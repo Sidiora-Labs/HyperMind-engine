@@ -9,6 +9,7 @@ repository.workspace = true
 [dependencies]
 hm-core = { path = "../hm-core" }
 tantivy = { version = "0.25.0", default-features = false }
+wide = "0.8.1"
 
 [lints]
 workspace = true

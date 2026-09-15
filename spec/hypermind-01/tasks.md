@@ -114,7 +114,7 @@
   - [x] 4.2 Embedding event with space identity
     - Enable Embedding with target_lsn, space id, dimension, quantized int8 vector and binary prefilter; VerifyEvent checks dimension against the declared space.
     - _Requirements: 6.1_
-  - [ ] 4.3 Flat int8 vector lane with binary prefilter, entity index, space generations
+  - [x] 4.3 Flat int8 vector lane with binary prefilter, entity index, space generations
     - Vector lane: mmap append-only file per space generation with magic-framed records; Search sorts by Hamming on the prefilter then scores by int8 dot through std::simd; SimdDot equals ScalarDot property test; CanonicalBytes for determinism.
     - Entity index ported from entity_index.cc: domains, urls, paths, hex ids, structured ids, proper nouns and bigrams with alias labels; query-side extraction from query and turn text; posting bitmaps.
     - Space generations: a second encoder populates its own generation even at equal dimensions; the active pointer switches atomically after validation; the prior compatible generation is retained by policy.

@@ -539,7 +539,7 @@ do_1 = "Enable Embedding with target_lsn, space id, dimension, quantized int8 ve
 
 [task.4.3]
 title = "Flat int8 vector lane with binary prefilter, entity index, space generations"
-status = "pending"
+status = "done"
 wave = 4
 owner_lane = "projections"
 requires = ["4.2"]

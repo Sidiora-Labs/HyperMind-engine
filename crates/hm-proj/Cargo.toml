@@ -13,6 +13,7 @@ hm-core = { path = "../hm-core" }
 hm-index = { path = "../hm-index" }
 hm-ledger = { path = "../hm-ledger" }
 hm-schema = { path = "../hm-schema" }
+memmap2 = "0.9.9"
 roaring = "0.11.2"
 
 [dev-dependencies]
