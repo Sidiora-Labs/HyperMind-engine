@@ -104,7 +104,7 @@
     - cargo-fuzz targets for frame, unseal, schema, protocol frame, query input and MMR state seeded from the neocortex corpus; CI smoke runs each for 60 seconds; Miri on the SIMD and mmap modules.
     - Threat model: trust boundaries, capability model, what verify proves and does not, crypto-shred guarantees, disclosure policy.
     - _Requirements: 15.1, 4.3, 16.1_
-  - [ ] 3.6 Slice 3 journey: cite, verify without keys, launder and be rejected, trip, shred with receipt
+  - [x] 3.6 Slice 3 journey: cite, verify without keys, launder and be rejected, trip, shred with receipt
     - Journey: append a turn with a tool result and receive an MMR receipt, run hm verify offline with no key and confirm the root, attempt a laundering write over MCP and receive rejection with effect_state rejected, touch a tripwire LSN through activate and observe the security event, crypto-shred and validate the signed receipt, gate slice3 green.
     - _Requirements: 1.1, 3.2, 3.3, 4.1, 4.2_
   - [ ] 4.1 Embedder trait, local ONNX embedder, remote providers, batching, cache, space identity
