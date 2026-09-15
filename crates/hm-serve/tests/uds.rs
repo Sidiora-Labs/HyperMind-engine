@@ -115,10 +115,12 @@ async fn real_socket_accepts_v2_append_and_lexical_recall() {
     let WirePayload::Response(response) = appended.payload else {
         panic!("expected response");
     };
-    assert!(matches!(
-        response.payload,
-        Some(ResponsePayload::AppendAck(_))
-    ));
+    let Some(ResponsePayload::AppendAck(ack)) = response.payload else {
+        panic!("expected append ack");
+    };
+    assert_eq!(ack.leaf_count, 1);
+    assert_eq!(ack.last_leaf_hash.as_deref().map(<[u8]>::len), Some(32));
+    assert_eq!(ack.mmr_root.as_deref().map(<[u8]>::len), Some(32));
 
     let recalled = exchange(
         &mut stream,

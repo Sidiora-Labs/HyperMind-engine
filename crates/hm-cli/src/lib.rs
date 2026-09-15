@@ -28,6 +28,8 @@ use std::path::{Path, PathBuf};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::UnixStream;
 
+mod verify;
+
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Debug, Parser)]
@@ -89,6 +91,12 @@ enum Command {
         #[arg(long)]
         embedded: bool,
     },
+    Verify {
+        actor_directory: PathBuf,
+        actor: u16,
+        checkpoint: PathBuf,
+        public_key: String,
+    },
 }
 
 #[derive(Clone, Copy, Debug, ValueEnum)]
@@ -100,6 +108,12 @@ enum MessageKind {
 pub async fn run(arguments: impl IntoIterator<Item = impl Into<OsString> + Clone>) -> Result<()> {
     let cli = Cli::try_parse_from(arguments)?;
     let value = execute(cli.command).await?;
+    if !cli.json
+        && let Some(display) = value.get("display").and_then(Value::as_str)
+    {
+        println!("{display}");
+        return Ok(());
+    }
     if cli.json || std::env::var_os("NO_COLOR").is_some() {
         println!("{}", serde_json::to_string(&value)?);
     } else {
@@ -141,6 +155,12 @@ async fn execute(command: Command) -> Result<Value> {
             budget_tokens,
             embedded,
         } => activate(&config, &conversation, &query, budget_tokens, embedded).await,
+        Command::Verify {
+            actor_directory,
+            actor,
+            checkpoint,
+            public_key,
+        } => verify::run(&actor_directory, actor, &checkpoint, &public_key),
     }
 }
 

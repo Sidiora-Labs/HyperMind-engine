@@ -3,11 +3,14 @@
 use hm_compose::bundle::{self, ActivationBundle, ActivationRequest};
 use hm_compose::tokens::{FallbackWeights, TokenCounter};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
+use hm_ledger::checkpoint::{SigningKeyPair, signing_key_pair_for};
 use hm_ledger::frame::{EventKind, Frame, FrameHeader};
 use hm_ledger::idempotency::{
     Admission, BatchEvent, BatchIdentity, ConnectionId, DedupTable, rollback_torn_batch,
 };
 use hm_ledger::keyring::{KeyEncryptionKey, KeyHierarchy, OsEntropy, UserId};
+use hm_ledger::mmr::Hash as MmrHash;
+use hm_ledger::mmr_store::{MmrStore, VerificationStatus};
 use hm_ledger::segment::{AppendRequest, SegmentLog, SegmentLogOptions};
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
@@ -48,6 +51,9 @@ pub struct AppendOutcome {
     pub first_lsn: LSN,
     pub last_lsn: LSN,
     pub duplicate: bool,
+    pub leaf_count: u64,
+    pub last_leaf_hash: MmrHash,
+    pub mmr_root: MmrHash,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -188,6 +194,7 @@ enum Command {
         Box<ActivateRequest>,
         oneshot::Sender<Result<ActivationBundle, Error>>,
     ),
+    VerificationStatus(oneshot::Sender<Result<VerificationStatus, Error>>),
     Stats(oneshot::Sender<Result<ActorStats, Error>>),
     Shutdown(oneshot::Sender<()>),
 }
@@ -203,6 +210,8 @@ struct WriterState {
     dedup: DedupTable,
     last_wall_timestamp_ns: i64,
     events: broadcast::Sender<Frame>,
+    mmr: MmrStore,
+    signing_keys: SigningKeyPair,
 }
 
 impl ActorEngine {
@@ -337,6 +346,10 @@ impl ActorEngine {
         request(&self.commands, Command::Stats).await
     }
 
+    pub async fn verification_status(&self) -> Result<VerificationStatus, Error> {
+        request(&self.commands, Command::VerificationStatus).await
+    }
+
     pub async fn shutdown(self) -> Result<(), Error> {
         let (reply, response) = oneshot::channel();
         self.commands
@@ -405,6 +418,9 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
             Command::Activate(request, reply) => {
                 let _ = reply.send(state.activate(*request));
             }
+            Command::VerificationStatus(reply) => {
+                let _ = reply.send(Ok(state.mmr.verification_status()));
+            }
             Command::Stats(reply) => {
                 let _ = reply.send(state.stats());
             }
@@ -436,6 +452,25 @@ impl WriterState {
             SegmentLogOptions::default(),
         )?;
         rollback_torn_batch(&mut log, &keys)?;
+        let signing_keys = signing_key_pair_for(&keys);
+        let sealed_frames = log.read_all()?;
+        let mut mmr = MmrStore::open(
+            &config.actor_directory,
+            config.actor,
+            signing_keys.public_key,
+        )?;
+        loop {
+            let repaired = mmr.verify_and_repair_bounded(&sealed_frames)?;
+            if repaired.complete {
+                break;
+            }
+        }
+        if mmr.verification_status().leaf_count != 0
+            && mmr.verification_status().last_checkpoint_lsn.get()
+                != mmr.verification_status().leaf_count
+        {
+            mmr.create_checkpoint(&signing_keys)?;
+        }
         let projections =
             ProjectionStore::open(&config.actor_directory, config.projection_map_bytes)?;
         let mut kinds = Vec::new();
@@ -480,6 +515,8 @@ impl WriterState {
             dedup,
             last_wall_timestamp_ns,
             events,
+            mmr,
+            signing_keys,
         })
     }
 
@@ -536,6 +573,11 @@ impl WriterState {
             });
         }
         let commit = self.log.append_batch(&sealed)?;
+        for (frame, sealed_event) in plaintext.iter().zip(&sealed) {
+            self.mmr
+                .append_sealed(&frame.header, &sealed_event.sealed_payload)?;
+        }
+        self.mmr.create_checkpoint(&self.signing_keys)?;
         self.plaintext_frames.extend(plaintext.iter().cloned());
         rebuild_projection_stream(&self.projections, &self.plaintext_frames, false, usize::MAX)?;
         for frame in &plaintext {
@@ -547,10 +589,14 @@ impl WriterState {
             .map_or(self.last_wall_timestamp_ns, |frame| {
                 frame.header.wall_timestamp_ns.get()
             });
+        let mmr = self.mmr.verification_status();
         Ok(AppendOutcome {
             first_lsn: commit.first_lsn,
             last_lsn: commit.last_lsn,
             duplicate: false,
+            leaf_count: mmr.leaf_count,
+            last_leaf_hash: self.mmr.leaf_hash(mmr.leaf_count - 1)?,
+            mmr_root: mmr.root,
         })
     }
 
@@ -608,10 +654,14 @@ impl WriterState {
             events: &batch_events,
         };
         if let Admission::Duplicate(prior) = self.dedup.admit(&identity)? {
+            let mmr = self.mmr.verification_status();
             return Ok(AppendOutcome {
                 first_lsn: prior.first_lsn,
                 last_lsn: prior.last_lsn,
                 duplicate: true,
+                leaf_count: mmr.leaf_count,
+                last_leaf_hash: self.mmr.leaf_hash(prior.last_lsn.get() - 1)?,
+                mmr_root: mmr.root,
             });
         }
         let outcome = self.append(prepared.clone())?;

@@ -82,7 +82,7 @@
   - [x] 2.8 Slice 2 journey: open loop, bind, dispatch, kill -9, restart, activate shows loop, binding, effect
     - Journey from the TypeScript client: intend opens a loop, bind pins a file at a revision, a ToolCall is appended and the daemon is killed inside the dispatch window, restart, the client resumes its sequence without a duplicate, activate shows the open loop, the binding as resolved, the effect as outcome_unknown, and gate slice2 is green.
     - _Requirements: 1.1, 2.2, 2.3, 7.1, 7.3_
-  - [ ] 3.1 MMR over sealed bytes, signed checkpoints, hm verify, crypto-shred, key rotation, tripwires
+  - [x] 3.1 MMR over sealed bytes, signed checkpoints, hm verify, crypto-shred, key rotation, tripwires
     - Port mmr.cc and mmr/store.cc with domain-separated BLAKE3, RootAt, ProveRange and VerifyRange; the leaf commits to header plus sealed payload; the neocortex mmr_test vectors are regenerated once for the sealed-leaf change and frozen.
     - Ed25519-signed checkpoints under mmr/checkpoints; hm verify actor-dir actor checkpoint pubkey prints MEMORY VERIFIED root and lsn with no key material; VerifyAndRepairBounded on open appends missing leaves in 1024-frame batches.
     - Crypto-shred writes DELETION_RECEIPT with key fingerprint and root, unlinks the keyring, zeroises, reopen reports kKeyDestroyed; RotateKeys re-wraps the data key under a new KEK; tripwire set is seeded at init and held in kernel memory keyed by LSN.

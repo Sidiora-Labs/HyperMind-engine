@@ -373,9 +373,9 @@ async fn handle_request(
                 first_lsn: outcome.first_lsn.get(),
                 last_lsn: outcome.last_lsn.get(),
                 duplicate: outcome.duplicate,
-                leaf_count: 0,
-                last_leaf_hash: None,
-                mmr_root: None,
+                leaf_count: outcome.leaf_count,
+                last_leaf_hash: Some(outcome.last_leaf_hash.to_vec()),
+                mmr_root: Some(outcome.mmr_root.to_vec()),
             }))
         }
         RequestPayload::Activate(activate) => {

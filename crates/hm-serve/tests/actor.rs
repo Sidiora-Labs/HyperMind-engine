@@ -58,6 +58,13 @@ async fn actor_appends_recalls_activates_and_rebuilds_identically() {
         .unwrap();
     assert_eq!(committed.first_lsn.get(), 1);
     assert_eq!(committed.last_lsn.get(), 2);
+    assert_eq!(committed.leaf_count, 2);
+    assert_ne!(committed.last_leaf_hash, [0; 32]);
+    assert_ne!(committed.mmr_root, [0; 32]);
+    let verified = engine.verification_status().await.unwrap();
+    assert!(verified.verified);
+    assert_eq!(verified.leaf_count, committed.leaf_count);
+    assert_eq!(verified.root, committed.mmr_root);
     let recalled = engine
         .recall(RecallRequest::Lexical {
             query: "heliotrope".to_owned(),
@@ -91,7 +98,9 @@ async fn actor_appends_recalls_activates_and_rebuilds_identically() {
         .await
         .unwrap();
     let after = reopened.stats().await.unwrap();
+    let reopened_verified = reopened.verification_status().await.unwrap();
     assert_eq!(before.applied, after.applied);
+    assert_eq!(reopened_verified, verified);
     assert_eq!(
         after
             .projections

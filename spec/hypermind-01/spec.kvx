@@ -441,7 +441,7 @@ do_1 = "Journey from the TypeScript client: intend opens a loop, bind pins a fil
 
 [task.3.1]
 title = "MMR over sealed bytes, signed checkpoints, hm verify, crypto-shred, key rotation, tripwires"
-status = "pending"
+status = "done"
 wave = 3
 section = "Wave 3 — Trust: prove the log without keys, never launder authority, shred with a receipt"
 owner_lane = "ledger"

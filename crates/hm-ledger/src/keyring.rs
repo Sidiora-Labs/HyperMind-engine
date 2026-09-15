@@ -53,6 +53,11 @@ impl KeyHierarchy {
     ) -> Result<Self, Error> {
         let key_directory = actor_directory.as_ref().join("keys");
         let keyring_path = key_directory.join("KEYRING");
+        if key_directory.join("DELETION_RECEIPT").exists()
+            || key_directory.join("DELETION_RECEIPT.pending").exists()
+        {
+            return Err(Error::new(ErrorCode::KeyDestroyed));
+        }
         match File::open(&keyring_path) {
             Ok(file) => Self::open_existing(file, keyring_path, actor, user, kek),
             Err(error) if error.kind() == std::io::ErrorKind::NotFound && allow_create => {
