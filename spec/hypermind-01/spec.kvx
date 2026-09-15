@@ -252,7 +252,7 @@ do_3 = "Carry the neocortex schema_test and protocol fuzz seed corpus as fixture
 
 [task.1.3]
 title = "Frame codec, segment log and sealing"
-status = "pending"
+status = "done"
 wave = 1
 owner_lane = "ledger"
 requires = ["1.1"]

@@ -14,7 +14,7 @@
     - Generate Rust with planus; implement VerifyEvent and VerifyRequest that fail closed on unknown versions, missing required fields, unknown union members and ToolResult without a prior ToolCall reference.
     - Carry the neocortex schema_test and protocol fuzz seed corpus as fixtures; a v1 Go-client envelope decodes as v2 with defaults.
     - _Requirements: 2.1, 4.1, 13.1_
-  - [ ] 1.3 Frame codec, segment log and sealing
+  - [x] 1.3 Frame codec, segment log and sealing
     - Port frame.h and frame.cc: 43-byte header, CRC32C over lsn onward, 16 MiB maximum; the neocortex frame test vectors pass byte for byte.
     - Port segment_log: numbered 128 MiB segments, NCMF manifest, group commit into one 4096-aligned buffer with fdatasync then manifest rewrite then directory fsync, torn-tail truncation on open, kInteriorCorruption refusal, manifest rebuild; pwrite backend now, io_uring behind a feature flag.
     - Port sealing: KEK to user key to data key wrapped with XChaCha20-Poly1305, NCKEY001 keyring, NCSEAL01 record layout, AAD bound to actor, lsn, kind and user, kLegacyPlaintext on unsealed records, zeroize on drop; the plaintext BLAKE3 digest is stored inside the sealed record for wave 3.
