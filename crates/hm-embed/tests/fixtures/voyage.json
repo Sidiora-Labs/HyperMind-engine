@@ -1,0 +1,28 @@
+[
+  {
+    "request": {
+      "method": "POST",
+      "url": "https://fixture.invalid/embeddings",
+      "headers": {
+        "authorization": "Bearer fixture-key",
+        "content-type": "application/json"
+      },
+      "body": {
+        "model": "fixture-model",
+        "input": ["alpha", "beta"],
+        "input_type": "document",
+        "output_dimension": 3,
+        "output_dtype": "float"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "data": [
+          {"embedding": [3.0, 4.0, 0.0]},
+          {"embedding": [0.0, 0.0, 2.0]}
+        ]
+      }
+    }
+  }
+]

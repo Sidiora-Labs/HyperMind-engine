@@ -1,0 +1,41 @@
+schema_version = 1
+
+[[models]]
+id = "nomic-ai/nomic-embed-text-v1.5"
+revision = "a15734e81021ea6c92b09050d2c7085001db8f36"
+dimensions = 768
+distance = "cosine"
+normalisation = "l2"
+maximum_tokens = 512
+query_prefix = "search_query: "
+document_prefix = "search_document: "
+
+[[models.artifacts]]
+name = "model_quantized.onnx"
+url = "https://huggingface.co/nomic-ai/nomic-embed-text-v1.5/resolve/a15734e81021ea6c92b09050d2c7085001db8f36/onnx/model_quantized.onnx"
+sha256 = "b4342336debaea79de872370664b0aaeb67dea4605513d00ee236ea871a81f27"
+
+[[models.artifacts]]
+name = "tokenizer.json"
+url = "https://huggingface.co/nomic-ai/nomic-embed-text-v1.5/resolve/a15734e81021ea6c92b09050d2c7085001db8f36/tokenizer.json"
+sha256 = "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66"
+
+[[models]]
+id = "BAAI/bge-small-en-v1.5"
+revision = "c5ac6c397e27c80e0229ec647987f2e553fc0ba9"
+dimensions = 384
+distance = "cosine"
+normalisation = "l2"
+maximum_tokens = 512
+query_prefix = "Represent this sentence for searching relevant passages: "
+document_prefix = ""
+
+[[models.artifacts]]
+name = "model_quantized.onnx"
+url = "https://huggingface.co/BAAI/bge-small-en-v1.5/resolve/c5ac6c397e27c80e0229ec647987f2e553fc0ba9/onnx/model_quantized.onnx"
+sha256 = "6c9c6101a956d62dfb5e7190c538226c0c5bb9cb27b651234b6df063ee7dbfe4"
+
+[[models.artifacts]]
+name = "tokenizer.json"
+url = "https://huggingface.co/BAAI/bge-small-en-v1.5/resolve/c5ac6c397e27c80e0229ec647987f2e553fc0ba9/tokenizer.json"
+sha256 = "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66"

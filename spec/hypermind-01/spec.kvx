@@ -515,7 +515,7 @@ do_1 = "Journey: append a turn with a tool result and receive an MMR receipt, ru
 
 [task.4.1]
 title = "Embedder trait, local ONNX embedder, remote providers, batching, cache, space identity"
-status = "pending"
+status = "done"
 wave = 4
 section = "Wave 4 — Meaning: semantic, entity and planned recall that never blocks the turn"
 owner_lane = "index"

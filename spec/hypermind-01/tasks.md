@@ -107,7 +107,7 @@
   - [x] 3.6 Slice 3 journey: cite, verify without keys, launder and be rejected, trip, shred with receipt
     - Journey: append a turn with a tool result and receive an MMR receipt, run hm verify offline with no key and confirm the root, attempt a laundering write over MCP and receive rejection with effect_state rejected, touch a tripwire LSN through activate and observe the security event, crypto-shred and validate the signed receipt, gate slice3 green.
     - _Requirements: 1.1, 3.2, 3.3, 4.1, 4.2_
-  - [ ] 4.1 Embedder trait, local ONNX embedder, remote providers, batching, cache, space identity
+  - [x] 4.1 Embedder trait, local ONNX embedder, remote providers, batching, cache, space identity
     - Embedder trait with embed_query and embed_documents, dimensions, space identity (encoder id and revision, dimensions, distance, normalisation, input role); local ONNX through ort with tokenizers for nomic-embed-text-v1.5 and bge-small-en-v1.5 int8, downloaded on first run with pinned digests; remote providers for OpenAI, Voyage, Vertex and Ollama behind recorded wire fixtures.
     - Batching with a content-hash cache; int8 quantisation and 1-bit binary prefilter derivation; a hash-feature embedder exists only as the lexical_only baseline and is labelled so in every report.
     - _Requirements: 6.1, 15.3_

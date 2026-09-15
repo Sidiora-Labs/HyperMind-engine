@@ -1,0 +1,28 @@
+[
+  {
+    "request": {
+      "method": "POST",
+      "url": "https://fixture.invalid/embeddings",
+      "headers": {
+        "authorization": "Bearer fixture-key",
+        "content-type": "application/json"
+      },
+      "body": {
+        "instances": [
+          {"content": "alpha", "task_type": "RETRIEVAL_DOCUMENT"},
+          {"content": "beta", "task_type": "RETRIEVAL_DOCUMENT"}
+        ],
+        "parameters": {"outputDimensionality": 3}
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "predictions": [
+          {"embeddings": {"values": [3.0, 4.0, 0.0]}},
+          {"embeddings": {"values": [0.0, 0.0, 2.0]}}
+        ]
+      }
+    }
+  }
+]
