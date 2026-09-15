@@ -99,7 +99,7 @@
     - Admin token disjoint from actor tokens; admin requests on actor connections and the reverse are kCapabilityDenied; Health, Stats with per-projection applied_lsn, LatencyHistograms, VerifyStatus, RebuildProjection, CryptoDelete, RotateKeys.
     - MCP inspect explains an item, walks its provenance chain to LSNs and MMR receipts, verifies against the latest checkpoint, and reports stats; MCP forget fades a memory, retracts a run, or crypto-shreds an actor with the admin token and returns the receipt; a tripwire hit is reported as a security event in warnings.
     - _Requirements: 13.1, 13.2, 3.3_
-  - [ ] 3.5 Laundering suite, fuzz targets, Miri on unsafe modules, threat model
+  - [x] 3.5 Laundering suite, fuzz targets, Miri on unsafe modules, threat model
     - Laundering suite: attempts to promote a model string to tool_observed through a tool, to cite a memory as an Outcome, to place memory in the system role, to re-ingest memory.* events; all must be rejected and counted; zero violations is the gate.
     - cargo-fuzz targets for frame, unseal, schema, protocol frame, query input and MMR state seeded from the neocortex corpus; CI smoke runs each for 60 seconds; Miri on the SIMD and mmap modules.
     - Threat model: trust boundaries, capability model, what verify proves and does not, crypto-shred guarantees, disclosure policy.

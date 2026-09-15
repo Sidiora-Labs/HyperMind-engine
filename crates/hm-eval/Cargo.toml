@@ -9,6 +9,7 @@ repository.workspace = true
 [dependencies]
 hm-compose = { path = "../hm-compose" }
 hm-core = { path = "../hm-core" }
+hm-cortex = { path = "../hm-cortex" }
 hm-ledger = { path = "../hm-ledger" }
 hm-proj = { path = "../hm-proj" }
 hm-schema = { path = "../hm-schema" }

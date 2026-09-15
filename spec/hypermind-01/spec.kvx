@@ -491,7 +491,7 @@ do_2 = "MCP inspect explains an item, walks its provenance chain to LSNs and MMR
 
 [task.3.5]
 title = "Laundering suite, fuzz targets, Miri on unsafe modules, threat model"
-status = "pending"
+status = "done"
 wave = 3
 owner_lane = "eval"
 requires = ["3.4"]

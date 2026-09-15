@@ -1133,6 +1133,7 @@ version = "0.1.0"
 dependencies = [
  "hm-compose",
  "hm-core",
+ "hm-cortex",
  "hm-ledger",
  "hm-proj",
  "hm-schema",

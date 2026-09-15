@@ -1,0 +1,48 @@
+name: fuzz and unsafe checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  fuzz:
+    name: fuzz smoke (${{ matrix.target }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - frame
+          - unseal
+          - schema
+          - protocol_frame
+          - query_input
+          - mmr_state
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: taiki-e/install-action@cargo-fuzz
+      - run: cargo fuzz run ${{ matrix.target }} -- -max_total_time=60
+
+  miri:
+    name: miri (${{ matrix.module }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - module: simd
+            package: hm-index
+            filter: simd
+          - module: mmap
+            package: hm-proj
+            filter: store
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: miri
+      - run: cargo miri test -p ${{ matrix.package }} --lib ${{ matrix.filter }}

@@ -1,0 +1,62 @@
+[package]
+name = "hypermind-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+hm-core = { path = "../crates/hm-core" }
+hm-index = { path = "../crates/hm-index" }
+hm-ledger = { path = "../crates/hm-ledger" }
+hm-schema = { path = "../crates/hm-schema" }
+hm-serve = { path = "../crates/hm-serve" }
+tempfile = "3.23.0"
+
+[[bin]]
+name = "frame"
+path = "fuzz_targets/frame.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "unseal"
+path = "fuzz_targets/unseal.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "schema"
+path = "fuzz_targets/schema.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "protocol_frame"
+path = "fuzz_targets/protocol_frame.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "query_input"
+path = "fuzz_targets/query_input.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "mmr_state"
+path = "fuzz_targets/mmr_state.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]
