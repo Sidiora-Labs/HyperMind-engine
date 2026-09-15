@@ -16,6 +16,11 @@ name = "slice3_journey"
 path = "tests/slice3_journey.rs"
 harness = false
 
+[[test]]
+name = "slice5_journey"
+path = "tests/slice5_journey.rs"
+harness = false
+
 [dependencies]
 hm-core = { path = "../hm-core" }
 hm-ledger = { path = "../hm-ledger" }

@@ -159,7 +159,7 @@
     - Temporal suite: scripted supersessions with validity intervals; as-of by valid_at and by known_at must differ where scripted; a bundle that states a superseded fact as current counts as a stale fact; gate is zero.
     - Protected-type suite: every run-authority write to identity, constraint or preference is rejected and a proposal appears in the conflicts tier.
     - _Requirements: 15.1, 8.1, 8.2_
-  - [ ] 5.7 Slice 5 journey: assert, supersede, asof both axes, dispute, protected write becomes proposal
+  - [x] 5.7 Slice 5 journey: assert, supersede, asof both axes, dispute, protected write becomes proposal
     - Journey: believe a fact, believe its replacement with a later valid_from, recall asof by valid_at and by known_at and receive different answers, dispute two claims through the in-process NLI, attempt an identity write with run authority and observe rejection plus a proposal in the conflicts tier, gate slice5 green.
     - _Requirements: 1.1, 8.1, 8.2, 8.3_
   - [ ] 6.1 Full provider set, prompt registry with snapshot tests, structured outputs, cost accounting

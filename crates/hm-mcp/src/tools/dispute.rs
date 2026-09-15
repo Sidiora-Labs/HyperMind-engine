@@ -56,16 +56,25 @@ pub async fn run(
     let runtime = if let Some(runtime) = runtime {
         runtime
     } else {
-        local = default_runtime()?;
+        local = tokio::task::spawn_blocking(default_runtime)
+            .await
+            .map_err(|_| Error::new(ErrorCode::OperationUnavailable))??;
         &local
     };
-    let report = dispute(
-        &runtime.nli,
-        runtime.provider.as_deref(),
-        runtime.minimum_tier,
-        &existing,
-        &incoming,
-    )
+    let adjudicator = runtime.clone();
+    let existing_for_adjudication = existing.clone();
+    let incoming_for_adjudication = incoming.clone();
+    let report = tokio::task::spawn_blocking(move || {
+        dispute(
+            &adjudicator.nli,
+            adjudicator.provider.as_deref(),
+            adjudicator.minimum_tier,
+            &existing_for_adjudication,
+            &incoming_for_adjudication,
+        )
+    })
+    .await
+    .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
     .map_err(|error| adjudication_error(&error))?;
     let mut envelope = Envelope::empty();
     let (action, events) = apply_outcome(
