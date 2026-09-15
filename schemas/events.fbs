@@ -21,6 +21,8 @@ enum Sensitivity : ubyte { public, personal, secret }
 struct ProvenanceRange {
   first_lsn:ulong;
   last_lsn:ulong;
+  byte_start:uint;
+  byte_end:uint;
 }
 
 table ModelProvenance {
@@ -140,6 +142,18 @@ table Consolidation {
   assertions:[Assertion] (required);
 }
 
+table ProposedAssertion {
+  belief_id:[ubyte] (required);
+  belief_type:BeliefType;
+  canonical_identity:string (required);
+  value:[ubyte] (required);
+  valid_from_ns:long;
+  valid_to_ns:long;
+  provenance:[ProvenanceRange] (required);
+  conflict_domain:string;
+  claim:AssertionClaim = affirmative;
+}
+
 table Embedding {
   target_lsn:ulong;
   dimension:uint;
@@ -180,7 +194,8 @@ union EventPayload {
   Embedding,
   Retract,
   Attestation,
-  Binding
+  Binding,
+  ProposedAssertion
 }
 
 table EventEnvelope {

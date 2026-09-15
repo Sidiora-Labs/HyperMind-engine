@@ -1882,13 +1882,19 @@ mod root {
 
                 /// The field `last_lsn` in the struct `ProvenanceRange`
                 pub last_lsn: u64,
+
+                /// The field `byte_start` in the struct `ProvenanceRange`
+                pub byte_start: u32,
+
+                /// The field `byte_end` in the struct `ProvenanceRange`
+                pub byte_end: u32,
             }
 
             /// # Safety
             /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
             unsafe impl ::planus::Primitive for ProvenanceRange {
                 const ALIGNMENT: usize = 8;
-                const SIZE: usize = 16;
+                const SIZE: usize = 24;
             }
 
             #[allow(clippy::identity_op)]
@@ -1899,10 +1905,14 @@ mod root {
                     cursor: ::planus::Cursor<'_, N>,
                     buffer_position: u32,
                 ) {
-                    let (cur, cursor) = cursor.split::<8, 8>();
+                    let (cur, cursor) = cursor.split::<8, 16>();
                     self.first_lsn.write(cur, buffer_position - 0);
-                    let (cur, cursor) = cursor.split::<8, 0>();
+                    let (cur, cursor) = cursor.split::<8, 8>();
                     self.last_lsn.write(cur, buffer_position - 8);
+                    let (cur, cursor) = cursor.split::<4, 4>();
+                    self.byte_start.write(cur, buffer_position - 16);
+                    let (cur, cursor) = cursor.split::<4, 0>();
+                    self.byte_end.write(cur, buffer_position - 20);
                     cursor.finish([]);
                 }
             }
@@ -1914,13 +1924,13 @@ mod root {
                     builder: &mut ::planus::Builder,
                 ) -> ::planus::Offset<ProvenanceRange> {
                     unsafe {
-                        builder.write_with(16, 7, |buffer_position, bytes| {
+                        builder.write_with(24, 7, |buffer_position, bytes| {
                             let bytes = bytes.as_mut_ptr();
 
                             ::planus::WriteAsPrimitive::write(
                                 self,
                                 ::planus::Cursor::new(
-                                    &mut *(bytes as *mut [::core::mem::MaybeUninit<u8>; 16]),
+                                    &mut *(bytes as *mut [::core::mem::MaybeUninit<u8>; 24]),
                                 ),
                                 buffer_position,
                             );
@@ -1951,7 +1961,7 @@ mod root {
 
             /// Reference to a deserialized [ProvenanceRange].
             #[derive(Copy, Clone)]
-            pub struct ProvenanceRangeRef<'a>(::planus::ArrayWithStartOffset<'a, 16>);
+            pub struct ProvenanceRangeRef<'a>(::planus::ArrayWithStartOffset<'a, 24>);
 
             impl<'a> ProvenanceRangeRef<'a> {
                 /// Getter for the [`first_lsn` field](ProvenanceRange#structfield.first_lsn).
@@ -1967,6 +1977,20 @@ mod root {
 
                     u64::from_le_bytes(*buffer.as_array())
                 }
+
+                /// Getter for the [`byte_start` field](ProvenanceRange#structfield.byte_start).
+                pub fn byte_start(&self) -> u32 {
+                    let buffer = self.0.advance_as_array::<4>(16).unwrap();
+
+                    u32::from_le_bytes(*buffer.as_array())
+                }
+
+                /// Getter for the [`byte_end` field](ProvenanceRange#structfield.byte_end).
+                pub fn byte_end(&self) -> u32 {
+                    let buffer = self.0.advance_as_array::<4>(20).unwrap();
+
+                    u32::from_le_bytes(*buffer.as_array())
+                }
             }
 
             impl<'a> ::core::fmt::Debug for ProvenanceRangeRef<'a> {
@@ -1974,12 +1998,14 @@ mod root {
                     let mut f = f.debug_struct("ProvenanceRangeRef");
                     f.field("first_lsn", &self.first_lsn());
                     f.field("last_lsn", &self.last_lsn());
+                    f.field("byte_start", &self.byte_start());
+                    f.field("byte_end", &self.byte_end());
                     f.finish()
                 }
             }
 
-            impl<'a> ::core::convert::From<::planus::ArrayWithStartOffset<'a, 16>> for ProvenanceRangeRef<'a> {
-                fn from(array: ::planus::ArrayWithStartOffset<'a, 16>) -> Self {
+            impl<'a> ::core::convert::From<::planus::ArrayWithStartOffset<'a, 24>> for ProvenanceRangeRef<'a> {
+                fn from(array: ::planus::ArrayWithStartOffset<'a, 24>) -> Self {
                     Self(array)
                 }
             }
@@ -1990,13 +2016,18 @@ mod root {
                     Self {
                         first_lsn: value.first_lsn(),
                         last_lsn: value.last_lsn(),
+                        byte_start: value.byte_start(),
+                        byte_end: value.byte_end(),
                     }
                 }
             }
 
             impl<'a, 'b> ::core::cmp::PartialEq<ProvenanceRangeRef<'a>> for ProvenanceRangeRef<'b> {
                 fn eq(&self, other: &ProvenanceRangeRef<'_>) -> bool {
-                    self.first_lsn() == other.first_lsn() && self.last_lsn() == other.last_lsn()
+                    self.first_lsn() == other.first_lsn()
+                        && self.last_lsn() == other.last_lsn()
+                        && self.byte_start() == other.byte_start()
+                        && self.byte_end() == other.byte_end()
                 }
             }
 
@@ -2015,6 +2046,8 @@ mod root {
                     self.first_lsn()
                         .cmp(&other.first_lsn())
                         .then_with(|| self.last_lsn().cmp(&other.last_lsn()))
+                        .then_with(|| self.byte_start().cmp(&other.byte_start()))
+                        .then_with(|| self.byte_end().cmp(&other.byte_end()))
                 }
             }
 
@@ -2022,6 +2055,8 @@ mod root {
                 fn hash<H: ::core::hash::Hasher>(&self, state: &mut H) {
                     self.first_lsn().hash(state);
                     self.last_lsn().hash(state);
+                    self.byte_start().hash(state);
+                    self.byte_end().hash(state);
                 }
             }
 
@@ -2031,13 +2066,13 @@ mod root {
                     buffer: ::planus::SliceWithStartOffset<'a>,
                     offset: usize,
                 ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
-                    let buffer = buffer.advance_as_array::<16>(offset)?;
+                    let buffer = buffer.advance_as_array::<24>(offset)?;
                     ::core::result::Result::Ok(Self(buffer))
                 }
             }
 
             impl<'a> ::planus::VectorRead<'a> for ProvenanceRangeRef<'a> {
-                const STRIDE: usize = 16;
+                const STRIDE: usize = 24;
 
                 #[inline]
                 unsafe fn from_buffer(
@@ -2052,7 +2087,7 @@ mod root {
             /// The planus compiler generates implementations that initialize
             /// the bytes in `write_values`.
             unsafe impl ::planus::VectorWrite<ProvenanceRange> for ProvenanceRange {
-                const STRIDE: usize = 16;
+                const STRIDE: usize = 24;
 
                 type Value = ProvenanceRange;
 
@@ -2067,12 +2102,12 @@ mod root {
                     bytes: *mut ::core::mem::MaybeUninit<u8>,
                     buffer_position: u32,
                 ) {
-                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 16];
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 24];
                     for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
                         ::planus::WriteAsPrimitive::write(
                             v,
                             ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
-                            buffer_position - (16 * i) as u32,
+                            buffer_position - (24 * i) as u32,
                         );
                     }
                 }
@@ -2081,7 +2116,7 @@ mod root {
             /// The table `ModelProvenance` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ModelProvenance` in the file `schemas/events.fbs:26`
+            /// * Table `ModelProvenance` in the file `schemas/events.fbs:28`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]
@@ -2488,7 +2523,7 @@ mod root {
             /// The table `UserMsg` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `UserMsg` in the file `schemas/events.fbs:33`
+            /// * Table `UserMsg` in the file `schemas/events.fbs:35`
             #[derive(
                 Clone,
                 Debug,
@@ -2741,7 +2776,7 @@ mod root {
             /// The table `DeliveredMsg` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DeliveredMsg` in the file `schemas/events.fbs:37`
+            /// * Table `DeliveredMsg` in the file `schemas/events.fbs:39`
             #[derive(
                 Clone,
                 Debug,
@@ -3010,7 +3045,7 @@ mod root {
             /// The table `ToolCall` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ToolCall` in the file `schemas/events.fbs:41`
+            /// * Table `ToolCall` in the file `schemas/events.fbs:43`
             #[derive(
                 Clone,
                 Debug,
@@ -3329,7 +3364,7 @@ mod root {
             /// The table `ToolResult` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ToolResult` in the file `schemas/events.fbs:47`
+            /// * Table `ToolResult` in the file `schemas/events.fbs:49`
             #[derive(
                 Clone,
                 Debug,
@@ -3722,7 +3757,7 @@ mod root {
             /// The table `Reasoning` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Reasoning` in the file `schemas/events.fbs:54`
+            /// * Table `Reasoning` in the file `schemas/events.fbs:56`
             #[derive(
                 Clone,
                 Debug,
@@ -3975,7 +4010,7 @@ mod root {
             /// The table `ProviderFrame` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProviderFrame` in the file `schemas/events.fbs:58`
+            /// * Table `ProviderFrame` in the file `schemas/events.fbs:60`
             #[derive(
                 Clone,
                 Debug,
@@ -4279,7 +4314,7 @@ mod root {
             /// The table `MediaRef` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `MediaRef` in the file `schemas/events.fbs:63`
+            /// * Table `MediaRef` in the file `schemas/events.fbs:65`
             #[derive(
                 Clone,
                 Debug,
@@ -4598,7 +4633,7 @@ mod root {
             /// The table `Effect` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Effect` in the file `schemas/events.fbs:69`
+            /// * Table `Effect` in the file `schemas/events.fbs:71`
             #[derive(
                 Clone,
                 Debug,
@@ -4949,7 +4984,7 @@ mod root {
             /// The table `Approval` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Approval` in the file `schemas/events.fbs:75`
+            /// * Table `Approval` in the file `schemas/events.fbs:77`
             #[derive(
                 Clone,
                 Debug,
@@ -5257,7 +5292,7 @@ mod root {
             /// The table `Outcome` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Outcome` in the file `schemas/events.fbs:80`
+            /// * Table `Outcome` in the file `schemas/events.fbs:82`
             #[derive(
                 Clone,
                 Debug,
@@ -5654,7 +5689,7 @@ mod root {
             /// The table `Checkpoint` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Checkpoint` in the file `schemas/events.fbs:87`
+            /// * Table `Checkpoint` in the file `schemas/events.fbs:89`
             #[derive(
                 Clone,
                 Debug,
@@ -5908,7 +5943,7 @@ mod root {
             /// The table `Supervisor` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Supervisor` in the file `schemas/events.fbs:91`
+            /// * Table `Supervisor` in the file `schemas/events.fbs:93`
             #[derive(
                 Clone,
                 Debug,
@@ -6196,7 +6231,7 @@ mod root {
             /// The table `Recovery` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Recovery` in the file `schemas/events.fbs:96`
+            /// * Table `Recovery` in the file `schemas/events.fbs:98`
             #[derive(
                 Clone,
                 Debug,
@@ -6500,7 +6535,7 @@ mod root {
             /// The table `IntentSet` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentSet` in the file `schemas/events.fbs:101`
+            /// * Table `IntentSet` in the file `schemas/events.fbs:103`
             #[derive(
                 Clone,
                 Debug,
@@ -6753,7 +6788,7 @@ mod root {
             /// The table `LoopOpened` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `LoopOpened` in the file `schemas/events.fbs:105`
+            /// * Table `LoopOpened` in the file `schemas/events.fbs:107`
             #[derive(
                 Clone,
                 Debug,
@@ -7041,7 +7076,7 @@ mod root {
             /// The table `LoopClosed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `LoopClosed` in the file `schemas/events.fbs:110`
+            /// * Table `LoopClosed` in the file `schemas/events.fbs:112`
             #[derive(
                 Clone,
                 Debug,
@@ -7443,7 +7478,7 @@ mod root {
             /// The table `Binding` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Binding` in the file `schemas/events.fbs:117`
+            /// * Table `Binding` in the file `schemas/events.fbs:119`
             #[derive(
                 Clone,
                 Debug,
@@ -7965,7 +8000,7 @@ mod root {
             /// The table `Assertion` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Assertion` in the file `schemas/events.fbs:127`
+            /// * Table `Assertion` in the file `schemas/events.fbs:129`
             #[derive(
                 Clone,
                 Debug,
@@ -8601,7 +8636,7 @@ mod root {
             /// The table `Consolidation` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Consolidation` in the file `schemas/events.fbs:139`
+            /// * Table `Consolidation` in the file `schemas/events.fbs:141`
             #[derive(
                 Clone,
                 Debug,
@@ -8873,10 +8908,686 @@ mod root {
                 }
             }
 
+            /// The table `ProposedAssertion` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `ProposedAssertion` in the file `schemas/events.fbs:145`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ProposedAssertion {
+                /// The field `belief_id` in the table `ProposedAssertion`
+                pub belief_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `belief_type` in the table `ProposedAssertion`
+                pub belief_type: self::BeliefType,
+                /// The field `canonical_identity` in the table `ProposedAssertion`
+                pub canonical_identity: ::planus::alloc::string::String,
+                /// The field `value` in the table `ProposedAssertion`
+                pub value: ::planus::alloc::vec::Vec<u8>,
+                /// The field `valid_from_ns` in the table `ProposedAssertion`
+                pub valid_from_ns: i64,
+                /// The field `valid_to_ns` in the table `ProposedAssertion`
+                pub valid_to_ns: i64,
+                /// The field `provenance` in the table `ProposedAssertion`
+                pub provenance: ::planus::alloc::vec::Vec<self::ProvenanceRange>,
+                /// The field `conflict_domain` in the table `ProposedAssertion`
+                pub conflict_domain: ::core::option::Option<::planus::alloc::string::String>,
+                /// The field `claim` in the table `ProposedAssertion`
+                pub claim: self::AssertionClaim,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ProposedAssertion {
+                fn default() -> Self {
+                    Self {
+                        belief_id: ::core::default::Default::default(),
+                        belief_type: self::BeliefType::Fact,
+                        canonical_identity: ::core::default::Default::default(),
+                        value: ::core::default::Default::default(),
+                        valid_from_ns: 0,
+                        valid_to_ns: 0,
+                        provenance: ::core::default::Default::default(),
+                        conflict_domain: ::core::default::Default::default(),
+                        claim: self::AssertionClaim::Affirmative,
+                    }
+                }
+            }
+
+            impl ProposedAssertion {
+                /// Creates a [ProposedAssertionBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ProposedAssertionBuilder<()> {
+                    ProposedAssertionBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_belief_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_belief_type: impl ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                    field_canonical_identity: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_value: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_valid_from_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                    field_valid_to_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                    field_provenance: impl ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                    field_conflict_domain: impl ::planus::WriteAsOptional<
+                        ::planus::Offset<::core::primitive::str>,
+                    >,
+                    field_claim: impl ::planus::WriteAsDefault<
+                        self::AssertionClaim,
+                        self::AssertionClaim,
+                    >,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_belief_id = field_belief_id.prepare(builder);
+                    let prepared_belief_type =
+                        field_belief_type.prepare(builder, &self::BeliefType::Fact);
+                    let prepared_canonical_identity = field_canonical_identity.prepare(builder);
+                    let prepared_value = field_value.prepare(builder);
+                    let prepared_valid_from_ns = field_valid_from_ns.prepare(builder, &0);
+                    let prepared_valid_to_ns = field_valid_to_ns.prepare(builder, &0);
+                    let prepared_provenance = field_provenance.prepare(builder);
+                    let prepared_conflict_domain = field_conflict_domain.prepare(builder);
+                    let prepared_claim =
+                        field_claim.prepare(builder, &self::AssertionClaim::Affirmative);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<22> =
+                        ::core::default::Default::default();
+                    if prepared_valid_from_ns.is_some() {
+                        table_writer.write_entry::<i64>(4);
+                    }
+                    if prepared_valid_to_ns.is_some() {
+                        table_writer.write_entry::<i64>(5);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(2);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(3);
+                    table_writer.write_entry::<::planus::Offset<[self::ProvenanceRange]>>(6);
+                    if prepared_conflict_domain.is_some() {
+                        table_writer.write_entry::<::planus::Offset<str>>(7);
+                    }
+                    if prepared_belief_type.is_some() {
+                        table_writer.write_entry::<self::BeliefType>(1);
+                    }
+                    if prepared_claim.is_some() {
+                        table_writer.write_entry::<self::AssertionClaim>(8);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_valid_from_ns) =
+                                prepared_valid_from_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_valid_from_ns);
+                            }
+                            if let ::core::option::Option::Some(prepared_valid_to_ns) =
+                                prepared_valid_to_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_valid_to_ns);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_belief_id);
+                            object_writer.write::<_, _, 4>(&prepared_canonical_identity);
+                            object_writer.write::<_, _, 4>(&prepared_value);
+                            object_writer.write::<_, _, 4>(&prepared_provenance);
+                            if let ::core::option::Option::Some(prepared_conflict_domain) =
+                                prepared_conflict_domain
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_conflict_domain);
+                            }
+                            if let ::core::option::Option::Some(prepared_belief_type) =
+                                prepared_belief_type
+                            {
+                                object_writer.write::<_, _, 1>(&prepared_belief_type);
+                            }
+                            if let ::core::option::Option::Some(prepared_claim) = prepared_claim {
+                                object_writer.write::<_, _, 1>(&prepared_claim);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ProposedAssertion>> for ProposedAssertion {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProposedAssertion> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ProposedAssertion>> for ProposedAssertion {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProposedAssertion>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ProposedAssertion> for ProposedAssertion {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProposedAssertion> {
+                    ProposedAssertion::create(
+                        builder,
+                        &self.belief_id,
+                        self.belief_type,
+                        &self.canonical_identity,
+                        &self.value,
+                        self.valid_from_ns,
+                        self.valid_to_ns,
+                        &self.provenance,
+                        &self.conflict_domain,
+                        self.claim,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [ProposedAssertion] type.
+            ///
+            /// Can be created using the [ProposedAssertion::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ProposedAssertionBuilder<State>(State);
+
+            impl ProposedAssertionBuilder<()> {
+                /// Setter for the [`belief_id` field](ProposedAssertion#structfield.belief_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn belief_id<T0>(self, value: T0) -> ProposedAssertionBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    ProposedAssertionBuilder((value,))
+                }
+            }
+
+            impl<T0> ProposedAssertionBuilder<(T0,)> {
+                /// Setter for the [`belief_type` field](ProposedAssertion#structfield.belief_type).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn belief_type<T1>(self, value: T1) -> ProposedAssertionBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                {
+                    let (v0,) = self.0;
+                    ProposedAssertionBuilder((v0, value))
+                }
+
+                /// Sets the [`belief_type` field](ProposedAssertion#structfield.belief_type) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn belief_type_as_default(
+                    self,
+                ) -> ProposedAssertionBuilder<(T0, ::planus::DefaultValue)> {
+                    self.belief_type(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> ProposedAssertionBuilder<(T0, T1)> {
+                /// Setter for the [`canonical_identity` field](ProposedAssertion#structfield.canonical_identity).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn canonical_identity<T2>(
+                    self,
+                    value: T2,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1) = self.0;
+                    ProposedAssertionBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> ProposedAssertionBuilder<(T0, T1, T2)> {
+                /// Setter for the [`value` field](ProposedAssertion#structfield.value).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn value<T3>(self, value: T3) -> ProposedAssertionBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    ProposedAssertionBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> ProposedAssertionBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`valid_from_ns` field](ProposedAssertion#structfield.valid_from_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn valid_from_ns<T4>(
+                    self,
+                    value: T4,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    ProposedAssertionBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`valid_from_ns` field](ProposedAssertion#structfield.valid_from_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn valid_from_ns_as_default(
+                    self,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)>
+                {
+                    self.valid_from_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> ProposedAssertionBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`valid_to_ns` field](ProposedAssertion#structfield.valid_to_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn valid_to_ns<T5>(
+                    self,
+                    value: T5,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    ProposedAssertionBuilder((v0, v1, v2, v3, v4, value))
+                }
+
+                /// Sets the [`valid_to_ns` field](ProposedAssertion#structfield.valid_to_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn valid_to_ns_as_default(
+                    self,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, ::planus::DefaultValue)>
+                {
+                    self.valid_to_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`provenance` field](ProposedAssertion#structfield.provenance).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn provenance<T6>(
+                    self,
+                    value: T6,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    ProposedAssertionBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`conflict_domain` field](ProposedAssertion#structfield.conflict_domain).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn conflict_domain<T7>(
+                    self,
+                    value: T7,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    ProposedAssertionBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+
+                /// Sets the [`conflict_domain` field](ProposedAssertion#structfield.conflict_domain) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn conflict_domain_as_null(
+                    self,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, ())> {
+                    self.conflict_domain(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
+                /// Setter for the [`claim` field](ProposedAssertion#structfield.claim).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn claim<T8>(
+                    self,
+                    value: T8,
+                ) -> ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+                where
+                    T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = self.0;
+                    ProposedAssertionBuilder((v0, v1, v2, v3, v4, v5, v6, v7, value))
+                }
+
+                /// Sets the [`claim` field](ProposedAssertion#structfield.claim) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn claim_as_default(
+                    self,
+                ) -> ProposedAssertionBuilder<(
+                    T0,
+                    T1,
+                    T2,
+                    T3,
+                    T4,
+                    T5,
+                    T6,
+                    T7,
+                    ::planus::DefaultValue,
+                )> {
+                    self.claim(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+                ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ProposedAssertion].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProposedAssertion>
+                where
+                    Self: ::planus::WriteAsOffset<ProposedAssertion>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                T2: ::planus::WriteAs<::planus::Offset<str>>,
+                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T4: ::planus::WriteAsDefault<i64, i64>,
+                T5: ::planus::WriteAsDefault<i64, i64>,
+                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+            > ::planus::WriteAs<::planus::Offset<ProposedAssertion>>
+                for ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                type Prepared = ::planus::Offset<ProposedAssertion>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProposedAssertion> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                T2: ::planus::WriteAs<::planus::Offset<str>>,
+                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T4: ::planus::WriteAsDefault<i64, i64>,
+                T5: ::planus::WriteAsDefault<i64, i64>,
+                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+            > ::planus::WriteAsOptional<::planus::Offset<ProposedAssertion>>
+                for ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                type Prepared = ::planus::Offset<ProposedAssertion>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProposedAssertion>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                T2: ::planus::WriteAs<::planus::Offset<str>>,
+                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T4: ::planus::WriteAsDefault<i64, i64>,
+                T5: ::planus::WriteAsDefault<i64, i64>,
+                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+            > ::planus::WriteAsOffset<ProposedAssertion>
+                for ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProposedAssertion> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8) = &self.0;
+                    ProposedAssertion::create(builder, v0, v1, v2, v3, v4, v5, v6, v7, v8)
+                }
+            }
+
+            /// Reference to a deserialized [ProposedAssertion].
+            #[derive(Copy, Clone)]
+            pub struct ProposedAssertionRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> ProposedAssertionRef<'a> {
+                /// Getter for the [`belief_id` field](ProposedAssertion#structfield.belief_id).
+                #[inline]
+                pub fn belief_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "ProposedAssertion", "belief_id")
+                }
+
+                /// Getter for the [`belief_type` field](ProposedAssertion#structfield.belief_type).
+                #[inline]
+                pub fn belief_type(&self) -> ::planus::Result<self::BeliefType> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(1, "ProposedAssertion", "belief_type")?
+                            .unwrap_or(self::BeliefType::Fact),
+                    )
+                }
+
+                /// Getter for the [`canonical_identity` field](ProposedAssertion#structfield.canonical_identity).
+                #[inline]
+                pub fn canonical_identity(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(2, "ProposedAssertion", "canonical_identity")
+                }
+
+                /// Getter for the [`value` field](ProposedAssertion#structfield.value).
+                #[inline]
+                pub fn value(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(3, "ProposedAssertion", "value")
+                }
+
+                /// Getter for the [`valid_from_ns` field](ProposedAssertion#structfield.valid_from_ns).
+                #[inline]
+                pub fn valid_from_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "ProposedAssertion", "valid_from_ns")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`valid_to_ns` field](ProposedAssertion#structfield.valid_to_ns).
+                #[inline]
+                pub fn valid_to_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(5, "ProposedAssertion", "valid_to_ns")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`provenance` field](ProposedAssertion#structfield.provenance).
+                #[inline]
+                pub fn provenance(
+                    &self,
+                ) -> ::planus::Result<::planus::Vector<'a, self::ProvenanceRangeRef<'a>>>
+                {
+                    self.0.access_required(6, "ProposedAssertion", "provenance")
+                }
+
+                /// Getter for the [`conflict_domain` field](ProposedAssertion#structfield.conflict_domain).
+                #[inline]
+                pub fn conflict_domain(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<&'a ::core::primitive::str>>
+                {
+                    self.0.access(7, "ProposedAssertion", "conflict_domain")
+                }
+
+                /// Getter for the [`claim` field](ProposedAssertion#structfield.claim).
+                #[inline]
+                pub fn claim(&self) -> ::planus::Result<self::AssertionClaim> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(8, "ProposedAssertion", "claim")?
+                            .unwrap_or(self::AssertionClaim::Affirmative),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ProposedAssertionRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ProposedAssertionRef");
+                    f.field("belief_id", &self.belief_id());
+                    f.field("belief_type", &self.belief_type());
+                    f.field("canonical_identity", &self.canonical_identity());
+                    f.field("value", &self.value());
+                    f.field("valid_from_ns", &self.valid_from_ns());
+                    f.field("valid_to_ns", &self.valid_to_ns());
+                    f.field("provenance", &self.provenance());
+                    if let ::core::option::Option::Some(field_conflict_domain) =
+                        self.conflict_domain().transpose()
+                    {
+                        f.field("conflict_domain", &field_conflict_domain);
+                    }
+                    f.field("claim", &self.claim());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ProposedAssertionRef<'a>> for ProposedAssertion {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ProposedAssertionRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        belief_id: value.belief_id()?.to_vec(),
+                        belief_type: ::core::convert::TryInto::try_into(value.belief_type()?)?,
+                        canonical_identity: ::core::convert::Into::into(
+                            value.canonical_identity()?,
+                        ),
+                        value: value.value()?.to_vec(),
+                        valid_from_ns: ::core::convert::TryInto::try_into(value.valid_from_ns()?)?,
+                        valid_to_ns: ::core::convert::TryInto::try_into(value.valid_to_ns()?)?,
+                        provenance: value.provenance()?.to_vec()?,
+                        conflict_domain: value.conflict_domain()?.map(::core::convert::Into::into),
+                        claim: ::core::convert::TryInto::try_into(value.claim()?)?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ProposedAssertionRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ProposedAssertionRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ProposedAssertionRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ProposedAssertion>> for ProposedAssertion {
+                type Value = ::planus::Offset<ProposedAssertion>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ProposedAssertion>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ProposedAssertionRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[ProposedAssertionRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
             /// The table `Embedding` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Embedding` in the file `schemas/events.fbs:143`
+            /// * Table `Embedding` in the file `schemas/events.fbs:157`
             #[derive(
                 Clone,
                 Debug,
@@ -9297,7 +10008,7 @@ mod root {
             /// The table `Retract` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Retract` in the file `schemas/events.fbs:151`
+            /// * Table `Retract` in the file `schemas/events.fbs:165`
             #[derive(
                 Clone,
                 Debug,
@@ -9587,7 +10298,7 @@ mod root {
             /// The table `Attestation` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Attestation` in the file `schemas/events.fbs:156`
+            /// * Table `Attestation` in the file `schemas/events.fbs:170`
             #[derive(
                 Clone,
                 Debug,
@@ -9942,7 +10653,7 @@ mod root {
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:161`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:175`
             #[derive(
                 Clone,
                 Debug,
@@ -10020,6 +10731,9 @@ mod root {
 
                 /// The variant of type `Binding` in the union `EventPayload`
                 Binding(::planus::alloc::boxed::Box<self::Binding>),
+
+                /// The variant of type `ProposedAssertion` in the union `EventPayload`
+                ProposedAssertion(::planus::alloc::boxed::Box<self::ProposedAssertion>),
             }
 
             impl EventPayload {
@@ -10204,6 +10918,14 @@ mod root {
                 ) -> ::planus::UnionOffset<Self> {
                     ::planus::UnionOffset::new(22, value.prepare(builder).downcast())
                 }
+
+                #[inline]
+                pub fn create_proposed_assertion(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::ProposedAssertion>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(23, value.prepare(builder).downcast())
+                }
             }
 
             impl ::planus::WriteAsUnion<EventPayload> for EventPayload {
@@ -10232,6 +10954,9 @@ mod root {
                         Self::Retract(value) => Self::create_retract(builder, value),
                         Self::Attestation(value) => Self::create_attestation(builder, value),
                         Self::Binding(value) => Self::create_binding(builder, value),
+                        Self::ProposedAssertion(value) => {
+                            Self::create_proposed_assertion(builder, value)
+                        }
                     }
                 }
             }
@@ -10511,6 +11236,18 @@ mod root {
                 ) -> EventPayloadBuilder<::planus::Initialized<22, T>>
                 where
                     T: ::planus::WriteAsOffset<self::Binding>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`ProposedAssertion` variant](EventPayload#variant.ProposedAssertion).
+                #[inline]
+                pub fn proposed_assertion<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<23, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::ProposedAssertion>,
                 {
                     EventPayloadBuilder(::planus::Initialized(value))
                 }
@@ -11102,6 +11839,32 @@ mod root {
                     ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
                 }
             }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<23, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProposedAssertion>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(23, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<23, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProposedAssertion>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
 
             /// Reference to a deserialized [EventPayload].
             #[derive(Copy, Clone, Debug)]
@@ -11128,6 +11891,7 @@ mod root {
                 Retract(self::RetractRef<'a>),
                 Attestation(self::AttestationRef<'a>),
                 Binding(self::BindingRef<'a>),
+                ProposedAssertion(self::ProposedAssertionRef<'a>),
             }
 
             impl<'a> ::core::convert::TryFrom<EventPayloadRef<'a>> for EventPayload {
@@ -11266,6 +12030,12 @@ mod root {
                                 ::core::convert::TryFrom::try_from(value)?,
                             ))
                         }
+
+                        EventPayloadRef::ProposedAssertion(value) => {
+                            Self::ProposedAssertion(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
                     })
                 }
             }
@@ -11343,6 +12113,9 @@ mod root {
                         22 => ::core::result::Result::Ok(Self::Binding(
                             ::planus::TableRead::from_buffer(buffer, field_offset)?,
                         )),
+                        23 => ::core::result::Result::Ok(Self::ProposedAssertion(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
                         _ => ::core::result::Result::Err(
                             ::planus::errors::ErrorKind::UnknownUnionTag { tag },
                         ),
@@ -11357,7 +12130,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:186`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:201`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]

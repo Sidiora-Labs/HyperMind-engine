@@ -1,8 +1,9 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::events::{
-    AttestationDisposition, Authority, Binding, Effect, Embedding, EventEnvelope, EventEnvelopeRef,
-    EventPayload, LoopCloseReason, LoopClosed, Outcome, ToolResult,
+    Assertion, AttestationDisposition, Authority, Binding, Consolidation, Effect, Embedding,
+    EventEnvelope, EventEnvelopeRef, EventPayload, LoopCloseReason, LoopClosed, Outcome,
+    ProposedAssertion, ProvenanceRange, Retract, ToolResult,
 };
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
@@ -45,6 +46,7 @@ pub enum EventKind {
     Retract = 20,
     Attestation = 21,
     Binding = 22,
+    ProposedAssertion = 23,
 }
 
 impl EventKind {
@@ -88,6 +90,15 @@ impl EventKind {
     pub const fn is_wave_four(self) -> bool {
         self.is_wave_three() || matches!(self, Self::Embedding)
     }
+
+    #[must_use]
+    pub const fn is_wave_five(self) -> bool {
+        self.is_wave_four()
+            || matches!(
+                self,
+                Self::Assertion | Self::Consolidation | Self::Retract | Self::ProposedAssertion
+            )
+    }
 }
 
 impl TryFrom<u8> for EventKind {
@@ -117,6 +128,7 @@ impl TryFrom<u8> for EventKind {
             20 => Ok(Self::Retract),
             21 => Ok(Self::Attestation),
             22 => Ok(Self::Binding),
+            23 => Ok(Self::ProposedAssertion),
             _ => Err(()),
         }
     }
@@ -190,7 +202,7 @@ pub fn verify_event_with_history(
     if envelope.schema_version == 0 || envelope.schema_version > CURRENT_SCHEMA_VERSION {
         return Err(Error::new(ErrorCode::SchemaVersion));
     }
-    if !expected_kind.is_wave_four() || payload_kind(&envelope.payload) != expected_kind {
+    if !expected_kind.is_wave_five() || payload_kind(&envelope.payload) != expected_kind {
         return Err(Error::new(ErrorCode::ForbiddenKind));
     }
     validate_envelope(&envelope)?;
@@ -335,7 +347,10 @@ fn validate_payload(
         }
         EventPayload::Binding(value) => validate_binding(value),
         EventPayload::Embedding(value) => validate_embedding(value),
-        _ => Err(Error::new(ErrorCode::ForbiddenKind)),
+        EventPayload::Assertion(value) => validate_assertion(value),
+        EventPayload::ProposedAssertion(value) => validate_proposed_assertion(value),
+        EventPayload::Consolidation(value) => validate_consolidation(value),
+        EventPayload::Retract(value) => validate_retract(value),
     }
 }
 
@@ -419,6 +434,81 @@ fn validate_embedding(value: &Embedding) -> Result<(), Error> {
     }
 }
 
+fn validate_assertion(value: &Assertion) -> Result<(), Error> {
+    validate_belief_fields(
+        &value.belief_id,
+        &value.canonical_identity,
+        &value.value,
+        value.valid_from_ns,
+        value.valid_to_ns,
+        &value.provenance,
+        value.conflict_domain.as_deref(),
+    )
+}
+
+fn validate_proposed_assertion(value: &ProposedAssertion) -> Result<(), Error> {
+    validate_belief_fields(
+        &value.belief_id,
+        &value.canonical_identity,
+        &value.value,
+        value.valid_from_ns,
+        value.valid_to_ns,
+        &value.provenance,
+        value.conflict_domain.as_deref(),
+    )
+}
+
+fn validate_consolidation(value: &Consolidation) -> Result<(), Error> {
+    if value.assertions.is_empty() {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    value.assertions.iter().try_for_each(validate_assertion)
+}
+
+fn validate_retract(value: &Retract) -> Result<(), Error> {
+    if !bounded_identifier(&value.belief_id) {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_provenance(&value.provenance)
+}
+
+fn validate_belief_fields(
+    belief_id: &[u8],
+    canonical_identity: &str,
+    value: &[u8],
+    valid_from_ns: i64,
+    valid_to_ns: i64,
+    provenance: &[ProvenanceRange],
+    conflict_domain: Option<&str>,
+) -> Result<(), Error> {
+    if !bounded_identifier(belief_id)
+        || canonical_identity.is_empty()
+        || canonical_identity.len() > MAXIMUM_IDENTIFIER_BYTES
+        || value.is_empty()
+        || value.len() > MAXIMUM_EVENT_BYTES
+        || (valid_to_ns != 0 && valid_to_ns < valid_from_ns)
+        || conflict_domain
+            .is_some_and(|domain| domain.is_empty() || domain.len() > MAXIMUM_IDENTIFIER_BYTES)
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_provenance(provenance)
+}
+
+fn validate_provenance(provenance: &[ProvenanceRange]) -> Result<(), Error> {
+    if provenance.is_empty()
+        || provenance.iter().any(|range| {
+            range.first_lsn == 0
+                || range.last_lsn < range.first_lsn
+                || range.byte_end <= range.byte_start
+        })
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
 fn require_prior_tool_call(lsn: u64, history: &impl EventHistory) -> Result<(), Error> {
     let referenced_lsn = LSN::new(lsn);
     if history.kind_at(referenced_lsn) != Some(EventKind::ToolCall) {
@@ -455,5 +545,6 @@ fn payload_kind(payload: &EventPayload) -> EventKind {
         EventPayload::Retract(_) => EventKind::Retract,
         EventPayload::Attestation(_) => EventKind::Attestation,
         EventPayload::Binding(_) => EventKind::Binding,
+        EventPayload::ProposedAssertion(_) => EventKind::ProposedAssertion,
     }
 }

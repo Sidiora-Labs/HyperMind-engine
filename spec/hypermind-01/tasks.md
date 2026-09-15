@@ -135,7 +135,7 @@
   - [x] 4.7 Slice 4 journey: 10k ingest, entity and paraphrase recall, deadline miss then fresh bundle
     - Journey: ingest 10k events with the local embedder, recall a path through the entity lane and a paraphrase through the vector lane, saturate the actor with load so activate misses its deadline, receive the stale bundle marked degraded with the miss in gaps, receive the fresh bundle by subscription, gate slice4 green.
     - _Requirements: 1.1, 6.1, 6.2, 7.3_
-  - [ ] 5.1 Belief events, tri-temporal envelope, byte-offset provenance, admission gate
+  - [x] 5.1 Belief events, tri-temporal envelope, byte-offset provenance, admission gate
     - Enable Assertion, Consolidation, Retract and add ProposedAssertion; event_time_ns on the envelope; byte_start and byte_end on ProvenanceRange; protocol adds AsOf with valid_time_ns or known_lsn and BeliefResult with version, supersedes_version, provenance and conflict edges.
     - Port belief_gate: negative_existence requires a tool_observed LSN inside its provenance or kNegativeExistenceUncorroborated; same-type same-domain different-identity live beliefs are listed as conflicts; AdmitBatch probes the socket batch before commit and returns typed rejections; apply-time rejections are deterministic skips.
     - _Requirements: 8.1, 8.2_

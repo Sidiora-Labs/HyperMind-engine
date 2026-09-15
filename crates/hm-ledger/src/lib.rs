@@ -3,6 +3,7 @@
 pub mod apply;
 pub mod checkpoint;
 pub mod frame;
+pub mod gate;
 pub mod idempotency;
 pub mod keyring;
 pub mod mmr;

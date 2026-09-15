@@ -3746,6 +3746,8 @@ mod root {
                 pub valid_time_ns: i64,
                 /// The field `transaction_lsn` in the table `AsOf`
                 pub transaction_lsn: u64,
+                /// The field `known_lsn` in the table `AsOf`
+                pub known_lsn: u64,
             }
 
             #[allow(clippy::derivable_impls)]
@@ -3756,6 +3758,7 @@ mod root {
                         canonical_identity: ::core::default::Default::default(),
                         valid_time_ns: 0,
                         transaction_lsn: 0,
+                        known_lsn: 0,
                     }
                 }
             }
@@ -3774,19 +3777,24 @@ mod root {
                     field_canonical_identity: impl ::planus::WriteAs<::planus::Offset<str>>,
                     field_valid_time_ns: impl ::planus::WriteAsDefault<i64, i64>,
                     field_transaction_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_known_lsn: impl ::planus::WriteAsDefault<u64, u64>,
                 ) -> ::planus::Offset<Self> {
                     let prepared_belief_type = field_belief_type.prepare(builder, &0);
                     let prepared_canonical_identity = field_canonical_identity.prepare(builder);
                     let prepared_valid_time_ns = field_valid_time_ns.prepare(builder, &0);
                     let prepared_transaction_lsn = field_transaction_lsn.prepare(builder, &0);
+                    let prepared_known_lsn = field_known_lsn.prepare(builder, &0);
 
-                    let mut table_writer: ::planus::table_writer::TableWriter<12> =
+                    let mut table_writer: ::planus::table_writer::TableWriter<14> =
                         ::core::default::Default::default();
                     if prepared_valid_time_ns.is_some() {
                         table_writer.write_entry::<i64>(2);
                     }
                     if prepared_transaction_lsn.is_some() {
                         table_writer.write_entry::<u64>(3);
+                    }
+                    if prepared_known_lsn.is_some() {
+                        table_writer.write_entry::<u64>(4);
                     }
                     table_writer.write_entry::<::planus::Offset<str>>(1);
                     if prepared_belief_type.is_some() {
@@ -3804,6 +3812,11 @@ mod root {
                                 prepared_transaction_lsn
                             {
                                 object_writer.write::<_, _, 8>(&prepared_transaction_lsn);
+                            }
+                            if let ::core::option::Option::Some(prepared_known_lsn) =
+                                prepared_known_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_known_lsn);
                             }
                             object_writer.write::<_, _, 4>(&prepared_canonical_identity);
                             if let ::core::option::Option::Some(prepared_belief_type) =
@@ -3847,6 +3860,7 @@ mod root {
                         &self.canonical_identity,
                         self.valid_time_ns,
                         self.transaction_lsn,
+                        self.known_lsn,
                     )
                 }
             }
@@ -3935,6 +3949,28 @@ mod root {
             }
 
             impl<T0, T1, T2, T3> AsOfBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`known_lsn` field](AsOf#structfield.known_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn known_lsn<T4>(self, value: T4) -> AsOfBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    AsOfBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`known_lsn` field](AsOf#structfield.known_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn known_lsn_as_default(
+                    self,
+                ) -> AsOfBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)> {
+                    self.known_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> AsOfBuilder<(T0, T1, T2, T3, T4)> {
                 /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [AsOf].
                 #[inline]
                 pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<AsOf>
@@ -3950,7 +3986,8 @@ mod root {
                 T1: ::planus::WriteAs<::planus::Offset<str>>,
                 T2: ::planus::WriteAsDefault<i64, i64>,
                 T3: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAs<::planus::Offset<AsOf>> for AsOfBuilder<(T0, T1, T2, T3)>
+                T4: ::planus::WriteAsDefault<u64, u64>,
+            > ::planus::WriteAs<::planus::Offset<AsOf>> for AsOfBuilder<(T0, T1, T2, T3, T4)>
             {
                 type Prepared = ::planus::Offset<AsOf>;
 
@@ -3965,7 +4002,9 @@ mod root {
                 T1: ::planus::WriteAs<::planus::Offset<str>>,
                 T2: ::planus::WriteAsDefault<i64, i64>,
                 T3: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOptional<::planus::Offset<AsOf>> for AsOfBuilder<(T0, T1, T2, T3)>
+                T4: ::planus::WriteAsDefault<u64, u64>,
+            > ::planus::WriteAsOptional<::planus::Offset<AsOf>>
+                for AsOfBuilder<(T0, T1, T2, T3, T4)>
             {
                 type Prepared = ::planus::Offset<AsOf>;
 
@@ -3983,12 +4022,13 @@ mod root {
                 T1: ::planus::WriteAs<::planus::Offset<str>>,
                 T2: ::planus::WriteAsDefault<i64, i64>,
                 T3: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<AsOf> for AsOfBuilder<(T0, T1, T2, T3)>
+                T4: ::planus::WriteAsDefault<u64, u64>,
+            > ::planus::WriteAsOffset<AsOf> for AsOfBuilder<(T0, T1, T2, T3, T4)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<AsOf> {
-                    let (v0, v1, v2, v3) = &self.0;
-                    AsOf::create(builder, v0, v1, v2, v3)
+                    let (v0, v1, v2, v3, v4) = &self.0;
+                    AsOf::create(builder, v0, v1, v2, v3, v4)
                 }
             }
 
@@ -4026,6 +4066,12 @@ mod root {
                         self.0.access(3, "AsOf", "transaction_lsn")?.unwrap_or(0),
                     )
                 }
+
+                /// Getter for the [`known_lsn` field](AsOf#structfield.known_lsn).
+                #[inline]
+                pub fn known_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(self.0.access(4, "AsOf", "known_lsn")?.unwrap_or(0))
+                }
             }
 
             impl<'a> ::core::fmt::Debug for AsOfRef<'a> {
@@ -4035,6 +4081,7 @@ mod root {
                     f.field("canonical_identity", &self.canonical_identity());
                     f.field("valid_time_ns", &self.valid_time_ns());
                     f.field("transaction_lsn", &self.transaction_lsn());
+                    f.field("known_lsn", &self.known_lsn());
                     f.finish()
                 }
             }
@@ -4053,6 +4100,7 @@ mod root {
                         transaction_lsn: ::core::convert::TryInto::try_into(
                             value.transaction_lsn()?,
                         )?,
+                        known_lsn: ::core::convert::TryInto::try_into(value.known_lsn()?)?,
                     })
                 }
             }
@@ -4129,7 +4177,7 @@ mod root {
             ///  Persists an opaque turn state with client-sequence idempotency.
             ///
             /// Generated from these locations:
-            /// * Table `Checkpoint` in the file `schemas/protocol.fbs:71`
+            /// * Table `Checkpoint` in the file `schemas/protocol.fbs:72`
             #[derive(
                 Clone,
                 Debug,
@@ -4465,7 +4513,7 @@ mod root {
             ///  Reads the latest persisted state for one turn identity.
             ///
             /// Generated from these locations:
-            /// * Table `LatestCheckpoint` in the file `schemas/protocol.fbs:78`
+            /// * Table `LatestCheckpoint` in the file `schemas/protocol.fbs:79`
             #[derive(
                 Clone,
                 Debug,
@@ -4737,7 +4785,7 @@ mod root {
             /// The table `Attest` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Attest` in the file `schemas/protocol.fbs:82`
+            /// * Table `Attest` in the file `schemas/protocol.fbs:83`
             #[derive(
                 Clone,
                 Debug,
@@ -5114,7 +5162,7 @@ mod root {
             ///  Streams committed events after an optional conversation and LSN cursor.
             ///
             /// Generated from these locations:
-            /// * Table `Subscribe` in the file `schemas/protocol.fbs:89`
+            /// * Table `Subscribe` in the file `schemas/protocol.fbs:90`
             #[derive(
                 Clone,
                 Debug,
@@ -5436,7 +5484,7 @@ mod root {
             /// The table `Health` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Health` in the file `schemas/protocol.fbs:94`
+            /// * Table `Health` in the file `schemas/protocol.fbs:95`
             #[derive(
                 Clone,
                 Debug,
@@ -5647,7 +5695,7 @@ mod root {
             /// The table `Stats` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Stats` in the file `schemas/protocol.fbs:96`
+            /// * Table `Stats` in the file `schemas/protocol.fbs:97`
             #[derive(
                 Clone,
                 Debug,
@@ -5909,7 +5957,7 @@ mod root {
             /// The table `LatencyHistograms` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyHistograms` in the file `schemas/protocol.fbs:100`
+            /// * Table `LatencyHistograms` in the file `schemas/protocol.fbs:101`
             #[derive(
                 Clone,
                 Debug,
@@ -6139,7 +6187,7 @@ mod root {
             /// The table `VerifyStatus` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `VerifyStatus` in the file `schemas/protocol.fbs:102`
+            /// * Table `VerifyStatus` in the file `schemas/protocol.fbs:103`
             #[derive(
                 Clone,
                 Debug,
@@ -6419,7 +6467,7 @@ mod root {
             /// The table `RebuildProjection` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RebuildProjection` in the file `schemas/protocol.fbs:106`
+            /// * Table `RebuildProjection` in the file `schemas/protocol.fbs:107`
             #[derive(
                 Clone,
                 Debug,
@@ -6740,7 +6788,7 @@ mod root {
             /// The table `CryptoDelete` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `CryptoDelete` in the file `schemas/protocol.fbs:111`
+            /// * Table `CryptoDelete` in the file `schemas/protocol.fbs:112`
             #[derive(
                 Clone,
                 Debug,
@@ -7020,7 +7068,7 @@ mod root {
             /// The union `RequestPayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `RequestPayload` in the file `schemas/protocol.fbs:115`
+            /// * Union `RequestPayload` in the file `schemas/protocol.fbs:116`
             #[derive(
                 Clone,
                 Debug,
@@ -8039,7 +8087,7 @@ mod root {
             /// The table `Request` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Request` in the file `schemas/protocol.fbs:133`
+            /// * Table `Request` in the file `schemas/protocol.fbs:134`
             #[derive(
                 Clone,
                 Debug,
@@ -8333,7 +8381,7 @@ mod root {
             /// The table `ErrorDetail` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `ErrorDetail` in the file `schemas/protocol.fbs:138`
+            /// * Table `ErrorDetail` in the file `schemas/protocol.fbs:139`
             #[derive(
                 Clone,
                 Debug,
@@ -8823,7 +8871,7 @@ mod root {
             /// The table `AppendAck` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AppendAck` in the file `schemas/protocol.fbs:146`
+            /// * Table `AppendAck` in the file `schemas/protocol.fbs:147`
             #[derive(
                 Clone,
                 Debug,
@@ -9400,7 +9448,7 @@ mod root {
             /// The table `BytesResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BytesResult` in the file `schemas/protocol.fbs:156`
+            /// * Table `BytesResult` in the file `schemas/protocol.fbs:157`
             #[derive(
                 Clone,
                 Debug,
@@ -9669,7 +9717,7 @@ mod root {
             ///  Confirms the server-assigned bounded subscription identity.
             ///
             /// Generated from these locations:
-            /// * Table `SubscriptionAck` in the file `schemas/protocol.fbs:161`
+            /// * Table `SubscriptionAck` in the file `schemas/protocol.fbs:162`
             #[derive(
                 Clone,
                 Debug,
@@ -9960,7 +10008,7 @@ mod root {
             /// The table `HealthResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `HealthResult` in the file `schemas/protocol.fbs:165`
+            /// * Table `HealthResult` in the file `schemas/protocol.fbs:166`
             #[derive(
                 Clone,
                 Debug,
@@ -10353,7 +10401,7 @@ mod root {
             /// The table `ProjectionStat` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `ProjectionStat` in the file `schemas/protocol.fbs:171`
+            /// * Table `ProjectionStat` in the file `schemas/protocol.fbs:172`
             #[derive(
                 Clone,
                 Debug,
@@ -10676,7 +10724,7 @@ mod root {
             /// The table `StatsResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `StatsResult` in the file `schemas/protocol.fbs:176`
+            /// * Table `StatsResult` in the file `schemas/protocol.fbs:177`
             #[derive(
                 Clone,
                 Debug,
@@ -11106,7 +11154,7 @@ mod root {
             /// The table `LatencyBucket` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyBucket` in the file `schemas/protocol.fbs:183`
+            /// * Table `LatencyBucket` in the file `schemas/protocol.fbs:184`
             #[derive(
                 Clone,
                 Debug,
@@ -11477,7 +11525,7 @@ mod root {
             /// The table `LatencyResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyResult` in the file `schemas/protocol.fbs:189`
+            /// * Table `LatencyResult` in the file `schemas/protocol.fbs:190`
             #[derive(
                 Clone,
                 Debug,
@@ -11755,7 +11803,7 @@ mod root {
             /// The table `VerifyResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `VerifyResult` in the file `schemas/protocol.fbs:193`
+            /// * Table `VerifyResult` in the file `schemas/protocol.fbs:194`
             #[derive(
                 Clone,
                 Debug,
@@ -12233,7 +12281,7 @@ mod root {
             /// The table `RebuildResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RebuildResult` in the file `schemas/protocol.fbs:201`
+            /// * Table `RebuildResult` in the file `schemas/protocol.fbs:202`
             #[derive(
                 Clone,
                 Debug,
@@ -12600,7 +12648,7 @@ mod root {
             /// The table `DeleteResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `DeleteResult` in the file `schemas/protocol.fbs:207`
+            /// * Table `DeleteResult` in the file `schemas/protocol.fbs:208`
             #[derive(
                 Clone,
                 Debug,
@@ -12916,7 +12964,7 @@ mod root {
             /// The table `FrameRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `FrameRecord` in the file `schemas/protocol.fbs:212`
+            /// * Table `FrameRecord` in the file `schemas/protocol.fbs:213`
             #[derive(
                 Clone,
                 Debug,
@@ -13413,7 +13461,7 @@ mod root {
             /// The table `TranscriptResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `TranscriptResult` in the file `schemas/protocol.fbs:221`
+            /// * Table `TranscriptResult` in the file `schemas/protocol.fbs:222`
             #[derive(
                 Clone,
                 Debug,
@@ -13745,7 +13793,7 @@ mod root {
             /// The table `TemporalWindowRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `TemporalWindowRecord` in the file `schemas/protocol.fbs:226`
+            /// * Table `TemporalWindowRecord` in the file `schemas/protocol.fbs:227`
             #[derive(
                 Clone,
                 Debug,
@@ -14202,7 +14250,7 @@ mod root {
             /// The table `RecallResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RecallResult` in the file `schemas/protocol.fbs:233`
+            /// * Table `RecallResult` in the file `schemas/protocol.fbs:234`
             #[derive(
                 Clone,
                 Debug,
@@ -14565,7 +14613,7 @@ mod root {
             /// The table `BeliefProvenanceRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefProvenanceRecord` in the file `schemas/protocol.fbs:238`
+            /// * Table `BeliefProvenanceRecord` in the file `schemas/protocol.fbs:239`
             #[derive(
                 Clone,
                 Debug,
@@ -14582,6 +14630,10 @@ mod root {
                 pub first_lsn: u64,
                 /// The field `last_lsn` in the table `BeliefProvenanceRecord`
                 pub last_lsn: u64,
+                /// The field `byte_start` in the table `BeliefProvenanceRecord`
+                pub byte_start: u32,
+                /// The field `byte_end` in the table `BeliefProvenanceRecord`
+                pub byte_end: u32,
             }
 
             #[allow(clippy::derivable_impls)]
@@ -14590,6 +14642,8 @@ mod root {
                     Self {
                         first_lsn: 0,
                         last_lsn: 0,
+                        byte_start: 0,
+                        byte_end: 0,
                     }
                 }
             }
@@ -14606,17 +14660,27 @@ mod root {
                     builder: &mut ::planus::Builder,
                     field_first_lsn: impl ::planus::WriteAsDefault<u64, u64>,
                     field_last_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_byte_start: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_byte_end: impl ::planus::WriteAsDefault<u32, u32>,
                 ) -> ::planus::Offset<Self> {
                     let prepared_first_lsn = field_first_lsn.prepare(builder, &0);
                     let prepared_last_lsn = field_last_lsn.prepare(builder, &0);
+                    let prepared_byte_start = field_byte_start.prepare(builder, &0);
+                    let prepared_byte_end = field_byte_end.prepare(builder, &0);
 
-                    let mut table_writer: ::planus::table_writer::TableWriter<8> =
+                    let mut table_writer: ::planus::table_writer::TableWriter<12> =
                         ::core::default::Default::default();
                     if prepared_first_lsn.is_some() {
                         table_writer.write_entry::<u64>(0);
                     }
                     if prepared_last_lsn.is_some() {
                         table_writer.write_entry::<u64>(1);
+                    }
+                    if prepared_byte_start.is_some() {
+                        table_writer.write_entry::<u32>(2);
+                    }
+                    if prepared_byte_end.is_some() {
+                        table_writer.write_entry::<u32>(3);
                     }
 
                     unsafe {
@@ -14630,6 +14694,16 @@ mod root {
                                 prepared_last_lsn
                             {
                                 object_writer.write::<_, _, 8>(&prepared_last_lsn);
+                            }
+                            if let ::core::option::Option::Some(prepared_byte_start) =
+                                prepared_byte_start
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_byte_start);
+                            }
+                            if let ::core::option::Option::Some(prepared_byte_end) =
+                                prepared_byte_end
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_byte_end);
                             }
                         });
                     }
@@ -14670,7 +14744,13 @@ mod root {
                     &self,
                     builder: &mut ::planus::Builder,
                 ) -> ::planus::Offset<BeliefProvenanceRecord> {
-                    BeliefProvenanceRecord::create(builder, self.first_lsn, self.last_lsn)
+                    BeliefProvenanceRecord::create(
+                        builder,
+                        self.first_lsn,
+                        self.last_lsn,
+                        self.byte_start,
+                        self.byte_end,
+                    )
                 }
             }
 
@@ -14725,6 +14805,58 @@ mod root {
             }
 
             impl<T0, T1> BeliefProvenanceRecordBuilder<(T0, T1)> {
+                /// Setter for the [`byte_start` field](BeliefProvenanceRecord#structfield.byte_start).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_start<T2>(
+                    self,
+                    value: T2,
+                ) -> BeliefProvenanceRecordBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1) = self.0;
+                    BeliefProvenanceRecordBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`byte_start` field](BeliefProvenanceRecord#structfield.byte_start) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_start_as_default(
+                    self,
+                ) -> BeliefProvenanceRecordBuilder<(T0, T1, ::planus::DefaultValue)>
+                {
+                    self.byte_start(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> BeliefProvenanceRecordBuilder<(T0, T1, T2)> {
+                /// Setter for the [`byte_end` field](BeliefProvenanceRecord#structfield.byte_end).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_end<T3>(
+                    self,
+                    value: T3,
+                ) -> BeliefProvenanceRecordBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    BeliefProvenanceRecordBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`byte_end` field](BeliefProvenanceRecord#structfield.byte_end) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_end_as_default(
+                    self,
+                ) -> BeliefProvenanceRecordBuilder<(T0, T1, T2, ::planus::DefaultValue)>
+                {
+                    self.byte_end(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3> BeliefProvenanceRecordBuilder<(T0, T1, T2, T3)> {
                 /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [BeliefProvenanceRecord].
                 #[inline]
                 pub fn finish(
@@ -14738,9 +14870,13 @@ mod root {
                 }
             }
 
-            impl<T0: ::planus::WriteAsDefault<u64, u64>, T1: ::planus::WriteAsDefault<u64, u64>>
-                ::planus::WriteAs<::planus::Offset<BeliefProvenanceRecord>>
-                for BeliefProvenanceRecordBuilder<(T0, T1)>
+            impl<
+                T0: ::planus::WriteAsDefault<u64, u64>,
+                T1: ::planus::WriteAsDefault<u64, u64>,
+                T2: ::planus::WriteAsDefault<u32, u32>,
+                T3: ::planus::WriteAsDefault<u32, u32>,
+            > ::planus::WriteAs<::planus::Offset<BeliefProvenanceRecord>>
+                for BeliefProvenanceRecordBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<BeliefProvenanceRecord>;
 
@@ -14753,9 +14889,13 @@ mod root {
                 }
             }
 
-            impl<T0: ::planus::WriteAsDefault<u64, u64>, T1: ::planus::WriteAsDefault<u64, u64>>
-                ::planus::WriteAsOptional<::planus::Offset<BeliefProvenanceRecord>>
-                for BeliefProvenanceRecordBuilder<(T0, T1)>
+            impl<
+                T0: ::planus::WriteAsDefault<u64, u64>,
+                T1: ::planus::WriteAsDefault<u64, u64>,
+                T2: ::planus::WriteAsDefault<u32, u32>,
+                T3: ::planus::WriteAsDefault<u32, u32>,
+            > ::planus::WriteAsOptional<::planus::Offset<BeliefProvenanceRecord>>
+                for BeliefProvenanceRecordBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<BeliefProvenanceRecord>;
 
@@ -14769,17 +14909,21 @@ mod root {
                 }
             }
 
-            impl<T0: ::planus::WriteAsDefault<u64, u64>, T1: ::planus::WriteAsDefault<u64, u64>>
-                ::planus::WriteAsOffset<BeliefProvenanceRecord>
-                for BeliefProvenanceRecordBuilder<(T0, T1)>
+            impl<
+                T0: ::planus::WriteAsDefault<u64, u64>,
+                T1: ::planus::WriteAsDefault<u64, u64>,
+                T2: ::planus::WriteAsDefault<u32, u32>,
+                T3: ::planus::WriteAsDefault<u32, u32>,
+            > ::planus::WriteAsOffset<BeliefProvenanceRecord>
+                for BeliefProvenanceRecordBuilder<(T0, T1, T2, T3)>
             {
                 #[inline]
                 fn prepare(
                     &self,
                     builder: &mut ::planus::Builder,
                 ) -> ::planus::Offset<BeliefProvenanceRecord> {
-                    let (v0, v1) = &self.0;
-                    BeliefProvenanceRecord::create(builder, v0, v1)
+                    let (v0, v1, v2, v3) = &self.0;
+                    BeliefProvenanceRecord::create(builder, v0, v1, v2, v3)
                 }
             }
 
@@ -14809,6 +14953,26 @@ mod root {
                             .unwrap_or(0),
                     )
                 }
+
+                /// Getter for the [`byte_start` field](BeliefProvenanceRecord#structfield.byte_start).
+                #[inline]
+                pub fn byte_start(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "BeliefProvenanceRecord", "byte_start")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`byte_end` field](BeliefProvenanceRecord#structfield.byte_end).
+                #[inline]
+                pub fn byte_end(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(3, "BeliefProvenanceRecord", "byte_end")?
+                            .unwrap_or(0),
+                    )
+                }
             }
 
             impl<'a> ::core::fmt::Debug for BeliefProvenanceRecordRef<'a> {
@@ -14816,6 +14980,8 @@ mod root {
                     let mut f = f.debug_struct("BeliefProvenanceRecordRef");
                     f.field("first_lsn", &self.first_lsn());
                     f.field("last_lsn", &self.last_lsn());
+                    f.field("byte_start", &self.byte_start());
+                    f.field("byte_end", &self.byte_end());
                     f.finish()
                 }
             }
@@ -14828,6 +14994,8 @@ mod root {
                     ::core::result::Result::Ok(Self {
                         first_lsn: ::core::convert::TryInto::try_into(value.first_lsn()?)?,
                         last_lsn: ::core::convert::TryInto::try_into(value.last_lsn()?)?,
+                        byte_start: ::core::convert::TryInto::try_into(value.byte_start()?)?,
+                        byte_end: ::core::convert::TryInto::try_into(value.byte_end()?)?,
                     })
                 }
             }
@@ -14914,7 +15082,7 @@ mod root {
             /// The table `BeliefConflictRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefConflictRecord` in the file `schemas/protocol.fbs:243`
+            /// * Table `BeliefConflictRecord` in the file `schemas/protocol.fbs:246`
             #[derive(
                 Clone,
                 Debug,
@@ -15423,7 +15591,7 @@ mod root {
             /// The table `BeliefResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefResult` in the file `schemas/protocol.fbs:251`
+            /// * Table `BeliefResult` in the file `schemas/protocol.fbs:254`
             #[derive(
                 Clone,
                 Debug,
@@ -16655,7 +16823,7 @@ mod root {
             ///  Identifies the ledger record containing the accepted checkpoint.
             ///
             /// Generated from these locations:
-            /// * Table `CheckpointAck` in the file `schemas/protocol.fbs:270`
+            /// * Table `CheckpointAck` in the file `schemas/protocol.fbs:273`
             #[derive(
                 Clone,
                 Debug,
@@ -16935,7 +17103,7 @@ mod root {
             ///  Returns the latest opaque turn state without interpreting its bytes.
             ///
             /// Generated from these locations:
-            /// * Table `CheckpointResult` in the file `schemas/protocol.fbs:275`
+            /// * Table `CheckpointResult` in the file `schemas/protocol.fbs:278`
             #[derive(
                 Clone,
                 Debug,
@@ -17318,7 +17486,7 @@ mod root {
             /// The table `AttestAck` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AttestAck` in the file `schemas/protocol.fbs:281`
+            /// * Table `AttestAck` in the file `schemas/protocol.fbs:284`
             #[derive(
                 Clone,
                 Debug,
@@ -17680,7 +17848,7 @@ mod root {
             /// The union `ResponsePayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `ResponsePayload` in the file `schemas/protocol.fbs:287`
+            /// * Union `ResponsePayload` in the file `schemas/protocol.fbs:290`
             #[derive(
                 Clone,
                 Debug,
@@ -18776,7 +18944,7 @@ mod root {
             /// The table `Response` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Response` in the file `schemas/protocol.fbs:306`
+            /// * Table `Response` in the file `schemas/protocol.fbs:309`
             #[derive(
                 Clone,
                 Debug,
@@ -19159,7 +19327,7 @@ mod root {
             ///  Pushes one committed ledger event to a subscriber.
             ///
             /// Generated from these locations:
-            /// * Table `Event` in the file `schemas/protocol.fbs:313`
+            /// * Table `Event` in the file `schemas/protocol.fbs:316`
             #[derive(
                 Clone,
                 Debug,
@@ -19683,7 +19851,7 @@ mod root {
             /// The union `WirePayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `WirePayload` in the file `schemas/protocol.fbs:323`
+            /// * Union `WirePayload` in the file `schemas/protocol.fbs:326`
             #[derive(
                 Clone,
                 Debug,
@@ -20069,7 +20237,7 @@ mod root {
             /// The table `WireEnvelope` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `WireEnvelope` in the file `schemas/protocol.fbs:331`
+            /// * Table `WireEnvelope` in the file `schemas/protocol.fbs:334`
             #[derive(
                 Clone,
                 Debug,

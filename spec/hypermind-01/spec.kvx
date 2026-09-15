@@ -600,7 +600,7 @@ do_1 = "Journey: ingest 10k events with the local embedder, recall a path throug
 
 [task.5.1]
 title = "Belief events, tri-temporal envelope, byte-offset provenance, admission gate"
-status = "pending"
+status = "done"
 wave = 5
 section = "Wave 5 — Belief and time: bitemporal beliefs, adjudication, a protected self"
 owner_lane = "schema"

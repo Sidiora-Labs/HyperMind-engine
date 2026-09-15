@@ -2,8 +2,8 @@
 
 use crate::event::{EventKind, MAXIMUM_EVENT_BYTES};
 use crate::wire::{
-    Activate, Append, Checkpoint, Event as EventPush, Hello, LatestCheckpoint, Recall, Request,
-    RequestPayload, Subscribe, Transcript, WireEnvelope, WireEnvelopeRef, WirePayload,
+    Activate, Append, AsOf, Checkpoint, Event as EventPush, Hello, LatestCheckpoint, Recall,
+    Request, RequestPayload, Subscribe, Transcript, WireEnvelope, WireEnvelopeRef, WirePayload,
 };
 use hm_core::{Error, ErrorCode};
 use planus::ReadAsRoot;
@@ -72,6 +72,7 @@ pub fn validate_request(request: &Request) -> Result<(), Error> {
         RequestPayload::Activate(value) => validate_activate(value),
         RequestPayload::Transcript(value) => validate_transcript(value),
         RequestPayload::Recall(value) => validate_recall(value),
+        RequestPayload::AsOf(value) => validate_asof(value),
         RequestPayload::Checkpoint(value) => validate_checkpoint(value),
         RequestPayload::LatestCheckpoint(value) => validate_latest_checkpoint(value),
         RequestPayload::Subscribe(value) => validate_subscribe(value),
@@ -127,7 +128,7 @@ fn validate_append(append: &Append) -> Result<(), Error> {
     for event in &append.events {
         let kind =
             EventKind::try_from(event.kind).map_err(|()| Error::new(ErrorCode::ProtocolInvalid))?;
-        if !kind.is_wave_two()
+        if !kind.is_wave_five()
             || event.conversation.len() != 16
             || event.payload.is_empty()
             || event.payload.len() > MAXIMUM_EVENT_BYTES
@@ -191,6 +192,21 @@ fn validate_recall(request: &Recall) -> Result<(), Error> {
     }
 }
 
+fn validate_asof(request: &AsOf) -> Result<(), Error> {
+    let valid_axis = request.valid_time_ns != 0;
+    let known_axis = request.known_lsn != 0;
+    if request.belief_type <= 4
+        && !request.canonical_identity.is_empty()
+        && request.canonical_identity.len() <= 4096
+        && request.transaction_lsn == 0
+        && valid_axis != known_axis
+    {
+        Ok(())
+    } else {
+        Err(Error::new(ErrorCode::ProtocolInvalid))
+    }
+}
+
 fn validate_checkpoint(request: &Checkpoint) -> Result<(), Error> {
     if request.turn_id.is_empty()
         || request.turn_id.len() > 4096
@@ -229,7 +245,7 @@ fn validate_event_push(event: &EventPush) -> Result<(), Error> {
         EventKind::try_from(event.kind).map_err(|()| Error::new(ErrorCode::ProtocolInvalid))?;
     if event.subscription_id == 0
         || event.lsn == 0
-        || !kind.is_wave_two()
+        || !kind.is_wave_five()
         || event.actor == 0
         || event.conversation.len() != 16
         || event.payload.is_empty()

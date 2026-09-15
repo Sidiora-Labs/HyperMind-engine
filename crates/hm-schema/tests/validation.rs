@@ -4,9 +4,10 @@ use hm_schema::event::{
     verify_event_with_history,
 };
 use hm_schema::events::{
-    Approval, Attestation, AttestationDisposition, Authority, Binding, Checkpoint, DeliveredMsg,
-    Effect, Embedding, EventEnvelope, EventPayload, IntentSet, LoopCloseReason, LoopClosed,
-    LoopOpened, Outcome, Reasoning, Recovery, Retention, Sensitivity, Supervisor, ToolCall,
+    Approval, Assertion, AssertionClaim, Attestation, AttestationDisposition, Authority,
+    BeliefType, Binding, Checkpoint, Consolidation, DeliveredMsg, Effect, Embedding, EventEnvelope,
+    EventPayload, IntentSet, LoopCloseReason, LoopClosed, LoopOpened, Outcome, ProposedAssertion,
+    ProvenanceRange, Reasoning, Recovery, Retention, Retract, Sensitivity, Supervisor, ToolCall,
     ToolResult, UserMsg,
 };
 use hm_schema::protocol::{
@@ -14,7 +15,7 @@ use hm_schema::protocol::{
     verify_wire_envelope,
 };
 use hm_schema::wire::{
-    Activate, Checkpoint as CheckpointRequest, Event as WireEvent, Health, LatestCheckpoint,
+    Activate, AsOf, Checkpoint as CheckpointRequest, Event as WireEvent, Health, LatestCheckpoint,
     Request, RequestPayload, Stats, Subscribe, WireEnvelope, WirePayload,
 };
 use std::fs;
@@ -595,6 +596,148 @@ fn continuity_protocol_requests_and_event_push_are_enabled() {
             .code,
         ErrorCode::ProtocolInvalid
     );
+}
+
+fn belief_provenance() -> Vec<ProvenanceRange> {
+    vec![ProvenanceRange {
+        first_lsn: 7,
+        last_lsn: 9,
+        byte_start: 4,
+        byte_end: 18,
+    }]
+}
+
+fn belief_assertion() -> Assertion {
+    Assertion {
+        belief_id: b"belief-1".to_vec(),
+        belief_type: BeliefType::Fact,
+        canonical_identity: "deployment:region:europe".to_owned(),
+        value: b"eu-central".to_vec(),
+        valid_from_ns: 100,
+        valid_to_ns: 200,
+        provenance: belief_provenance(),
+        conflict_domain: Some("deployment:region".to_owned()),
+        claim: AssertionClaim::Affirmative,
+    }
+}
+
+#[test]
+fn belief_events_round_trip_with_tri_temporal_and_byte_provenance_fields() {
+    let assertion = belief_assertion();
+    let proposed = ProposedAssertion {
+        belief_id: assertion.belief_id.clone(),
+        belief_type: assertion.belief_type,
+        canonical_identity: assertion.canonical_identity.clone(),
+        value: assertion.value.clone(),
+        valid_from_ns: assertion.valid_from_ns,
+        valid_to_ns: assertion.valid_to_ns,
+        provenance: assertion.provenance.clone(),
+        conflict_domain: assertion.conflict_domain.clone(),
+        claim: assertion.claim,
+    };
+    let cases = [
+        (
+            EventKind::Assertion,
+            EventPayload::Assertion(Box::new(assertion.clone())),
+        ),
+        (
+            EventKind::Consolidation,
+            EventPayload::Consolidation(Box::new(Consolidation {
+                assertions: vec![assertion],
+            })),
+        ),
+        (
+            EventKind::Retract,
+            EventPayload::Retract(Box::new(Retract {
+                belief_id: b"belief-1".to_vec(),
+                provenance: belief_provenance(),
+            })),
+        ),
+        (
+            EventKind::ProposedAssertion,
+            EventPayload::ProposedAssertion(Box::new(proposed)),
+        ),
+    ];
+    for (kind, payload) in cases {
+        let mut envelope = event_envelope(payload, 2);
+        envelope.event_time_ns = 123_456;
+        let verified = verify_event(&encode_event(&envelope), kind, Boundary::Socket)
+            .expect("enabled belief event");
+        assert_eq!(verified.kind, kind);
+        assert_eq!(verified.envelope.event_time_ns, 123_456);
+    }
+}
+
+#[test]
+fn belief_provenance_requires_a_nonempty_byte_range() {
+    for (byte_start, byte_end) in [(0, 0), (8, 8), (9, 8)] {
+        let mut assertion = belief_assertion();
+        assertion.provenance[0].byte_start = byte_start;
+        assertion.provenance[0].byte_end = byte_end;
+        let encoded = encode_event(&event_envelope(
+            EventPayload::Assertion(Box::new(assertion)),
+            2,
+        ));
+        assert_eq!(
+            verify_event(&encoded, EventKind::Assertion, Boundary::Socket)
+                .expect_err("empty or reversed byte range")
+                .code,
+            ErrorCode::SchemaInvalid
+        );
+    }
+}
+
+#[test]
+fn asof_requires_exactly_one_valid_or_known_time_axis() {
+    for request in [
+        AsOf {
+            belief_type: BeliefType::Fact as u8,
+            canonical_identity: "deployment:region:europe".to_owned(),
+            valid_time_ns: 123,
+            transaction_lsn: 0,
+            known_lsn: 0,
+        },
+        AsOf {
+            belief_type: BeliefType::Fact as u8,
+            canonical_identity: "deployment:region:europe".to_owned(),
+            valid_time_ns: 0,
+            transaction_lsn: 0,
+            known_lsn: 17,
+        },
+    ] {
+        validate_request(&Request {
+            request_id: 41,
+            payload: RequestPayload::AsOf(Box::new(request)),
+        })
+        .expect("one as-of axis");
+    }
+
+    for request in [
+        AsOf {
+            belief_type: BeliefType::Fact as u8,
+            canonical_identity: "deployment:region:europe".to_owned(),
+            valid_time_ns: 0,
+            transaction_lsn: 0,
+            known_lsn: 0,
+        },
+        AsOf {
+            belief_type: BeliefType::Fact as u8,
+            canonical_identity: "deployment:region:europe".to_owned(),
+            valid_time_ns: 123,
+            transaction_lsn: 0,
+            known_lsn: 17,
+        },
+    ] {
+        assert_eq!(
+            validate_request(&Request {
+                request_id: 42,
+                payload: RequestPayload::AsOf(Box::new(request)),
+            })
+            .expect_err("as-of requires exactly one axis")
+            .code,
+            ErrorCode::ProtocolInvalid
+        );
+    }
 }
 
 #[test]
