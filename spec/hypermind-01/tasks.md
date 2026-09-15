@@ -128,7 +128,7 @@
     - recall exposes modes semantic, lexical, entity, temporal and near with filters; remember accepts anchor, retention and sensitivity; the query is embedded once per activate through the configured embedder, never a document; activate accepts a precomputed query embedding as the Go client does.
     - TypeScript engine and client expose the same modes and fields; the health and gaps fields are typed.
     - _Requirements: 13.2, 14.2_
-  - [ ] 4.6 Semantic recall at scale, latency at 100k, LongMemEval baseline
+  - [x] 4.6 Semantic recall at scale, latency at 100k, LongMemEval baseline
     - recall@k and MRR with the local encoder at 1k, 10k and 100k seeded stores; activate p50 and p99 cold and warm at 10k and 100k; a run with the hash baseline labelled lexical_only.
     - LongMemEval runner with a pinned judge and content-hash response cache; baseline run without consolidation recorded in eval/results as the wave 4 number.
     - _Requirements: 15.1, 15.3, 6.3, 7.3_

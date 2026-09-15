@@ -577,7 +577,7 @@ do_2 = "TypeScript engine and client expose the same modes and fields; the healt
 
 [task.4.6]
 title = "Semantic recall at scale, latency at 100k, LongMemEval baseline"
-status = "pending"
+status = "done"
 wave = 4
 owner_lane = "eval"
 requires = ["4.5"]

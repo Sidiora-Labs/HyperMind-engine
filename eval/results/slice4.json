@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "slice": "slice4",
+  "encoder": "lexical_only",
+  "judge_model": "openrouter/openai/gpt-4o-2024-08-06",
+  "suites": [
+    "seeded_vector_recall_1k_10k_100k",
+    "activation_latency_10k_100k",
+    "longmemeval_s_no_consolidation"
+  ],
+  "judge_free": [
+    {
+      "name": "recall_at_10_1000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "mrr_1000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "recall_at_10_10000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "mrr_10000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "recall_at_10_100000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "mrr_100000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "activate_p50_cold_10000",
+      "value": 2729451.0,
+      "unit": "nanoseconds",
+      "tolerance": 0.25,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "activate_p99_cold_10000",
+      "value": 2989957.0,
+      "unit": "nanoseconds",
+      "tolerance": 0.25,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "activate_p50_warm_10000",
+      "value": 3023008.0,
+      "unit": "nanoseconds",
+      "tolerance": 0.25,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "activate_p99_warm_10000",
+      "value": 3378517.0,
+      "unit": "nanoseconds",
+      "tolerance": 0.25,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "activate_p50_cold_100000",
+      "value": 10654014.0,
+      "unit": "nanoseconds",
+      "tolerance": 0.25,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "activate_p99_cold_100000",
+      "value": 40404310.0,
+      "unit": "nanoseconds",
+      "tolerance": 0.25,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "activate_p50_warm_100000",
+      "value": 6953175.0,
+      "unit": "nanoseconds",
+      "tolerance": 0.25,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "activate_p99_warm_100000",
+      "value": 143132073.0,
+      "unit": "nanoseconds",
+      "tolerance": 0.25,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "longmemeval_coverage",
+      "value": 0.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "longmemeval_judge_cache_hit_rate",
+      "value": 0.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "activate_p99_target_met_100000",
+      "value": 0.0,
+      "unit": "boolean",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    }
+  ],
+  "judged": [
+    {
+      "name": "longmemeval_accuracy_no_consolidation",
+      "value": 0.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": true
+    }
+  ]
+}

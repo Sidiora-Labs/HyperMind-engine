@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "slice": "slice4-local",
+  "encoder": "BAAI/bge-small-en-v1.5@c5ac6c397e27c80e0229ec647987f2e553fc0ba9",
+  "judge_model": null,
+  "suites": [
+    "semantic_recall_1k_10k_100k"
+  ],
+  "judge_free": [
+    {
+      "name": "semantic_recall_at_10_1000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "semantic_mrr_1000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "semantic_recall_at_10_10000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "semantic_mrr_10000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "semantic_recall_at_10_100000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "semantic_mrr_100000",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.01,
+      "higher_is_better": true,
+      "judged": false
+    }
+  ],
+  "judged": []
+}
