@@ -44,7 +44,7 @@
     - docs/reference/schematics.md sections 1 to 6 written from the schema and error codes in the normative style: event taxonomy, ordering rules, frame layout, error codes, projection contract, bundle contract; quickstart for MCP in Claude Code and the embedded Rust API.
     - CI bench-gate job wired to gate slice1.
     - _Requirements: 15.1, 16.1, 1.3_
-  - [ ] 1.9 Slice 1 journey: remember over MCP, restart, recall, activate with provenance, eval green
+  - [x] 1.9 Slice 1 journey: remember over MCP, restart, recall, activate with provenance, eval green
     - Journey: start the real daemon in a temporary directory, connect an MCP client, remember three facts, kill the daemon, restart, recall lexically, activate and assert the bundle contains the facts with provenance URIs and a valid HMA1 hash, then run hm-eval gate slice1.
     - The journey harness in hm-sim is reused by every later slice.
     - _Requirements: 1.1, 1.3, 2.1, 7.2_
