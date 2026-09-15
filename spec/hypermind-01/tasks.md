@@ -79,7 +79,7 @@
     - Silent-degradation suite: force missing bindings, dropped tiers and a narrowed subtask; every forced condition must appear in gaps; a bundle without it fails the gate.
     - Schematics sections for ordering rules, idempotency, torn-batch rollback, work ledger transitions and recovery algorithms.
     - _Requirements: 15.1, 7.3, 16.1_
-  - [ ] 2.8 Slice 2 journey: open loop, bind, dispatch, kill -9, restart, activate shows loop, binding, effect
+  - [x] 2.8 Slice 2 journey: open loop, bind, dispatch, kill -9, restart, activate shows loop, binding, effect
     - Journey from the TypeScript client: intend opens a loop, bind pins a file at a revision, a ToolCall is appended and the daemon is killed inside the dispatch window, restart, the client resumes its sequence without a duplicate, activate shows the open loop, the binding as resolved, the effect as outcome_unknown, and gate slice2 is green.
     - _Requirements: 1.1, 2.2, 2.3, 7.1, 7.3_
   - [ ] 3.1 MMR over sealed bytes, signed checkpoints, hm verify, crypto-shred, key rotation, tripwires

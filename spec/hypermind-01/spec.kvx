@@ -430,7 +430,7 @@ do_3 = "Schematics sections for ordering rules, idempotency, torn-batch rollback
 
 [task.2.8]
 title = "Slice 2 journey: open loop, bind, dispatch, kill -9, restart, activate shows loop, binding, effect"
-status = "pending"
+status = "done"
 wave = 2
 owner_lane = "integration"
 requires = ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7"]
