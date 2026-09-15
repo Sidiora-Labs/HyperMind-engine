@@ -1,0 +1,13 @@
+{
+  "name": "hypermind-typescript",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build": "npm run build -w @hypermind/render && npm run build -w @hypermind/client && npm run build -w @hypermind/engine",
+    "test": "cargo build --manifest-path ../../Cargo.toml -p hm-cli && npm run build && node --test packages/render/dist/*.test.js packages/client/dist/*.test.js packages/engine/dist/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.1",
+    "typescript": "5.9.2"
+  }
+}

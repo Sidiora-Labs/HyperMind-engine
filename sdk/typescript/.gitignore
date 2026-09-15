@@ -1,0 +1,9 @@
+node_modules/
+packages/*/dist/
+packages/engine/*.node
+packages/engine/index.js
+packages/engine/index.d.ts
+packages/engine/native/target/
+packages/engine/native/*.node
+packages/engine/native/index.js
+packages/engine/native/index.d.ts

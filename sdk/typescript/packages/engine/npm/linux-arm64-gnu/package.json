@@ -1,0 +1,8 @@
+{
+  "name": "@hypermind/engine-linux-arm64-gnu",
+  "version": "0.1.0",
+  "os": ["linux"],
+  "cpu": ["arm64"],
+  "libc": ["glibc"],
+  "main": "hypermind_engine.linux-arm64-gnu.node"
+}

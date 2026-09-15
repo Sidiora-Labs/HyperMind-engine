@@ -1,0 +1,15 @@
+{
+  "name": "@hypermind/client",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@hypermind/render": "0.1.0",
+    "@noble/hashes": "1.8.0",
+    "flatbuffers": "2.0.7"
+  }
+}

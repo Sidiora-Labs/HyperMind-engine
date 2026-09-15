@@ -1,0 +1,31 @@
+{
+  "name": "@hypermind/engine",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "*.node", "npm"],
+  "scripts": {
+    "build:native": "napi build --platform --release --manifest-path native/Cargo.toml --output-dir .",
+    "build": "npm run build:native && tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@hypermind/client": "0.1.0",
+    "@hypermind/render": "0.1.0"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "3.4.1"
+  },
+  "napi": {
+    "binaryName": "hypermind_engine",
+    "targets": [
+      "x86_64-unknown-linux-gnu",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-apple-darwin"
+    ]
+  },
+  "optionalDependencies": {
+    "@hypermind/engine-linux-x64-gnu": "0.1.0",
+    "@hypermind/engine-linux-arm64-gnu": "0.1.0",
+    "@hypermind/engine-darwin-arm64": "0.1.0"
+  }
+}

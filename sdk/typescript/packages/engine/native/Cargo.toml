@@ -1,0 +1,27 @@
+[package]
+name = "hypermind-engine-napi"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+license = "Apache-2.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+hm-compose = { path = "../../../../../crates/hm-compose" }
+hm-core = { path = "../../../../../crates/hm-core" }
+hm-ledger = { path = "../../../../../crates/hm-ledger" }
+hm-mcp = { path = "../../../../../crates/hm-mcp" }
+hm-serve = { path = "../../../../../crates/hm-serve" }
+napi = { version = "3.3.0", features = ["tokio_rt"] }
+napi-derive = "3.2.5"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+sha2 = "0.10.9"
+tokio = { version = "1.48.0", features = ["sync"] }
+
+[build-dependencies]
+napi-build = "2.3.1"
+
+[workspace]

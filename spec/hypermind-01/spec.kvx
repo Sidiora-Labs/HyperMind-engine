@@ -404,7 +404,7 @@ do_2 = "Every mutation error carries effect_state not_dispatched, unknown or rej
 
 [task.2.6]
 title = "TypeScript engine (napi) and client with sequence recovery, renderer v1"
-status = "pending"
+status = "done"
 wave = 2
 owner_lane = "sdk"
 requires = ["2.5"]

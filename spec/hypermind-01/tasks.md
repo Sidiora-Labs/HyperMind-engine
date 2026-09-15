@@ -69,7 +69,7 @@
     - Checkpoint stores an opaque turn blob keyed by turn id with client sequence idempotency; LatestCheckpoint scans up to 65536 records; Subscribe streams Event frames from since_lsn with a bounded queue and disconnects a saturated subscriber.
     - Every mutation error carries effect_state not_dispatched, unknown or rejected; MCP intend sets objective, opens and closes loops; MCP bind writes a Binding and returns its status.
     - _Requirements: 13.1, 13.2_
-  - [ ] 2.6 TypeScript engine (napi) and client with sequence recovery, renderer v1
+  - [x] 2.6 TypeScript engine (napi) and client with sequence recovery, renderer v1
     - @hypermind/engine via napi-rs exposing open, Session, remember, recall, activate, checkpoint, intend, bind with prebuilds for linux x64 and arm64 and darwin arm64.
     - @hypermind/client over the Unix socket with the Go client's sequence policy ported: stable connection id, next_client_seq from Welcome, pending queue, PendingWriteError with effect_state, reconnect that never double-applies; tests run against the real daemon binary.
     - @hypermind/render v1: bundle to typed prompt sections with authority labels and provenance URIs, same-turn exclusion, memory never in system role.
