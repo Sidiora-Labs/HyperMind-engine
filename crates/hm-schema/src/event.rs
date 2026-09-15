@@ -1,7 +1,8 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::events::{
-    AttestationDisposition, EventEnvelope, EventEnvelopeRef, EventPayload, ToolResult,
+    AttestationDisposition, Authority, Binding, Effect, EventEnvelope, EventEnvelopeRef,
+    EventPayload, LoopCloseReason, LoopClosed, Outcome, ToolResult,
 };
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
@@ -41,6 +42,7 @@ pub enum EventKind {
     Embedding = 19,
     Retract = 20,
     Attestation = 21,
+    Binding = 22,
 }
 
 impl EventKind {
@@ -55,6 +57,24 @@ impl EventKind {
                 | Self::Reasoning
                 | Self::Attestation
         )
+    }
+
+    #[must_use]
+    pub const fn is_wave_two(self) -> bool {
+        self.is_wave_one()
+            || matches!(
+                self,
+                Self::Effect
+                    | Self::Approval
+                    | Self::Outcome
+                    | Self::Checkpoint
+                    | Self::Supervisor
+                    | Self::Recovery
+                    | Self::IntentSet
+                    | Self::LoopOpened
+                    | Self::LoopClosed
+                    | Self::Binding
+            )
     }
 }
 
@@ -84,13 +104,30 @@ impl TryFrom<u8> for EventKind {
             19 => Ok(Self::Embedding),
             20 => Ok(Self::Retract),
             21 => Ok(Self::Attestation),
+            22 => Ok(Self::Binding),
             _ => Err(()),
         }
     }
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum HistorySource {
+    LedgerEvent,
+    Memory,
+    Summary,
+    Reconstruction,
+}
+
 pub trait EventHistory {
     fn kind_at(&self, lsn: LSN) -> Option<EventKind>;
+
+    fn authority_at(&self, _lsn: LSN) -> Option<Authority> {
+        None
+    }
+
+    fn source_at(&self, _lsn: LSN) -> HistorySource {
+        HistorySource::LedgerEvent
+    }
 }
 
 impl<F> EventHistory for F
@@ -141,11 +178,12 @@ pub fn verify_event_with_history(
     if envelope.schema_version == 0 || envelope.schema_version > CURRENT_SCHEMA_VERSION {
         return Err(Error::new(ErrorCode::SchemaVersion));
     }
-    if !expected_kind.is_wave_one() || payload_kind(&envelope.payload) != expected_kind {
+    if !expected_kind.is_wave_two() || payload_kind(&envelope.payload) != expected_kind {
         return Err(Error::new(ErrorCode::ForbiddenKind));
     }
     validate_envelope(&envelope)?;
-    validate_payload(&envelope.payload, history)?;
+    let legacy_evidence_allowed = envelope.schema_version == 1 && boundary != Boundary::Socket;
+    validate_payload(&envelope.payload, history, legacy_evidence_allowed)?;
     Ok(VerifiedEvent {
         envelope,
         kind: expected_kind,
@@ -193,7 +231,11 @@ fn validate_envelope(envelope: &EventEnvelope) -> Result<(), Error> {
     Ok(())
 }
 
-fn validate_payload(payload: &EventPayload, history: &impl EventHistory) -> Result<(), Error> {
+fn validate_payload(
+    payload: &EventPayload,
+    history: &impl EventHistory,
+    legacy_evidence_allowed: bool,
+) -> Result<(), Error> {
     match payload {
         EventPayload::UserMsg(_) | EventPayload::DeliveredMsg(_) | EventPayload::Reasoning(_) => {
             Ok(())
@@ -206,6 +248,53 @@ fn validate_payload(payload: &EventPayload, history: &impl EventHistory) -> Resu
             }
         }
         EventPayload::ToolResult(value) => validate_tool_result(value, history),
+        EventPayload::Effect(value) => validate_effect(value, history),
+        EventPayload::Approval(value) => {
+            if bounded_identifier(&value.effect_id) {
+                Ok(())
+            } else {
+                Err(Error::new(ErrorCode::SchemaInvalid))
+            }
+        }
+        EventPayload::Outcome(value) => validate_outcome(value, history, legacy_evidence_allowed),
+        EventPayload::Checkpoint(value) => {
+            if bounded_identifier(&value.cursor) {
+                Ok(())
+            } else {
+                Err(Error::new(ErrorCode::SchemaInvalid))
+            }
+        }
+        EventPayload::Supervisor(value) => {
+            if value.code.is_empty() {
+                Err(Error::new(ErrorCode::SchemaInvalid))
+            } else {
+                Ok(())
+            }
+        }
+        EventPayload::Recovery(value) => {
+            if value.code.is_empty() || value.target_lsn == 0 {
+                Err(Error::new(ErrorCode::SchemaInvalid))
+            } else {
+                Ok(())
+            }
+        }
+        EventPayload::IntentSet(value) => {
+            if value.objective.is_empty() {
+                Err(Error::new(ErrorCode::SchemaInvalid))
+            } else {
+                Ok(())
+            }
+        }
+        EventPayload::LoopOpened(value) => {
+            if bounded_identifier(&value.loop_id) && !value.objective.is_empty() {
+                Ok(())
+            } else {
+                Err(Error::new(ErrorCode::SchemaInvalid))
+            }
+        }
+        EventPayload::LoopClosed(value) => {
+            validate_loop_closed(value, history, legacy_evidence_allowed)
+        }
         EventPayload::Attestation(value) => {
             if value.target_lsn != 0
                 && matches!(
@@ -218,6 +307,7 @@ fn validate_payload(payload: &EventPayload, history: &impl EventHistory) -> Resu
                 Err(Error::new(ErrorCode::SchemaInvalid))
             }
         }
+        EventPayload::Binding(value) => validate_binding(value),
         _ => Err(Error::new(ErrorCode::ForbiddenKind)),
     }
 }
@@ -226,11 +316,105 @@ fn validate_tool_result(value: &ToolResult, history: &impl EventHistory) -> Resu
     if !bounded_identifier(&value.call_id) || value.tool_call_lsn == 0 {
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
-    let referenced_lsn = LSN::new(value.tool_call_lsn);
+    require_prior_tool_call(value.tool_call_lsn, history)
+}
+
+fn validate_effect(value: &Effect, history: &impl EventHistory) -> Result<(), Error> {
+    if !bounded_identifier(&value.effect_id) || value.tool_call_lsn == 0 {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    require_prior_tool_call(value.tool_call_lsn, history)
+}
+
+fn validate_outcome(
+    value: &Outcome,
+    history: &impl EventHistory,
+    legacy_evidence_allowed: bool,
+) -> Result<(), Error> {
+    if !bounded_identifier(&value.effect_id) {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_optional_evidence(
+        value.evidence_lsns.as_deref(),
+        history,
+        legacy_evidence_allowed,
+    )
+}
+
+fn validate_loop_closed(
+    value: &LoopClosed,
+    history: &impl EventHistory,
+    legacy_evidence_allowed: bool,
+) -> Result<(), Error> {
+    if !bounded_identifier(&value.loop_id) {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    if value.reason == LoopCloseReason::Done {
+        validate_optional_evidence(
+            value.evidence_lsns.as_deref(),
+            history,
+            legacy_evidence_allowed,
+        )?;
+    }
+    Ok(())
+}
+
+fn validate_binding(value: &Binding) -> Result<(), Error> {
+    let task = value.task.as_deref().is_some_and(bounded_identifier);
+    let scope = value.scope.as_deref().is_some_and(bounded_identifier);
+    if task == scope
+        || value.canonical_entity.is_empty()
+        || value.property.is_empty()
+        || value.evidence_lsn == 0
+        || value.revision.is_empty()
+        || value.revision.len() > MAXIMUM_IDENTIFIER_BYTES
+        || value.freshness_requirement_ns == 0
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn require_prior_tool_call(lsn: u64, history: &impl EventHistory) -> Result<(), Error> {
+    let referenced_lsn = LSN::new(lsn);
     if history.kind_at(referenced_lsn) != Some(EventKind::ToolCall) {
         return Err(Error::new(ErrorCode::OrderingViolation).at_lsn(referenced_lsn));
     }
     Ok(())
+}
+
+fn validate_observed_evidence(lsns: &[u64], history: &impl EventHistory) -> Result<(), Error> {
+    if lsns.is_empty() {
+        return Err(Error::new(ErrorCode::CitationInvalid));
+    }
+    for raw_lsn in lsns {
+        let lsn = LSN::new(*raw_lsn);
+        if *raw_lsn == 0
+            || history.source_at(lsn) != HistorySource::LedgerEvent
+            || !matches!(
+                history.authority_at(lsn),
+                Some(
+                    Authority::ToolObserved | Authority::ExternalObserved | Authority::RuntimeFact
+                )
+            )
+        {
+            return Err(Error::new(ErrorCode::CitationInvalid).at_lsn(lsn));
+        }
+    }
+    Ok(())
+}
+
+fn validate_optional_evidence(
+    lsns: Option<&[u64]>,
+    history: &impl EventHistory,
+    legacy_evidence_allowed: bool,
+) -> Result<(), Error> {
+    match lsns {
+        Some(lsns) => validate_observed_evidence(lsns, history),
+        None if legacy_evidence_allowed => Ok(()),
+        None => Err(Error::new(ErrorCode::CitationInvalid)),
+    }
 }
 
 fn bounded_identifier(value: &[u8]) -> bool {
@@ -260,5 +444,6 @@ fn payload_kind(payload: &EventPayload) -> EventKind {
         EventPayload::Embedding(_) => EventKind::Embedding,
         EventPayload::Retract(_) => EventKind::Retract,
         EventPayload::Attestation(_) => EventKind::Attestation,
+        EventPayload::Binding(_) => EventKind::Binding,
     }
 }

@@ -4,7 +4,7 @@ use crate::frame::{EventKind, Frame, FrameHeader};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
 use std::thread::ThreadId;
 
-pub const EVENT_KIND_COUNT: usize = 21;
+pub const EVENT_KIND_COUNT: usize = 22;
 const RECOVERY_BATCH_SIZE: usize = 1_024;
 
 pub trait Clock: Send {

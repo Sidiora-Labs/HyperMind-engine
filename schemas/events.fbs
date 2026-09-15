@@ -81,6 +81,7 @@ table Outcome {
   effect_id:[ubyte] (required);
   status:ResultStatus;
   detail:[ubyte] (required);
+  evidence_lsns:[ulong];
 }
 
 table Checkpoint {
@@ -110,6 +111,17 @@ table LoopClosed {
   loop_id:[ubyte] (required);
   reason:LoopCloseReason;
   cause:[ubyte] (required);
+  evidence_lsns:[ulong];
+}
+
+table Binding {
+  task:[ubyte];
+  scope:[ubyte];
+  canonical_entity:string (required);
+  property:string (required);
+  evidence_lsn:ulong;
+  revision:[ubyte] (required);
+  freshness_requirement_ns:ulong;
 }
 
 table Assertion {
@@ -166,7 +178,8 @@ union EventPayload {
   Consolidation,
   Embedding,
   Retract,
-  Attestation
+  Attestation,
+  Binding
 }
 
 table EventEnvelope {

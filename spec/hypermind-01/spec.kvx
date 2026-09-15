@@ -355,7 +355,7 @@ do_2 = "Port sim_env and core_sim_test: SimulatedStorage with FaultPlan maximum_
 
 [task.2.2]
 title = "Continuity events: Checkpoint, IntentSet, loops, Binding, Effect, Approval, Outcome, ordering rules"
-status = "pending"
+status = "done"
 wave = 2
 owner_lane = "schema"
 requires = ["1.9"]

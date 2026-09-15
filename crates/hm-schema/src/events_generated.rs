@@ -5276,6 +5276,8 @@ mod root {
                 pub status: self::ResultStatus,
                 /// The field `detail` in the table `Outcome`
                 pub detail: ::planus::alloc::vec::Vec<u8>,
+                /// The field `evidence_lsns` in the table `Outcome`
+                pub evidence_lsns: ::core::option::Option<::planus::alloc::vec::Vec<u64>>,
             }
 
             #[allow(clippy::derivable_impls)]
@@ -5285,6 +5287,7 @@ mod root {
                         effect_id: ::core::default::Default::default(),
                         status: self::ResultStatus::Ok,
                         detail: ::core::default::Default::default(),
+                        evidence_lsns: ::core::default::Default::default(),
                     }
                 }
             }
@@ -5302,15 +5305,20 @@ mod root {
                     field_effect_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
                     field_status: impl ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
                     field_detail: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_evidence_lsns: impl ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
                 ) -> ::planus::Offset<Self> {
                     let prepared_effect_id = field_effect_id.prepare(builder);
                     let prepared_status = field_status.prepare(builder, &self::ResultStatus::Ok);
                     let prepared_detail = field_detail.prepare(builder);
+                    let prepared_evidence_lsns = field_evidence_lsns.prepare(builder);
 
-                    let mut table_writer: ::planus::table_writer::TableWriter<10> =
+                    let mut table_writer: ::planus::table_writer::TableWriter<12> =
                         ::core::default::Default::default();
                     table_writer.write_entry::<::planus::Offset<[u8]>>(0);
                     table_writer.write_entry::<::planus::Offset<[u8]>>(2);
+                    if prepared_evidence_lsns.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u64]>>(3);
+                    }
                     if prepared_status.is_some() {
                         table_writer.write_entry::<self::ResultStatus>(1);
                     }
@@ -5319,6 +5327,11 @@ mod root {
                         table_writer.finish(builder, |object_writer| {
                             object_writer.write::<_, _, 4>(&prepared_effect_id);
                             object_writer.write::<_, _, 4>(&prepared_detail);
+                            if let ::core::option::Option::Some(prepared_evidence_lsns) =
+                                prepared_evidence_lsns
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_evidence_lsns);
+                            }
                             if let ::core::option::Option::Some(prepared_status) = prepared_status {
                                 object_writer.write::<_, _, 1>(&prepared_status);
                             }
@@ -5352,7 +5365,13 @@ mod root {
             impl ::planus::WriteAsOffset<Outcome> for Outcome {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Outcome> {
-                    Outcome::create(builder, &self.effect_id, self.status, &self.detail)
+                    Outcome::create(
+                        builder,
+                        &self.effect_id,
+                        self.status,
+                        &self.detail,
+                        &self.evidence_lsns,
+                    )
                 }
             }
 
@@ -5409,6 +5428,26 @@ mod root {
             }
 
             impl<T0, T1, T2> OutcomeBuilder<(T0, T1, T2)> {
+                /// Setter for the [`evidence_lsns` field](Outcome#structfield.evidence_lsns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn evidence_lsns<T3>(self, value: T3) -> OutcomeBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    OutcomeBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`evidence_lsns` field](Outcome#structfield.evidence_lsns) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn evidence_lsns_as_null(self) -> OutcomeBuilder<(T0, T1, T2, ())> {
+                    self.evidence_lsns(())
+                }
+            }
+
+            impl<T0, T1, T2, T3> OutcomeBuilder<(T0, T1, T2, T3)> {
                 /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [Outcome].
                 #[inline]
                 pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<Outcome>
@@ -5423,7 +5462,8 @@ mod root {
                 T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
                 T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
                 T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAs<::planus::Offset<Outcome>> for OutcomeBuilder<(T0, T1, T2)>
+                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+            > ::planus::WriteAs<::planus::Offset<Outcome>> for OutcomeBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<Outcome>;
 
@@ -5437,8 +5477,9 @@ mod root {
                 T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
                 T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
                 T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
             > ::planus::WriteAsOptional<::planus::Offset<Outcome>>
-                for OutcomeBuilder<(T0, T1, T2)>
+                for OutcomeBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<Outcome>;
 
@@ -5455,12 +5496,13 @@ mod root {
                 T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
                 T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
                 T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<Outcome> for OutcomeBuilder<(T0, T1, T2)>
+                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+            > ::planus::WriteAsOffset<Outcome> for OutcomeBuilder<(T0, T1, T2, T3)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Outcome> {
-                    let (v0, v1, v2) = &self.0;
-                    Outcome::create(builder, v0, v1, v2)
+                    let (v0, v1, v2, v3) = &self.0;
+                    Outcome::create(builder, v0, v1, v2, v3)
                 }
             }
 
@@ -5490,6 +5532,15 @@ mod root {
                 pub fn detail(&self) -> ::planus::Result<&'a [u8]> {
                     self.0.access_required(2, "Outcome", "detail")
                 }
+
+                /// Getter for the [`evidence_lsns` field](Outcome#structfield.evidence_lsns).
+                #[inline]
+                pub fn evidence_lsns(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<::planus::Vector<'a, u64>>>
+                {
+                    self.0.access(3, "Outcome", "evidence_lsns")
+                }
             }
 
             impl<'a> ::core::fmt::Debug for OutcomeRef<'a> {
@@ -5498,6 +5549,11 @@ mod root {
                     f.field("effect_id", &self.effect_id());
                     f.field("status", &self.status());
                     f.field("detail", &self.detail());
+                    if let ::core::option::Option::Some(field_evidence_lsns) =
+                        self.evidence_lsns().transpose()
+                    {
+                        f.field("evidence_lsns", &field_evidence_lsns);
+                    }
                     f.finish()
                 }
             }
@@ -5511,6 +5567,13 @@ mod root {
                         effect_id: value.effect_id()?.to_vec(),
                         status: ::core::convert::TryInto::try_into(value.status()?)?,
                         detail: value.detail()?.to_vec(),
+                        evidence_lsns: if let ::core::option::Option::Some(evidence_lsns) =
+                            value.evidence_lsns()?
+                        {
+                            ::core::option::Option::Some(evidence_lsns.to_vec()?)
+                        } else {
+                            ::core::option::Option::None
+                        },
                     })
                 }
             }
@@ -5591,7 +5654,7 @@ mod root {
             /// The table `Checkpoint` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Checkpoint` in the file `schemas/events.fbs:86`
+            /// * Table `Checkpoint` in the file `schemas/events.fbs:87`
             #[derive(
                 Clone,
                 Debug,
@@ -5845,7 +5908,7 @@ mod root {
             /// The table `Supervisor` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Supervisor` in the file `schemas/events.fbs:90`
+            /// * Table `Supervisor` in the file `schemas/events.fbs:91`
             #[derive(
                 Clone,
                 Debug,
@@ -6133,7 +6196,7 @@ mod root {
             /// The table `Recovery` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Recovery` in the file `schemas/events.fbs:95`
+            /// * Table `Recovery` in the file `schemas/events.fbs:96`
             #[derive(
                 Clone,
                 Debug,
@@ -6437,7 +6500,7 @@ mod root {
             /// The table `IntentSet` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentSet` in the file `schemas/events.fbs:100`
+            /// * Table `IntentSet` in the file `schemas/events.fbs:101`
             #[derive(
                 Clone,
                 Debug,
@@ -6690,7 +6753,7 @@ mod root {
             /// The table `LoopOpened` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `LoopOpened` in the file `schemas/events.fbs:104`
+            /// * Table `LoopOpened` in the file `schemas/events.fbs:105`
             #[derive(
                 Clone,
                 Debug,
@@ -6978,7 +7041,7 @@ mod root {
             /// The table `LoopClosed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `LoopClosed` in the file `schemas/events.fbs:109`
+            /// * Table `LoopClosed` in the file `schemas/events.fbs:110`
             #[derive(
                 Clone,
                 Debug,
@@ -6997,6 +7060,8 @@ mod root {
                 pub reason: self::LoopCloseReason,
                 /// The field `cause` in the table `LoopClosed`
                 pub cause: ::planus::alloc::vec::Vec<u8>,
+                /// The field `evidence_lsns` in the table `LoopClosed`
+                pub evidence_lsns: ::core::option::Option<::planus::alloc::vec::Vec<u64>>,
             }
 
             #[allow(clippy::derivable_impls)]
@@ -7006,6 +7071,7 @@ mod root {
                         loop_id: ::core::default::Default::default(),
                         reason: self::LoopCloseReason::Done,
                         cause: ::core::default::Default::default(),
+                        evidence_lsns: ::core::default::Default::default(),
                     }
                 }
             }
@@ -7026,16 +7092,21 @@ mod root {
                         self::LoopCloseReason,
                     >,
                     field_cause: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_evidence_lsns: impl ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
                 ) -> ::planus::Offset<Self> {
                     let prepared_loop_id = field_loop_id.prepare(builder);
                     let prepared_reason =
                         field_reason.prepare(builder, &self::LoopCloseReason::Done);
                     let prepared_cause = field_cause.prepare(builder);
+                    let prepared_evidence_lsns = field_evidence_lsns.prepare(builder);
 
-                    let mut table_writer: ::planus::table_writer::TableWriter<10> =
+                    let mut table_writer: ::planus::table_writer::TableWriter<12> =
                         ::core::default::Default::default();
                     table_writer.write_entry::<::planus::Offset<[u8]>>(0);
                     table_writer.write_entry::<::planus::Offset<[u8]>>(2);
+                    if prepared_evidence_lsns.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u64]>>(3);
+                    }
                     if prepared_reason.is_some() {
                         table_writer.write_entry::<self::LoopCloseReason>(1);
                     }
@@ -7044,6 +7115,11 @@ mod root {
                         table_writer.finish(builder, |object_writer| {
                             object_writer.write::<_, _, 4>(&prepared_loop_id);
                             object_writer.write::<_, _, 4>(&prepared_cause);
+                            if let ::core::option::Option::Some(prepared_evidence_lsns) =
+                                prepared_evidence_lsns
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_evidence_lsns);
+                            }
                             if let ::core::option::Option::Some(prepared_reason) = prepared_reason {
                                 object_writer.write::<_, _, 1>(&prepared_reason);
                             }
@@ -7077,7 +7153,13 @@ mod root {
             impl ::planus::WriteAsOffset<LoopClosed> for LoopClosed {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<LoopClosed> {
-                    LoopClosed::create(builder, &self.loop_id, self.reason, &self.cause)
+                    LoopClosed::create(
+                        builder,
+                        &self.loop_id,
+                        self.reason,
+                        &self.cause,
+                        &self.evidence_lsns,
+                    )
                 }
             }
 
@@ -7134,6 +7216,26 @@ mod root {
             }
 
             impl<T0, T1, T2> LoopClosedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`evidence_lsns` field](LoopClosed#structfield.evidence_lsns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn evidence_lsns<T3>(self, value: T3) -> LoopClosedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    LoopClosedBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`evidence_lsns` field](LoopClosed#structfield.evidence_lsns) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn evidence_lsns_as_null(self) -> LoopClosedBuilder<(T0, T1, T2, ())> {
+                    self.evidence_lsns(())
+                }
+            }
+
+            impl<T0, T1, T2, T3> LoopClosedBuilder<(T0, T1, T2, T3)> {
                 /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [LoopClosed].
                 #[inline]
                 pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<LoopClosed>
@@ -7148,7 +7250,9 @@ mod root {
                 T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
                 T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
                 T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAs<::planus::Offset<LoopClosed>> for LoopClosedBuilder<(T0, T1, T2)>
+                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+            > ::planus::WriteAs<::planus::Offset<LoopClosed>>
+                for LoopClosedBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<LoopClosed>;
 
@@ -7162,8 +7266,9 @@ mod root {
                 T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
                 T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
                 T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
             > ::planus::WriteAsOptional<::planus::Offset<LoopClosed>>
-                for LoopClosedBuilder<(T0, T1, T2)>
+                for LoopClosedBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<LoopClosed>;
 
@@ -7180,12 +7285,13 @@ mod root {
                 T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
                 T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
                 T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<LoopClosed> for LoopClosedBuilder<(T0, T1, T2)>
+                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+            > ::planus::WriteAsOffset<LoopClosed> for LoopClosedBuilder<(T0, T1, T2, T3)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<LoopClosed> {
-                    let (v0, v1, v2) = &self.0;
-                    LoopClosed::create(builder, v0, v1, v2)
+                    let (v0, v1, v2, v3) = &self.0;
+                    LoopClosed::create(builder, v0, v1, v2, v3)
                 }
             }
 
@@ -7215,6 +7321,15 @@ mod root {
                 pub fn cause(&self) -> ::planus::Result<&'a [u8]> {
                     self.0.access_required(2, "LoopClosed", "cause")
                 }
+
+                /// Getter for the [`evidence_lsns` field](LoopClosed#structfield.evidence_lsns).
+                #[inline]
+                pub fn evidence_lsns(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<::planus::Vector<'a, u64>>>
+                {
+                    self.0.access(3, "LoopClosed", "evidence_lsns")
+                }
             }
 
             impl<'a> ::core::fmt::Debug for LoopClosedRef<'a> {
@@ -7223,6 +7338,11 @@ mod root {
                     f.field("loop_id", &self.loop_id());
                     f.field("reason", &self.reason());
                     f.field("cause", &self.cause());
+                    if let ::core::option::Option::Some(field_evidence_lsns) =
+                        self.evidence_lsns().transpose()
+                    {
+                        f.field("evidence_lsns", &field_evidence_lsns);
+                    }
                     f.finish()
                 }
             }
@@ -7236,6 +7356,13 @@ mod root {
                         loop_id: value.loop_id()?.to_vec(),
                         reason: ::core::convert::TryInto::try_into(value.reason()?)?,
                         cause: value.cause()?.to_vec(),
+                        evidence_lsns: if let ::core::option::Option::Some(evidence_lsns) =
+                            value.evidence_lsns()?
+                        {
+                            ::core::option::Option::Some(evidence_lsns.to_vec()?)
+                        } else {
+                            ::core::option::Option::None
+                        },
                     })
                 }
             }
@@ -7313,10 +7440,532 @@ mod root {
                 }
             }
 
+            /// The table `Binding` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `Binding` in the file `schemas/events.fbs:117`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct Binding {
+                /// The field `task` in the table `Binding`
+                pub task: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
+                /// The field `scope` in the table `Binding`
+                pub scope: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
+                /// The field `canonical_entity` in the table `Binding`
+                pub canonical_entity: ::planus::alloc::string::String,
+                /// The field `property` in the table `Binding`
+                pub property: ::planus::alloc::string::String,
+                /// The field `evidence_lsn` in the table `Binding`
+                pub evidence_lsn: u64,
+                /// The field `revision` in the table `Binding`
+                pub revision: ::planus::alloc::vec::Vec<u8>,
+                /// The field `freshness_requirement_ns` in the table `Binding`
+                pub freshness_requirement_ns: u64,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for Binding {
+                fn default() -> Self {
+                    Self {
+                        task: ::core::default::Default::default(),
+                        scope: ::core::default::Default::default(),
+                        canonical_entity: ::core::default::Default::default(),
+                        property: ::core::default::Default::default(),
+                        evidence_lsn: 0,
+                        revision: ::core::default::Default::default(),
+                        freshness_requirement_ns: 0,
+                    }
+                }
+            }
+
+            impl Binding {
+                /// Creates a [BindingBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> BindingBuilder<()> {
+                    BindingBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_task: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    field_scope: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    field_canonical_entity: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_property: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_evidence_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_revision: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_freshness_requirement_ns: impl ::planus::WriteAsDefault<u64, u64>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_task = field_task.prepare(builder);
+                    let prepared_scope = field_scope.prepare(builder);
+                    let prepared_canonical_entity = field_canonical_entity.prepare(builder);
+                    let prepared_property = field_property.prepare(builder);
+                    let prepared_evidence_lsn = field_evidence_lsn.prepare(builder, &0);
+                    let prepared_revision = field_revision.prepare(builder);
+                    let prepared_freshness_requirement_ns =
+                        field_freshness_requirement_ns.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<18> =
+                        ::core::default::Default::default();
+                    if prepared_evidence_lsn.is_some() {
+                        table_writer.write_entry::<u64>(4);
+                    }
+                    if prepared_freshness_requirement_ns.is_some() {
+                        table_writer.write_entry::<u64>(6);
+                    }
+                    if prepared_task.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    }
+                    if prepared_scope.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+                    }
+                    table_writer.write_entry::<::planus::Offset<str>>(2);
+                    table_writer.write_entry::<::planus::Offset<str>>(3);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(5);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_evidence_lsn) =
+                                prepared_evidence_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_evidence_lsn);
+                            }
+                            if let ::core::option::Option::Some(prepared_freshness_requirement_ns) =
+                                prepared_freshness_requirement_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_freshness_requirement_ns);
+                            }
+                            if let ::core::option::Option::Some(prepared_task) = prepared_task {
+                                object_writer.write::<_, _, 4>(&prepared_task);
+                            }
+                            if let ::core::option::Option::Some(prepared_scope) = prepared_scope {
+                                object_writer.write::<_, _, 4>(&prepared_scope);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_canonical_entity);
+                            object_writer.write::<_, _, 4>(&prepared_property);
+                            object_writer.write::<_, _, 4>(&prepared_revision);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<Binding>> for Binding {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Binding> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<Binding>> for Binding {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<Binding>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<Binding> for Binding {
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Binding> {
+                    Binding::create(
+                        builder,
+                        &self.task,
+                        &self.scope,
+                        &self.canonical_entity,
+                        &self.property,
+                        self.evidence_lsn,
+                        &self.revision,
+                        self.freshness_requirement_ns,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [Binding] type.
+            ///
+            /// Can be created using the [Binding::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct BindingBuilder<State>(State);
+
+            impl BindingBuilder<()> {
+                /// Setter for the [`task` field](Binding#structfield.task).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn task<T0>(self, value: T0) -> BindingBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                {
+                    BindingBuilder((value,))
+                }
+
+                /// Sets the [`task` field](Binding#structfield.task) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn task_as_null(self) -> BindingBuilder<((),)> {
+                    self.task(())
+                }
+            }
+
+            impl<T0> BindingBuilder<(T0,)> {
+                /// Setter for the [`scope` field](Binding#structfield.scope).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn scope<T1>(self, value: T1) -> BindingBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    BindingBuilder((v0, value))
+                }
+
+                /// Sets the [`scope` field](Binding#structfield.scope) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn scope_as_null(self) -> BindingBuilder<(T0, ())> {
+                    self.scope(())
+                }
+            }
+
+            impl<T0, T1> BindingBuilder<(T0, T1)> {
+                /// Setter for the [`canonical_entity` field](Binding#structfield.canonical_entity).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn canonical_entity<T2>(self, value: T2) -> BindingBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1) = self.0;
+                    BindingBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> BindingBuilder<(T0, T1, T2)> {
+                /// Setter for the [`property` field](Binding#structfield.property).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn property<T3>(self, value: T3) -> BindingBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    BindingBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> BindingBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`evidence_lsn` field](Binding#structfield.evidence_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn evidence_lsn<T4>(self, value: T4) -> BindingBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    BindingBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`evidence_lsn` field](Binding#structfield.evidence_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn evidence_lsn_as_default(
+                    self,
+                ) -> BindingBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)> {
+                    self.evidence_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> BindingBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`revision` field](Binding#structfield.revision).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn revision<T5>(self, value: T5) -> BindingBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    BindingBuilder((v0, v1, v2, v3, v4, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> BindingBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`freshness_requirement_ns` field](Binding#structfield.freshness_requirement_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn freshness_requirement_ns<T6>(
+                    self,
+                    value: T6,
+                ) -> BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    BindingBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+
+                /// Sets the [`freshness_requirement_ns` field](Binding#structfield.freshness_requirement_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn freshness_requirement_ns_as_default(
+                    self,
+                ) -> BindingBuilder<(T0, T1, T2, T3, T4, T5, ::planus::DefaultValue)>
+                {
+                    self.freshness_requirement_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [Binding].
+                #[inline]
+                pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<Binding>
+                where
+                    Self: ::planus::WriteAsOffset<Binding>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                T2: ::planus::WriteAs<::planus::Offset<str>>,
+                T3: ::planus::WriteAs<::planus::Offset<str>>,
+                T4: ::planus::WriteAsDefault<u64, u64>,
+                T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T6: ::planus::WriteAsDefault<u64, u64>,
+            > ::planus::WriteAs<::planus::Offset<Binding>>
+                for BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<Binding>;
+
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Binding> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                T2: ::planus::WriteAs<::planus::Offset<str>>,
+                T3: ::planus::WriteAs<::planus::Offset<str>>,
+                T4: ::planus::WriteAsDefault<u64, u64>,
+                T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T6: ::planus::WriteAsDefault<u64, u64>,
+            > ::planus::WriteAsOptional<::planus::Offset<Binding>>
+                for BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<Binding>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<Binding>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                T2: ::planus::WriteAs<::planus::Offset<str>>,
+                T3: ::planus::WriteAs<::planus::Offset<str>>,
+                T4: ::planus::WriteAsDefault<u64, u64>,
+                T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T6: ::planus::WriteAsDefault<u64, u64>,
+            > ::planus::WriteAsOffset<Binding> for BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Binding> {
+                    let (v0, v1, v2, v3, v4, v5, v6) = &self.0;
+                    Binding::create(builder, v0, v1, v2, v3, v4, v5, v6)
+                }
+            }
+
+            /// Reference to a deserialized [Binding].
+            #[derive(Copy, Clone)]
+            pub struct BindingRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> BindingRef<'a> {
+                /// Getter for the [`task` field](Binding#structfield.task).
+                #[inline]
+                pub fn task(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                    self.0.access(0, "Binding", "task")
+                }
+
+                /// Getter for the [`scope` field](Binding#structfield.scope).
+                #[inline]
+                pub fn scope(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                    self.0.access(1, "Binding", "scope")
+                }
+
+                /// Getter for the [`canonical_entity` field](Binding#structfield.canonical_entity).
+                #[inline]
+                pub fn canonical_entity(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(2, "Binding", "canonical_entity")
+                }
+
+                /// Getter for the [`property` field](Binding#structfield.property).
+                #[inline]
+                pub fn property(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(3, "Binding", "property")
+                }
+
+                /// Getter for the [`evidence_lsn` field](Binding#structfield.evidence_lsn).
+                #[inline]
+                pub fn evidence_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0.access(4, "Binding", "evidence_lsn")?.unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`revision` field](Binding#structfield.revision).
+                #[inline]
+                pub fn revision(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(5, "Binding", "revision")
+                }
+
+                /// Getter for the [`freshness_requirement_ns` field](Binding#structfield.freshness_requirement_ns).
+                #[inline]
+                pub fn freshness_requirement_ns(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(6, "Binding", "freshness_requirement_ns")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for BindingRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("BindingRef");
+                    if let ::core::option::Option::Some(field_task) = self.task().transpose() {
+                        f.field("task", &field_task);
+                    }
+                    if let ::core::option::Option::Some(field_scope) = self.scope().transpose() {
+                        f.field("scope", &field_scope);
+                    }
+                    f.field("canonical_entity", &self.canonical_entity());
+                    f.field("property", &self.property());
+                    f.field("evidence_lsn", &self.evidence_lsn());
+                    f.field("revision", &self.revision());
+                    f.field("freshness_requirement_ns", &self.freshness_requirement_ns());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<BindingRef<'a>> for Binding {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: BindingRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        task: value.task()?.map(|v| v.to_vec()),
+                        scope: value.scope()?.map(|v| v.to_vec()),
+                        canonical_entity: ::core::convert::Into::into(value.canonical_entity()?),
+                        property: ::core::convert::Into::into(value.property()?),
+                        evidence_lsn: ::core::convert::TryInto::try_into(value.evidence_lsn()?)?,
+                        revision: value.revision()?.to_vec(),
+                        freshness_requirement_ns: ::core::convert::TryInto::try_into(
+                            value.freshness_requirement_ns()?,
+                        )?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for BindingRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for BindingRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[BindingRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<Binding>> for Binding {
+                type Value = ::planus::Offset<Binding>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<Binding>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for BindingRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[BindingRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
             /// The table `Assertion` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Assertion` in the file `schemas/events.fbs:115`
+            /// * Table `Assertion` in the file `schemas/events.fbs:127`
             #[derive(
                 Clone,
                 Debug,
@@ -7952,7 +8601,7 @@ mod root {
             /// The table `Consolidation` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Consolidation` in the file `schemas/events.fbs:127`
+            /// * Table `Consolidation` in the file `schemas/events.fbs:139`
             #[derive(
                 Clone,
                 Debug,
@@ -8227,7 +8876,7 @@ mod root {
             /// The table `Embedding` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Embedding` in the file `schemas/events.fbs:131`
+            /// * Table `Embedding` in the file `schemas/events.fbs:143`
             #[derive(
                 Clone,
                 Debug,
@@ -8616,7 +9265,7 @@ mod root {
             /// The table `Retract` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Retract` in the file `schemas/events.fbs:138`
+            /// * Table `Retract` in the file `schemas/events.fbs:150`
             #[derive(
                 Clone,
                 Debug,
@@ -8906,7 +9555,7 @@ mod root {
             /// The table `Attestation` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Attestation` in the file `schemas/events.fbs:143`
+            /// * Table `Attestation` in the file `schemas/events.fbs:155`
             #[derive(
                 Clone,
                 Debug,
@@ -9261,7 +9910,7 @@ mod root {
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:148`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:160`
             #[derive(
                 Clone,
                 Debug,
@@ -9336,6 +9985,9 @@ mod root {
 
                 /// The variant of type `Attestation` in the union `EventPayload`
                 Attestation(::planus::alloc::boxed::Box<self::Attestation>),
+
+                /// The variant of type `Binding` in the union `EventPayload`
+                Binding(::planus::alloc::boxed::Box<self::Binding>),
             }
 
             impl EventPayload {
@@ -9512,6 +10164,14 @@ mod root {
                 ) -> ::planus::UnionOffset<Self> {
                     ::planus::UnionOffset::new(21, value.prepare(builder).downcast())
                 }
+
+                #[inline]
+                pub fn create_binding(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::Binding>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(22, value.prepare(builder).downcast())
+                }
             }
 
             impl ::planus::WriteAsUnion<EventPayload> for EventPayload {
@@ -9539,6 +10199,7 @@ mod root {
                         Self::Embedding(value) => Self::create_embedding(builder, value),
                         Self::Retract(value) => Self::create_retract(builder, value),
                         Self::Attestation(value) => Self::create_attestation(builder, value),
+                        Self::Binding(value) => Self::create_binding(builder, value),
                     }
                 }
             }
@@ -9806,6 +10467,18 @@ mod root {
                 ) -> EventPayloadBuilder<::planus::Initialized<21, T>>
                 where
                     T: ::planus::WriteAsOffset<self::Attestation>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`Binding` variant](EventPayload#variant.Binding).
+                #[inline]
+                pub fn binding<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<22, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::Binding>,
                 {
                     EventPayloadBuilder(::planus::Initialized(value))
                 }
@@ -10371,6 +11044,32 @@ mod root {
                     ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
                 }
             }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<22, T>>
+            where
+                T: ::planus::WriteAsOffset<self::Binding>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(22, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<22, T>>
+            where
+                T: ::planus::WriteAsOffset<self::Binding>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
 
             /// Reference to a deserialized [EventPayload].
             #[derive(Copy, Clone, Debug)]
@@ -10396,6 +11095,7 @@ mod root {
                 Embedding(self::EmbeddingRef<'a>),
                 Retract(self::RetractRef<'a>),
                 Attestation(self::AttestationRef<'a>),
+                Binding(self::BindingRef<'a>),
             }
 
             impl<'a> ::core::convert::TryFrom<EventPayloadRef<'a>> for EventPayload {
@@ -10528,6 +11228,12 @@ mod root {
                                 ::core::convert::TryFrom::try_from(value)?,
                             ))
                         }
+
+                        EventPayloadRef::Binding(value) => {
+                            Self::Binding(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
                     })
                 }
             }
@@ -10602,6 +11308,9 @@ mod root {
                         21 => ::core::result::Result::Ok(Self::Attestation(
                             ::planus::TableRead::from_buffer(buffer, field_offset)?,
                         )),
+                        22 => ::core::result::Result::Ok(Self::Binding(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
                         _ => ::core::result::Result::Err(
                             ::planus::errors::ErrorKind::UnknownUnionTag { tag },
                         ),
@@ -10616,7 +11325,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:172`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:185`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]

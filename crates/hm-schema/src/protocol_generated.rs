@@ -3938,10 +3938,10 @@ mod root {
                 }
             }
 
-            /// The table `Checkpoint` in the namespace `hypermind.protocol`
+            ///  Persists an opaque turn state with client-sequence idempotency.
             ///
             /// Generated from these locations:
-            /// * Table `Checkpoint` in the file `schemas/protocol.fbs:69`
+            /// * Table `Checkpoint` in the file `schemas/protocol.fbs:70`
             #[derive(
                 Clone,
                 Debug,
@@ -4274,10 +4274,10 @@ mod root {
                 }
             }
 
-            /// The table `LatestCheckpoint` in the namespace `hypermind.protocol`
+            ///  Reads the latest persisted state for one turn identity.
             ///
             /// Generated from these locations:
-            /// * Table `LatestCheckpoint` in the file `schemas/protocol.fbs:75`
+            /// * Table `LatestCheckpoint` in the file `schemas/protocol.fbs:77`
             #[derive(
                 Clone,
                 Debug,
@@ -4549,7 +4549,7 @@ mod root {
             /// The table `Attest` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Attest` in the file `schemas/protocol.fbs:79`
+            /// * Table `Attest` in the file `schemas/protocol.fbs:81`
             #[derive(
                 Clone,
                 Debug,
@@ -4923,10 +4923,10 @@ mod root {
                 }
             }
 
-            /// The table `Subscribe` in the namespace `hypermind.protocol`
+            ///  Streams committed events after an optional conversation and LSN cursor.
             ///
             /// Generated from these locations:
-            /// * Table `Subscribe` in the file `schemas/protocol.fbs:85`
+            /// * Table `Subscribe` in the file `schemas/protocol.fbs:88`
             #[derive(
                 Clone,
                 Debug,
@@ -5248,7 +5248,7 @@ mod root {
             /// The table `Health` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Health` in the file `schemas/protocol.fbs:90`
+            /// * Table `Health` in the file `schemas/protocol.fbs:93`
             #[derive(
                 Clone,
                 Debug,
@@ -5459,7 +5459,7 @@ mod root {
             /// The table `Stats` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Stats` in the file `schemas/protocol.fbs:92`
+            /// * Table `Stats` in the file `schemas/protocol.fbs:95`
             #[derive(
                 Clone,
                 Debug,
@@ -5721,7 +5721,7 @@ mod root {
             /// The table `LatencyHistograms` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyHistograms` in the file `schemas/protocol.fbs:96`
+            /// * Table `LatencyHistograms` in the file `schemas/protocol.fbs:99`
             #[derive(
                 Clone,
                 Debug,
@@ -5951,7 +5951,7 @@ mod root {
             /// The table `VerifyStatus` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `VerifyStatus` in the file `schemas/protocol.fbs:98`
+            /// * Table `VerifyStatus` in the file `schemas/protocol.fbs:101`
             #[derive(
                 Clone,
                 Debug,
@@ -6231,7 +6231,7 @@ mod root {
             /// The table `RebuildProjection` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RebuildProjection` in the file `schemas/protocol.fbs:102`
+            /// * Table `RebuildProjection` in the file `schemas/protocol.fbs:105`
             #[derive(
                 Clone,
                 Debug,
@@ -6552,7 +6552,7 @@ mod root {
             /// The table `CryptoDelete` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `CryptoDelete` in the file `schemas/protocol.fbs:107`
+            /// * Table `CryptoDelete` in the file `schemas/protocol.fbs:110`
             #[derive(
                 Clone,
                 Debug,
@@ -6832,7 +6832,7 @@ mod root {
             /// The union `RequestPayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `RequestPayload` in the file `schemas/protocol.fbs:111`
+            /// * Union `RequestPayload` in the file `schemas/protocol.fbs:114`
             #[derive(
                 Clone,
                 Debug,
@@ -7851,7 +7851,7 @@ mod root {
             /// The table `Request` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Request` in the file `schemas/protocol.fbs:129`
+            /// * Table `Request` in the file `schemas/protocol.fbs:132`
             #[derive(
                 Clone,
                 Debug,
@@ -8145,7 +8145,7 @@ mod root {
             /// The table `ErrorDetail` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `ErrorDetail` in the file `schemas/protocol.fbs:134`
+            /// * Table `ErrorDetail` in the file `schemas/protocol.fbs:137`
             #[derive(
                 Clone,
                 Debug,
@@ -8577,7 +8577,7 @@ mod root {
             /// The table `AppendAck` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AppendAck` in the file `schemas/protocol.fbs:141`
+            /// * Table `AppendAck` in the file `schemas/protocol.fbs:144`
             #[derive(
                 Clone,
                 Debug,
@@ -9154,7 +9154,7 @@ mod root {
             /// The table `BytesResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BytesResult` in the file `schemas/protocol.fbs:151`
+            /// * Table `BytesResult` in the file `schemas/protocol.fbs:154`
             #[derive(
                 Clone,
                 Debug,
@@ -9420,10 +9420,10 @@ mod root {
                 }
             }
 
-            /// The table `SubscriptionAck` in the namespace `hypermind.protocol`
+            ///  Confirms the server-assigned bounded subscription identity.
             ///
             /// Generated from these locations:
-            /// * Table `SubscriptionAck` in the file `schemas/protocol.fbs:155`
+            /// * Table `SubscriptionAck` in the file `schemas/protocol.fbs:159`
             #[derive(
                 Clone,
                 Debug,
@@ -9714,7 +9714,7 @@ mod root {
             /// The table `HealthResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `HealthResult` in the file `schemas/protocol.fbs:159`
+            /// * Table `HealthResult` in the file `schemas/protocol.fbs:163`
             #[derive(
                 Clone,
                 Debug,
@@ -10107,7 +10107,7 @@ mod root {
             /// The table `ProjectionStat` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `ProjectionStat` in the file `schemas/protocol.fbs:165`
+            /// * Table `ProjectionStat` in the file `schemas/protocol.fbs:169`
             #[derive(
                 Clone,
                 Debug,
@@ -10430,7 +10430,7 @@ mod root {
             /// The table `StatsResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `StatsResult` in the file `schemas/protocol.fbs:170`
+            /// * Table `StatsResult` in the file `schemas/protocol.fbs:174`
             #[derive(
                 Clone,
                 Debug,
@@ -10860,7 +10860,7 @@ mod root {
             /// The table `LatencyBucket` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyBucket` in the file `schemas/protocol.fbs:177`
+            /// * Table `LatencyBucket` in the file `schemas/protocol.fbs:181`
             #[derive(
                 Clone,
                 Debug,
@@ -11231,7 +11231,7 @@ mod root {
             /// The table `LatencyResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyResult` in the file `schemas/protocol.fbs:183`
+            /// * Table `LatencyResult` in the file `schemas/protocol.fbs:187`
             #[derive(
                 Clone,
                 Debug,
@@ -11509,7 +11509,7 @@ mod root {
             /// The table `VerifyResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `VerifyResult` in the file `schemas/protocol.fbs:187`
+            /// * Table `VerifyResult` in the file `schemas/protocol.fbs:191`
             #[derive(
                 Clone,
                 Debug,
@@ -11987,7 +11987,7 @@ mod root {
             /// The table `RebuildResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RebuildResult` in the file `schemas/protocol.fbs:195`
+            /// * Table `RebuildResult` in the file `schemas/protocol.fbs:199`
             #[derive(
                 Clone,
                 Debug,
@@ -12354,7 +12354,7 @@ mod root {
             /// The table `DeleteResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `DeleteResult` in the file `schemas/protocol.fbs:201`
+            /// * Table `DeleteResult` in the file `schemas/protocol.fbs:205`
             #[derive(
                 Clone,
                 Debug,
@@ -12670,7 +12670,7 @@ mod root {
             /// The table `FrameRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `FrameRecord` in the file `schemas/protocol.fbs:206`
+            /// * Table `FrameRecord` in the file `schemas/protocol.fbs:210`
             #[derive(
                 Clone,
                 Debug,
@@ -13167,7 +13167,7 @@ mod root {
             /// The table `TranscriptResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `TranscriptResult` in the file `schemas/protocol.fbs:215`
+            /// * Table `TranscriptResult` in the file `schemas/protocol.fbs:219`
             #[derive(
                 Clone,
                 Debug,
@@ -13499,7 +13499,7 @@ mod root {
             /// The table `TemporalWindowRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `TemporalWindowRecord` in the file `schemas/protocol.fbs:220`
+            /// * Table `TemporalWindowRecord` in the file `schemas/protocol.fbs:224`
             #[derive(
                 Clone,
                 Debug,
@@ -13956,7 +13956,7 @@ mod root {
             /// The table `RecallResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RecallResult` in the file `schemas/protocol.fbs:227`
+            /// * Table `RecallResult` in the file `schemas/protocol.fbs:231`
             #[derive(
                 Clone,
                 Debug,
@@ -14319,7 +14319,7 @@ mod root {
             /// The table `BeliefProvenanceRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefProvenanceRecord` in the file `schemas/protocol.fbs:232`
+            /// * Table `BeliefProvenanceRecord` in the file `schemas/protocol.fbs:236`
             #[derive(
                 Clone,
                 Debug,
@@ -14668,7 +14668,7 @@ mod root {
             /// The table `BeliefConflictRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefConflictRecord` in the file `schemas/protocol.fbs:237`
+            /// * Table `BeliefConflictRecord` in the file `schemas/protocol.fbs:241`
             #[derive(
                 Clone,
                 Debug,
@@ -15177,7 +15177,7 @@ mod root {
             /// The table `BeliefResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefResult` in the file `schemas/protocol.fbs:245`
+            /// * Table `BeliefResult` in the file `schemas/protocol.fbs:249`
             #[derive(
                 Clone,
                 Debug,
@@ -16406,10 +16406,10 @@ mod root {
                 }
             }
 
-            /// The table `CheckpointAck` in the namespace `hypermind.protocol`
+            ///  Identifies the ledger record containing the accepted checkpoint.
             ///
             /// Generated from these locations:
-            /// * Table `CheckpointAck` in the file `schemas/protocol.fbs:263`
+            /// * Table `CheckpointAck` in the file `schemas/protocol.fbs:268`
             #[derive(
                 Clone,
                 Debug,
@@ -16686,10 +16686,10 @@ mod root {
                 }
             }
 
-            /// The table `CheckpointResult` in the namespace `hypermind.protocol`
+            ///  Returns the latest opaque turn state without interpreting its bytes.
             ///
             /// Generated from these locations:
-            /// * Table `CheckpointResult` in the file `schemas/protocol.fbs:267`
+            /// * Table `CheckpointResult` in the file `schemas/protocol.fbs:273`
             #[derive(
                 Clone,
                 Debug,
@@ -17072,7 +17072,7 @@ mod root {
             /// The table `AttestAck` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AttestAck` in the file `schemas/protocol.fbs:273`
+            /// * Table `AttestAck` in the file `schemas/protocol.fbs:279`
             #[derive(
                 Clone,
                 Debug,
@@ -17434,7 +17434,7 @@ mod root {
             /// The union `ResponsePayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `ResponsePayload` in the file `schemas/protocol.fbs:279`
+            /// * Union `ResponsePayload` in the file `schemas/protocol.fbs:285`
             #[derive(
                 Clone,
                 Debug,
@@ -18530,7 +18530,7 @@ mod root {
             /// The table `Response` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Response` in the file `schemas/protocol.fbs:298`
+            /// * Table `Response` in the file `schemas/protocol.fbs:304`
             #[derive(
                 Clone,
                 Debug,
@@ -18910,10 +18910,10 @@ mod root {
                 }
             }
 
-            /// The table `Event` in the namespace `hypermind.protocol`
+            ///  Pushes one committed ledger event to a subscriber.
             ///
             /// Generated from these locations:
-            /// * Table `Event` in the file `schemas/protocol.fbs:304`
+            /// * Table `Event` in the file `schemas/protocol.fbs:311`
             #[derive(
                 Clone,
                 Debug,
@@ -19437,7 +19437,7 @@ mod root {
             /// The union `WirePayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `WirePayload` in the file `schemas/protocol.fbs:314`
+            /// * Union `WirePayload` in the file `schemas/protocol.fbs:321`
             #[derive(
                 Clone,
                 Debug,
@@ -19823,7 +19823,7 @@ mod root {
             /// The table `WireEnvelope` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `WireEnvelope` in the file `schemas/protocol.fbs:322`
+            /// * Table `WireEnvelope` in the file `schemas/protocol.fbs:329`
             #[derive(
                 Clone,
                 Debug,

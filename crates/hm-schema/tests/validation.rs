@@ -1,17 +1,21 @@
 use hm_core::{ErrorCode, LSN};
 use hm_schema::event::{
-    Boundary, EventKind, encode_event_envelope, verify_event, verify_event_with_history,
+    Boundary, EventHistory, EventKind, HistorySource, encode_event_envelope, verify_event,
+    verify_event_with_history,
 };
 use hm_schema::events::{
-    Attestation, AttestationDisposition, Authority, DeliveredMsg, EventEnvelope, EventPayload,
-    Reasoning, Retention, Sensitivity, ToolCall, ToolResult, UserMsg,
+    Approval, Attestation, AttestationDisposition, Authority, Binding, Checkpoint, DeliveredMsg,
+    Effect, EventEnvelope, EventPayload, IntentSet, LoopCloseReason, LoopClosed, LoopOpened,
+    Outcome, Reasoning, Recovery, Retention, Sensitivity, Supervisor, ToolCall, ToolResult,
+    UserMsg,
 };
 use hm_schema::protocol::{
     CURRENT_PROTOCOL_VERSION, encode_wire_envelope, validate_request, verify_request,
     verify_wire_envelope,
 };
 use hm_schema::wire::{
-    Activate, Health, Request, RequestPayload, Stats, WireEnvelope, WirePayload,
+    Activate, Checkpoint as CheckpointRequest, Event as WireEvent, Health, LatestCheckpoint,
+    Request, RequestPayload, Stats, Subscribe, WireEnvelope, WirePayload,
 };
 use std::fs;
 
@@ -39,6 +43,31 @@ fn encode_event(envelope: &EventEnvelope) -> Vec<u8> {
 
 fn encode_wire(envelope: &WireEnvelope) -> Vec<u8> {
     encode_wire_envelope(envelope)
+}
+
+struct OneHistory {
+    lsn: LSN,
+    kind: EventKind,
+    authority: Authority,
+    source: HistorySource,
+}
+
+impl EventHistory for OneHistory {
+    fn kind_at(&self, lsn: LSN) -> Option<EventKind> {
+        (lsn == self.lsn).then_some(self.kind)
+    }
+
+    fn authority_at(&self, lsn: LSN) -> Option<Authority> {
+        (lsn == self.lsn).then_some(self.authority)
+    }
+
+    fn source_at(&self, lsn: LSN) -> HistorySource {
+        if lsn == self.lsn {
+            self.source
+        } else {
+            HistorySource::LedgerEvent
+        }
+    }
 }
 
 fn vtable_position(buffer: &[u8], table_position: usize) -> usize {
@@ -135,6 +164,208 @@ fn tool_result_requires_a_prior_tool_call() {
 }
 
 #[test]
+fn verifies_continuity_events_and_binding_contract() {
+    let cases = [
+        (
+            EventKind::Approval,
+            EventPayload::Approval(Box::new(Approval {
+                effect_id: b"effect-1".to_vec(),
+                ..Approval::default()
+            })),
+        ),
+        (
+            EventKind::Checkpoint,
+            EventPayload::Checkpoint(Box::new(Checkpoint {
+                cursor: b"opaque-turn-state".to_vec(),
+            })),
+        ),
+        (
+            EventKind::Supervisor,
+            EventPayload::Supervisor(Box::new(Supervisor {
+                code: "resume".to_owned(),
+                evidence: Vec::new(),
+            })),
+        ),
+        (
+            EventKind::Recovery,
+            EventPayload::Recovery(Box::new(Recovery {
+                code: "reconcile".to_owned(),
+                target_lsn: 7,
+            })),
+        ),
+        (
+            EventKind::IntentSet,
+            EventPayload::IntentSet(Box::new(IntentSet {
+                objective: b"finish continuity slice".to_vec(),
+            })),
+        ),
+        (
+            EventKind::LoopOpened,
+            EventPayload::LoopOpened(Box::new(LoopOpened {
+                loop_id: b"loop-1".to_vec(),
+                objective: b"dispatch tool".to_vec(),
+            })),
+        ),
+        (
+            EventKind::LoopClosed,
+            EventPayload::LoopClosed(Box::new(LoopClosed {
+                loop_id: b"loop-1".to_vec(),
+                reason: LoopCloseReason::Abandoned,
+                cause: b"cancelled".to_vec(),
+                evidence_lsns: None,
+            })),
+        ),
+        (
+            EventKind::Binding,
+            EventPayload::Binding(Box::new(Binding {
+                task: Some(b"task-1".to_vec()),
+                scope: None,
+                canonical_entity: "src/main.rs".to_owned(),
+                property: "revision".to_owned(),
+                evidence_lsn: 9,
+                revision: b"abc123".to_vec(),
+                freshness_requirement_ns: 60_000_000_000,
+            })),
+        ),
+    ];
+    for (kind, payload) in cases {
+        let encoded = encode_event(&event_envelope(payload, 2));
+        assert_eq!(
+            verify_event(&encoded, kind, Boundary::Socket)
+                .expect("valid continuity event")
+                .kind,
+            kind
+        );
+    }
+
+    let effect = encode_event(&event_envelope(
+        EventPayload::Effect(Box::new(Effect {
+            effect_id: b"effect-1".to_vec(),
+            tool_call_lsn: 7,
+            ..Effect::default()
+        })),
+        2,
+    ));
+    assert_eq!(
+        verify_event_with_history(&effect, EventKind::Effect, Boundary::Socket, &|lsn| {
+            (lsn == LSN::new(7)).then_some(EventKind::ToolCall)
+        })
+        .expect("effect cites prior tool call")
+        .kind,
+        EventKind::Effect
+    );
+}
+
+#[test]
+fn binding_requires_exactly_one_task_or_scope() {
+    let encoded = encode_event(&event_envelope(
+        EventPayload::Binding(Box::new(Binding {
+            task: Some(b"task-1".to_vec()),
+            scope: Some(b"scope-1".to_vec()),
+            canonical_entity: "src/main.rs".to_owned(),
+            property: "revision".to_owned(),
+            evidence_lsn: 9,
+            revision: b"abc123".to_vec(),
+            freshness_requirement_ns: 1,
+        })),
+        2,
+    ));
+    assert_eq!(
+        verify_event(&encoded, EventKind::Binding, Boundary::Socket)
+            .expect_err("binding cannot target both task and scope")
+            .code,
+        ErrorCode::SchemaInvalid
+    );
+}
+
+#[test]
+fn completed_outcomes_and_loops_require_observed_ledger_evidence() {
+    let outcome = |evidence_lsns| {
+        encode_event(&event_envelope(
+            EventPayload::Outcome(Box::new(Outcome {
+                effect_id: b"effect-1".to_vec(),
+                detail: b"written".to_vec(),
+                evidence_lsns,
+                ..Outcome::default()
+            })),
+            2,
+        ))
+    };
+    let done = encode_event(&event_envelope(
+        EventPayload::LoopClosed(Box::new(LoopClosed {
+            loop_id: b"loop-1".to_vec(),
+            reason: LoopCloseReason::Done,
+            cause: b"effect observed".to_vec(),
+            evidence_lsns: Some(vec![7]),
+        })),
+        2,
+    ));
+    for authority in [
+        Authority::ToolObserved,
+        Authority::ExternalObserved,
+        Authority::RuntimeFact,
+    ] {
+        let history = OneHistory {
+            lsn: LSN::new(7),
+            kind: EventKind::ToolResult,
+            authority,
+            source: HistorySource::LedgerEvent,
+        };
+        verify_event_with_history(
+            &outcome(Some(vec![7])),
+            EventKind::Outcome,
+            Boundary::Socket,
+            &history,
+        )
+        .expect("observed outcome evidence");
+        verify_event_with_history(&done, EventKind::LoopClosed, Boundary::Socket, &history)
+            .expect("observed loop evidence");
+    }
+
+    assert_eq!(
+        verify_event(&outcome(None), EventKind::Outcome, Boundary::Socket)
+            .expect_err("outcome evidence is required")
+            .code,
+        ErrorCode::CitationInvalid
+    );
+    let assistant_history = OneHistory {
+        lsn: LSN::new(7),
+        kind: EventKind::Reasoning,
+        authority: Authority::AssistantGenerated,
+        source: HistorySource::LedgerEvent,
+    };
+    assert_eq!(
+        verify_event_with_history(
+            &outcome(Some(vec![7])),
+            EventKind::Outcome,
+            Boundary::Socket,
+            &assistant_history,
+        )
+        .expect_err("assistant text is not outcome evidence")
+        .code,
+        ErrorCode::CitationInvalid
+    );
+    for source in [
+        HistorySource::Memory,
+        HistorySource::Summary,
+        HistorySource::Reconstruction,
+    ] {
+        let laundered = OneHistory {
+            lsn: LSN::new(7),
+            kind: EventKind::ToolResult,
+            authority: Authority::ToolObserved,
+            source,
+        };
+        assert_eq!(
+            verify_event_with_history(&done, EventKind::LoopClosed, Boundary::Socket, &laundered,)
+                .expect_err("memory-derived evidence is rejected")
+                .code,
+            ErrorCode::CitationInvalid
+        );
+    }
+}
+
+#[test]
 fn event_validation_fails_closed() {
     let future = encode_event(&event_envelope(
         EventPayload::UserMsg(Box::new(UserMsg {
@@ -157,7 +388,7 @@ fn event_validation_fails_closed() {
     ));
     let root = root_table_position(&unknown);
     let tag = table_field_position(&unknown, root, 1);
-    unknown[tag] = 22;
+    unknown[tag] = 23;
     assert_eq!(
         verify_event(&unknown, EventKind::UserMsg, Boundary::Import)
             .expect_err("unknown union member")
@@ -269,6 +500,59 @@ fn request_semantics_are_bounded_and_wave_scoped() {
     };
     assert_eq!(
         validate_request(&unavailable).expect_err("actor zero").code,
+        ErrorCode::ProtocolInvalid
+    );
+}
+
+#[test]
+fn continuity_protocol_requests_and_event_push_are_enabled() {
+    for payload in [
+        RequestPayload::Checkpoint(Box::new(CheckpointRequest {
+            turn_id: b"turn-7".to_vec(),
+            blob: b"opaque checkpoint".to_vec(),
+            client_seq: 3,
+        })),
+        RequestPayload::LatestCheckpoint(Box::new(LatestCheckpoint {
+            turn_id: b"turn-7".to_vec(),
+        })),
+        RequestPayload::Subscribe(Box::new(Subscribe {
+            conversation: Some(vec![0x17; 16]),
+            since_lsn: 9,
+        })),
+    ] {
+        validate_request(&Request {
+            request_id: 7,
+            payload,
+        })
+        .expect("continuity request");
+    }
+
+    let pushed = WireEnvelope {
+        proto_version: CURRENT_PROTOCOL_VERSION,
+        payload: WirePayload::Event(Box::new(WireEvent {
+            subscription_id: 1,
+            lsn: 11,
+            kind: EventKind::Binding as u8,
+            wall_timestamp_ns: 1_000,
+            actor: 7,
+            conversation: vec![0x17; 16],
+            payload: b"sealed event".to_vec(),
+        })),
+    };
+    assert!(verify_wire_envelope(&encode_wire(&pushed)).is_ok());
+
+    let invalid = Request {
+        request_id: 8,
+        payload: RequestPayload::Checkpoint(Box::new(CheckpointRequest {
+            turn_id: Vec::new(),
+            blob: Vec::new(),
+            client_seq: 0,
+        })),
+    };
+    assert_eq!(
+        validate_request(&invalid)
+            .expect_err("invalid checkpoint")
+            .code,
         ErrorCode::ProtocolInvalid
     );
 }

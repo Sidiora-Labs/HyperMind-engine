@@ -66,12 +66,14 @@ table AsOf {
   transaction_lsn:ulong;
 }
 
+/// Persists an opaque turn state with client-sequence idempotency.
 table Checkpoint {
   turn_id:[ubyte] (required);
   blob:[ubyte] (required);
   client_seq:ulong;
 }
 
+/// Reads the latest persisted state for one turn identity.
 table LatestCheckpoint {
   turn_id:[ubyte] (required);
 }
@@ -82,6 +84,7 @@ table Attest {
   client_seq:ulong;
 }
 
+/// Streams committed events after an optional conversation and LSN cursor.
 table Subscribe {
   conversation:[ubyte];
   since_lsn:ulong;
@@ -152,6 +155,7 @@ table BytesResult {
   bytes:[ubyte] (required);
 }
 
+/// Confirms the server-assigned bounded subscription identity.
 table SubscriptionAck {
   subscription_id:ulong;
 }
@@ -260,10 +264,12 @@ table BeliefResult {
   tombstoned:bool;
 }
 
+/// Identifies the ledger record containing the accepted checkpoint.
 table CheckpointAck {
   lsn:ulong;
 }
 
+/// Returns the latest opaque turn state without interpreting its bytes.
 table CheckpointResult {
   present:bool;
   lsn:ulong;
@@ -301,6 +307,7 @@ table Response {
   payload:ResponsePayload;
 }
 
+/// Pushes one committed ledger event to a subscriber.
 table Event {
   subscription_id:ulong;
   lsn:ulong;

@@ -52,7 +52,7 @@
     - Append keyed by connection id and client sequence with strictly prior plus one admission, duplicate on exact replay, kIdempotencyConflict on same-sequence different-digest, RebuildDedup from envelope metadata at boot, RollBackTornBatch when the last frame's client_event_index plus one is not client_event_count.
     - Port sim_env and core_sim_test: SimulatedStorage with FaultPlan maximum_write_bytes, torn_after_bytes, kill_after_durable_lsn, reverse_write_completion, fsync_lies; 2,048 randomised schedules converge to one CanonicalBytes; kill at every LSN; writer-ownership violation; real fork plus SIGKILL after commit.
     - _Requirements: 2.2, 2.3_
-  - [ ] 2.2 Continuity events: Checkpoint, IntentSet, loops, Binding, Effect, Approval, Outcome, ordering rules
+  - [x] 2.2 Continuity events: Checkpoint, IntentSet, loops, Binding, Effect, Approval, Outcome, ordering rules
     - Enable Checkpoint, IntentSet, LoopOpened, LoopClosed, Effect, Approval, Outcome, Supervisor, Recovery and add Binding with task or scope, canonical entity, property, evidence LSN, revision, freshness; protocol adds Checkpoint, LatestCheckpoint, CheckpointAck, CheckpointResult, Subscribe, SubscriptionAck, Event push.
     - Ordering rules in VerifyEvent: ToolResult and Effect reference a prior ToolCall LSN; Outcome and LoopClosed done cite tool_observed, external_observed or runtime_fact LSNs and are rejected when citing a memory or summary kind.
     - _Requirements: 2.1, 4.2_

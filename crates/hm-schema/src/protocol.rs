@@ -2,8 +2,8 @@
 
 use crate::event::{EventKind, MAXIMUM_EVENT_BYTES};
 use crate::wire::{
-    Activate, Append, Hello, Recall, Request, RequestPayload, Transcript, WireEnvelope,
-    WireEnvelopeRef, WirePayload,
+    Activate, Append, Checkpoint, Event as EventPush, Hello, LatestCheckpoint, Recall, Request,
+    RequestPayload, Subscribe, Transcript, WireEnvelope, WireEnvelopeRef, WirePayload,
 };
 use hm_core::{Error, ErrorCode};
 use planus::ReadAsRoot;
@@ -45,6 +45,9 @@ pub fn verify_wire_envelope(encoded: &[u8]) -> Result<WireEnvelope, Error> {
     if let WirePayload::Hello(hello) = &envelope.payload {
         validate_hello(hello)?;
     }
+    if let WirePayload::Event(event) = &envelope.payload {
+        validate_event_push(event)?;
+    }
     Ok(envelope)
 }
 
@@ -69,6 +72,9 @@ pub fn validate_request(request: &Request) -> Result<(), Error> {
         RequestPayload::Activate(value) => validate_activate(value),
         RequestPayload::Transcript(value) => validate_transcript(value),
         RequestPayload::Recall(value) => validate_recall(value),
+        RequestPayload::Checkpoint(value) => validate_checkpoint(value),
+        RequestPayload::LatestCheckpoint(value) => validate_latest_checkpoint(value),
+        RequestPayload::Subscribe(value) => validate_subscribe(value),
         RequestPayload::Health(_) => Ok(()),
         RequestPayload::Stats(value) if value.actor != 0 => Ok(()),
         RequestPayload::Stats(_) => Err(Error::new(ErrorCode::ProtocolInvalid)),
@@ -116,7 +122,7 @@ fn validate_append(append: &Append) -> Result<(), Error> {
     for event in &append.events {
         let kind =
             EventKind::try_from(event.kind).map_err(|()| Error::new(ErrorCode::ProtocolInvalid))?;
-        if !kind.is_wave_one()
+        if !kind.is_wave_two()
             || event.conversation.len() != 16
             || event.payload.is_empty()
             || event.payload.len() > MAXIMUM_EVENT_BYTES
@@ -177,5 +183,55 @@ fn validate_recall(request: &Recall) -> Result<(), Error> {
         Ok(())
     } else {
         Err(Error::new(ErrorCode::ProtocolInvalid))
+    }
+}
+
+fn validate_checkpoint(request: &Checkpoint) -> Result<(), Error> {
+    if request.turn_id.is_empty()
+        || request.turn_id.len() > 4096
+        || request.blob.is_empty()
+        || request.blob.len() > MAXIMUM_EVENT_BYTES
+        || request.client_seq == 0
+    {
+        Err(Error::new(ErrorCode::ProtocolInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_latest_checkpoint(request: &LatestCheckpoint) -> Result<(), Error> {
+    if request.turn_id.is_empty() || request.turn_id.len() > 4096 {
+        Err(Error::new(ErrorCode::ProtocolInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_subscribe(request: &Subscribe) -> Result<(), Error> {
+    if request
+        .conversation
+        .as_ref()
+        .is_some_and(|conversation| conversation.len() != 16)
+    {
+        Err(Error::new(ErrorCode::ProtocolInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_event_push(event: &EventPush) -> Result<(), Error> {
+    let kind =
+        EventKind::try_from(event.kind).map_err(|()| Error::new(ErrorCode::ProtocolInvalid))?;
+    if event.subscription_id == 0
+        || event.lsn == 0
+        || !kind.is_wave_two()
+        || event.actor == 0
+        || event.conversation.len() != 16
+        || event.payload.is_empty()
+        || event.payload.len() > MAXIMUM_EVENT_BYTES
+    {
+        Err(Error::new(ErrorCode::ProtocolInvalid))
+    } else {
+        Ok(())
     }
 }
