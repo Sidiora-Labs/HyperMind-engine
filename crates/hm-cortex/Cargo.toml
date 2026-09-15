@@ -6,6 +6,10 @@ rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 
+[dependencies]
+blake3 = "1.8.2"
+hm-core = { path = "../hm-core" }
+hm-schema = { path = "../hm-schema" }
+
 [lints]
 workspace = true
-

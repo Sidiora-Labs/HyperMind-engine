@@ -455,7 +455,7 @@ do_3 = "Crypto-shred writes DELETION_RECEIPT with key fingerprint and root, unli
 
 [task.3.2]
 title = "Authority enforcement at ingest, derivation rule, citation invariants, sensitivity and retention"
-status = "pending"
+status = "done"
 wave = 3
 owner_lane = "cognition"
 requires = ["2.8"]

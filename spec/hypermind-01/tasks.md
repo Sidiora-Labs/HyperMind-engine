@@ -87,7 +87,7 @@
     - Ed25519-signed checkpoints under mmr/checkpoints; hm verify actor-dir actor checkpoint pubkey prints MEMORY VERIFIED root and lsn with no key material; VerifyAndRepairBounded on open appends missing leaves in 1024-frame batches.
     - Crypto-shred writes DELETION_RECEIPT with key fingerprint and root, unlinks the keyring, zeroises, reopen reports kKeyDestroyed; RotateKeys re-wraps the data key under a new KEK; tripwire set is seeded at init and held in kernel memory keyed by LSN.
     - _Requirements: 3.1, 3.2, 3.3_
-  - [ ] 3.2 Authority enforcement at ingest, derivation rule, citation invariants, sensitivity and retention
+  - [x] 3.2 Authority enforcement at ingest, derivation rule, citation invariants, sensitivity and retention
     - Ingest maps UserMsg to user_asserted, ToolResult to tool_observed, ToolCall and Checkpoint and loop events to runtime_fact, DeliveredMsg and Reasoning to assistant_generated, external feeds to external_observed; automatic sensitivity capped at personal; retention do_not_store returns a receipt and appends nothing.
     - derive_authority(source, output) returns the source authority only when output is a verbatim quote of a cited byte range, else derived_inference; VerifyEvent rejects Outcome and LoopClosed done whose citations include any derived or memory kind; memory.* kinds are refused at the ingest boundary.
     - _Requirements: 4.1, 4.2, 10.2_

@@ -7,6 +7,8 @@ use crate::events::{
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
 
+use crate::validate::authority::validate_optional_observed_evidence;
+
 pub const CURRENT_SCHEMA_VERSION: u16 = 2;
 pub const MAXIMUM_EVENT_BYTES: usize = 16 * 1024 * 1024;
 pub const MAXIMUM_IDENTIFIER_BYTES: usize = 4096;
@@ -75,6 +77,11 @@ impl EventKind {
                     | Self::LoopClosed
                     | Self::Binding
             )
+    }
+
+    #[must_use]
+    pub const fn is_wave_three(self) -> bool {
+        self.is_wave_two() || matches!(self, Self::ProviderFrame | Self::MediaRef)
     }
 }
 
@@ -178,7 +185,7 @@ pub fn verify_event_with_history(
     if envelope.schema_version == 0 || envelope.schema_version > CURRENT_SCHEMA_VERSION {
         return Err(Error::new(ErrorCode::SchemaVersion));
     }
-    if !expected_kind.is_wave_two() || payload_kind(&envelope.payload) != expected_kind {
+    if !expected_kind.is_wave_three() || payload_kind(&envelope.payload) != expected_kind {
         return Err(Error::new(ErrorCode::ForbiddenKind));
     }
     validate_envelope(&envelope)?;
@@ -239,6 +246,20 @@ fn validate_payload(
     match payload {
         EventPayload::UserMsg(_) | EventPayload::DeliveredMsg(_) | EventPayload::Reasoning(_) => {
             Ok(())
+        }
+        EventPayload::ProviderFrame(value) => {
+            if value.provider.is_empty() || value.api_content.is_empty() {
+                Err(Error::new(ErrorCode::SchemaInvalid))
+            } else {
+                Ok(())
+            }
+        }
+        EventPayload::MediaRef(value) => {
+            if value.uri.is_empty() || value.media_type.is_empty() || value.digest.is_empty() {
+                Err(Error::new(ErrorCode::SchemaInvalid))
+            } else {
+                Ok(())
+            }
         }
         EventPayload::ToolCall(value) => {
             if bounded_identifier(&value.call_id) && !value.tool_name.is_empty() {
@@ -334,7 +355,7 @@ fn validate_outcome(
     if !bounded_identifier(&value.effect_id) {
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
-    validate_optional_evidence(
+    validate_optional_observed_evidence(
         value.evidence_lsns.as_deref(),
         history,
         legacy_evidence_allowed,
@@ -350,7 +371,7 @@ fn validate_loop_closed(
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
     if value.reason == LoopCloseReason::Done {
-        validate_optional_evidence(
+        validate_optional_observed_evidence(
             value.evidence_lsns.as_deref(),
             history,
             legacy_evidence_allowed,
@@ -382,39 +403,6 @@ fn require_prior_tool_call(lsn: u64, history: &impl EventHistory) -> Result<(), 
         return Err(Error::new(ErrorCode::OrderingViolation).at_lsn(referenced_lsn));
     }
     Ok(())
-}
-
-fn validate_observed_evidence(lsns: &[u64], history: &impl EventHistory) -> Result<(), Error> {
-    if lsns.is_empty() {
-        return Err(Error::new(ErrorCode::CitationInvalid));
-    }
-    for raw_lsn in lsns {
-        let lsn = LSN::new(*raw_lsn);
-        if *raw_lsn == 0
-            || history.source_at(lsn) != HistorySource::LedgerEvent
-            || !matches!(
-                history.authority_at(lsn),
-                Some(
-                    Authority::ToolObserved | Authority::ExternalObserved | Authority::RuntimeFact
-                )
-            )
-        {
-            return Err(Error::new(ErrorCode::CitationInvalid).at_lsn(lsn));
-        }
-    }
-    Ok(())
-}
-
-fn validate_optional_evidence(
-    lsns: Option<&[u64]>,
-    history: &impl EventHistory,
-    legacy_evidence_allowed: bool,
-) -> Result<(), Error> {
-    match lsns {
-        Some(lsns) => validate_observed_evidence(lsns, history),
-        None if legacy_evidence_allowed => Ok(()),
-        None => Err(Error::new(ErrorCode::CitationInvalid)),
-    }
 }
 
 fn bounded_identifier(value: &[u8]) -> bool {
