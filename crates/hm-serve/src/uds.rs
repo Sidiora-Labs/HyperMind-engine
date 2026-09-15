@@ -16,9 +16,10 @@ use hm_schema::protocol::{
 };
 use hm_schema::wire::{
     AppendAck, BytesResult, CheckpointAck, CheckpointResult, ErrorDetail, Event, FrameRecord,
-    HealthResult, MutationEffectState as WireMutationEffectState, ProjectionStat, RecallResult,
-    Request, RequestPayload, Response, ResponsePayload, ResponseStatus, StatsResult,
-    SubscriptionAck, TranscriptResult, Welcome, WireEnvelope, WirePayload,
+    HealthResult, MutationEffectState as WireMutationEffectState, ProjectionStat,
+    RecallMode as WireRecallMode, RecallResult, Request, RequestPayload, Response, ResponsePayload,
+    ResponseStatus, StatsResult, SubscriptionAck, TranscriptResult, Welcome, WireEnvelope,
+    WirePayload,
 };
 use std::collections::BTreeMap;
 use std::future::Future;
@@ -445,11 +446,35 @@ async fn handle_request(
         RequestPayload::Recall(recall) => {
             let query = String::from_utf8(recall.query)
                 .map_err(|_| (request_id, Error::new(ErrorCode::ProtocolInvalid)))?;
-            let items = actor
-                .recall(RecallRequest::Lexical {
+            let recall_request = match (recall.mode, recall.level) {
+                (WireRecallMode::ListWindows, 0) => RecallRequest::Semantic {
                     query,
                     limit: recall.limit as usize,
-                })
+                },
+                (WireRecallMode::ListWindows, 1) => RecallRequest::Lexical {
+                    query,
+                    limit: recall.limit as usize,
+                },
+                (WireRecallMode::ListWindows, 2) => RecallRequest::Entity {
+                    query,
+                    turn_text: String::new(),
+                    limit: recall.limit as usize,
+                },
+                (WireRecallMode::ListWindows, 3) => RecallRequest::Temporal {
+                    start_ns: recall.start_ns,
+                    end_ns: recall.end_ns,
+                    limit: recall.limit as usize,
+                },
+                (WireRecallMode::OpenWindow, 0) => RecallRequest::Near {
+                    anchor: query,
+                    query: String::new(),
+                    turn_text: String::new(),
+                    limit: recall.limit as usize,
+                },
+                _ => return Err((request_id, Error::new(ErrorCode::ProtocolInvalid))),
+            };
+            let items = actor
+                .recall(recall_request)
                 .await
                 .map_err(|error| (request_id, error))?;
             ResponsePayload::RecallResult(Box::new(RecallResult {

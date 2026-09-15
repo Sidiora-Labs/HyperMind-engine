@@ -1,6 +1,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::bindings::BindingsProjection;
+use crate::entities::EntityProjection;
 use crate::intent::IntentFrameProjection;
 use crate::ledger::WorkLedgerProjection;
 use crate::lexical::LexicalProjection;
@@ -28,6 +29,7 @@ pub fn rebuild_projection_stream(
         store.reset(ProjectionId::IntentFrame)?;
         store.reset(ProjectionId::WorkLedger)?;
         store.reset(ProjectionId::Bindings)?;
+        store.reset(ProjectionId::EntityIndex)?;
     }
     let snapshot = store.begin_snapshot()?;
     let mut timeline_checkpoint = snapshot.checkpoint(ProjectionId::ConversationHeads)?.get();
@@ -35,6 +37,7 @@ pub fn rebuild_projection_stream(
     let mut intent_checkpoint = snapshot.checkpoint(ProjectionId::IntentFrame)?.get();
     let mut ledger_checkpoint = snapshot.checkpoint(ProjectionId::WorkLedger)?.get();
     let mut bindings_checkpoint = snapshot.checkpoint(ProjectionId::Bindings)?.get();
+    let mut entity_checkpoint = snapshot.checkpoint(ProjectionId::EntityIndex)?.get();
     drop(snapshot);
     let minimum = [
         timeline_checkpoint,
@@ -42,6 +45,7 @@ pub fn rebuild_projection_stream(
         intent_checkpoint,
         ledger_checkpoint,
         bindings_checkpoint,
+        entity_checkpoint,
     ]
     .into_iter()
     .min()
@@ -52,6 +56,7 @@ pub fn rebuild_projection_stream(
         intent_checkpoint,
         ledger_checkpoint,
         bindings_checkpoint,
+        entity_checkpoint,
     ]
     .into_iter()
     .any(|checkpoint| checkpoint > frames.len() as u64)
@@ -88,6 +93,10 @@ pub fn rebuild_projection_stream(
             BindingsProjection::apply_event(store, frame)?;
             bindings_checkpoint = expected_lsn;
         }
+        if entity_checkpoint < expected_lsn {
+            EntityProjection::apply_event(store, frame)?;
+            entity_checkpoint = expected_lsn;
+        }
         applied_frames += 1;
     }
     let applied_lsn = [
@@ -96,6 +105,7 @@ pub fn rebuild_projection_stream(
         intent_checkpoint,
         ledger_checkpoint,
         bindings_checkpoint,
+        entity_checkpoint,
     ]
     .into_iter()
     .min()
@@ -107,6 +117,7 @@ pub fn rebuild_projection_stream(
             && lexical_checkpoint == frames.len() as u64
             && intent_checkpoint == frames.len() as u64
             && ledger_checkpoint == frames.len() as u64
-            && bindings_checkpoint == frames.len() as u64,
+            && bindings_checkpoint == frames.len() as u64
+            && entity_checkpoint == frames.len() as u64,
     })
 }

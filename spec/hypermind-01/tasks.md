@@ -124,7 +124,7 @@
     - Health computed separately for encoder, backlog, projection and inclusion; activate deadline default 25 ms returns the last bundle marked degraded with stale_by_lsn on a miss and schedules a fresh bundle push over Subscribe.
     - Anchors: remember accepts anchor facets path, symbol, url, entity; recall near walks the entity lane first.
     - _Requirements: 6.2, 6.3, 7.3_
-  - [ ] 4.5 recall modes semantic, entity and near; remember with anchor, retention, sensitivity; SDK exposure
+  - [x] 4.5 recall modes semantic, entity and near; remember with anchor, retention, sensitivity; SDK exposure
     - recall exposes modes semantic, lexical, entity, temporal and near with filters; remember accepts anchor, retention and sensitivity; the query is embedded once per activate through the configured embedder, never a document; activate accepts a precomputed query embedding as the Go client does.
     - TypeScript engine and client expose the same modes and fields; the health and gaps fields are typed.
     - _Requirements: 13.2, 14.2_

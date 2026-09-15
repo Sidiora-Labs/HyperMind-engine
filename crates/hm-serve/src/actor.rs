@@ -18,6 +18,7 @@ use hm_ledger::tripwire::TripwireSet;
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
 };
+use hm_proj::entities::EntityProjection;
 use hm_proj::lexical::LexicalProjection;
 use hm_proj::rebuild::rebuild_projection_stream;
 use hm_proj::store::{ProjectionId, ProjectionStore};
@@ -85,8 +86,28 @@ pub struct RecallItem {
 
 #[derive(Clone, Debug)]
 pub enum RecallRequest {
+    Semantic {
+        query: String,
+        limit: usize,
+    },
     Lexical {
         query: String,
+        limit: usize,
+    },
+    Entity {
+        query: String,
+        turn_text: String,
+        limit: usize,
+    },
+    Near {
+        anchor: String,
+        query: String,
+        turn_text: String,
+        limit: usize,
+    },
+    Temporal {
+        start_ns: i64,
+        end_ns: i64,
         limit: usize,
     },
     Timeline {
@@ -807,6 +828,10 @@ impl WriterState {
     fn recall(&self, request: RecallRequest) -> Result<Vec<RecallItem>, Error> {
         let snapshot = self.projections.begin_snapshot()?;
         match request {
+            RecallRequest::Semantic { query, limit } => {
+                let _ = (query, limit);
+                Err(Error::new(ErrorCode::OperationUnavailable))
+            }
             RecallRequest::Lexical { query, limit } => {
                 LexicalProjection::query(&snapshot, &query, limit)?
                     .into_iter()
@@ -816,6 +841,72 @@ impl WriterState {
                         Err(error) => Some(Err(error)),
                     })
                     .collect()
+            }
+            RecallRequest::Entity {
+                query,
+                turn_text,
+                limit,
+            } => EntityProjection::query(&snapshot, &query, &turn_text, limit)?
+                .into_iter()
+                .filter_map(|hit| match read_conversation_record(&snapshot, hit.lsn) {
+                    Ok(Some(record)) => Some(Ok(recall_item(record, hit.score() as u64))),
+                    Ok(None) => None,
+                    Err(error) => Some(Err(error)),
+                })
+                .collect(),
+            RecallRequest::Near {
+                anchor,
+                query,
+                turn_text,
+                limit,
+            } => {
+                let entity_query = if query.is_empty() {
+                    anchor
+                } else {
+                    format!("{anchor} {query}")
+                };
+                let mut lsns = std::collections::BTreeSet::new();
+                let mut output = Vec::new();
+                for hit in EntityProjection::query(&snapshot, &entity_query, &turn_text, limit)? {
+                    if let Some(record) = read_conversation_record(&snapshot, hit.lsn)? {
+                        lsns.insert(hit.lsn);
+                        output.push(recall_item(record, hit.score() as u64));
+                    }
+                }
+                if output.len() < limit && !query.is_empty() {
+                    for hit in LexicalProjection::query(&snapshot, &query, limit)? {
+                        if lsns.insert(hit.lsn)
+                            && let Some(record) = read_conversation_record(&snapshot, hit.lsn)?
+                        {
+                            output.push(recall_item(record, hit.score_q32));
+                            if output.len() == limit {
+                                break;
+                            }
+                        }
+                    }
+                }
+                Ok(output)
+            }
+            RecallRequest::Temporal {
+                start_ns,
+                end_ns,
+                limit,
+            } => {
+                if start_ns > end_ns || limit == 0 {
+                    return Err(Error::new(ErrorCode::InvalidArgument));
+                }
+                let mut output = Vec::new();
+                for frame in self.plaintext_frames.iter().rev() {
+                    if (start_ns..=end_ns).contains(&frame.header.wall_timestamp_ns.get())
+                        && let Some(record) = read_conversation_record(&snapshot, frame.header.lsn)?
+                    {
+                        output.push(recall_item(record, 0));
+                        if output.len() == limit {
+                            break;
+                        }
+                    }
+                }
+                Ok(output)
             }
             RecallRequest::Timeline {
                 conversation,
@@ -874,6 +965,7 @@ impl WriterState {
 
     fn rebuild_projection(&mut self, name: &str) -> Result<LSN, Error> {
         let projection = [
+            ProjectionId::EntityIndex,
             ProjectionId::Bm25,
             ProjectionId::IntentFrame,
             ProjectionId::WorkLedger,

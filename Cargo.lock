@@ -1212,8 +1212,10 @@ name = "hm-mcp"
 version = "0.1.0"
 dependencies = [
  "base64 0.22.1",
+ "blake3",
  "hm-compose",
  "hm-core",
+ "hm-embed",
  "hm-ledger",
  "hm-schema",
  "hm-serve",
@@ -1256,6 +1258,7 @@ dependencies = [
  "crc32c",
  "hm-compose",
  "hm-core",
+ "hm-embed",
  "hm-ledger",
  "hm-proj",
  "hm-schema",

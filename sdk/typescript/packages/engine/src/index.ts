@@ -7,8 +7,8 @@ interface NativeEngineHandle {
 }
 
 interface NativeSessionHandle {
-  remember(content: string, kind: string): Promise<string>;
-  recall(query: string, limit: number): Promise<string>;
+  remember(content: string, kind: string, optionsJson: string): Promise<string>;
+  recall(query: string, limit: number, mode: string, filtersJson: string): Promise<string>;
   activate(query: string, budgetTokens: number): Promise<Uint8Array>;
   checkpoint(turnId: string, blob: Uint8Array): Promise<string>;
   intend(input: string): Promise<string>;
@@ -28,14 +28,54 @@ export interface EngineConfig {
   projectionMapBytes?: number;
 }
 
+export type HealthStatus = "semantic_ready" | "semantic_lagging" | "lexical_only" | "unavailable";
+export type RecallMode = "semantic" | "lexical" | "entity" | "temporal" | "near";
+export type Retention = "current_state" | "daily" | "durable" | "do_not_store";
+export type Sensitivity = "public" | "personal" | "secret";
+export type AnchorFacet = "path" | "symbol" | "url" | "entity";
+
+export interface Health {
+  encoder?: HealthStatus;
+  backlog?: HealthStatus;
+  projection: HealthStatus | "ready";
+  inclusion?: HealthStatus;
+  bundle_hash?: string;
+}
+
+export interface Gap {
+  kind: string;
+  detail: string;
+}
+
 export interface Envelope {
   ok: boolean;
   items: unknown[];
   provenance: string[];
-  gaps: unknown[];
-  health: unknown;
+  gaps: Gap[];
+  health: Health;
   warnings: string[];
   effect_state?: "not_dispatched" | "unknown" | "rejected";
+}
+
+export interface RememberOptions {
+  kind?: "user" | "assistant" | "document";
+  anchor?: { facet: AnchorFacet; value: string };
+  retention?: Retention;
+  sensitivity?: Sensitivity;
+}
+
+export interface RecallOptions {
+  mode?: RecallMode;
+  limit?: number;
+  filters?: {
+    conversation?: string;
+    since_lsn?: number;
+    until_lsn?: number;
+    temporal_from_ns?: number;
+    temporal_to_ns?: number;
+    anchor?: string;
+    turn_text?: string;
+  };
 }
 
 export interface BindInput {
@@ -74,12 +114,34 @@ export class Session {
     readonly conversation: string,
   ) {}
 
-  async remember(content: string, kind: "user" | "assistant" = "user"): Promise<Envelope> {
-    return decodeEnvelope(await this.native.remember(content, kind));
+  async remember(
+    content: string,
+    options: "user" | "assistant" | RememberOptions = {},
+  ): Promise<Envelope> {
+    const normalized = typeof options === "string" ? { kind: options } : options;
+    return decodeEnvelope(
+      await this.native.remember(
+        content,
+        normalized.kind ?? "user",
+        JSON.stringify({
+          anchor: normalized.anchor,
+          retention: normalized.retention,
+          sensitivity: normalized.sensitivity,
+        }),
+      ),
+    );
   }
 
-  async recall(query: string, limit = 32): Promise<Envelope> {
-    return decodeEnvelope(await this.native.recall(query, limit));
+  async recall(query: string, options: number | RecallOptions = {}): Promise<Envelope> {
+    const normalized = typeof options === "number" ? { limit: options } : options;
+    return decodeEnvelope(
+      await this.native.recall(
+        query,
+        normalized.limit ?? 32,
+        normalized.mode ?? "lexical",
+        JSON.stringify(normalized.filters ?? {}),
+      ),
+    );
   }
 
   async activate(query: string, budgetTokens: number): Promise<Bundle> {

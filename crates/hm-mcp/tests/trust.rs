@@ -141,6 +141,9 @@ async fn tripwire_is_a_warning_and_crypto_shred_requires_the_admin_token() {
             content: "tripwire content".to_owned(),
             kind: RememberKind::User,
             chunk_bytes: None,
+            anchor: None,
+            retention: None,
+            sensitivity: None,
         })
         .await;
     assert!(remembered.ok);

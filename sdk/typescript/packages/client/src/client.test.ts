@@ -78,8 +78,22 @@ test("client uses the real daemon and recovers stable sequence history", async (
   });
   context.after(() => client.close());
   const session = client.session("typescript-continuity");
-  const evidence = await session.remember("heliotrope continuity evidence");
+  const evidence = await session.remember(
+    "heliotrope continuity evidence: Alice Smith changed src/main.rs for GH-123",
+  );
   assert.equal(evidence, 1n);
+  assert.deepEqual(await session.recall("heliotrope", { mode: "lexical" }), [1n]);
+  assert.deepEqual(await session.recall("GH-123", { mode: "entity" }), [1n]);
+  assert.deepEqual(await session.recall("", { mode: "near", anchor: "src/main.rs" }), [1n]);
+  assert.deepEqual(await session.recall("", {
+    mode: "temporal",
+    temporalFromNs: 0n,
+    temporalToNs: 9_223_372_036_854_775_807n,
+  }), [1n]);
+  await assert.rejects(
+    session.recall("heliotrope", { mode: "semantic" }),
+    (error) => error instanceof EngineError && error.code === 49,
+  );
   const checkpoint = await session.checkpoint("turn-a", Buffer.from("opaque-a"));
   assert.equal(checkpoint, 2n);
   assert.deepEqual(
@@ -100,6 +114,12 @@ test("client uses the real daemon and recovers stable sequence history", async (
   assert.equal(bundle.sections.length, 10);
   assert.equal(bundle.sections.some((section) => section.tier === "intent" && section.items.length > 0), true);
   assert.equal(bundle.sections.some((section) => section.tier === "bindings" && section.items.length > 0), true);
+  const precomputed = await session.activate("heliotrope", {
+    budgetTokens: 2048,
+    queryEmbedding: Int8Array.from([1, 2, 3, 4, 5, 6, 7, 8]),
+    queryBinaryPrefilter: Uint8Array.from([0xff]),
+  });
+  assert.equal(precomputed.sections.length, 10);
   client.close();
 
   const resumed = await Client.connect({

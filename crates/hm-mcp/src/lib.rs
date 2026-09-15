@@ -22,6 +22,10 @@ pub use tools::bind::BindInput;
 pub use tools::forget::{ForgetAction, ForgetInput};
 pub use tools::inspect::InspectInput;
 pub use tools::intend::{IntendAction, IntendCloseReason, IntendInput};
+pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
+pub use tools::remember::{
+    AnchorFacet, RememberAnchor, RememberInput, RememberKind, RetentionInput, SensitivityInput,
+};
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 const DEFAULT_CHUNK_BYTES: usize = 32 * 1024;
@@ -84,43 +88,6 @@ impl Envelope {
 }
 
 #[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum RememberKind {
-    User,
-    Assistant,
-    Document,
-}
-
-#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
-pub struct RememberInput {
-    pub conversation: String,
-    pub content: String,
-    pub kind: RememberKind,
-    #[serde(default)]
-    pub chunk_bytes: Option<usize>,
-}
-
-#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum RecallMode {
-    Lexical,
-    Timeline,
-}
-
-#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
-pub struct RecallInput {
-    pub mode: RecallMode,
-    #[serde(default)]
-    pub query: String,
-    #[serde(default)]
-    pub conversation: String,
-    #[serde(default = "default_limit")]
-    pub limit: usize,
-    #[serde(default)]
-    pub since_lsn: u64,
-}
-
-#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
 pub struct ActivateInput {
     pub conversation: String,
     #[serde(default)]
@@ -128,10 +95,6 @@ pub struct ActivateInput {
     #[serde(default)]
     pub turn_text: String,
     pub budget_tokens: usize,
-}
-
-const fn default_limit() -> usize {
-    32
 }
 
 #[derive(Clone)]
@@ -167,9 +130,31 @@ impl McpServer {
         }
     }
 
+    #[allow(clippy::too_many_lines)]
     async fn remember_inner(&self, input: RememberInput) -> Result<Envelope, Error> {
         if input.conversation.is_empty() || input.content.is_empty() {
             return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        if input
+            .anchor
+            .as_ref()
+            .is_some_and(|anchor| anchor.value.is_empty() || anchor.value.len() > 4096)
+        {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let retention: Retention = input.retention.unwrap_or(RetentionInput::Durable).into();
+        let sensitivity: Sensitivity = input
+            .sensitivity
+            .unwrap_or(SensitivityInput::Personal)
+            .into();
+        if retention == Retention::DoNotStore {
+            let mut envelope = Envelope::empty();
+            envelope.items.push(json!({
+                "stored": false,
+                "retention": "do_not_store",
+                "receipt": hex(blake3::hash(input.content.as_bytes()).as_bytes()),
+            }));
+            return Ok(envelope);
         }
         let conversation = ConversationId::derive(&input.conversation);
         let (kind, authority) = match input.kind {
@@ -224,8 +209,8 @@ impl McpServer {
                     run_id: None,
                     model_provenance: None,
                     authority,
-                    retention: Retention::Durable,
-                    sensitivity: Sensitivity::Personal,
+                    retention,
+                    sensitivity,
                     event_time_ns: 0,
                 }),
             });
@@ -236,6 +221,10 @@ impl McpServer {
             "first_lsn": outcome.first_lsn.get(),
             "last_lsn": outcome.last_lsn.get(),
             "count": outcome.last_lsn.get() - outcome.first_lsn.get() + 1,
+            "anchor": input.anchor.as_ref().map(|anchor| json!({
+                "facet": format!("{:?}", anchor.facet).to_lowercase(),
+                "value": anchor.value,
+            })),
         }));
         for lsn in outcome.first_lsn.get()..=outcome.last_lsn.get() {
             envelope
@@ -257,8 +246,40 @@ impl McpServer {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
         let request = match input.mode {
+            RecallMode::Semantic if !input.query.is_empty() => RecallRequest::Semantic {
+                query: input.query.clone(),
+                limit: input.limit,
+            },
             RecallMode::Lexical if !input.query.is_empty() => RecallRequest::Lexical {
-                query: input.query,
+                query: input.query.clone(),
+                limit: input.limit,
+            },
+            RecallMode::Entity
+                if !input.query.is_empty() || !input.filters.turn_text.is_empty() =>
+            {
+                RecallRequest::Entity {
+                    query: input.query.clone(),
+                    turn_text: input.filters.turn_text.clone(),
+                    limit: input.limit,
+                }
+            }
+            RecallMode::Near
+                if input
+                    .filters
+                    .anchor
+                    .as_ref()
+                    .is_some_and(|value| !value.is_empty()) =>
+            {
+                RecallRequest::Near {
+                    anchor: input.filters.anchor.clone().expect("checked anchor"),
+                    query: input.query.clone(),
+                    turn_text: input.filters.turn_text.clone(),
+                    limit: input.limit,
+                }
+            }
+            RecallMode::Temporal => RecallRequest::Temporal {
+                start_ns: input.filters.temporal_from_ns.unwrap_or(i64::MIN),
+                end_ns: input.filters.temporal_to_ns.unwrap_or(i64::MAX),
                 limit: input.limit,
             },
             RecallMode::Timeline if !input.conversation.is_empty() => RecallRequest::Timeline {
@@ -268,7 +289,27 @@ impl McpServer {
             },
             _ => return Err(Error::new(ErrorCode::InvalidArgument)),
         };
-        let records = self.actor.recall(request).await?;
+        let conversation_filter = input
+            .filters
+            .conversation
+            .as_deref()
+            .filter(|value| !value.is_empty())
+            .map(ConversationId::derive);
+        let since_lsn = input.filters.since_lsn.unwrap_or(input.since_lsn);
+        let until_lsn = input.filters.until_lsn.unwrap_or(u64::MAX);
+        if since_lsn > until_lsn {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let records = self
+            .actor
+            .recall(request)
+            .await?
+            .into_iter()
+            .filter(|record| {
+                record.lsn.get() > since_lsn
+                    && record.lsn.get() <= until_lsn
+                    && conversation_filter.is_none_or(|value| value == record.conversation)
+            });
         let mut envelope = Envelope::empty();
         for record in records {
             let (content, authority) = event_content(record.kind, &record.payload)?;
@@ -352,13 +393,15 @@ impl McpServer {
 #[tool_router(server_handler)]
 impl McpServer {
     #[tool(
-        description = "Persist a user message, delivered assistant message, or chunked document"
+        description = "Persist a user message, delivered assistant message, or chunked document with optional anchor, retention, and sensitivity"
     )]
     async fn remember(&self, Parameters(input): Parameters<RememberInput>) -> Json<Envelope> {
         Json(self.remember_envelope(input).await)
     }
 
-    #[tool(description = "Recall memories by lexical match or conversation timeline")]
+    #[tool(
+        description = "Recall by semantic, lexical, entity, temporal, near-anchor, or timeline mode with filters"
+    )]
     async fn recall(&self, Parameters(input): Parameters<RecallInput>) -> Json<Envelope> {
         Json(self.recall_envelope(input).await)
     }

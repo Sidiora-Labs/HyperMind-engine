@@ -565,7 +565,7 @@ do_3 = "Anchors: remember accepts anchor facets path, symbol, url, entity; recal
 
 [task.4.5]
 title = "recall modes semantic, entity and near; remember with anchor, retention, sensitivity; SDK exposure"
-status = "pending"
+status = "done"
 wave = 4
 owner_lane = "surface"
 requires = ["4.4"]

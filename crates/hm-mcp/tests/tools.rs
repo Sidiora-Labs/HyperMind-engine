@@ -30,6 +30,9 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
             content: "heliotrope alpha heliotrope beta".to_owned(),
             kind: RememberKind::Document,
             chunk_bytes: Some(18),
+            anchor: None,
+            retention: None,
+            sensitivity: None,
         })
         .await;
     assert!(remembered.ok);
@@ -55,6 +58,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
             conversation: String::new(),
             limit: 10,
             since_lsn: 0,
+            filters: hm_mcp::RecallFilters::default(),
         })
         .await;
     assert!(recalled.ok);
@@ -83,6 +87,9 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
             content: String::new(),
             kind: RememberKind::User,
             chunk_bytes: None,
+            anchor: None,
+            retention: None,
+            sensitivity: None,
         })
         .await;
     assert!(!rejected.ok);

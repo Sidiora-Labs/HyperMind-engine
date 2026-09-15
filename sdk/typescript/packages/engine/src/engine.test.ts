@@ -37,6 +37,17 @@ test("napi engine exposes one embedded continuity session", async (context) => {
   });
   assert.equal(bound.ok, true);
   assert.equal((bound.items[0] as { status: string }).status, "resolved");
+  const anchored = await session.remember("Alice Smith changed src/main.rs for GH-123", {
+    kind: "document",
+    anchor: { facet: "path", value: "src/main.rs" },
+    retention: "daily",
+    sensitivity: "public",
+  });
+  assert.equal(anchored.ok, true);
+  const entity = await session.recall("GH-123", { mode: "entity", limit: 10 });
+  assert.equal(entity.ok, true);
+  assert.equal(entity.items.length, 1);
+  assert.equal(typeof entity.health.projection, "string");
   const recalled = await session.recall("heliotrope");
   assert.equal(recalled.ok, true);
   assert.equal(recalled.items.length, 1);

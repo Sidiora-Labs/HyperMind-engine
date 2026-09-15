@@ -43,8 +43,42 @@ const MAXIMUM_FRAME_BYTES = 17 * 1024 * 1024;
 const text = new TextEncoder();
 
 export type EffectState = "not_dispatched" | "unknown" | "rejected";
-export type MemoryKind = "user" | "assistant";
+export type MemoryKind = "user" | "assistant" | "document";
 export type CloseReason = "done" | "abandoned" | "handed_off" | "superseded";
+export type RecallMode = "semantic" | "lexical" | "entity" | "temporal" | "near";
+export type RetentionPolicy = "current_state" | "daily" | "durable" | "do_not_store";
+export type SensitivityPolicy = "public" | "personal" | "secret";
+export type AnchorFacet = "path" | "symbol" | "url" | "entity";
+
+export interface RememberOptions {
+  kind?: MemoryKind;
+  anchor?: { facet: AnchorFacet; value: string };
+  retention?: RetentionPolicy;
+  sensitivity?: SensitivityPolicy;
+}
+
+export interface DoNotStoreReceipt {
+  stored: false;
+  receipt: string;
+}
+
+export interface RecallOptions {
+  mode?: RecallMode;
+  limit?: number;
+  anchor?: string;
+  turnText?: string;
+  sinceLsn?: bigint;
+  untilLsn?: bigint;
+  temporalFromNs?: bigint;
+  temporalToNs?: bigint;
+}
+
+export interface ActivateOptions {
+  budgetTokens: number;
+  turnText?: string;
+  queryEmbedding?: Int8Array;
+  queryBinaryPrefilter?: Uint8Array;
+}
 
 export interface ClientConfig {
   socketPath: string;
@@ -239,19 +273,49 @@ export class Client {
     });
   }
 
-  async recall(query: string, limit = 32): Promise<bigint[]> {
+  async recall(query: string, options: number | RecallOptions = {}): Promise<bigint[]> {
+    const normalized = typeof options === "number" ? { limit: options } : options;
+    const mode = normalized.mode ?? "lexical";
+    const selectors: Record<RecallMode, { mode: WireRecallMode; level: number }> = {
+      semantic: { mode: WireRecallMode.list_windows, level: 0 },
+      lexical: { mode: WireRecallMode.list_windows, level: 1 },
+      entity: { mode: WireRecallMode.list_windows, level: 2 },
+      temporal: { mode: WireRecallMode.list_windows, level: 3 },
+      near: { mode: WireRecallMode.open_window, level: 0 },
+    };
+    const selector = selectors[mode];
+    const queryText = normalized.turnText === undefined
+      ? normalized.anchor ?? query
+      : `${normalized.anchor ?? query} ${normalized.turnText}`;
     return this.exclusive(async () => {
       await this.ensure();
       const result = (await this.request(
         RequestPayload.Recall,
-        new RecallT([...text.encode(query)], limit, WireRecallMode.list_windows, 0, 0n, 0n),
+        new RecallT(
+          [...text.encode(queryText)],
+          normalized.limit ?? 32,
+          selector.mode,
+          selector.level,
+          normalized.temporalFromNs ?? 0n,
+          normalized.temporalToNs ?? 0n,
+        ),
         ResponsePayload.RecallResult,
       )) as RecallResultT;
-      return result.members;
+      return result.members.filter((lsn) =>
+        (normalized.sinceLsn === undefined || lsn > normalized.sinceLsn)
+        && (normalized.untilLsn === undefined || lsn <= normalized.untilLsn));
     });
   }
 
-  async activate(conversation: Uint8Array, query: string, budgetTokens: number): Promise<Bundle> {
+  async activate(
+    conversation: Uint8Array,
+    query: string,
+    options: number | ActivateOptions,
+  ): Promise<Bundle> {
+    const normalized = typeof options === "number" ? { budgetTokens: options } : options;
+    if ((normalized.queryEmbedding === undefined) !== (normalized.queryBinaryPrefilter === undefined)) {
+      throw new Error("query embedding and binary prefilter must be supplied together");
+    }
     return this.exclusive(async () => {
       await this.ensure();
       const result = (await this.request(
@@ -260,11 +324,23 @@ export class Client {
           pack(builder: flatbuffers.Builder): flatbuffers.Offset {
             const conversationOffset = Activate.createConversationVector(builder, conversation);
             const queryOffset = Activate.createQueryVector(builder, text.encode(query));
+            const turnTextOffset = normalized.turnText === undefined
+              ? 0
+              : Activate.createTurnTextVector(builder, text.encode(normalized.turnText));
+            const queryEmbeddingOffset = normalized.queryEmbedding === undefined
+              ? 0
+              : Activate.createQueryEmbeddingVector(builder, normalized.queryEmbedding);
+            const queryPrefilterOffset = normalized.queryBinaryPrefilter === undefined
+              ? 0
+              : Activate.createQueryBinaryPrefilterVector(builder, normalized.queryBinaryPrefilter);
             const weights = Activate.createTokenWeightsVector(builder, Array(256).fill(256));
             Activate.startActivate(builder);
             Activate.addConversation(builder, conversationOffset);
             Activate.addQuery(builder, queryOffset);
-            Activate.addBudgetTokens(builder, BigInt(budgetTokens));
+            if (turnTextOffset !== 0) Activate.addTurnText(builder, turnTextOffset);
+            Activate.addBudgetTokens(builder, BigInt(normalized.budgetTokens));
+            if (queryEmbeddingOffset !== 0) Activate.addQueryEmbedding(builder, queryEmbeddingOffset);
+            if (queryPrefilterOffset !== 0) Activate.addQueryBinaryPrefilter(builder, queryPrefilterOffset);
             Activate.addTokenWeights(builder, weights);
             return Activate.endActivate(builder);
           },
@@ -448,21 +524,41 @@ export class Session {
     private readonly conversationBytes: Uint8Array,
   ) {}
 
-  remember(content: string, kind: MemoryKind = "user"): Promise<bigint> {
-    const payload = kind === "user" ? new UserMsgT([...text.encode(content)]) : new DeliveredMsgT([...text.encode(content)]);
-    return this.client.append(kind === "user" ? 1 : 2, this.conversationBytes, eventEnvelope(
-      kind === "user" ? EventPayload.UserMsg : EventPayload.DeliveredMsg,
+  remember(content: string): Promise<bigint>;
+  remember(content: string, options: MemoryKind): Promise<bigint>;
+  remember(
+    content: string,
+    options: RememberOptions & { retention: "do_not_store" },
+  ): Promise<DoNotStoreReceipt>;
+  remember(content: string, options: RememberOptions): Promise<bigint>;
+  remember(
+    content: string,
+    options: MemoryKind | RememberOptions = {},
+  ): Promise<bigint | DoNotStoreReceipt> {
+    const normalized = typeof options === "string" ? { kind: options } : options;
+    if (normalized.retention === "do_not_store") {
+      return Promise.resolve({
+        stored: false,
+        receipt: createHash("sha256").update(content).digest("hex"),
+      });
+    }
+    const kind = normalized.kind ?? "user";
+    const payload = kind === "assistant" ? new DeliveredMsgT([...text.encode(content)]) : new UserMsgT([...text.encode(content)]);
+    return this.client.append(kind === "assistant" ? 2 : 1, this.conversationBytes, eventEnvelope(
+      kind === "assistant" ? EventPayload.DeliveredMsg : EventPayload.UserMsg,
       payload,
-      kind === "user" ? Authority.user_asserted : Authority.assistant_generated,
+      kind === "assistant" ? Authority.assistant_generated : kind === "document" ? Authority.external_observed : Authority.user_asserted,
+      retentionValue(normalized.retention),
+      sensitivityValue(normalized.sensitivity),
     ));
   }
 
-  recall(query: string, limit = 32): Promise<bigint[]> {
-    return this.client.recall(query, limit);
+  recall(query: string, options: number | RecallOptions = {}): Promise<bigint[]> {
+    return this.client.recall(query, options);
   }
 
-  activate(query: string, budgetTokens: number): Promise<Bundle> {
-    return this.client.activate(this.conversationBytes, query, budgetTokens);
+  activate(query: string, options: number | ActivateOptions): Promise<Bundle> {
+    return this.client.activate(this.conversationBytes, query, options);
   }
 
   checkpoint(turnId: string, blob: Uint8Array): Promise<bigint> {
@@ -515,7 +611,13 @@ export class Session {
   }
 }
 
-function eventEnvelope(payloadType: EventPayload, payload: { pack(builder: flatbuffers.Builder): flatbuffers.Offset }, authority: Authority): Uint8Array {
+function eventEnvelope(
+  payloadType: EventPayload,
+  payload: { pack(builder: flatbuffers.Builder): flatbuffers.Offset },
+  authority: Authority,
+  retention = Retention.durable,
+  sensitivity = Sensitivity.personal,
+): Uint8Array {
   const builder = new flatbuffers.Builder(512);
   const payloadOffset = payload.pack(builder);
   EventEnvelope.startEventEnvelope(builder);
@@ -524,11 +626,28 @@ function eventEnvelope(payloadType: EventPayload, payload: { pack(builder: flatb
   EventEnvelope.addPayload(builder, payloadOffset);
   EventEnvelope.addClientEventCount(builder, 1);
   EventEnvelope.addAuthority(builder, authority);
-  EventEnvelope.addRetention(builder, Retention.durable);
-  EventEnvelope.addSensitivity(builder, Sensitivity.personal);
+  EventEnvelope.addRetention(builder, retention);
+  EventEnvelope.addSensitivity(builder, sensitivity);
   const offset = EventEnvelope.endEventEnvelope(builder);
   builder.finish(offset, "NCEV");
   return builder.asUint8Array();
+}
+
+function retentionValue(value: RetentionPolicy | undefined): Retention {
+  return {
+    current_state: Retention.current_state,
+    daily: Retention.daily,
+    durable: Retention.durable,
+    do_not_store: Retention.do_not_store,
+  }[value ?? "durable"];
+}
+
+function sensitivityValue(value: SensitivityPolicy | undefined): Sensitivity {
+  return {
+    public: Sensitivity.public_,
+    personal: Sensitivity.personal,
+    secret: Sensitivity.secret,
+  }[value ?? "personal"];
 }
 
 function conversationId(value: string): Uint8Array {

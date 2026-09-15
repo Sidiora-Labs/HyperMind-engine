@@ -5,7 +5,8 @@ use hm_compose::tokens::FallbackWeights;
 use hm_core::{ActorId, ConversationId};
 use hm_ledger::idempotency::ConnectionId;
 use hm_mcp::{
-    BindInput, IntendInput, McpServer, RecallInput, RecallMode, RememberInput, RememberKind,
+    BindInput, IntendInput, McpServer, RecallFilters, RecallInput, RecallMode, RememberAnchor,
+    RememberInput, RememberKind, RetentionInput, SensitivityInput,
 };
 use hm_serve::actor::{ActivateRequest, ActorConfig, ActorEngine};
 use napi::bindgen_prelude::Buffer;
@@ -34,6 +35,13 @@ struct BindJson {
     evidence_lsn: String,
     revision: String,
     freshness_requirement_ns: String,
+}
+
+#[derive(Deserialize, Default)]
+struct RememberOptionsJson {
+    anchor: Option<RememberAnchor>,
+    retention: Option<RetentionInput>,
+    sensitivity: Option<SensitivityInput>,
 }
 
 #[napi]
@@ -91,12 +99,20 @@ pub struct NativeSession {
 #[napi]
 impl NativeSession {
     #[napi]
-    pub async fn remember(&self, content: String, kind: String) -> napi::Result<String> {
+    pub async fn remember(
+        &self,
+        content: String,
+        kind: String,
+        options_json: String,
+    ) -> napi::Result<String> {
         let kind = match kind.as_str() {
             "user" => RememberKind::User,
             "assistant" => RememberKind::Assistant,
+            "document" => RememberKind::Document,
             _ => return Err(napi::Error::from_reason("invalid memory kind")),
         };
+        let options: RememberOptionsJson =
+            serde_json::from_str(&options_json).map_err(napi_error)?;
         encode_json(
             &self
                 .mcp
@@ -105,22 +121,41 @@ impl NativeSession {
                     content,
                     kind,
                     chunk_bytes: None,
+                    anchor: options.anchor,
+                    retention: options.retention,
+                    sensitivity: options.sensitivity,
                 })
                 .await,
         )
     }
 
     #[napi]
-    pub async fn recall(&self, query: String, limit: u32) -> napi::Result<String> {
+    pub async fn recall(
+        &self,
+        query: String,
+        limit: u32,
+        mode: String,
+        filters_json: String,
+    ) -> napi::Result<String> {
+        let mode = match mode.as_str() {
+            "semantic" => RecallMode::Semantic,
+            "lexical" => RecallMode::Lexical,
+            "entity" => RecallMode::Entity,
+            "temporal" => RecallMode::Temporal,
+            "near" => RecallMode::Near,
+            _ => return Err(napi::Error::from_reason("invalid recall mode")),
+        };
+        let filters: RecallFilters = serde_json::from_str(&filters_json).map_err(napi_error)?;
         encode_json(
             &self
                 .mcp
                 .recall_envelope(RecallInput {
-                    mode: RecallMode::Lexical,
+                    mode,
                     query,
                     conversation: String::new(),
                     limit: limit as usize,
                     since_lsn: 0,
+                    filters,
                 })
                 .await,
         )

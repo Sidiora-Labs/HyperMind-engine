@@ -17,6 +17,7 @@ fn actor_config(path: &std::path::Path) -> ActorConfig {
 }
 
 #[tokio::test]
+#[allow(clippy::too_many_lines)]
 async fn intend_and_bind_append_real_continuity_events() {
     let temporary = tempfile::tempdir().unwrap();
     let actor = ActorEngine::open(actor_config(temporary.path()))
@@ -53,6 +54,9 @@ async fn intend_and_bind_append_real_continuity_events() {
             content: "the continuity fixture is observed".to_owned(),
             kind: RememberKind::User,
             chunk_bytes: None,
+            anchor: None,
+            retention: None,
+            sensitivity: None,
         })
         .await;
     assert!(evidence.ok);
