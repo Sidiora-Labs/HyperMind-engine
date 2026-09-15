@@ -626,7 +626,7 @@ do_3 = "Port temporal_ladder: minute, hour, day, week windows as bitmaps; ListWi
 
 [task.5.3]
 title = "Minimal LLM provider trait and the adjudication ladder with in-process NLI"
-status = "pending"
+status = "done"
 wave = 5
 owner_lane = "cognition"
 requires = ["5.2"]

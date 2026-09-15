@@ -1,0 +1,35 @@
+[
+  {
+    "request": {
+      "method": "POST",
+      "url": "http://fixture.invalid/api/chat",
+      "headers": {"content-type": "application/json"},
+      "body": {
+        "model": "fixture-model",
+        "messages": [
+          {"role": "system", "content": "Decide temporal supersession."},
+          {"role": "user", "content": "old: Europe\nnew: America"}
+        ],
+        "format": {
+          "type": "object",
+          "properties": {
+            "supersedes": {"type": "boolean"},
+            "reason": {"type": "string"}
+          },
+          "required": ["supersedes", "reason"],
+          "additionalProperties": false
+        },
+        "stream": false,
+        "options": {"num_predict": 64}
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "message": {"content": "{\"supersedes\":true,\"reason\":\"later interval\"}"},
+        "prompt_eval_count": 10,
+        "eval_count": 4
+      }
+    }
+  }
+]

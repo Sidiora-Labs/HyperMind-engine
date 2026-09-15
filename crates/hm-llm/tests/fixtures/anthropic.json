@@ -1,0 +1,53 @@
+[
+  {
+    "request": {
+      "method": "POST",
+      "url": "https://fixture.invalid/v1/messages",
+      "headers": {
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+        "x-api-key": "fixture-key"
+      },
+      "body": {
+        "model": "fixture-model",
+        "max_tokens": 64,
+        "system": [{
+          "type": "text",
+          "text": "Decide temporal supersession.",
+          "cache_control": {"type": "ephemeral"}
+        }],
+        "messages": [{"role": "user", "content": "old: Europe\nnew: America"}],
+        "tools": [{
+          "name": "emit_structured_result",
+          "description": "supersession_1",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "supersedes": {"type": "boolean"},
+              "reason": {"type": "string"}
+            },
+            "required": ["supersedes", "reason"],
+            "additionalProperties": false
+          }
+        }],
+        "tool_choice": {"type": "tool", "name": "emit_structured_result"}
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "content": [{
+          "type": "tool_use",
+          "name": "emit_structured_result",
+          "input": {"supersedes": true, "reason": "later interval"}
+        }],
+        "usage": {
+          "input_tokens": 10,
+          "output_tokens": 4,
+          "cache_read_input_tokens": 6,
+          "cache_creation_input_tokens": 3
+        }
+      }
+    }
+  }
+]

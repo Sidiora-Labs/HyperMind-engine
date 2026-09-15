@@ -1143,7 +1143,13 @@ version = "0.1.0"
 dependencies = [
  "blake3",
  "hm-core",
+ "hm-llm",
  "hm-schema",
+ "ort",
+ "reqwest",
+ "serde_json",
+ "sha2",
+ "tokenizers",
 ]
 
 [[package]]
@@ -1210,6 +1216,11 @@ dependencies = [
 [[package]]
 name = "hm-llm"
 version = "0.1.0"
+dependencies = [
+ "reqwest",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "hm-mcp"

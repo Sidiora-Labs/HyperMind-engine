@@ -144,7 +144,7 @@
     - Protected types: Assertion or Retract for identity, constraint or preference from any run authority is kProtectedTypeWrite and emits a security event; ProposedAssertion is stored under the head as pending until a user or admin event accepts or rejects it.
     - Port temporal_ladder: minute, hour, day, week windows as bitmaps; ListWindows, OpenWindow, ResolveMembers.
     - _Requirements: 5.1, 8.1, 8.2_
-  - [ ] 5.3 Minimal LLM provider trait and the adjudication ladder with in-process NLI
+  - [x] 5.3 Minimal LLM provider trait and the adjudication ladder with in-process NLI
     - LlmProvider trait with generate_structured against a JSON schema, model id, tier, usage accounting; Anthropic Messages native with prompt caching, OpenAI-compatible, Ollama; recorded wire fixtures for tests.
     - NLI through ort with nli-deberta-v3-small in both directions; verdict genuine, tension, complementary or unrelated; genuine escalates to one supersession call under prompt supersession@1; models below tier cannot declare genuine under 0.8; the result is a Retract plus Assertion or a conflict edge with obligated surfacing; no provider configured records an unverified tension.
     - _Requirements: 8.3, 17.2_
