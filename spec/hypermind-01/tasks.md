@@ -24,7 +24,7 @@
     - Timeline projection (conversation heads): E key conversation plus lsn to kind, timestamp and payload; L key lsn to event key; ReadConversationRecord and latest-of-kind reverse scan.
     - Lexical projection: tantivy tokenisation and postings for UserMsg and DeliveredMsg, document length and global stats, fixed-point Q32 ln ported from FixedLnRatio, BM25 with k1 1.2 and b 0.75 in integer coefficients; RebuildProjectionStream resumes from the minimum checkpoint after a kill.
     - _Requirements: 5.1, 6.1_
-  - [ ] 1.5 Bundle v1: conversation and fused tiers, exact token budget, canonical bytes, gaps
+  - [x] 1.5 Bundle v1: conversation and fused tiers, exact token budget, canonical bytes, gaps
     - ActivationRequest, ActivationItem, ActivationSection, ActivationBundle with all ten tiers declared and the conversation and fused tiers populated this wave; lexical lane through the projection; provenance URI construction with lane ranks and why codes.
     - Exact token counting through tiktoken-rs and HF tokenizers keyed by model id, with the neocortex per-byte weight table as the fallback; trim policy sheds from the tail and coarsens conversation items to lsn plus first line.
     - HMA1 canonical serialisation and BLAKE3 bundle hash; gaps[] and health fields present with the truncated-lane and dropped-tier gap kinds; BuildAttestations turns provenance LSNs into Attestation frames.

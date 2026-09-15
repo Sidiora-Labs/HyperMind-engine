@@ -278,7 +278,7 @@ do_3 = "Lexical projection: tantivy tokenisation and postings for UserMsg and De
 
 [task.1.5]
 title = "Bundle v1: conversation and fused tiers, exact token budget, canonical bytes, gaps"
-status = "pending"
+status = "done"
 wave = 1
 owner_lane = "compose"
 requires = ["1.4"]
