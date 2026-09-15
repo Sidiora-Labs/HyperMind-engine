@@ -6,6 +6,19 @@ rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 
+[dependencies]
+blake3 = "1.8.2"
+crc32c = "0.6.8"
+hm-compose = { path = "../hm-compose" }
+hm-core = { path = "../hm-core" }
+hm-ledger = { path = "../hm-ledger" }
+hm-proj = { path = "../hm-proj" }
+hm-schema = { path = "../hm-schema" }
+subtle = "2.6.1"
+tokio = { version = "1.48.0", features = ["io-util", "macros", "net", "rt", "sync", "time"] }
+
+[dev-dependencies]
+tempfile = "3.23.0"
+
 [lints]
 workspace = true
-

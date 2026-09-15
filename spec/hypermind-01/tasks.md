@@ -29,7 +29,7 @@
     - Exact token counting through tiktoken-rs and HF tokenizers keyed by model id, with the neocortex per-byte weight table as the fallback; trim policy sheds from the tail and coarsens conversation items to lsn plus first line.
     - HMA1 canonical serialisation and BLAKE3 bundle hash; gaps[] and health fields present with the truncated-lane and dropped-tier gap kinds; BuildAttestations turns provenance LSNs into Attestation frames.
     - _Requirements: 7.1, 7.2_
-  - [ ] 1.6 Actor engine, Unix socket server and MCP with remember, recall, activate, inspect
+  - [x] 1.6 Actor engine, Unix socket server and MCP with remember, recall, activate, inspect
     - ActorEngine with one tokio writer task per actor: apply loop assigns LSNs and wall timestamps, validates ordering, seals, appends, applies projections; readers use snapshots; AppliedState rolling digest as the determinism oracle.
     - UDS server with NCPR length and CRC32C framing, Hello handshake with capability token and constant-time compare, Append, Recall, Activate, Transcript, Health, Stats; socket mode 0600; config file mode 0600 required; bounded per-connection output queues.
     - hm-mcp over rmcp stdio: remember (append UserMsg or DeliveredMsg or a chunked document with authority set from kind), recall mode lexical and timeline, activate, inspect stats; one envelope ok, items, provenance, budget, gaps, health, warnings; every mutation error carries effect_state.
