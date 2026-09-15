@@ -145,6 +145,7 @@ table Embedding {
   dimension:uint;
   quantized:[byte] (required);
   binary_prefilter:[ubyte] (required);
+  space_id:string (required);
 }
 
 table Retract {

@@ -1,7 +1,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::events::{
-    AttestationDisposition, Authority, Binding, Effect, EventEnvelope, EventEnvelopeRef,
+    AttestationDisposition, Authority, Binding, Effect, Embedding, EventEnvelope, EventEnvelopeRef,
     EventPayload, LoopCloseReason, LoopClosed, Outcome, ToolResult,
 };
 use hm_core::{Error, ErrorCode, LSN};
@@ -82,6 +82,11 @@ impl EventKind {
     #[must_use]
     pub const fn is_wave_three(self) -> bool {
         self.is_wave_two() || matches!(self, Self::ProviderFrame | Self::MediaRef)
+    }
+
+    #[must_use]
+    pub const fn is_wave_four(self) -> bool {
+        self.is_wave_three() || matches!(self, Self::Embedding)
     }
 }
 
@@ -185,7 +190,7 @@ pub fn verify_event_with_history(
     if envelope.schema_version == 0 || envelope.schema_version > CURRENT_SCHEMA_VERSION {
         return Err(Error::new(ErrorCode::SchemaVersion));
     }
-    if !expected_kind.is_wave_three() || payload_kind(&envelope.payload) != expected_kind {
+    if !expected_kind.is_wave_four() || payload_kind(&envelope.payload) != expected_kind {
         return Err(Error::new(ErrorCode::ForbiddenKind));
     }
     validate_envelope(&envelope)?;
@@ -329,6 +334,7 @@ fn validate_payload(
             }
         }
         EventPayload::Binding(value) => validate_binding(value),
+        EventPayload::Embedding(value) => validate_embedding(value),
         _ => Err(Error::new(ErrorCode::ForbiddenKind)),
     }
 }
@@ -390,6 +396,22 @@ fn validate_binding(value: &Binding) -> Result<(), Error> {
         || value.revision.is_empty()
         || value.revision.len() > MAXIMUM_IDENTIFIER_BYTES
         || value.freshness_requirement_ns == 0
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_embedding(value: &Embedding) -> Result<(), Error> {
+    let dimension =
+        usize::try_from(value.dimension).map_err(|_| Error::new(ErrorCode::SchemaInvalid))?;
+    if value.target_lsn == 0
+        || value.space_id.is_empty()
+        || value.space_id.len() > MAXIMUM_IDENTIFIER_BYTES
+        || dimension == 0
+        || value.quantized.len() != dimension
+        || value.binary_prefilter.len() != dimension.div_ceil(8)
     {
         Err(Error::new(ErrorCode::SchemaInvalid))
     } else {

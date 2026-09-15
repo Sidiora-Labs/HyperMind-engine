@@ -5,9 +5,9 @@ use hm_schema::event::{
 };
 use hm_schema::events::{
     Approval, Attestation, AttestationDisposition, Authority, Binding, Checkpoint, DeliveredMsg,
-    Effect, EventEnvelope, EventPayload, IntentSet, LoopCloseReason, LoopClosed, LoopOpened,
-    Outcome, Reasoning, Recovery, Retention, Sensitivity, Supervisor, ToolCall, ToolResult,
-    UserMsg,
+    Effect, Embedding, EventEnvelope, EventPayload, IntentSet, LoopCloseReason, LoopClosed,
+    LoopOpened, Outcome, Reasoning, Recovery, Retention, Sensitivity, Supervisor, ToolCall,
+    ToolResult, UserMsg,
 };
 use hm_schema::protocol::{
     CURRENT_PROTOCOL_VERSION, encode_wire_envelope, validate_request, verify_request,
@@ -276,6 +276,46 @@ fn binding_requires_exactly_one_task_or_scope() {
             .code,
         ErrorCode::SchemaInvalid
     );
+}
+
+#[test]
+fn embedding_requires_a_matching_declared_dimension() {
+    let embedding =
+        |target_lsn, space_id: &str, dimension, quantized: Vec<i8>, binary_prefilter: Vec<u8>| {
+            encode_event(&event_envelope(
+                EventPayload::Embedding(Box::new(Embedding {
+                    target_lsn,
+                    dimension,
+                    quantized,
+                    binary_prefilter,
+                    space_id: space_id.to_owned(),
+                })),
+                2,
+            ))
+        };
+    let space_id = "nomic-v1.5:revision:768:cosine:l2:document";
+    let valid = embedding(7, space_id, 9, vec![1; 9], vec![0xff, 0x01]);
+    assert_eq!(
+        verify_event(&valid, EventKind::Embedding, Boundary::Socket)
+            .expect("embedding dimension matches its declared space")
+            .kind,
+        EventKind::Embedding
+    );
+
+    for invalid in [
+        embedding(7, space_id, 8, vec![1; 7], vec![0xff]),
+        embedding(7, space_id, 8, vec![1; 8], vec![0xff, 0x00]),
+        embedding(7, space_id, 0, Vec::new(), Vec::new()),
+        embedding(0, space_id, 8, vec![1; 8], vec![0xff]),
+        embedding(7, "", 8, vec![1; 8], vec![0xff]),
+    ] {
+        assert_eq!(
+            verify_event(&invalid, EventKind::Embedding, Boundary::Socket)
+                .expect_err("embedding dimensions must match")
+                .code,
+            ErrorCode::SchemaInvalid
+        );
+    }
 }
 
 #[test]

@@ -528,7 +528,7 @@ do_2 = "Batching with a content-hash cache; int8 quantisation and 1-bit binary p
 
 [task.4.2]
 title = "Embedding event with space identity"
-status = "pending"
+status = "done"
 wave = 4
 owner_lane = "schema"
 requires = ["3.6"]

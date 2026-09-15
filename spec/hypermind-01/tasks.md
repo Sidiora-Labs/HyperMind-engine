@@ -111,7 +111,7 @@
     - Embedder trait with embed_query and embed_documents, dimensions, space identity (encoder id and revision, dimensions, distance, normalisation, input role); local ONNX through ort with tokenizers for nomic-embed-text-v1.5 and bge-small-en-v1.5 int8, downloaded on first run with pinned digests; remote providers for OpenAI, Voyage, Vertex and Ollama behind recorded wire fixtures.
     - Batching with a content-hash cache; int8 quantisation and 1-bit binary prefilter derivation; a hash-feature embedder exists only as the lexical_only baseline and is labelled so in every report.
     - _Requirements: 6.1, 15.3_
-  - [ ] 4.2 Embedding event with space identity
+  - [x] 4.2 Embedding event with space identity
     - Enable Embedding with target_lsn, space id, dimension, quantized int8 vector and binary prefilter; VerifyEvent checks dimension against the declared space.
     - _Requirements: 6.1_
   - [ ] 4.3 Flat int8 vector lane with binary prefilter, entity index, space generations

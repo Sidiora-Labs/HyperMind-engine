@@ -8897,6 +8897,8 @@ mod root {
                 pub quantized: ::planus::alloc::vec::Vec<i8>,
                 /// The field `binary_prefilter` in the table `Embedding`
                 pub binary_prefilter: ::planus::alloc::vec::Vec<u8>,
+                /// The field `space_id` in the table `Embedding`
+                pub space_id: ::planus::alloc::string::String,
             }
 
             #[allow(clippy::derivable_impls)]
@@ -8907,6 +8909,7 @@ mod root {
                         dimension: 0,
                         quantized: ::core::default::Default::default(),
                         binary_prefilter: ::core::default::Default::default(),
+                        space_id: ::core::default::Default::default(),
                     }
                 }
             }
@@ -8925,13 +8928,15 @@ mod root {
                     field_dimension: impl ::planus::WriteAsDefault<u32, u32>,
                     field_quantized: impl ::planus::WriteAs<::planus::Offset<[i8]>>,
                     field_binary_prefilter: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_space_id: impl ::planus::WriteAs<::planus::Offset<str>>,
                 ) -> ::planus::Offset<Self> {
                     let prepared_target_lsn = field_target_lsn.prepare(builder, &0);
                     let prepared_dimension = field_dimension.prepare(builder, &0);
                     let prepared_quantized = field_quantized.prepare(builder);
                     let prepared_binary_prefilter = field_binary_prefilter.prepare(builder);
+                    let prepared_space_id = field_space_id.prepare(builder);
 
-                    let mut table_writer: ::planus::table_writer::TableWriter<12> =
+                    let mut table_writer: ::planus::table_writer::TableWriter<14> =
                         ::core::default::Default::default();
                     if prepared_target_lsn.is_some() {
                         table_writer.write_entry::<u64>(0);
@@ -8941,6 +8946,7 @@ mod root {
                     }
                     table_writer.write_entry::<::planus::Offset<[i8]>>(2);
                     table_writer.write_entry::<::planus::Offset<[u8]>>(3);
+                    table_writer.write_entry::<::planus::Offset<str>>(4);
 
                     unsafe {
                         table_writer.finish(builder, |object_writer| {
@@ -8956,6 +8962,7 @@ mod root {
                             }
                             object_writer.write::<_, _, 4>(&prepared_quantized);
                             object_writer.write::<_, _, 4>(&prepared_binary_prefilter);
+                            object_writer.write::<_, _, 4>(&prepared_space_id);
                         });
                     }
                     builder.current_offset()
@@ -8992,6 +8999,7 @@ mod root {
                         self.dimension,
                         &self.quantized,
                         &self.binary_prefilter,
+                        &self.space_id,
                     )
                 }
             }
@@ -9071,6 +9079,19 @@ mod root {
             }
 
             impl<T0, T1, T2, T3> EmbeddingBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`space_id` field](Embedding#structfield.space_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn space_id<T4>(self, value: T4) -> EmbeddingBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    EmbeddingBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> EmbeddingBuilder<(T0, T1, T2, T3, T4)> {
                 /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [Embedding].
                 #[inline]
                 pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<Embedding>
@@ -9086,8 +9107,9 @@ mod root {
                 T1: ::planus::WriteAsDefault<u32, u32>,
                 T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
                 T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T4: ::planus::WriteAs<::planus::Offset<str>>,
             > ::planus::WriteAs<::planus::Offset<Embedding>>
-                for EmbeddingBuilder<(T0, T1, T2, T3)>
+                for EmbeddingBuilder<(T0, T1, T2, T3, T4)>
             {
                 type Prepared = ::planus::Offset<Embedding>;
 
@@ -9102,8 +9124,9 @@ mod root {
                 T1: ::planus::WriteAsDefault<u32, u32>,
                 T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
                 T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                T4: ::planus::WriteAs<::planus::Offset<str>>,
             > ::planus::WriteAsOptional<::planus::Offset<Embedding>>
-                for EmbeddingBuilder<(T0, T1, T2, T3)>
+                for EmbeddingBuilder<(T0, T1, T2, T3, T4)>
             {
                 type Prepared = ::planus::Offset<Embedding>;
 
@@ -9121,12 +9144,13 @@ mod root {
                 T1: ::planus::WriteAsDefault<u32, u32>,
                 T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
                 T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<Embedding> for EmbeddingBuilder<(T0, T1, T2, T3)>
+                T4: ::planus::WriteAs<::planus::Offset<str>>,
+            > ::planus::WriteAsOffset<Embedding> for EmbeddingBuilder<(T0, T1, T2, T3, T4)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Embedding> {
-                    let (v0, v1, v2, v3) = &self.0;
-                    Embedding::create(builder, v0, v1, v2, v3)
+                    let (v0, v1, v2, v3, v4) = &self.0;
+                    Embedding::create(builder, v0, v1, v2, v3, v4)
                 }
             }
 
@@ -9162,6 +9186,12 @@ mod root {
                 pub fn binary_prefilter(&self) -> ::planus::Result<&'a [u8]> {
                     self.0.access_required(3, "Embedding", "binary_prefilter")
                 }
+
+                /// Getter for the [`space_id` field](Embedding#structfield.space_id).
+                #[inline]
+                pub fn space_id(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(4, "Embedding", "space_id")
+                }
             }
 
             impl<'a> ::core::fmt::Debug for EmbeddingRef<'a> {
@@ -9171,6 +9201,7 @@ mod root {
                     f.field("dimension", &self.dimension());
                     f.field("quantized", &self.quantized());
                     f.field("binary_prefilter", &self.binary_prefilter());
+                    f.field("space_id", &self.space_id());
                     f.finish()
                 }
             }
@@ -9185,6 +9216,7 @@ mod root {
                         dimension: ::core::convert::TryInto::try_into(value.dimension()?)?,
                         quantized: value.quantized()?.to_vec(),
                         binary_prefilter: value.binary_prefilter()?.to_vec(),
+                        space_id: ::core::convert::Into::into(value.space_id()?),
                     })
                 }
             }
@@ -9265,7 +9297,7 @@ mod root {
             /// The table `Retract` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Retract` in the file `schemas/events.fbs:150`
+            /// * Table `Retract` in the file `schemas/events.fbs:151`
             #[derive(
                 Clone,
                 Debug,
@@ -9555,7 +9587,7 @@ mod root {
             /// The table `Attestation` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Attestation` in the file `schemas/events.fbs:155`
+            /// * Table `Attestation` in the file `schemas/events.fbs:156`
             #[derive(
                 Clone,
                 Debug,
@@ -9910,7 +9942,7 @@ mod root {
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:160`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:161`
             #[derive(
                 Clone,
                 Debug,
@@ -11325,7 +11357,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:185`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:186`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]
