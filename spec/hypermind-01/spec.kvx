@@ -239,7 +239,7 @@ do_3 = "CI: build, clippy with warnings denied, fmt, cargo-deny, test on x86-64 
 
 [task.1.2]
 title = "Schema v2 subset and protocol v3 subset with generated code and validation"
-status = "pending"
+status = "done"
 wave = 1
 owner_lane = "schema"
 requires = ["1.1"]

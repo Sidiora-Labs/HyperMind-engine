@@ -9,7 +9,7 @@
     - Implement hm-core: EntityId, LSN, ActorId, ConversationId (16 bytes derived as in the Go client), SchemaVersion, UtcNanos, the full ErrorCode enum carrying every neocortex code plus kProtectedTypeWrite, kCitationInvalid, kDeadlineMissed, kTripwire, and Error with system_error, lsn and offset.
     - CI: build, clippy with warnings denied, fmt, cargo-deny, test on x86-64 and aarch64 runners; a bench-gate job that runs hm-eval gate for the current wave and compares to main.
     - _Requirements: 1.2, 1.3_
-  - [ ] 1.2 Schema v2 subset and protocol v3 subset with generated code and validation
+  - [x] 1.2 Schema v2 subset and protocol v3 subset with generated code and validation
     - Copy neocortex events.fbs and protocol.fbs, bump to schema_version 2 and proto_version 3 additively; this wave enables UserMsg, DeliveredMsg, Reasoning, ToolCall, ToolResult, Attestation and the envelope fields authority, retention, sensitivity, event_time_ns, origin_actor, run_id, model_provenance; protocol enables Hello, Welcome, Append, AppendAck, Recall, RecallResult, Activate, BytesResult, Transcript, TranscriptResult, Health, Stats, ErrorDetail.
     - Generate Rust with planus; implement VerifyEvent and VerifyRequest that fail closed on unknown versions, missing required fields, unknown union members and ToolResult without a prior ToolCall reference.
     - Carry the neocortex schema_test and protocol fuzz seed corpus as fixtures; a v1 Go-client envelope decodes as v2 with defaults.
