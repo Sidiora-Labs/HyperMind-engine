@@ -1,0 +1,941 @@
+# hypermind-01: the HyperMind memory engine, built as vertical slices.
+# Authoritative implementation contract. KVX Dialect B. Generated Markdown mirrors are views.
+# PLAN.md and HARNESS-LESSONS.md supply rationale; where wording differs, this file controls.
+
+[meta]
+feature = "hypermind-01"
+title = "HyperMind 01 — Elite memory engine for agents, built vertically"
+status = "draft"
+spec_version = "1.0.0"
+date = "2026-09-15"
+intro = "Build HyperMind: a Rust memory kernel that fuses the neocortex ledger discipline (encrypted, tamper-evident, deterministic, bitemporal) with the cortex-engine cognitive loop (ingest, consolidate, forget, believe, adjudicate) and the harness lessons (evidence authority, required bindings, attention-gated anticipation, generations, byte-range citations, protected self). The system is a stack of eight layers and is built as eight vertical slices, each adding to every layer and ending in a runnable end-to-end journey. No wave builds one layer alone. Every wave ships an eval gate. The agent that uses HyperMind resumes where it left off, knows when things were true, notices when it is wrong, anticipates without interrupting, learns procedures from independent episodes, and proves where every recalled fact came from, on every turn, in under 10 ms, with no LLM on the hot path."
+
+[design]
+overview = "Eight layers: L0 schema and core, L1 ledger, L2 projections, L3 indexes and providers, L4 cognition, L5 compose, L6 surfaces and SDKs, L7 eval and docs. Eight waves: Spine, Continuity, Trust, Meaning, Belief and time, Sleep, Anticipation, Reach. Each wave is a slice through all eight layers. See design.body.md for the layer by wave matrix, the slice journeys and the ownership lanes."
+include = "design.body.md"
+
+[design.authority]
+title = "Authority, scope and milestones"
+source_of_truth = "This spec.kvx is the implementation contract. Its design sections and acceptance criteria are normative. PLAN.md and HARNESS-LESSONS.md are rationale and are not a second editable spec. Generated requirements.md, design.md and tasks.md are views."
+location = "Canonical source is spec/hypermind-01/spec.kvx in the HyperMind-engine repository. The neocortex-engine and cortex-engine trees are read-only donors; their test vectors and fixtures are carried in, their code is ported, never linked."
+milestones = ["W1-W2: a daemon an agent can remember into, recall from, checkpoint against and survive a crash with, over MCP, from Rust and TypeScript, with a fault simulator and an eval gate", "W3-W5: proof, meaning and time: verifiable without keys, semantic and entity recall under a deadline, bitemporal beliefs with adjudication and a protected self", "W6-W7: sleep and anticipation: consolidation as retractable generations with citations, prospective memory gated by attention, predictions with assessment, procedures earned from independent episodes", "W8: reach and qualification: gRPC, REST, Python and Go, migration from cortex-engine, docs site, published benchmarks, v1.0.0"]
+completion = "The feature is complete when every task is done, every slice journey passes in CI, and the wave 8 benchmark run meets the targets in req.15. A milestone is usable on its own; an experimental lane left disabled after a completed and reported evaluation is acceptable and is named in the handoff."
+non_goals = ["A second memory authority beside the ledger, or a graph database as a prerequisite", "Model weight training, parameter memory, or claims about intelligence beyond the measured behaviours", "Persona, social, content or mood features inside the engine; those are plugins", "Unauthenticated federation, or cross-process locking on one actor directory", "Runtime-cost minimisation as the definition of good; prioritise measured behaviour per slice"]
+
+[design.build]
+title = "Vertical build discipline"
+rule = "The system is a stack, and it is built by stacking slices, not by pouring layers. A wave that adds a projection also adds the event that feeds it, the request that reads it, the tier or tool that surfaces it, the SDK call that reaches it, and the eval that measures it. A task that delivers a layer whose consumer is in a later wave violates this contract and is split."
+waves = ["W1 Spine: remember and recall one thing end to end, survive a restart", "W2 Continuity: survive a kill mid-turn and resume the loop with exact bindings", "W3 Trust: prove the log without keys, never launder authority, shred with a receipt", "W4 Meaning: semantic, entity and planned recall that never blocks the turn", "W5 Belief and time: bitemporal beliefs, adjudication, a protected self", "W6 Sleep: consolidation as retractable generations with byte-range citations", "W7 Anticipation: wake triggers, attention, predictions, procedures", "W8 Reach: gRPC, REST, Python, Go, migration, docs, benchmarks, release"]
+integration = "Each wave ends with one integration task that requires every lane task in the wave and whose verify_cmd runs that slice's journey test through MCP, daemon, ledger, restart and recall. Lane tasks in wave N+1 require the integration task of wave N. That dependency is what makes the build vertical: nothing in a later slice rests on an unproven layer."
+scaffold = "Task 1.1 alone may create empty crates for later waves so the workspace compiles. An empty crate is scaffolding, not a layer. Adding behaviour to a crate that no task in the current wave consumes is a violation."
+lanes = "Lanes are file scopes, not layers. The ledger lane contributes to every wave; so does the eval lane. Parallelism is across lanes inside one wave, never across waves."
+
+[design.layers]
+title = "The stack"
+l0 = "hm-core and hm-schema: ids, revisions, error codes, FlatBuffers events (schema v2, additive over neocortex v1, file identifier NCEV) and protocol (v3 additive over neocortex v2, NCPR). Every persisted and wire-visible type carries a version."
+l1 = "hm-ledger: 43-byte frame header, CRC32C frames, segment log with group commit, torn-tail repair and interior-corruption refusal, XChaCha20-Poly1305 sealing with AAD bound to actor, lsn, kind and user, Merkle Mountain Range over sealed bytes, Ed25519 checkpoints, idempotent append keyed by connection id and client sequence, tripwire LSN set, crypto-shred with signed receipt, key rotation."
+l2 = "hm-proj: one LMDB environment per actor; each projection applies in one write transaction that commits mutations and its checkpoint together; rebuild from any prefix is byte-identical; generations with compare-and-swap publish, reader leases and retraction override. Projections: timeline, lexical, entities, vectors, beliefs, graph, memories, fsrs, intent frame, bindings, work ledger, intentions, attention history, predictions, procedures, attestations, temporal ladder, runs."
+l3 = "hm-index and hm-embed and hm-llm: tantivy postings with fixed-point BM25; flat int8 vector lane with binary prefilter and an HNSW lane above 50k; rule-based entity index; embedder trait with local ONNX and remote providers, batched and content-hash cached, with space identity; LLM provider trait with Anthropic native, OpenAI-compatible, Gemini and Ollama, structured outputs only, a versioned prompt registry and cost accounting."
+l4 = "hm-cortex: ingest with authority tagging, NREM cluster and merge and mint with citation validation, REM connect and abstract and hindsight, FSRS-6 review with retention classes and protection sets, adjudication ladder with in-process NLI and tier-capped LLM supersession, wake evaluation and attention scoring, prediction assessment and calibration, procedural mining with a learning ladder. Always background, always budgeted, always a generation."
+l5 = "hm-compose: query planner, lanes, reciprocal rank fusion, optional reranker, ten-tier activation bundle with exact token counts, required tiers that are never shed, trim and coarsen policy, HMA1 canonical bytes, retrieval manifest, gaps and health, hard deadline with cached fallback."
+l6 = "hm-serve, hm-mcp, hm-cli and sdk: Unix socket with NCPR framing, gRPC over mTLS carrying the same envelope bytes, REST with OpenAPI, MCP with thirteen verbs and one envelope, CLI and TUI, Rust embedded API, TypeScript napi and client, Python PyO3 and client, Go client extension, renderers with activation safety."
+l7 = "hm-eval, hm-sim and docs: fault simulator, slice journeys, internal suites, LongMemEval, LoCoMo, BEAM, latency and cost and determinism reports, CI gates, schematics, ADRs, docs site."
+
+[design.records]
+title = "Minimum record contracts"
+envelope = "EventEnvelope v2 = neocortex v1 fields plus origin_actor, run_id, model_provenance, authority, retention, sensitivity, event_time_ns. Frame header stays 43 bytes. The MMR leaf commits to the sealed bytes; a plaintext digest inside the sealed record supports content proofs."
+authority = "authority is one of user_asserted, external_observed, tool_observed, runtime_fact, assistant_generated, derived_inference. Ingest sets it from source kind. Derivation lowers it to derived_inference unless the derived text is a verbatim quote of a cited byte range. It is rendered on every surfaced item and never omitted."
+provenance = "ProvenanceRange = first_lsn, last_lsn, optional byte_start and byte_end into the cited payload. Provenance URI hm://actor/conversation/lsn with at, src, score, vr, lr, why and run query fields."
+belief = "Assertion carries belief_id, type in fact, preference, constraint, goal, identity, canonical_identity, value, valid_from_ns, valid_to_ns, provenance ranges, conflict_domain, claim affirmative or negative_existence. identity, constraint and preference are protected: runs emit ProposedAssertion. Negative existence needs a corroborating tool_observed LSN in its provenance or admission fails with kNegativeExistenceUncorroborated."
+binding = "Binding = task or scope, canonical entity, property, evidence LSN, revision, freshness requirement, status resolved or missing or stale or conflicting. Bindings are resolved from one snapshot independent of ranking and are never shed from a bundle."
+intention = "IntentionSet = objective, WakeTrigger, expiry, reply route. WakeTrigger is one of at, schedule, child_terminal, process_exit, file_changed, repository_changed, channel_message, external_condition, user_response, entity_mentioned, loop_closed, prediction_resolved, belief_changed. IntentionFired carries a stable wake id used as an idempotency key. AttentionDecided is one of ignore, remember, batch, schedule, ask_user, start_work, notify with a user-readable reason."
+prediction = "Predicted = immutable id and revision, task and attempt and operation linkage, bounded expected predicates (object exists in scope, revision or digest equals, receipt matches, typed property satisfies a bounded predicate, process terminated with observed result, answer committed), deadline, uncertainty text. OutcomeObserved = assessment supported or contradicted or pending or unresolvable or not_executed, observation LSNs, evaluator version."
+procedure = "Procedure = conditional strategy, expected outcomes, preconditions, independent supporting episodes, failures and counterexamples, state tentative or supported or adopted. supported requires at least three independent source roots from at least two conversations. adopted requires a user-authority event. Only adopted procedures render as instructions."
+memory = "Memory = name, definition, tags (open set with a curated core), salience, embedding reference, authority, retention, sensitivity, fsrs state, provenance, run_id. MemoryMinted, MemoryRevised, MemoryMerged, MemoryFaded are events; definitions are never overwritten in place."
+edge = "Edge = source, target, relation, weight from evidence count, evidence LSNs, valid_from and valid_to, run_id. EdgeAsserted and EdgeRetracted are events."
+run = "ConsolidationOpened = run_id, phases, prompt versions, model ids, budget. ConsolidationPhase records progress with a per-attempt idempotency prefix. ConsolidationClosed is the publish compare-and-swap. ConsolidationRetracted switches active_generation back."
+manifest = "RetrievalManifest = query identity digest, snapshot epoch, encoder and index generation, candidate lanes, selected ids, included ids, used ids from attestation, gaps, degraded reasons, health."
+
+[design.retrieval]
+title = "Recall and activation"
+planner = "Deterministic query-shape rules first: identifier-like queries lead with the entity lane; temporal phrases open a ladder window; why or how questions add graph expansion and procedures; otherwise semantic leads. A learned planner may replace rules only behind the eval gate."
+lanes = "vector (binary prefilter then int8 dot, flat below 50k and HNSW above), lexical (fixed-point BM25), entity (exact postings), temporal (ladder descent and recency prior), graph (one to two hops over validated edges with validity intervals, at most 200 visited nodes), belief (as-of heads and obligated conflicts). Every lane is a pure index read."
+fusion = "Reciprocal rank fusion over canonical ids, never raw scores across spaces. Composite = rrf times fsrs retrievability times salience factor times recency prior. Optional cross-encoder rerank of the top 32, off by default, enabled per deployment only when hm-eval shows a gain."
+tiers = "resident, intent, bindings, work_ledger, prospective, conversation, entity, conflicts, fused, temporal. The first four are required and never shed; if they alone exceed budget the bundle narrows the active subtask and reports a gap. Trim sheds from the tail and coarsens conversation items to lsn plus first line before touching required tiers."
+budget = "Token cost is exact per target model through tiktoken or HF tokenizers. Default allocation: mandatory 15 percent, intent and bindings and work 10, conversation 40, recall 15, tools 10, reserve 10. Optional segments shrink first."
+deadline = "activate has a hard deadline, default 25 ms. On a miss it returns the conversation's last bundle marked degraded with stale_by_lsn and the query it was built for, and pushes the fresh bundle over Subscribe. The foreground SDK call cannot fail because memory is slow."
+health = "semantic_ready, semantic_lagging, lexical_only, unavailable, reported separately for encoder, backlog, projection and actual inclusion. gaps[] lists missing or stale bindings, truncated lanes, index lag, dropped tiers and pending protected-type proposals. Silent degradation is a tested bug class."
+rendering = "The SDK renderer emits typed sections with the authority class and provenance URI on every item; only semantic kinds; only items with full provenance; same-turn exclusion; no raw bytes; memory content never takes the system or developer role. Reconstruction output is labelled RECONSTRUCTION, carries assistant_generated, and the SDK refuses to remember it verbatim."
+
+[design.cognition]
+title = "Ingest, sleep and learning"
+ingest = "Per turn: append episodic events with authority from source kind, embed batched and cached by content hash, extract entities, prediction-error gate against the nearest memory, Observed marker. No LLM. memory.* events are never re-ingested. retention do_not_store returns a receipt and writes nothing. Automatic sensitivity is capped at personal."
+nrem = "Cluster unprocessed observations by embedding and entity overlap without an LLM. One structured-output call per cluster returns attach or revise or mint with citations. Every quoted span must be a substring of a cited byte range inside the run's frozen candidate set or the candidate is dropped and counted. Output authority is derived_inference unless verbatim. Mint requires at least three independent source roots from at least two conversations; a speculation-typed source poisons the candidate. Thought-quality and rewrite-guard run as measured classifiers with logged decisions."
+rem = "Connect from cluster adjacency and entity co-occurrence with one long-context pass, never pairwise LLM calls; edge weight from evidence count. Abstract across tags with a novelty gate against store and run and a grounding floor. Hindsight defaults to no change; a concern must cite a neighbour or belief history; the rewrite guard declines lossy rewrites. Review with FSRS-6 from attestations, retrieval rank and contradiction involvement; retention class and the load-bearing protection set decide eligibility; the last K contradicted outcomes per domain are kept as counterexamples."
+generations = "A run is a generation. Derived events are staged under run_id; ConsolidationClosed is a compare-and-swap publish that refuses if any staged record lacks a projection; readers lease a generation for a bounded time; retractions of a belief or memory apply to every generation, leased or not. Phases persist as events with a per-attempt idempotency prefix so a crashed run resumes. Retract switches active_generation back immediately; cleanup is background."
+budgets = "Each run declares max_llm_calls, max_tokens, max_usd and max_wall_ms. Exceeding any aborts the phase cleanly and reports it. Every LLM-derived event carries model_provenance. Prompt ids and versions are snapshot-tested; a wording change requires a version bump."
+adjudication = "In-process NLI in both directions yields genuine, tension, complementary or unrelated. genuine triggers one LLM call to test supersession on the time axis, producing either a Retract plus Assertion or a conflict edge with obligated surfacing. Models below the configured tier cannot declare genuine under 0.8."
+anticipation = "Wake triggers are evaluated against new events; IntentionFired carries a stable wake id; the attention scorer combines urgency, expected value, confidence, interruption cost, resource cost and duplication penalty, applies quiet hours, notification budget and current workload, records AttentionDecided with a readable reason, and keeps a bounded history the user can inspect. Only notify, ask_user and start_work reach the bundle."
+learning = "Predictions carry bounded predicates and a deadline; outcomes are assessed in five states; a revision_required gap is emitted after three same-mechanism failures with at most two revision rounds and five probes inside existing budgets. Procedures are mined from ToolCall to ToolResult to Effect to Outcome chains per closed loop and advance tentative to supported to adopted."
+
+[design.surfaces]
+title = "Protocol, tools and SDKs"
+protocol = "Local: Unix domain socket, length and CRC32C prefixed FlatBuffer WireEnvelope, capability handshake, byte-compatible with neocortex proto_version 2; new requests are union members under proto_version 3. Remote: gRPC service carrying the same envelope bytes over mTLS with capability tokens, streaming Subscribe. Admin: separate token; Health, Stats, Verify, Rebuild, CryptoDelete, RotateKeys. Admin and actor requests never mix on one connection."
+tools = "Thirteen MCP verbs with one envelope ok, items, provenance, budget, gaps, health, warnings: remember, recall, activate, believe, retract, dispute, intend, bind, predict, outcome, attest, consolidate, inspect, forget. Every mutation error carries effect_state in not_dispatched, unknown, rejected. MCP resources resolve hm:// URIs; an MCP prompt exposes the activate-backed system block."
+cli = "hm init, serve, doctor, actor add or list or rotate-keys or shred, remember, recall, activate with a model budget, consolidate run or list or retract, verify, bench, export and import as JSON lines of events, tui."
+sdks = "Rust crate hypermind (the kernel), TypeScript packages engine (napi), client (gRPC) and mcp, Python packages hypermind (PyO3) and client, Go client extended from cortexclient. Common contract: Session, remember, recall, activate to Bundle, render(bundle, model), attest, believe, intend, bind, predict, outcome, consolidate. Same envelope, same error codes."
+
+[design.security]
+title = "Security and privacy"
+sealing = "Per-actor KEK to user key to data key; XChaCha20-Poly1305 with AAD bound to actor, lsn, kind and user; plaintext on disk refused with kLegacyPlaintext. Key rotation re-wraps the data key without rewriting the log."
+integrity = "MMR leaves over sealed bytes so hm verify needs no key; Ed25519-signed checkpoints; every append ack returns leaf_count, leaf_hash and root; tool citations pin to a log prefix; crypto-shred writes a signed deletion receipt and zeroises keys."
+tripwires = "Engine-seeded sealed records whose LSNs live in a kernel-held set; any activation, retract or forget touching one raises a security event. Never a flag inside the record."
+isolation = "Actors are hard-isolated: own keys, log, LMDB environment, vector lane. Bridges forward selected kinds as new events carrying origin_actor. Federation is gRPC with mTLS and capability tokens only."
+fuzzing = "libFuzzer-style targets via cargo-fuzz for frame, unseal, schema, protocol frame, query input and MMR state, run in CI smoke mode; Miri on the unsafe SIMD and mmap modules."
+
+[design.evaluation]
+title = "The merge gate"
+principle = "No retrieval or consolidation threshold merges without a number. hm-eval runs in CI from wave 1 and compares against main with a per-metric tolerance."
+suites = ["recall@k and MRR over seeded stores at 1k, 10k and 100k events", "activate p50 and p99 cold and warm at 10k and 100k", "continuity: kill -9 mid-turn, restart, resume without duplicate effects", "silent degradation: every forced miss appears in gaps or health", "laundering: no derived record gains observed authority; no Outcome cites a memory; no memory content reaches the system role", "citation validity: quotes lie inside cited frozen ranges", "dream regression: entity, number and quote preservation, drift, duplicate rate, edge precision", "temporal: as-of correctness, supersession, stale-fact rate", "protected types: run writes rejected, proposals surfaced", "attention: suppression precision on a labelled interruption set", "determinism: identical bundle hash on x86-64 and aarch64", "cost: LLM calls, tokens and USD per 1k turns and per run", "LongMemEval, LoCoMo and BEAM with pinned judge and cached responses"]
+targets = "At v1.0.0: LongMemEval at least 90 percent, LoCoMo at least 75 percent F1, recall@10 at least 0.95 at 10k, activate p99 under 10 ms at 100k warm, zero lossy rewrites on the dream fixture, zero stale facts stated as current, zero laundering violations, continuity 100 percent, determinism 100 percent, attention precision at least 0.9."
+
+[documentation]
+mode = "manual"
+status = "pending"
+audiences = ["developer", "operator", "user"]
+targets = ["README.md", "docs/reference/schematics.md", "docs/adr/**", "docs/concepts/**", "docs/guides/**", "docs/internals/**", "docs/evaluation/**", "docs/security/threat-model.md", "PLAN.md", "HARNESS-LESSONS.md"]
+verify_cmd = "mdbook build docs && cargo run -p hm-eval -- docs-gate"
+
+[req.1]
+title = "Vertical build discipline"
+story = "As the owner, I need the engine built as slices through every layer so that each wave is a working system, never an unproven layer waiting for its consumer."
+ac_1 = "Every wave adds to every layer it touches and ends with an integration task whose journey test crosses schema, ledger, projections, indexes, cognition where present, compose, MCP or SDK, restart and recall. Lane tasks in wave N+1 require the integration task of wave N."
+ac_2 = "No task delivers behaviour in a crate that no task in the same wave consumes. Empty scaffolding crates from task 1.1 are the only exception. cg spec render and the wave graph reflect this dependency shape."
+ac_3 = "Each wave's eval gate is added in that wave and runs in CI before the wave closes."
+
+[req.2]
+title = "Ledger durability and idempotency"
+story = "As an agent runtime, I need every accepted write to survive any crash and never apply twice."
+ac_1 = "Frames carry a 43-byte header and CRC32C; segments use group commit with fdatasync and a manifest; open repairs a torn tail and refuses interior corruption with kInteriorCorruption. The neocortex frame and segment test vectors pass unchanged."
+ac_2 = "Append is idempotent by connection id and client sequence with strictly sequential admission; an exact replay returns duplicate; a same-sequence different-digest replay is kIdempotencyConflict; the dedup map rebuilds from envelope metadata at boot; a torn multi-event batch is rolled back at open."
+ac_3 = "The fault simulator converges to identical CanonicalBytes over 2,048 schedules including torn writes, reordered completions, lying fsync and kill after every durable LSN; a real fork and SIGKILL test after commit passes."
+
+[req.3]
+title = "Sealing, integrity and verification"
+story = "As an operator, I need memory encrypted at rest, tamper-evident without keys, and erasable with a receipt."
+ac_1 = "Every payload is sealed with XChaCha20-Poly1305 and AAD bound to actor, lsn, kind and user; plaintext on disk is refused; keys are zeroised on close; rotation re-wraps the data key without rewriting the log."
+ac_2 = "The MMR leaf commits to the sealed bytes; checkpoints are Ed25519-signed; hm verify audits an actor directory offline with no key and prints the root and LSN; VerifyStatus reports the same online; every append ack returns leaf count, leaf hash and root."
+ac_3 = "CryptoDelete writes a signed deletion receipt containing the key fingerprint and root, unlinks the keyring, and a reopen reports kKeyDestroyed. Tripwire LSNs held by the kernel raise a security event on any activation, retract or forget."
+
+[req.4]
+title = "Evidence authority and anti-laundering"
+story = "As a user, I need the agent to know what was observed, what was asserted and what was inferred, and to be unable to promote one into another."
+ac_1 = "Every event and every surfaced item carries one of six authority classes set at ingest from source kind. A derived record is derived_inference unless its text is a verbatim quote of a cited byte range. A model-authored string cannot gain tool_observed by passing through a tool."
+ac_2 = "Outcome and LoopClosed done events must cite tool_observed, external_observed or runtime_fact LSNs; citing a memory, summary or reconstruction is rejected at admission. memory.* events are never re-ingested."
+ac_3 = "Renderers never place memory content in the system or developer role, drop items without full provenance, exclude same-turn content and raw bytes, and label authority on every item. The laundering suite reports zero violations."
+
+[req.5]
+title = "Projections and generations"
+story = "As the kernel, I need every read model rebuildable from the log and every consolidation publishable and retractable atomically."
+ac_1 = "Each projection applies in one LMDB write transaction that commits mutations and its checkpoint together and requires applied_lsn equals checkpoint plus one; rebuild from any prefix yields byte-identical CanonicalDump; a SIGKILL mid-rebuild resumes from the minimum checkpoint."
+ac_2 = "A consolidation run stages derived events under run_id into a generation; publish is a compare-and-swap on active_generation that refuses if any staged record lacks a projection; readers lease a generation for a bounded time; retractions apply to every generation including leased ones; retract switches the pointer back without waiting for cleanup."
+ac_3 = "Projections present at v1.0: timeline, lexical, entities, vectors, beliefs, graph, memories, fsrs, intent frame, bindings, work ledger, intentions, attention history, predictions, procedures, attestations, temporal ladder, runs."
+
+[req.6]
+title = "Retrieval lanes and planner"
+story = "As an agent, I need recall that finds paraphrases, exact identifiers, time windows and connected ideas, and explains why."
+ac_1 = "Lexical uses fixed-point BM25 over tantivy postings; vector uses a binary prefilter then int8 dot products with SIMD equal to scalar, flat below 50k and HNSW above with measured recall parity; entity uses exact postings for ids, paths, urls and proper nouns; temporal descends the ladder; graph walks validated edges with validity intervals; belief reads as-of heads."
+ac_2 = "The planner classifies query shape deterministically and selects lanes and weights; fusion is reciprocal rank over canonical ids; the composite multiplies fsrs retrievability, salience factor and recency prior; every hit carries a provenance URI with lane ranks and a why code."
+ac_3 = "recall@10 is at least 0.95 on the 10k seeded store; recall supports modes semantic, lexical, entity, temporal, graph, asof, timeline and reconstruct, and near for anchored retrieval."
+
+[req.7]
+title = "Activation bundle and deadline"
+story = "As an agent runtime, I need a budgeted, ordered, explainable context on every turn that never blocks the turn."
+ac_1 = "Ten tiers in shed order with resident, intent, bindings and work_ledger required and never shed; exact token counts per target model; trim sheds from the tail and coarsens conversation items before required tiers; if required tiers exceed budget the bundle narrows the subtask and reports a gap."
+ac_2 = "The bundle is canonically serialised as HMA1, hashed, pinned to a snapshot epoch, carries a RetrievalManifest with candidates, selected, included and used, plus gaps and health; every provenance LSN yields an Attestation frame."
+ac_3 = "activate p99 is under 10 ms at 100k events warm; on a deadline miss it returns the last bundle marked degraded with stale_by_lsn and pushes the fresh bundle over Subscribe; the silent-degradation suite shows every forced miss in gaps or health."
+
+[req.8]
+title = "Beliefs and time"
+story = "As a user, I need the agent to know what was true when, what it knew when, and to surface contradictions unprompted."
+ac_1 = "Beliefs are versioned with supersedes chains, conflict edges with obligated surfacing, and as-of queries by valid_at or known_at that can return different answers; records are tri-temporal with event_time_ns, observation LSN and validity."
+ac_2 = "The admission gate rejects negative_existence without a corroborating tool_observed LSN and lists same-domain conflicts before commit; identity, constraint and preference accept Assertion and Retract only from user or admin authority; runs emit ProposedAssertion surfaced in the conflicts tier."
+ac_3 = "dispute runs in-process NLI both directions, escalates genuine to one tier-capped LLM supersession check, and yields Retract plus Assertion or a conflict edge; the temporal suite reports zero stale facts stated as current."
+
+[req.9]
+title = "Consolidation as retractable generations"
+story = "As a user, I need the agent to consolidate what it learns without ever corrupting what it knew, and to undo any consolidation."
+ac_1 = "NREM clusters without an LLM and makes one structured-output call per cluster; REM connects from adjacency with one long-context pass, abstracts with novelty and grounding gates, and audits with hindsight defaulting to no change; every derived record carries run_id, model_provenance and citations."
+ac_2 = "Every quoted span in a derived record lies inside a cited byte range in the run's frozen candidate set or the candidate is dropped and counted; mint requires at least three independent source roots from at least two conversations; derived authority is derived_inference."
+ac_3 = "Runs declare max_llm_calls, max_tokens, max_usd and max_wall_ms and abort cleanly on any; phases persist with a per-attempt idempotency prefix and resume after a crash; consolidate retract switches activation back immediately; the dream regression fixture shows zero lossy rewrites."
+
+[req.10]
+title = "Retention and forgetting"
+story = "As a user, I need the agent to forget noise and never forget what it is standing on."
+ac_1 = "FSRS-6 orders review from attestations, retrieval rank and contradiction involvement; dreams do not count as access."
+ac_2 = "Retention class in current_state, daily, durable, do_not_store decides eligibility; do_not_store writes nothing; the protection set excludes provenance of open loops, active bindings, unfulfilled intentions, resident beliefs and the last N bundles; the last K contradicted outcomes per domain are kept as counterexamples."
+ac_3 = "Fading is an event; faded memories are excluded from refine, connect, abstract and sampling; nothing is deleted except by crypto-shred or an explicit retract."
+
+[req.11]
+title = "Prospective memory and attention"
+story = "As a user, I want the agent to follow up on its own, and to know when not to interrupt me."
+ac_1 = "IntentionSet accepts the wake-trigger vocabulary; triggers are persisted before the action waits; IntentionFired carries a stable wake id so duplicate external events resume once."
+ac_2 = "Every fired intention is scored by the attention function with quiet hours, notification budget and workload applied and recorded as AttentionDecided with a readable reason; only notify, ask_user and start_work reach the prospective tier; batch produces a digest item; schedule re-arms."
+ac_3 = "The attention history is a bounded projection the user can inspect; attention suppression precision on the labelled set is at least 0.9."
+
+[req.12]
+title = "Predictions and procedures"
+story = "As a user, I want the agent to say what it expects, notice when it was wrong, and get better at things it has done before."
+ac_1 = "Predicted carries bounded predicates from the fixed vocabulary and a deadline; OutcomeObserved assesses supported, contradicted, pending, unresolvable or not_executed with observation LSNs; calibration is reported per predicate kind; a revision_required gap follows three same-mechanism failures."
+ac_2 = "Procedures are mined from ToolCall to ToolResult to Effect to Outcome chains per closed loop; supported requires three independent source roots from two conversations; adopted requires a user-authority event; only adopted procedures render as instructions, tentative ones render as observations."
+ac_3 = "Model narrative cannot redefine success after results; assessments cite observation LSNs only."
+
+[req.13]
+title = "Surfaces"
+story = "As an integrator, I need one protocol locally and remotely, thirteen composable tools, a REST mirror and a CLI."
+ac_1 = "The Unix socket speaks NCPR framing byte-compatible with neocortex proto_version 2 and adds v3 requests; gRPC over mTLS carries the same envelope bytes with streaming Subscribe; admin and actor tokens are disjoint and never mix on a connection."
+ac_2 = "MCP exposes exactly the thirteen verbs with the one envelope; every mutation error carries effect_state; resources resolve hm:// URIs; a prompt exposes the activate-backed system block; REST mirrors the verbs with OpenAPI and gates destructive verbs on the admin token."
+ac_3 = "hm covers init, serve, doctor, actor management, remember, recall, activate, consolidate, verify, bench, export, import and tui; every command takes --json."
+
+[req.14]
+title = "SDKs and migration"
+story = "As a developer, I need HyperMind from Rust, TypeScript, Python and Go with one contract, and a path off cortex-engine."
+ac_1 = "The Rust crate is the kernel with an embedded API; TypeScript ships engine via napi prebuilds, client over gRPC and mcp; Python ships hypermind via maturin wheels and a gRPC client; the Go client keeps its sequence-recovery state machine and gains Recall, AsOf, Subscribe and CryptoDelete builders; all pass their suites against the real daemon."
+ac_2 = "Every SDK exposes Session, remember, recall, activate to Bundle, render, attest, believe, intend, bind, predict, outcome and consolidate with the same envelope and error codes; every mutation error carries effect_state; renderers enforce activation safety."
+ac_3 = "migrate-from-cortex imports a cortex-engine SQLite or JSON store into events with authority user_asserted for observations and derived_inference for dream-minted memories, preserves ids and edges, and verifies counts and a sample of embeddings."
+
+[req.15]
+title = "Evaluation gate and targets"
+story = "As the owner, I need every quality claim to be a number produced in CI."
+ac_1 = "hm-eval runs the internal suites and the public benchmarks, writes JSON to eval/results, compares against main with per-metric tolerance, and fails CI on regression; judge models are pinned and responses cached by content hash; judge-free and judged metrics are reported separately."
+ac_2 = "Wave 8 publishes LongMemEval at least 90 percent, LoCoMo at least 75 percent F1, recall@10 at least 0.95 at 10k, activate p99 under 10 ms at 100k warm, zero lossy rewrites, zero stale facts, zero laundering violations, continuity 100 percent, determinism 100 percent across x86-64 and aarch64, attention precision at least 0.9, and cost per 1k turns."
+ac_3 = "A hash-feature embedder is labelled lexical_only in every report; no metric is blended across encoders or judges."
+
+[req.16]
+title = "Documentation and packaging"
+story = "As an adopter, I need to add memory to any MCP client in two commands and understand what it does."
+ac_1 = "docs contain start-here, concepts, guides, reference (schematics rewritten from the schema, protocol, MCP, CLI, config, prompts, SDKs), internals, evaluation, security and ADRs; every public type and tool carries when-to-use and do-not-use; the docs gate passes."
+ac_2 = "Packaging ships a distroless static image, compose, systemd unit and Helm chart; models download on first run with pinned digests; hm doctor reports what is present; release builds are reproducible."
+
+[req.17]
+title = "Multi-actor isolation and budgets"
+story = "As an operator, I need many agents in one daemon without leakage and with bounded cost."
+ac_1 = "Actors have separate keys, logs, LMDB environments and vector lanes; one writer task per actor; cross-actor reads happen only through bridges that append origin_actor events or a read-only commons actor."
+ac_2 = "Per-connection output queues are bounded and a saturated subscriber is disconnected; consolidation runs per actor under declared budgets; cost is accounted per operation and reported."
+
+[task.1.1]
+title = "Workspace, core ids and errors, CI, and empty scaffolding for every crate"
+status = "done"
+wave = 1
+section = "Wave 1 — Spine: remember and recall one thing, end to end"
+owner_lane = "root-foundation"
+requires = []
+reqs = ["1.2", "1.3"]
+touches = ["Cargo.toml", "rust-toolchain.toml", "deny.toml", ".github/workflows/**", "crates/hm-core/**", "crates/*/Cargo.toml", "crates/*/src/lib.rs", "README.md", ".gitignore"]
+verify_cmd = "cargo build --workspace && cargo clippy --workspace -- -D warnings && cargo test -p hm-core"
+do_1 = "Create the Cargo workspace with hm-core, hm-schema, hm-ledger, hm-proj, hm-index, hm-embed, hm-llm, hm-cortex, hm-compose, hm-serve, hm-mcp, hm-cli, hm-sim, hm-eval as crates; later-wave crates contain only lib.rs and a version constant."
+do_2 = "Implement hm-core: EntityId, LSN, ActorId, ConversationId (16 bytes derived as in the Go client), SchemaVersion, UtcNanos, the full ErrorCode enum carrying every neocortex code plus kProtectedTypeWrite, kCitationInvalid, kDeadlineMissed, kTripwire, and Error with system_error, lsn and offset."
+do_3 = "CI: build, clippy with warnings denied, fmt, cargo-deny, test on x86-64 and aarch64 runners; a bench-gate job that runs hm-eval gate for the current wave and compares to main."
+
+[task.1.2]
+title = "Schema v2 subset and protocol v3 subset with generated code and validation"
+status = "pending"
+wave = 1
+owner_lane = "schema"
+requires = ["1.1"]
+reqs = ["2.1", "4.1", "13.1"]
+touches = ["schemas/events.fbs", "schemas/protocol.fbs", "crates/hm-schema/**"]
+verify_cmd = "cargo test -p hm-schema"
+do_1 = "Copy neocortex events.fbs and protocol.fbs, bump to schema_version 2 and proto_version 3 additively; this wave enables UserMsg, DeliveredMsg, Reasoning, ToolCall, ToolResult, Attestation and the envelope fields authority, retention, sensitivity, event_time_ns, origin_actor, run_id, model_provenance; protocol enables Hello, Welcome, Append, AppendAck, Recall, RecallResult, Activate, BytesResult, Transcript, TranscriptResult, Health, Stats, ErrorDetail."
+do_2 = "Generate Rust with planus; implement VerifyEvent and VerifyRequest that fail closed on unknown versions, missing required fields, unknown union members and ToolResult without a prior ToolCall reference."
+do_3 = "Carry the neocortex schema_test and protocol fuzz seed corpus as fixtures; a v1 Go-client envelope decodes as v2 with defaults."
+
+[task.1.3]
+title = "Frame codec, segment log and sealing"
+status = "pending"
+wave = 1
+owner_lane = "ledger"
+requires = ["1.1"]
+reqs = ["2.1", "3.1"]
+touches = ["crates/hm-ledger/src/frame.rs", "crates/hm-ledger/src/segment.rs", "crates/hm-ledger/src/seal.rs", "crates/hm-ledger/src/keyring.rs", "crates/hm-ledger/tests/frame.rs", "crates/hm-ledger/tests/segment.rs", "crates/hm-ledger/tests/seal.rs", "crates/hm-ledger/fixtures/**"]
+verify_cmd = "cargo test -p hm-ledger"
+do_1 = "Port frame.h and frame.cc: 43-byte header, CRC32C over lsn onward, 16 MiB maximum; the neocortex frame test vectors pass byte for byte."
+do_2 = "Port segment_log: numbered 128 MiB segments, NCMF manifest, group commit into one 4096-aligned buffer with fdatasync then manifest rewrite then directory fsync, torn-tail truncation on open, kInteriorCorruption refusal, manifest rebuild; pwrite backend now, io_uring behind a feature flag."
+do_3 = "Port sealing: KEK to user key to data key wrapped with XChaCha20-Poly1305, NCKEY001 keyring, NCSEAL01 record layout, AAD bound to actor, lsn, kind and user, kLegacyPlaintext on unsealed records, zeroize on drop; the plaintext BLAKE3 digest is stored inside the sealed record for wave 3."
+
+[task.1.4]
+title = "LMDB projection store with checkpointed apply, timeline and lexical projections"
+status = "pending"
+wave = 1
+owner_lane = "projections"
+requires = ["1.2"]
+reqs = ["5.1", "6.1"]
+touches = ["crates/hm-proj/src/store.rs", "crates/hm-proj/src/timeline.rs", "crates/hm-proj/src/lexical.rs", "crates/hm-proj/src/rebuild.rs", "crates/hm-proj/tests/**", "crates/hm-index/src/bm25.rs", "crates/hm-index/src/tokenize.rs", "crates/hm-index/tests/**"]
+verify_cmd = "cargo test -p hm-proj && cargo test -p hm-index"
+do_1 = "ProjectionStore over heed: one DBI per projection plus projection_checkpoints; Apply(projection, applied_lsn, mutations) is one write transaction requiring applied_lsn equals checkpoint plus one; ReadSnapshot with prefix and reverse scans; CanonicalDump for byte-equality tests; roaring bitmaps for sets."
+do_2 = "Timeline projection (conversation heads): E key conversation plus lsn to kind, timestamp and payload; L key lsn to event key; ReadConversationRecord and latest-of-kind reverse scan."
+do_3 = "Lexical projection: tantivy tokenisation and postings for UserMsg and DeliveredMsg, document length and global stats, fixed-point Q32 ln ported from FixedLnRatio, BM25 with k1 1.2 and b 0.75 in integer coefficients; RebuildProjectionStream resumes from the minimum checkpoint after a kill."
+
+[task.1.5]
+title = "Bundle v1: conversation and fused tiers, exact token budget, canonical bytes, gaps"
+status = "pending"
+wave = 1
+owner_lane = "compose"
+requires = ["1.4"]
+reqs = ["7.1", "7.2"]
+touches = ["crates/hm-compose/src/bundle.rs", "crates/hm-compose/src/tokens.rs", "crates/hm-compose/src/canonical.rs", "crates/hm-compose/src/lanes/lexical.rs", "crates/hm-compose/tests/**"]
+verify_cmd = "cargo test -p hm-compose"
+do_1 = "ActivationRequest, ActivationItem, ActivationSection, ActivationBundle with all ten tiers declared and the conversation and fused tiers populated this wave; lexical lane through the projection; provenance URI construction with lane ranks and why codes."
+do_2 = "Exact token counting through tiktoken-rs and HF tokenizers keyed by model id, with the neocortex per-byte weight table as the fallback; trim policy sheds from the tail and coarsens conversation items to lsn plus first line."
+do_3 = "HMA1 canonical serialisation and BLAKE3 bundle hash; gaps[] and health fields present with the truncated-lane and dropped-tier gap kinds; BuildAttestations turns provenance LSNs into Attestation frames."
+
+[task.1.6]
+title = "Actor engine, Unix socket server and MCP with remember, recall, activate, inspect"
+status = "pending"
+wave = 1
+owner_lane = "surface"
+requires = ["1.3", "1.5"]
+reqs = ["13.1", "13.2", "17.1"]
+touches = ["crates/hm-serve/src/actor.rs", "crates/hm-serve/src/uds.rs", "crates/hm-serve/src/protocol.rs", "crates/hm-serve/src/config.rs", "crates/hm-serve/tests/**", "crates/hm-mcp/src/**", "crates/hm-mcp/tests/**"]
+verify_cmd = "cargo test -p hm-serve && cargo test -p hm-mcp"
+do_1 = "ActorEngine with one tokio writer task per actor: apply loop assigns LSNs and wall timestamps, validates ordering, seals, appends, applies projections; readers use snapshots; AppliedState rolling digest as the determinism oracle."
+do_2 = "UDS server with NCPR length and CRC32C framing, Hello handshake with capability token and constant-time compare, Append, Recall, Activate, Transcript, Health, Stats; socket mode 0600; config file mode 0600 required; bounded per-connection output queues."
+do_3 = "hm-mcp over rmcp stdio: remember (append UserMsg or DeliveredMsg or a chunked document with authority set from kind), recall mode lexical and timeline, activate, inspect stats; one envelope ok, items, provenance, budget, gaps, health, warnings; every mutation error carries effect_state."
+
+[task.1.7]
+title = "Rust embedded API and hm CLI: init, serve, remember, recall, activate"
+status = "pending"
+wave = 1
+owner_lane = "sdk"
+requires = ["1.6"]
+reqs = ["14.1", "14.2", "13.3"]
+touches = ["crates/hm-cli/src/**", "crates/hm-cli/tests/**", "crates/hm-serve/src/embedded.rs", "sdk/README.md"]
+verify_cmd = "cargo test -p hm-cli"
+do_1 = "hypermind embedded API: HyperMind::open(path, config), Actor, Session with remember, recall, activate returning Bundle, and render(bundle, model) producing typed sections with authority labels and provenance URIs; no daemon required."
+do_2 = "hm init writes an actor directory, keys and config; hm serve runs the daemon; hm remember, recall and activate speak to a running daemon or the embedded engine; every command takes --json and honours NO_COLOR."
+do_3 = "hm doctor reports toolchain, actor directories, socket health and missing models."
+
+[task.1.8]
+title = "Eval runner, seeded stores, recall and latency suites, schematics skeleton and quickstart"
+status = "pending"
+wave = 1
+owner_lane = "eval"
+requires = ["1.7"]
+reqs = ["15.1", "16.1", "1.3"]
+touches = ["crates/hm-eval/src/**", "crates/hm-eval/tests/**", "eval/seeds/**", "eval/results/.gitkeep", "docs/reference/schematics.md", "docs/start/quickstart.md", "docs/book.toml", "docs/SUMMARY.md"]
+verify_cmd = "cargo run -p hm-eval -- gate slice1 && mdbook build docs"
+do_1 = "hm-eval binary: suite registry, seeded-store generator producing 1k and 10k event stores with held-out probes, recall@k and MRR through the lexical lane, activate p50 and p99 cold and warm, JSON results in eval/results, compare against main with tolerance and non-zero exit on regression."
+do_2 = "docs/reference/schematics.md sections 1 to 6 written from the schema and error codes in the normative style: event taxonomy, ordering rules, frame layout, error codes, projection contract, bundle contract; quickstart for MCP in Claude Code and the embedded Rust API."
+do_3 = "CI bench-gate job wired to gate slice1."
+
+[task.1.9]
+title = "Slice 1 journey: remember over MCP, restart, recall, activate with provenance, eval green"
+status = "pending"
+wave = 1
+owner_lane = "integration"
+requires = ["1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8"]
+reqs = ["1.1", "1.3", "2.1", "7.2"]
+touches = ["crates/hm-sim/tests/slice1_journey.rs", "crates/hm-sim/src/harness.rs"]
+verify_cmd = "cargo test -p hm-sim --test slice1_journey"
+do_1 = "Journey: start the real daemon in a temporary directory, connect an MCP client, remember three facts, kill the daemon, restart, recall lexically, activate and assert the bundle contains the facts with provenance URIs and a valid HMA1 hash, then run hm-eval gate slice1."
+do_2 = "The journey harness in hm-sim is reused by every later slice."
+
+[task.2.1]
+title = "Idempotent append, dedup rebuild, torn-batch rollback and the fault simulator"
+status = "pending"
+wave = 2
+section = "Wave 2 — Continuity: survive a kill mid-turn and resume the loop with exact bindings"
+owner_lane = "ledger"
+requires = ["1.9"]
+reqs = ["2.2", "2.3"]
+touches = ["crates/hm-ledger/src/idempotency.rs", "crates/hm-ledger/src/apply.rs", "crates/hm-ledger/tests/idempotency.rs", "crates/hm-sim/src/env.rs", "crates/hm-sim/src/fault.rs", "crates/hm-sim/tests/core_sim.rs"]
+verify_cmd = "cargo test -p hm-ledger && cargo test -p hm-sim --test core_sim"
+do_1 = "Append keyed by connection id and client sequence with strictly prior plus one admission, duplicate on exact replay, kIdempotencyConflict on same-sequence different-digest, RebuildDedup from envelope metadata at boot, RollBackTornBatch when the last frame's client_event_index plus one is not client_event_count."
+do_2 = "Port sim_env and core_sim_test: SimulatedStorage with FaultPlan maximum_write_bytes, torn_after_bytes, kill_after_durable_lsn, reverse_write_completion, fsync_lies; 2,048 randomised schedules converge to one CanonicalBytes; kill at every LSN; writer-ownership violation; real fork plus SIGKILL after commit."
+
+[task.2.2]
+title = "Continuity events: Checkpoint, IntentSet, loops, Binding, Effect, Approval, Outcome, ordering rules"
+status = "pending"
+wave = 2
+owner_lane = "schema"
+requires = ["1.9"]
+reqs = ["2.1", "4.2"]
+touches = ["schemas/events.fbs", "schemas/protocol.fbs", "crates/hm-schema/**"]
+verify_cmd = "cargo test -p hm-schema"
+do_1 = "Enable Checkpoint, IntentSet, LoopOpened, LoopClosed, Effect, Approval, Outcome, Supervisor, Recovery and add Binding with task or scope, canonical entity, property, evidence LSN, revision, freshness; protocol adds Checkpoint, LatestCheckpoint, CheckpointAck, CheckpointResult, Subscribe, SubscriptionAck, Event push."
+do_2 = "Ordering rules in VerifyEvent: ToolResult and Effect reference a prior ToolCall LSN; Outcome and LoopClosed done cite tool_observed, external_observed or runtime_fact LSNs and are rejected when citing a memory or summary kind."
+
+[task.2.3]
+title = "Intent frame, bindings and work ledger projections with latest-checkpoint scan"
+status = "pending"
+wave = 2
+owner_lane = "projections"
+requires = ["2.2"]
+reqs = ["5.1", "5.3"]
+touches = ["crates/hm-proj/src/intent.rs", "crates/hm-proj/src/bindings.rs", "crates/hm-proj/src/ledger.rs", "crates/hm-proj/src/checkpoint.rs", "crates/hm-proj/tests/continuity.rs"]
+verify_cmd = "cargo test -p hm-proj --test continuity"
+do_1 = "Intent frame: objective plus open loops up to 4096 per conversation with a global loop id index preventing cross-conversation closes and double closes; closed loops readable."
+do_2 = "Bindings projection: resolve_required_bindings reads up to 128 bindings for a task from one snapshot with status resolved, missing, stale or conflicting by revision and freshness; corrections resolve by identity and effective time."
+do_3 = "Work ledger: WorkItem kinds tool_call and effect with states dispatched, committed, returned, outcome_unknown and TransitionAllowed rules; requires_reconciliation when not returned; a crash inside the dispatch window is conservatively unknown. Port continuity_projection_test: every prefix rebuilds identically, reset replay matches, a bounded partial rebuild resumes."
+
+[task.2.4]
+title = "Required tiers that are never shed, narrow-subtask gap, allocation template"
+status = "pending"
+wave = 2
+owner_lane = "compose"
+requires = ["2.3"]
+reqs = ["7.1", "7.3"]
+touches = ["crates/hm-compose/src/tiers/intent.rs", "crates/hm-compose/src/tiers/bindings.rs", "crates/hm-compose/src/tiers/work.rs", "crates/hm-compose/src/trim.rs", "crates/hm-compose/src/budget.rs", "crates/hm-compose/tests/required.rs"]
+verify_cmd = "cargo test -p hm-compose"
+do_1 = "Populate intent, bindings and work_ledger tiers from the projections; mark resident, intent, bindings and work_ledger required; trim never sheds them; when they alone exceed budget the bundle narrows to the active loop and emits a narrowed_subtask gap."
+do_2 = "Budget allocation template mandatory 15, intent and bindings and work 10, conversation 40, recall 15, tools 10, reserve 10 percent, configurable per profile; optional segments shrink first; missing, stale and conflicting bindings appear in gaps."
+
+[task.2.5]
+title = "Checkpoint and Subscribe requests, effect_state on errors, MCP intend and bind"
+status = "pending"
+wave = 2
+owner_lane = "surface"
+requires = ["2.1", "2.4"]
+reqs = ["13.1", "13.2"]
+touches = ["crates/hm-serve/src/requests/checkpoint.rs", "crates/hm-serve/src/requests/subscribe.rs", "crates/hm-serve/src/errors.rs", "crates/hm-serve/tests/continuity.rs", "crates/hm-mcp/src/tools/intend.rs", "crates/hm-mcp/src/tools/bind.rs", "crates/hm-mcp/tests/continuity.rs"]
+verify_cmd = "cargo test -p hm-serve --test continuity && cargo test -p hm-mcp --test continuity"
+do_1 = "Checkpoint stores an opaque turn blob keyed by turn id with client sequence idempotency; LatestCheckpoint scans up to 65536 records; Subscribe streams Event frames from since_lsn with a bounded queue and disconnects a saturated subscriber."
+do_2 = "Every mutation error carries effect_state not_dispatched, unknown or rejected; MCP intend sets objective, opens and closes loops; MCP bind writes a Binding and returns its status."
+
+[task.2.6]
+title = "TypeScript engine (napi) and client with sequence recovery, renderer v1"
+status = "pending"
+wave = 2
+owner_lane = "sdk"
+requires = ["2.5"]
+reqs = ["14.1", "14.2"]
+touches = ["sdk/typescript/packages/engine/**", "sdk/typescript/packages/client/**", "sdk/typescript/packages/render/**", "sdk/typescript/package.json", "sdk/typescript/tsconfig.json"]
+verify_cmd = "npm --prefix sdk/typescript test"
+do_1 = "@hypermind/engine via napi-rs exposing open, Session, remember, recall, activate, checkpoint, intend, bind with prebuilds for linux x64 and arm64 and darwin arm64."
+do_2 = "@hypermind/client over the Unix socket with the Go client's sequence policy ported: stable connection id, next_client_seq from Welcome, pending queue, PendingWriteError with effect_state, reconnect that never double-applies; tests run against the real daemon binary."
+do_3 = "@hypermind/render v1: bundle to typed prompt sections with authority labels and provenance URIs, same-turn exclusion, memory never in system role."
+
+[task.2.7]
+title = "Continuity and silent-degradation suites; schematics ordering and recovery sections"
+status = "pending"
+wave = 2
+owner_lane = "eval"
+requires = ["2.6"]
+reqs = ["15.1", "7.3", "16.1"]
+touches = ["crates/hm-eval/src/suites/continuity.rs", "crates/hm-eval/src/suites/degradation.rs", "docs/reference/schematics.md", "docs/internals/recovery.md"]
+verify_cmd = "cargo run -p hm-eval -- gate slice2"
+do_1 = "Continuity suite: kill -9 the daemon at randomised points in a scripted turn, restart, assert the loop, binding and unreconciled effect are present and no append was applied twice; run through the TypeScript client and the Rust API."
+do_2 = "Silent-degradation suite: force missing bindings, dropped tiers and a narrowed subtask; every forced condition must appear in gaps; a bundle without it fails the gate."
+do_3 = "Schematics sections for ordering rules, idempotency, torn-batch rollback, work ledger transitions and recovery algorithms."
+
+[task.2.8]
+title = "Slice 2 journey: open loop, bind, dispatch, kill -9, restart, activate shows loop, binding, effect"
+status = "pending"
+wave = 2
+owner_lane = "integration"
+requires = ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7"]
+reqs = ["1.1", "2.2", "2.3", "7.1", "7.3"]
+touches = ["crates/hm-sim/tests/slice2_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test slice2_journey"
+do_1 = "Journey from the TypeScript client: intend opens a loop, bind pins a file at a revision, a ToolCall is appended and the daemon is killed inside the dispatch window, restart, the client resumes its sequence without a duplicate, activate shows the open loop, the binding as resolved, the effect as outcome_unknown, and gate slice2 is green."
+
+[task.3.1]
+title = "MMR over sealed bytes, signed checkpoints, hm verify, crypto-shred, key rotation, tripwires"
+status = "pending"
+wave = 3
+section = "Wave 3 — Trust: prove the log without keys, never launder authority, shred with a receipt"
+owner_lane = "ledger"
+requires = ["2.8"]
+reqs = ["3.1", "3.2", "3.3"]
+touches = ["crates/hm-ledger/src/mmr.rs", "crates/hm-ledger/src/mmr_store.rs", "crates/hm-ledger/src/checkpoint.rs", "crates/hm-ledger/src/shred.rs", "crates/hm-ledger/src/rotate.rs", "crates/hm-ledger/src/tripwire.rs", "crates/hm-ledger/tests/mmr.rs", "crates/hm-ledger/tests/shred.rs", "crates/hm-cli/src/verify.rs"]
+verify_cmd = "cargo test -p hm-ledger && cargo test -p hm-cli --test verify"
+do_1 = "Port mmr.cc and mmr/store.cc with domain-separated BLAKE3, RootAt, ProveRange and VerifyRange; the leaf commits to header plus sealed payload; the neocortex mmr_test vectors are regenerated once for the sealed-leaf change and frozen."
+do_2 = "Ed25519-signed checkpoints under mmr/checkpoints; hm verify actor-dir actor checkpoint pubkey prints MEMORY VERIFIED root and lsn with no key material; VerifyAndRepairBounded on open appends missing leaves in 1024-frame batches."
+do_3 = "Crypto-shred writes DELETION_RECEIPT with key fingerprint and root, unlinks the keyring, zeroises, reopen reports kKeyDestroyed; RotateKeys re-wraps the data key under a new KEK; tripwire set is seeded at init and held in kernel memory keyed by LSN."
+
+[task.3.2]
+title = "Authority enforcement at ingest, derivation rule, citation invariants, sensitivity and retention"
+status = "pending"
+wave = 3
+owner_lane = "cognition"
+requires = ["2.8"]
+reqs = ["4.1", "4.2", "10.2"]
+touches = ["crates/hm-cortex/src/ingest.rs", "crates/hm-cortex/src/authority.rs", "crates/hm-cortex/tests/authority.rs", "crates/hm-schema/src/validate/authority.rs"]
+verify_cmd = "cargo test -p hm-cortex --test authority && cargo test -p hm-schema"
+do_1 = "Ingest maps UserMsg to user_asserted, ToolResult to tool_observed, ToolCall and Checkpoint and loop events to runtime_fact, DeliveredMsg and Reasoning to assistant_generated, external feeds to external_observed; automatic sensitivity capped at personal; retention do_not_store returns a receipt and appends nothing."
+do_2 = "derive_authority(source, output) returns the source authority only when output is a verbatim quote of a cited byte range, else derived_inference; VerifyEvent rejects Outcome and LoopClosed done whose citations include any derived or memory kind; memory.* kinds are refused at the ingest boundary."
+
+[task.3.3]
+title = "Activation safety in renderers, RetrievalManifest stages, attestation frames"
+status = "pending"
+wave = 3
+owner_lane = "compose"
+requires = ["3.2"]
+reqs = ["4.3", "7.2"]
+touches = ["crates/hm-compose/src/manifest.rs", "crates/hm-compose/src/safety.rs", "crates/hm-compose/tests/safety.rs", "sdk/typescript/packages/render/**"]
+verify_cmd = "cargo test -p hm-compose && npm --prefix sdk/typescript test"
+do_1 = "RetrievalManifest with candidates, selected, included and used populated from lanes, trim and attestations; manifest id from query identity plus selected digests at snapshot epoch; validate before reuse rejects a moved epoch."
+do_2 = "Port activation_safety_test: mismatched union payloads decode to empty, non-semantic kinds and raw NCEV or checkpoint bytes are dropped, items without full provenance are excluded, same-turn content is excluded, authority labels on every item, memory never in system or developer role; identical assertions in the Rust renderer and the TypeScript renderer."
+
+[task.3.4]
+title = "Admin token split, admin operations, MCP inspect verify and provenance, MCP forget"
+status = "pending"
+wave = 3
+owner_lane = "surface"
+requires = ["3.1", "3.3"]
+reqs = ["13.1", "13.2", "3.3"]
+touches = ["crates/hm-serve/src/admin.rs", "crates/hm-serve/src/auth.rs", "crates/hm-serve/tests/admin.rs", "crates/hm-mcp/src/tools/inspect.rs", "crates/hm-mcp/src/tools/forget.rs", "crates/hm-mcp/tests/trust.rs"]
+verify_cmd = "cargo test -p hm-serve --test admin && cargo test -p hm-mcp --test trust"
+do_1 = "Admin token disjoint from actor tokens; admin requests on actor connections and the reverse are kCapabilityDenied; Health, Stats with per-projection applied_lsn, LatencyHistograms, VerifyStatus, RebuildProjection, CryptoDelete, RotateKeys."
+do_2 = "MCP inspect explains an item, walks its provenance chain to LSNs and MMR receipts, verifies against the latest checkpoint, and reports stats; MCP forget fades a memory, retracts a run, or crypto-shreds an actor with the admin token and returns the receipt; a tripwire hit is reported as a security event in warnings."
+
+[task.3.5]
+title = "Laundering suite, fuzz targets, Miri on unsafe modules, threat model"
+status = "pending"
+wave = 3
+owner_lane = "eval"
+requires = ["3.4"]
+reqs = ["15.1", "4.3", "16.1"]
+touches = ["crates/hm-eval/src/suites/laundering.rs", "fuzz/**", ".github/workflows/fuzz.yml", "docs/security/threat-model.md", "docs/internals/sealing.md", "docs/internals/mmr.md"]
+verify_cmd = "cargo run -p hm-eval -- gate slice3 && cargo fuzz list"
+do_1 = "Laundering suite: attempts to promote a model string to tool_observed through a tool, to cite a memory as an Outcome, to place memory in the system role, to re-ingest memory.* events; all must be rejected and counted; zero violations is the gate."
+do_2 = "cargo-fuzz targets for frame, unseal, schema, protocol frame, query input and MMR state seeded from the neocortex corpus; CI smoke runs each for 60 seconds; Miri on the SIMD and mmap modules."
+do_3 = "Threat model: trust boundaries, capability model, what verify proves and does not, crypto-shred guarantees, disclosure policy."
+
+[task.3.6]
+title = "Slice 3 journey: cite, verify without keys, launder and be rejected, trip, shred with receipt"
+status = "pending"
+wave = 3
+owner_lane = "integration"
+requires = ["3.1", "3.2", "3.3", "3.4", "3.5"]
+reqs = ["1.1", "3.2", "3.3", "4.1", "4.2"]
+touches = ["crates/hm-sim/tests/slice3_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test slice3_journey"
+do_1 = "Journey: append a turn with a tool result and receive an MMR receipt, run hm verify offline with no key and confirm the root, attempt a laundering write over MCP and receive rejection with effect_state rejected, touch a tripwire LSN through activate and observe the security event, crypto-shred and validate the signed receipt, gate slice3 green."
+
+[task.4.1]
+title = "Embedder trait, local ONNX embedder, remote providers, batching, cache, space identity"
+status = "pending"
+wave = 4
+section = "Wave 4 — Meaning: semantic, entity and planned recall that never blocks the turn"
+owner_lane = "index"
+requires = ["3.6"]
+reqs = ["6.1", "15.3"]
+touches = ["crates/hm-embed/**", "models/manifest.toml", "models/README.md"]
+verify_cmd = "cargo test -p hm-embed"
+do_1 = "Embedder trait with embed_query and embed_documents, dimensions, space identity (encoder id and revision, dimensions, distance, normalisation, input role); local ONNX through ort with tokenizers for nomic-embed-text-v1.5 and bge-small-en-v1.5 int8, downloaded on first run with pinned digests; remote providers for OpenAI, Voyage, Vertex and Ollama behind recorded wire fixtures."
+do_2 = "Batching with a content-hash cache; int8 quantisation and 1-bit binary prefilter derivation; a hash-feature embedder exists only as the lexical_only baseline and is labelled so in every report."
+
+[task.4.2]
+title = "Embedding event with space identity"
+status = "pending"
+wave = 4
+owner_lane = "schema"
+requires = ["3.6"]
+reqs = ["6.1"]
+touches = ["schemas/events.fbs", "crates/hm-schema/**"]
+verify_cmd = "cargo test -p hm-schema"
+do_1 = "Enable Embedding with target_lsn, space id, dimension, quantized int8 vector and binary prefilter; VerifyEvent checks dimension against the declared space."
+
+[task.4.3]
+title = "Flat int8 vector lane with binary prefilter, entity index, space generations"
+status = "pending"
+wave = 4
+owner_lane = "projections"
+requires = ["4.2"]
+reqs = ["5.1", "6.1"]
+touches = ["crates/hm-proj/src/vectors.rs", "crates/hm-proj/src/entities.rs", "crates/hm-proj/src/spaces.rs", "crates/hm-proj/tests/index_plane.rs", "crates/hm-index/src/simd.rs", "crates/hm-index/src/entity_rules.rs"]
+verify_cmd = "cargo test -p hm-proj --test index_plane && cargo test -p hm-index"
+do_1 = "Vector lane: mmap append-only file per space generation with magic-framed records; Search sorts by Hamming on the prefilter then scores by int8 dot through std::simd; SimdDot equals ScalarDot property test; CanonicalBytes for determinism."
+do_2 = "Entity index ported from entity_index.cc: domains, urls, paths, hex ids, structured ids, proper nouns and bigrams with alias labels; query-side extraction from query and turn text; posting bitmaps."
+do_3 = "Space generations: a second encoder populates its own generation even at equal dimensions; the active pointer switches atomically after validation; the prior compatible generation is retained by policy."
+
+[task.4.4]
+title = "Query planner, lanes, fusion, health, deadline with cached fallback, anchors"
+status = "pending"
+wave = 4
+owner_lane = "compose"
+requires = ["4.1", "4.3"]
+reqs = ["6.2", "6.3", "7.3"]
+touches = ["crates/hm-compose/src/planner.rs", "crates/hm-compose/src/lanes/vector.rs", "crates/hm-compose/src/lanes/entity.rs", "crates/hm-compose/src/lanes/temporal.rs", "crates/hm-compose/src/fusion.rs", "crates/hm-compose/src/health.rs", "crates/hm-compose/src/deadline.rs", "crates/hm-compose/tests/meaning.rs"]
+verify_cmd = "cargo test -p hm-compose"
+do_1 = "Planner classifies query shape by deterministic rules and selects lanes and weights; vector, entity and temporal-recency lanes; reciprocal rank fusion over canonical ids; composite with recency prior; every hit carries lane ranks and a why code in its URI."
+do_2 = "Health computed separately for encoder, backlog, projection and inclusion; activate deadline default 25 ms returns the last bundle marked degraded with stale_by_lsn on a miss and schedules a fresh bundle push over Subscribe."
+do_3 = "Anchors: remember accepts anchor facets path, symbol, url, entity; recall near walks the entity lane first."
+
+[task.4.5]
+title = "recall modes semantic, entity and near; remember with anchor, retention, sensitivity; SDK exposure"
+status = "pending"
+wave = 4
+owner_lane = "surface"
+requires = ["4.4"]
+reqs = ["13.2", "14.2"]
+touches = ["crates/hm-mcp/src/tools/recall.rs", "crates/hm-mcp/src/tools/remember.rs", "crates/hm-mcp/tests/meaning.rs", "crates/hm-serve/src/requests/activate.rs", "sdk/typescript/packages/engine/**", "sdk/typescript/packages/client/**"]
+verify_cmd = "cargo test -p hm-mcp --test meaning && npm --prefix sdk/typescript test"
+do_1 = "recall exposes modes semantic, lexical, entity, temporal and near with filters; remember accepts anchor, retention and sensitivity; the query is embedded once per activate through the configured embedder, never a document; activate accepts a precomputed query embedding as the Go client does."
+do_2 = "TypeScript engine and client expose the same modes and fields; the health and gaps fields are typed."
+
+[task.4.6]
+title = "Semantic recall at scale, latency at 100k, LongMemEval baseline"
+status = "pending"
+wave = 4
+owner_lane = "eval"
+requires = ["4.5"]
+reqs = ["15.1", "15.3", "6.3", "7.3"]
+touches = ["crates/hm-eval/src/suites/recall.rs", "crates/hm-eval/src/suites/latency.rs", "crates/hm-eval/src/bench/longmemeval.rs", "eval/datasets/README.md", "docs/evaluation/methodology.md"]
+verify_cmd = "cargo run -p hm-eval -- gate slice4"
+do_1 = "recall@k and MRR with the local encoder at 1k, 10k and 100k seeded stores; activate p50 and p99 cold and warm at 10k and 100k; a run with the hash baseline labelled lexical_only."
+do_2 = "LongMemEval runner with a pinned judge and content-hash response cache; baseline run without consolidation recorded in eval/results as the wave 4 number."
+
+[task.4.7]
+title = "Slice 4 journey: 10k ingest, entity and paraphrase recall, deadline miss then fresh bundle"
+status = "pending"
+wave = 4
+owner_lane = "integration"
+requires = ["4.1", "4.2", "4.3", "4.4", "4.5", "4.6"]
+reqs = ["1.1", "6.1", "6.2", "7.3"]
+touches = ["crates/hm-sim/tests/slice4_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test slice4_journey"
+do_1 = "Journey: ingest 10k events with the local embedder, recall a path through the entity lane and a paraphrase through the vector lane, saturate the actor with load so activate misses its deadline, receive the stale bundle marked degraded with the miss in gaps, receive the fresh bundle by subscription, gate slice4 green."
+
+[task.5.1]
+title = "Belief events, tri-temporal envelope, byte-offset provenance, admission gate"
+status = "pending"
+wave = 5
+section = "Wave 5 — Belief and time: bitemporal beliefs, adjudication, a protected self"
+owner_lane = "schema"
+requires = ["4.7"]
+reqs = ["8.1", "8.2"]
+touches = ["schemas/events.fbs", "schemas/protocol.fbs", "crates/hm-schema/**", "crates/hm-ledger/src/gate.rs", "crates/hm-ledger/tests/gate.rs"]
+verify_cmd = "cargo test -p hm-schema && cargo test -p hm-ledger --test gate"
+do_1 = "Enable Assertion, Consolidation, Retract and add ProposedAssertion; event_time_ns on the envelope; byte_start and byte_end on ProvenanceRange; protocol adds AsOf with valid_time_ns or known_lsn and BeliefResult with version, supersedes_version, provenance and conflict edges."
+do_2 = "Port belief_gate: negative_existence requires a tool_observed LSN inside its provenance or kNegativeExistenceUncorroborated; same-type same-domain different-identity live beliefs are listed as conflicts; AdmitBatch probes the socket batch before commit and returns typed rejections; apply-time rejections are deterministic skips."
+
+[task.5.2]
+title = "Belief store, temporal ladder, protected types"
+status = "pending"
+wave = 5
+owner_lane = "projections"
+requires = ["5.1"]
+reqs = ["5.1", "8.1", "8.2"]
+touches = ["crates/hm-proj/src/beliefs.rs", "crates/hm-proj/src/ladder.rs", "crates/hm-proj/src/protected.rs", "crates/hm-proj/tests/beliefs.rs", "crates/hm-proj/tests/ladder.rs"]
+verify_cmd = "cargo test -p hm-proj --test beliefs && cargo test -p hm-proj --test ladder"
+do_1 = "Port belief_store.cc: head, version, belief id, domain member, conflict edge and tool marker keys; ReadAsOf walks the supersedes chain by known_lsn and valid time and reports which axis it used; ReadHeads; conflict edges obligated until resolved; pending proposals readable."
+do_2 = "Protected types: Assertion or Retract for identity, constraint or preference from any run authority is kProtectedTypeWrite and emits a security event; ProposedAssertion is stored under the head as pending until a user or admin event accepts or rejects it."
+do_3 = "Port temporal_ladder: minute, hour, day, week windows as bitmaps; ListWindows, OpenWindow, ResolveMembers."
+
+[task.5.3]
+title = "Minimal LLM provider trait and the adjudication ladder with in-process NLI"
+status = "pending"
+wave = 5
+owner_lane = "cognition"
+requires = ["5.2"]
+reqs = ["8.3", "17.2"]
+touches = ["crates/hm-llm/src/lib.rs", "crates/hm-llm/src/anthropic.rs", "crates/hm-llm/src/openai_compat.rs", "crates/hm-llm/src/ollama.rs", "crates/hm-llm/tests/**", "crates/hm-cortex/src/adjudicate.rs", "crates/hm-cortex/src/nli.rs", "crates/hm-cortex/tests/adjudicate.rs", "prompts/supersession@1.md"]
+verify_cmd = "cargo test -p hm-llm && cargo test -p hm-cortex --test adjudicate"
+do_1 = "LlmProvider trait with generate_structured against a JSON schema, model id, tier, usage accounting; Anthropic Messages native with prompt caching, OpenAI-compatible, Ollama; recorded wire fixtures for tests."
+do_2 = "NLI through ort with nli-deberta-v3-small in both directions; verdict genuine, tension, complementary or unrelated; genuine escalates to one supersession call under prompt supersession@1; models below tier cannot declare genuine under 0.8; the result is a Retract plus Assertion or a conflict edge with obligated surfacing; no provider configured records an unverified tension."
+
+[task.5.4]
+title = "Resident, conflicts and temporal tiers; asof and timeline recall modes"
+status = "pending"
+wave = 5
+owner_lane = "compose"
+requires = ["5.2"]
+reqs = ["7.1", "6.3"]
+touches = ["crates/hm-compose/src/tiers/resident.rs", "crates/hm-compose/src/tiers/conflicts.rs", "crates/hm-compose/src/tiers/temporal.rs", "crates/hm-compose/src/lanes/belief.rs", "crates/hm-compose/tests/belief.rs"]
+verify_cmd = "cargo test -p hm-compose"
+do_1 = "Resident tier from live identity, constraint, preference and goal heads excluding structural-self and failure domains; conflicts tier from beliefs whose provenance surfaced with unresolved obligated edges plus the counterpart via as-of, and pending protected-type proposals; temporal tier from week windows."
+do_2 = "recall asof takes valid_at or known_at and reports which; timeline mode descends the ladder."
+
+[task.5.5]
+title = "AsOf request; MCP believe, retract, dispute; typed belief API in SDKs"
+status = "pending"
+wave = 5
+owner_lane = "surface"
+requires = ["5.3", "5.4"]
+reqs = ["13.2", "14.2"]
+touches = ["crates/hm-serve/src/requests/asof.rs", "crates/hm-mcp/src/tools/believe.rs", "crates/hm-mcp/src/tools/retract.rs", "crates/hm-mcp/src/tools/dispute.rs", "crates/hm-mcp/tests/belief.rs", "sdk/typescript/packages/engine/**", "sdk/typescript/packages/client/**"]
+verify_cmd = "cargo test -p hm-mcp --test belief && npm --prefix sdk/typescript test"
+do_1 = "believe writes a typed bitemporal assertion and returns gate rejections with effect_state rejected; retract tombstones; dispute adjudicates two claims and returns verdict, suggested action and any resulting events; a protected-type write from a run authority returns kProtectedTypeWrite."
+
+[task.5.6]
+title = "Temporal suite, stale-fact rate, protected-type suite"
+status = "pending"
+wave = 5
+owner_lane = "eval"
+requires = ["5.5"]
+reqs = ["15.1", "8.1", "8.2"]
+touches = ["crates/hm-eval/src/suites/temporal.rs", "crates/hm-eval/src/suites/protected.rs", "eval/fixtures/temporal/**", "docs/concepts/time.md"]
+verify_cmd = "cargo run -p hm-eval -- gate slice5"
+do_1 = "Temporal suite: scripted supersessions with validity intervals; as-of by valid_at and by known_at must differ where scripted; a bundle that states a superseded fact as current counts as a stale fact; gate is zero."
+do_2 = "Protected-type suite: every run-authority write to identity, constraint or preference is rejected and a proposal appears in the conflicts tier."
+
+[task.5.7]
+title = "Slice 5 journey: assert, supersede, asof both axes, dispute, protected write becomes proposal"
+status = "pending"
+wave = 5
+owner_lane = "integration"
+requires = ["5.1", "5.2", "5.3", "5.4", "5.5", "5.6"]
+reqs = ["1.1", "8.1", "8.2", "8.3"]
+touches = ["crates/hm-sim/tests/slice5_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test slice5_journey"
+do_1 = "Journey: believe a fact, believe its replacement with a later valid_from, recall asof by valid_at and by known_at and receive different answers, dispute two claims through the in-process NLI, attempt an identity write with run authority and observe rejection plus a proposal in the conflicts tier, gate slice5 green."
+
+[task.6.1]
+title = "Full provider set, prompt registry with snapshot tests, structured outputs, cost accounting"
+status = "pending"
+wave = 6
+section = "Wave 6 — Sleep: consolidation as retractable generations with byte-range citations"
+owner_lane = "cognition"
+requires = ["5.7"]
+reqs = ["9.3", "17.2"]
+touches = ["crates/hm-llm/src/gemini.rs", "crates/hm-llm/src/registry.rs", "crates/hm-llm/src/cost.rs", "crates/hm-llm/tests/**", "prompts/**"]
+verify_cmd = "cargo test -p hm-llm"
+do_1 = "Gemini provider; prompt registry loading prompts/<id>@<version>.md with snapshot tests that fail on wording changes without a version bump; ported cortex-engine prompts refine-definition, edge-discover, abstract-synthesis, hindsight-review rewritten for citations and structured output."
+do_2 = "Cost accounting per call and per run in calls, tokens and USD from a pinned price table; usage recorded on every LLM-derived event's model_provenance."
+
+[task.6.2]
+title = "Memory, edge and consolidation events; run_id and model_provenance on the envelope"
+status = "pending"
+wave = 6
+owner_lane = "schema"
+requires = ["5.7"]
+reqs = ["9.1", "5.2"]
+touches = ["schemas/events.fbs", "crates/hm-schema/**"]
+verify_cmd = "cargo test -p hm-schema"
+do_1 = "Add MemoryMinted, MemoryRevised, MemoryMerged, MemoryFaded, EdgeAsserted, EdgeRetracted, ConsolidationOpened, ConsolidationPhase, ConsolidationClosed, ConsolidationRetracted, Reviewed; VerifyEvent requires run_id and model_provenance on every LLM-derived kind and citations with byte ranges on minted and revised memories and asserted edges."
+
+[task.6.3]
+title = "Memories, graph and fsrs projections; runs, active_generation, leases, retraction override"
+status = "pending"
+wave = 6
+owner_lane = "projections"
+requires = ["6.2"]
+reqs = ["5.2", "5.3", "10.3"]
+touches = ["crates/hm-proj/src/memories.rs", "crates/hm-proj/src/graph.rs", "crates/hm-proj/src/fsrs.rs", "crates/hm-proj/src/runs.rs", "crates/hm-proj/src/generation.rs", "crates/hm-proj/src/lease.rs", "crates/hm-proj/tests/generations.rs"]
+verify_cmd = "cargo test -p hm-proj --test generations"
+do_1 = "Memories projection with version chains and faded state; graph as adjacency bitmaps with relation, weight, evidence LSNs and validity; fsrs state per memory."
+do_2 = "Runs projection and generations: staged records under run_id are invisible until publish; publish is a compare-and-swap on active_generation refusing when any staged record lacks a projection; lease(generation, seconds) pins a read view; retractions apply to every generation including leased; retract switches the pointer back and schedules cleanup. Test: two leased readers see different derived content simultaneously; a lost publish ack resumes to exactly one published generation."
+
+[task.6.4]
+title = "NREM: clustering, merge and mint with citation validation, independence rule, quality classifiers"
+status = "pending"
+wave = 6
+owner_lane = "cognition"
+requires = ["6.1", "6.3"]
+reqs = ["9.1", "9.2", "4.1"]
+touches = ["crates/hm-cortex/src/nrem/cluster.rs", "crates/hm-cortex/src/nrem/merge.rs", "crates/hm-cortex/src/citations.rs", "crates/hm-cortex/src/quality.rs", "crates/hm-cortex/tests/nrem.rs", "prompts/merge-cluster@1.md"]
+verify_cmd = "cargo test -p hm-cortex --test nrem"
+do_1 = "Cluster pending observations by embedding and entity overlap without an LLM, sampled by salience and recency, never by key order; one structured-output call per cluster under merge-cluster@1 returning attach, revise or mint with name, definition, tags, salience and citations."
+do_2 = "Citation validator: every quoted span must be a substring of a cited byte range inside the frozen candidate set or the candidate is dropped and counted as citation_invalid; derived authority through derive_authority; mint requires at least three independent source roots from at least two conversations; a speculation-typed source poisons the candidate."
+do_3 = "Port thought-quality and rewrite-guard as classifiers with logged decisions and measured precision on the dream fixture."
+
+[task.6.5]
+title = "REM: connect, abstract, hindsight, FSRS review with protection sets; phase machine, budgets, retract"
+status = "pending"
+wave = 6
+owner_lane = "cognition"
+requires = ["6.4"]
+reqs = ["9.1", "9.3", "10.1", "10.2", "10.3"]
+touches = ["crates/hm-cortex/src/rem/connect.rs", "crates/hm-cortex/src/rem/abstract.rs", "crates/hm-cortex/src/rem/hindsight.rs", "crates/hm-cortex/src/review.rs", "crates/hm-cortex/src/fsrs.rs", "crates/hm-cortex/src/run.rs", "crates/hm-cortex/src/budget.rs", "crates/hm-cortex/tests/rem.rs", "prompts/connect-long-context@1.md", "prompts/abstract-synthesis@2.md", "prompts/hindsight-review@3.md"]
+verify_cmd = "cargo test -p hm-cortex --test rem"
+do_1 = "Connect from cluster adjacency and entity co-occurrence with one long-context pass; edges carry evidence LSNs, validity and weight from evidence count. Abstract across tags with a novelty gate against store and run and a grounding floor. Hindsight defaults to no change, requires a cited neighbour or belief history, and runs the rewrite guard."
+do_2 = "FSRS-6 ported from cortex-engine with ratings from attestations, retrieval rank and contradiction involvement; dreams do not count as access; retention class and the protection set (open loops, active bindings, unfulfilled intentions, resident beliefs, last N bundles) decide eligibility; the last K contradicted outcomes per domain are kept; fading is a MemoryFaded event."
+do_3 = "Run phase machine persisted as ConsolidationPhase events with a per-attempt idempotency prefix; a crashed run resumes; runs are keyed by hash of scope, cadence key and generation; budgets max_llm_calls, max_tokens, max_usd, max_wall_ms abort a phase cleanly; retract appends ConsolidationRetracted and switches the pointer; a read-only due() decides cadence by the actor's IANA time zone."
+
+[task.6.6]
+title = "Graph lane; attest closes the loop; MCP consolidate and attest; CLI consolidate"
+status = "pending"
+wave = 6
+owner_lane = "surface"
+requires = ["6.5"]
+reqs = ["6.1", "13.2", "13.3", "10.1"]
+touches = ["crates/hm-compose/src/lanes/graph.rs", "crates/hm-serve/src/requests/attest.rs", "crates/hm-mcp/src/tools/consolidate.rs", "crates/hm-mcp/src/tools/attest.rs", "crates/hm-mcp/tests/sleep.rs", "crates/hm-cli/src/consolidate.rs", "sdk/typescript/packages/engine/**"]
+verify_cmd = "cargo test -p hm-mcp --test sleep && cargo test -p hm-cli"
+do_1 = "Graph lane: one to two hops over validated edges with validity intervals, query-conditioned, at most 200 visited nodes; joins fusion."
+do_2 = "Attest accepts used, ignored, helpful and harmful on provenance URIs and writes Attestation events that the review phase reads; the RetrievalManifest used stage is populated from them."
+do_3 = "MCP consolidate runs NREM or REM or both with a budget, lists runs with cost and stats, retracts a run; hm consolidate run, list, retract; the TypeScript engine exposes the same."
+
+[task.6.7]
+title = "Dream regression, citation validity, publish and rollback suites; LongMemEval at 80"
+status = "pending"
+wave = 6
+owner_lane = "eval"
+requires = ["6.6"]
+reqs = ["15.1", "9.2", "9.3", "5.2"]
+touches = ["crates/hm-eval/src/suites/dream.rs", "crates/hm-eval/src/suites/citations.rs", "crates/hm-eval/src/suites/generations.rs", "eval/fixtures/dream/**", "docs/concepts/consolidation.md", "docs/internals/generations.md"]
+verify_cmd = "cargo run -p hm-eval -- gate slice6"
+do_1 = "Dream regression fixture built from the cortex-engine changelog incidents: numbers, quotations, first person, named entities and hedges; a consolidation run must preserve all of them, produce no duplicate abstractions above the measured threshold, and mint nothing without three roots; zero lossy rewrites is the gate."
+do_2 = "Citation validity reports drop rate; the generations suite kills the daemon between stage and publish and after a lost ack and asserts exactly one published generation; LongMemEval with consolidation enabled at least 80 percent."
+
+[task.6.8]
+title = "Slice 6 journey: consolidate as a generation, cited mint, retract, instant switch back, idempotent rerun"
+status = "pending"
+wave = 6
+owner_lane = "integration"
+requires = ["6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7"]
+reqs = ["1.1", "9.1", "9.2", "9.3", "5.2"]
+touches = ["crates/hm-sim/tests/slice6_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test slice6_journey"
+do_1 = "Journey: remember twenty observations across two conversations, run consolidate with a budget against a fixture provider, observe a minted memory whose citations resolve to byte ranges, activate and see it in fused, retract the run and observe activation without it on the next call, rerun and receive the identical run id and result, gate slice6 green."
+
+[task.7.1]
+title = "Intention, attention, prediction and procedure events and projections"
+status = "pending"
+wave = 7
+section = "Wave 7 — Anticipation: wake triggers, attention, predictions, procedures"
+owner_lane = "projections"
+requires = ["6.8"]
+reqs = ["11.1", "12.1", "12.2", "5.3"]
+touches = ["schemas/events.fbs", "crates/hm-schema/**", "crates/hm-proj/src/intentions.rs", "crates/hm-proj/src/attention.rs", "crates/hm-proj/src/predictions.rs", "crates/hm-proj/src/procedures.rs", "crates/hm-proj/tests/anticipation.rs"]
+verify_cmd = "cargo test -p hm-schema && cargo test -p hm-proj --test anticipation"
+do_1 = "Add IntentionSet with the WakeTrigger union, IntentionFired with wake id, AttentionDecided, IntentionCancelled, Predicted with bounded predicates and deadline, OutcomeObserved with five assessment states, ProcedureMined, ProcedureRevised, ProcedureAdopted."
+do_2 = "Projections: intentions with a condition index by trigger kind; attention history bounded per actor with reasons; predictions with calibration counters per predicate kind; procedures with state, independent source roots, counterexamples."
+
+[task.7.2]
+title = "Wake evaluation, attention scorer, prediction assessment, procedural mining and ladder"
+status = "pending"
+wave = 7
+owner_lane = "cognition"
+requires = ["7.1"]
+reqs = ["11.1", "11.2", "12.1", "12.2", "12.3"]
+touches = ["crates/hm-cortex/src/prospective.rs", "crates/hm-cortex/src/attention.rs", "crates/hm-cortex/src/predict.rs", "crates/hm-cortex/src/procedures.rs", "crates/hm-cortex/tests/anticipation.rs"]
+verify_cmd = "cargo test -p hm-cortex --test anticipation"
+do_1 = "Evaluate wake triggers against new events and external condition feeds; emit IntentionFired with a stable wake id; score with urgency, expected value, confidence, interruption cost, resource cost and duplication penalty, apply quiet hours, notification budget and workload, record AttentionDecided with a reason."
+do_2 = "Assess predictions against observation LSNs only into the five states; update calibration per predicate kind; emit a revision_required gap after three same-mechanism failures with the bounded revision and probe counts; the model cannot redefine success after results."
+do_3 = "Mine procedures from ToolCall to ToolResult to Effect to Outcome chains per closed loop; advance tentative to supported at three independent source roots from two conversations; adopted only by a user-authority event."
+
+[task.7.3]
+title = "Prospective tier, procedure rendering by state, reconstruct mode, optional reranker"
+status = "pending"
+wave = 7
+owner_lane = "compose"
+requires = ["7.2"]
+reqs = ["7.1", "6.3", "4.3"]
+touches = ["crates/hm-compose/src/tiers/prospective.rs", "crates/hm-compose/src/procedures.rs", "crates/hm-compose/src/reconstruct.rs", "crates/hm-compose/src/rerank.rs", "crates/hm-compose/tests/anticipation.rs", "sdk/typescript/packages/render/**", "prompts/reconstruct@1.md"]
+verify_cmd = "cargo test -p hm-compose && npm --prefix sdk/typescript test"
+do_1 = "Prospective tier admits only notify, ask_user and start_work decisions; batch decisions render as one digest item; adopted procedures render as instructions, tentative as observations."
+do_2 = "recall mode reconstruct narrates between anchors with prompt reconstruct@1, labelled RECONSTRUCTION with assistant_generated; the renderers and SDKs refuse to remember such output verbatim; optional cross-encoder rerank of the top 32 through ort behind a per-deployment flag that hm-eval must justify."
+
+[task.7.4]
+title = "HNSW lane above 50k with recall parity"
+status = "pending"
+wave = 7
+owner_lane = "index"
+requires = ["6.8"]
+reqs = ["6.1"]
+touches = ["crates/hm-index/src/hnsw.rs", "crates/hm-proj/src/vectors_hnsw.rs", "crates/hm-index/tests/hnsw_parity.rs"]
+verify_cmd = "cargo test -p hm-index --features hnsw"
+do_1 = "usearch behind the hnsw feature as a checkpointed projection selected automatically above 50k vectors per space; parity test against the flat lane reports recall@10 and is a gate at 0.98; the flat lane stays the default and the deterministic reference."
+
+[task.7.5]
+title = "MCP predict and outcome; intend with wake triggers; recall reconstruct; attention history via inspect"
+status = "pending"
+wave = 7
+owner_lane = "surface"
+requires = ["7.3", "7.4"]
+reqs = ["13.2", "14.2", "11.3"]
+touches = ["crates/hm-mcp/src/tools/predict.rs", "crates/hm-mcp/src/tools/outcome.rs", "crates/hm-mcp/src/tools/intend.rs", "crates/hm-mcp/src/tools/inspect.rs", "crates/hm-mcp/tests/anticipation.rs", "sdk/typescript/packages/engine/**", "sdk/typescript/packages/client/**"]
+verify_cmd = "cargo test -p hm-mcp --test anticipation && npm --prefix sdk/typescript test"
+do_1 = "predict registers a prediction with predicates and a deadline; outcome records an assessment citing observation LSNs; intend accepts the wake-trigger vocabulary and cancels intentions; inspect exposes attention history with reasons and prediction calibration; the TypeScript SDK mirrors all of it."
+
+[task.7.6]
+title = "Attention precision, calibration, HNSW parity; LongMemEval at 90 and LoCoMo at 75"
+status = "pending"
+wave = 7
+owner_lane = "eval"
+requires = ["7.5"]
+reqs = ["15.1", "15.2", "11.3", "12.1"]
+touches = ["crates/hm-eval/src/suites/attention.rs", "crates/hm-eval/src/suites/calibration.rs", "crates/hm-eval/src/bench/locomo.rs", "eval/fixtures/attention/**", "docs/concepts/anticipation.md"]
+verify_cmd = "cargo run -p hm-eval -- gate slice7"
+do_1 = "Labelled interruption set with quiet-hour and duplicate cases; suppression precision at least 0.9; calibration report per predicate kind; LoCoMo runner with pinned judge; LongMemEval at least 90 percent and LoCoMo at least 75 percent F1 recorded."
+
+[task.7.7]
+title = "Slice 7 journey: intention on repository change, batched under quiet hours, contradicted prediction, procedure earns support"
+status = "pending"
+wave = 7
+owner_lane = "integration"
+requires = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6"]
+reqs = ["1.1", "11.1", "11.2", "12.1", "12.2"]
+touches = ["crates/hm-sim/tests/slice7_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test slice7_journey"
+do_1 = "Journey: intend with a repository_changed trigger, feed the change during quiet hours and observe AttentionDecided batch with a reason and a digest item in the next bundle, predict a revision-equals predicate and record a contradicted outcome, close three loops in two conversations with the same tool chain and observe the procedure move to supported and render as an observation, gate slice7 green."
+
+[task.8.1]
+title = "gRPC over mTLS with streaming Subscribe; REST with OpenAPI; protocol v3 frozen"
+status = "pending"
+wave = 8
+section = "Wave 8 — Reach: gRPC, REST, Python, Go, migration, docs, benchmarks, release"
+owner_lane = "surface"
+requires = ["7.7"]
+reqs = ["13.1", "13.2", "17.1"]
+touches = ["crates/hm-serve/src/grpc/**", "crates/hm-serve/src/rest/**", "schemas/hypermind.proto", "schemas/openapi.yaml", "crates/hm-serve/tests/remote.rs"]
+verify_cmd = "cargo test -p hm-serve --test remote"
+do_1 = "tonic service carrying the NCPR envelope bytes with mTLS and capability tokens, streaming Subscribe; axum REST mirror of the thirteen verbs with utoipa OpenAPI, admin token gating destructive verbs; protocol v3 frozen and documented."
+
+[task.8.2]
+title = "Python SDK, Go client extension, TypeScript client over gRPC"
+status = "pending"
+wave = 8
+owner_lane = "sdk"
+requires = ["8.1"]
+reqs = ["14.1", "14.2"]
+touches = ["sdk/python/**", "sdk/go/**", "sdk/typescript/packages/client/**"]
+verify_cmd = "python -m pytest sdk/python/tests -q && go test ./sdk/go/... && npm --prefix sdk/typescript test"
+do_1 = "hypermind Python package through PyO3 and maturin wheels with the embedded API, plus hypermind-client over gRPC, async-first; Go client imported from cortexclient with Recall, AsOf, Subscribe, CryptoDelete and Attest builders added and its sequence tests run against the new daemon; TypeScript client gains the gRPC transport."
+
+[task.8.3]
+title = "migrate-from-cortex importer with verification"
+status = "pending"
+wave = 8
+owner_lane = "sdk"
+requires = ["8.1"]
+reqs = ["14.3"]
+touches = ["sdk/typescript/packages/migrate/**", "crates/hm-cli/src/import.rs", "eval/fixtures/cortex-store/**"]
+verify_cmd = "npm --prefix sdk/typescript test && cargo test -p hm-cli --test import"
+do_1 = "Read a cortex-engine SQLite or JSON store; emit events preserving ids: observations as UserMsg or DeliveredMsg with user_asserted or assistant_generated, memories as MemoryMinted with derived_inference and provenance to their observations, edges as EdgeAsserted, beliefs as Assertion with validity, FSRS state as Reviewed; verify counts and a sample of embeddings at float32 precision; hm import consumes JSON lines."
+
+[task.8.4]
+title = "CLI completion, TUI, packaging, model download, doctor"
+status = "pending"
+wave = 8
+owner_lane = "surface"
+requires = ["8.1"]
+reqs = ["13.3", "16.2"]
+touches = ["crates/hm-cli/**", "deploy/**", "models/**"]
+verify_cmd = "cargo test -p hm-cli && docker build -f deploy/Dockerfile ."
+do_1 = "hm actor add, list, rotate-keys, shred; bench; export and import; tui with a live activation viewer; distroless static image, compose, systemd unit, Helm chart; model download with pinned digests on first run; doctor reports models, sockets, keys and index health."
+
+[task.8.5]
+title = "Docs site: start, concepts, guides, reference, internals, evaluation, security, ADRs"
+status = "pending"
+wave = 8
+owner_lane = "docs"
+requires = ["8.2", "8.3", "8.4"]
+reqs = ["16.1"]
+touches = ["docs/**", "README.md"]
+verify_cmd = "mdbook build docs && cargo run -p hm-eval -- docs-gate"
+do_1 = "Complete the mdBook: start here with two-command MCP setup, concepts, guides including migration and deployment, reference with schematics finished from the frozen schema, protocol v3, MCP, CLI, config, prompts and SDK APIs generated, internals, evaluation methodology and numbers, threat model, ADR-001 to ADR-010; every public type and tool carries when-to-use and do-not-use; the docs gate checks every tool and type is documented."
+
+[task.8.6]
+title = "Full benchmark run, determinism across architectures, cost report, release qualification"
+status = "pending"
+wave = 8
+owner_lane = "eval"
+requires = ["8.2", "8.3", "8.4"]
+reqs = ["15.1", "15.2", "15.3"]
+touches = ["crates/hm-eval/src/suites/determinism.rs", "crates/hm-eval/src/suites/cost.rs", "crates/hm-eval/src/bench/beam.rs", "eval/results/v1.0.0/**", "docs/evaluation/results.md", ".github/workflows/release.yml"]
+verify_cmd = "cargo run -p hm-eval -- gate release"
+do_1 = "Run every suite and benchmark on x86-64 and aarch64, assert identical bundle hashes, publish eval/results/v1.0.0 with judge-free and judged metrics separate and encoder identity on every row; cost per 1k turns and per run; release workflow builds reproducible binaries, wheels and prebuilds and attaches the results."
+
+[task.8.7]
+title = "Slice 8 journey: every earlier journey over gRPC from Python and Go, migration verified, v1.0.0"
+status = "pending"
+wave = 8
+owner_lane = "integration"
+requires = ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6"]
+reqs = ["1.1", "14.1", "14.3", "15.2", "16.1"]
+touches = ["crates/hm-sim/tests/slice8_journey.rs", "CHANGELOG.md"]
+verify_cmd = "cargo test -p hm-sim --test slice8_journey && cargo run -p hm-eval -- gate release"
+do_1 = "Journey: run the slice 1 to 7 journeys through the Python and Go clients over gRPC against a TLS daemon, migrate the cortex-engine fixture store and verify counts, build the docs, run the release gate, tag v1.0.0 with the changelog."

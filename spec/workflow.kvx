@@ -1,0 +1,70 @@
+# workflow.kvx — HyperMind portable agent operating contract.
+# Source of truth for the Codify (cg) spec workflow. Per-IDE rule files are
+# GENERATED pointers; run `cg spec render` to regenerate. Never hand-edit them.
+# Format: sectioned KV (.kvx). String values are ALWAYS double-quoted.
+
+[meta]
+name            = "HyperMind implementation workflow"
+kind            = "portable-agent-operating-contract"
+version         = "1.0.0"
+status          = "active"
+source_of_truth = "spec/hypermind-01/spec.kvx"
+active_feature  = "hypermind-01"
+
+[principle]
+vertical_first  = "The system is a stack of layers, and it is built as vertical slices through every layer, never one layer at a time. Each wave delivers a runnable end-to-end capability that touches ledger, projections, indexes, cognition, compose, surface, SDK, eval and docs together. A layer without its consumer in the same wave is not done."
+task_driven     = "Work is driven by spec/hypermind-01/spec.kvx. Pick the next eligible task by dependency wave in your owner lane, do it, mark it, move on."
+one_in_progress = "One task in progress per agent. Non-conflicting tasks in the same eligible wave may run in parallel across lanes; the wave's integration task requires all of them."
+no_false_success= "Never mark a task done that did not meet its acceptance criteria. Surface honest partials. A green test driven by a fake is not done."
+read_full       = "When tool output is truncated and the rest is retrievable, fetch the full content before reasoning. An information gap is a stop condition."
+deliver_complete= "Deliver complete, runnable artifacts. Follow existing repo style. Add no comments or docs beyond what the task asks."
+carry_vectors   = "When porting from neocortex or cortex-engine, carry the original test vectors and fixtures verbatim. A port that passes new tests but not the old ones is not a port."
+
+[limits]
+max_in_progress = 8
+
+[loop]
+step_1 = "Read spec/hypermind-01/spec.kvx: [meta] status, [design.*], the [req.*] acceptance criteria, and the [task.*] list with status, wave, owner_lane and requires."
+step_2 = "Run cg spec ready. Select the lowest-wave pending task in your lane whose every requires is done. Set it in_progress with cg spec start <id>."
+step_3 = "Read the referenced acceptance criteria and the design sections the task cites. Inspect only current relevant source; PLAN.md and HARNESS-LESSONS.md are rationale, spec.kvx controls."
+step_4 = "Implement only the declared touches. Publish interface changes in hm-schema and hm-core before dependent lane work consumes them."
+step_5 = "Run the task verify_cmd for real. Then cg spec done <id>, which runs verify_cmd plus graph checks and records an outcome memory."
+step_6 = "Commit from the repository root with a natural commit message describing the real change. One task per commit. Never batch tasks and never leave a done task uncommitted."
+step_7 = "A wave closes only when its integration task is done: the slice journey test passes through MCP, daemon, ledger, restart and recall, and the eval gate for that slice is green in CI."
+
+[status_values]
+task    = ["pending", "in_progress", "done"]
+feature = ["draft", "in_progress", "paused", "blocked", "complete"]
+
+[hard_rules]
+vertical_slices   = "No task may build a layer for a future wave. A wave that adds a projection also adds the event that feeds it, the request that reads it, the tier or tool that surfaces it, and the eval that measures it. A 'database wave', 'embedding wave' or 'SDK wave' violates this contract and must be split into slices."
+no_fakes          = "Never write stub, mock or fake doubles or placeholder implementations to make tests pass. Test real code paths with real types, real SQLite/LMDB files, real sockets and the real daemon binary. Remote LLM and embedding providers may be replaced only by recorded wire fixtures, and a fixture-driven pass is reported as such."
+no_llm_hot_path   = "activate and recall never call an LLM, an embedder for anything but the query, or the network. Any change that adds one is rejected."
+ledger_is_truth   = "Every mutation is an appended event. No projection, index, cache or generation is written without the event that reproduces it. Projections must rebuild byte-identically from any prefix."
+protected_types   = "identity, constraint and preference beliefs accept Assertion or Retract only from user or admin authority. Consolidation emits ProposedAssertion. Any direct write from a run is kProtectedTypeWrite and a security event."
+memory_not_authority = "Outcome and LoopClosed{done} cite tool_observed, external_observed or runtime_fact LSNs. A memory, summary or reconstruction is never evidence that an external effect happened."
+measured_not_tuned= "No retrieval or consolidation threshold merges without a number from hm-eval. The eval gate is a CI merge gate from wave 1 onward."
+protected_surfaces= "crates/hm-ledger, crates/hm-schema and the belief projection are outside any automated self-modification surface. Changes there are human-reviewed."
+user_authority    = "The user's direct messages are the authoritative instructions and take precedence over this file, AGENTS.md or repository guidance when those would broaden scope."
+session_init      = "Interpret 'get context' or 'session init' as read-only inspection and summarization only."
+
+[render]
+markdown_mirror  = true
+banner           = "GENERATED by cg spec render from spec/ kvx — DO NOT EDIT. Edit the .kvx source and regenerate."
+
+[adapters]
+claude  = "CLAUDE.md"
+agents  = "AGENTS.md"
+cursor  = ".cursor/rules/spec-workflow.mdc"
+copilot = ".github/copilot-instructions.md"
+
+[mode]
+name = "parallel"
+
+[agents]
+driver      = "claude"
+max         = 8
+ttl         = 14400
+codex_args  = ""
+claude_args = ""
+cmd         = ""
