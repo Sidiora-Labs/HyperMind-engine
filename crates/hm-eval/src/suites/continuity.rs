@@ -87,20 +87,30 @@ async fn run_trial(trial: u8) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let actor = ActorEngine::open(config(&actor_directory, trial)).await?;
+    let next_sequence = actor
+        .next_client_sequence([trial.wrapping_add(1); 16])
+        .await?;
+    let committed_steps = usize::try_from(next_sequence.saturating_sub(1))?;
+    if !(kill_after..=usize::from(TURN_STEPS)).contains(&committed_steps) {
+        return Err(format!(
+            "restart found {committed_steps} committed steps after boundary {kill_after}"
+        )
+        .into());
+    }
     for (index, events) in scripted_turn(trial)
         .into_iter()
         .enumerate()
-        .skip(kill_after - 1)
+        .skip(committed_steps - 1)
     {
         let client_seq = u64::try_from(index + 1)?;
         let outcome = actor
             .append_idempotent([trial.wrapping_add(1); 16], client_seq, events)
             .await?;
-        if outcome.duplicate != (index + 1 == kill_after) {
+        if outcome.duplicate != (index + 1 == committed_steps) {
             return Err(format!(
                 "step {client_seq} duplicate={}, expected {}",
                 outcome.duplicate,
-                index + 1 == kill_after
+                index + 1 == committed_steps
             )
             .into());
         }
