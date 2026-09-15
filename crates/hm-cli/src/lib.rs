@@ -351,7 +351,8 @@ async fn activate(
                 "tier": format!("{:?}", section.tier).to_lowercase(),
                 "items": section.items.iter().map(|item| json!({
                     "role": item.role,
-                    "authority": "untrusted_memory",
+                    "authority": authority_name(item.source_authority),
+                    "trust": "untrusted_memory",
                     "uri": item.provenance_uri,
                     "content": item.content,
                 })).collect::<Vec<_>>(),
@@ -524,4 +525,15 @@ fn hex(bytes: &[u8]) -> String {
         let _ = write!(output, "{byte:02x}");
     }
     output
+}
+
+const fn authority_name(authority: Authority) -> &'static str {
+    match authority {
+        Authority::UserAsserted => "user_asserted",
+        Authority::ExternalObserved => "external_observed",
+        Authority::ToolObserved => "tool_observed",
+        Authority::RuntimeFact => "runtime_fact",
+        Authority::AssistantGenerated => "assistant_generated",
+        Authority::DerivedInference => "derived_inference",
+    }
 }

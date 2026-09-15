@@ -11,7 +11,10 @@ use hm_ledger::idempotency::{
 use hm_ledger::keyring::{KeyEncryptionKey, KeyHierarchy, OsEntropy, UserId};
 use hm_ledger::mmr::Hash as MmrHash;
 use hm_ledger::mmr_store::{MmrStore, VerificationStatus};
+use hm_ledger::rotate::rotate_keys;
 use hm_ledger::segment::{AppendRequest, SegmentLog, SegmentLogOptions};
+use hm_ledger::shred::{crypto_shred, encode_deletion_receipt};
+use hm_ledger::tripwire::TripwireSet;
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
 };
@@ -60,6 +63,14 @@ pub struct AppendOutcome {
 pub struct CheckpointOutcome {
     pub lsn: LSN,
     pub duplicate: bool,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct IntegrityReceipt {
+    pub lsn: LSN,
+    pub leaf_hash: MmrHash,
+    pub root: MmrHash,
+    pub checkpoint_lsn: LSN,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -195,6 +206,11 @@ enum Command {
         oneshot::Sender<Result<ActivationBundle, Error>>,
     ),
     VerificationStatus(oneshot::Sender<Result<VerificationStatus, Error>>),
+    IntegrityAt(LSN, oneshot::Sender<Result<IntegrityReceipt, Error>>),
+    RebuildProjection(String, oneshot::Sender<Result<LSN, Error>>),
+    RotateKeys(KeyEncryptionKey, oneshot::Sender<Result<(), Error>>),
+    GuardTripwires(Vec<LSN>, oneshot::Sender<Result<(), Error>>),
+    CryptoDelete(oneshot::Sender<Result<Vec<u8>, Error>>),
     Stats(oneshot::Sender<Result<ActorStats, Error>>),
     Shutdown(oneshot::Sender<()>),
 }
@@ -206,19 +222,29 @@ struct WriterState {
     projections: ProjectionStore,
     plaintext_frames: Vec<Frame>,
     kinds: Vec<event::EventKind>,
+    authorities: Vec<Authority>,
     applied: AppliedState,
     dedup: DedupTable,
     last_wall_timestamp_ns: i64,
     events: broadcast::Sender<Frame>,
     mmr: MmrStore,
     signing_keys: SigningKeyPair,
+    tripwires: TripwireSet,
 }
 
 impl ActorEngine {
     pub async fn open(config: ActorConfig) -> Result<Self, Error> {
+        Self::open_with_tripwires(config, []).await
+    }
+
+    pub async fn open_with_tripwires(
+        config: ActorConfig,
+        tripwire_lsns: impl IntoIterator<Item = LSN>,
+    ) -> Result<Self, Error> {
         if config.actor.get() == 0 {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
+        let tripwires = TripwireSet::seeded(tripwire_lsns)?;
         let actor = config.actor;
         let (commands, receiver) = mpsc::channel(COMMAND_QUEUE);
         let (events, _) = broadcast::channel(COMMAND_QUEUE);
@@ -235,7 +261,7 @@ impl ActorEngine {
                     return;
                 };
                 runtime.block_on(async move {
-                    match WriterState::open(config, writer_events) {
+                    match WriterState::open(config, writer_events, tripwires) {
                         Ok(state) => {
                             let _ = initialized_tx.send(Ok(()));
                             writer_loop(state, receiver).await;
@@ -350,6 +376,29 @@ impl ActorEngine {
         request(&self.commands, Command::VerificationStatus).await
     }
 
+    pub async fn integrity_at(&self, lsn: LSN) -> Result<IntegrityReceipt, Error> {
+        request(&self.commands, |reply| Command::IntegrityAt(lsn, reply)).await
+    }
+
+    pub async fn rebuild_projection(&self, name: String) -> Result<LSN, Error> {
+        request(&self.commands, |reply| {
+            Command::RebuildProjection(name, reply)
+        })
+        .await
+    }
+
+    pub async fn rotate_keys(&self, new_kek: KeyEncryptionKey) -> Result<(), Error> {
+        request(&self.commands, |reply| Command::RotateKeys(new_kek, reply)).await
+    }
+
+    pub async fn guard_tripwires(&self, lsns: Vec<LSN>) -> Result<(), Error> {
+        request(&self.commands, |reply| Command::GuardTripwires(lsns, reply)).await
+    }
+
+    pub async fn crypto_delete(&self) -> Result<Vec<u8>, Error> {
+        request(&self.commands, Command::CryptoDelete).await
+    }
+
     pub async fn shutdown(self) -> Result<(), Error> {
         let (reply, response) = oneshot::channel();
         self.commands
@@ -421,6 +470,22 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
             Command::VerificationStatus(reply) => {
                 let _ = reply.send(Ok(state.mmr.verification_status()));
             }
+            Command::IntegrityAt(lsn, reply) => {
+                let _ = reply.send(state.integrity_at(lsn));
+            }
+            Command::RebuildProjection(name, reply) => {
+                let _ = reply.send(state.rebuild_projection(&name));
+            }
+            Command::RotateKeys(new_kek, reply) => {
+                let _ = reply.send(state.rotate_keys(new_kek));
+            }
+            Command::GuardTripwires(lsns, reply) => {
+                let _ = reply.send(state.tripwires.guard(lsns));
+            }
+            Command::CryptoDelete(reply) => {
+                let _ = reply.send(state.crypto_delete());
+                return;
+            }
             Command::Stats(reply) => {
                 let _ = reply.send(state.stats());
             }
@@ -434,7 +499,11 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
 }
 
 impl WriterState {
-    fn open(config: ActorConfig, events: broadcast::Sender<Frame>) -> Result<Self, Error> {
+    fn open(
+        config: ActorConfig,
+        events: broadcast::Sender<Frame>,
+        tripwires: TripwireSet,
+    ) -> Result<Self, Error> {
         fs::create_dir_all(&config.actor_directory)
             .map_err(|_| Error::new(ErrorCode::OpenFailed))?;
         let mut entropy = OsEntropy;
@@ -474,26 +543,22 @@ impl WriterState {
         let projections =
             ProjectionStore::open(&config.actor_directory, config.projection_map_bytes)?;
         let mut kinds = Vec::new();
+        let mut authorities = Vec::new();
         let mut applied = AppliedState::default();
         let mut plaintext_frames = Vec::new();
         let mut last_wall_timestamp_ns = i64::MIN;
         for mut frame in log.read_all()? {
             frame.sealed_payload = keys.unseal(&frame.header, &frame.sealed_payload)?;
             let kind = schema_kind(frame.header.kind)?;
-            event::verify_event_with_history(
+            let verified = event::verify_event_with_history(
                 &frame.sealed_payload,
                 kind,
                 Boundary::Disk,
-                &|lsn: LSN| {
-                    lsn.get()
-                        .checked_sub(1)
-                        .and_then(|index| usize::try_from(index).ok())
-                        .and_then(|index| kinds.get(index))
-                        .copied()
-                },
+                &ActorHistory::new(&kinds, &authorities),
             )?;
             applied.apply(&frame)?;
             kinds.push(kind);
+            authorities.push(verified.envelope.authority);
             last_wall_timestamp_ns =
                 last_wall_timestamp_ns.max(frame.header.wall_timestamp_ns.get());
             plaintext_frames.push(frame);
@@ -511,12 +576,14 @@ impl WriterState {
             projections,
             plaintext_frames,
             kinds,
+            authorities,
             applied,
             dedup,
             last_wall_timestamp_ns,
             events,
             mmr,
             signing_keys,
+            tripwires,
         })
     }
 
@@ -526,22 +593,18 @@ impl WriterState {
         }
         let first_lsn = self.log.next_lsn().get();
         let mut verified_kinds = self.kinds.clone();
+        let mut verified_authorities = self.authorities.clone();
         for (index, incoming) in events.iter().enumerate() {
             let kind = schema_kind(incoming.kind)?;
-            event::verify_event_with_history(
+            let verified = event::verify_event_with_history(
                 &incoming.payload,
                 kind,
                 Boundary::Socket,
-                &|lsn: LSN| {
-                    lsn.get()
-                        .checked_sub(1)
-                        .and_then(|position| usize::try_from(position).ok())
-                        .and_then(|position| verified_kinds.get(position))
-                        .copied()
-                },
+                &ActorHistory::new(&verified_kinds, &verified_authorities),
             )
             .map_err(|error| error.at_lsn(LSN::new(first_lsn + index as u64)))?;
             verified_kinds.push(kind);
+            verified_authorities.push(verified.envelope.authority);
         }
         let now = wall_time_ns()?;
         let mut entropy = OsEntropy;
@@ -584,6 +647,7 @@ impl WriterState {
             self.applied.apply(frame)?;
         }
         self.kinds = verified_kinds;
+        self.authorities = verified_authorities;
         self.last_wall_timestamp_ns = plaintext
             .last()
             .map_or(self.last_wall_timestamp_ns, |frame| {
@@ -611,7 +675,8 @@ impl WriterState {
         }
         let count =
             u32::try_from(events.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
-        let mut history = self.kinds.clone();
+        let mut history_kinds = self.kinds.clone();
+        let mut history_authorities = self.authorities.clone();
         let mut prepared = Vec::with_capacity(events.len());
         for (index, incoming) in events.into_iter().enumerate() {
             let kind = schema_kind(incoming.kind)?;
@@ -619,13 +684,7 @@ impl WriterState {
                 &incoming.payload,
                 kind,
                 Boundary::Socket,
-                &|lsn: LSN| {
-                    lsn.get()
-                        .checked_sub(1)
-                        .and_then(|position| usize::try_from(position).ok())
-                        .and_then(|position| history.get(position))
-                        .copied()
-                },
+                &ActorHistory::new(&history_kinds, &history_authorities),
             )?
             .envelope;
             envelope.connection_id = Some(connection_id.to_vec());
@@ -638,7 +697,8 @@ impl WriterState {
                 conversation: incoming.conversation,
                 payload: encode_event_envelope(&envelope),
             });
-            history.push(kind);
+            history_kinds.push(kind);
+            history_authorities.push(envelope.authority);
         }
         let batch_events: Vec<BatchEvent<'_>> = prepared
             .iter()
@@ -777,7 +837,7 @@ impl WriterState {
     fn activate(&self, request: ActivateRequest) -> Result<ActivationBundle, Error> {
         let counter = TokenCounter::for_model("wire-fallback", None, request.token_weights)?;
         let snapshot = self.projections.begin_snapshot()?;
-        bundle::activate(
+        let bundle = bundle::activate(
             &snapshot,
             &ActivationRequest {
                 actor: self.config.actor,
@@ -789,7 +849,74 @@ impl WriterState {
                 maximum_candidates: bundle::MAXIMUM_CANDIDATES,
                 maximum_conversation_records: bundle::MAXIMUM_CONVERSATION_RECORDS,
             },
-        )
+        )?;
+        self.tripwires.guard(
+            bundle
+                .sections
+                .iter()
+                .flat_map(|section| &section.items)
+                .flat_map(|item| item.provenance.iter().copied()),
+        )?;
+        Ok(bundle)
+    }
+
+    fn integrity_at(&self, lsn: LSN) -> Result<IntegrityReceipt, Error> {
+        if lsn.get() == 0 || lsn.get() > self.mmr.verification_status().leaf_count {
+            return Err(Error::new(ErrorCode::InvalidArgument).at_lsn(lsn));
+        }
+        Ok(IntegrityReceipt {
+            lsn,
+            leaf_hash: self.mmr.leaf_hash(lsn.get() - 1)?,
+            root: self.mmr.root_at(lsn.get())?,
+            checkpoint_lsn: self.mmr.verification_status().last_checkpoint_lsn,
+        })
+    }
+
+    fn rebuild_projection(&mut self, name: &str) -> Result<LSN, Error> {
+        let projection = [
+            ProjectionId::Bm25,
+            ProjectionId::IntentFrame,
+            ProjectionId::WorkLedger,
+            ProjectionId::ConversationHeads,
+            ProjectionId::Bindings,
+        ]
+        .into_iter()
+        .find(|projection| projection.name() == name)
+        .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+        let progress =
+            rebuild_projection_stream(&self.projections, &self.plaintext_frames, true, usize::MAX)?;
+        if !progress.complete {
+            return Err(Error::new(ErrorCode::ProjectionCheckpoint).at_lsn(progress.applied_lsn));
+        }
+        self.projections.begin_snapshot()?.checkpoint(projection)
+    }
+
+    fn rotate_keys(&mut self, new_kek: KeyEncryptionKey) -> Result<(), Error> {
+        let mut entropy = OsEntropy;
+        rotate_keys(
+            &self.config.actor_directory,
+            self.config.actor,
+            self.config.user,
+            &self.config.kek,
+            &new_kek,
+            &mut entropy,
+        )?;
+        self.config.kek = new_kek;
+        Ok(())
+    }
+
+    fn crypto_delete(self) -> Result<Vec<u8>, Error> {
+        let status = self.mmr.verification_status();
+        if status.leaf_count == 0 {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let receipt = crypto_shred(
+            self.keys,
+            LSN::new(status.leaf_count),
+            status.root,
+            &self.signing_keys,
+        )?;
+        Ok(encode_deletion_receipt(&receipt).to_vec())
     }
 
     fn stats(&self) -> Result<ActorStats, Error> {
@@ -829,6 +956,33 @@ fn recall_item(record: ConversationRecord, score_q32: u64) -> RecallItem {
         wall_timestamp_ns: record.wall_timestamp_ns,
         payload: record.payload,
         score_q32,
+    }
+}
+
+struct ActorHistory<'a> {
+    kinds: &'a [event::EventKind],
+    authorities: &'a [Authority],
+}
+
+impl<'a> ActorHistory<'a> {
+    const fn new(kinds: &'a [event::EventKind], authorities: &'a [Authority]) -> Self {
+        Self { kinds, authorities }
+    }
+
+    fn position(lsn: LSN) -> Option<usize> {
+        lsn.get()
+            .checked_sub(1)
+            .and_then(|position| usize::try_from(position).ok())
+    }
+}
+
+impl event::EventHistory for ActorHistory<'_> {
+    fn kind_at(&self, lsn: LSN) -> Option<event::EventKind> {
+        Self::position(lsn).and_then(|position| self.kinds.get(position).copied())
+    }
+
+    fn authority_at(&self, lsn: LSN) -> Option<Authority> {
+        Self::position(lsn).and_then(|position| self.authorities.get(position).copied())
     }
 }
 

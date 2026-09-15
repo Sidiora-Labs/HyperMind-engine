@@ -31,5 +31,5 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
         projection_map_bytes: config.projection_map_bytes,
     })
     .await?;
-    hm_mcp::serve_stdio(hm_mcp::McpServer::new(actor)).await
+    hm_mcp::serve_stdio(hm_mcp::McpServer::new_with_admin(actor, config.admin_token)).await
 }

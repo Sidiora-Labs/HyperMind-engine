@@ -19,6 +19,8 @@ use serde_json::{Value, json};
 
 pub mod tools;
 pub use tools::bind::BindInput;
+pub use tools::forget::{ForgetAction, ForgetInput};
+pub use tools::inspect::InspectInput;
 pub use tools::intend::{IntendAction, IntendCloseReason, IntendInput};
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -71,6 +73,14 @@ impl Envelope {
         }
         envelope
     }
+
+    pub(crate) fn security_error(error: Error) -> Self {
+        let mut envelope = Self::error(error, true);
+        envelope
+            .warnings
+            .push(format!("security_event:tripwire:lsn={}", error.lsn.get()));
+        envelope
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
@@ -120,9 +130,6 @@ pub struct ActivateInput {
     pub budget_tokens: usize,
 }
 
-#[derive(Clone, Debug, Default, Deserialize, schemars::JsonSchema)]
-pub struct InspectInput {}
-
 const fn default_limit() -> usize {
     32
 }
@@ -130,12 +137,27 @@ const fn default_limit() -> usize {
 #[derive(Clone)]
 pub struct McpServer {
     actor: ActorEngine,
+    admin_token: Option<hm_serve::config::CapabilityToken>,
 }
 
 impl McpServer {
     #[must_use]
     pub const fn new(actor: ActorEngine) -> Self {
-        Self { actor }
+        Self {
+            actor,
+            admin_token: None,
+        }
+    }
+
+    #[must_use]
+    pub const fn new_with_admin(
+        actor: ActorEngine,
+        admin_token: hm_serve::config::CapabilityToken,
+    ) -> Self {
+        Self {
+            actor,
+            admin_token: Some(admin_token),
+        }
     }
 
     pub async fn remember_envelope(&self, input: RememberInput) -> Envelope {
@@ -249,7 +271,7 @@ impl McpServer {
         let records = self.actor.recall(request).await?;
         let mut envelope = Envelope::empty();
         for record in records {
-            let content = event_content(record.kind, &record.payload)?;
+            let (content, authority) = event_content(record.kind, &record.payload)?;
             let uri = format!(
                 "hm://{}/{}/{}?at={}&src={}&score={}",
                 self.actor.actor(),
@@ -263,6 +285,7 @@ impl McpServer {
                 "lsn": record.lsn.get(),
                 "kind": record.kind as u8,
                 "content": content,
+                "authority": authority_name(authority),
                 "score_q32": record.score_q32,
                 "uri": uri,
             }));
@@ -274,6 +297,7 @@ impl McpServer {
     pub async fn activate_envelope(&self, input: ActivateInput) -> Envelope {
         match self.activate_inner(input).await {
             Ok(value) => value,
+            Err(error) if error.code == ErrorCode::Tripwire => Envelope::security_error(error),
             Err(error) => Envelope::error(error, false),
         }
     }
@@ -295,24 +319,18 @@ impl McpServer {
         Ok(bundle_envelope(&bundle))
     }
 
-    pub async fn inspect_envelope(&self, _input: InspectInput) -> Envelope {
-        match self.actor.stats().await {
-            Ok(stats) => {
-                let mut envelope = Envelope::empty();
-                envelope.items.push(json!({
-                    "actor": stats.actor.get(),
-                    "log_events": stats.log_events,
-                    "log_bytes": stats.log_bytes,
-                    "applied_lsn": stats.applied.last_lsn.get(),
-                    "applied_digest": hex(&stats.applied.rolling_digest),
-                    "projections": stats.projections.iter().map(|projection| json!({
-                        "name": projection.name,
-                        "applied_lsn": projection.applied_lsn.get(),
-                    })).collect::<Vec<_>>(),
-                }));
-                envelope
-            }
+    pub async fn inspect_envelope(&self, input: InspectInput) -> Envelope {
+        match tools::inspect::run(&self.actor, input).await {
+            Ok(value) => value,
             Err(error) => Envelope::error(error, false),
+        }
+    }
+
+    pub async fn forget_envelope(&self, input: ForgetInput) -> Envelope {
+        match tools::forget::run(&self.actor, self.admin_token.as_ref(), input).await {
+            Ok(value) => value,
+            Err(error) if error.code == ErrorCode::Tripwire => Envelope::security_error(error),
+            Err(error) => Envelope::error(error, true),
         }
     }
 
@@ -355,6 +373,11 @@ impl McpServer {
         Json(self.inspect_envelope(input).await)
     }
 
+    #[tool(description = "Fade a memory, retract a run, or crypto-shred the actor")]
+    async fn forget(&self, Parameters(input): Parameters<ForgetInput>) -> Json<Envelope> {
+        Json(self.forget_envelope(input).await)
+    }
+
     #[tool(description = "Set an objective, open a work loop, or close a work loop")]
     async fn intend(&self, Parameters(input): Parameters<IntendInput>) -> Json<Envelope> {
         Json(self.intend_envelope(input).await)
@@ -379,6 +402,7 @@ fn bundle_envelope(bundle: &ActivationBundle) -> Envelope {
                 "tier": format!("{:?}", item.tier).to_lowercase(),
                 "uri": item.uri,
                 "content_base64": base64::engine::general_purpose::STANDARD.encode(&item.content),
+                "authority": authority_name(item.authority),
                 "tokens": item.tokens,
                 "coarsened": item.coarsened,
             }));
@@ -404,16 +428,33 @@ fn bundle_envelope(bundle: &ActivationBundle) -> Envelope {
     envelope
 }
 
-fn event_content(kind: hm_ledger::frame::EventKind, payload: &[u8]) -> Result<String, Error> {
+fn event_content(
+    kind: hm_ledger::frame::EventKind,
+    payload: &[u8],
+) -> Result<(String, Authority), Error> {
     let schema_kind = hm_schema::event::EventKind::try_from(kind as u8)
         .map_err(|()| Error::new(ErrorCode::InvalidKind))?;
     let verified = verify_event(payload, schema_kind, hm_schema::event::Boundary::Disk)?;
+    let authority = verified.envelope.authority;
     let bytes = match verified.envelope.payload {
         EventPayload::UserMsg(message) => message.content,
         EventPayload::DeliveredMsg(message) => message.content,
-        _ => return Ok(String::new()),
+        _ => return Ok((String::new(), authority)),
     };
-    String::from_utf8(bytes).map_err(|_| Error::new(ErrorCode::SchemaInvalid))
+    String::from_utf8(bytes)
+        .map(|content| (content, authority))
+        .map_err(|_| Error::new(ErrorCode::SchemaInvalid))
+}
+
+const fn authority_name(authority: Authority) -> &'static str {
+    match authority {
+        Authority::UserAsserted => "user_asserted",
+        Authority::ExternalObserved => "external_observed",
+        Authority::ToolObserved => "tool_observed",
+        Authority::RuntimeFact => "runtime_fact",
+        Authority::AssistantGenerated => "assistant_generated",
+        Authority::DerivedInference => "derived_inference",
+    }
 }
 
 fn chunk_text(text: &str, maximum_bytes: usize) -> Result<Vec<&str>, Error> {
@@ -471,7 +512,7 @@ mod tests {
         assert_eq!(
             names,
             [
-                "activate", "bind", "inspect", "intend", "recall", "remember"
+                "activate", "bind", "forget", "inspect", "intend", "recall", "remember"
             ]
             .map(str::to_owned)
             .into()

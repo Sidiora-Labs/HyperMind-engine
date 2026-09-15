@@ -61,6 +61,7 @@ pub struct RenderedItem {
     pub tier: Tier,
     pub role: &'static str,
     pub authority: RenderAuthority,
+    pub source_authority: Authority,
     pub provenance_uri: String,
     pub provenance: Vec<LSN>,
     pub content: String,
@@ -235,6 +236,7 @@ pub fn render(bundle: &ActivationBundle, model: RenderModel) -> Result<RenderedB
                 tier: item.tier,
                 role: "user",
                 authority: RenderAuthority::UntrustedMemory,
+                source_authority: item.authority,
                 provenance_uri: item.uri.clone(),
                 provenance: item.provenance.clone(),
                 content: String::from_utf8(item.content.clone())

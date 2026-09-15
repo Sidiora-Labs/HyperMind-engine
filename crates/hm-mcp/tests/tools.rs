@@ -73,7 +73,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
     assert!(activated.budget.is_some());
     assert!(activated.health.get("bundle_hash").is_some());
 
-    let inspected = server.inspect_envelope(InspectInput {}).await;
+    let inspected = server.inspect_envelope(InspectInput::default()).await;
     assert!(inspected.ok);
     assert_eq!(inspected.items[0]["log_events"], 2);
 

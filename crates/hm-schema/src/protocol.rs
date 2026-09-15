@@ -75,9 +75,14 @@ pub fn validate_request(request: &Request) -> Result<(), Error> {
         RequestPayload::Checkpoint(value) => validate_checkpoint(value),
         RequestPayload::LatestCheckpoint(value) => validate_latest_checkpoint(value),
         RequestPayload::Subscribe(value) => validate_subscribe(value),
-        RequestPayload::Health(_) => Ok(()),
+        RequestPayload::Health(_) | RequestPayload::LatencyHistograms(_) => Ok(()),
         RequestPayload::Stats(value) if value.actor != 0 => Ok(()),
         RequestPayload::Stats(_) => Err(Error::new(ErrorCode::ProtocolInvalid)),
+        RequestPayload::VerifyStatus(value) if value.actor != 0 => Ok(()),
+        RequestPayload::RebuildProjection(value) if value.actor != 0 && !value.name.is_empty() => {
+            Ok(())
+        }
+        RequestPayload::CryptoDelete(value) if value.actor != 0 => Ok(()),
         _ => Err(Error::new(ErrorCode::OperationUnavailable)),
     }
 }

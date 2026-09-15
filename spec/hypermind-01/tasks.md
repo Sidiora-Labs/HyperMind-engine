@@ -95,7 +95,7 @@
     - RetrievalManifest with candidates, selected, included and used populated from lanes, trim and attestations; manifest id from query identity plus selected digests at snapshot epoch; validate before reuse rejects a moved epoch.
     - Port activation_safety_test: mismatched union payloads decode to empty, non-semantic kinds and raw NCEV or checkpoint bytes are dropped, items without full provenance are excluded, same-turn content is excluded, authority labels on every item, memory never in system or developer role; identical assertions in the Rust renderer and the TypeScript renderer.
     - _Requirements: 4.3, 7.2_
-  - [ ] 3.4 Admin token split, admin operations, MCP inspect verify and provenance, MCP forget
+  - [x] 3.4 Admin token split, admin operations, MCP inspect verify and provenance, MCP forget
     - Admin token disjoint from actor tokens; admin requests on actor connections and the reverse are kCapabilityDenied; Health, Stats with per-projection applied_lsn, LatencyHistograms, VerifyStatus, RebuildProjection, CryptoDelete, RotateKeys.
     - MCP inspect explains an item, walks its provenance chain to LSNs and MMR receipts, verifies against the latest checkpoint, and reports stats; MCP forget fades a memory, retracts a run, or crypto-shreds an actor with the admin token and returns the receipt; a tripwire hit is reported as a security event in warnings.
     - _Requirements: 13.1, 13.2, 3.3_

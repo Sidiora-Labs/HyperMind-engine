@@ -1,7 +1,9 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::actor::{ActivateRequest, ActorConfig, ActorEngine, IncomingEvent, RecallRequest};
-use crate::config::{ServerConfig, capability_equal};
+use crate::admin::{self, LatencyHistograms};
+use crate::auth::{self, Principal};
+use crate::config::ServerConfig;
 use crate::errors::{MutationEffectState, mutation_effect_state};
 use crate::protocol::{FrameParser, encode_frame};
 use crate::requests::{checkpoint, subscribe};
@@ -34,6 +36,7 @@ pub struct UdsServer {
     actors: Arc<BTreeMap<u16, ActorEngine>>,
     listener: UnixListener,
     active_connections: Arc<AtomicUsize>,
+    latencies: LatencyHistograms,
 }
 
 impl UdsServer {
@@ -73,6 +76,7 @@ impl UdsServer {
             actors: Arc::new(actors),
             listener,
             active_connections: Arc::new(AtomicUsize::new(0)),
+            latencies: LatencyHistograms::default(),
         })
     }
 
@@ -90,10 +94,18 @@ impl UdsServer {
                     let config = Arc::clone(&self.config);
                     let actors = Arc::clone(&self.actors);
                     let active = Arc::clone(&self.active_connections);
+                    let latencies = self.latencies.clone();
                     active.fetch_add(1, Ordering::Relaxed);
                     tokio::spawn(async move {
                         let _permit = permit;
-                        let _ = handle_connection(stream, config, actors, Arc::clone(&active)).await;
+                        let _ = handle_connection(
+                            stream,
+                            config,
+                            actors,
+                            Arc::clone(&active),
+                            latencies,
+                        )
+                        .await;
                         active.fetch_sub(1, Ordering::Relaxed);
                     });
                 }
@@ -127,6 +139,7 @@ async fn handle_connection(
     config: Arc<ServerConfig>,
     actors: Arc<BTreeMap<u16, ActorEngine>>,
     active_connections: Arc<AtomicUsize>,
+    latencies: LatencyHistograms,
 ) -> Result<(), Error> {
     let (mut reader, mut writer) = stream.into_split();
     let (output, mut queued) = mpsc::channel::<Vec<u8>>(config.maximum_output_frames);
@@ -248,14 +261,18 @@ async fn handle_connection(
                 }
                 continue;
             }
+            let operation = request_name(&request_payload);
+            let started = std::time::Instant::now();
             let response = handle_request(
                 current,
                 request_id,
                 request_payload,
                 &actors,
                 active_connections.load(Ordering::Relaxed),
+                &latencies,
             )
             .await;
+            latencies.observe(operation, started.elapsed());
             let envelope = match response {
                 Ok(payload) => response_wire(current.proto_version, payload.0, payload.1, true)?,
                 Err((request_id, error)) => {
@@ -287,25 +304,13 @@ fn authenticate(
     let connection_id = connection_id
         .try_into()
         .map_err(|_| Error::new(ErrorCode::ProtocolInvalid))?;
-    if capability_equal(&config.admin_token, token) {
-        return Ok(Session {
-            actor: None,
-            admin: true,
-            proto_version,
-            connection_id,
-            next_subscription_id: 1,
-            subscriptions: 0,
-        });
-    }
-    let actor = config
-        .actors
-        .iter()
-        .find(|capability| capability_equal(&capability.token, token))
-        .map(|capability| capability.actor)
-        .ok_or_else(|| Error::new(ErrorCode::CapabilityDenied))?;
+    let principal = auth::authenticate(config, token)?;
     Ok(Session {
-        actor: Some(actor),
-        admin: false,
+        actor: match principal {
+            Principal::Actor(actor) => Some(actor),
+            Principal::Admin => None,
+        },
+        admin: principal == Principal::Admin,
         proto_version,
         connection_id,
         next_subscription_id: 1,
@@ -320,18 +325,14 @@ async fn handle_request(
     request_payload: RequestPayload,
     actors: &BTreeMap<u16, ActorEngine>,
     active_connections: usize,
+    latencies: &LatencyHistograms,
 ) -> Result<(u64, ResponsePayload), (u64, Error)> {
     let request = Request {
         request_id,
         payload: request_payload,
     };
-    let admin_request = matches!(
-        request.payload,
-        RequestPayload::Health(_) | RequestPayload::Stats(_)
-    );
-    if admin_request != session.admin {
-        return Err((request_id, Error::new(ErrorCode::CapabilityDenied)));
-    }
+    let principal = session.actor.map_or(Principal::Admin, Principal::Actor);
+    auth::authorize(principal, &request.payload).map_err(|error| (request_id, error))?;
     if let RequestPayload::Health(_) = request.payload {
         return Ok((
             request_id,
@@ -344,8 +345,17 @@ async fn handle_request(
             })),
         ));
     }
+    if let RequestPayload::LatencyHistograms(_) = request.payload {
+        return Ok((
+            request_id,
+            ResponsePayload::LatencyResult(Box::new(latencies.snapshot())),
+        ));
+    }
     let actor_id = match &request.payload {
         RequestPayload::Stats(stats) => stats.actor,
+        RequestPayload::VerifyStatus(verify) => verify.actor,
+        RequestPayload::RebuildProjection(rebuild) => rebuild.actor,
+        RequestPayload::CryptoDelete(delete) => delete.actor,
         _ => session
             .actor
             .ok_or((request_id, Error::new(ErrorCode::CapabilityDenied)))?,
@@ -494,9 +504,44 @@ async fn handle_request(
                     .collect(),
             }))
         }
+        RequestPayload::VerifyStatus(_) => ResponsePayload::VerifyResult(Box::new(
+            admin::verify(actor)
+                .await
+                .map_err(|error| (request_id, error))?,
+        )),
+        RequestPayload::RebuildProjection(value) => ResponsePayload::RebuildResult(Box::new(
+            admin::rebuild(actor, value.name)
+                .await
+                .map_err(|error| (request_id, error))?,
+        )),
+        RequestPayload::CryptoDelete(_) => ResponsePayload::DeleteResult(Box::new(
+            admin::crypto_delete(actor)
+                .await
+                .map_err(|error| (request_id, error))?,
+        )),
         _ => return Err((request_id, Error::new(ErrorCode::OperationUnavailable))),
     };
     Ok((request_id, payload))
+}
+
+const fn request_name(request: &RequestPayload) -> &'static str {
+    match request {
+        RequestPayload::Append(_) => "append",
+        RequestPayload::Activate(_) => "activate",
+        RequestPayload::Transcript(_) => "transcript",
+        RequestPayload::Recall(_) => "recall",
+        RequestPayload::AsOf(_) => "asof",
+        RequestPayload::Checkpoint(_) => "checkpoint",
+        RequestPayload::LatestCheckpoint(_) => "latest_checkpoint",
+        RequestPayload::Attest(_) => "attest",
+        RequestPayload::Subscribe(_) => "subscribe",
+        RequestPayload::Health(_) => "health",
+        RequestPayload::Stats(_) => "stats",
+        RequestPayload::LatencyHistograms(_) => "latency_histograms",
+        RequestPayload::VerifyStatus(_) => "verify_status",
+        RequestPayload::RebuildProjection(_) => "rebuild_projection",
+        RequestPayload::CryptoDelete(_) => "crypto_delete",
+    }
 }
 
 #[allow(clippy::too_many_arguments)]

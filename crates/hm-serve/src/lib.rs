@@ -1,6 +1,8 @@
 #![forbid(unsafe_code)]
 
 pub mod actor;
+pub mod admin;
+pub mod auth;
 pub mod config;
 pub mod embedded;
 pub mod errors;
