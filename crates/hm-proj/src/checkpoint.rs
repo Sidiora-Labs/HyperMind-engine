@@ -168,6 +168,7 @@ pub(crate) const fn schema_kind(kind: EventKind) -> Option<event::EventKind> {
         EventKind::LoopClosed => event::EventKind::LoopClosed,
         EventKind::Attestation => event::EventKind::Attestation,
         EventKind::Binding => event::EventKind::Binding,
+        EventKind::ProposedAssertion => event::EventKind::ProposedAssertion,
         EventKind::Assertion
         | EventKind::Consolidation
         | EventKind::Embedding

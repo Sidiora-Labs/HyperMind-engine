@@ -16,9 +16,10 @@ pub const fn authority_for_event(kind: EventKind) -> Authority {
         EventKind::DeliveredMsg | EventKind::Reasoning => Authority::AssistantGenerated,
         EventKind::ToolResult => Authority::ToolObserved,
         EventKind::ProviderFrame | EventKind::MediaRef => Authority::ExternalObserved,
-        EventKind::Assertion | EventKind::Consolidation | EventKind::Embedding => {
-            Authority::DerivedInference
-        }
+        EventKind::Assertion
+        | EventKind::Consolidation
+        | EventKind::Embedding
+        | EventKind::ProposedAssertion => Authority::DerivedInference,
         EventKind::ToolCall
         | EventKind::Effect
         | EventKind::Approval

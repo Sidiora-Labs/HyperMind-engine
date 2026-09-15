@@ -1234,6 +1234,7 @@ dependencies = [
 name = "hm-proj"
 version = "0.1.0"
 dependencies = [
+ "bincode",
  "blake3",
  "heed",
  "hm-core",
@@ -1242,6 +1243,7 @@ dependencies = [
  "hm-schema",
  "memmap2",
  "roaring",
+ "serde",
  "tempfile",
 ]
 

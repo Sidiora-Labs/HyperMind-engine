@@ -139,7 +139,7 @@
     - Enable Assertion, Consolidation, Retract and add ProposedAssertion; event_time_ns on the envelope; byte_start and byte_end on ProvenanceRange; protocol adds AsOf with valid_time_ns or known_lsn and BeliefResult with version, supersedes_version, provenance and conflict edges.
     - Port belief_gate: negative_existence requires a tool_observed LSN inside its provenance or kNegativeExistenceUncorroborated; same-type same-domain different-identity live beliefs are listed as conflicts; AdmitBatch probes the socket batch before commit and returns typed rejections; apply-time rejections are deterministic skips.
     - _Requirements: 8.1, 8.2_
-  - [ ] 5.2 Belief store, temporal ladder, protected types
+  - [x] 5.2 Belief store, temporal ladder, protected types
     - Port belief_store.cc: head, version, belief id, domain member, conflict edge and tool marker keys; ReadAsOf walks the supersedes chain by known_lsn and valid time and reports which axis it used; ReadHeads; conflict edges obligated until resolved; pending proposals readable.
     - Protected types: Assertion or Retract for identity, constraint or preference from any run authority is kProtectedTypeWrite and emits a security event; ProposedAssertion is stored under the head as pending until a user or admin event accepts or rejects it.
     - Port temporal_ladder: minute, hour, day, week windows as bitmaps; ListWindows, OpenWindow, ResolveMembers.

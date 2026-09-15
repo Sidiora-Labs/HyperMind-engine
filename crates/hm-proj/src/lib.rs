@@ -1,11 +1,14 @@
 #![deny(unsafe_code)]
 
+pub mod beliefs;
 pub mod bindings;
 pub mod checkpoint;
 pub mod entities;
 pub mod intent;
+pub mod ladder;
 pub mod ledger;
 pub mod lexical;
+pub mod protected;
 pub mod rebuild;
 pub mod spaces;
 #[allow(unsafe_code)]

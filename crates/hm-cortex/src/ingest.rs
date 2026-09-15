@@ -52,7 +52,10 @@ pub fn ingest(
         IngestSource::Derived
             if matches!(
                 kind,
-                EventKind::Assertion | EventKind::Consolidation | EventKind::Embedding
+                EventKind::Assertion
+                    | EventKind::Consolidation
+                    | EventKind::Embedding
+                    | EventKind::ProposedAssertion
             ) =>
         {
             authority_for_event(kind)

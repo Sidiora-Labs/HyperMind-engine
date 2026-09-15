@@ -613,7 +613,7 @@ do_2 = "Port belief_gate: negative_existence requires a tool_observed LSN inside
 
 [task.5.2]
 title = "Belief store, temporal ladder, protected types"
-status = "pending"
+status = "done"
 wave = 5
 owner_lane = "projections"
 requires = ["5.1"]

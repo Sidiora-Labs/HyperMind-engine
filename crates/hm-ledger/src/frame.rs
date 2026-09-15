@@ -38,13 +38,14 @@ pub enum EventKind {
     Retract = 20,
     Attestation = 21,
     Binding = 22,
+    ProposedAssertion = 23,
 }
 
 impl TryFrom<u8> for EventKind {
     type Error = Error;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
-        const KINDS: [EventKind; 22] = [
+        const KINDS: [EventKind; 23] = [
             EventKind::UserMsg,
             EventKind::DeliveredMsg,
             EventKind::ToolCall,
@@ -67,6 +68,7 @@ impl TryFrom<u8> for EventKind {
             EventKind::Retract,
             EventKind::Attestation,
             EventKind::Binding,
+            EventKind::ProposedAssertion,
         ];
         let index = usize::from(value.saturating_sub(1));
         if value == 0 {

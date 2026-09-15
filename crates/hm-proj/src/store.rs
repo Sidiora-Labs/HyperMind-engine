@@ -149,6 +149,14 @@ impl ProjectionStore {
         self.apply_internal(projection, applied_lsn, mutations)
     }
 
+    pub(crate) fn apply_belief(
+        &self,
+        applied_lsn: LSN,
+        mutations: &[Mutation],
+    ) -> Result<(), Error> {
+        self.apply_internal(ProjectionId::BeliefStore, applied_lsn, mutations)
+    }
+
     pub fn reset(&self, projection: ProjectionId) -> Result<(), Error> {
         self.require_writer()?;
         let mut transaction = self.environment.write_txn().map_err(database_error)?;
