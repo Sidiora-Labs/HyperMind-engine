@@ -6,6 +6,9 @@ rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 
+[dependencies]
+hm-core = { path = "../hm-core" }
+tantivy = { version = "0.25.0", default-features = false }
+
 [lints]
 workspace = true
-

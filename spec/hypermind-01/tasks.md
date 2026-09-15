@@ -19,7 +19,7 @@
     - Port segment_log: numbered 128 MiB segments, NCMF manifest, group commit into one 4096-aligned buffer with fdatasync then manifest rewrite then directory fsync, torn-tail truncation on open, kInteriorCorruption refusal, manifest rebuild; pwrite backend now, io_uring behind a feature flag.
     - Port sealing: KEK to user key to data key wrapped with XChaCha20-Poly1305, NCKEY001 keyring, NCSEAL01 record layout, AAD bound to actor, lsn, kind and user, kLegacyPlaintext on unsealed records, zeroize on drop; the plaintext BLAKE3 digest is stored inside the sealed record for wave 3.
     - _Requirements: 2.1, 3.1_
-  - [ ] 1.4 LMDB projection store with checkpointed apply, timeline and lexical projections
+  - [x] 1.4 LMDB projection store with checkpointed apply, timeline and lexical projections
     - ProjectionStore over heed: one DBI per projection plus projection_checkpoints; Apply(projection, applied_lsn, mutations) is one write transaction requiring applied_lsn equals checkpoint plus one; ReadSnapshot with prefix and reverse scans; CanonicalDump for byte-equality tests; roaring bitmaps for sets.
     - Timeline projection (conversation heads): E key conversation plus lsn to kind, timestamp and payload; L key lsn to event key; ReadConversationRecord and latest-of-kind reverse scan.
     - Lexical projection: tantivy tokenisation and postings for UserMsg and DeliveredMsg, document length and global stats, fixed-point Q32 ln ported from FixedLnRatio, BM25 with k1 1.2 and b 0.75 in integer coefficients; RebuildProjectionStream resumes from the minimum checkpoint after a kill.

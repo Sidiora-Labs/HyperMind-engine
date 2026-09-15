@@ -6,6 +6,20 @@ rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 
-[lints]
-workspace = true
+[dependencies]
+heed = "0.22.1"
+hm-core = { path = "../hm-core" }
+hm-index = { path = "../hm-index" }
+hm-ledger = { path = "../hm-ledger" }
+hm-schema = { path = "../hm-schema" }
+roaring = "0.11.2"
 
+[dev-dependencies]
+tempfile = "3.23.0"
+
+[lints.rust]
+unsafe_code = "allow"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }

@@ -265,7 +265,7 @@ do_3 = "Port sealing: KEK to user key to data key wrapped with XChaCha20-Poly130
 
 [task.1.4]
 title = "LMDB projection store with checkpointed apply, timeline and lexical projections"
-status = "pending"
+status = "done"
 wave = 1
 owner_lane = "projections"
 requires = ["1.2"]
