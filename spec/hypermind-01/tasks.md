@@ -119,7 +119,7 @@
     - Entity index ported from entity_index.cc: domains, urls, paths, hex ids, structured ids, proper nouns and bigrams with alias labels; query-side extraction from query and turn text; posting bitmaps.
     - Space generations: a second encoder populates its own generation even at equal dimensions; the active pointer switches atomically after validation; the prior compatible generation is retained by policy.
     - _Requirements: 5.1, 6.1_
-  - [ ] 4.4 Query planner, lanes, fusion, health, deadline with cached fallback, anchors
+  - [x] 4.4 Query planner, lanes, fusion, health, deadline with cached fallback, anchors
     - Planner classifies query shape by deterministic rules and selects lanes and weights; vector, entity and temporal-recency lanes; reciprocal rank fusion over canonical ids; composite with recency prior; every hit carries lane ranks and a why code in its URI.
     - Health computed separately for encoder, backlog, projection and inclusion; activate deadline default 25 ms returns the last bundle marked degraded with stale_by_lsn on a miss and schedules a fresh bundle push over Subscribe.
     - Anchors: remember accepts anchor facets path, symbol, url, entity; recall near walks the entity lane first.

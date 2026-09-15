@@ -1121,6 +1121,7 @@ version = "0.1.0"
 dependencies = [
  "blake3",
  "hm-core",
+ "hm-index",
  "hm-ledger",
  "hm-proj",
  "hm-schema",

@@ -552,7 +552,7 @@ do_3 = "Space generations: a second encoder populates its own generation even at
 
 [task.4.4]
 title = "Query planner, lanes, fusion, health, deadline with cached fallback, anchors"
-status = "pending"
+status = "done"
 wave = 4
 owner_lane = "compose"
 requires = ["4.1", "4.3"]

@@ -67,6 +67,13 @@ impl Tier {
 #[repr(u8)]
 pub enum RetrievalLane {
     Lexical,
+    Vector,
+    Entity,
+    Temporal,
+    Graph,
+    Belief,
+    Timeline,
+    Reconstruct,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -74,6 +81,10 @@ pub enum RetrievalLane {
 pub enum WhyCode {
     Conversation,
     Lexical,
+    Vector,
+    Entity,
+    Temporal,
+    Fused,
     Intent,
     Binding,
     WorkLedger,
@@ -521,6 +532,10 @@ fn provenance_uri(
     let why = match why {
         WhyCode::Conversation => "conversation",
         WhyCode::Lexical => "lexical",
+        WhyCode::Vector => "vector",
+        WhyCode::Entity => "entity",
+        WhyCode::Temporal => "temporal",
+        WhyCode::Fused => "fused",
         WhyCode::Intent => "intent",
         WhyCode::Binding => "binding",
         WhyCode::WorkLedger => "work_ledger",
