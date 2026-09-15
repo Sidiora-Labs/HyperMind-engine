@@ -367,7 +367,7 @@ do_2 = "Ordering rules in VerifyEvent: ToolResult and Effect reference a prior T
 
 [task.2.3]
 title = "Intent frame, bindings and work ledger projections with latest-checkpoint scan"
-status = "pending"
+status = "done"
 wave = 2
 owner_lane = "projections"
 requires = ["2.2"]

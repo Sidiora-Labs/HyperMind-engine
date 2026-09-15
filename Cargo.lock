@@ -1107,6 +1107,7 @@ dependencies = [
 name = "hm-proj"
 version = "0.1.0"
 dependencies = [
+ "blake3",
  "heed",
  "hm-core",
  "hm-index",

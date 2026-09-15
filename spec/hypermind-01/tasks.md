@@ -56,7 +56,7 @@
     - Enable Checkpoint, IntentSet, LoopOpened, LoopClosed, Effect, Approval, Outcome, Supervisor, Recovery and add Binding with task or scope, canonical entity, property, evidence LSN, revision, freshness; protocol adds Checkpoint, LatestCheckpoint, CheckpointAck, CheckpointResult, Subscribe, SubscriptionAck, Event push.
     - Ordering rules in VerifyEvent: ToolResult and Effect reference a prior ToolCall LSN; Outcome and LoopClosed done cite tool_observed, external_observed or runtime_fact LSNs and are rejected when citing a memory or summary kind.
     - _Requirements: 2.1, 4.2_
-  - [ ] 2.3 Intent frame, bindings and work ledger projections with latest-checkpoint scan
+  - [x] 2.3 Intent frame, bindings and work ledger projections with latest-checkpoint scan
     - Intent frame: objective plus open loops up to 4096 per conversation with a global loop id index preventing cross-conversation closes and double closes; closed loops readable.
     - Bindings projection: resolve_required_bindings reads up to 128 bindings for a task from one snapshot with status resolved, missing, stale or conflicting by revision and freshness; corrections resolve by identity and effective time.
     - Work ledger: WorkItem kinds tool_call and effect with states dispatched, committed, returned, outcome_unknown and TransitionAllowed rules; requires_reconciliation when not returned; a crash inside the dispatch window is conservatively unknown. Port continuity_projection_test: every prefix rebuilds identically, reset replay matches, a bounded partial rebuild resumes.

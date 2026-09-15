@@ -16,6 +16,7 @@ const PROJECTION_NAMES: [&str; ProjectionId::COUNT] = [
     "intent_frame",
     "work_ledger",
     "conversation_heads",
+    "bindings",
 ];
 
 type ByteDatabase = Database<Bytes, Bytes>;
@@ -31,10 +32,11 @@ pub enum ProjectionId {
     IntentFrame,
     WorkLedger,
     ConversationHeads,
+    Bindings,
 }
 
 impl ProjectionId {
-    pub const COUNT: usize = 8;
+    pub const COUNT: usize = 9;
 
     #[must_use]
     pub const fn name(self) -> &'static str {
