@@ -132,7 +132,7 @@
     - recall@k and MRR with the local encoder at 1k, 10k and 100k seeded stores; activate p50 and p99 cold and warm at 10k and 100k; a run with the hash baseline labelled lexical_only.
     - LongMemEval runner with a pinned judge and content-hash response cache; baseline run without consolidation recorded in eval/results as the wave 4 number.
     - _Requirements: 15.1, 15.3, 6.3, 7.3_
-  - [ ] 4.7 Slice 4 journey: 10k ingest, entity and paraphrase recall, deadline miss then fresh bundle
+  - [x] 4.7 Slice 4 journey: 10k ingest, entity and paraphrase recall, deadline miss then fresh bundle
     - Journey: ingest 10k events with the local embedder, recall a path through the entity lane and a paraphrase through the vector lane, saturate the actor with load so activate misses its deadline, receive the stale bundle marked degraded with the miss in gaps, receive the fresh bundle by subscription, gate slice4 green.
     - _Requirements: 1.1, 6.1, 6.2, 7.3_
   - [ ] 5.1 Belief events, tri-temporal envelope, byte-offset provenance, admission gate

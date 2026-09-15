@@ -24,8 +24,10 @@ hm-ledger = { path = "../hm-ledger" }
 base64 = "0.22.1"
 blake3 = "1.8.2"
 hm-compose = { path = "../hm-compose" }
+hm-embed = { path = "../hm-embed" }
 hm-eval = { path = "../hm-eval" }
 hm-mcp = { path = "../hm-mcp" }
+hm-proj = { path = "../hm-proj" }
 hm-schema = { path = "../hm-schema" }
 hm-serve = { path = "../hm-serve" }
 rmcp = { version = "3.3.0", features = ["client", "transport-child-process"] }

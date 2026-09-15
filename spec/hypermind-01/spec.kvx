@@ -589,7 +589,7 @@ do_2 = "LongMemEval runner with a pinned judge and content-hash response cache; 
 
 [task.4.7]
 title = "Slice 4 journey: 10k ingest, entity and paraphrase recall, deadline miss then fresh bundle"
-status = "pending"
+status = "done"
 wave = 4
 owner_lane = "integration"
 requires = ["4.1", "4.2", "4.3", "4.4", "4.5", "4.6"]
