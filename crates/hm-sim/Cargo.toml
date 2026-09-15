@@ -11,11 +11,14 @@ name = "slice1_journey"
 path = "tests/slice1_journey.rs"
 harness = false
 
+[dependencies]
+hm-core = { path = "../hm-core" }
+hm-ledger = { path = "../hm-ledger" }
+
 [dev-dependencies]
 base64 = "0.22.1"
 blake3 = "1.8.2"
 hm-compose = { path = "../hm-compose" }
-hm-core = { path = "../hm-core" }
 hm-eval = { path = "../hm-eval" }
 hm-mcp = { path = "../hm-mcp" }
 hm-schema = { path = "../hm-schema" }

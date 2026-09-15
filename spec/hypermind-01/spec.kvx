@@ -342,7 +342,7 @@ do_2 = "The journey harness in hm-sim is reused by every later slice."
 
 [task.2.1]
 title = "Idempotent append, dedup rebuild, torn-batch rollback and the fault simulator"
-status = "pending"
+status = "done"
 wave = 2
 section = "Wave 2 — Continuity: survive a kill mid-turn and resume the loop with exact bindings"
 owner_lane = "ledger"

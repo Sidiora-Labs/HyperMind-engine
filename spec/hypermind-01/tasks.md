@@ -48,7 +48,7 @@
     - Journey: start the real daemon in a temporary directory, connect an MCP client, remember three facts, kill the daemon, restart, recall lexically, activate and assert the bundle contains the facts with provenance URIs and a valid HMA1 hash, then run hm-eval gate slice1.
     - The journey harness in hm-sim is reused by every later slice.
     - _Requirements: 1.1, 1.3, 2.1, 7.2_
-  - [ ] 2.1 Idempotent append, dedup rebuild, torn-batch rollback and the fault simulator
+  - [x] 2.1 Idempotent append, dedup rebuild, torn-batch rollback and the fault simulator
     - Append keyed by connection id and client sequence with strictly prior plus one admission, duplicate on exact replay, kIdempotencyConflict on same-sequence different-digest, RebuildDedup from envelope metadata at boot, RollBackTornBatch when the last frame's client_event_index plus one is not client_event_count.
     - Port sim_env and core_sim_test: SimulatedStorage with FaultPlan maximum_write_bytes, torn_after_bytes, kill_after_durable_lsn, reverse_write_completion, fsync_lies; 2,048 randomised schedules converge to one CanonicalBytes; kill at every LSN; writer-ownership violation; real fork plus SIGKILL after commit.
     - _Requirements: 2.2, 2.3_
