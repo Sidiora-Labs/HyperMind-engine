@@ -392,7 +392,7 @@ do_2 = "Budget allocation template mandatory 15, intent and bindings and work 10
 
 [task.2.5]
 title = "Checkpoint and Subscribe requests, effect_state on errors, MCP intend and bind"
-status = "pending"
+status = "done"
 wave = 2
 owner_lane = "surface"
 requires = ["2.1", "2.4"]

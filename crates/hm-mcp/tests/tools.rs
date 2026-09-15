@@ -86,7 +86,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
         })
         .await;
     assert!(!rejected.ok);
-    assert_eq!(rejected.effect_state.as_deref(), Some("rejected"));
+    assert_eq!(rejected.effect_state.as_deref(), Some("not_dispatched"));
 
     drop(server);
     actor.shutdown().await.unwrap();

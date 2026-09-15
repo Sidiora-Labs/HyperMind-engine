@@ -65,7 +65,7 @@
     - Populate intent, bindings and work_ledger tiers from the projections; mark resident, intent, bindings and work_ledger required; trim never sheds them; when they alone exceed budget the bundle narrows to the active loop and emits a narrowed_subtask gap.
     - Budget allocation template mandatory 15, intent and bindings and work 10, conversation 40, recall 15, tools 10, reserve 10 percent, configurable per profile; optional segments shrink first; missing, stale and conflicting bindings appear in gaps.
     - _Requirements: 7.1, 7.3_
-  - [ ] 2.5 Checkpoint and Subscribe requests, effect_state on errors, MCP intend and bind
+  - [x] 2.5 Checkpoint and Subscribe requests, effect_state on errors, MCP intend and bind
     - Checkpoint stores an opaque turn blob keyed by turn id with client sequence idempotency; LatestCheckpoint scans up to 65536 records; Subscribe streams Event frames from since_lsn with a bounded queue and disconnects a saturated subscriber.
     - Every mutation error carries effect_state not_dispatched, unknown or rejected; MCP intend sets objective, opens and closes loops; MCP bind writes a Binding and returns its status.
     - _Requirements: 13.1, 13.2_

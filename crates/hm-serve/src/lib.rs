@@ -3,7 +3,9 @@
 pub mod actor;
 pub mod config;
 pub mod embedded;
+pub mod errors;
 pub mod protocol;
+pub mod requests;
 pub mod uds;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

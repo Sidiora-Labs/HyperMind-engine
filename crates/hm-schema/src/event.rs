@@ -258,10 +258,10 @@ fn validate_payload(
         }
         EventPayload::Outcome(value) => validate_outcome(value, history, legacy_evidence_allowed),
         EventPayload::Checkpoint(value) => {
-            if bounded_identifier(&value.cursor) {
-                Ok(())
-            } else {
+            if value.cursor.is_empty() {
                 Err(Error::new(ErrorCode::SchemaInvalid))
+            } else {
+                Ok(())
             }
         }
         EventPayload::Supervisor(value) => {

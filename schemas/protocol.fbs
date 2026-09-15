@@ -1,6 +1,7 @@
 namespace hypermind.protocol;
 
 enum ResponseStatus : ubyte { ok, error }
+enum MutationEffectState : ubyte { none, not_dispatched, unknown, rejected }
 
 table Hello {
   proto_version:ushort;
@@ -139,6 +140,7 @@ table ErrorDetail {
   system_error:int;
   lsn:ulong;
   offset:ulong;
+  effect_state:MutationEffectState = none;
 }
 
 table AppendAck {

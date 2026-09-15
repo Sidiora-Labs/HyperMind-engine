@@ -17,6 +17,10 @@ use rmcp::{Json, ServiceExt, schemars, tool, tool_router, transport::stdio};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 
+pub mod tools;
+pub use tools::bind::BindInput;
+pub use tools::intend::{IntendAction, IntendCloseReason, IntendInput};
+
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 const DEFAULT_CHUNK_BYTES: usize = 32 * 1024;
 
@@ -34,7 +38,7 @@ pub struct Envelope {
 }
 
 impl Envelope {
-    fn empty() -> Self {
+    pub(crate) fn empty() -> Self {
         Self {
             ok: true,
             items: Vec::new(),
@@ -47,7 +51,7 @@ impl Envelope {
         }
     }
 
-    fn error(error: Error, mutation: bool) -> Self {
+    pub(crate) fn error(error: Error, mutation: bool) -> Self {
         let mut envelope = Self::empty();
         envelope.ok = false;
         envelope.items.push(json!({
@@ -59,20 +63,9 @@ impl Envelope {
         envelope.health = json!({"projection": "unavailable"});
         if mutation {
             envelope.effect_state = Some(
-                if matches!(
-                    error.code,
-                    ErrorCode::InvalidArgument
-                        | ErrorCode::InvalidLength
-                        | ErrorCode::SchemaInvalid
-                        | ErrorCode::SchemaVersion
-                        | ErrorCode::ForbiddenKind
-                        | ErrorCode::OrderingViolation
-                        | ErrorCode::ProtectedTypeWrite
-                ) {
-                    "rejected"
-                } else {
-                    "unknown"
-                }
+                hm_serve::errors::mutation_effect_state_name(
+                    hm_serve::errors::mutation_effect_state(error),
+                )
                 .to_owned(),
             );
         }
@@ -322,6 +315,20 @@ impl McpServer {
             Err(error) => Envelope::error(error, false),
         }
     }
+
+    pub async fn intend_envelope(&self, input: IntendInput) -> Envelope {
+        match tools::intend::run(&self.actor, input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, true),
+        }
+    }
+
+    pub async fn bind_envelope(&self, input: BindInput) -> Envelope {
+        match tools::bind::run(&self.actor, input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, true),
+        }
+    }
 }
 
 #[tool_router(server_handler)]
@@ -346,6 +353,16 @@ impl McpServer {
     #[tool(description = "Inspect actor ledger, projection checkpoints, and applied-state digest")]
     async fn inspect(&self, Parameters(input): Parameters<InspectInput>) -> Json<Envelope> {
         Json(self.inspect_envelope(input).await)
+    }
+
+    #[tool(description = "Set an objective, open a work loop, or close a work loop")]
+    async fn intend(&self, Parameters(input): Parameters<IntendInput>) -> Json<Envelope> {
+        Json(self.intend_envelope(input).await)
+    }
+
+    #[tool(description = "Bind a task or scope to a canonical entity revision")]
+    async fn bind(&self, Parameters(input): Parameters<BindInput>) -> Json<Envelope> {
+        Json(self.bind_envelope(input).await)
     }
 }
 
@@ -453,9 +470,11 @@ mod tests {
             .collect();
         assert_eq!(
             names,
-            ["activate", "inspect", "recall", "remember"]
-                .map(str::to_owned)
-                .into()
+            [
+                "activate", "bind", "inspect", "intend", "recall", "remember"
+            ]
+            .map(str::to_owned)
+            .into()
         );
     }
 }

@@ -4,17 +4,26 @@ use hm_compose::bundle::{self, ActivationBundle, ActivationRequest};
 use hm_compose::tokens::{FallbackWeights, TokenCounter};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
 use hm_ledger::frame::{EventKind, Frame, FrameHeader};
+use hm_ledger::idempotency::{
+    Admission, BatchEvent, BatchIdentity, ConnectionId, DedupTable, rollback_torn_batch,
+};
 use hm_ledger::keyring::{KeyEncryptionKey, KeyHierarchy, OsEntropy, UserId};
 use hm_ledger::segment::{AppendRequest, SegmentLog, SegmentLogOptions};
+use hm_proj::checkpoint::{
+    CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
+};
 use hm_proj::lexical::LexicalProjection;
 use hm_proj::rebuild::rebuild_projection_stream;
 use hm_proj::store::{ProjectionId, ProjectionStore};
 use hm_proj::timeline::{ConversationRecord, read_conversation_record, read_conversation_records};
-use hm_schema::event::{self, Boundary};
+use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
+use hm_schema::events::{
+    Authority, Checkpoint, EventEnvelope, EventPayload, Retention, Sensitivity,
+};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
-use tokio::sync::{mpsc, oneshot};
+use tokio::sync::{broadcast, mpsc, oneshot};
 
 const COMMAND_QUEUE: usize = 256;
 
@@ -38,6 +47,13 @@ pub struct IncomingEvent {
 pub struct AppendOutcome {
     pub first_lsn: LSN,
     pub last_lsn: LSN,
+    pub duplicate: bool,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct CheckpointOutcome {
+    pub lsn: LSN,
+    pub duplicate: bool,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -132,6 +148,7 @@ pub struct ActorStats {
 pub struct ActorEngine {
     actor: ActorId,
     commands: mpsc::Sender<Command>,
+    events: broadcast::Sender<Frame>,
 }
 
 enum Command {
@@ -139,6 +156,30 @@ enum Command {
         Vec<IncomingEvent>,
         oneshot::Sender<Result<AppendOutcome, Error>>,
     ),
+    IdempotentAppend(
+        ConnectionId,
+        u64,
+        Vec<IncomingEvent>,
+        oneshot::Sender<Result<AppendOutcome, Error>>,
+    ),
+    Checkpoint(
+        ConnectionId,
+        u64,
+        Vec<u8>,
+        Vec<u8>,
+        oneshot::Sender<Result<CheckpointOutcome, Error>>,
+    ),
+    LatestCheckpoint(
+        Vec<u8>,
+        oneshot::Sender<Result<Option<CheckpointRead>, Error>>,
+    ),
+    FramesSince(
+        LSN,
+        Option<ConversationId>,
+        usize,
+        oneshot::Sender<Result<Vec<Frame>, Error>>,
+    ),
+    NextClientSequence(ConnectionId, oneshot::Sender<Result<u64, Error>>),
     Recall(
         RecallRequest,
         oneshot::Sender<Result<Vec<RecallItem>, Error>>,
@@ -159,7 +200,9 @@ struct WriterState {
     plaintext_frames: Vec<Frame>,
     kinds: Vec<event::EventKind>,
     applied: AppliedState,
+    dedup: DedupTable,
     last_wall_timestamp_ns: i64,
+    events: broadcast::Sender<Frame>,
 }
 
 impl ActorEngine {
@@ -169,6 +212,8 @@ impl ActorEngine {
         }
         let actor = config.actor;
         let (commands, receiver) = mpsc::channel(COMMAND_QUEUE);
+        let (events, _) = broadcast::channel(COMMAND_QUEUE);
+        let writer_events = events.clone();
         let (initialized_tx, initialized_rx) = oneshot::channel();
         std::thread::Builder::new()
             .name(format!("hm-actor-{}", actor.get()))
@@ -181,7 +226,7 @@ impl ActorEngine {
                     return;
                 };
                 runtime.block_on(async move {
-                    match WriterState::open(config) {
+                    match WriterState::open(config, writer_events) {
                         Ok(state) => {
                             let _ = initialized_tx.send(Ok(()));
                             writer_loop(state, receiver).await;
@@ -196,7 +241,11 @@ impl ActorEngine {
         initialized_rx
             .await
             .map_err(|_| Error::new(ErrorCode::OpenFailed))??;
-        Ok(Self { actor, commands })
+        Ok(Self {
+            actor,
+            commands,
+            events,
+        })
     }
 
     #[must_use]
@@ -206,6 +255,65 @@ impl ActorEngine {
 
     pub async fn append(&self, events: Vec<IncomingEvent>) -> Result<AppendOutcome, Error> {
         request(&self.commands, |reply| Command::Append(events, reply)).await
+    }
+
+    pub async fn append_idempotent(
+        &self,
+        connection_id: ConnectionId,
+        client_seq: u64,
+        events: Vec<IncomingEvent>,
+    ) -> Result<AppendOutcome, Error> {
+        request(&self.commands, |reply| {
+            Command::IdempotentAppend(connection_id, client_seq, events, reply)
+        })
+        .await
+    }
+
+    pub async fn write_checkpoint(
+        &self,
+        connection_id: ConnectionId,
+        client_seq: u64,
+        turn_id: Vec<u8>,
+        blob: Vec<u8>,
+    ) -> Result<CheckpointOutcome, Error> {
+        request(&self.commands, |reply| {
+            Command::Checkpoint(connection_id, client_seq, turn_id, blob, reply)
+        })
+        .await
+    }
+
+    pub async fn latest_checkpoint(
+        &self,
+        turn_id: Vec<u8>,
+    ) -> Result<Option<CheckpointRead>, Error> {
+        request(&self.commands, |reply| {
+            Command::LatestCheckpoint(turn_id, reply)
+        })
+        .await
+    }
+
+    pub async fn frames_since(
+        &self,
+        since_lsn: LSN,
+        conversation: Option<ConversationId>,
+        maximum_frames: usize,
+    ) -> Result<Vec<Frame>, Error> {
+        request(&self.commands, |reply| {
+            Command::FramesSince(since_lsn, conversation, maximum_frames, reply)
+        })
+        .await
+    }
+
+    pub async fn next_client_sequence(&self, connection_id: ConnectionId) -> Result<u64, Error> {
+        request(&self.commands, |reply| {
+            Command::NextClientSequence(connection_id, reply)
+        })
+        .await
+    }
+
+    #[must_use]
+    pub fn subscribe(&self) -> broadcast::Receiver<Frame> {
+        self.events.subscribe()
     }
 
     pub async fn recall(&self, request_value: RecallRequest) -> Result<Vec<RecallItem>, Error> {
@@ -259,7 +367,37 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
     while let Some(command) = commands.recv().await {
         match command {
             Command::Append(events, reply) => {
-                let _ = reply.send(state.append(events));
+                let before = state.plaintext_frames.len();
+                let result = state.append(events);
+                if result.as_ref().is_ok_and(|outcome| !outcome.duplicate) {
+                    state.publish_from(before);
+                }
+                let _ = reply.send(result);
+            }
+            Command::IdempotentAppend(connection, sequence, events, reply) => {
+                let before = state.plaintext_frames.len();
+                let result = state.append_idempotent(connection, sequence, events);
+                if result.as_ref().is_ok_and(|outcome| !outcome.duplicate) {
+                    state.publish_from(before);
+                }
+                let _ = reply.send(result);
+            }
+            Command::Checkpoint(connection, sequence, turn_id, blob, reply) => {
+                let before = state.plaintext_frames.len();
+                let result = state.write_checkpoint(connection, sequence, &turn_id, &blob);
+                if result.as_ref().is_ok_and(|outcome| !outcome.duplicate) {
+                    state.publish_from(before);
+                }
+                let _ = reply.send(result);
+            }
+            Command::LatestCheckpoint(turn_id, reply) => {
+                let _ = reply.send(state.latest_checkpoint(&turn_id));
+            }
+            Command::FramesSince(since_lsn, conversation, maximum, reply) => {
+                let _ = reply.send(state.frames_since(since_lsn, conversation, maximum));
+            }
+            Command::NextClientSequence(connection, reply) => {
+                let _ = reply.send(state.next_client_sequence(&connection));
             }
             Command::Recall(request, reply) => {
                 let _ = reply.send(state.recall(request));
@@ -280,7 +418,7 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
 }
 
 impl WriterState {
-    fn open(config: ActorConfig) -> Result<Self, Error> {
+    fn open(config: ActorConfig, events: broadcast::Sender<Frame>) -> Result<Self, Error> {
         fs::create_dir_all(&config.actor_directory)
             .map_err(|_| Error::new(ErrorCode::OpenFailed))?;
         let mut entropy = OsEntropy;
@@ -292,11 +430,12 @@ impl WriterState {
             &mut entropy,
             true,
         )?;
-        let log = SegmentLog::open(
+        let mut log = SegmentLog::open(
             &config.actor_directory,
             config.actor,
             SegmentLogOptions::default(),
         )?;
+        rollback_torn_batch(&mut log, &keys)?;
         let projections =
             ProjectionStore::open(&config.actor_directory, config.projection_map_bytes)?;
         let mut kinds = Vec::new();
@@ -329,6 +468,7 @@ impl WriterState {
         if !rebuilt.complete {
             return Err(Error::new(ErrorCode::ProjectionCheckpoint));
         }
+        let dedup = DedupTable::rebuild(&plaintext_frames)?;
         Ok(Self {
             config,
             log,
@@ -337,7 +477,9 @@ impl WriterState {
             plaintext_frames,
             kinds,
             applied,
+            dedup,
             last_wall_timestamp_ns,
+            events,
         })
     }
 
@@ -408,7 +550,148 @@ impl WriterState {
         Ok(AppendOutcome {
             first_lsn: commit.first_lsn,
             last_lsn: commit.last_lsn,
+            duplicate: false,
         })
+    }
+
+    fn append_idempotent(
+        &mut self,
+        connection_id: ConnectionId,
+        client_seq: u64,
+        events: Vec<IncomingEvent>,
+    ) -> Result<AppendOutcome, Error> {
+        if events.is_empty() || events.len() > hm_schema::protocol::MAXIMUM_BATCH_EVENTS {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let count =
+            u32::try_from(events.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+        let mut history = self.kinds.clone();
+        let mut prepared = Vec::with_capacity(events.len());
+        for (index, incoming) in events.into_iter().enumerate() {
+            let kind = schema_kind(incoming.kind)?;
+            let mut envelope = event::verify_event_with_history(
+                &incoming.payload,
+                kind,
+                Boundary::Socket,
+                &|lsn: LSN| {
+                    lsn.get()
+                        .checked_sub(1)
+                        .and_then(|position| usize::try_from(position).ok())
+                        .and_then(|position| history.get(position))
+                        .copied()
+                },
+            )?
+            .envelope;
+            envelope.connection_id = Some(connection_id.to_vec());
+            envelope.client_seq = client_seq;
+            envelope.client_event_index =
+                u32::try_from(index).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+            envelope.client_event_count = count;
+            prepared.push(IncomingEvent {
+                kind: incoming.kind,
+                conversation: incoming.conversation,
+                payload: encode_event_envelope(&envelope),
+            });
+            history.push(kind);
+        }
+        let batch_events: Vec<BatchEvent<'_>> = prepared
+            .iter()
+            .map(|incoming| BatchEvent {
+                kind: incoming.kind,
+                conversation: incoming.conversation,
+                plaintext_payload: &incoming.payload,
+            })
+            .collect();
+        let identity = BatchIdentity {
+            connection_id,
+            client_seq,
+            events: &batch_events,
+        };
+        if let Admission::Duplicate(prior) = self.dedup.admit(&identity)? {
+            return Ok(AppendOutcome {
+                first_lsn: prior.first_lsn,
+                last_lsn: prior.last_lsn,
+                duplicate: true,
+            });
+        }
+        let outcome = self.append(prepared.clone())?;
+        self.dedup
+            .record(&identity, outcome.first_lsn, outcome.last_lsn)?;
+        Ok(outcome)
+    }
+
+    fn write_checkpoint(
+        &mut self,
+        connection_id: ConnectionId,
+        client_seq: u64,
+        turn_id: &[u8],
+        blob: &[u8],
+    ) -> Result<CheckpointOutcome, Error> {
+        let cursor = encode_checkpoint_cursor(turn_id, blob)?;
+        let incoming = IncomingEvent {
+            kind: EventKind::Checkpoint,
+            conversation: turn_conversation(turn_id),
+            payload: encode_event_envelope(&EventEnvelope {
+                schema_version: CURRENT_SCHEMA_VERSION,
+                payload: EventPayload::Checkpoint(Box::new(Checkpoint { cursor })),
+                connection_id: None,
+                client_seq: 0,
+                client_event_index: 0,
+                client_event_count: 0,
+                origin_actor: self.config.actor.get(),
+                run_id: None,
+                model_provenance: None,
+                authority: Authority::RuntimeFact,
+                retention: Retention::CurrentState,
+                sensitivity: Sensitivity::Personal,
+                event_time_ns: 0,
+            }),
+        };
+        let outcome = self.append_idempotent(connection_id, client_seq, vec![incoming])?;
+        Ok(CheckpointOutcome {
+            lsn: outcome.first_lsn,
+            duplicate: outcome.duplicate,
+        })
+    }
+
+    fn latest_checkpoint(&self, turn_id: &[u8]) -> Result<Option<CheckpointRead>, Error> {
+        latest_checkpoint(&self.projections.begin_snapshot()?, turn_id)
+    }
+
+    fn frames_since(
+        &self,
+        since_lsn: LSN,
+        conversation: Option<ConversationId>,
+        maximum_frames: usize,
+    ) -> Result<Vec<Frame>, Error> {
+        if maximum_frames == 0 {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        Ok(self
+            .plaintext_frames
+            .iter()
+            .filter(|frame| {
+                frame.header.lsn.get() > since_lsn.get()
+                    && conversation.is_none_or(|value| value == frame.header.conversation)
+            })
+            .take(maximum_frames)
+            .cloned()
+            .collect())
+    }
+
+    fn next_client_sequence(&self, connection_id: &ConnectionId) -> Result<u64, Error> {
+        self.dedup.get(connection_id).map_or(Ok(1), |state| {
+            state
+                .client_seq
+                .checked_add(1)
+                .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))
+        })
+    }
+
+    fn publish_from(&self, index: usize) {
+        for frame in self.plaintext_frames.iter().skip(index) {
+            let _ = self.events.send(frame.clone());
+        }
     }
 
     fn recall(&self, request: RecallRequest) -> Result<Vec<RecallItem>, Error> {
@@ -471,6 +754,7 @@ impl WriterState {
             ProjectionId::IntentFrame,
             ProjectionId::WorkLedger,
             ProjectionId::ConversationHeads,
+            ProjectionId::Bindings,
         ] {
             projections.push(ProjectionStat {
                 name: projection.name(),

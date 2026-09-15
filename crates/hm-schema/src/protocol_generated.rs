@@ -194,10 +194,198 @@ mod root {
                 }
             }
 
+            /// The enum `MutationEffectState` in the namespace `hypermind.protocol`
+            ///
+            /// Generated from these locations:
+            /// * Enum `MutationEffectState` in the file `schemas/protocol.fbs:4`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum MutationEffectState {
+                /// The variant `none` in the enum `MutationEffectState`
+                None = 0,
+
+                /// The variant `not_dispatched` in the enum `MutationEffectState`
+                NotDispatched = 1,
+
+                /// The variant `unknown` in the enum `MutationEffectState`
+                Unknown = 2,
+
+                /// The variant `rejected` in the enum `MutationEffectState`
+                Rejected = 3,
+            }
+
+            impl MutationEffectState {
+                /// Array containing all valid variants of MutationEffectState
+                pub const ENUM_VALUES: [Self; 4] = [
+                    Self::None,
+                    Self::NotDispatched,
+                    Self::Unknown,
+                    Self::Rejected,
+                ];
+            }
+
+            impl ::core::convert::TryFrom<u8> for MutationEffectState {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(MutationEffectState::None),
+                        1 => ::core::result::Result::Ok(MutationEffectState::NotDispatched),
+                        2 => ::core::result::Result::Ok(MutationEffectState::Unknown),
+                        3 => ::core::result::Result::Ok(MutationEffectState::Rejected),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<MutationEffectState> for u8 {
+                #[inline]
+                fn from(value: MutationEffectState) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for MutationEffectState {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<MutationEffectState> for MutationEffectState {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<MutationEffectState> for MutationEffectState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> MutationEffectState {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<MutationEffectState, MutationEffectState> for MutationEffectState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &MutationEffectState,
+                ) -> ::core::option::Option<MutationEffectState> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<MutationEffectState> for MutationEffectState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<MutationEffectState> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for MutationEffectState {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for MutationEffectState {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "MutationEffectState",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<MutationEffectState> for MutationEffectState {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
             /// The table `Hello` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Hello` in the file `schemas/protocol.fbs:5`
+            /// * Table `Hello` in the file `schemas/protocol.fbs:6`
             #[derive(
                 Clone,
                 Debug,
@@ -535,7 +723,7 @@ mod root {
             /// The table `Welcome` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Welcome` in the file `schemas/protocol.fbs:11`
+            /// * Table `Welcome` in the file `schemas/protocol.fbs:12`
             #[derive(
                 Clone,
                 Debug,
@@ -1126,7 +1314,7 @@ mod root {
             /// The table `AppendEvent` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AppendEvent` in the file `schemas/protocol.fbs:21`
+            /// * Table `AppendEvent` in the file `schemas/protocol.fbs:22`
             #[derive(
                 Clone,
                 Debug,
@@ -1474,7 +1662,7 @@ mod root {
             /// The table `Append` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Append` in the file `schemas/protocol.fbs:27`
+            /// * Table `Append` in the file `schemas/protocol.fbs:28`
             #[derive(
                 Clone,
                 Debug,
@@ -1783,7 +1971,7 @@ mod root {
             /// The table `Activate` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Activate` in the file `schemas/protocol.fbs:32`
+            /// * Table `Activate` in the file `schemas/protocol.fbs:33`
             #[derive(
                 Clone,
                 Debug,
@@ -2518,7 +2706,7 @@ mod root {
             /// The table `Transcript` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Transcript` in the file `schemas/protocol.fbs:45`
+            /// * Table `Transcript` in the file `schemas/protocol.fbs:46`
             #[derive(
                 Clone,
                 Debug,
@@ -2869,7 +3057,7 @@ mod root {
             /// The enum `RecallMode` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Enum `RecallMode` in the file `schemas/protocol.fbs:51`
+            /// * Enum `RecallMode` in the file `schemas/protocol.fbs:52`
             #[derive(
                 Copy,
                 Clone,
@@ -3049,7 +3237,7 @@ mod root {
             /// The table `Recall` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Recall` in the file `schemas/protocol.fbs:53`
+            /// * Table `Recall` in the file `schemas/protocol.fbs:54`
             #[derive(
                 Clone,
                 Debug,
@@ -3537,7 +3725,7 @@ mod root {
             /// The table `AsOf` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AsOf` in the file `schemas/protocol.fbs:62`
+            /// * Table `AsOf` in the file `schemas/protocol.fbs:63`
             #[derive(
                 Clone,
                 Debug,
@@ -3941,7 +4129,7 @@ mod root {
             ///  Persists an opaque turn state with client-sequence idempotency.
             ///
             /// Generated from these locations:
-            /// * Table `Checkpoint` in the file `schemas/protocol.fbs:70`
+            /// * Table `Checkpoint` in the file `schemas/protocol.fbs:71`
             #[derive(
                 Clone,
                 Debug,
@@ -4277,7 +4465,7 @@ mod root {
             ///  Reads the latest persisted state for one turn identity.
             ///
             /// Generated from these locations:
-            /// * Table `LatestCheckpoint` in the file `schemas/protocol.fbs:77`
+            /// * Table `LatestCheckpoint` in the file `schemas/protocol.fbs:78`
             #[derive(
                 Clone,
                 Debug,
@@ -4549,7 +4737,7 @@ mod root {
             /// The table `Attest` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Attest` in the file `schemas/protocol.fbs:81`
+            /// * Table `Attest` in the file `schemas/protocol.fbs:82`
             #[derive(
                 Clone,
                 Debug,
@@ -4926,7 +5114,7 @@ mod root {
             ///  Streams committed events after an optional conversation and LSN cursor.
             ///
             /// Generated from these locations:
-            /// * Table `Subscribe` in the file `schemas/protocol.fbs:88`
+            /// * Table `Subscribe` in the file `schemas/protocol.fbs:89`
             #[derive(
                 Clone,
                 Debug,
@@ -5248,7 +5436,7 @@ mod root {
             /// The table `Health` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Health` in the file `schemas/protocol.fbs:93`
+            /// * Table `Health` in the file `schemas/protocol.fbs:94`
             #[derive(
                 Clone,
                 Debug,
@@ -5459,7 +5647,7 @@ mod root {
             /// The table `Stats` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Stats` in the file `schemas/protocol.fbs:95`
+            /// * Table `Stats` in the file `schemas/protocol.fbs:96`
             #[derive(
                 Clone,
                 Debug,
@@ -5721,7 +5909,7 @@ mod root {
             /// The table `LatencyHistograms` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyHistograms` in the file `schemas/protocol.fbs:99`
+            /// * Table `LatencyHistograms` in the file `schemas/protocol.fbs:100`
             #[derive(
                 Clone,
                 Debug,
@@ -5951,7 +6139,7 @@ mod root {
             /// The table `VerifyStatus` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `VerifyStatus` in the file `schemas/protocol.fbs:101`
+            /// * Table `VerifyStatus` in the file `schemas/protocol.fbs:102`
             #[derive(
                 Clone,
                 Debug,
@@ -6231,7 +6419,7 @@ mod root {
             /// The table `RebuildProjection` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RebuildProjection` in the file `schemas/protocol.fbs:105`
+            /// * Table `RebuildProjection` in the file `schemas/protocol.fbs:106`
             #[derive(
                 Clone,
                 Debug,
@@ -6552,7 +6740,7 @@ mod root {
             /// The table `CryptoDelete` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `CryptoDelete` in the file `schemas/protocol.fbs:110`
+            /// * Table `CryptoDelete` in the file `schemas/protocol.fbs:111`
             #[derive(
                 Clone,
                 Debug,
@@ -6832,7 +7020,7 @@ mod root {
             /// The union `RequestPayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `RequestPayload` in the file `schemas/protocol.fbs:114`
+            /// * Union `RequestPayload` in the file `schemas/protocol.fbs:115`
             #[derive(
                 Clone,
                 Debug,
@@ -7851,7 +8039,7 @@ mod root {
             /// The table `Request` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Request` in the file `schemas/protocol.fbs:132`
+            /// * Table `Request` in the file `schemas/protocol.fbs:133`
             #[derive(
                 Clone,
                 Debug,
@@ -8145,7 +8333,7 @@ mod root {
             /// The table `ErrorDetail` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `ErrorDetail` in the file `schemas/protocol.fbs:137`
+            /// * Table `ErrorDetail` in the file `schemas/protocol.fbs:138`
             #[derive(
                 Clone,
                 Debug,
@@ -8166,6 +8354,8 @@ mod root {
                 pub lsn: u64,
                 /// The field `offset` in the table `ErrorDetail`
                 pub offset: u64,
+                /// The field `effect_state` in the table `ErrorDetail`
+                pub effect_state: self::MutationEffectState,
             }
 
             #[allow(clippy::derivable_impls)]
@@ -8176,6 +8366,7 @@ mod root {
                         system_error: 0,
                         lsn: 0,
                         offset: 0,
+                        effect_state: self::MutationEffectState::None,
                     }
                 }
             }
@@ -8194,13 +8385,19 @@ mod root {
                     field_system_error: impl ::planus::WriteAsDefault<i32, i32>,
                     field_lsn: impl ::planus::WriteAsDefault<u64, u64>,
                     field_offset: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_effect_state: impl ::planus::WriteAsDefault<
+                        self::MutationEffectState,
+                        self::MutationEffectState,
+                    >,
                 ) -> ::planus::Offset<Self> {
                     let prepared_code = field_code.prepare(builder, &0);
                     let prepared_system_error = field_system_error.prepare(builder, &0);
                     let prepared_lsn = field_lsn.prepare(builder, &0);
                     let prepared_offset = field_offset.prepare(builder, &0);
+                    let prepared_effect_state =
+                        field_effect_state.prepare(builder, &self::MutationEffectState::None);
 
-                    let mut table_writer: ::planus::table_writer::TableWriter<12> =
+                    let mut table_writer: ::planus::table_writer::TableWriter<14> =
                         ::core::default::Default::default();
                     if prepared_lsn.is_some() {
                         table_writer.write_entry::<u64>(2);
@@ -8213,6 +8410,9 @@ mod root {
                     }
                     if prepared_code.is_some() {
                         table_writer.write_entry::<u8>(0);
+                    }
+                    if prepared_effect_state.is_some() {
+                        table_writer.write_entry::<self::MutationEffectState>(4);
                     }
 
                     unsafe {
@@ -8230,6 +8430,11 @@ mod root {
                             }
                             if let ::core::option::Option::Some(prepared_code) = prepared_code {
                                 object_writer.write::<_, _, 1>(&prepared_code);
+                            }
+                            if let ::core::option::Option::Some(prepared_effect_state) =
+                                prepared_effect_state
+                            {
+                                object_writer.write::<_, _, 1>(&prepared_effect_state);
                             }
                         });
                     }
@@ -8273,6 +8478,7 @@ mod root {
                         self.system_error,
                         self.lsn,
                         self.offset,
+                        self.effect_state,
                     )
                 }
             }
@@ -8370,6 +8576,31 @@ mod root {
             }
 
             impl<T0, T1, T2, T3> ErrorDetailBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`effect_state` field](ErrorDetail#structfield.effect_state).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn effect_state<T4>(self, value: T4) -> ErrorDetailBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<
+                            self::MutationEffectState,
+                            self::MutationEffectState,
+                        >,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    ErrorDetailBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`effect_state` field](ErrorDetail#structfield.effect_state) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn effect_state_as_default(
+                    self,
+                ) -> ErrorDetailBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)> {
+                    self.effect_state(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> ErrorDetailBuilder<(T0, T1, T2, T3, T4)> {
                 /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ErrorDetail].
                 #[inline]
                 pub fn finish(
@@ -8388,8 +8619,9 @@ mod root {
                 T1: ::planus::WriteAsDefault<i32, i32>,
                 T2: ::planus::WriteAsDefault<u64, u64>,
                 T3: ::planus::WriteAsDefault<u64, u64>,
+                T4: ::planus::WriteAsDefault<self::MutationEffectState, self::MutationEffectState>,
             > ::planus::WriteAs<::planus::Offset<ErrorDetail>>
-                for ErrorDetailBuilder<(T0, T1, T2, T3)>
+                for ErrorDetailBuilder<(T0, T1, T2, T3, T4)>
             {
                 type Prepared = ::planus::Offset<ErrorDetail>;
 
@@ -8407,8 +8639,9 @@ mod root {
                 T1: ::planus::WriteAsDefault<i32, i32>,
                 T2: ::planus::WriteAsDefault<u64, u64>,
                 T3: ::planus::WriteAsDefault<u64, u64>,
+                T4: ::planus::WriteAsDefault<self::MutationEffectState, self::MutationEffectState>,
             > ::planus::WriteAsOptional<::planus::Offset<ErrorDetail>>
-                for ErrorDetailBuilder<(T0, T1, T2, T3)>
+                for ErrorDetailBuilder<(T0, T1, T2, T3, T4)>
             {
                 type Prepared = ::planus::Offset<ErrorDetail>;
 
@@ -8426,15 +8659,16 @@ mod root {
                 T1: ::planus::WriteAsDefault<i32, i32>,
                 T2: ::planus::WriteAsDefault<u64, u64>,
                 T3: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<ErrorDetail> for ErrorDetailBuilder<(T0, T1, T2, T3)>
+                T4: ::planus::WriteAsDefault<self::MutationEffectState, self::MutationEffectState>,
+            > ::planus::WriteAsOffset<ErrorDetail> for ErrorDetailBuilder<(T0, T1, T2, T3, T4)>
             {
                 #[inline]
                 fn prepare(
                     &self,
                     builder: &mut ::planus::Builder,
                 ) -> ::planus::Offset<ErrorDetail> {
-                    let (v0, v1, v2, v3) = &self.0;
-                    ErrorDetail::create(builder, v0, v1, v2, v3)
+                    let (v0, v1, v2, v3, v4) = &self.0;
+                    ErrorDetail::create(builder, v0, v1, v2, v3, v4)
                 }
             }
 
@@ -8474,6 +8708,16 @@ mod root {
                         self.0.access(3, "ErrorDetail", "offset")?.unwrap_or(0),
                     )
                 }
+
+                /// Getter for the [`effect_state` field](ErrorDetail#structfield.effect_state).
+                #[inline]
+                pub fn effect_state(&self) -> ::planus::Result<self::MutationEffectState> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "ErrorDetail", "effect_state")?
+                            .unwrap_or(self::MutationEffectState::None),
+                    )
+                }
             }
 
             impl<'a> ::core::fmt::Debug for ErrorDetailRef<'a> {
@@ -8483,6 +8727,7 @@ mod root {
                     f.field("system_error", &self.system_error());
                     f.field("lsn", &self.lsn());
                     f.field("offset", &self.offset());
+                    f.field("effect_state", &self.effect_state());
                     f.finish()
                 }
             }
@@ -8497,6 +8742,7 @@ mod root {
                         system_error: ::core::convert::TryInto::try_into(value.system_error()?)?,
                         lsn: ::core::convert::TryInto::try_into(value.lsn()?)?,
                         offset: ::core::convert::TryInto::try_into(value.offset()?)?,
+                        effect_state: ::core::convert::TryInto::try_into(value.effect_state()?)?,
                     })
                 }
             }
@@ -8577,7 +8823,7 @@ mod root {
             /// The table `AppendAck` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AppendAck` in the file `schemas/protocol.fbs:144`
+            /// * Table `AppendAck` in the file `schemas/protocol.fbs:146`
             #[derive(
                 Clone,
                 Debug,
@@ -9154,7 +9400,7 @@ mod root {
             /// The table `BytesResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BytesResult` in the file `schemas/protocol.fbs:154`
+            /// * Table `BytesResult` in the file `schemas/protocol.fbs:156`
             #[derive(
                 Clone,
                 Debug,
@@ -9423,7 +9669,7 @@ mod root {
             ///  Confirms the server-assigned bounded subscription identity.
             ///
             /// Generated from these locations:
-            /// * Table `SubscriptionAck` in the file `schemas/protocol.fbs:159`
+            /// * Table `SubscriptionAck` in the file `schemas/protocol.fbs:161`
             #[derive(
                 Clone,
                 Debug,
@@ -9714,7 +9960,7 @@ mod root {
             /// The table `HealthResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `HealthResult` in the file `schemas/protocol.fbs:163`
+            /// * Table `HealthResult` in the file `schemas/protocol.fbs:165`
             #[derive(
                 Clone,
                 Debug,
@@ -10107,7 +10353,7 @@ mod root {
             /// The table `ProjectionStat` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `ProjectionStat` in the file `schemas/protocol.fbs:169`
+            /// * Table `ProjectionStat` in the file `schemas/protocol.fbs:171`
             #[derive(
                 Clone,
                 Debug,
@@ -10430,7 +10676,7 @@ mod root {
             /// The table `StatsResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `StatsResult` in the file `schemas/protocol.fbs:174`
+            /// * Table `StatsResult` in the file `schemas/protocol.fbs:176`
             #[derive(
                 Clone,
                 Debug,
@@ -10860,7 +11106,7 @@ mod root {
             /// The table `LatencyBucket` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyBucket` in the file `schemas/protocol.fbs:181`
+            /// * Table `LatencyBucket` in the file `schemas/protocol.fbs:183`
             #[derive(
                 Clone,
                 Debug,
@@ -11231,7 +11477,7 @@ mod root {
             /// The table `LatencyResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyResult` in the file `schemas/protocol.fbs:187`
+            /// * Table `LatencyResult` in the file `schemas/protocol.fbs:189`
             #[derive(
                 Clone,
                 Debug,
@@ -11509,7 +11755,7 @@ mod root {
             /// The table `VerifyResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `VerifyResult` in the file `schemas/protocol.fbs:191`
+            /// * Table `VerifyResult` in the file `schemas/protocol.fbs:193`
             #[derive(
                 Clone,
                 Debug,
@@ -11987,7 +12233,7 @@ mod root {
             /// The table `RebuildResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RebuildResult` in the file `schemas/protocol.fbs:199`
+            /// * Table `RebuildResult` in the file `schemas/protocol.fbs:201`
             #[derive(
                 Clone,
                 Debug,
@@ -12354,7 +12600,7 @@ mod root {
             /// The table `DeleteResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `DeleteResult` in the file `schemas/protocol.fbs:205`
+            /// * Table `DeleteResult` in the file `schemas/protocol.fbs:207`
             #[derive(
                 Clone,
                 Debug,
@@ -12670,7 +12916,7 @@ mod root {
             /// The table `FrameRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `FrameRecord` in the file `schemas/protocol.fbs:210`
+            /// * Table `FrameRecord` in the file `schemas/protocol.fbs:212`
             #[derive(
                 Clone,
                 Debug,
@@ -13167,7 +13413,7 @@ mod root {
             /// The table `TranscriptResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `TranscriptResult` in the file `schemas/protocol.fbs:219`
+            /// * Table `TranscriptResult` in the file `schemas/protocol.fbs:221`
             #[derive(
                 Clone,
                 Debug,
@@ -13499,7 +13745,7 @@ mod root {
             /// The table `TemporalWindowRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `TemporalWindowRecord` in the file `schemas/protocol.fbs:224`
+            /// * Table `TemporalWindowRecord` in the file `schemas/protocol.fbs:226`
             #[derive(
                 Clone,
                 Debug,
@@ -13956,7 +14202,7 @@ mod root {
             /// The table `RecallResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RecallResult` in the file `schemas/protocol.fbs:231`
+            /// * Table `RecallResult` in the file `schemas/protocol.fbs:233`
             #[derive(
                 Clone,
                 Debug,
@@ -14319,7 +14565,7 @@ mod root {
             /// The table `BeliefProvenanceRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefProvenanceRecord` in the file `schemas/protocol.fbs:236`
+            /// * Table `BeliefProvenanceRecord` in the file `schemas/protocol.fbs:238`
             #[derive(
                 Clone,
                 Debug,
@@ -14668,7 +14914,7 @@ mod root {
             /// The table `BeliefConflictRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefConflictRecord` in the file `schemas/protocol.fbs:241`
+            /// * Table `BeliefConflictRecord` in the file `schemas/protocol.fbs:243`
             #[derive(
                 Clone,
                 Debug,
@@ -15177,7 +15423,7 @@ mod root {
             /// The table `BeliefResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefResult` in the file `schemas/protocol.fbs:249`
+            /// * Table `BeliefResult` in the file `schemas/protocol.fbs:251`
             #[derive(
                 Clone,
                 Debug,
@@ -16409,7 +16655,7 @@ mod root {
             ///  Identifies the ledger record containing the accepted checkpoint.
             ///
             /// Generated from these locations:
-            /// * Table `CheckpointAck` in the file `schemas/protocol.fbs:268`
+            /// * Table `CheckpointAck` in the file `schemas/protocol.fbs:270`
             #[derive(
                 Clone,
                 Debug,
@@ -16689,7 +16935,7 @@ mod root {
             ///  Returns the latest opaque turn state without interpreting its bytes.
             ///
             /// Generated from these locations:
-            /// * Table `CheckpointResult` in the file `schemas/protocol.fbs:273`
+            /// * Table `CheckpointResult` in the file `schemas/protocol.fbs:275`
             #[derive(
                 Clone,
                 Debug,
@@ -17072,7 +17318,7 @@ mod root {
             /// The table `AttestAck` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AttestAck` in the file `schemas/protocol.fbs:279`
+            /// * Table `AttestAck` in the file `schemas/protocol.fbs:281`
             #[derive(
                 Clone,
                 Debug,
@@ -17434,7 +17680,7 @@ mod root {
             /// The union `ResponsePayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `ResponsePayload` in the file `schemas/protocol.fbs:285`
+            /// * Union `ResponsePayload` in the file `schemas/protocol.fbs:287`
             #[derive(
                 Clone,
                 Debug,
@@ -18530,7 +18776,7 @@ mod root {
             /// The table `Response` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Response` in the file `schemas/protocol.fbs:304`
+            /// * Table `Response` in the file `schemas/protocol.fbs:306`
             #[derive(
                 Clone,
                 Debug,
@@ -18913,7 +19159,7 @@ mod root {
             ///  Pushes one committed ledger event to a subscriber.
             ///
             /// Generated from these locations:
-            /// * Table `Event` in the file `schemas/protocol.fbs:311`
+            /// * Table `Event` in the file `schemas/protocol.fbs:313`
             #[derive(
                 Clone,
                 Debug,
@@ -19437,7 +19683,7 @@ mod root {
             /// The union `WirePayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `WirePayload` in the file `schemas/protocol.fbs:321`
+            /// * Union `WirePayload` in the file `schemas/protocol.fbs:323`
             #[derive(
                 Clone,
                 Debug,
@@ -19823,7 +20069,7 @@ mod root {
             /// The table `WireEnvelope` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `WireEnvelope` in the file `schemas/protocol.fbs:329`
+            /// * Table `WireEnvelope` in the file `schemas/protocol.fbs:331`
             #[derive(
                 Clone,
                 Debug,

@@ -2,7 +2,9 @@
 
 use crate::actor::{ActivateRequest, ActorConfig, ActorEngine, IncomingEvent, RecallRequest};
 use crate::config::{ServerConfig, capability_equal};
+use crate::errors::{MutationEffectState, mutation_effect_state};
 use crate::protocol::{FrameParser, encode_frame};
+use crate::requests::{checkpoint, subscribe};
 use hm_compose::canonical::canonical_bytes;
 use hm_compose::tokens::FallbackWeights;
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN};
@@ -11,9 +13,10 @@ use hm_schema::protocol::{
     MAXIMUM_BATCH_EVENTS, MAXIMUM_PROTOCOL_PAYLOAD_BYTES, verify_wire_envelope,
 };
 use hm_schema::wire::{
-    AppendAck, BytesResult, ErrorDetail, FrameRecord, HealthResult, ProjectionStat, RecallResult,
+    AppendAck, BytesResult, CheckpointAck, CheckpointResult, ErrorDetail, Event, FrameRecord,
+    HealthResult, MutationEffectState as WireMutationEffectState, ProjectionStat, RecallResult,
     Request, RequestPayload, Response, ResponsePayload, ResponseStatus, StatsResult,
-    TranscriptResult, Welcome, WireEnvelope, WirePayload,
+    SubscriptionAck, TranscriptResult, Welcome, WireEnvelope, WirePayload,
 };
 use std::collections::BTreeMap;
 use std::future::Future;
@@ -22,7 +25,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{UnixListener, UnixStream};
-use tokio::sync::{Semaphore, mpsc};
+use tokio::sync::{Semaphore, mpsc, watch};
 
 const MAXIMUM_SUBSCRIPTIONS: u32 = 64;
 
@@ -113,8 +116,12 @@ struct Session {
     actor: Option<u16>,
     admin: bool,
     proto_version: u16,
+    connection_id: [u8; 16],
+    next_subscription_id: u64,
+    subscriptions: usize,
 }
 
+#[allow(clippy::too_many_lines)]
 async fn handle_connection(
     stream: UnixStream,
     config: Arc<ServerConfig>,
@@ -136,11 +143,19 @@ async fn handle_connection(
     let mut parser = FrameParser::default();
     let mut buffer = vec![0; 64 * 1024];
     let mut session = None;
+    let (disconnect, mut disconnected) = watch::channel(false);
     loop {
-        let count = reader
-            .read(&mut buffer)
-            .await
-            .map_err(|_| Error::new(ErrorCode::ReadFailed))?;
+        let count = tokio::select! {
+            changed = disconnected.changed() => {
+                if changed.is_err() || *disconnected.borrow() {
+                    break;
+                }
+                continue;
+            }
+            read = reader.read(&mut buffer) => {
+                read.map_err(|_| Error::new(ErrorCode::ReadFailed))?
+            }
+        };
         if count == 0 {
             break;
         }
@@ -153,8 +168,22 @@ async fn handle_connection(
                 if envelope.proto_version != hello.proto_version {
                     return Err(Error::new(ErrorCode::ProtocolVersion));
                 }
-                let authenticated =
-                    authenticate(&config, &hello.capability_token, hello.proto_version)?;
+                let authenticated = authenticate(
+                    &config,
+                    &hello.connection_id,
+                    &hello.capability_token,
+                    hello.proto_version,
+                )?;
+                let next_client_seq = match authenticated.actor {
+                    Some(actor_id) => {
+                        actors
+                            .get(&actor_id)
+                            .ok_or_else(|| Error::new(ErrorCode::CapabilityDenied))?
+                            .next_client_sequence(authenticated.connection_id)
+                            .await?
+                    }
+                    None => 1,
+                };
                 let welcome = Welcome {
                     proto_version: hello.proto_version,
                     actor_ns: authenticated.actor.unwrap_or_default(),
@@ -164,7 +193,7 @@ async fn handle_connection(
                     maximum_batch_events: u32::try_from(MAXIMUM_BATCH_EVENTS)
                         .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?,
                     maximum_subscriptions: MAXIMUM_SUBSCRIPTIONS,
-                    next_client_seq: 1,
+                    next_client_seq,
                 };
                 enqueue(
                     &output,
@@ -181,27 +210,57 @@ async fn handle_connection(
             let WirePayload::Request(request) = envelope.payload else {
                 return Err(Error::new(ErrorCode::ProtocolInvalid));
             };
-            let current = session.as_ref().expect("session established");
+            let mutation = mutation_request(&request.payload);
+            if let Err(error) = hm_schema::protocol::validate_request(&request) {
+                let current = session.as_ref().expect("session established");
+                enqueue(
+                    &output,
+                    &output_bytes,
+                    config.maximum_output_bytes,
+                    error_wire(current.proto_version, request.request_id, error, mutation)?,
+                )?;
+                continue;
+            }
+            let Request {
+                request_id,
+                payload: request_payload,
+            } = *request;
+            let current = session.as_mut().expect("session established");
+            if let RequestPayload::Subscribe(request_value) = request_payload {
+                let response = handle_subscribe(
+                    current,
+                    request_id,
+                    *request_value,
+                    &actors,
+                    &output,
+                    &output_bytes,
+                    config.maximum_output_bytes,
+                    disconnect.clone(),
+                )
+                .await;
+                if let Err(error) = response {
+                    enqueue(
+                        &output,
+                        &output_bytes,
+                        config.maximum_output_bytes,
+                        error_wire(current.proto_version, request_id, error, false)?,
+                    )?;
+                }
+                continue;
+            }
             let response = handle_request(
                 current,
-                *request,
+                request_id,
+                request_payload,
                 &actors,
                 active_connections.load(Ordering::Relaxed),
             )
             .await;
             let envelope = match response {
                 Ok(payload) => response_wire(current.proto_version, payload.0, payload.1, true)?,
-                Err((request_id, error)) => response_wire(
-                    current.proto_version,
-                    request_id,
-                    ResponsePayload::ErrorDetail(Box::new(ErrorDetail {
-                        code: error.code as u8,
-                        system_error: error.system_error,
-                        lsn: error.lsn.get(),
-                        offset: error.offset,
-                    })),
-                    false,
-                )?,
+                Err((request_id, error)) => {
+                    error_wire(current.proto_version, request_id, error, mutation)?
+                }
             };
             enqueue(
                 &output,
@@ -211,6 +270,7 @@ async fn handle_connection(
             )?;
         }
     }
+    let _ = disconnect.send(true);
     drop(output);
     writer_task
         .await
@@ -218,12 +278,23 @@ async fn handle_connection(
     Ok(())
 }
 
-fn authenticate(config: &ServerConfig, token: &[u8], proto_version: u16) -> Result<Session, Error> {
+fn authenticate(
+    config: &ServerConfig,
+    connection_id: &[u8],
+    token: &[u8],
+    proto_version: u16,
+) -> Result<Session, Error> {
+    let connection_id = connection_id
+        .try_into()
+        .map_err(|_| Error::new(ErrorCode::ProtocolInvalid))?;
     if capability_equal(&config.admin_token, token) {
         return Ok(Session {
             actor: None,
             admin: true,
             proto_version,
+            connection_id,
+            next_subscription_id: 1,
+            subscriptions: 0,
         });
     }
     let actor = config
@@ -236,18 +307,24 @@ fn authenticate(config: &ServerConfig, token: &[u8], proto_version: u16) -> Resu
         actor: Some(actor),
         admin: false,
         proto_version,
+        connection_id,
+        next_subscription_id: 1,
+        subscriptions: 0,
     })
 }
 
 #[allow(clippy::too_many_lines)]
 async fn handle_request(
     session: &Session,
-    request: Request,
+    request_id: u64,
+    request_payload: RequestPayload,
     actors: &BTreeMap<u16, ActorEngine>,
     active_connections: usize,
 ) -> Result<(u64, ResponsePayload), (u64, Error)> {
-    let request_id = request.request_id;
-    hm_schema::protocol::validate_request(&request).map_err(|error| (request_id, error))?;
+    let request = Request {
+        request_id,
+        payload: request_payload,
+    };
     let admin_request = matches!(
         request.payload,
         RequestPayload::Health(_) | RequestPayload::Stats(_)
@@ -288,14 +365,14 @@ async fn handle_request(
                 });
             }
             let outcome = actor
-                .append(incoming)
+                .append_idempotent(session.connection_id, append.client_seq, incoming)
                 .await
                 .map_err(|error| (request_id, error))?;
             ResponsePayload::AppendAck(Box::new(AppendAck {
                 client_seq: append.client_seq,
                 first_lsn: outcome.first_lsn.get(),
                 last_lsn: outcome.last_lsn.get(),
-                duplicate: false,
+                duplicate: outcome.duplicate,
                 leaf_count: 0,
                 last_leaf_hash: None,
                 mmr_root: None,
@@ -370,6 +447,37 @@ async fn handle_request(
                 members: Some(items.into_iter().map(|item| item.lsn.get()).collect()),
             }))
         }
+        RequestPayload::Checkpoint(value) => {
+            let outcome = checkpoint::write(
+                actor,
+                session.connection_id,
+                value.client_seq,
+                value.turn_id,
+                value.blob,
+            )
+            .await
+            .map_err(|error| (request_id, error))?;
+            ResponsePayload::CheckpointAck(Box::new(CheckpointAck {
+                lsn: outcome.lsn.get(),
+            }))
+        }
+        RequestPayload::LatestCheckpoint(value) => {
+            let result = checkpoint::latest(actor, value.turn_id)
+                .await
+                .map_err(|error| (request_id, error))?;
+            ResponsePayload::CheckpointResult(Box::new(match result {
+                Some(value) => CheckpointResult {
+                    present: true,
+                    lsn: value.lsn.get(),
+                    blob: Some(value.blob),
+                },
+                None => CheckpointResult {
+                    present: false,
+                    lsn: 0,
+                    blob: None,
+                },
+            }))
+        }
         RequestPayload::Stats(_) => {
             let stats = actor.stats().await.map_err(|error| (request_id, error))?;
             ResponsePayload::StatsResult(Box::new(StatsResult {
@@ -389,6 +497,174 @@ async fn handle_request(
         _ => return Err((request_id, Error::new(ErrorCode::OperationUnavailable))),
     };
     Ok((request_id, payload))
+}
+
+#[allow(clippy::too_many_arguments)]
+async fn handle_subscribe(
+    session: &mut Session,
+    request_id: u64,
+    request: hm_schema::wire::Subscribe,
+    actors: &BTreeMap<u16, ActorEngine>,
+    output: &mpsc::Sender<Vec<u8>>,
+    output_bytes: &Arc<AtomicUsize>,
+    maximum_output_bytes: usize,
+    disconnect: watch::Sender<bool>,
+) -> Result<(), Error> {
+    if session.admin || session.subscriptions >= MAXIMUM_SUBSCRIPTIONS as usize {
+        return Err(Error::new(if session.admin {
+            ErrorCode::CapabilityDenied
+        } else {
+            ErrorCode::CapacityExceeded
+        }));
+    }
+    let actor_id = session
+        .actor
+        .ok_or_else(|| Error::new(ErrorCode::CapabilityDenied))?;
+    let actor = actors
+        .get(&actor_id)
+        .ok_or_else(|| Error::new(ErrorCode::CapabilityDenied))?;
+    let conversation = request
+        .conversation
+        .as_deref()
+        .map(conversation)
+        .transpose()?;
+    let available = output.capacity().saturating_sub(1);
+    if available == 0 {
+        return Err(Error::new(ErrorCode::CapacityExceeded));
+    }
+    let mut started = subscribe::start(
+        actor,
+        LSN::new(request.since_lsn),
+        conversation,
+        available + 1,
+    )
+    .await?;
+    if started.replay.len() > available {
+        return Err(Error::new(ErrorCode::CapacityExceeded));
+    }
+    let subscription_id = session.next_subscription_id;
+    session.next_subscription_id = session
+        .next_subscription_id
+        .checked_add(1)
+        .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))?;
+    enqueue(
+        output,
+        output_bytes,
+        maximum_output_bytes,
+        response_wire(
+            session.proto_version,
+            request_id,
+            ResponsePayload::SubscriptionAck(Box::new(SubscriptionAck { subscription_id })),
+            true,
+        )?,
+    )?;
+    for frame in &started.replay {
+        enqueue(
+            output,
+            output_bytes,
+            maximum_output_bytes,
+            event_wire(session.proto_version, subscription_id, frame)?,
+        )?;
+    }
+    session.subscriptions += 1;
+    let output = output.clone();
+    let output_bytes = Arc::clone(output_bytes);
+    let proto_version = session.proto_version;
+    let mut stop = disconnect.subscribe();
+    tokio::spawn(async move {
+        loop {
+            let received = tokio::select! {
+                changed = stop.changed() => {
+                    if changed.is_err() || *stop.borrow() {
+                        return;
+                    }
+                    continue;
+                }
+                received = started.receiver.recv() => received,
+            };
+            let frame = match received {
+                Ok(frame) => frame,
+                Err(
+                    tokio::sync::broadcast::error::RecvError::Lagged(_)
+                    | tokio::sync::broadcast::error::RecvError::Closed,
+                ) => {
+                    let _ = disconnect.send(true);
+                    return;
+                }
+            };
+            if frame.header.lsn.get() <= started.replay_tail.get()
+                || conversation.is_some_and(|value| value != frame.header.conversation)
+            {
+                continue;
+            }
+            let queued = event_wire(proto_version, subscription_id, &frame)
+                .and_then(|wire| enqueue(&output, &output_bytes, maximum_output_bytes, wire));
+            if queued.is_err() {
+                let _ = disconnect.send(true);
+                return;
+            }
+        }
+    });
+    Ok(())
+}
+
+fn mutation_request(payload: &RequestPayload) -> bool {
+    matches!(
+        payload,
+        RequestPayload::Append(_)
+            | RequestPayload::Checkpoint(_)
+            | RequestPayload::Attest(_)
+            | RequestPayload::RebuildProjection(_)
+            | RequestPayload::CryptoDelete(_)
+    )
+}
+
+fn error_wire(
+    proto_version: u16,
+    request_id: u64,
+    error: Error,
+    mutation: bool,
+) -> Result<Vec<u8>, Error> {
+    let effect_state = if mutation {
+        match mutation_effect_state(error) {
+            MutationEffectState::NotDispatched => WireMutationEffectState::NotDispatched,
+            MutationEffectState::Unknown => WireMutationEffectState::Unknown,
+            MutationEffectState::Rejected => WireMutationEffectState::Rejected,
+        }
+    } else {
+        WireMutationEffectState::None
+    };
+    response_wire(
+        proto_version,
+        request_id,
+        ResponsePayload::ErrorDetail(Box::new(ErrorDetail {
+            code: error.code as u8,
+            system_error: error.system_error,
+            lsn: error.lsn.get(),
+            offset: error.offset,
+            effect_state,
+        })),
+        false,
+    )
+}
+
+fn event_wire(
+    proto_version: u16,
+    subscription_id: u64,
+    frame: &hm_ledger::frame::Frame,
+) -> Result<Vec<u8>, Error> {
+    wire(
+        proto_version,
+        WirePayload::Event(Box::new(Event {
+            subscription_id,
+            lsn: frame.header.lsn.get(),
+            kind: frame.header.kind as u8,
+            wall_timestamp_ns: frame.header.wall_timestamp_ns.get(),
+            actor: frame.header.actor.get(),
+            conversation: frame.header.conversation.into_bytes().to_vec(),
+            payload: frame.sealed_payload.clone(),
+        })),
+    )
 }
 
 fn conversation(bytes: &[u8]) -> Result<ConversationId, Error> {
