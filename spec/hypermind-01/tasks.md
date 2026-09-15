@@ -61,7 +61,7 @@
     - Bindings projection: resolve_required_bindings reads up to 128 bindings for a task from one snapshot with status resolved, missing, stale or conflicting by revision and freshness; corrections resolve by identity and effective time.
     - Work ledger: WorkItem kinds tool_call and effect with states dispatched, committed, returned, outcome_unknown and TransitionAllowed rules; requires_reconciliation when not returned; a crash inside the dispatch window is conservatively unknown. Port continuity_projection_test: every prefix rebuilds identically, reset replay matches, a bounded partial rebuild resumes.
     - _Requirements: 5.1, 5.3_
-  - [ ] 2.4 Required tiers that are never shed, narrow-subtask gap, allocation template
+  - [x] 2.4 Required tiers that are never shed, narrow-subtask gap, allocation template
     - Populate intent, bindings and work_ledger tiers from the projections; mark resident, intent, bindings and work_ledger required; trim never sheds them; when they alone exceed budget the bundle narrows to the active loop and emits a narrowed_subtask gap.
     - Budget allocation template mandatory 15, intent and bindings and work 10, conversation 40, recall 15, tools 10, reserve 10 percent, configurable per profile; optional segments shrink first; missing, stale and conflicting bindings appear in gaps.
     - _Requirements: 7.1, 7.3_

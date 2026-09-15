@@ -1,8 +1,11 @@
 #![allow(clippy::missing_errors_doc)]
 
+use crate::budget::BudgetProfile;
 use crate::canonical::{bundle_hash, canonical_bytes};
 use crate::lanes::lexical;
+use crate::tiers::{bindings, intent, work};
 use crate::tokens::TokenCounter;
+use crate::trim::trim_to_budget_with_profile;
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
 use hm_ledger::frame::{EventKind, Frame, FrameHeader};
 use hm_proj::store::{ProjectionId, ReadSnapshot};
@@ -13,6 +16,8 @@ use hm_schema::events::{
     Sensitivity,
 };
 use std::collections::BTreeSet;
+
+pub use crate::trim::trim_to_budget;
 
 pub const MAXIMUM_CANDIDATES: usize = 4096;
 pub const MAXIMUM_CONVERSATION_RECORDS: usize = 16_384;
@@ -67,6 +72,9 @@ pub enum RetrievalLane {
 pub enum WhyCode {
     Conversation,
     Lexical,
+    Intent,
+    Binding,
+    WorkLedger,
 }
 
 pub struct ActivationRequest<'model> {
@@ -78,6 +86,14 @@ pub struct ActivationRequest<'model> {
     pub token_counter: &'model TokenCounter,
     pub maximum_candidates: usize,
     pub maximum_conversation_records: usize,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct ActivationContext {
+    pub task: Option<Vec<u8>>,
+    pub required_bindings: Vec<hm_proj::bindings::BindingRequirement>,
+    pub now_ns: Option<UtcNanos>,
+    pub budget_profile: BudgetProfile,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -179,7 +195,16 @@ pub fn activate(
     snapshot: &ReadSnapshot<'_>,
     request: &ActivationRequest<'_>,
 ) -> Result<ActivationBundle, Error> {
+    activate_with_context(snapshot, request, &ActivationContext::default())
+}
+
+pub fn activate_with_context(
+    snapshot: &ReadSnapshot<'_>,
+    request: &ActivationRequest<'_>,
+    context: &ActivationContext,
+) -> Result<ActivationBundle, Error> {
     validate_request(request)?;
+    context.budget_profile.validate()?;
     let snapshot_epoch =
         u64::try_from(snapshot.epoch()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
     let query_digest = *blake3::hash(request.query.as_bytes()).as_bytes();
@@ -216,9 +241,44 @@ pub fn activate(
         bundle_hash: [0; 32],
     };
 
+    let intent = intent::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        request.token_counter,
+    )?;
+    let active_task = context.task.as_deref().or(intent.active_task.as_deref());
+    for item in intent.items {
+        add_item(&mut bundle, item)?;
+    }
+    let now_ns = match context.now_ns {
+        Some(value) => value,
+        None => latest_projection_time(snapshot)?,
+    };
+    let bindings = bindings::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        active_task,
+        &context.required_bindings,
+        now_ns,
+        request.token_counter,
+    )?;
+    for item in bindings.items {
+        add_item(&mut bundle, item)?;
+    }
+    bundle.gaps.extend(bindings.gaps);
+    for item in work::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        request.token_counter,
+    )? {
+        add_item(&mut bundle, item)?;
+    }
     populate_conversation(&mut bundle, snapshot, request)?;
     populate_lexical(&mut bundle, snapshot, request)?;
-    trim_to_budget(&mut bundle, request.token_counter)?;
+    trim_to_budget_with_profile(&mut bundle, request.token_counter, context.budget_profile)?;
     let included: BTreeSet<LSN> = bundle
         .sections
         .iter()
@@ -236,47 +296,14 @@ pub fn activate(
     Ok(bundle)
 }
 
-pub fn trim_to_budget(bundle: &mut ActivationBundle, counter: &TokenCounter) -> Result<(), Error> {
-    let mut total = total_tokens(bundle)?;
-    for tier in [Tier::Temporal, Tier::Fused, Tier::Conflicts, Tier::Entity] {
-        drop_section_tail(bundle, tier, &mut total);
-        if total <= bundle.budget_tokens {
-            break;
-        }
+fn latest_projection_time(snapshot: &ReadSnapshot<'_>) -> Result<UtcNanos, Error> {
+    let checkpoint = snapshot.checkpoint(ProjectionId::ConversationHeads)?;
+    if checkpoint.get() == 0 {
+        return Ok(UtcNanos::new(0));
     }
-    if total > bundle.budget_tokens {
-        coarsen_section(bundle, Tier::Conversation, counter, &mut total)?;
-    }
-    if total > bundle.budget_tokens {
-        drop_section_tail(bundle, Tier::Conversation, &mut total);
-    }
-    if total > bundle.budget_tokens {
-        drop_section_tail(bundle, Tier::Prospective, &mut total);
-    }
-    if total > bundle.budget_tokens {
-        bundle.gaps.push(Gap {
-            kind: GapKind::NarrowedSubtask,
-            tier: None,
-            lane: None,
-            detail: "required context exceeds the activation budget".to_owned(),
-        });
-        for tier in [
-            Tier::WorkLedger,
-            Tier::Bindings,
-            Tier::Intent,
-            Tier::Resident,
-        ] {
-            coarsen_section(bundle, tier, counter, &mut total)?;
-            if total <= bundle.budget_tokens {
-                break;
-            }
-        }
-    }
-    if total > bundle.budget_tokens {
-        return Err(Error::new(ErrorCode::CapacityExceeded));
-    }
-    bundle.spent_tokens = total;
-    Ok(())
+    read_conversation_record(snapshot, checkpoint)?
+        .map(|record| record.wall_timestamp_ns)
+        .ok_or_else(|| Error::new(ErrorCode::InvariantViolation).at_lsn(checkpoint))
 }
 
 pub fn build_attestations(
@@ -467,6 +494,9 @@ fn provenance_uri(
     let why = match why {
         WhyCode::Conversation => "conversation",
         WhyCode::Lexical => "lexical",
+        WhyCode::Intent => "intent",
+        WhyCode::Binding => "binding",
+        WhyCode::WorkLedger => "work_ledger",
     };
     format!(
         "hm://{}/{}/{}?at={}&src={}&score={score}&vr=0&lr={lexical_rank}&why={why}",
@@ -484,72 +514,6 @@ fn add_item(bundle: &mut ActivationBundle, item: ActivationItem) -> Result<(), E
         .checked_add(item.tokens)
         .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))?;
     section.items.push(item);
-    Ok(())
-}
-
-fn total_tokens(bundle: &ActivationBundle) -> Result<usize, Error> {
-    bundle.sections.iter().try_fold(0_usize, |total, section| {
-        total
-            .checked_add(section.tokens)
-            .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))
-    })
-}
-
-fn drop_section_tail(bundle: &mut ActivationBundle, tier: Tier, total: &mut usize) {
-    let section = &mut bundle.sections[tier as usize];
-    while *total > bundle.budget_tokens {
-        let Some(item) = section.items.pop() else {
-            break;
-        };
-        section.tokens -= item.tokens;
-        *total -= item.tokens;
-        section.trimmed_items += 1;
-    }
-    if section.trimmed_items > 0
-        && !bundle
-            .gaps
-            .iter()
-            .any(|gap| gap.kind == GapKind::DroppedTier && gap.tier == Some(tier))
-    {
-        bundle.gaps.push(Gap {
-            kind: GapKind::DroppedTier,
-            tier: Some(tier),
-            lane: None,
-            detail: "items removed to satisfy the token budget".to_owned(),
-        });
-    }
-}
-
-fn coarsen_section(
-    bundle: &mut ActivationBundle,
-    tier: Tier,
-    counter: &TokenCounter,
-    total: &mut usize,
-) -> Result<(), Error> {
-    let section = &mut bundle.sections[tier as usize];
-    for item in &mut section.items {
-        if *total <= bundle.budget_tokens {
-            break;
-        }
-        let first_line = item
-            .content
-            .split(|byte| *byte == b'\n')
-            .next()
-            .unwrap_or_default();
-        let mut compact = item.provenance[0].get().to_string().into_bytes();
-        compact.push(b' ');
-        compact.extend_from_slice(first_line);
-        let tokens = counter.count(&compact)?;
-        if tokens < item.tokens {
-            let reduction = item.tokens - tokens;
-            item.content = compact;
-            item.tokens = tokens;
-            item.coarsened = true;
-            section.tokens -= reduction;
-            *total -= reduction;
-            section.coarsened_items += 1;
-        }
-    }
     Ok(())
 }
 

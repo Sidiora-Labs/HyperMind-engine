@@ -380,7 +380,7 @@ do_3 = "Work ledger: WorkItem kinds tool_call and effect with states dispatched,
 
 [task.2.4]
 title = "Required tiers that are never shed, narrow-subtask gap, allocation template"
-status = "pending"
+status = "done"
 wave = 2
 owner_lane = "compose"
 requires = ["2.3"]
