@@ -1,0 +1,9 @@
+[book]
+title = "HyperMind"
+authors = ["HyperMind contributors"]
+language = "en"
+src = "."
+
+[build]
+build-dir = "book"
+create-missing = false

@@ -48,12 +48,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.93.0
+      - uses: taiki-e/install-action@mdbook
       - name: Compare slice against main
         shell: bash
-        run: |
-          if test -f crates/hm-eval/src/main.rs; then
-            cargo run -p hm-eval -- gate slice1 --compare main
-          else
-            echo "hm-eval gate becomes executable in task 1.8"
-          fi
-
+        run: cargo run -p hm-eval -- gate slice1 --compare main
+      - run: mdbook build docs

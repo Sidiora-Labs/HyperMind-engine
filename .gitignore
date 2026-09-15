@@ -4,3 +4,5 @@
 *.swp
 *.tmp
 .DS_Store
+/eval/results/*.json
+/docs/book/

@@ -39,7 +39,7 @@
     - hm init writes an actor directory, keys and config; hm serve runs the daemon; hm remember, recall and activate speak to a running daemon or the embedded engine; every command takes --json and honours NO_COLOR.
     - hm doctor reports toolchain, actor directories, socket health and missing models.
     - _Requirements: 14.1, 14.2, 13.3_
-  - [ ] 1.8 Eval runner, seeded stores, recall and latency suites, schematics skeleton and quickstart
+  - [x] 1.8 Eval runner, seeded stores, recall and latency suites, schematics skeleton and quickstart
     - hm-eval binary: suite registry, seeded-store generator producing 1k and 10k event stores with held-out probes, recall@k and MRR through the lexical lane, activate p50 and p99 cold and warm, JSON results in eval/results, compare against main with tolerance and non-zero exit on regression.
     - docs/reference/schematics.md sections 1 to 6 written from the schema and error codes in the normative style: event taxonomy, ordering rules, frame layout, error codes, projection contract, bundle contract; quickstart for MCP in Claude Code and the embedded Rust API.
     - CI bench-gate job wired to gate slice1.

@@ -317,7 +317,7 @@ do_3 = "hm doctor reports toolchain, actor directories, socket health and missin
 
 [task.1.8]
 title = "Eval runner, seeded stores, recall and latency suites, schematics skeleton and quickstart"
-status = "pending"
+status = "done"
 wave = 1
 owner_lane = "eval"
 requires = ["1.7"]

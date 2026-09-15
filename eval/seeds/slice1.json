@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "seed": 24301,
+  "event_counts": [1000, 10000],
+  "probe_count": 20,
+  "document_template": "seeded memory record {index} contains unique anchor anchor{index}hypermind and common context"
+}
