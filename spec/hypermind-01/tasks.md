@@ -34,7 +34,7 @@
     - UDS server with NCPR length and CRC32C framing, Hello handshake with capability token and constant-time compare, Append, Recall, Activate, Transcript, Health, Stats; socket mode 0600; config file mode 0600 required; bounded per-connection output queues.
     - hm-mcp over rmcp stdio: remember (append UserMsg or DeliveredMsg or a chunked document with authority set from kind), recall mode lexical and timeline, activate, inspect stats; one envelope ok, items, provenance, budget, gaps, health, warnings; every mutation error carries effect_state.
     - _Requirements: 13.1, 13.2, 17.1_
-  - [ ] 1.7 Rust embedded API and hm CLI: init, serve, remember, recall, activate
+  - [x] 1.7 Rust embedded API and hm CLI: init, serve, remember, recall, activate
     - hypermind embedded API: HyperMind::open(path, config), Actor, Session with remember, recall, activate returning Bundle, and render(bundle, model) producing typed sections with authority labels and provenance URIs; no daemon required.
     - hm init writes an actor directory, keys and config; hm serve runs the daemon; hm remember, recall and activate speak to a running daemon or the embedded engine; every command takes --json and honours NO_COLOR.
     - hm doctor reports toolchain, actor directories, socket health and missing models.

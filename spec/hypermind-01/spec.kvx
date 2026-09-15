@@ -304,7 +304,7 @@ do_3 = "hm-mcp over rmcp stdio: remember (append UserMsg or DeliveredMsg or a ch
 
 [task.1.7]
 title = "Rust embedded API and hm CLI: init, serve, remember, recall, activate"
-status = "pending"
+status = "done"
 wave = 1
 owner_lane = "sdk"
 requires = ["1.6"]

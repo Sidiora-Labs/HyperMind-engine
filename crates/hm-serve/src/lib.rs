@@ -2,6 +2,7 @@
 
 pub mod actor;
 pub mod config;
+pub mod embedded;
 pub mod protocol;
 pub mod uds;
 
