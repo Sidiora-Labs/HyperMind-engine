@@ -417,7 +417,7 @@ do_3 = "@hypermind/render v1: bundle to typed prompt sections with authority lab
 
 [task.2.7]
 title = "Continuity and silent-degradation suites; schematics ordering and recovery sections"
-status = "pending"
+status = "done"
 wave = 2
 owner_lane = "eval"
 requires = ["2.6"]

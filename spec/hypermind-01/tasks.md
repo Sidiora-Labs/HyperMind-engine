@@ -74,7 +74,7 @@
     - @hypermind/client over the Unix socket with the Go client's sequence policy ported: stable connection id, next_client_seq from Welcome, pending queue, PendingWriteError with effect_state, reconnect that never double-applies; tests run against the real daemon binary.
     - @hypermind/render v1: bundle to typed prompt sections with authority labels and provenance URIs, same-turn exclusion, memory never in system role.
     - _Requirements: 14.1, 14.2_
-  - [ ] 2.7 Continuity and silent-degradation suites; schematics ordering and recovery sections
+  - [x] 2.7 Continuity and silent-degradation suites; schematics ordering and recovery sections
     - Continuity suite: kill -9 the daemon at randomised points in a scripted turn, restart, assert the loop, binding and unreconciled effect are present and no append was applied twice; run through the TypeScript client and the Rust API.
     - Silent-degradation suite: force missing bindings, dropped tiers and a narrowed subtask; every forced condition must appear in gaps; a bundle without it fails the gate.
     - Schematics sections for ordering rules, idempotency, torn-batch rollback, work ledger transitions and recovery algorithms.
