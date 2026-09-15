@@ -24,6 +24,7 @@ export { LoopOpened, LoopOpenedT } from './hypermind/schema/loop-opened';
 export { MediaRef, MediaRefT } from './hypermind/schema/media-ref';
 export { ModelProvenance, ModelProvenanceT } from './hypermind/schema/model-provenance';
 export { Outcome, OutcomeT } from './hypermind/schema/outcome';
+export { ProposedAssertion, ProposedAssertionT } from './hypermind/schema/proposed-assertion';
 export { ProvenanceRange, ProvenanceRangeT } from './hypermind/schema/provenance-range';
 export { ProviderFrame, ProviderFrameT } from './hypermind/schema/provider-frame';
 export { Reasoning, ReasoningT } from './hypermind/schema/reasoning';

@@ -18,7 +18,11 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 
 pub mod tools;
+pub use tools::believe::{
+    BeliefClaimInput, BeliefTypeInput, BelieveInput, ClaimInput, ProvenanceInput,
+};
 pub use tools::bind::BindInput;
+pub use tools::dispute::{DisputeInput, DisputeRuntime};
 pub use tools::forget::{ForgetAction, ForgetInput};
 pub use tools::inspect::InspectInput;
 pub use tools::intend::{IntendAction, IntendCloseReason, IntendInput};
@@ -26,6 +30,7 @@ pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
 pub use tools::remember::{
     AnchorFacet, RememberAnchor, RememberInput, RememberKind, RetentionInput, SensitivityInput,
 };
+pub use tools::retract::RetractInput;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 const DEFAULT_CHUNK_BYTES: usize = 32 * 1024;
@@ -101,6 +106,7 @@ pub struct ActivateInput {
 pub struct McpServer {
     actor: ActorEngine,
     admin_token: Option<hm_serve::config::CapabilityToken>,
+    dispute_runtime: Option<DisputeRuntime>,
 }
 
 impl McpServer {
@@ -109,6 +115,7 @@ impl McpServer {
         Self {
             actor,
             admin_token: None,
+            dispute_runtime: None,
         }
     }
 
@@ -120,7 +127,14 @@ impl McpServer {
         Self {
             actor,
             admin_token: Some(admin_token),
+            dispute_runtime: None,
         }
+    }
+
+    #[must_use]
+    pub fn with_dispute_runtime(mut self, runtime: DisputeRuntime) -> Self {
+        self.dispute_runtime = Some(runtime);
+        self
     }
 
     pub async fn remember_envelope(&self, input: RememberInput) -> Envelope {
@@ -388,6 +402,27 @@ impl McpServer {
             Err(error) => Envelope::error(error, true),
         }
     }
+
+    pub async fn believe_envelope(&self, input: BelieveInput) -> Envelope {
+        match tools::believe::run(&self.actor, input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, true),
+        }
+    }
+
+    pub async fn retract_envelope(&self, input: RetractInput) -> Envelope {
+        match tools::retract::run(&self.actor, input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, true),
+        }
+    }
+
+    pub async fn dispute_envelope(&self, input: DisputeInput) -> Envelope {
+        match tools::dispute::run(&self.actor, self.dispute_runtime.as_ref(), input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, true),
+        }
+    }
 }
 
 #[tool_router(server_handler)]
@@ -429,6 +464,21 @@ impl McpServer {
     #[tool(description = "Bind a task or scope to a canonical entity revision")]
     async fn bind(&self, Parameters(input): Parameters<BindInput>) -> Json<Envelope> {
         Json(self.bind_envelope(input).await)
+    }
+
+    #[tool(description = "Write a typed bitemporal belief assertion")]
+    async fn believe(&self, Parameters(input): Parameters<BelieveInput>) -> Json<Envelope> {
+        Json(self.believe_envelope(input).await)
+    }
+
+    #[tool(description = "Tombstone a belief while preserving its history")]
+    async fn retract(&self, Parameters(input): Parameters<RetractInput>) -> Json<Envelope> {
+        Json(self.retract_envelope(input).await)
+    }
+
+    #[tool(description = "Adjudicate two belief claims with local bidirectional NLI")]
+    async fn dispute(&self, Parameters(input): Parameters<DisputeInput>) -> Json<Envelope> {
+        Json(self.dispute_envelope(input).await)
     }
 }
 
@@ -546,7 +596,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn rmcp_router_exposes_wave_one_tools() {
+    fn rmcp_router_exposes_current_tools() {
         let names: std::collections::BTreeSet<_> = McpServer::tool_router()
             .list_all()
             .into_iter()
@@ -555,7 +605,8 @@ mod tests {
         assert_eq!(
             names,
             [
-                "activate", "bind", "forget", "inspect", "intend", "recall", "remember"
+                "activate", "believe", "bind", "dispute", "forget", "inspect", "intend", "recall",
+                "remember", "retract"
             ]
             .map(str::to_owned)
             .into()

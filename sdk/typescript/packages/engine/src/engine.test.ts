@@ -55,4 +55,32 @@ test("napi engine exposes one embedded continuity session", async (context) => {
   assert.equal(bundle.sections.length, 10);
   const prompt = render(bundle);
   assert.equal(prompt.sections.flatMap((section) => section.items).every((item) => item.role === "user"), true);
+
+  const provenance = [{
+    firstLsn: evidenceLsn,
+    lastLsn: evidenceLsn,
+    byteStart: 0,
+    byteEnd: 26,
+  }];
+  const believed = await session.believe({
+    beliefId: "native-region",
+    beliefType: "fact",
+    canonicalIdentity: "deployment:region",
+    value: "Europe",
+    validFromNs: 10n,
+    provenance,
+    conflictDomain: "deployment",
+  });
+  assert.equal(believed.ok, true);
+  const beliefLsn = BigInt((believed.items[0] as { lsn: number }).lsn);
+  const asOf = await session.asOf("fact", "deployment:region", { knownAtLsn: beliefLsn });
+  assert.equal(asOf?.value, "Europe");
+  assert.equal(asOf?.transactionLsn, beliefLsn);
+  const retracted = await session.retract("native-region", provenance);
+  assert.equal(retracted.ok, true);
+  const retractLsn = BigInt((retracted.items[0] as { lsn: number }).lsn);
+  assert.equal(
+    await session.asOf("fact", "deployment:region", { knownAtLsn: retractLsn }),
+    undefined,
+  );
 });

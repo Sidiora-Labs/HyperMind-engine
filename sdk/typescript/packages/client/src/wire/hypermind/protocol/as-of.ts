@@ -44,8 +44,13 @@ transactionLsn():bigint {
   return offset ? this.bb!.readUint64(this.bb_pos + offset) : BigInt('0');
 }
 
+knownLsn():bigint {
+  const offset = this.bb!.__offset(this.bb_pos, 12);
+  return offset ? this.bb!.readUint64(this.bb_pos + offset) : BigInt('0');
+}
+
 static startAsOf(builder:flatbuffers.Builder) {
-  builder.startObject(4);
+  builder.startObject(5);
 }
 
 static addBeliefType(builder:flatbuffers.Builder, beliefType:number) {
@@ -64,18 +69,23 @@ static addTransactionLsn(builder:flatbuffers.Builder, transactionLsn:bigint) {
   builder.addFieldInt64(3, transactionLsn, BigInt('0'));
 }
 
+static addKnownLsn(builder:flatbuffers.Builder, knownLsn:bigint) {
+  builder.addFieldInt64(4, knownLsn, BigInt('0'));
+}
+
 static endAsOf(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   builder.requiredField(offset, 6) // canonical_identity
   return offset;
 }
 
-static createAsOf(builder:flatbuffers.Builder, beliefType:number, canonicalIdentityOffset:flatbuffers.Offset, validTimeNs:bigint, transactionLsn:bigint):flatbuffers.Offset {
+static createAsOf(builder:flatbuffers.Builder, beliefType:number, canonicalIdentityOffset:flatbuffers.Offset, validTimeNs:bigint, transactionLsn:bigint, knownLsn:bigint):flatbuffers.Offset {
   AsOf.startAsOf(builder);
   AsOf.addBeliefType(builder, beliefType);
   AsOf.addCanonicalIdentity(builder, canonicalIdentityOffset);
   AsOf.addValidTimeNs(builder, validTimeNs);
   AsOf.addTransactionLsn(builder, transactionLsn);
+  AsOf.addKnownLsn(builder, knownLsn);
   return AsOf.endAsOf(builder);
 }
 
@@ -84,7 +94,8 @@ unpack(): AsOfT {
     this.beliefType(),
     this.canonicalIdentity(),
     this.validTimeNs(),
-    this.transactionLsn()
+    this.transactionLsn(),
+    this.knownLsn()
   );
 }
 
@@ -94,6 +105,7 @@ unpackTo(_o: AsOfT): void {
   _o.canonicalIdentity = this.canonicalIdentity();
   _o.validTimeNs = this.validTimeNs();
   _o.transactionLsn = this.transactionLsn();
+  _o.knownLsn = this.knownLsn();
 }
 }
 
@@ -102,7 +114,8 @@ constructor(
   public beliefType: number = 0,
   public canonicalIdentity: string|Uint8Array|null = null,
   public validTimeNs: bigint = BigInt('0'),
-  public transactionLsn: bigint = BigInt('0')
+  public transactionLsn: bigint = BigInt('0'),
+  public knownLsn: bigint = BigInt('0')
 ){}
 
 
@@ -113,7 +126,8 @@ pack(builder:flatbuffers.Builder): flatbuffers.Offset {
     this.beliefType,
     canonicalIdentity,
     this.validTimeNs,
-    this.transactionLsn
+    this.transactionLsn,
+    this.knownLsn
   );
 }
 }

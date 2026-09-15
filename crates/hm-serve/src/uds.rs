@@ -6,7 +6,7 @@ use crate::auth::{self, Principal};
 use crate::config::ServerConfig;
 use crate::errors::{MutationEffectState, mutation_effect_state};
 use crate::protocol::{FrameParser, encode_frame};
-use crate::requests::{checkpoint, subscribe};
+use crate::requests::{asof, checkpoint, subscribe};
 use hm_compose::canonical::canonical_bytes;
 use hm_compose::tokens::FallbackWeights;
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN};
@@ -482,6 +482,11 @@ async fn handle_request(
                 members: Some(items.into_iter().map(|item| item.lsn.get()).collect()),
             }))
         }
+        RequestPayload::AsOf(value) => ResponsePayload::BeliefResult(Box::new(
+            asof::read(actor, *value)
+                .await
+                .map_err(|error| (request_id, error))?,
+        )),
         RequestPayload::Checkpoint(value) => {
             let outcome = checkpoint::write(
                 actor,

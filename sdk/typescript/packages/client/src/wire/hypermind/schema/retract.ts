@@ -40,7 +40,7 @@ beliefIdArray():Uint8Array|null {
 
 provenance(index: number, obj?:ProvenanceRange):ProvenanceRange|null {
   const offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? (obj || new ProvenanceRange()).__init(this.bb!.__vector(this.bb_pos + offset) + index * 16, this.bb!) : null;
+  return offset ? (obj || new ProvenanceRange()).__init(this.bb!.__vector(this.bb_pos + offset) + index * 24, this.bb!) : null;
 }
 
 provenanceLength():number {
@@ -73,7 +73,7 @@ static addProvenance(builder:flatbuffers.Builder, provenanceOffset:flatbuffers.O
 }
 
 static startProvenanceVector(builder:flatbuffers.Builder, numElems:number) {
-  builder.startVector(16, numElems, 8);
+  builder.startVector(24, numElems, 8);
 }
 
 static endRetract(builder:flatbuffers.Builder):flatbuffers.Offset {

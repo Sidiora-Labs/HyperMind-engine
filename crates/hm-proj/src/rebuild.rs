@@ -1,8 +1,10 @@
 #![allow(clippy::missing_errors_doc)]
 
+use crate::beliefs::BeliefProjection;
 use crate::bindings::BindingsProjection;
 use crate::entities::EntityProjection;
 use crate::intent::IntentFrameProjection;
+use crate::ladder::TemporalLadder;
 use crate::ledger::WorkLedgerProjection;
 use crate::lexical::LexicalProjection;
 use crate::store::{ProjectionId, ProjectionStore};
@@ -24,12 +26,7 @@ pub fn rebuild_projection_stream(
     maximum_frames: usize,
 ) -> Result<RebuildProgress, Error> {
     if reset {
-        store.reset(ProjectionId::ConversationHeads)?;
-        store.reset(ProjectionId::Bm25)?;
-        store.reset(ProjectionId::IntentFrame)?;
-        store.reset(ProjectionId::WorkLedger)?;
-        store.reset(ProjectionId::Bindings)?;
-        store.reset(ProjectionId::EntityIndex)?;
+        reset_all(store)?;
     }
     let snapshot = store.begin_snapshot()?;
     let mut timeline_checkpoint = snapshot.checkpoint(ProjectionId::ConversationHeads)?.get();
@@ -38,28 +35,23 @@ pub fn rebuild_projection_stream(
     let mut ledger_checkpoint = snapshot.checkpoint(ProjectionId::WorkLedger)?.get();
     let mut bindings_checkpoint = snapshot.checkpoint(ProjectionId::Bindings)?.get();
     let mut entity_checkpoint = snapshot.checkpoint(ProjectionId::EntityIndex)?.get();
+    let mut belief_checkpoint = snapshot.checkpoint(ProjectionId::BeliefStore)?.get();
+    let mut ladder_checkpoint = snapshot.checkpoint(ProjectionId::TemporalLadder)?.get();
     drop(snapshot);
-    let minimum = [
+    let checkpoints = [
         timeline_checkpoint,
         lexical_checkpoint,
         intent_checkpoint,
         ledger_checkpoint,
         bindings_checkpoint,
         entity_checkpoint,
-    ]
-    .into_iter()
-    .min()
-    .unwrap_or(0);
-    if [
-        timeline_checkpoint,
-        lexical_checkpoint,
-        intent_checkpoint,
-        ledger_checkpoint,
-        bindings_checkpoint,
-        entity_checkpoint,
-    ]
-    .into_iter()
-    .any(|checkpoint| checkpoint > frames.len() as u64)
+        belief_checkpoint,
+        ladder_checkpoint,
+    ];
+    let minimum = checkpoints.into_iter().min().unwrap_or(0);
+    if checkpoints
+        .into_iter()
+        .any(|checkpoint| checkpoint > frames.len() as u64)
     {
         return Err(Error::new(ErrorCode::ProjectionCheckpoint).at_lsn(LSN::new(minimum)));
     }
@@ -97,27 +89,48 @@ pub fn rebuild_projection_stream(
             EntityProjection::apply_event(store, frame)?;
             entity_checkpoint = expected_lsn;
         }
+        if belief_checkpoint < expected_lsn {
+            BeliefProjection::apply_event(store, frame)?;
+            belief_checkpoint = expected_lsn;
+        }
+        if ladder_checkpoint < expected_lsn {
+            TemporalLadder::apply_event(store, frame)?;
+            ladder_checkpoint = expected_lsn;
+        }
         applied_frames += 1;
     }
-    let applied_lsn = [
+    let checkpoints = [
         timeline_checkpoint,
         lexical_checkpoint,
         intent_checkpoint,
         ledger_checkpoint,
         bindings_checkpoint,
         entity_checkpoint,
-    ]
-    .into_iter()
-    .min()
-    .unwrap_or(0);
+        belief_checkpoint,
+        ladder_checkpoint,
+    ];
+    let applied_lsn = checkpoints.into_iter().min().unwrap_or(0);
     Ok(RebuildProgress {
         applied_lsn: LSN::new(applied_lsn),
         applied_frames,
-        complete: timeline_checkpoint == frames.len() as u64
-            && lexical_checkpoint == frames.len() as u64
-            && intent_checkpoint == frames.len() as u64
-            && ledger_checkpoint == frames.len() as u64
-            && bindings_checkpoint == frames.len() as u64
-            && entity_checkpoint == frames.len() as u64,
+        complete: checkpoints
+            .into_iter()
+            .all(|checkpoint| checkpoint == frames.len() as u64),
     })
+}
+
+fn reset_all(store: &ProjectionStore) -> Result<(), Error> {
+    for projection in [
+        ProjectionId::ConversationHeads,
+        ProjectionId::Bm25,
+        ProjectionId::IntentFrame,
+        ProjectionId::WorkLedger,
+        ProjectionId::Bindings,
+        ProjectionId::EntityIndex,
+        ProjectionId::BeliefStore,
+        ProjectionId::TemporalLadder,
+    ] {
+        store.reset(projection)?;
+    }
+    Ok(())
 }

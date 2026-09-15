@@ -62,8 +62,15 @@ binaryPrefilterArray():Uint8Array|null {
   return offset ? new Uint8Array(this.bb!.bytes().buffer, this.bb!.bytes().byteOffset + this.bb!.__vector(this.bb_pos + offset), this.bb!.__vector_len(this.bb_pos + offset)) : null;
 }
 
+spaceId():string|null
+spaceId(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
+spaceId(optionalEncoding?:any):string|Uint8Array|null {
+  const offset = this.bb!.__offset(this.bb_pos, 12);
+  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
+}
+
 static startEmbedding(builder:flatbuffers.Builder) {
-  builder.startObject(4);
+  builder.startObject(5);
 }
 
 static addTargetLsn(builder:flatbuffers.Builder, targetLsn:bigint) {
@@ -111,19 +118,25 @@ static startBinaryPrefilterVector(builder:flatbuffers.Builder, numElems:number) 
   builder.startVector(1, numElems, 1);
 }
 
+static addSpaceId(builder:flatbuffers.Builder, spaceIdOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(4, spaceIdOffset, 0);
+}
+
 static endEmbedding(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   builder.requiredField(offset, 8) // quantized
   builder.requiredField(offset, 10) // binary_prefilter
+  builder.requiredField(offset, 12) // space_id
   return offset;
 }
 
-static createEmbedding(builder:flatbuffers.Builder, targetLsn:bigint, dimension:number, quantizedOffset:flatbuffers.Offset, binaryPrefilterOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createEmbedding(builder:flatbuffers.Builder, targetLsn:bigint, dimension:number, quantizedOffset:flatbuffers.Offset, binaryPrefilterOffset:flatbuffers.Offset, spaceIdOffset:flatbuffers.Offset):flatbuffers.Offset {
   Embedding.startEmbedding(builder);
   Embedding.addTargetLsn(builder, targetLsn);
   Embedding.addDimension(builder, dimension);
   Embedding.addQuantized(builder, quantizedOffset);
   Embedding.addBinaryPrefilter(builder, binaryPrefilterOffset);
+  Embedding.addSpaceId(builder, spaceIdOffset);
   return Embedding.endEmbedding(builder);
 }
 
@@ -132,7 +145,8 @@ unpack(): EmbeddingT {
     this.targetLsn(),
     this.dimension(),
     this.bb!.createScalarList(this.quantized.bind(this), this.quantizedLength()),
-    this.bb!.createScalarList(this.binaryPrefilter.bind(this), this.binaryPrefilterLength())
+    this.bb!.createScalarList(this.binaryPrefilter.bind(this), this.binaryPrefilterLength()),
+    this.spaceId()
   );
 }
 
@@ -142,6 +156,7 @@ unpackTo(_o: EmbeddingT): void {
   _o.dimension = this.dimension();
   _o.quantized = this.bb!.createScalarList(this.quantized.bind(this), this.quantizedLength());
   _o.binaryPrefilter = this.bb!.createScalarList(this.binaryPrefilter.bind(this), this.binaryPrefilterLength());
+  _o.spaceId = this.spaceId();
 }
 }
 
@@ -150,19 +165,22 @@ constructor(
   public targetLsn: bigint = BigInt('0'),
   public dimension: number = 0,
   public quantized: (number)[] = [],
-  public binaryPrefilter: (number)[] = []
+  public binaryPrefilter: (number)[] = [],
+  public spaceId: string|Uint8Array|null = null
 ){}
 
 
 pack(builder:flatbuffers.Builder): flatbuffers.Offset {
   const quantized = Embedding.createQuantizedVector(builder, this.quantized);
   const binaryPrefilter = Embedding.createBinaryPrefilterVector(builder, this.binaryPrefilter);
+  const spaceId = (this.spaceId !== null ? builder.createString(this.spaceId!) : 0);
 
   return Embedding.createEmbedding(builder,
     this.targetLsn,
     this.dimension,
     quantized,
-    binaryPrefilter
+    binaryPrefilter,
+    spaceId
   );
 }
 }

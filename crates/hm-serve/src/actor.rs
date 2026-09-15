@@ -15,6 +15,7 @@ use hm_ledger::rotate::rotate_keys;
 use hm_ledger::segment::{AppendRequest, SegmentLog, SegmentLogOptions};
 use hm_ledger::shred::{crypto_shred, encode_deletion_receipt};
 use hm_ledger::tripwire::TripwireSet;
+use hm_proj::beliefs::{BeliefAsOf, BeliefAsOfResult, BeliefProjection};
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
 };
@@ -25,7 +26,7 @@ use hm_proj::store::{ProjectionId, ProjectionStore};
 use hm_proj::timeline::{ConversationRecord, read_conversation_record, read_conversation_records};
 use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{
-    Authority, Checkpoint, EventEnvelope, EventPayload, Retention, Sensitivity,
+    Authority, BeliefType, Checkpoint, EventEnvelope, EventPayload, Retention, Sensitivity,
 };
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -226,6 +227,12 @@ enum Command {
         Box<ActivateRequest>,
         oneshot::Sender<Result<ActivationBundle, Error>>,
     ),
+    AsOf(
+        BeliefType,
+        String,
+        BeliefAsOf,
+        oneshot::Sender<Result<BeliefAsOfResult, Error>>,
+    ),
     VerificationStatus(oneshot::Sender<Result<VerificationStatus, Error>>),
     IntegrityAt(LSN, oneshot::Sender<Result<IntegrityReceipt, Error>>),
     RebuildProjection(String, oneshot::Sender<Result<LSN, Error>>),
@@ -389,6 +396,18 @@ impl ActorEngine {
         .await
     }
 
+    pub async fn as_of(
+        &self,
+        belief_type: BeliefType,
+        canonical_identity: String,
+        as_of: BeliefAsOf,
+    ) -> Result<BeliefAsOfResult, Error> {
+        request(&self.commands, |reply| {
+            Command::AsOf(belief_type, canonical_identity, as_of, reply)
+        })
+        .await
+    }
+
     pub async fn stats(&self) -> Result<ActorStats, Error> {
         request(&self.commands, Command::Stats).await
     }
@@ -487,6 +506,10 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
             }
             Command::Activate(request, reply) => {
                 let _ = reply.send(state.activate(*request));
+            }
+            Command::AsOf(belief_type, canonical_identity, as_of, reply) => {
+                let result = state.as_of(belief_type, &canonical_identity, as_of);
+                let _ = reply.send(result);
             }
             Command::VerificationStatus(reply) => {
                 let _ = reply.send(Ok(state.mmr.verification_status()));
@@ -923,6 +946,20 @@ impl WriterState {
             .map(|record| recall_item(record, 0))
             .collect()),
         }
+    }
+
+    fn as_of(
+        &self,
+        belief_type: BeliefType,
+        canonical_identity: &str,
+        as_of: BeliefAsOf,
+    ) -> Result<BeliefAsOfResult, Error> {
+        BeliefProjection::read_as_of(
+            &self.projections.begin_snapshot()?,
+            belief_type,
+            canonical_identity,
+            as_of,
+        )
     }
 
     fn activate(&self, request: ActivateRequest) -> Result<ActivationBundle, Error> {

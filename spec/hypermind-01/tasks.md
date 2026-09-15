@@ -152,7 +152,7 @@
     - Resident tier from live identity, constraint, preference and goal heads excluding structural-self and failure domains; conflicts tier from beliefs whose provenance surfaced with unresolved obligated edges plus the counterpart via as-of, and pending protected-type proposals; temporal tier from week windows.
     - recall asof takes valid_at or known_at and reports which; timeline mode descends the ladder.
     - _Requirements: 7.1, 6.3_
-  - [ ] 5.5 AsOf request; MCP believe, retract, dispute; typed belief API in SDKs
+  - [x] 5.5 AsOf request; MCP believe, retract, dispute; typed belief API in SDKs
     - believe writes a typed bitemporal assertion and returns gate rejections with effect_state rejected; retract tombstones; dispute adjudicates two claims and returns verdict, suggested action and any resulting events; a protected-type write from a run authority returns kProtectedTypeWrite.
     - _Requirements: 13.2, 14.2_
   - [ ] 5.6 Temporal suite, stale-fact rate, protected-type suite

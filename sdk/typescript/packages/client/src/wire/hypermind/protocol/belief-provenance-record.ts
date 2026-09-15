@@ -32,8 +32,18 @@ lastLsn():bigint {
   return offset ? this.bb!.readUint64(this.bb_pos + offset) : BigInt('0');
 }
 
+byteStart():number {
+  const offset = this.bb!.__offset(this.bb_pos, 8);
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+}
+
+byteEnd():number {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.readUint32(this.bb_pos + offset) : 0;
+}
+
 static startBeliefProvenanceRecord(builder:flatbuffers.Builder) {
-  builder.startObject(2);
+  builder.startObject(4);
 }
 
 static addFirstLsn(builder:flatbuffers.Builder, firstLsn:bigint) {
@@ -44,22 +54,34 @@ static addLastLsn(builder:flatbuffers.Builder, lastLsn:bigint) {
   builder.addFieldInt64(1, lastLsn, BigInt('0'));
 }
 
+static addByteStart(builder:flatbuffers.Builder, byteStart:number) {
+  builder.addFieldInt32(2, byteStart, 0);
+}
+
+static addByteEnd(builder:flatbuffers.Builder, byteEnd:number) {
+  builder.addFieldInt32(3, byteEnd, 0);
+}
+
 static endBeliefProvenanceRecord(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createBeliefProvenanceRecord(builder:flatbuffers.Builder, firstLsn:bigint, lastLsn:bigint):flatbuffers.Offset {
+static createBeliefProvenanceRecord(builder:flatbuffers.Builder, firstLsn:bigint, lastLsn:bigint, byteStart:number, byteEnd:number):flatbuffers.Offset {
   BeliefProvenanceRecord.startBeliefProvenanceRecord(builder);
   BeliefProvenanceRecord.addFirstLsn(builder, firstLsn);
   BeliefProvenanceRecord.addLastLsn(builder, lastLsn);
+  BeliefProvenanceRecord.addByteStart(builder, byteStart);
+  BeliefProvenanceRecord.addByteEnd(builder, byteEnd);
   return BeliefProvenanceRecord.endBeliefProvenanceRecord(builder);
 }
 
 unpack(): BeliefProvenanceRecordT {
   return new BeliefProvenanceRecordT(
     this.firstLsn(),
-    this.lastLsn()
+    this.lastLsn(),
+    this.byteStart(),
+    this.byteEnd()
   );
 }
 
@@ -67,20 +89,26 @@ unpack(): BeliefProvenanceRecordT {
 unpackTo(_o: BeliefProvenanceRecordT): void {
   _o.firstLsn = this.firstLsn();
   _o.lastLsn = this.lastLsn();
+  _o.byteStart = this.byteStart();
+  _o.byteEnd = this.byteEnd();
 }
 }
 
 export class BeliefProvenanceRecordT {
 constructor(
   public firstLsn: bigint = BigInt('0'),
-  public lastLsn: bigint = BigInt('0')
+  public lastLsn: bigint = BigInt('0'),
+  public byteStart: number = 0,
+  public byteEnd: number = 0
 ){}
 
 
 pack(builder:flatbuffers.Builder): flatbuffers.Offset {
   return BeliefProvenanceRecord.createBeliefProvenanceRecord(builder,
     this.firstLsn,
-    this.lastLsn
+    this.lastLsn,
+    this.byteStart,
+    this.byteEnd
   );
 }
 }

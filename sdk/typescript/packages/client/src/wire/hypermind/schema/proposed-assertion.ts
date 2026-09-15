@@ -7,22 +7,22 @@ import { BeliefType } from '../../hypermind/schema/belief-type';
 import { ProvenanceRange, ProvenanceRangeT } from '../../hypermind/schema/provenance-range';
 
 
-export class Assertion {
+export class ProposedAssertion {
   bb: flatbuffers.ByteBuffer|null = null;
   bb_pos = 0;
-  __init(i:number, bb:flatbuffers.ByteBuffer):Assertion {
+  __init(i:number, bb:flatbuffers.ByteBuffer):ProposedAssertion {
   this.bb_pos = i;
   this.bb = bb;
   return this;
 }
 
-static getRootAsAssertion(bb:flatbuffers.ByteBuffer, obj?:Assertion):Assertion {
-  return (obj || new Assertion()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsProposedAssertion(bb:flatbuffers.ByteBuffer, obj?:ProposedAssertion):ProposedAssertion {
+  return (obj || new ProposedAssertion()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-static getSizePrefixedRootAsAssertion(bb:flatbuffers.ByteBuffer, obj?:Assertion):Assertion {
+static getSizePrefixedRootAsProposedAssertion(bb:flatbuffers.ByteBuffer, obj?:ProposedAssertion):ProposedAssertion {
   bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-  return (obj || new Assertion()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new ProposedAssertion()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
 beliefId(index: number):number|null {
@@ -99,7 +99,7 @@ claim():AssertionClaim {
   return offset ? this.bb!.readUint8(this.bb_pos + offset) : AssertionClaim.affirmative;
 }
 
-static startAssertion(builder:flatbuffers.Builder) {
+static startProposedAssertion(builder:flatbuffers.Builder) {
   builder.startObject(9);
 }
 
@@ -167,7 +167,7 @@ static addClaim(builder:flatbuffers.Builder, claim:AssertionClaim) {
   builder.addFieldInt8(8, claim, AssertionClaim.affirmative);
 }
 
-static endAssertion(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endProposedAssertion(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   builder.requiredField(offset, 4) // belief_id
   builder.requiredField(offset, 8) // canonical_identity
@@ -176,22 +176,22 @@ static endAssertion(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createAssertion(builder:flatbuffers.Builder, beliefIdOffset:flatbuffers.Offset, beliefType:BeliefType, canonicalIdentityOffset:flatbuffers.Offset, valueOffset:flatbuffers.Offset, validFromNs:bigint, validToNs:bigint, provenanceOffset:flatbuffers.Offset, conflictDomainOffset:flatbuffers.Offset, claim:AssertionClaim):flatbuffers.Offset {
-  Assertion.startAssertion(builder);
-  Assertion.addBeliefId(builder, beliefIdOffset);
-  Assertion.addBeliefType(builder, beliefType);
-  Assertion.addCanonicalIdentity(builder, canonicalIdentityOffset);
-  Assertion.addValue(builder, valueOffset);
-  Assertion.addValidFromNs(builder, validFromNs);
-  Assertion.addValidToNs(builder, validToNs);
-  Assertion.addProvenance(builder, provenanceOffset);
-  Assertion.addConflictDomain(builder, conflictDomainOffset);
-  Assertion.addClaim(builder, claim);
-  return Assertion.endAssertion(builder);
+static createProposedAssertion(builder:flatbuffers.Builder, beliefIdOffset:flatbuffers.Offset, beliefType:BeliefType, canonicalIdentityOffset:flatbuffers.Offset, valueOffset:flatbuffers.Offset, validFromNs:bigint, validToNs:bigint, provenanceOffset:flatbuffers.Offset, conflictDomainOffset:flatbuffers.Offset, claim:AssertionClaim):flatbuffers.Offset {
+  ProposedAssertion.startProposedAssertion(builder);
+  ProposedAssertion.addBeliefId(builder, beliefIdOffset);
+  ProposedAssertion.addBeliefType(builder, beliefType);
+  ProposedAssertion.addCanonicalIdentity(builder, canonicalIdentityOffset);
+  ProposedAssertion.addValue(builder, valueOffset);
+  ProposedAssertion.addValidFromNs(builder, validFromNs);
+  ProposedAssertion.addValidToNs(builder, validToNs);
+  ProposedAssertion.addProvenance(builder, provenanceOffset);
+  ProposedAssertion.addConflictDomain(builder, conflictDomainOffset);
+  ProposedAssertion.addClaim(builder, claim);
+  return ProposedAssertion.endProposedAssertion(builder);
 }
 
-unpack(): AssertionT {
-  return new AssertionT(
+unpack(): ProposedAssertionT {
+  return new ProposedAssertionT(
     this.bb!.createScalarList(this.beliefId.bind(this), this.beliefIdLength()),
     this.beliefType(),
     this.canonicalIdentity(),
@@ -205,7 +205,7 @@ unpack(): AssertionT {
 }
 
 
-unpackTo(_o: AssertionT): void {
+unpackTo(_o: ProposedAssertionT): void {
   _o.beliefId = this.bb!.createScalarList(this.beliefId.bind(this), this.beliefIdLength());
   _o.beliefType = this.beliefType();
   _o.canonicalIdentity = this.canonicalIdentity();
@@ -218,7 +218,7 @@ unpackTo(_o: AssertionT): void {
 }
 }
 
-export class AssertionT {
+export class ProposedAssertionT {
 constructor(
   public beliefId: (number)[] = [],
   public beliefType: BeliefType = BeliefType.fact,
@@ -233,13 +233,13 @@ constructor(
 
 
 pack(builder:flatbuffers.Builder): flatbuffers.Offset {
-  const beliefId = Assertion.createBeliefIdVector(builder, this.beliefId);
+  const beliefId = ProposedAssertion.createBeliefIdVector(builder, this.beliefId);
   const canonicalIdentity = (this.canonicalIdentity !== null ? builder.createString(this.canonicalIdentity!) : 0);
-  const value = Assertion.createValueVector(builder, this.value);
-  const provenance = builder.createStructOffsetList(this.provenance, Assertion.startProvenanceVector);
+  const value = ProposedAssertion.createValueVector(builder, this.value);
+  const provenance = builder.createStructOffsetList(this.provenance, ProposedAssertion.startProvenanceVector);
   const conflictDomain = (this.conflictDomain !== null ? builder.createString(this.conflictDomain!) : 0);
 
-  return Assertion.createAssertion(builder,
+  return ProposedAssertion.createProposedAssertion(builder,
     beliefId,
     this.beliefType,
     canonicalIdentity,

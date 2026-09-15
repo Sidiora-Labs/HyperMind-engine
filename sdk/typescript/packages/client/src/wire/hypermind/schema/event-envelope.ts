@@ -19,6 +19,7 @@ import { LoopOpened, LoopOpenedT } from '../../hypermind/schema/loop-opened';
 import { MediaRef, MediaRefT } from '../../hypermind/schema/media-ref';
 import { ModelProvenance, ModelProvenanceT } from '../../hypermind/schema/model-provenance';
 import { Outcome, OutcomeT } from '../../hypermind/schema/outcome';
+import { ProposedAssertion, ProposedAssertionT } from '../../hypermind/schema/proposed-assertion';
 import { ProviderFrame, ProviderFrameT } from '../../hypermind/schema/provider-frame';
 import { Reasoning, ReasoningT } from '../../hypermind/schema/reasoning';
 import { Recovery, RecoveryT } from '../../hypermind/schema/recovery';
@@ -292,7 +293,7 @@ export class EventEnvelopeT {
 constructor(
   public schemaVersion: number = 1,
   public payloadType: EventPayload = EventPayload.NONE,
-  public payload: ApprovalT|AssertionT|AttestationT|BindingT|CheckpointT|ConsolidationT|DeliveredMsgT|EffectT|EmbeddingT|IntentSetT|LoopClosedT|LoopOpenedT|MediaRefT|OutcomeT|ProviderFrameT|ReasoningT|RecoveryT|RetractT|SupervisorT|ToolCallT|ToolResultT|UserMsgT|null = null,
+  public payload: ApprovalT|AssertionT|AttestationT|BindingT|CheckpointT|ConsolidationT|DeliveredMsgT|EffectT|EmbeddingT|IntentSetT|LoopClosedT|LoopOpenedT|MediaRefT|OutcomeT|ProposedAssertionT|ProviderFrameT|ReasoningT|RecoveryT|RetractT|SupervisorT|ToolCallT|ToolResultT|UserMsgT|null = null,
   public connectionId: (number)[] = [],
   public clientSeq: bigint = BigInt('0'),
   public clientEventIndex: number = 0,

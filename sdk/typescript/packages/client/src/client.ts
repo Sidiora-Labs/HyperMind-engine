@@ -6,6 +6,8 @@ import { parseBundle } from "./canonical";
 import { Activate } from "./wire/hypermind/protocol/activate";
 import { AppendEventT } from "./wire/hypermind/protocol/append-event";
 import { AppendT } from "./wire/hypermind/protocol/append";
+import { AsOfT } from "./wire/hypermind/protocol/as-of";
+import { BeliefResultT } from "./wire/hypermind/protocol/belief-result";
 import { BytesResultT } from "./wire/hypermind/protocol/bytes-result";
 import { CheckpointAckT } from "./wire/hypermind/protocol/checkpoint-ack";
 import { CheckpointResultT } from "./wire/hypermind/protocol/checkpoint-result";
@@ -26,6 +28,9 @@ import { Welcome } from "./wire/hypermind/protocol/welcome";
 import { WireEnvelope, WireEnvelopeT } from "./wire/hypermind/protocol/wire-envelope";
 import { WirePayload } from "./wire/hypermind/protocol/wire-payload";
 import { Authority } from "./wire/hypermind/schema/authority";
+import { AssertionT } from "./wire/hypermind/schema/assertion";
+import { AssertionClaim } from "./wire/hypermind/schema/assertion-claim";
+import { BeliefType as WireBeliefType } from "./wire/hypermind/schema/belief-type";
 import { Binding } from "./wire/hypermind/schema/binding";
 import { DeliveredMsgT } from "./wire/hypermind/schema/delivered-msg";
 import { EventEnvelope } from "./wire/hypermind/schema/event-envelope";
@@ -35,12 +40,15 @@ import { LoopCloseReason } from "./wire/hypermind/schema/loop-close-reason";
 import { LoopClosedT } from "./wire/hypermind/schema/loop-closed";
 import { LoopOpenedT } from "./wire/hypermind/schema/loop-opened";
 import { Retention } from "./wire/hypermind/schema/retention";
+import { RetractT } from "./wire/hypermind/schema/retract";
 import { Sensitivity } from "./wire/hypermind/schema/sensitivity";
 import { UserMsgT } from "./wire/hypermind/schema/user-msg";
+import { ProvenanceRangeT } from "./wire/hypermind/schema/provenance-range";
 
 const PROTOCOL_VERSION = 3;
 const MAXIMUM_FRAME_BYTES = 17 * 1024 * 1024;
 const text = new TextEncoder();
+const utf8 = new TextDecoder();
 
 export type EffectState = "not_dispatched" | "unknown" | "rejected";
 export type MemoryKind = "user" | "assistant" | "document";
@@ -49,6 +57,53 @@ export type RecallMode = "semantic" | "lexical" | "entity" | "temporal" | "near"
 export type RetentionPolicy = "current_state" | "daily" | "durable" | "do_not_store";
 export type SensitivityPolicy = "public" | "personal" | "secret";
 export type AnchorFacet = "path" | "symbol" | "url" | "entity";
+export type BeliefType = "fact" | "preference" | "constraint" | "goal" | "identity";
+export type BeliefClaim = "affirmative" | "negative_existence";
+
+export interface BeliefProvenance {
+  firstLsn: bigint;
+  lastLsn: bigint;
+  byteStart: number;
+  byteEnd: number;
+}
+
+export interface BelieveInput {
+  beliefId: string;
+  beliefType: BeliefType;
+  canonicalIdentity: string;
+  value: string;
+  validFromNs?: bigint;
+  validToNs?: bigint;
+  provenance: BeliefProvenance[];
+  conflictDomain?: string;
+  claim?: BeliefClaim;
+}
+
+export type AsOfOptions =
+  | { validAtNs: bigint; knownAtLsn?: never }
+  | { validAtNs?: never; knownAtLsn: bigint };
+
+export interface BeliefRecord {
+  beliefId: string;
+  beliefType: BeliefType;
+  canonicalIdentity: string;
+  conflictDomain?: string;
+  value: string;
+  claim: BeliefClaim;
+  validFromNs: bigint;
+  validToNs: bigint;
+  transactionLsn: bigint;
+  version: bigint;
+  supersedesVersion: bigint;
+  provenance: BeliefProvenance[];
+  conflicts: Array<{
+    otherType: BeliefType;
+    otherCanonicalIdentity: string;
+    createdLsn: bigint;
+    resolvedLsn: bigint;
+    obligatedSurfacing: boolean;
+  }>;
+}
 
 export interface RememberOptions {
   kind?: MemoryKind;
@@ -307,6 +362,28 @@ export class Client {
     });
   }
 
+  async asOf(
+    beliefType: BeliefType,
+    canonicalIdentity: string,
+    options: AsOfOptions,
+  ): Promise<BeliefRecord | undefined> {
+    return this.exclusive(async () => {
+      await this.ensure();
+      const result = (await this.request(
+        RequestPayload.AsOf,
+        new AsOfT(
+          beliefTypeValue(beliefType),
+          canonicalIdentity,
+          options.validAtNs ?? 0n,
+          0n,
+          options.knownAtLsn ?? 0n,
+        ),
+        ResponsePayload.BeliefResult,
+      )) as BeliefResultT;
+      return result.present ? beliefRecord(result) : undefined;
+    });
+  }
+
   async activate(
     conversation: Uint8Array,
     query: string,
@@ -561,6 +638,57 @@ export class Session {
     return this.client.activate(this.conversationBytes, query, options);
   }
 
+  believe(input: BelieveInput): Promise<bigint> {
+    const assertion = new AssertionT(
+      [...text.encode(input.beliefId)],
+      beliefTypeValue(input.beliefType),
+      input.canonicalIdentity,
+      [...text.encode(input.value)],
+      input.validFromNs ?? 0n,
+      input.validToNs ?? 0n,
+      input.provenance.map((range) => new ProvenanceRangeT(
+        range.firstLsn,
+        range.lastLsn,
+        range.byteStart,
+        range.byteEnd,
+      )),
+      input.conflictDomain ?? null,
+      input.claim === "negative_existence"
+        ? AssertionClaim.negative_existence
+        : AssertionClaim.affirmative,
+    );
+    return this.client.append(
+      17,
+      this.conversationBytes,
+      eventEnvelope(EventPayload.Assertion, assertion, Authority.user_asserted),
+    );
+  }
+
+  retract(beliefId: string, provenance: BeliefProvenance[]): Promise<bigint> {
+    const retract = new RetractT(
+      [...text.encode(beliefId)],
+      provenance.map((range) => new ProvenanceRangeT(
+        range.firstLsn,
+        range.lastLsn,
+        range.byteStart,
+        range.byteEnd,
+      )),
+    );
+    return this.client.append(
+      20,
+      this.conversationBytes,
+      eventEnvelope(EventPayload.Retract, retract, Authority.user_asserted),
+    );
+  }
+
+  asOf(
+    beliefType: BeliefType,
+    canonicalIdentity: string,
+    options: AsOfOptions,
+  ): Promise<BeliefRecord | undefined> {
+    return this.client.asOf(beliefType, canonicalIdentity, options);
+  }
+
   checkpoint(turnId: string, blob: Uint8Array): Promise<bigint> {
     return this.client.checkpoint(turnId, blob);
   }
@@ -648,6 +776,60 @@ function sensitivityValue(value: SensitivityPolicy | undefined): Sensitivity {
     personal: Sensitivity.personal,
     secret: Sensitivity.secret,
   }[value ?? "personal"];
+}
+
+function beliefTypeValue(value: BeliefType): WireBeliefType {
+  return {
+    fact: WireBeliefType.fact,
+    preference: WireBeliefType.preference,
+    constraint: WireBeliefType.constraint,
+    goal: WireBeliefType.goal,
+    identity: WireBeliefType.identity,
+  }[value];
+}
+
+function beliefTypeName(value: number): BeliefType {
+  const name = ["fact", "preference", "constraint", "goal", "identity"][value];
+  if (name === undefined) throw new Error("invalid belief type");
+  return name as BeliefType;
+}
+
+function decodeString(value: string | Uint8Array | null): string {
+  if (value === null) return "";
+  return typeof value === "string" ? value : utf8.decode(value);
+}
+
+function beliefRecord(result: BeliefResultT): BeliefRecord {
+  return {
+    beliefId: utf8.decode(Uint8Array.from(result.beliefId)),
+    beliefType: beliefTypeName(result.beliefType),
+    canonicalIdentity: decodeString(result.canonicalIdentity),
+    conflictDomain: result.conflictDomain === null
+      ? undefined
+      : decodeString(result.conflictDomain),
+    value: utf8.decode(Uint8Array.from(result.value)),
+    claim: result.claim === AssertionClaim.negative_existence
+      ? "negative_existence"
+      : "affirmative",
+    validFromNs: result.validFromNs,
+    validToNs: result.validToNs,
+    transactionLsn: result.transactionLsn,
+    version: result.version,
+    supersedesVersion: result.supersedesVersion,
+    provenance: result.provenance.map((range) => ({
+      firstLsn: range.firstLsn,
+      lastLsn: range.lastLsn,
+      byteStart: range.byteStart,
+      byteEnd: range.byteEnd,
+    })),
+    conflicts: result.conflictEdges.map((edge) => ({
+      otherType: beliefTypeName(edge.otherType),
+      otherCanonicalIdentity: decodeString(edge.otherCanonicalIdentity),
+      createdLsn: edge.createdLsn,
+      resolvedLsn: edge.resolvedLsn,
+      obligatedSurfacing: edge.obligatedSurfacing,
+    })),
+  };
 }
 
 function conversationId(value: string): Uint8Array {

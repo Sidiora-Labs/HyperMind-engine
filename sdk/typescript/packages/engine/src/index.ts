@@ -1,6 +1,15 @@
 import path from "node:path";
 import { Bundle } from "@hypermind/render";
-import { parseBundle } from "@hypermind/client";
+import {
+  AsOfOptions,
+  BeliefProvenance,
+  BeliefRecord,
+  BeliefType,
+  BelieveInput,
+  parseBundle,
+} from "@hypermind/client";
+
+export type { AsOfOptions, BeliefProvenance, BeliefRecord, BeliefType, BelieveInput };
 
 interface NativeEngineHandle {
   session(conversation: string): NativeSessionHandle;
@@ -13,6 +22,14 @@ interface NativeSessionHandle {
   checkpoint(turnId: string, blob: Uint8Array): Promise<string>;
   intend(input: string): Promise<string>;
   bind(input: string): Promise<string>;
+  believe(input: string): Promise<string>;
+  retract(beliefId: string, provenance: string): Promise<string>;
+  asOf(
+    beliefType: string,
+    canonicalIdentity: string,
+    validAtNs?: string,
+    knownAtLsn?: string,
+  ): Promise<string>;
 }
 
 interface NativeModule {
@@ -174,6 +191,100 @@ export class Session {
       ),
     );
   }
+
+  async believe(input: BelieveInput & { runId?: string }): Promise<Envelope> {
+    return decodeEnvelope(
+      await this.native.believe(JSON.stringify({
+        belief_id: input.beliefId,
+        belief_type: input.beliefType,
+        canonical_identity: input.canonicalIdentity,
+        value: input.value,
+        valid_from_ns: (input.validFromNs ?? 0n).toString(),
+        valid_to_ns: (input.validToNs ?? 0n).toString(),
+        provenance: encodeProvenance(input.provenance),
+        conflict_domain: input.conflictDomain,
+        claim: input.claim,
+        run_id: input.runId,
+      })),
+    );
+  }
+
+  async retract(beliefId: string, provenance: BeliefProvenance[]): Promise<Envelope> {
+    return decodeEnvelope(
+      await this.native.retract(beliefId, JSON.stringify(encodeProvenance(provenance))),
+    );
+  }
+
+  async asOf(
+    beliefType: BeliefType,
+    canonicalIdentity: string,
+    options: AsOfOptions,
+  ): Promise<BeliefRecord | undefined> {
+    const encoded = await this.native.asOf(
+      beliefType,
+      canonicalIdentity,
+      options.validAtNs?.toString(),
+      options.knownAtLsn?.toString(),
+    );
+    const raw = JSON.parse(encoded) as EncodedBeliefRecord | null;
+    return raw === null ? undefined : decodeBelief(raw);
+  }
+}
+
+interface EncodedBeliefRecord extends Omit<BeliefRecord,
+  | "validFromNs"
+  | "validToNs"
+  | "transactionLsn"
+  | "version"
+  | "supersedesVersion"
+  | "provenance"
+  | "conflicts"
+> {
+  validFromNs: string;
+  validToNs: string;
+  transactionLsn: string;
+  version: string;
+  supersedesVersion: string;
+  provenance: Array<Omit<BeliefProvenance, "firstLsn" | "lastLsn"> & {
+    firstLsn: string;
+    lastLsn: string;
+  }>;
+  conflicts: Array<Omit<BeliefRecord["conflicts"][number],
+    "createdLsn" | "resolvedLsn"
+  > & {
+    createdLsn: string;
+    resolvedLsn: string;
+  }>;
+}
+
+function encodeProvenance(provenance: BeliefProvenance[]): unknown[] {
+  return provenance.map((range) => ({
+    first_lsn: range.firstLsn.toString(),
+    last_lsn: range.lastLsn.toString(),
+    byte_start: range.byteStart,
+    byte_end: range.byteEnd,
+  }));
+}
+
+function decodeBelief(raw: EncodedBeliefRecord): BeliefRecord {
+  return {
+    ...raw,
+    validFromNs: BigInt(raw.validFromNs),
+    validToNs: BigInt(raw.validToNs),
+    transactionLsn: BigInt(raw.transactionLsn),
+    version: BigInt(raw.version),
+    supersedesVersion: BigInt(raw.supersedesVersion),
+    provenance: raw.provenance.map((range) => ({
+      ...range,
+      firstLsn: BigInt(range.firstLsn),
+      lastLsn: BigInt(range.lastLsn),
+    })),
+    conflicts: raw.conflicts.map((edge) => ({
+      ...edge,
+      createdLsn: BigInt(edge.createdLsn),
+      resolvedLsn: BigInt(edge.resolvedLsn),
+    })),
+  };
 }
 
 function decodeEnvelope(value: string): Envelope {

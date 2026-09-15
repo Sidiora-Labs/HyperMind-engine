@@ -650,7 +650,7 @@ do_2 = "recall asof takes valid_at or known_at and reports which; timeline mode 
 
 [task.5.5]
 title = "AsOf request; MCP believe, retract, dispute; typed belief API in SDKs"
-status = "pending"
+status = "done"
 wave = 5
 owner_lane = "surface"
 requires = ["5.3", "5.4"]

@@ -13,6 +13,8 @@ hm-compose = { path = "../../../../../crates/hm-compose" }
 hm-core = { path = "../../../../../crates/hm-core" }
 hm-ledger = { path = "../../../../../crates/hm-ledger" }
 hm-mcp = { path = "../../../../../crates/hm-mcp" }
+hm-proj = { path = "../../../../../crates/hm-proj" }
+hm-schema = { path = "../../../../../crates/hm-schema" }
 hm-serve = { path = "../../../../../crates/hm-serve" }
 napi = { version = "3.3.0", features = ["tokio_rt"] }
 napi-derive = "3.2.5"

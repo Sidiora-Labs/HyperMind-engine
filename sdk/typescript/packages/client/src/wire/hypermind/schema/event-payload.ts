@@ -14,6 +14,7 @@ import { LoopClosed, LoopClosedT } from '../../hypermind/schema/loop-closed';
 import { LoopOpened, LoopOpenedT } from '../../hypermind/schema/loop-opened';
 import { MediaRef, MediaRefT } from '../../hypermind/schema/media-ref';
 import { Outcome, OutcomeT } from '../../hypermind/schema/outcome';
+import { ProposedAssertion, ProposedAssertionT } from '../../hypermind/schema/proposed-assertion';
 import { ProviderFrame, ProviderFrameT } from '../../hypermind/schema/provider-frame';
 import { Reasoning, ReasoningT } from '../../hypermind/schema/reasoning';
 import { Recovery, RecoveryT } from '../../hypermind/schema/recovery';
@@ -47,13 +48,14 @@ export enum EventPayload {
   Embedding = 19,
   Retract = 20,
   Attestation = 21,
-  Binding = 22
+  Binding = 22,
+  ProposedAssertion = 23
 }
 
 export function unionToEventPayload(
   type: EventPayload,
-  accessor: (obj:Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg) => Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg|null
-): Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg|null {
+  accessor: (obj:Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProposedAssertion|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg) => Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProposedAssertion|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg|null
+): Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProposedAssertion|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg|null {
   switch(EventPayload[type]) {
     case 'NONE': return null; 
     case 'UserMsg': return accessor(new UserMsg())! as UserMsg;
@@ -78,15 +80,16 @@ export function unionToEventPayload(
     case 'Retract': return accessor(new Retract())! as Retract;
     case 'Attestation': return accessor(new Attestation())! as Attestation;
     case 'Binding': return accessor(new Binding())! as Binding;
+    case 'ProposedAssertion': return accessor(new ProposedAssertion())! as ProposedAssertion;
     default: return null;
   }
 }
 
 export function unionListToEventPayload(
   type: EventPayload, 
-  accessor: (index: number, obj:Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg) => Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg|null, 
+  accessor: (index: number, obj:Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProposedAssertion|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg) => Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProposedAssertion|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg|null,
   index: number
-): Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg|null {
+): Approval|Assertion|Attestation|Binding|Checkpoint|Consolidation|DeliveredMsg|Effect|Embedding|IntentSet|LoopClosed|LoopOpened|MediaRef|Outcome|ProposedAssertion|ProviderFrame|Reasoning|Recovery|Retract|Supervisor|ToolCall|ToolResult|UserMsg|null {
   switch(EventPayload[type]) {
     case 'NONE': return null; 
     case 'UserMsg': return accessor(index, new UserMsg())! as UserMsg;
@@ -111,6 +114,7 @@ export function unionListToEventPayload(
     case 'Retract': return accessor(index, new Retract())! as Retract;
     case 'Attestation': return accessor(index, new Attestation())! as Attestation;
     case 'Binding': return accessor(index, new Binding())! as Binding;
+    case 'ProposedAssertion': return accessor(index, new ProposedAssertion())! as ProposedAssertion;
     default: return null;
   }
 }

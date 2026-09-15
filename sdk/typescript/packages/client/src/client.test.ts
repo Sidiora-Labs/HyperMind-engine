@@ -148,6 +148,57 @@ test("known pre-dispatch rejection does not burn a sequence", async (context) =>
   assert.equal(await client.checkpoint("turn", Buffer.from("valid")), 1n);
 });
 
+test("typed belief API distinguishes valid and known time and preserves retracted history", async (context) => {
+  const fixture = await daemonFixture();
+  context.after(fixture.stop);
+  const client = await Client.connect({
+    socketPath: fixture.socket,
+    capabilityToken: fixture.token,
+    connectionId: Uint8Array.from({ length: 16 }, () => 5),
+  });
+  context.after(() => client.close());
+  const session = client.session("typescript-beliefs");
+  const evidence = await session.remember("observed deployment region");
+  const source = [{
+    firstLsn: evidence,
+    lastLsn: evidence,
+    byteStart: 0,
+    byteEnd: 26,
+  }];
+  assert.equal(await session.believe({
+    beliefId: "region-v1",
+    beliefType: "fact",
+    canonicalIdentity: "deployment:active",
+    value: "Europe",
+    validFromNs: 1n,
+    validToNs: 100n,
+    provenance: source,
+    conflictDomain: "deployment:region",
+  }), 2n);
+  assert.equal(await session.believe({
+    beliefId: "region-v2",
+    beliefType: "fact",
+    canonicalIdentity: "deployment:active",
+    value: "America",
+    validFromNs: 101n,
+    provenance: source,
+    conflictDomain: "deployment:region",
+  }), 3n);
+  const valid = await session.asOf("fact", "deployment:active", { validAtNs: 50n });
+  const known = await session.asOf("fact", "deployment:active", { knownAtLsn: 3n });
+  assert.equal(valid?.value, "Europe");
+  assert.equal(valid?.version, 1n);
+  assert.equal(known?.value, "America");
+  assert.equal(known?.supersedesVersion, 1n);
+  assert.deepEqual(known?.provenance, source);
+  assert.equal(await session.retract("region-v2", source), 4n);
+  assert.equal(await session.asOf("fact", "deployment:active", { knownAtLsn: 4n }), undefined);
+  assert.equal(
+    (await session.asOf("fact", "deployment:active", { knownAtLsn: 3n }))?.value,
+    "America",
+  );
+});
+
 test("concurrent clients with one identity recover occupied sequence slots", async (context) => {
   const fixture = await daemonFixture();
   context.after(fixture.stop);

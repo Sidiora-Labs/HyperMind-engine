@@ -21,12 +21,22 @@ lastLsn():bigint {
   return this.bb!.readUint64(this.bb_pos + 8);
 }
 
-static sizeOf():number {
-  return 16;
+byteStart():number {
+  return this.bb!.readUint32(this.bb_pos + 16);
 }
 
-static createProvenanceRange(builder:flatbuffers.Builder, first_lsn: bigint, last_lsn: bigint):flatbuffers.Offset {
-  builder.prep(8, 16);
+byteEnd():number {
+  return this.bb!.readUint32(this.bb_pos + 20);
+}
+
+static sizeOf():number {
+  return 24;
+}
+
+static createProvenanceRange(builder:flatbuffers.Builder, first_lsn: bigint, last_lsn: bigint, byte_start: number, byte_end: number):flatbuffers.Offset {
+  builder.prep(8, 24);
+  builder.writeInt32(byte_end);
+  builder.writeInt32(byte_start);
   builder.writeInt64(last_lsn);
   builder.writeInt64(first_lsn);
   return builder.offset();
@@ -36,7 +46,9 @@ static createProvenanceRange(builder:flatbuffers.Builder, first_lsn: bigint, las
 unpack(): ProvenanceRangeT {
   return new ProvenanceRangeT(
     this.firstLsn(),
-    this.lastLsn()
+    this.lastLsn(),
+    this.byteStart(),
+    this.byteEnd()
   );
 }
 
@@ -44,20 +56,26 @@ unpack(): ProvenanceRangeT {
 unpackTo(_o: ProvenanceRangeT): void {
   _o.firstLsn = this.firstLsn();
   _o.lastLsn = this.lastLsn();
+  _o.byteStart = this.byteStart();
+  _o.byteEnd = this.byteEnd();
 }
 }
 
 export class ProvenanceRangeT {
 constructor(
   public firstLsn: bigint = BigInt('0'),
-  public lastLsn: bigint = BigInt('0')
+  public lastLsn: bigint = BigInt('0'),
+  public byteStart: number = 0,
+  public byteEnd: number = 0
 ){}
 
 
 pack(builder:flatbuffers.Builder): flatbuffers.Offset {
   return ProvenanceRange.createProvenanceRange(builder,
     this.firstLsn,
-    this.lastLsn
+    this.lastLsn,
+    this.byteStart,
+    this.byteEnd
   );
 }
 }

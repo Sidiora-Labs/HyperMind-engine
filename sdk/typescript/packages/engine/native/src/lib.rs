@@ -5,9 +5,12 @@ use hm_compose::tokens::FallbackWeights;
 use hm_core::{ActorId, ConversationId};
 use hm_ledger::idempotency::ConnectionId;
 use hm_mcp::{
-    BindInput, IntendInput, McpServer, RecallFilters, RecallInput, RecallMode, RememberAnchor,
-    RememberInput, RememberKind, RetentionInput, SensitivityInput,
+    BeliefClaimInput, BeliefTypeInput, BelieveInput, BindInput, ClaimInput, IntendInput, McpServer,
+    ProvenanceInput, RecallFilters, RecallInput, RecallMode, RememberAnchor, RememberInput,
+    RememberKind, RetentionInput, RetractInput, SensitivityInput,
 };
+use hm_proj::beliefs::BeliefAsOf;
+use hm_schema::events::BeliefType;
 use hm_serve::actor::{ActivateRequest, ActorConfig, ActorEngine};
 use napi::bindgen_prelude::Buffer;
 use napi_derive::napi;
@@ -35,6 +38,28 @@ struct BindJson {
     evidence_lsn: String,
     revision: String,
     freshness_requirement_ns: String,
+}
+
+#[derive(Deserialize)]
+struct ProvenanceJson {
+    first_lsn: String,
+    last_lsn: String,
+    byte_start: u32,
+    byte_end: u32,
+}
+
+#[derive(Deserialize)]
+struct BelieveJson {
+    belief_id: String,
+    belief_type: String,
+    canonical_identity: String,
+    value: String,
+    valid_from_ns: String,
+    valid_to_ns: String,
+    provenance: Vec<ProvenanceJson>,
+    conflict_domain: Option<String>,
+    claim: Option<String>,
+    run_id: Option<String>,
 }
 
 #[derive(Deserialize, Default)]
@@ -219,6 +244,155 @@ impl NativeSession {
             freshness_requirement_ns: raw.freshness_requirement_ns.parse().map_err(napi_error)?,
         };
         encode_json(&self.mcp.bind_envelope(input).await)
+    }
+
+    #[napi]
+    pub async fn believe(&self, input_json: String) -> napi::Result<String> {
+        let raw: BelieveJson = serde_json::from_str(&input_json).map_err(napi_error)?;
+        let input = BelieveInput {
+            conversation: self.conversation.clone(),
+            belief: BeliefClaimInput {
+                belief_id: raw.belief_id,
+                belief_type: belief_type_input(&raw.belief_type)?,
+                canonical_identity: raw.canonical_identity,
+                value: raw.value,
+                valid_from_ns: raw.valid_from_ns.parse().map_err(napi_error)?,
+                valid_to_ns: raw.valid_to_ns.parse().map_err(napi_error)?,
+                provenance: provenance(raw.provenance)?,
+                conflict_domain: raw.conflict_domain,
+                claim: match raw.claim.as_deref().unwrap_or("affirmative") {
+                    "affirmative" => ClaimInput::Affirmative,
+                    "negative_existence" => ClaimInput::NegativeExistence,
+                    _ => return Err(napi::Error::from_reason("invalid belief claim")),
+                },
+            },
+            run_id: raw.run_id,
+        };
+        encode_json(&self.mcp.believe_envelope(input).await)
+    }
+
+    #[napi]
+    pub async fn retract(
+        &self,
+        belief_id: String,
+        provenance_json: String,
+    ) -> napi::Result<String> {
+        let raw: Vec<ProvenanceJson> =
+            serde_json::from_str(&provenance_json).map_err(napi_error)?;
+        encode_json(
+            &self
+                .mcp
+                .retract_envelope(RetractInput {
+                    conversation: self.conversation.clone(),
+                    belief_id,
+                    provenance: provenance(raw)?,
+                })
+                .await,
+        )
+    }
+
+    #[napi]
+    pub async fn as_of(
+        &self,
+        belief_type: String,
+        canonical_identity: String,
+        valid_at_ns: Option<String>,
+        known_at_lsn: Option<String>,
+    ) -> napi::Result<String> {
+        let as_of = match (valid_at_ns, known_at_lsn) {
+            (Some(value), None) => BeliefAsOf::ValidAt(value.parse().map_err(napi_error)?),
+            (None, Some(value)) => {
+                BeliefAsOf::KnownAt(hm_core::LSN::new(value.parse().map_err(napi_error)?))
+            }
+            _ => return Err(napi::Error::from_reason("exactly one as-of axis is required")),
+        };
+        let result = self
+            .actor
+            .as_of(
+                belief_type_value(&belief_type)?,
+                canonical_identity,
+                as_of,
+            )
+            .await
+            .map_err(napi_error)?;
+        let Some(record) = result.record else {
+            return Ok("null".to_owned());
+        };
+        encode_json(&serde_json::json!({
+            "beliefId": String::from_utf8_lossy(&record.belief_id),
+            "beliefType": belief_type_name(record.belief_type),
+            "canonicalIdentity": record.canonical_identity,
+            "conflictDomain": (!record.conflict_domain.is_empty()).then_some(record.conflict_domain),
+            "value": String::from_utf8_lossy(&record.value),
+            "claim": if record.claim == hm_schema::events::AssertionClaim::NegativeExistence {
+                "negative_existence"
+            } else {
+                "affirmative"
+            },
+            "validFromNs": record.valid_from_ns.to_string(),
+            "validToNs": record.valid_to_ns.to_string(),
+            "transactionLsn": record.observation_lsn.to_string(),
+            "version": record.version.to_string(),
+            "supersedesVersion": record.supersedes_version.to_string(),
+            "provenance": record.provenance.into_iter().map(|range| serde_json::json!({
+                "firstLsn": range.first_lsn.to_string(),
+                "lastLsn": range.last_lsn.to_string(),
+                "byteStart": range.byte_start,
+                "byteEnd": range.byte_end,
+            })).collect::<Vec<_>>(),
+            "conflicts": record.conflict_edges.into_iter().map(|edge| serde_json::json!({
+                "otherType": belief_type_name(edge.other_type),
+                "otherCanonicalIdentity": edge.other_canonical_identity,
+                "createdLsn": edge.created_lsn.to_string(),
+                "resolvedLsn": edge.resolved_lsn.to_string(),
+                "obligatedSurfacing": edge.obligated_surfacing,
+            })).collect::<Vec<_>>(),
+        }))
+    }
+}
+
+fn provenance(values: Vec<ProvenanceJson>) -> napi::Result<Vec<ProvenanceInput>> {
+    values
+        .into_iter()
+        .map(|value| {
+            Ok(ProvenanceInput {
+                first_lsn: value.first_lsn.parse().map_err(napi_error)?,
+                last_lsn: value.last_lsn.parse().map_err(napi_error)?,
+                byte_start: value.byte_start,
+                byte_end: value.byte_end,
+            })
+        })
+        .collect()
+}
+
+fn belief_type_input(value: &str) -> napi::Result<BeliefTypeInput> {
+    Ok(match value {
+        "fact" => BeliefTypeInput::Fact,
+        "preference" => BeliefTypeInput::Preference,
+        "constraint" => BeliefTypeInput::Constraint,
+        "goal" => BeliefTypeInput::Goal,
+        "identity" => BeliefTypeInput::Identity,
+        _ => return Err(napi::Error::from_reason("invalid belief type")),
+    })
+}
+
+fn belief_type_value(value: &str) -> napi::Result<BeliefType> {
+    Ok(match belief_type_input(value)? {
+        BeliefTypeInput::Fact => BeliefType::Fact,
+        BeliefTypeInput::Preference => BeliefType::Preference,
+        BeliefTypeInput::Constraint => BeliefType::Constraint,
+        BeliefTypeInput::Goal => BeliefType::Goal,
+        BeliefTypeInput::Identity => BeliefType::Identity,
+    })
+}
+
+const fn belief_type_name(value: BeliefType) -> &'static str {
+    match value {
+        BeliefType::Fact => "fact",
+        BeliefType::Preference => "preference",
+        BeliefType::Constraint => "constraint",
+        BeliefType::Goal => "goal",
+        BeliefType::Identity => "identity",
     }
 }
 
