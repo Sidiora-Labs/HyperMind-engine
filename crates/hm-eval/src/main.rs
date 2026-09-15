@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-use hm_eval::{slice1, slice2, slice3, slice4, suites};
+use hm_eval::{slice1, slice2, slice3, slice4, slice5, suites};
 
 #[tokio::main]
 async fn main() {
@@ -10,6 +10,7 @@ async fn main() {
         [command, slice] if command == "gate" && slice == "slice2" => slice2::gate(None).await,
         [command, slice] if command == "gate" && slice == "slice3" => slice3::gate(None),
         [command, slice] if command == "gate" && slice == "slice4" => slice4::gate(None),
+        [command, slice] if command == "gate" && slice == "slice5" => slice5::gate(None).await,
         [command, slice, flag, reference]
             if command == "gate" && slice == "slice1" && flag == "--compare" =>
         {
@@ -30,6 +31,11 @@ async fn main() {
         {
             slice4::gate(Some(reference))
         }
+        [command, slice, flag, reference]
+            if command == "gate" && slice == "slice5" && flag == "--compare" =>
+        {
+            slice5::gate(Some(reference)).await
+        }
         [command, directory, marker, trial] if command == "__continuity_child" => {
             match trial.parse::<u8>() {
                 Ok(trial) => suites::continuity::child(
@@ -43,7 +49,7 @@ async fn main() {
             }
         }
         _ => {
-            eprintln!("usage: hm-eval gate <slice1|slice2|slice3|slice4> [--compare REF]");
+            eprintln!("usage: hm-eval gate <slice1|slice2|slice3|slice4|slice5> [--compare REF]");
             std::process::exit(2);
         }
     };

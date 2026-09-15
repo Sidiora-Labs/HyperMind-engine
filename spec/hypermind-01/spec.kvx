@@ -661,7 +661,7 @@ do_1 = "believe writes a typed bitemporal assertion and returns gate rejections 
 
 [task.5.6]
 title = "Temporal suite, stale-fact rate, protected-type suite"
-status = "pending"
+status = "done"
 wave = 5
 owner_lane = "eval"
 requires = ["5.5"]

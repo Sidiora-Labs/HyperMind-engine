@@ -155,7 +155,7 @@
   - [x] 5.5 AsOf request; MCP believe, retract, dispute; typed belief API in SDKs
     - believe writes a typed bitemporal assertion and returns gate rejections with effect_state rejected; retract tombstones; dispute adjudicates two claims and returns verdict, suggested action and any resulting events; a protected-type write from a run authority returns kProtectedTypeWrite.
     - _Requirements: 13.2, 14.2_
-  - [ ] 5.6 Temporal suite, stale-fact rate, protected-type suite
+  - [x] 5.6 Temporal suite, stale-fact rate, protected-type suite
     - Temporal suite: scripted supersessions with validity intervals; as-of by valid_at and by known_at must differ where scripted; a bundle that states a superseded fact as current counts as a stale fact; gate is zero.
     - Protected-type suite: every run-authority write to identity, constraint or preference is rejected and a proposal appears in the conflicts tier.
     - _Requirements: 15.1, 8.1, 8.2_

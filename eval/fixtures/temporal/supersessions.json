@@ -1,0 +1,28 @@
+{
+  "conversation": "slice5-temporal",
+  "canonical_identity": "deployment:active",
+  "conflict_domain": "deployment:region",
+  "evidence": "deployment state was observed by the operator",
+  "versions": [
+    {
+      "belief_id": "deployment-europe",
+      "value": "Europe",
+      "valid_from_ns": 1,
+      "valid_to_ns": 100
+    },
+    {
+      "belief_id": "deployment-america",
+      "value": "America",
+      "valid_from_ns": 101,
+      "valid_to_ns": 0
+    }
+  ],
+  "valid_query": {
+    "at": 50,
+    "expected": "Europe"
+  },
+  "known_query": {
+    "at": 3,
+    "expected": "America"
+  }
+}

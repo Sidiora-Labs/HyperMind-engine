@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "slice": "slice5",
+  "encoder": "lexical_only",
+  "judge_model": null,
+  "suites": [
+    "temporal_supersession",
+    "protected_belief_types"
+  ],
+  "judge_free": [
+    {
+      "name": "temporal_asof_accuracy",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "stale_fact_rate",
+      "value": 0.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "protected_write_rejection",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "protected_proposal_surfacing",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    }
+  ],
+  "judged": []
+}
