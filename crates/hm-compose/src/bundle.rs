@@ -5,7 +5,7 @@ use crate::canonical::{bundle_hash, canonical_bytes};
 use crate::lanes::lexical;
 use crate::manifest;
 use crate::safety;
-use crate::tiers::{bindings, intent, work};
+use crate::tiers::{bindings, conflicts, intent, resident, temporal as temporal_tier, work};
 use crate::tokens::TokenCounter;
 use crate::trim::trim_to_budget_with_profile;
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
@@ -88,6 +88,8 @@ pub enum WhyCode {
     Intent,
     Binding,
     WorkLedger,
+    Belief,
+    Conflict,
 }
 
 pub struct ActivationRequest<'model> {
@@ -223,7 +225,104 @@ pub fn activate_with_context(
     let snapshot_epoch =
         u64::try_from(snapshot.epoch()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
     let query_digest = *blake3::hash(request.query.as_bytes()).as_bytes();
-    let mut bundle = ActivationBundle {
+    let mut bundle = empty_bundle(snapshot, request, snapshot_epoch, query_digest)?;
+
+    let intent = intent::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        request.token_counter,
+    )?;
+    let active_task = context.task.as_deref().or(intent.active_task.as_deref());
+    for item in intent.items {
+        add_item(&mut bundle, item)?;
+    }
+    for item in resident::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        request.token_counter,
+    )? {
+        add_item(&mut bundle, item)?;
+    }
+    let now_ns = match context.now_ns {
+        Some(value) => value,
+        None => latest_projection_time(snapshot)?,
+    };
+    let bindings = bindings::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        active_task,
+        &context.required_bindings,
+        now_ns,
+        request.token_counter,
+    )?;
+    for item in bindings.items {
+        add_item(&mut bundle, item)?;
+    }
+    bundle.gaps.extend(bindings.gaps);
+    for item in work::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        request.token_counter,
+    )? {
+        add_item(&mut bundle, item)?;
+    }
+    populate_conversation(&mut bundle, snapshot, request)?;
+    populate_lexical(&mut bundle, snapshot, request)?;
+    let conflict_tier = conflicts::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        request.token_counter,
+    )?;
+    for item in conflict_tier.items {
+        add_item(&mut bundle, item)?;
+    }
+    bundle.gaps.extend(conflict_tier.gaps);
+    for item in temporal_tier::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        now_ns,
+        request.token_counter,
+    )? {
+        add_item(&mut bundle, item)?;
+    }
+    exclude_same_turn_content(&mut bundle, request.turn_text.as_bytes());
+    trim_to_budget_with_profile(&mut bundle, request.token_counter, context.budget_profile)?;
+    let included: BTreeSet<LSN> = bundle
+        .sections
+        .iter()
+        .flat_map(|section| section.items.iter())
+        .flat_map(|item| item.provenance.iter().copied())
+        .collect();
+    bundle.manifest.included = bundle
+        .manifest
+        .selected
+        .iter()
+        .copied()
+        .filter(|lsn| included.contains(lsn))
+        .collect();
+    let selected = selected_digests(snapshot, &bundle.manifest.selected)?;
+    bundle.manifest.manifest_id = manifest::manifest_id(
+        &bundle.manifest.query_digest,
+        bundle.manifest.snapshot_epoch,
+        &selected,
+    );
+    bundle.bundle_hash = bundle_hash(&bundle)?;
+    Ok(bundle)
+}
+
+fn empty_bundle(
+    snapshot: &ReadSnapshot<'_>,
+    request: &ActivationRequest<'_>,
+    snapshot_epoch: u64,
+    query_digest: [u8; 32],
+) -> Result<ActivationBundle, Error> {
+    Ok(ActivationBundle {
         snapshot_epoch,
         budget_tokens: request.budget_tokens,
         spent_tokens: 0,
@@ -255,68 +354,7 @@ pub fn activate_with_context(
             inclusion: HealthStatus::LexicalOnly,
         },
         bundle_hash: [0; 32],
-    };
-
-    let intent = intent::read(
-        snapshot,
-        request.actor,
-        request.conversation,
-        request.token_counter,
-    )?;
-    let active_task = context.task.as_deref().or(intent.active_task.as_deref());
-    for item in intent.items {
-        add_item(&mut bundle, item)?;
-    }
-    let now_ns = match context.now_ns {
-        Some(value) => value,
-        None => latest_projection_time(snapshot)?,
-    };
-    let bindings = bindings::read(
-        snapshot,
-        request.actor,
-        request.conversation,
-        active_task,
-        &context.required_bindings,
-        now_ns,
-        request.token_counter,
-    )?;
-    for item in bindings.items {
-        add_item(&mut bundle, item)?;
-    }
-    bundle.gaps.extend(bindings.gaps);
-    for item in work::read(
-        snapshot,
-        request.actor,
-        request.conversation,
-        request.token_counter,
-    )? {
-        add_item(&mut bundle, item)?;
-    }
-    populate_conversation(&mut bundle, snapshot, request)?;
-    populate_lexical(&mut bundle, snapshot, request)?;
-    exclude_same_turn_content(&mut bundle, request.turn_text.as_bytes());
-    trim_to_budget_with_profile(&mut bundle, request.token_counter, context.budget_profile)?;
-    let included: BTreeSet<LSN> = bundle
-        .sections
-        .iter()
-        .flat_map(|section| section.items.iter())
-        .flat_map(|item| item.provenance.iter().copied())
-        .collect();
-    bundle.manifest.included = bundle
-        .manifest
-        .selected
-        .iter()
-        .copied()
-        .filter(|lsn| included.contains(lsn))
-        .collect();
-    let selected = selected_digests(snapshot, &bundle.manifest.selected)?;
-    bundle.manifest.manifest_id = manifest::manifest_id(
-        &bundle.manifest.query_digest,
-        bundle.manifest.snapshot_epoch,
-        &selected,
-    );
-    bundle.bundle_hash = bundle_hash(&bundle)?;
-    Ok(bundle)
+    })
 }
 
 fn latest_projection_time(snapshot: &ReadSnapshot<'_>) -> Result<UtcNanos, Error> {
@@ -539,6 +577,8 @@ fn provenance_uri(
         WhyCode::Intent => "intent",
         WhyCode::Binding => "binding",
         WhyCode::WorkLedger => "work_ledger",
+        WhyCode::Belief => "belief",
+        WhyCode::Conflict => "conflict",
     };
     format!(
         "hm://{}/{}/{}?at={}&src={}&score={score}&vr=0&lr={lexical_rank}&why={why}",

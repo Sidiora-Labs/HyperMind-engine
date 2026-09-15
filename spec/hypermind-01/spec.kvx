@@ -638,7 +638,7 @@ do_2 = "NLI through ort with nli-deberta-v3-small in both directions; verdict ge
 
 [task.5.4]
 title = "Resident, conflicts and temporal tiers; asof and timeline recall modes"
-status = "pending"
+status = "done"
 wave = 5
 owner_lane = "compose"
 requires = ["5.2"]

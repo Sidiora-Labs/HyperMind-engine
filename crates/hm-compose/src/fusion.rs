@@ -206,5 +206,7 @@ const fn why_name(why: WhyCode) -> &'static str {
         WhyCode::Intent => "intent",
         WhyCode::Binding => "binding",
         WhyCode::WorkLedger => "work_ledger",
+        WhyCode::Belief => "belief",
+        WhyCode::Conflict => "conflict",
     }
 }

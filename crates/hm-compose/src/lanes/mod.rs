@@ -1,3 +1,4 @@
+pub mod belief;
 pub mod entity;
 pub mod lexical;
 pub mod temporal;

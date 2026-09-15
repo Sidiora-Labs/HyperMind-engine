@@ -148,7 +148,7 @@
     - LlmProvider trait with generate_structured against a JSON schema, model id, tier, usage accounting; Anthropic Messages native with prompt caching, OpenAI-compatible, Ollama; recorded wire fixtures for tests.
     - NLI through ort with nli-deberta-v3-small in both directions; verdict genuine, tension, complementary or unrelated; genuine escalates to one supersession call under prompt supersession@1; models below tier cannot declare genuine under 0.8; the result is a Retract plus Assertion or a conflict edge with obligated surfacing; no provider configured records an unverified tension.
     - _Requirements: 8.3, 17.2_
-  - [ ] 5.4 Resident, conflicts and temporal tiers; asof and timeline recall modes
+  - [x] 5.4 Resident, conflicts and temporal tiers; asof and timeline recall modes
     - Resident tier from live identity, constraint, preference and goal heads excluding structural-self and failure domains; conflicts tier from beliefs whose provenance surfaced with unresolved obligated edges plus the counterpart via as-of, and pending protected-type proposals; temporal tier from week windows.
     - recall asof takes valid_at or known_at and reports which; timeline mode descends the ladder.
     - _Requirements: 7.1, 6.3_
