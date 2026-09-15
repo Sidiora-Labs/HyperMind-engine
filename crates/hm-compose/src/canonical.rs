@@ -44,6 +44,7 @@ pub fn canonical_bytes(bundle: &ActivationBundle) -> Result<Vec<u8>, Error> {
             output.push(item.tier as u8);
             output.push(u8::from(item.coarsened));
             output.push(item.why as u8);
+            output.push(item.authority as u8);
             append_u32(&mut output, item.vector_rank);
             append_u32(&mut output, item.lexical_rank);
             append_usize(&mut output, item.tokens)?;
@@ -53,6 +54,7 @@ pub fn canonical_bytes(bundle: &ActivationBundle) -> Result<Vec<u8>, Error> {
         }
     }
 
+    output.extend_from_slice(&bundle.manifest.manifest_id);
     output.extend_from_slice(&bundle.manifest.query_digest);
     append_u64(&mut output, bundle.manifest.snapshot_epoch);
     append_bytes(&mut output, bundle.manifest.encoder.as_bytes())?;

@@ -467,7 +467,7 @@ do_2 = "derive_authority(source, output) returns the source authority only when 
 
 [task.3.3]
 title = "Activation safety in renderers, RetrievalManifest stages, attestation frames"
-status = "pending"
+status = "done"
 wave = 3
 owner_lane = "compose"
 requires = ["3.2"]

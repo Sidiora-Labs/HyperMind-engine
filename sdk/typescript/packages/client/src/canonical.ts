@@ -1,5 +1,5 @@
 import { blake3 } from "@noble/hashes/blake3";
-import { Bundle, BundleItem, BundleSection, TIERS } from "@hypermind/render";
+import { Authority, Bundle, BundleItem, BundleSection, TIERS } from "@hypermind/render";
 
 const HEALTH = ["semantic_ready", "semantic_lagging", "lexical_only", "unavailable"];
 const GAP = [
@@ -11,6 +11,14 @@ const GAP = [
   "conflicting_binding",
   "index_lag",
   "pending_protected_proposal",
+];
+const AUTHORITY: Authority[] = [
+  "user_asserted",
+  "external_observed",
+  "tool_observed",
+  "runtime_fact",
+  "assistant_generated",
+  "derived_inference",
 ];
 
 class Reader {
@@ -92,6 +100,8 @@ export function parseBundle(bytes: Uint8Array): Bundle {
       if (itemTier !== tier) throw new Error("activation item tier mismatch");
       const coarsened = reader.u8() !== 0;
       reader.u8();
+      const authority = AUTHORITY[reader.u8()];
+      if (authority === undefined) throw new Error("invalid activation authority");
       reader.u32();
       reader.u32();
       const itemTokens = reader.count();
@@ -103,12 +113,14 @@ export function parseBundle(bytes: Uint8Array): Bundle {
         uri,
         provenance,
         content,
+        authority,
         tokens: itemTokens,
         coarsened,
       });
     }
     sections.push({ tier, required, items, tokens, trimmedItems, coarsenedItems });
   }
+  reader.raw(32);
   reader.raw(32);
   reader.u64();
   reader.blob();

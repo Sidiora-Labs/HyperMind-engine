@@ -3,6 +3,8 @@
 use crate::budget::BudgetProfile;
 use crate::canonical::{bundle_hash, canonical_bytes};
 use crate::lanes::lexical;
+use crate::manifest;
+use crate::safety;
 use crate::tiers::{bindings, intent, work};
 use crate::tokens::TokenCounter;
 use crate::trim::trim_to_budget_with_profile;
@@ -102,6 +104,7 @@ pub struct ActivationItem {
     pub uri: String,
     pub provenance: Vec<LSN>,
     pub content: Vec<u8>,
+    pub authority: Authority,
     pub tokens: usize,
     pub coarsened: bool,
     pub vector_rank: u32,
@@ -159,6 +162,7 @@ pub struct BundleHealth {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct RetrievalManifest {
+    pub manifest_id: [u8; 32],
     pub query_digest: [u8; 32],
     pub snapshot_epoch: u64,
     pub encoder: String,
@@ -221,6 +225,7 @@ pub fn activate_with_context(
             coarsened_items: 0,
         }),
         manifest: RetrievalManifest {
+            manifest_id: [0; 32],
             query_digest,
             snapshot_epoch,
             encoder: request.token_counter.model_id().to_owned(),
@@ -278,6 +283,7 @@ pub fn activate_with_context(
     }
     populate_conversation(&mut bundle, snapshot, request)?;
     populate_lexical(&mut bundle, snapshot, request)?;
+    exclude_same_turn_content(&mut bundle, request.turn_text.as_bytes());
     trim_to_budget_with_profile(&mut bundle, request.token_counter, context.budget_profile)?;
     let included: BTreeSet<LSN> = bundle
         .sections
@@ -292,6 +298,12 @@ pub fn activate_with_context(
         .copied()
         .filter(|lsn| included.contains(lsn))
         .collect();
+    let selected = selected_digests(snapshot, &bundle.manifest.selected)?;
+    bundle.manifest.manifest_id = manifest::manifest_id(
+        &bundle.manifest.query_digest,
+        bundle.manifest.snapshot_epoch,
+        &selected,
+    );
     bundle.bundle_hash = bundle_hash(&bundle)?;
     Ok(bundle)
 }
@@ -307,7 +319,7 @@ fn latest_projection_time(snapshot: &ReadSnapshot<'_>) -> Result<UtcNanos, Error
 }
 
 pub fn build_attestations(
-    bundle: &ActivationBundle,
+    bundle: &mut ActivationBundle,
     request: AttestationRequest,
 ) -> Result<Vec<Frame>, Error> {
     if request.first_lsn.get() == 0 {
@@ -355,6 +367,24 @@ pub fn build_attestations(
             sealed_payload: encode_event_envelope(&envelope),
         });
     }
+    if request.disposition == AttestationDisposition::Used {
+        bundle.manifest.used = frames
+            .iter()
+            .filter_map(|frame| {
+                let verified = event::verify_event(
+                    &frame.sealed_payload,
+                    event::EventKind::Attestation,
+                    Boundary::Disk,
+                )
+                .ok()?;
+                let EventPayload::Attestation(attestation) = verified.envelope.payload else {
+                    return None;
+                };
+                Some(LSN::new(attestation.target_lsn))
+            })
+            .collect();
+        bundle.bundle_hash = bundle_hash(bundle)?;
+    }
     Ok(frames)
 }
 
@@ -392,15 +422,16 @@ fn populate_conversation(
         });
     }
     for record in records {
-        let Some(content) = record_content(&record)? else {
+        let Some(content) = record_content(&record) else {
             continue;
         };
         let item = ActivationItem {
             tier: Tier::Conversation,
             uri: provenance_uri(request.actor, &record, 0, 0, WhyCode::Conversation),
             provenance: vec![record.lsn],
-            tokens: request.token_counter.count(&content)?,
-            content,
+            tokens: request.token_counter.count(&content.bytes)?,
+            content: content.bytes,
+            authority: content.authority,
             coarsened: false,
             vector_rank: 0,
             lexical_rank: 0,
@@ -443,7 +474,7 @@ fn populate_lexical(
         if record.conversation == request.conversation {
             continue;
         }
-        let Some(content) = record_content(&record)? else {
+        let Some(content) = record_content(&record) else {
             continue;
         };
         let lexical_rank =
@@ -458,8 +489,9 @@ fn populate_lexical(
                 WhyCode::Lexical,
             ),
             provenance: vec![record.lsn],
-            tokens: request.token_counter.count(&content)?,
-            content,
+            tokens: request.token_counter.count(&content.bytes)?,
+            content: content.bytes,
+            authority: content.authority,
             coarsened: false,
             vector_rank: 0,
             lexical_rank,
@@ -470,18 +502,13 @@ fn populate_lexical(
     Ok(())
 }
 
-fn record_content(record: &ConversationRecord) -> Result<Option<Vec<u8>>, Error> {
+fn record_content(record: &ConversationRecord) -> Option<safety::SafeContent> {
     let schema_kind = match record.kind {
         EventKind::UserMsg => event::EventKind::UserMsg,
         EventKind::DeliveredMsg => event::EventKind::DeliveredMsg,
-        _ => return Ok(None),
+        _ => return None,
     };
-    let verified = event::verify_event(&record.payload, schema_kind, Boundary::Disk)?;
-    match verified.envelope.payload {
-        EventPayload::UserMsg(message) => Ok(Some(message.content)),
-        EventPayload::DeliveredMsg(message) => Ok(Some(message.content)),
-        _ => Err(Error::new(ErrorCode::InvariantViolation).at_lsn(record.lsn)),
-    }
+    safety::decode_semantic_content(&record.payload, schema_kind)
 }
 
 fn provenance_uri(
@@ -505,8 +532,8 @@ fn provenance_uri(
 }
 
 fn add_item(bundle: &mut ActivationBundle, item: ActivationItem) -> Result<(), Error> {
-    if item.uri.is_empty() || item.provenance.is_empty() {
-        return Err(Error::new(ErrorCode::InvalidArgument));
+    if !safety::safe_item(&item, &BTreeSet::new()) {
+        return Ok(());
     }
     let section = &mut bundle.sections[item.tier as usize];
     section.tokens = section
@@ -515,6 +542,34 @@ fn add_item(bundle: &mut ActivationBundle, item: ActivationItem) -> Result<(), E
         .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))?;
     section.items.push(item);
     Ok(())
+}
+
+fn selected_digests(
+    snapshot: &ReadSnapshot<'_>,
+    selected: &[LSN],
+) -> Result<Vec<(LSN, [u8; 32])>, Error> {
+    selected
+        .iter()
+        .map(|lsn| {
+            let record = read_conversation_record(snapshot, *lsn)?
+                .ok_or_else(|| Error::new(ErrorCode::ProjectionCheckpoint).at_lsn(*lsn))?;
+            Ok((*lsn, *blake3::hash(&record.payload).as_bytes()))
+        })
+        .collect()
+}
+
+fn exclude_same_turn_content(bundle: &mut ActivationBundle, turn_text: &[u8]) {
+    if turn_text.is_empty() {
+        return;
+    }
+    for section in &mut bundle.sections {
+        let before = section.items.len();
+        section.items.retain(|item| item.content != turn_text);
+        if section.items.len() != before {
+            section.tokens = section.items.iter().map(|item| item.tokens).sum();
+            section.trimmed_items += before - section.items.len();
+        }
+    }
 }
 
 pub fn canonical_and_hash(bundle: &ActivationBundle) -> Result<(Vec<u8>, [u8; 32]), Error> {

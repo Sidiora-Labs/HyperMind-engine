@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { ActivationSafetyError, Bundle, render } from "./index";
+import { Bundle, render } from "./index";
 
 function bundle(): Bundle {
   return {
@@ -20,6 +20,7 @@ function bundle(): Bundle {
             uri: "hm://7/00000000000000000000000000000000/8",
             provenance: [8n],
             content: "older observation",
+            authority: "external_observed",
             tokens: 4,
             coarsened: false,
           },
@@ -28,6 +29,7 @@ function bundle(): Bundle {
             uri: "hm://7/00000000000000000000000000000000/9",
             provenance: [9n],
             content: "same turn",
+            authority: "assistant_generated",
             tokens: 4,
             coarsened: false,
           },
@@ -45,7 +47,8 @@ test("render labels memory as untrusted user content and excludes same-turn item
   assert.equal(rendered.version, 1);
   assert.equal(rendered.sections[0]?.items.length, 1);
   assert.equal(rendered.sections[0]?.items[0]?.role, "user");
-  assert.equal(rendered.sections[0]?.items[0]?.authority, "untrusted_memory");
+  assert.equal(rendered.sections[0]?.items[0]?.authority, "external_observed");
+  assert.equal(rendered.sections[0]?.items[0]?.trust, "untrusted_memory");
   assert.equal(rendered.sections[0]?.items[0]?.provenanceUri.startsWith("hm://"), true);
   assert.equal(
     JSON.stringify(rendered, (_, value) =>
@@ -55,8 +58,32 @@ test("render labels memory as untrusted user content and excludes same-turn item
   );
 });
 
-test("render rejects uncited memory", () => {
+test("render excludes uncited, non-semantic, and raw memory", () => {
   const invalid = bundle();
   invalid.sections[0]!.items[0]!.provenance = [];
-  assert.throws(() => render(invalid), ActivationSafetyError);
+  invalid.sections[0]!.items.push({
+    ...invalid.sections[0]!.items[1]!,
+    provenance: [10n],
+    semantic: false,
+  });
+  invalid.sections[0]!.items.push({
+    ...invalid.sections[0]!.items[1]!,
+    provenance: [11n],
+    content: "NCEV raw envelope",
+  });
+  invalid.sections[0]!.items.push({
+    ...invalid.sections[0]!.items[1]!,
+    provenance: [12n],
+    content: "PCCN raw checkpoint",
+  });
+  assert.deepEqual(render(invalid).sections[0]?.items, [
+    {
+      role: "user",
+      authority: "assistant_generated",
+      trust: "untrusted_memory",
+      provenanceUri: "hm://7/00000000000000000000000000000000/9",
+      provenance: [9n],
+      content: "same turn",
+    },
+  ]);
 });

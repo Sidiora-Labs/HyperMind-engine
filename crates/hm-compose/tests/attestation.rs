@@ -18,7 +18,7 @@ fn every_unique_provenance_lsn_becomes_a_valid_attestation_frame() {
     let snapshot = store.begin_snapshot().expect("snapshot");
     let counter =
         TokenCounter::for_model("fallback", None, FallbackWeights::default()).expect("counter");
-    let bundle = activate(
+    let mut bundle = activate(
         &snapshot,
         &ActivationRequest {
             actor: ActorId::new(19),
@@ -33,7 +33,7 @@ fn every_unique_provenance_lsn_becomes_a_valid_attestation_frame() {
     )
     .expect("activate");
     let attestations = build_attestations(
-        &bundle,
+        &mut bundle,
         AttestationRequest {
             first_lsn: LSN::new(100),
             actor: ActorId::new(19),
@@ -44,6 +44,7 @@ fn every_unique_provenance_lsn_becomes_a_valid_attestation_frame() {
     )
     .expect("attestations");
     assert_eq!(attestations.len(), 4);
+    assert_eq!(bundle.manifest.used.len(), 4);
     for (index, frame) in attestations.iter().enumerate() {
         assert_eq!(frame.header.kind, EventKind::Attestation);
         assert_eq!(

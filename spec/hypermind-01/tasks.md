@@ -91,7 +91,7 @@
     - Ingest maps UserMsg to user_asserted, ToolResult to tool_observed, ToolCall and Checkpoint and loop events to runtime_fact, DeliveredMsg and Reasoning to assistant_generated, external feeds to external_observed; automatic sensitivity capped at personal; retention do_not_store returns a receipt and appends nothing.
     - derive_authority(source, output) returns the source authority only when output is a verbatim quote of a cited byte range, else derived_inference; VerifyEvent rejects Outcome and LoopClosed done whose citations include any derived or memory kind; memory.* kinds are refused at the ingest boundary.
     - _Requirements: 4.1, 4.2, 10.2_
-  - [ ] 3.3 Activation safety in renderers, RetrievalManifest stages, attestation frames
+  - [x] 3.3 Activation safety in renderers, RetrievalManifest stages, attestation frames
     - RetrievalManifest with candidates, selected, included and used populated from lanes, trim and attestations; manifest id from query identity plus selected digests at snapshot epoch; validate before reuse rejects a moved epoch.
     - Port activation_safety_test: mismatched union payloads decode to empty, non-semantic kinds and raw NCEV or checkpoint bytes are dropped, items without full provenance are excluded, same-turn content is excluded, authority labels on every item, memory never in system or developer role; identical assertions in the Rust renderer and the TypeScript renderer.
     - _Requirements: 4.3, 7.2_

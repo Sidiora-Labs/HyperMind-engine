@@ -5,6 +5,7 @@ use crate::tokens::TokenCounter;
 use hm_core::{ActorId, ConversationId, Error};
 use hm_proj::intent::IntentFrameProjection;
 use hm_proj::store::ReadSnapshot;
+use hm_schema::events::Authority;
 
 pub(crate) struct IntentTier {
     pub items: Vec<ActivationItem>,
@@ -64,6 +65,7 @@ fn item(
         provenance: vec![lsn],
         tokens: counter.count(&content)?,
         content,
+        authority: Authority::DerivedInference,
         coarsened: false,
         vector_rank: 0,
         lexical_rank: 0,

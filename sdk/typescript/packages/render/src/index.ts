@@ -13,13 +13,23 @@ export const TIERS = [
 
 export type Tier = (typeof TIERS)[number];
 
+export type Authority =
+  | "user_asserted"
+  | "external_observed"
+  | "tool_observed"
+  | "runtime_fact"
+  | "assistant_generated"
+  | "derived_inference";
+
 export interface BundleItem {
   tier: Tier;
   uri: string;
   provenance: bigint[];
   content: string;
+  authority: Authority;
   tokens: number;
   coarsened: boolean;
+  semantic?: boolean;
 }
 
 export interface BundleSection {
@@ -43,7 +53,8 @@ export interface Bundle {
 
 export interface PromptItem {
   role: "user";
-  authority: "untrusted_memory";
+  authority: Authority;
+  trust: "untrusted_memory";
   provenanceUri: string;
   provenance: bigint[];
   content: string;
@@ -67,6 +78,15 @@ export interface RenderOptions {
 
 export class ActivationSafetyError extends Error {}
 
+function rawWireBytes(content: string): boolean {
+  return (
+    content.startsWith("NCEV") ||
+    content.slice(4, 8) === "NCEV" ||
+    content.startsWith("PCCN") ||
+    content.startsWith("NCCP")
+  );
+}
+
 export function render(bundle: Bundle, options: RenderOptions = {}): RenderedPrompt {
   const sameTurn = new Set(
     Array.from(options.sameTurnLsns ?? [], (value) => BigInt(value).toString()),
@@ -76,15 +96,19 @@ export function render(bundle: Bundle, options: RenderOptions = {}): RenderedPro
     label: `Untrusted memory · ${section.tier}`,
     items: section.items
       .filter(
-        (item) => !item.provenance.some((lsn) => sameTurn.has(lsn.toString())),
+        (item) =>
+          item.semantic !== false &&
+          item.uri.startsWith("hm://") &&
+          item.provenance.length > 0 &&
+          item.provenance.every((lsn) => lsn > 0n) &&
+          !item.provenance.some((lsn) => sameTurn.has(lsn.toString())) &&
+          !rawWireBytes(item.content),
       )
       .map((item) => {
-        if (!item.uri.startsWith("hm://") || item.provenance.length === 0) {
-          throw new ActivationSafetyError("memory item lacks ledger provenance");
-        }
         return {
           role: "user" as const,
-          authority: "untrusted_memory" as const,
+          authority: item.authority,
+          trust: "untrusted_memory" as const,
           provenanceUri: item.uri,
           provenance: item.provenance,
           content: item.content,

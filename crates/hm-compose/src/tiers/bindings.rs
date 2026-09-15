@@ -8,6 +8,7 @@ use hm_proj::bindings::{
 };
 use hm_proj::store::ReadSnapshot;
 use hm_proj::timeline::read_conversation_record;
+use hm_schema::events::Authority;
 
 pub(crate) struct BindingsTier {
     pub items: Vec<ActivationItem>,
@@ -88,6 +89,7 @@ pub(crate) fn read(
             provenance,
             tokens: counter.count(&content)?,
             content,
+            authority: Authority::DerivedInference,
             coarsened: false,
             vector_rank: 0,
             lexical_rank: 0,

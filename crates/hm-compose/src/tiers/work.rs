@@ -5,6 +5,7 @@ use crate::tokens::TokenCounter;
 use hm_core::{ActorId, ConversationId, Error};
 use hm_proj::ledger::{WorkKind, WorkLedgerProjection, WorkState};
 use hm_proj::store::ReadSnapshot;
+use hm_schema::events::Authority;
 
 pub(crate) fn read(
     snapshot: &ReadSnapshot<'_>,
@@ -39,6 +40,7 @@ pub(crate) fn read(
                 },
                 tokens: counter.count(&content)?,
                 content,
+                authority: Authority::DerivedInference,
                 coarsened: false,
                 vector_rank: 0,
                 lexical_rank: 0,
