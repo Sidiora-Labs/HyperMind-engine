@@ -2697,6 +2697,11 @@
       "file": "crates/hm-proj/src/procedures.rs"
     },
     {
+      "id": "rust:crates/hm-proj/src/procedures.rs:PlaybookMetadata",
+      "name": "hm-proj::PlaybookMetadata",
+      "file": "crates/hm-proj/src/procedures.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/procedures.rs:ProceduresProjection",
       "name": "hm-proj::ProceduresProjection",
       "file": "crates/hm-proj/src/procedures.rs"

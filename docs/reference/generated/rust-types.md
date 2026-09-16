@@ -11071,6 +11071,7 @@ pub enum ProcedureState {
     Tentative,
     Supported,
     Adopted,
+    Imported,
 }
 ```
 
@@ -11098,6 +11099,30 @@ pub struct ProcedureRecord {
     pub version_lsn: u64,
     pub previous_lsn: u64,
     pub adopted_lsn: u64,
+}
+```
+
+## hm-proj::PlaybookMetadata
+
+<a id="rust-crates-hm-proj-src-procedures-rs-playbookmetadata"></a>
+
+Source: [`crates/hm-proj/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/procedures.rs).
+
+When to use: Use `PlaybookMetadata` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct PlaybookMetadata {
+    pub procedure_id: Vec<u8>,
+    pub name: String,
+    pub declared_tools: Vec<String>,
+    pub source_uri: String,
+    pub source_digest: Vec<u8>,
+    pub playbook_version: u16,
+    pub instruction_bytes: u64,
+    pub imported_lsn: u64,
 }
 ```
 

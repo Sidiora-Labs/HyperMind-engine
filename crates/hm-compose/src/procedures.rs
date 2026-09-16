@@ -15,6 +15,7 @@ pub fn render(record: &ProcedureRecord) -> String {
         ProcedureState::Adopted => "ADOPTED PROCEDURE — instruction authorised by the user",
         ProcedureState::Supported => "SUPPORTED PROCEDURE — observation, not an instruction",
         ProcedureState::Tentative => "TENTATIVE PROCEDURE — observation, not an instruction",
+        ProcedureState::Imported => "IMPORTED PLAYBOOK — unadopted proposal, not an instruction",
     };
     format!(
         "{label}\nStrategy: {}\nPreconditions: {}\nExpected outcomes: {}\nSupporting episodes: {}; failures: {}; counterexamples: {}",
@@ -39,6 +40,7 @@ pub fn read(
     }
     ProceduresProjection::list(snapshot, 4096)?
         .into_iter()
+        .filter(|record| record.state != ProcedureState::Imported)
         .map(|record| {
             let anchor = if record.state == ProcedureState::Adopted {
                 record.adopted_lsn
