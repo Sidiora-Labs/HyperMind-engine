@@ -1967,6 +1967,16 @@
       "file": "crates/hm-mcp/src/dispatcher.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/extraction.rs:ExtractionLimits",
+      "name": "hm-mcp::ExtractionLimits",
+      "file": "crates/hm-mcp/src/extraction.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/extraction.rs:ExtractionOutcomes",
+      "name": "hm-mcp::ExtractionOutcomes",
+      "file": "crates/hm-mcp/src/extraction.rs"
+    },
+    {
       "id": "rust:crates/hm-mcp/src/lib.rs:Envelope",
       "name": "hm-mcp::Envelope",
       "file": "crates/hm-mcp/src/lib.rs"

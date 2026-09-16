@@ -8041,6 +8041,44 @@ pub struct McpToolDispatcher {
 }
 ```
 
+## hm-mcp::ExtractionLimits
+
+<a id="rust-crates-hm-mcp-src-extraction-rs-extractionlimits"></a>
+
+Source: [`crates/hm-mcp/src/extraction.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/extraction.rs).
+
+When to use: Use `ExtractionLimits` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct ExtractionLimits {
+    pub maximum_parallel: usize,
+    pub stop_dispatch_on_failure: bool,
+}
+```
+
+## hm-mcp::ExtractionOutcomes
+
+<a id="rust-crates-hm-mcp-src-extraction-rs-extractionoutcomes"></a>
+
+Source: [`crates/hm-mcp/src/extraction.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/extraction.rs).
+
+When to use: Use `ExtractionOutcomes` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct ExtractionOutcomes<T, E> {
+    pub extracted: Vec<(usize, T)>,
+    pub failed: Vec<(usize, E)>,
+    pub skipped: Vec<usize>,
+    pub aborted: Vec<usize>,
+}
+```
+
 ## hm-mcp::Envelope
 
 <a id="rust-crates-hm-mcp-src-lib-rs-envelope"></a>

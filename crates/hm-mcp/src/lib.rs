@@ -21,6 +21,7 @@ use serde_json::{Value, json};
 
 pub mod admission;
 pub mod dispatcher;
+pub mod extraction;
 pub mod telemetry;
 pub mod tools;
 pub use telemetry::ObservedProvider;
