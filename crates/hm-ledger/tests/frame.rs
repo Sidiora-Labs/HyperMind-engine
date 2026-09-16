@@ -44,12 +44,12 @@ fn neocortex_vectors_round_trip_all_legacy_kinds() {
 
 #[test]
 fn hypermind_event_kind_extensions_round_trip_without_renumbering() {
-    for kind in 22..=43 {
+    for kind in 22..=47 {
         let frame = donor_frame(kind);
         assert_eq!(decode(&encode(&frame).unwrap()).unwrap(), frame);
         assert_eq!(frame.header.kind as u8, kind);
     }
-    assert!(EventKind::try_from(44).is_err());
+    assert!(EventKind::try_from(48).is_err());
 }
 
 #[test]

@@ -2,8 +2,9 @@
 
 use crate::events::{
     Assertion, AttentionDecided, AttestationDisposition, Authority, Binding, Consolidation,
-    ConsolidationClosed, ConsolidationOpened, ConsolidationPhase, ConsolidationRetracted,
-    EdgeAsserted, EdgeRetracted, Effect, Embedding, EventEnvelope, EventEnvelopeRef, EventPayload,
+    ConsolidationClosed, ConsolidationOpened, ConsolidationPhase, ConsolidationPhaseName,
+    ConsolidationRetracted, DocumentChunked, DocumentExtracted, DocumentIngested, EdgeAsserted,
+    EdgeRetracted, Effect, Embedding, EventEnvelope, EventEnvelopeRef, EventPayload,
     ExpectedPredicate, IntentionCancelled, IntentionFired, IntentionSet, LoopCloseReason,
     LoopClosed, MemoryFaded, MemoryMerged, MemoryMinted, MemoryRevised, Outcome, OutcomeObserved,
     Predicted, ProcedureAdopted, ProcedureMined, ProcedureRevised, ProcedureSupport,
@@ -77,6 +78,9 @@ pub enum EventKind {
     ProcedureRevised = 42,
     ProcedureAdopted = 43,
     VocabularyImported = 44,
+    DocumentIngested = 45,
+    DocumentExtracted = 46,
+    DocumentChunked = 47,
 }
 
 impl EventKind {
@@ -164,6 +168,9 @@ impl EventKind {
                     | Self::ProcedureRevised
                     | Self::ProcedureAdopted
                     | Self::VocabularyImported
+                    | Self::DocumentIngested
+                    | Self::DocumentExtracted
+                    | Self::DocumentChunked
             )
     }
 
@@ -194,6 +201,8 @@ impl EventKind {
                 | Self::ConsolidationClosed
                 | Self::ConsolidationRetracted
                 | Self::Reviewed
+                | Self::DocumentExtracted
+                | Self::DocumentChunked
         )
     }
 }
@@ -247,6 +256,9 @@ impl TryFrom<u8> for EventKind {
             42 => Ok(Self::ProcedureRevised),
             43 => Ok(Self::ProcedureAdopted),
             44 => Ok(Self::VocabularyImported),
+            45 => Ok(Self::DocumentIngested),
+            46 => Ok(Self::DocumentExtracted),
+            47 => Ok(Self::DocumentChunked),
             _ => Err(()),
         }
     }
@@ -527,6 +539,9 @@ fn validate_payload(
         EventPayload::ProcedureRevised(value) => validate_procedure_revised(value),
         EventPayload::ProcedureAdopted(value) => validate_procedure_adopted(value),
         EventPayload::VocabularyImported(value) => validate_vocabulary_imported(value),
+        EventPayload::DocumentIngested(value) => validate_document_ingested(value),
+        EventPayload::DocumentExtracted(value) => validate_document_extracted(value),
+        EventPayload::DocumentChunked(value) => validate_document_chunked(value),
     }
 }
 
@@ -751,6 +766,67 @@ fn valid_vocabulary_term(term: &VocabularyTerm) -> bool {
 
 fn bounded_vocabulary_name(value: &str) -> bool {
     !value.is_empty() && value.len() <= MAXIMUM_VOCABULARY_NAME_BYTES
+}
+
+fn validate_document_ingested(value: &DocumentIngested) -> Result<(), Error> {
+    if value.document_id.len() == 32
+        && bounded_identifier(value.name.as_bytes())
+        && bounded_identifier(value.media_type.as_bytes())
+        && !value.content.is_empty()
+        && value.content_digest.len() == 32
+    {
+        Ok(())
+    } else {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    }
+}
+
+fn validate_document_extracted(value: &DocumentExtracted) -> Result<(), Error> {
+    let reason = value
+        .partial_reason
+        .as_deref()
+        .is_some_and(|reason| !reason.is_empty());
+    let failed = value
+        .failed_units
+        .as_deref()
+        .is_some_and(|units| !units.is_empty());
+    if value.document_id.len() != 32
+        || value.source_lsn == 0
+        || !bounded_identifier(value.loader_id.as_bytes())
+        || value.extraction_version == 0
+        || value.text.is_empty()
+        || value.text_digest.len() != 32
+        || reason != failed
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    Ok(())
+}
+
+fn validate_document_chunked(value: &DocumentChunked) -> Result<(), Error> {
+    if value.document_id.len() != 32
+        || value.source_lsn == 0
+        || value.extraction_version == 0
+        || !bounded_identifier(value.chunker_id.as_bytes())
+        || value.token_budget == 0
+        || value.chunks.is_empty()
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    let mut expected_start = 0_u32;
+    for (index, chunk) in value.chunks.iter().enumerate() {
+        let ordinal = u32::try_from(index).map_err(|_| Error::new(ErrorCode::SchemaInvalid))?;
+        if chunk.chunk_id.len() != 32
+            || chunk.content_hash.len() != 32
+            || chunk.ordinal != ordinal
+            || chunk.byte_start != expected_start
+            || chunk.byte_end <= chunk.byte_start
+        {
+            return Err(Error::new(ErrorCode::SchemaInvalid));
+        }
+        expected_start = chunk.byte_end;
+    }
+    Ok(())
 }
 
 fn validate_external_payload(payload: &EventPayload) -> Result<(), Error> {
@@ -1024,7 +1100,11 @@ fn validate_consolidation_opened(value: &ConsolidationOpened) -> Result<(), Erro
         || value.cadence_key.len() > MAXIMUM_IDENTIFIER_BYTES
         || value.generation == 0
         || value.phases.is_empty()
-        || value.prompts.is_empty()
+        || (value.prompts.is_empty()
+            && !value
+                .phases
+                .iter()
+                .all(|phase| *phase == ConsolidationPhaseName::Extract))
         || value.prompts.iter().any(|prompt| {
             prompt.prompt_id.is_empty()
                 || prompt.prompt_id.len() > MAXIMUM_IDENTIFIER_BYTES
@@ -1186,5 +1266,8 @@ fn payload_kind(payload: &EventPayload) -> EventKind {
         EventPayload::ProcedureRevised(_) => EventKind::ProcedureRevised,
         EventPayload::ProcedureAdopted(_) => EventKind::ProcedureAdopted,
         EventPayload::VocabularyImported(_) => EventKind::VocabularyImported,
+        EventPayload::DocumentIngested(_) => EventKind::DocumentIngested,
+        EventPayload::DocumentExtracted(_) => EventKind::DocumentExtracted,
+        EventPayload::DocumentChunked(_) => EventKind::DocumentChunked,
     }
 }

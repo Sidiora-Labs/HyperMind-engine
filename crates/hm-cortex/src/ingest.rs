@@ -13,6 +13,7 @@ pub enum IngestSource {
     Kernel,
     ExternalFeed,
     Derived,
+    Document,
     Memory(String),
 }
 
@@ -61,6 +62,16 @@ pub fn ingest(
                     | EventKind::MemoryMerged
                     | EventKind::EdgeAsserted
                     | EventKind::EdgeRetracted
+            ) =>
+        {
+            authority_for_event(kind)
+        }
+        IngestSource::Document
+            if matches!(
+                kind,
+                EventKind::DocumentIngested
+                    | EventKind::DocumentExtracted
+                    | EventKind::DocumentChunked
             ) =>
         {
             authority_for_event(kind)

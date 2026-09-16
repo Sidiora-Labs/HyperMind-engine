@@ -149,7 +149,7 @@ Do not use: Do not write directly to a projection, bypass admission, or infer ob
 
 
 ```text
-enum ConsolidationPhaseName : ubyte { nrem, connect, abstract, hindsight, review, publish }
+enum ConsolidationPhaseName : ubyte { nrem, connect, abstract, hindsight, review, publish, extract }
 ```
 
 ## events.fbs::ConsolidationPhaseState
@@ -187,6 +187,36 @@ enum Authority : ubyte {
   assistant_generated,
   derived_inference
 }
+```
+
+## events.fbs::DocumentCut
+
+<a id="schema-schemas-events-fbs-documentcut"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Document Cut when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+enum DocumentCut : ubyte { paragraph_end, paragraph_cut, row_end, row_cut }
+```
+
+## events.fbs::DocumentChange
+
+<a id="schema-schemas-events-fbs-documentchange"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Document Change when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+enum DocumentChange : ubyte { retained, moved, replaced, added }
 ```
 
 ## events.fbs::Retention
@@ -1593,6 +1623,123 @@ table VocabularyImported {
 }
 ```
 
+## events.fbs::DocumentPageSpan
+
+<a id="schema-schemas-events-fbs-documentpagespan"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Document Page Span when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table DocumentPageSpan {
+  page_number:uint;
+  byte_start:uint;
+  byte_end:uint;
+}
+```
+
+## events.fbs::DocumentIngested
+
+<a id="schema-schemas-events-fbs-documentingested"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Document Ingested when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table DocumentIngested {
+  document_id:[ubyte] (required);
+  name:string (required);
+  media_type:string (required);
+  content:[ubyte] (required);
+  content_digest:[ubyte] (required);
+}
+```
+
+## events.fbs::DocumentExtracted
+
+<a id="schema-schemas-events-fbs-documentextracted"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Document Extracted when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table DocumentExtracted {
+  document_id:[ubyte] (required);
+  source_lsn:ulong;
+  loader_id:string (required);
+  extraction_version:ushort;
+  text:[ubyte] (required);
+  text_digest:[ubyte] (required);
+  page_spans:[DocumentPageSpan] (required);
+  partial_reason:string;
+  failed_units:[uint];
+}
+```
+
+## events.fbs::DocumentChunk
+
+<a id="schema-schemas-events-fbs-documentchunk"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Document Chunk when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table DocumentChunk {
+  chunk_id:[ubyte] (required);
+  content_hash:[ubyte] (required);
+  occurrence:uint;
+  ordinal:uint;
+  byte_start:uint;
+  byte_end:uint;
+  cut:DocumentCut;
+  change:DocumentChange;
+  page_number:uint;
+  row_index:uint;
+  column_start:uint;
+  column_end:uint;
+  token_estimate:uint;
+}
+```
+
+## events.fbs::DocumentChunked
+
+<a id="schema-schemas-events-fbs-documentchunked"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Document Chunked when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table DocumentChunked {
+  document_id:[ubyte] (required);
+  source_lsn:ulong;
+  extraction_version:ushort;
+  chunker_id:string (required);
+  token_budget:uint;
+  previous_chunked_lsn:ulong;
+  chunks:[DocumentChunk] (required);
+}
+```
+
 ## events.fbs::EventPayload
 
 <a id="schema-schemas-events-fbs-eventpayload"></a>
@@ -1649,7 +1796,10 @@ union EventPayload {
   ProcedureMined,
   ProcedureRevised,
   ProcedureAdopted,
-  VocabularyImported
+  VocabularyImported,
+  DocumentIngested,
+  DocumentExtracted,
+  DocumentChunked
 }
 ```
 

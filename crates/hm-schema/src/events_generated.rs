@@ -1702,17 +1702,21 @@ mod root {
 
                 /// The variant `publish` in the enum `ConsolidationPhaseName`
                 Publish = 5,
+
+                /// The variant `extract` in the enum `ConsolidationPhaseName`
+                Extract = 6,
             }
 
             impl ConsolidationPhaseName {
                 /// Array containing all valid variants of ConsolidationPhaseName
-                pub const ENUM_VALUES: [Self; 6] = [
+                pub const ENUM_VALUES: [Self; 7] = [
                     Self::Nrem,
                     Self::Connect,
                     Self::Abstract,
                     Self::Hindsight,
                     Self::Review,
                     Self::Publish,
+                    Self::Extract,
                 ];
             }
 
@@ -1731,6 +1735,7 @@ mod root {
                         3 => ::core::result::Result::Ok(ConsolidationPhaseName::Hindsight),
                         4 => ::core::result::Result::Ok(ConsolidationPhaseName::Review),
                         5 => ::core::result::Result::Ok(ConsolidationPhaseName::Publish),
+                        6 => ::core::result::Result::Ok(ConsolidationPhaseName::Extract),
 
                         _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
                             tag: value as i128,
@@ -2246,10 +2251,382 @@ mod root {
                 }
             }
 
+            /// The enum `DocumentCut` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `DocumentCut` in the file `schemas/events.fbs:22`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum DocumentCut {
+                /// The variant `paragraph_end` in the enum `DocumentCut`
+                ParagraphEnd = 0,
+
+                /// The variant `paragraph_cut` in the enum `DocumentCut`
+                ParagraphCut = 1,
+
+                /// The variant `row_end` in the enum `DocumentCut`
+                RowEnd = 2,
+
+                /// The variant `row_cut` in the enum `DocumentCut`
+                RowCut = 3,
+            }
+
+            impl DocumentCut {
+                /// Array containing all valid variants of DocumentCut
+                pub const ENUM_VALUES: [Self; 4] = [
+                    Self::ParagraphEnd,
+                    Self::ParagraphCut,
+                    Self::RowEnd,
+                    Self::RowCut,
+                ];
+            }
+
+            impl ::core::convert::TryFrom<u8> for DocumentCut {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(DocumentCut::ParagraphEnd),
+                        1 => ::core::result::Result::Ok(DocumentCut::ParagraphCut),
+                        2 => ::core::result::Result::Ok(DocumentCut::RowEnd),
+                        3 => ::core::result::Result::Ok(DocumentCut::RowCut),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<DocumentCut> for u8 {
+                #[inline]
+                fn from(value: DocumentCut) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for DocumentCut {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<DocumentCut> for DocumentCut {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<DocumentCut> for DocumentCut {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> DocumentCut {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<DocumentCut, DocumentCut> for DocumentCut {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &DocumentCut,
+                ) -> ::core::option::Option<DocumentCut> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<DocumentCut> for DocumentCut {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<DocumentCut> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for DocumentCut {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for DocumentCut {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "DocumentCut",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<DocumentCut> for DocumentCut {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
+            /// The enum `DocumentChange` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `DocumentChange` in the file `schemas/events.fbs:23`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum DocumentChange {
+                /// The variant `retained` in the enum `DocumentChange`
+                Retained = 0,
+
+                /// The variant `moved` in the enum `DocumentChange`
+                Moved = 1,
+
+                /// The variant `replaced` in the enum `DocumentChange`
+                Replaced = 2,
+
+                /// The variant `added` in the enum `DocumentChange`
+                Added = 3,
+            }
+
+            impl DocumentChange {
+                /// Array containing all valid variants of DocumentChange
+                pub const ENUM_VALUES: [Self; 4] =
+                    [Self::Retained, Self::Moved, Self::Replaced, Self::Added];
+            }
+
+            impl ::core::convert::TryFrom<u8> for DocumentChange {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(DocumentChange::Retained),
+                        1 => ::core::result::Result::Ok(DocumentChange::Moved),
+                        2 => ::core::result::Result::Ok(DocumentChange::Replaced),
+                        3 => ::core::result::Result::Ok(DocumentChange::Added),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<DocumentChange> for u8 {
+                #[inline]
+                fn from(value: DocumentChange) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for DocumentChange {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<DocumentChange> for DocumentChange {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<DocumentChange> for DocumentChange {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> DocumentChange {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<DocumentChange, DocumentChange> for DocumentChange {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &DocumentChange,
+                ) -> ::core::option::Option<DocumentChange> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<DocumentChange> for DocumentChange {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<DocumentChange> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for DocumentChange {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for DocumentChange {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "DocumentChange",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<DocumentChange> for DocumentChange {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
             /// The enum `Retention` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `Retention` in the file `schemas/events.fbs:22`
+            /// * Enum `Retention` in the file `schemas/events.fbs:24`
             #[derive(
                 Copy,
                 Clone,
@@ -2437,7 +2814,7 @@ mod root {
             /// The enum `Sensitivity` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `Sensitivity` in the file `schemas/events.fbs:23`
+            /// * Enum `Sensitivity` in the file `schemas/events.fbs:25`
             #[derive(
                 Copy,
                 Clone,
@@ -2616,7 +2993,7 @@ mod root {
             /// The struct `ProvenanceRange` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Struct `ProvenanceRange` in the file `schemas/events.fbs:25`
+            /// * Struct `ProvenanceRange` in the file `schemas/events.fbs:27`
             #[derive(
                 Copy,
                 Clone,
@@ -2870,7 +3247,7 @@ mod root {
             /// The table `ModelProvenance` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ModelProvenance` in the file `schemas/events.fbs:32`
+            /// * Table `ModelProvenance` in the file `schemas/events.fbs:34`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]
@@ -3617,7 +3994,7 @@ mod root {
             /// The table `UserMsg` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `UserMsg` in the file `schemas/events.fbs:45`
+            /// * Table `UserMsg` in the file `schemas/events.fbs:47`
             #[derive(
                 Clone,
                 Debug,
@@ -3870,7 +4247,7 @@ mod root {
             /// The table `DeliveredMsg` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DeliveredMsg` in the file `schemas/events.fbs:49`
+            /// * Table `DeliveredMsg` in the file `schemas/events.fbs:51`
             #[derive(
                 Clone,
                 Debug,
@@ -4139,7 +4516,7 @@ mod root {
             /// The table `ToolCall` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ToolCall` in the file `schemas/events.fbs:53`
+            /// * Table `ToolCall` in the file `schemas/events.fbs:55`
             #[derive(
                 Clone,
                 Debug,
@@ -4458,7 +4835,7 @@ mod root {
             /// The table `ToolResult` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ToolResult` in the file `schemas/events.fbs:59`
+            /// * Table `ToolResult` in the file `schemas/events.fbs:61`
             #[derive(
                 Clone,
                 Debug,
@@ -4851,7 +5228,7 @@ mod root {
             /// The table `Reasoning` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Reasoning` in the file `schemas/events.fbs:66`
+            /// * Table `Reasoning` in the file `schemas/events.fbs:68`
             #[derive(
                 Clone,
                 Debug,
@@ -5104,7 +5481,7 @@ mod root {
             /// The table `ProviderFrame` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProviderFrame` in the file `schemas/events.fbs:70`
+            /// * Table `ProviderFrame` in the file `schemas/events.fbs:72`
             #[derive(
                 Clone,
                 Debug,
@@ -5408,7 +5785,7 @@ mod root {
             /// The table `MediaRef` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `MediaRef` in the file `schemas/events.fbs:75`
+            /// * Table `MediaRef` in the file `schemas/events.fbs:77`
             #[derive(
                 Clone,
                 Debug,
@@ -5727,7 +6104,7 @@ mod root {
             /// The table `Effect` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Effect` in the file `schemas/events.fbs:81`
+            /// * Table `Effect` in the file `schemas/events.fbs:83`
             #[derive(
                 Clone,
                 Debug,
@@ -6079,7 +6456,7 @@ mod root {
             /// The table `Approval` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Approval` in the file `schemas/events.fbs:87`
+            /// * Table `Approval` in the file `schemas/events.fbs:89`
             #[derive(
                 Clone,
                 Debug,
@@ -6388,7 +6765,7 @@ mod root {
             /// The table `Outcome` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Outcome` in the file `schemas/events.fbs:92`
+            /// * Table `Outcome` in the file `schemas/events.fbs:94`
             #[derive(
                 Clone,
                 Debug,
@@ -6786,7 +7163,7 @@ mod root {
             /// The table `Checkpoint` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Checkpoint` in the file `schemas/events.fbs:99`
+            /// * Table `Checkpoint` in the file `schemas/events.fbs:101`
             #[derive(
                 Clone,
                 Debug,
@@ -7040,7 +7417,7 @@ mod root {
             /// The table `Supervisor` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Supervisor` in the file `schemas/events.fbs:103`
+            /// * Table `Supervisor` in the file `schemas/events.fbs:105`
             #[derive(
                 Clone,
                 Debug,
@@ -7328,7 +7705,7 @@ mod root {
             /// The table `Recovery` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Recovery` in the file `schemas/events.fbs:108`
+            /// * Table `Recovery` in the file `schemas/events.fbs:110`
             #[derive(
                 Clone,
                 Debug,
@@ -7633,7 +8010,7 @@ mod root {
             /// The table `IntentSet` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentSet` in the file `schemas/events.fbs:113`
+            /// * Table `IntentSet` in the file `schemas/events.fbs:115`
             #[derive(
                 Clone,
                 Debug,
@@ -7886,7 +8263,7 @@ mod root {
             /// The table `LoopOpened` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `LoopOpened` in the file `schemas/events.fbs:117`
+            /// * Table `LoopOpened` in the file `schemas/events.fbs:119`
             #[derive(
                 Clone,
                 Debug,
@@ -8174,7 +8551,7 @@ mod root {
             /// The table `LoopClosed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `LoopClosed` in the file `schemas/events.fbs:122`
+            /// * Table `LoopClosed` in the file `schemas/events.fbs:124`
             #[derive(
                 Clone,
                 Debug,
@@ -8576,7 +8953,7 @@ mod root {
             /// The table `Binding` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Binding` in the file `schemas/events.fbs:129`
+            /// * Table `Binding` in the file `schemas/events.fbs:131`
             #[derive(
                 Clone,
                 Debug,
@@ -9099,7 +9476,7 @@ mod root {
             /// The table `Assertion` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Assertion` in the file `schemas/events.fbs:139`
+            /// * Table `Assertion` in the file `schemas/events.fbs:141`
             #[derive(
                 Clone,
                 Debug,
@@ -9735,7 +10112,7 @@ mod root {
             /// The table `Consolidation` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Consolidation` in the file `schemas/events.fbs:151`
+            /// * Table `Consolidation` in the file `schemas/events.fbs:153`
             #[derive(
                 Clone,
                 Debug,
@@ -10010,7 +10387,7 @@ mod root {
             /// The table `ProposedAssertion` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProposedAssertion` in the file `schemas/events.fbs:155`
+            /// * Table `ProposedAssertion` in the file `schemas/events.fbs:157`
             #[derive(
                 Clone,
                 Debug,
@@ -10686,7 +11063,7 @@ mod root {
             /// The table `Embedding` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Embedding` in the file `schemas/events.fbs:167`
+            /// * Table `Embedding` in the file `schemas/events.fbs:169`
             #[derive(
                 Clone,
                 Debug,
@@ -11107,7 +11484,7 @@ mod root {
             /// The table `Retract` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Retract` in the file `schemas/events.fbs:175`
+            /// * Table `Retract` in the file `schemas/events.fbs:177`
             #[derive(
                 Clone,
                 Debug,
@@ -11398,7 +11775,7 @@ mod root {
             /// The table `Attestation` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Attestation` in the file `schemas/events.fbs:180`
+            /// * Table `Attestation` in the file `schemas/events.fbs:182`
             #[derive(
                 Clone,
                 Debug,
@@ -11754,7 +12131,7 @@ mod root {
             /// The table `MemoryMinted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `MemoryMinted` in the file `schemas/events.fbs:185`
+            /// * Table `MemoryMinted` in the file `schemas/events.fbs:187`
             #[derive(
                 Clone,
                 Debug,
@@ -12225,7 +12602,7 @@ mod root {
             /// The table `MemoryRevised` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `MemoryRevised` in the file `schemas/events.fbs:194`
+            /// * Table `MemoryRevised` in the file `schemas/events.fbs:196`
             #[derive(
                 Clone,
                 Debug,
@@ -12748,7 +13125,7 @@ mod root {
             /// The table `MemoryId` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `MemoryId` in the file `schemas/events.fbs:204`
+            /// * Table `MemoryId` in the file `schemas/events.fbs:206`
             #[derive(
                 Clone,
                 Debug,
@@ -13001,7 +13378,7 @@ mod root {
             /// The table `MemoryMerged` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `MemoryMerged` in the file `schemas/events.fbs:208`
+            /// * Table `MemoryMerged` in the file `schemas/events.fbs:210`
             #[derive(
                 Clone,
                 Debug,
@@ -13512,7 +13889,7 @@ mod root {
             /// The table `MemoryFaded` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `MemoryFaded` in the file `schemas/events.fbs:218`
+            /// * Table `MemoryFaded` in the file `schemas/events.fbs:220`
             #[derive(
                 Clone,
                 Debug,
@@ -13892,7 +14269,7 @@ mod root {
             /// The table `EdgeAsserted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EdgeAsserted` in the file `schemas/events.fbs:224`
+            /// * Table `EdgeAsserted` in the file `schemas/events.fbs:226`
             #[derive(
                 Clone,
                 Debug,
@@ -14467,7 +14844,7 @@ mod root {
             /// The table `EdgeRetracted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EdgeRetracted` in the file `schemas/events.fbs:235`
+            /// * Table `EdgeRetracted` in the file `schemas/events.fbs:237`
             #[derive(
                 Clone,
                 Debug,
@@ -14774,7 +15151,7 @@ mod root {
             /// The table `ConsolidationBudget` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ConsolidationBudget` in the file `schemas/events.fbs:240`
+            /// * Table `ConsolidationBudget` in the file `schemas/events.fbs:242`
             #[derive(
                 Clone,
                 Debug,
@@ -15233,7 +15610,7 @@ mod root {
             /// The table `PromptVersion` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `PromptVersion` in the file `schemas/events.fbs:247`
+            /// * Table `PromptVersion` in the file `schemas/events.fbs:249`
             #[derive(
                 Clone,
                 Debug,
@@ -15584,7 +15961,7 @@ mod root {
             /// The table `ConsolidationOpened` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ConsolidationOpened` in the file `schemas/events.fbs:253`
+            /// * Table `ConsolidationOpened` in the file `schemas/events.fbs:255`
             #[derive(
                 Clone,
                 Debug,
@@ -16145,7 +16522,7 @@ mod root {
             /// The table `ConsolidationPhase` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ConsolidationPhase` in the file `schemas/events.fbs:263`
+            /// * Table `ConsolidationPhase` in the file `schemas/events.fbs:265`
             #[derive(
                 Clone,
                 Debug,
@@ -16891,7 +17268,7 @@ mod root {
             /// The table `ConsolidationClosed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ConsolidationClosed` in the file `schemas/events.fbs:275`
+            /// * Table `ConsolidationClosed` in the file `schemas/events.fbs:277`
             #[derive(
                 Clone,
                 Debug,
@@ -17588,7 +17965,7 @@ mod root {
             /// The table `ConsolidationRetracted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ConsolidationRetracted` in the file `schemas/events.fbs:286`
+            /// * Table `ConsolidationRetracted` in the file `schemas/events.fbs:288`
             #[derive(
                 Clone,
                 Debug,
@@ -17968,7 +18345,7 @@ mod root {
             /// The table `Reviewed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Reviewed` in the file `schemas/events.fbs:292`
+            /// * Table `Reviewed` in the file `schemas/events.fbs:294`
             #[derive(
                 Clone,
                 Debug,
@@ -18542,7 +18919,7 @@ mod root {
             /// The enum `AttentionDecision` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `AttentionDecision` in the file `schemas/events.fbs:302`
+            /// * Enum `AttentionDecision` in the file `schemas/events.fbs:304`
             #[derive(
                 Copy,
                 Clone,
@@ -18745,7 +19122,7 @@ mod root {
             /// The enum `PredicateKind` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `PredicateKind` in the file `schemas/events.fbs:303`
+            /// * Enum `PredicateKind` in the file `schemas/events.fbs:305`
             #[derive(
                 Copy,
                 Clone,
@@ -18948,7 +19325,7 @@ mod root {
             /// The enum `OutcomeAssessment` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `OutcomeAssessment` in the file `schemas/events.fbs:312`
+            /// * Enum `OutcomeAssessment` in the file `schemas/events.fbs:314`
             #[derive(
                 Copy,
                 Clone,
@@ -19141,7 +19518,7 @@ mod root {
             /// The table `WakeAt` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeAt` in the file `schemas/events.fbs:314`
+            /// * Table `WakeAt` in the file `schemas/events.fbs:316`
             #[derive(
                 Clone,
                 Debug,
@@ -19403,7 +19780,7 @@ mod root {
             /// The table `WakeSchedule` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeSchedule` in the file `schemas/events.fbs:318`
+            /// * Table `WakeSchedule` in the file `schemas/events.fbs:320`
             #[derive(
                 Clone,
                 Debug,
@@ -19672,7 +20049,7 @@ mod root {
             /// The table `WakeChildTerminal` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeChildTerminal` in the file `schemas/events.fbs:322`
+            /// * Table `WakeChildTerminal` in the file `schemas/events.fbs:324`
             #[derive(
                 Clone,
                 Debug,
@@ -19944,7 +20321,7 @@ mod root {
             /// The table `WakeProcessExit` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeProcessExit` in the file `schemas/events.fbs:326`
+            /// * Table `WakeProcessExit` in the file `schemas/events.fbs:328`
             #[derive(
                 Clone,
                 Debug,
@@ -20216,7 +20593,7 @@ mod root {
             /// The table `WakeFileChanged` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeFileChanged` in the file `schemas/events.fbs:330`
+            /// * Table `WakeFileChanged` in the file `schemas/events.fbs:332`
             #[derive(
                 Clone,
                 Debug,
@@ -20488,7 +20865,7 @@ mod root {
             /// The table `WakeRepositoryChanged` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeRepositoryChanged` in the file `schemas/events.fbs:334`
+            /// * Table `WakeRepositoryChanged` in the file `schemas/events.fbs:336`
             #[derive(
                 Clone,
                 Debug,
@@ -20770,7 +21147,7 @@ mod root {
             /// The table `WakeChannelMessage` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeChannelMessage` in the file `schemas/events.fbs:338`
+            /// * Table `WakeChannelMessage` in the file `schemas/events.fbs:340`
             #[derive(
                 Clone,
                 Debug,
@@ -21042,7 +21419,7 @@ mod root {
             /// The table `WakeExternalCondition` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeExternalCondition` in the file `schemas/events.fbs:342`
+            /// * Table `WakeExternalCondition` in the file `schemas/events.fbs:344`
             #[derive(
                 Clone,
                 Debug,
@@ -21324,7 +21701,7 @@ mod root {
             /// The table `WakeUserResponse` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeUserResponse` in the file `schemas/events.fbs:346`
+            /// * Table `WakeUserResponse` in the file `schemas/events.fbs:348`
             #[derive(
                 Clone,
                 Debug,
@@ -21596,7 +21973,7 @@ mod root {
             /// The table `WakeEntityMentioned` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeEntityMentioned` in the file `schemas/events.fbs:350`
+            /// * Table `WakeEntityMentioned` in the file `schemas/events.fbs:352`
             #[derive(
                 Clone,
                 Debug,
@@ -21873,7 +22250,7 @@ mod root {
             /// The table `WakeLoopClosed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeLoopClosed` in the file `schemas/events.fbs:354`
+            /// * Table `WakeLoopClosed` in the file `schemas/events.fbs:356`
             #[derive(
                 Clone,
                 Debug,
@@ -22143,7 +22520,7 @@ mod root {
             /// The table `WakePredictionResolved` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakePredictionResolved` in the file `schemas/events.fbs:358`
+            /// * Table `WakePredictionResolved` in the file `schemas/events.fbs:360`
             #[derive(
                 Clone,
                 Debug,
@@ -22427,7 +22804,7 @@ mod root {
             /// The table `WakeBeliefChanged` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeBeliefChanged` in the file `schemas/events.fbs:362`
+            /// * Table `WakeBeliefChanged` in the file `schemas/events.fbs:364`
             #[derive(
                 Clone,
                 Debug,
@@ -22702,7 +23079,7 @@ mod root {
             /// The union `WakeTrigger` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `WakeTrigger` in the file `schemas/events.fbs:366`
+            /// * Union `WakeTrigger` in the file `schemas/events.fbs:368`
             #[derive(
                 Clone,
                 Debug,
@@ -23599,7 +23976,7 @@ mod root {
             /// The table `IntentionSet` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentionSet` in the file `schemas/events.fbs:382`
+            /// * Table `IntentionSet` in the file `schemas/events.fbs:384`
             #[derive(
                 Clone,
                 Debug,
@@ -24054,7 +24431,7 @@ mod root {
             /// The table `IntentionFired` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentionFired` in the file `schemas/events.fbs:390`
+            /// * Table `IntentionFired` in the file `schemas/events.fbs:392`
             #[derive(
                 Clone,
                 Debug,
@@ -24413,7 +24790,7 @@ mod root {
             /// The table `AttentionDecided` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `AttentionDecided` in the file `schemas/events.fbs:396`
+            /// * Table `AttentionDecided` in the file `schemas/events.fbs:398`
             #[derive(
                 Clone,
                 Debug,
@@ -24812,7 +25189,7 @@ mod root {
             /// The table `IntentionCancelled` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentionCancelled` in the file `schemas/events.fbs:403`
+            /// * Table `IntentionCancelled` in the file `schemas/events.fbs:405`
             #[derive(
                 Clone,
                 Debug,
@@ -25120,7 +25497,7 @@ mod root {
             /// The table `ExpectedPredicate` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ExpectedPredicate` in the file `schemas/events.fbs:408`
+            /// * Table `ExpectedPredicate` in the file `schemas/events.fbs:410`
             #[derive(
                 Clone,
                 Debug,
@@ -25552,7 +25929,7 @@ mod root {
             /// The table `Predicted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Predicted` in the file `schemas/events.fbs:415`
+            /// * Table `Predicted` in the file `schemas/events.fbs:417`
             #[derive(
                 Clone,
                 Debug,
@@ -26175,7 +26552,7 @@ mod root {
             /// The table `OutcomeObserved` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `OutcomeObserved` in the file `schemas/events.fbs:427`
+            /// * Table `OutcomeObserved` in the file `schemas/events.fbs:429`
             #[derive(
                 Clone,
                 Debug,
@@ -26633,7 +27010,7 @@ mod root {
             /// The table `ProcedureSupport` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProcedureSupport` in the file `schemas/events.fbs:435`
+            /// * Table `ProcedureSupport` in the file `schemas/events.fbs:437`
             #[derive(
                 Clone,
                 Debug,
@@ -26996,7 +27373,7 @@ mod root {
             /// The table `ProcedureMined` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProcedureMined` in the file `schemas/events.fbs:441`
+            /// * Table `ProcedureMined` in the file `schemas/events.fbs:443`
             #[derive(
                 Clone,
                 Debug,
@@ -27546,7 +27923,7 @@ mod root {
             /// The table `ProcedureRevised` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProcedureRevised` in the file `schemas/events.fbs:451`
+            /// * Table `ProcedureRevised` in the file `schemas/events.fbs:453`
             #[derive(
                 Clone,
                 Debug,
@@ -28162,7 +28539,7 @@ mod root {
             /// The table `ProcedureAdopted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProcedureAdopted` in the file `schemas/events.fbs:462`
+            /// * Table `ProcedureAdopted` in the file `schemas/events.fbs:464`
             #[derive(
                 Clone,
                 Debug,
@@ -28488,7 +28865,7 @@ mod root {
             /// The enum `VocabularyCategory` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `VocabularyCategory` in the file `schemas/events.fbs:467`
+            /// * Enum `VocabularyCategory` in the file `schemas/events.fbs:469`
             #[derive(
                 Copy,
                 Clone,
@@ -28668,7 +29045,7 @@ mod root {
             /// The table `VocabularyTerm` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `VocabularyTerm` in the file `schemas/events.fbs:469`
+            /// * Table `VocabularyTerm` in the file `schemas/events.fbs:471`
             #[derive(
                 Clone,
                 Debug,
@@ -29154,7 +29531,7 @@ mod root {
             /// The table `VocabularyImported` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `VocabularyImported` in the file `schemas/events.fbs:477`
+            /// * Table `VocabularyImported` in the file `schemas/events.fbs:479`
             #[derive(
                 Clone,
                 Debug,
@@ -29689,10 +30066,3010 @@ mod root {
                 }
             }
 
+            /// The table `DocumentPageSpan` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `DocumentPageSpan` in the file `schemas/events.fbs:489`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct DocumentPageSpan {
+                /// The field `page_number` in the table `DocumentPageSpan`
+                pub page_number: u32,
+                /// The field `byte_start` in the table `DocumentPageSpan`
+                pub byte_start: u32,
+                /// The field `byte_end` in the table `DocumentPageSpan`
+                pub byte_end: u32,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for DocumentPageSpan {
+                fn default() -> Self {
+                    Self {
+                        page_number: 0,
+                        byte_start: 0,
+                        byte_end: 0,
+                    }
+                }
+            }
+
+            impl DocumentPageSpan {
+                /// Creates a [DocumentPageSpanBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> DocumentPageSpanBuilder<()> {
+                    DocumentPageSpanBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_page_number: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_byte_start: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_byte_end: impl ::planus::WriteAsDefault<u32, u32>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_page_number = field_page_number.prepare(builder, &0);
+                    let prepared_byte_start = field_byte_start.prepare(builder, &0);
+                    let prepared_byte_end = field_byte_end.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<10> =
+                        ::core::default::Default::default();
+                    if prepared_page_number.is_some() {
+                        table_writer.write_entry::<u32>(0);
+                    }
+                    if prepared_byte_start.is_some() {
+                        table_writer.write_entry::<u32>(1);
+                    }
+                    if prepared_byte_end.is_some() {
+                        table_writer.write_entry::<u32>(2);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_page_number) =
+                                prepared_page_number
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_page_number);
+                            }
+                            if let ::core::option::Option::Some(prepared_byte_start) =
+                                prepared_byte_start
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_byte_start);
+                            }
+                            if let ::core::option::Option::Some(prepared_byte_end) =
+                                prepared_byte_end
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_byte_end);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<DocumentPageSpan>> for DocumentPageSpan {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentPageSpan> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<DocumentPageSpan>> for DocumentPageSpan {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentPageSpan>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<DocumentPageSpan> for DocumentPageSpan {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentPageSpan> {
+                    DocumentPageSpan::create(
+                        builder,
+                        self.page_number,
+                        self.byte_start,
+                        self.byte_end,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [DocumentPageSpan] type.
+            ///
+            /// Can be created using the [DocumentPageSpan::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct DocumentPageSpanBuilder<State>(State);
+
+            impl DocumentPageSpanBuilder<()> {
+                /// Setter for the [`page_number` field](DocumentPageSpan#structfield.page_number).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn page_number<T0>(self, value: T0) -> DocumentPageSpanBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    DocumentPageSpanBuilder((value,))
+                }
+
+                /// Sets the [`page_number` field](DocumentPageSpan#structfield.page_number) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn page_number_as_default(
+                    self,
+                ) -> DocumentPageSpanBuilder<(::planus::DefaultValue,)> {
+                    self.page_number(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0> DocumentPageSpanBuilder<(T0,)> {
+                /// Setter for the [`byte_start` field](DocumentPageSpan#structfield.byte_start).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_start<T1>(self, value: T1) -> DocumentPageSpanBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0,) = self.0;
+                    DocumentPageSpanBuilder((v0, value))
+                }
+
+                /// Sets the [`byte_start` field](DocumentPageSpan#structfield.byte_start) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_start_as_default(
+                    self,
+                ) -> DocumentPageSpanBuilder<(T0, ::planus::DefaultValue)> {
+                    self.byte_start(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> DocumentPageSpanBuilder<(T0, T1)> {
+                /// Setter for the [`byte_end` field](DocumentPageSpan#structfield.byte_end).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_end<T2>(self, value: T2) -> DocumentPageSpanBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1) = self.0;
+                    DocumentPageSpanBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`byte_end` field](DocumentPageSpan#structfield.byte_end) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_end_as_default(
+                    self,
+                ) -> DocumentPageSpanBuilder<(T0, T1, ::planus::DefaultValue)> {
+                    self.byte_end(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> DocumentPageSpanBuilder<(T0, T1, T2)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [DocumentPageSpan].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentPageSpan>
+                where
+                    Self: ::planus::WriteAsOffset<DocumentPageSpan>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAsDefault<u32, u32>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAs<::planus::Offset<DocumentPageSpan>>
+                for DocumentPageSpanBuilder<(T0, T1, T2)>
+            {
+                type Prepared = ::planus::Offset<DocumentPageSpan>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentPageSpan> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAsDefault<u32, u32>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAsOptional<::planus::Offset<DocumentPageSpan>>
+                for DocumentPageSpanBuilder<(T0, T1, T2)>
+            {
+                type Prepared = ::planus::Offset<DocumentPageSpan>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentPageSpan>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAsDefault<u32, u32>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAsOffset<DocumentPageSpan>
+                for DocumentPageSpanBuilder<(T0, T1, T2)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentPageSpan> {
+                    let (v0, v1, v2) = &self.0;
+                    DocumentPageSpan::create(builder, v0, v1, v2)
+                }
+            }
+
+            /// Reference to a deserialized [DocumentPageSpan].
+            #[derive(Copy, Clone)]
+            pub struct DocumentPageSpanRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> DocumentPageSpanRef<'a> {
+                /// Getter for the [`page_number` field](DocumentPageSpan#structfield.page_number).
+                #[inline]
+                pub fn page_number(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(0, "DocumentPageSpan", "page_number")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`byte_start` field](DocumentPageSpan#structfield.byte_start).
+                #[inline]
+                pub fn byte_start(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(1, "DocumentPageSpan", "byte_start")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`byte_end` field](DocumentPageSpan#structfield.byte_end).
+                #[inline]
+                pub fn byte_end(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "DocumentPageSpan", "byte_end")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for DocumentPageSpanRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("DocumentPageSpanRef");
+                    f.field("page_number", &self.page_number());
+                    f.field("byte_start", &self.byte_start());
+                    f.field("byte_end", &self.byte_end());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<DocumentPageSpanRef<'a>> for DocumentPageSpan {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: DocumentPageSpanRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        page_number: ::core::convert::TryInto::try_into(value.page_number()?)?,
+                        byte_start: ::core::convert::TryInto::try_into(value.byte_start()?)?,
+                        byte_end: ::core::convert::TryInto::try_into(value.byte_end()?)?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for DocumentPageSpanRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for DocumentPageSpanRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[DocumentPageSpanRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<DocumentPageSpan>> for DocumentPageSpan {
+                type Value = ::planus::Offset<DocumentPageSpan>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<DocumentPageSpan>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for DocumentPageSpanRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[DocumentPageSpanRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `DocumentIngested` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `DocumentIngested` in the file `schemas/events.fbs:495`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct DocumentIngested {
+                /// The field `document_id` in the table `DocumentIngested`
+                pub document_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `name` in the table `DocumentIngested`
+                pub name: ::planus::alloc::string::String,
+                /// The field `media_type` in the table `DocumentIngested`
+                pub media_type: ::planus::alloc::string::String,
+                /// The field `content` in the table `DocumentIngested`
+                pub content: ::planus::alloc::vec::Vec<u8>,
+                /// The field `content_digest` in the table `DocumentIngested`
+                pub content_digest: ::planus::alloc::vec::Vec<u8>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for DocumentIngested {
+                fn default() -> Self {
+                    Self {
+                        document_id: ::core::default::Default::default(),
+                        name: ::core::default::Default::default(),
+                        media_type: ::core::default::Default::default(),
+                        content: ::core::default::Default::default(),
+                        content_digest: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl DocumentIngested {
+                /// Creates a [DocumentIngestedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> DocumentIngestedBuilder<()> {
+                    DocumentIngestedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_document_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_name: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_media_type: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_content: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_content_digest: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_document_id = field_document_id.prepare(builder);
+                    let prepared_name = field_name.prepare(builder);
+                    let prepared_media_type = field_media_type.prepare(builder);
+                    let prepared_content = field_content.prepare(builder);
+                    let prepared_content_digest = field_content_digest.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<14> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(1);
+                    table_writer.write_entry::<::planus::Offset<str>>(2);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(3);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(4);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_document_id);
+                            object_writer.write::<_, _, 4>(&prepared_name);
+                            object_writer.write::<_, _, 4>(&prepared_media_type);
+                            object_writer.write::<_, _, 4>(&prepared_content);
+                            object_writer.write::<_, _, 4>(&prepared_content_digest);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<DocumentIngested>> for DocumentIngested {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentIngested> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<DocumentIngested>> for DocumentIngested {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentIngested>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<DocumentIngested> for DocumentIngested {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentIngested> {
+                    DocumentIngested::create(
+                        builder,
+                        &self.document_id,
+                        &self.name,
+                        &self.media_type,
+                        &self.content,
+                        &self.content_digest,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [DocumentIngested] type.
+            ///
+            /// Can be created using the [DocumentIngested::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct DocumentIngestedBuilder<State>(State);
+
+            impl DocumentIngestedBuilder<()> {
+                /// Setter for the [`document_id` field](DocumentIngested#structfield.document_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn document_id<T0>(self, value: T0) -> DocumentIngestedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    DocumentIngestedBuilder((value,))
+                }
+            }
+
+            impl<T0> DocumentIngestedBuilder<(T0,)> {
+                /// Setter for the [`name` field](DocumentIngested#structfield.name).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn name<T1>(self, value: T1) -> DocumentIngestedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0,) = self.0;
+                    DocumentIngestedBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> DocumentIngestedBuilder<(T0, T1)> {
+                /// Setter for the [`media_type` field](DocumentIngested#structfield.media_type).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn media_type<T2>(self, value: T2) -> DocumentIngestedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1) = self.0;
+                    DocumentIngestedBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> DocumentIngestedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`content` field](DocumentIngested#structfield.content).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn content<T3>(self, value: T3) -> DocumentIngestedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    DocumentIngestedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> DocumentIngestedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`content_digest` field](DocumentIngested#structfield.content_digest).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn content_digest<T4>(
+                    self,
+                    value: T4,
+                ) -> DocumentIngestedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    DocumentIngestedBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> DocumentIngestedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [DocumentIngested].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentIngested>
+                where
+                    Self: ::planus::WriteAsOffset<DocumentIngested>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAs<::planus::Offset<DocumentIngested>>
+                for DocumentIngestedBuilder<(T0, T1, T2, T3, T4)>
+            {
+                type Prepared = ::planus::Offset<DocumentIngested>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentIngested> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<DocumentIngested>>
+                for DocumentIngestedBuilder<(T0, T1, T2, T3, T4)>
+            {
+                type Prepared = ::planus::Offset<DocumentIngested>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentIngested>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOffset<DocumentIngested>
+                for DocumentIngestedBuilder<(T0, T1, T2, T3, T4)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentIngested> {
+                    let (v0, v1, v2, v3, v4) = &self.0;
+                    DocumentIngested::create(builder, v0, v1, v2, v3, v4)
+                }
+            }
+
+            /// Reference to a deserialized [DocumentIngested].
+            #[derive(Copy, Clone)]
+            pub struct DocumentIngestedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> DocumentIngestedRef<'a> {
+                /// Getter for the [`document_id` field](DocumentIngested#structfield.document_id).
+                #[inline]
+                pub fn document_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "DocumentIngested", "document_id")
+                }
+
+                /// Getter for the [`name` field](DocumentIngested#structfield.name).
+                #[inline]
+                pub fn name(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(1, "DocumentIngested", "name")
+                }
+
+                /// Getter for the [`media_type` field](DocumentIngested#structfield.media_type).
+                #[inline]
+                pub fn media_type(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(2, "DocumentIngested", "media_type")
+                }
+
+                /// Getter for the [`content` field](DocumentIngested#structfield.content).
+                #[inline]
+                pub fn content(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(3, "DocumentIngested", "content")
+                }
+
+                /// Getter for the [`content_digest` field](DocumentIngested#structfield.content_digest).
+                #[inline]
+                pub fn content_digest(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(4, "DocumentIngested", "content_digest")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for DocumentIngestedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("DocumentIngestedRef");
+                    f.field("document_id", &self.document_id());
+                    f.field("name", &self.name());
+                    f.field("media_type", &self.media_type());
+                    f.field("content", &self.content());
+                    f.field("content_digest", &self.content_digest());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<DocumentIngestedRef<'a>> for DocumentIngested {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: DocumentIngestedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        document_id: value.document_id()?.to_vec(),
+                        name: ::core::convert::Into::into(value.name()?),
+                        media_type: ::core::convert::Into::into(value.media_type()?),
+                        content: value.content()?.to_vec(),
+                        content_digest: value.content_digest()?.to_vec(),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for DocumentIngestedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for DocumentIngestedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[DocumentIngestedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<DocumentIngested>> for DocumentIngested {
+                type Value = ::planus::Offset<DocumentIngested>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<DocumentIngested>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for DocumentIngestedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[DocumentIngestedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `DocumentExtracted` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `DocumentExtracted` in the file `schemas/events.fbs:503`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct DocumentExtracted {
+                /// The field `document_id` in the table `DocumentExtracted`
+                pub document_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `source_lsn` in the table `DocumentExtracted`
+                pub source_lsn: u64,
+                /// The field `loader_id` in the table `DocumentExtracted`
+                pub loader_id: ::planus::alloc::string::String,
+                /// The field `extraction_version` in the table `DocumentExtracted`
+                pub extraction_version: u16,
+                /// The field `text` in the table `DocumentExtracted`
+                pub text: ::planus::alloc::vec::Vec<u8>,
+                /// The field `text_digest` in the table `DocumentExtracted`
+                pub text_digest: ::planus::alloc::vec::Vec<u8>,
+                /// The field `page_spans` in the table `DocumentExtracted`
+                pub page_spans: ::planus::alloc::vec::Vec<self::DocumentPageSpan>,
+                /// The field `partial_reason` in the table `DocumentExtracted`
+                pub partial_reason: ::core::option::Option<::planus::alloc::string::String>,
+                /// The field `failed_units` in the table `DocumentExtracted`
+                pub failed_units: ::core::option::Option<::planus::alloc::vec::Vec<u32>>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for DocumentExtracted {
+                fn default() -> Self {
+                    Self {
+                        document_id: ::core::default::Default::default(),
+                        source_lsn: 0,
+                        loader_id: ::core::default::Default::default(),
+                        extraction_version: 0,
+                        text: ::core::default::Default::default(),
+                        text_digest: ::core::default::Default::default(),
+                        page_spans: ::core::default::Default::default(),
+                        partial_reason: ::core::default::Default::default(),
+                        failed_units: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl DocumentExtracted {
+                /// Creates a [DocumentExtractedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> DocumentExtractedBuilder<()> {
+                    DocumentExtractedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_document_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_source_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_loader_id: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_extraction_version: impl ::planus::WriteAsDefault<u16, u16>,
+                    field_text: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_text_digest: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_page_spans: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::DocumentPageSpan>]>,
+                    >,
+                    field_partial_reason: impl ::planus::WriteAsOptional<
+                        ::planus::Offset<::core::primitive::str>,
+                    >,
+                    field_failed_units: impl ::planus::WriteAsOptional<::planus::Offset<[u32]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_document_id = field_document_id.prepare(builder);
+                    let prepared_source_lsn = field_source_lsn.prepare(builder, &0);
+                    let prepared_loader_id = field_loader_id.prepare(builder);
+                    let prepared_extraction_version = field_extraction_version.prepare(builder, &0);
+                    let prepared_text = field_text.prepare(builder);
+                    let prepared_text_digest = field_text_digest.prepare(builder);
+                    let prepared_page_spans = field_page_spans.prepare(builder);
+                    let prepared_partial_reason = field_partial_reason.prepare(builder);
+                    let prepared_failed_units = field_failed_units.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<22> =
+                        ::core::default::Default::default();
+                    if prepared_source_lsn.is_some() {
+                        table_writer.write_entry::<u64>(1);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(2);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(4);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(5);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<self::DocumentPageSpan>]>>(6);
+                    if prepared_partial_reason.is_some() {
+                        table_writer.write_entry::<::planus::Offset<str>>(7);
+                    }
+                    if prepared_failed_units.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u32]>>(8);
+                    }
+                    if prepared_extraction_version.is_some() {
+                        table_writer.write_entry::<u16>(3);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_source_lsn) =
+                                prepared_source_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_source_lsn);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_document_id);
+                            object_writer.write::<_, _, 4>(&prepared_loader_id);
+                            object_writer.write::<_, _, 4>(&prepared_text);
+                            object_writer.write::<_, _, 4>(&prepared_text_digest);
+                            object_writer.write::<_, _, 4>(&prepared_page_spans);
+                            if let ::core::option::Option::Some(prepared_partial_reason) =
+                                prepared_partial_reason
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_partial_reason);
+                            }
+                            if let ::core::option::Option::Some(prepared_failed_units) =
+                                prepared_failed_units
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_failed_units);
+                            }
+                            if let ::core::option::Option::Some(prepared_extraction_version) =
+                                prepared_extraction_version
+                            {
+                                object_writer.write::<_, _, 2>(&prepared_extraction_version);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<DocumentExtracted>> for DocumentExtracted {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentExtracted> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<DocumentExtracted>> for DocumentExtracted {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentExtracted>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<DocumentExtracted> for DocumentExtracted {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentExtracted> {
+                    DocumentExtracted::create(
+                        builder,
+                        &self.document_id,
+                        self.source_lsn,
+                        &self.loader_id,
+                        self.extraction_version,
+                        &self.text,
+                        &self.text_digest,
+                        &self.page_spans,
+                        &self.partial_reason,
+                        &self.failed_units,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [DocumentExtracted] type.
+            ///
+            /// Can be created using the [DocumentExtracted::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct DocumentExtractedBuilder<State>(State);
+
+            impl DocumentExtractedBuilder<()> {
+                /// Setter for the [`document_id` field](DocumentExtracted#structfield.document_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn document_id<T0>(self, value: T0) -> DocumentExtractedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    DocumentExtractedBuilder((value,))
+                }
+            }
+
+            impl<T0> DocumentExtractedBuilder<(T0,)> {
+                /// Setter for the [`source_lsn` field](DocumentExtracted#structfield.source_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_lsn<T1>(self, value: T1) -> DocumentExtractedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0,) = self.0;
+                    DocumentExtractedBuilder((v0, value))
+                }
+
+                /// Sets the [`source_lsn` field](DocumentExtracted#structfield.source_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_lsn_as_default(
+                    self,
+                ) -> DocumentExtractedBuilder<(T0, ::planus::DefaultValue)> {
+                    self.source_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> DocumentExtractedBuilder<(T0, T1)> {
+                /// Setter for the [`loader_id` field](DocumentExtracted#structfield.loader_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn loader_id<T2>(self, value: T2) -> DocumentExtractedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1) = self.0;
+                    DocumentExtractedBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> DocumentExtractedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`extraction_version` field](DocumentExtracted#structfield.extraction_version).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn extraction_version<T3>(
+                    self,
+                    value: T3,
+                ) -> DocumentExtractedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsDefault<u16, u16>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    DocumentExtractedBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`extraction_version` field](DocumentExtracted#structfield.extraction_version) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn extraction_version_as_default(
+                    self,
+                ) -> DocumentExtractedBuilder<(T0, T1, T2, ::planus::DefaultValue)>
+                {
+                    self.extraction_version(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3> DocumentExtractedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`text` field](DocumentExtracted#structfield.text).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn text<T4>(self, value: T4) -> DocumentExtractedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    DocumentExtractedBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> DocumentExtractedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`text_digest` field](DocumentExtracted#structfield.text_digest).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn text_digest<T5>(
+                    self,
+                    value: T5,
+                ) -> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    DocumentExtractedBuilder((v0, v1, v2, v3, v4, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`page_spans` field](DocumentExtracted#structfield.page_spans).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn page_spans<T6>(
+                    self,
+                    value: T6,
+                ) -> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::DocumentPageSpan>]>,
+                    >,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    DocumentExtractedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`partial_reason` field](DocumentExtracted#structfield.partial_reason).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn partial_reason<T7>(
+                    self,
+                    value: T7,
+                ) -> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    DocumentExtractedBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+
+                /// Sets the [`partial_reason` field](DocumentExtracted#structfield.partial_reason) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn partial_reason_as_null(
+                    self,
+                ) -> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, ())> {
+                    self.partial_reason(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
+                /// Setter for the [`failed_units` field](DocumentExtracted#structfield.failed_units).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn failed_units<T8>(
+                    self,
+                    value: T8,
+                ) -> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+                where
+                    T8: ::planus::WriteAsOptional<::planus::Offset<[u32]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = self.0;
+                    DocumentExtractedBuilder((v0, v1, v2, v3, v4, v5, v6, v7, value))
+                }
+
+                /// Sets the [`failed_units` field](DocumentExtracted#structfield.failed_units) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn failed_units_as_null(
+                    self,
+                ) -> DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, ())>
+                {
+                    self.failed_units(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+                DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [DocumentExtracted].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentExtracted>
+                where
+                    Self: ::planus::WriteAsOffset<DocumentExtracted>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAsDefault<u16, u16>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::DocumentPageSpan>]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsOptional<::planus::Offset<[u32]>>,
+                > ::planus::WriteAs<::planus::Offset<DocumentExtracted>>
+                for DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                type Prepared = ::planus::Offset<DocumentExtracted>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentExtracted> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAsDefault<u16, u16>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::DocumentPageSpan>]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsOptional<::planus::Offset<[u32]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<DocumentExtracted>>
+                for DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                type Prepared = ::planus::Offset<DocumentExtracted>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentExtracted>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAsDefault<u16, u16>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::DocumentPageSpan>]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsOptional<::planus::Offset<[u32]>>,
+                > ::planus::WriteAsOffset<DocumentExtracted>
+                for DocumentExtractedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentExtracted> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8) = &self.0;
+                    DocumentExtracted::create(builder, v0, v1, v2, v3, v4, v5, v6, v7, v8)
+                }
+            }
+
+            /// Reference to a deserialized [DocumentExtracted].
+            #[derive(Copy, Clone)]
+            pub struct DocumentExtractedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> DocumentExtractedRef<'a> {
+                /// Getter for the [`document_id` field](DocumentExtracted#structfield.document_id).
+                #[inline]
+                pub fn document_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "DocumentExtracted", "document_id")
+                }
+
+                /// Getter for the [`source_lsn` field](DocumentExtracted#structfield.source_lsn).
+                #[inline]
+                pub fn source_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(1, "DocumentExtracted", "source_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`loader_id` field](DocumentExtracted#structfield.loader_id).
+                #[inline]
+                pub fn loader_id(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(2, "DocumentExtracted", "loader_id")
+                }
+
+                /// Getter for the [`extraction_version` field](DocumentExtracted#structfield.extraction_version).
+                #[inline]
+                pub fn extraction_version(&self) -> ::planus::Result<u16> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(3, "DocumentExtracted", "extraction_version")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`text` field](DocumentExtracted#structfield.text).
+                #[inline]
+                pub fn text(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(4, "DocumentExtracted", "text")
+                }
+
+                /// Getter for the [`text_digest` field](DocumentExtracted#structfield.text_digest).
+                #[inline]
+                pub fn text_digest(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(5, "DocumentExtracted", "text_digest")
+                }
+
+                /// Getter for the [`page_spans` field](DocumentExtracted#structfield.page_spans).
+                #[inline]
+                pub fn page_spans(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<self::DocumentPageSpanRef<'a>>>,
+                > {
+                    self.0.access_required(6, "DocumentExtracted", "page_spans")
+                }
+
+                /// Getter for the [`partial_reason` field](DocumentExtracted#structfield.partial_reason).
+                #[inline]
+                pub fn partial_reason(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<&'a ::core::primitive::str>>
+                {
+                    self.0.access(7, "DocumentExtracted", "partial_reason")
+                }
+
+                /// Getter for the [`failed_units` field](DocumentExtracted#structfield.failed_units).
+                #[inline]
+                pub fn failed_units(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<::planus::Vector<'a, u32>>>
+                {
+                    self.0.access(8, "DocumentExtracted", "failed_units")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for DocumentExtractedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("DocumentExtractedRef");
+                    f.field("document_id", &self.document_id());
+                    f.field("source_lsn", &self.source_lsn());
+                    f.field("loader_id", &self.loader_id());
+                    f.field("extraction_version", &self.extraction_version());
+                    f.field("text", &self.text());
+                    f.field("text_digest", &self.text_digest());
+                    f.field("page_spans", &self.page_spans());
+                    if let ::core::option::Option::Some(field_partial_reason) =
+                        self.partial_reason().transpose()
+                    {
+                        f.field("partial_reason", &field_partial_reason);
+                    }
+                    if let ::core::option::Option::Some(field_failed_units) =
+                        self.failed_units().transpose()
+                    {
+                        f.field("failed_units", &field_failed_units);
+                    }
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<DocumentExtractedRef<'a>> for DocumentExtracted {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: DocumentExtractedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        document_id: value.document_id()?.to_vec(),
+                        source_lsn: ::core::convert::TryInto::try_into(value.source_lsn()?)?,
+                        loader_id: ::core::convert::Into::into(value.loader_id()?),
+                        extraction_version: ::core::convert::TryInto::try_into(
+                            value.extraction_version()?,
+                        )?,
+                        text: value.text()?.to_vec(),
+                        text_digest: value.text_digest()?.to_vec(),
+                        page_spans: value.page_spans()?.to_vec_result()?,
+                        partial_reason: value.partial_reason()?.map(::core::convert::Into::into),
+                        failed_units: if let ::core::option::Option::Some(failed_units) =
+                            value.failed_units()?
+                        {
+                            ::core::option::Option::Some(failed_units.to_vec()?)
+                        } else {
+                            ::core::option::Option::None
+                        },
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for DocumentExtractedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for DocumentExtractedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[DocumentExtractedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<DocumentExtracted>> for DocumentExtracted {
+                type Value = ::planus::Offset<DocumentExtracted>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<DocumentExtracted>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for DocumentExtractedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[DocumentExtractedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `DocumentChunk` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `DocumentChunk` in the file `schemas/events.fbs:515`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct DocumentChunk {
+                /// The field `chunk_id` in the table `DocumentChunk`
+                pub chunk_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `content_hash` in the table `DocumentChunk`
+                pub content_hash: ::planus::alloc::vec::Vec<u8>,
+                /// The field `occurrence` in the table `DocumentChunk`
+                pub occurrence: u32,
+                /// The field `ordinal` in the table `DocumentChunk`
+                pub ordinal: u32,
+                /// The field `byte_start` in the table `DocumentChunk`
+                pub byte_start: u32,
+                /// The field `byte_end` in the table `DocumentChunk`
+                pub byte_end: u32,
+                /// The field `cut` in the table `DocumentChunk`
+                pub cut: self::DocumentCut,
+                /// The field `change` in the table `DocumentChunk`
+                pub change: self::DocumentChange,
+                /// The field `page_number` in the table `DocumentChunk`
+                pub page_number: u32,
+                /// The field `row_index` in the table `DocumentChunk`
+                pub row_index: u32,
+                /// The field `column_start` in the table `DocumentChunk`
+                pub column_start: u32,
+                /// The field `column_end` in the table `DocumentChunk`
+                pub column_end: u32,
+                /// The field `token_estimate` in the table `DocumentChunk`
+                pub token_estimate: u32,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for DocumentChunk {
+                fn default() -> Self {
+                    Self {
+                        chunk_id: ::core::default::Default::default(),
+                        content_hash: ::core::default::Default::default(),
+                        occurrence: 0,
+                        ordinal: 0,
+                        byte_start: 0,
+                        byte_end: 0,
+                        cut: self::DocumentCut::ParagraphEnd,
+                        change: self::DocumentChange::Retained,
+                        page_number: 0,
+                        row_index: 0,
+                        column_start: 0,
+                        column_end: 0,
+                        token_estimate: 0,
+                    }
+                }
+            }
+
+            impl DocumentChunk {
+                /// Creates a [DocumentChunkBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> DocumentChunkBuilder<()> {
+                    DocumentChunkBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_chunk_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_content_hash: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_occurrence: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_ordinal: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_byte_start: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_byte_end: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_cut: impl ::planus::WriteAsDefault<self::DocumentCut, self::DocumentCut>,
+                    field_change: impl ::planus::WriteAsDefault<
+                        self::DocumentChange,
+                        self::DocumentChange,
+                    >,
+                    field_page_number: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_row_index: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_column_start: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_column_end: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_token_estimate: impl ::planus::WriteAsDefault<u32, u32>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_chunk_id = field_chunk_id.prepare(builder);
+                    let prepared_content_hash = field_content_hash.prepare(builder);
+                    let prepared_occurrence = field_occurrence.prepare(builder, &0);
+                    let prepared_ordinal = field_ordinal.prepare(builder, &0);
+                    let prepared_byte_start = field_byte_start.prepare(builder, &0);
+                    let prepared_byte_end = field_byte_end.prepare(builder, &0);
+                    let prepared_cut = field_cut.prepare(builder, &self::DocumentCut::ParagraphEnd);
+                    let prepared_change =
+                        field_change.prepare(builder, &self::DocumentChange::Retained);
+                    let prepared_page_number = field_page_number.prepare(builder, &0);
+                    let prepared_row_index = field_row_index.prepare(builder, &0);
+                    let prepared_column_start = field_column_start.prepare(builder, &0);
+                    let prepared_column_end = field_column_end.prepare(builder, &0);
+                    let prepared_token_estimate = field_token_estimate.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<30> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+                    if prepared_occurrence.is_some() {
+                        table_writer.write_entry::<u32>(2);
+                    }
+                    if prepared_ordinal.is_some() {
+                        table_writer.write_entry::<u32>(3);
+                    }
+                    if prepared_byte_start.is_some() {
+                        table_writer.write_entry::<u32>(4);
+                    }
+                    if prepared_byte_end.is_some() {
+                        table_writer.write_entry::<u32>(5);
+                    }
+                    if prepared_page_number.is_some() {
+                        table_writer.write_entry::<u32>(8);
+                    }
+                    if prepared_row_index.is_some() {
+                        table_writer.write_entry::<u32>(9);
+                    }
+                    if prepared_column_start.is_some() {
+                        table_writer.write_entry::<u32>(10);
+                    }
+                    if prepared_column_end.is_some() {
+                        table_writer.write_entry::<u32>(11);
+                    }
+                    if prepared_token_estimate.is_some() {
+                        table_writer.write_entry::<u32>(12);
+                    }
+                    if prepared_cut.is_some() {
+                        table_writer.write_entry::<self::DocumentCut>(6);
+                    }
+                    if prepared_change.is_some() {
+                        table_writer.write_entry::<self::DocumentChange>(7);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_chunk_id);
+                            object_writer.write::<_, _, 4>(&prepared_content_hash);
+                            if let ::core::option::Option::Some(prepared_occurrence) =
+                                prepared_occurrence
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_occurrence);
+                            }
+                            if let ::core::option::Option::Some(prepared_ordinal) = prepared_ordinal
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_ordinal);
+                            }
+                            if let ::core::option::Option::Some(prepared_byte_start) =
+                                prepared_byte_start
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_byte_start);
+                            }
+                            if let ::core::option::Option::Some(prepared_byte_end) =
+                                prepared_byte_end
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_byte_end);
+                            }
+                            if let ::core::option::Option::Some(prepared_page_number) =
+                                prepared_page_number
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_page_number);
+                            }
+                            if let ::core::option::Option::Some(prepared_row_index) =
+                                prepared_row_index
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_row_index);
+                            }
+                            if let ::core::option::Option::Some(prepared_column_start) =
+                                prepared_column_start
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_column_start);
+                            }
+                            if let ::core::option::Option::Some(prepared_column_end) =
+                                prepared_column_end
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_column_end);
+                            }
+                            if let ::core::option::Option::Some(prepared_token_estimate) =
+                                prepared_token_estimate
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_token_estimate);
+                            }
+                            if let ::core::option::Option::Some(prepared_cut) = prepared_cut {
+                                object_writer.write::<_, _, 1>(&prepared_cut);
+                            }
+                            if let ::core::option::Option::Some(prepared_change) = prepared_change {
+                                object_writer.write::<_, _, 1>(&prepared_change);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<DocumentChunk>> for DocumentChunk {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunk> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<DocumentChunk>> for DocumentChunk {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentChunk>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<DocumentChunk> for DocumentChunk {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunk> {
+                    DocumentChunk::create(
+                        builder,
+                        &self.chunk_id,
+                        &self.content_hash,
+                        self.occurrence,
+                        self.ordinal,
+                        self.byte_start,
+                        self.byte_end,
+                        self.cut,
+                        self.change,
+                        self.page_number,
+                        self.row_index,
+                        self.column_start,
+                        self.column_end,
+                        self.token_estimate,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [DocumentChunk] type.
+            ///
+            /// Can be created using the [DocumentChunk::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct DocumentChunkBuilder<State>(State);
+
+            impl DocumentChunkBuilder<()> {
+                /// Setter for the [`chunk_id` field](DocumentChunk#structfield.chunk_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn chunk_id<T0>(self, value: T0) -> DocumentChunkBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    DocumentChunkBuilder((value,))
+                }
+            }
+
+            impl<T0> DocumentChunkBuilder<(T0,)> {
+                /// Setter for the [`content_hash` field](DocumentChunk#structfield.content_hash).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn content_hash<T1>(self, value: T1) -> DocumentChunkBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    DocumentChunkBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> DocumentChunkBuilder<(T0, T1)> {
+                /// Setter for the [`occurrence` field](DocumentChunk#structfield.occurrence).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn occurrence<T2>(self, value: T2) -> DocumentChunkBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1) = self.0;
+                    DocumentChunkBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`occurrence` field](DocumentChunk#structfield.occurrence) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn occurrence_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(T0, T1, ::planus::DefaultValue)> {
+                    self.occurrence(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> DocumentChunkBuilder<(T0, T1, T2)> {
+                /// Setter for the [`ordinal` field](DocumentChunk#structfield.ordinal).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn ordinal<T3>(self, value: T3) -> DocumentChunkBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`ordinal` field](DocumentChunk#structfield.ordinal) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn ordinal_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, ::planus::DefaultValue)> {
+                    self.ordinal(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3> DocumentChunkBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`byte_start` field](DocumentChunk#structfield.byte_start).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_start<T4>(self, value: T4) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`byte_start` field](DocumentChunk#structfield.byte_start) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_start_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)>
+                {
+                    self.byte_start(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> DocumentChunkBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`byte_end` field](DocumentChunk#structfield.byte_end).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_end<T5>(
+                    self,
+                    value: T5,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, v4, value))
+                }
+
+                /// Sets the [`byte_end` field](DocumentChunk#structfield.byte_end) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn byte_end_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, ::planus::DefaultValue)>
+                {
+                    self.byte_end(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`cut` field](DocumentChunk#structfield.cut).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn cut<T6>(
+                    self,
+                    value: T6,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAsDefault<self::DocumentCut, self::DocumentCut>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+
+                /// Sets the [`cut` field](DocumentChunk#structfield.cut) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn cut_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, ::planus::DefaultValue)>
+                {
+                    self.cut(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`change` field](DocumentChunk#structfield.change).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn change<T7>(
+                    self,
+                    value: T7,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAsDefault<self::DocumentChange, self::DocumentChange>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+
+                /// Sets the [`change` field](DocumentChunk#structfield.change) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn change_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, ::planus::DefaultValue)>
+                {
+                    self.change(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
+                /// Setter for the [`page_number` field](DocumentChunk#structfield.page_number).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn page_number<T8>(
+                    self,
+                    value: T8,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+                where
+                    T8: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, v4, v5, v6, v7, value))
+                }
+
+                /// Sets the [`page_number` field](DocumentChunk#structfield.page_number) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn page_number_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, ::planus::DefaultValue)>
+                {
+                    self.page_number(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+                DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                /// Setter for the [`row_index` field](DocumentChunk#structfield.row_index).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn row_index<T9>(
+                    self,
+                    value: T9,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+                where
+                    T9: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, v4, v5, v6, v7, v8, value))
+                }
+
+                /// Sets the [`row_index` field](DocumentChunk#structfield.row_index) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn row_index_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(
+                    T0,
+                    T1,
+                    T2,
+                    T3,
+                    T4,
+                    T5,
+                    T6,
+                    T7,
+                    T8,
+                    ::planus::DefaultValue,
+                )> {
+                    self.row_index(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+                DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+            {
+                /// Setter for the [`column_start` field](DocumentChunk#structfield.column_start).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn column_start<T10>(
+                    self,
+                    value: T10,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
+                where
+                    T10: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8, v9) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, value))
+                }
+
+                /// Sets the [`column_start` field](DocumentChunk#structfield.column_start) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn column_start_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(
+                    T0,
+                    T1,
+                    T2,
+                    T3,
+                    T4,
+                    T5,
+                    T6,
+                    T7,
+                    T8,
+                    T9,
+                    ::planus::DefaultValue,
+                )> {
+                    self.column_start(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+                DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
+            {
+                /// Setter for the [`column_end` field](DocumentChunk#structfield.column_end).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn column_end<T11>(
+                    self,
+                    value: T11,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)>
+                where
+                    T11: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, value))
+                }
+
+                /// Sets the [`column_end` field](DocumentChunk#structfield.column_end) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn column_end_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(
+                    T0,
+                    T1,
+                    T2,
+                    T3,
+                    T4,
+                    T5,
+                    T6,
+                    T7,
+                    T8,
+                    T9,
+                    T10,
+                    ::planus::DefaultValue,
+                )> {
+                    self.column_end(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
+                DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)>
+            {
+                /// Setter for the [`token_estimate` field](DocumentChunk#structfield.token_estimate).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn token_estimate<T12>(
+                    self,
+                    value: T12,
+                ) -> DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>
+                where
+                    T12: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11) = self.0;
+                    DocumentChunkBuilder((v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, value))
+                }
+
+                /// Sets the [`token_estimate` field](DocumentChunk#structfield.token_estimate) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn token_estimate_as_default(
+                    self,
+                ) -> DocumentChunkBuilder<(
+                    T0,
+                    T1,
+                    T2,
+                    T3,
+                    T4,
+                    T5,
+                    T6,
+                    T7,
+                    T8,
+                    T9,
+                    T10,
+                    T11,
+                    ::planus::DefaultValue,
+                )> {
+                    self.token_estimate(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
+                DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>
+            {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [DocumentChunk].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunk>
+                where
+                    Self: ::planus::WriteAsOffset<DocumentChunk>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<self::DocumentCut, self::DocumentCut>,
+                    T7: ::planus::WriteAsDefault<self::DocumentChange, self::DocumentChange>,
+                    T8: ::planus::WriteAsDefault<u32, u32>,
+                    T9: ::planus::WriteAsDefault<u32, u32>,
+                    T10: ::planus::WriteAsDefault<u32, u32>,
+                    T11: ::planus::WriteAsDefault<u32, u32>,
+                    T12: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAs<::planus::Offset<DocumentChunk>>
+                for DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>
+            {
+                type Prepared = ::planus::Offset<DocumentChunk>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunk> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<self::DocumentCut, self::DocumentCut>,
+                    T7: ::planus::WriteAsDefault<self::DocumentChange, self::DocumentChange>,
+                    T8: ::planus::WriteAsDefault<u32, u32>,
+                    T9: ::planus::WriteAsDefault<u32, u32>,
+                    T10: ::planus::WriteAsDefault<u32, u32>,
+                    T11: ::planus::WriteAsDefault<u32, u32>,
+                    T12: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAsOptional<::planus::Offset<DocumentChunk>>
+                for DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>
+            {
+                type Prepared = ::planus::Offset<DocumentChunk>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentChunk>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u32, u32>,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<self::DocumentCut, self::DocumentCut>,
+                    T7: ::planus::WriteAsDefault<self::DocumentChange, self::DocumentChange>,
+                    T8: ::planus::WriteAsDefault<u32, u32>,
+                    T9: ::planus::WriteAsDefault<u32, u32>,
+                    T10: ::planus::WriteAsDefault<u32, u32>,
+                    T11: ::planus::WriteAsDefault<u32, u32>,
+                    T12: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAsOffset<DocumentChunk>
+                for DocumentChunkBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunk> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12) = &self.0;
+                    DocumentChunk::create(
+                        builder, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12,
+                    )
+                }
+            }
+
+            /// Reference to a deserialized [DocumentChunk].
+            #[derive(Copy, Clone)]
+            pub struct DocumentChunkRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> DocumentChunkRef<'a> {
+                /// Getter for the [`chunk_id` field](DocumentChunk#structfield.chunk_id).
+                #[inline]
+                pub fn chunk_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "DocumentChunk", "chunk_id")
+                }
+
+                /// Getter for the [`content_hash` field](DocumentChunk#structfield.content_hash).
+                #[inline]
+                pub fn content_hash(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(1, "DocumentChunk", "content_hash")
+                }
+
+                /// Getter for the [`occurrence` field](DocumentChunk#structfield.occurrence).
+                #[inline]
+                pub fn occurrence(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "DocumentChunk", "occurrence")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`ordinal` field](DocumentChunk#structfield.ordinal).
+                #[inline]
+                pub fn ordinal(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0.access(3, "DocumentChunk", "ordinal")?.unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`byte_start` field](DocumentChunk#structfield.byte_start).
+                #[inline]
+                pub fn byte_start(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "DocumentChunk", "byte_start")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`byte_end` field](DocumentChunk#structfield.byte_end).
+                #[inline]
+                pub fn byte_end(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0.access(5, "DocumentChunk", "byte_end")?.unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`cut` field](DocumentChunk#structfield.cut).
+                #[inline]
+                pub fn cut(&self) -> ::planus::Result<self::DocumentCut> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(6, "DocumentChunk", "cut")?
+                            .unwrap_or(self::DocumentCut::ParagraphEnd),
+                    )
+                }
+
+                /// Getter for the [`change` field](DocumentChunk#structfield.change).
+                #[inline]
+                pub fn change(&self) -> ::planus::Result<self::DocumentChange> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(7, "DocumentChunk", "change")?
+                            .unwrap_or(self::DocumentChange::Retained),
+                    )
+                }
+
+                /// Getter for the [`page_number` field](DocumentChunk#structfield.page_number).
+                #[inline]
+                pub fn page_number(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(8, "DocumentChunk", "page_number")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`row_index` field](DocumentChunk#structfield.row_index).
+                #[inline]
+                pub fn row_index(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0.access(9, "DocumentChunk", "row_index")?.unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`column_start` field](DocumentChunk#structfield.column_start).
+                #[inline]
+                pub fn column_start(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(10, "DocumentChunk", "column_start")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`column_end` field](DocumentChunk#structfield.column_end).
+                #[inline]
+                pub fn column_end(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(11, "DocumentChunk", "column_end")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`token_estimate` field](DocumentChunk#structfield.token_estimate).
+                #[inline]
+                pub fn token_estimate(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(12, "DocumentChunk", "token_estimate")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for DocumentChunkRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("DocumentChunkRef");
+                    f.field("chunk_id", &self.chunk_id());
+                    f.field("content_hash", &self.content_hash());
+                    f.field("occurrence", &self.occurrence());
+                    f.field("ordinal", &self.ordinal());
+                    f.field("byte_start", &self.byte_start());
+                    f.field("byte_end", &self.byte_end());
+                    f.field("cut", &self.cut());
+                    f.field("change", &self.change());
+                    f.field("page_number", &self.page_number());
+                    f.field("row_index", &self.row_index());
+                    f.field("column_start", &self.column_start());
+                    f.field("column_end", &self.column_end());
+                    f.field("token_estimate", &self.token_estimate());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<DocumentChunkRef<'a>> for DocumentChunk {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: DocumentChunkRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        chunk_id: value.chunk_id()?.to_vec(),
+                        content_hash: value.content_hash()?.to_vec(),
+                        occurrence: ::core::convert::TryInto::try_into(value.occurrence()?)?,
+                        ordinal: ::core::convert::TryInto::try_into(value.ordinal()?)?,
+                        byte_start: ::core::convert::TryInto::try_into(value.byte_start()?)?,
+                        byte_end: ::core::convert::TryInto::try_into(value.byte_end()?)?,
+                        cut: ::core::convert::TryInto::try_into(value.cut()?)?,
+                        change: ::core::convert::TryInto::try_into(value.change()?)?,
+                        page_number: ::core::convert::TryInto::try_into(value.page_number()?)?,
+                        row_index: ::core::convert::TryInto::try_into(value.row_index()?)?,
+                        column_start: ::core::convert::TryInto::try_into(value.column_start()?)?,
+                        column_end: ::core::convert::TryInto::try_into(value.column_end()?)?,
+                        token_estimate: ::core::convert::TryInto::try_into(
+                            value.token_estimate()?,
+                        )?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for DocumentChunkRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for DocumentChunkRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[DocumentChunkRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<DocumentChunk>> for DocumentChunk {
+                type Value = ::planus::Offset<DocumentChunk>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<DocumentChunk>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for DocumentChunkRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[DocumentChunkRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `DocumentChunked` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `DocumentChunked` in the file `schemas/events.fbs:531`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct DocumentChunked {
+                /// The field `document_id` in the table `DocumentChunked`
+                pub document_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `source_lsn` in the table `DocumentChunked`
+                pub source_lsn: u64,
+                /// The field `extraction_version` in the table `DocumentChunked`
+                pub extraction_version: u16,
+                /// The field `chunker_id` in the table `DocumentChunked`
+                pub chunker_id: ::planus::alloc::string::String,
+                /// The field `token_budget` in the table `DocumentChunked`
+                pub token_budget: u32,
+                /// The field `previous_chunked_lsn` in the table `DocumentChunked`
+                pub previous_chunked_lsn: u64,
+                /// The field `chunks` in the table `DocumentChunked`
+                pub chunks: ::planus::alloc::vec::Vec<self::DocumentChunk>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for DocumentChunked {
+                fn default() -> Self {
+                    Self {
+                        document_id: ::core::default::Default::default(),
+                        source_lsn: 0,
+                        extraction_version: 0,
+                        chunker_id: ::core::default::Default::default(),
+                        token_budget: 0,
+                        previous_chunked_lsn: 0,
+                        chunks: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl DocumentChunked {
+                /// Creates a [DocumentChunkedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> DocumentChunkedBuilder<()> {
+                    DocumentChunkedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_document_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_source_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_extraction_version: impl ::planus::WriteAsDefault<u16, u16>,
+                    field_chunker_id: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_token_budget: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_previous_chunked_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_chunks: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::DocumentChunk>]>,
+                    >,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_document_id = field_document_id.prepare(builder);
+                    let prepared_source_lsn = field_source_lsn.prepare(builder, &0);
+                    let prepared_extraction_version = field_extraction_version.prepare(builder, &0);
+                    let prepared_chunker_id = field_chunker_id.prepare(builder);
+                    let prepared_token_budget = field_token_budget.prepare(builder, &0);
+                    let prepared_previous_chunked_lsn =
+                        field_previous_chunked_lsn.prepare(builder, &0);
+                    let prepared_chunks = field_chunks.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<18> =
+                        ::core::default::Default::default();
+                    if prepared_source_lsn.is_some() {
+                        table_writer.write_entry::<u64>(1);
+                    }
+                    if prepared_previous_chunked_lsn.is_some() {
+                        table_writer.write_entry::<u64>(5);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(3);
+                    if prepared_token_budget.is_some() {
+                        table_writer.write_entry::<u32>(4);
+                    }
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::DocumentChunk>]>>(
+                            6,
+                        );
+                    if prepared_extraction_version.is_some() {
+                        table_writer.write_entry::<u16>(2);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_source_lsn) =
+                                prepared_source_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_source_lsn);
+                            }
+                            if let ::core::option::Option::Some(prepared_previous_chunked_lsn) =
+                                prepared_previous_chunked_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_previous_chunked_lsn);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_document_id);
+                            object_writer.write::<_, _, 4>(&prepared_chunker_id);
+                            if let ::core::option::Option::Some(prepared_token_budget) =
+                                prepared_token_budget
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_token_budget);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_chunks);
+                            if let ::core::option::Option::Some(prepared_extraction_version) =
+                                prepared_extraction_version
+                            {
+                                object_writer.write::<_, _, 2>(&prepared_extraction_version);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<DocumentChunked>> for DocumentChunked {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunked> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<DocumentChunked>> for DocumentChunked {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentChunked>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<DocumentChunked> for DocumentChunked {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunked> {
+                    DocumentChunked::create(
+                        builder,
+                        &self.document_id,
+                        self.source_lsn,
+                        self.extraction_version,
+                        &self.chunker_id,
+                        self.token_budget,
+                        self.previous_chunked_lsn,
+                        &self.chunks,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [DocumentChunked] type.
+            ///
+            /// Can be created using the [DocumentChunked::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct DocumentChunkedBuilder<State>(State);
+
+            impl DocumentChunkedBuilder<()> {
+                /// Setter for the [`document_id` field](DocumentChunked#structfield.document_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn document_id<T0>(self, value: T0) -> DocumentChunkedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    DocumentChunkedBuilder((value,))
+                }
+            }
+
+            impl<T0> DocumentChunkedBuilder<(T0,)> {
+                /// Setter for the [`source_lsn` field](DocumentChunked#structfield.source_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_lsn<T1>(self, value: T1) -> DocumentChunkedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0,) = self.0;
+                    DocumentChunkedBuilder((v0, value))
+                }
+
+                /// Sets the [`source_lsn` field](DocumentChunked#structfield.source_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_lsn_as_default(
+                    self,
+                ) -> DocumentChunkedBuilder<(T0, ::planus::DefaultValue)> {
+                    self.source_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> DocumentChunkedBuilder<(T0, T1)> {
+                /// Setter for the [`extraction_version` field](DocumentChunked#structfield.extraction_version).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn extraction_version<T2>(
+                    self,
+                    value: T2,
+                ) -> DocumentChunkedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<u16, u16>,
+                {
+                    let (v0, v1) = self.0;
+                    DocumentChunkedBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`extraction_version` field](DocumentChunked#structfield.extraction_version) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn extraction_version_as_default(
+                    self,
+                ) -> DocumentChunkedBuilder<(T0, T1, ::planus::DefaultValue)> {
+                    self.extraction_version(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> DocumentChunkedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`chunker_id` field](DocumentChunked#structfield.chunker_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn chunker_id<T3>(self, value: T3) -> DocumentChunkedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    DocumentChunkedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> DocumentChunkedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`token_budget` field](DocumentChunked#structfield.token_budget).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn token_budget<T4>(
+                    self,
+                    value: T4,
+                ) -> DocumentChunkedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    DocumentChunkedBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`token_budget` field](DocumentChunked#structfield.token_budget) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn token_budget_as_default(
+                    self,
+                ) -> DocumentChunkedBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)>
+                {
+                    self.token_budget(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> DocumentChunkedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`previous_chunked_lsn` field](DocumentChunked#structfield.previous_chunked_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn previous_chunked_lsn<T5>(
+                    self,
+                    value: T5,
+                ) -> DocumentChunkedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    DocumentChunkedBuilder((v0, v1, v2, v3, v4, value))
+                }
+
+                /// Sets the [`previous_chunked_lsn` field](DocumentChunked#structfield.previous_chunked_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn previous_chunked_lsn_as_default(
+                    self,
+                ) -> DocumentChunkedBuilder<(T0, T1, T2, T3, T4, ::planus::DefaultValue)>
+                {
+                    self.previous_chunked_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> DocumentChunkedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`chunks` field](DocumentChunked#structfield.chunks).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn chunks<T6>(
+                    self,
+                    value: T6,
+                ) -> DocumentChunkedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::DocumentChunk>]>,
+                    >,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    DocumentChunkedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> DocumentChunkedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [DocumentChunked].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunked>
+                where
+                    Self: ::planus::WriteAsOffset<DocumentChunked>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u16, u16>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::DocumentChunk>]>>,
+                > ::planus::WriteAs<::planus::Offset<DocumentChunked>>
+                for DocumentChunkedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<DocumentChunked>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunked> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u16, u16>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::DocumentChunk>]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<DocumentChunked>>
+                for DocumentChunkedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<DocumentChunked>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<DocumentChunked>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u16, u16>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::DocumentChunk>]>>,
+                > ::planus::WriteAsOffset<DocumentChunked>
+                for DocumentChunkedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<DocumentChunked> {
+                    let (v0, v1, v2, v3, v4, v5, v6) = &self.0;
+                    DocumentChunked::create(builder, v0, v1, v2, v3, v4, v5, v6)
+                }
+            }
+
+            /// Reference to a deserialized [DocumentChunked].
+            #[derive(Copy, Clone)]
+            pub struct DocumentChunkedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> DocumentChunkedRef<'a> {
+                /// Getter for the [`document_id` field](DocumentChunked#structfield.document_id).
+                #[inline]
+                pub fn document_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "DocumentChunked", "document_id")
+                }
+
+                /// Getter for the [`source_lsn` field](DocumentChunked#structfield.source_lsn).
+                #[inline]
+                pub fn source_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(1, "DocumentChunked", "source_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`extraction_version` field](DocumentChunked#structfield.extraction_version).
+                #[inline]
+                pub fn extraction_version(&self) -> ::planus::Result<u16> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "DocumentChunked", "extraction_version")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`chunker_id` field](DocumentChunked#structfield.chunker_id).
+                #[inline]
+                pub fn chunker_id(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(3, "DocumentChunked", "chunker_id")
+                }
+
+                /// Getter for the [`token_budget` field](DocumentChunked#structfield.token_budget).
+                #[inline]
+                pub fn token_budget(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "DocumentChunked", "token_budget")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`previous_chunked_lsn` field](DocumentChunked#structfield.previous_chunked_lsn).
+                #[inline]
+                pub fn previous_chunked_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(5, "DocumentChunked", "previous_chunked_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`chunks` field](DocumentChunked#structfield.chunks).
+                #[inline]
+                pub fn chunks(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<self::DocumentChunkRef<'a>>>,
+                > {
+                    self.0.access_required(6, "DocumentChunked", "chunks")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for DocumentChunkedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("DocumentChunkedRef");
+                    f.field("document_id", &self.document_id());
+                    f.field("source_lsn", &self.source_lsn());
+                    f.field("extraction_version", &self.extraction_version());
+                    f.field("chunker_id", &self.chunker_id());
+                    f.field("token_budget", &self.token_budget());
+                    f.field("previous_chunked_lsn", &self.previous_chunked_lsn());
+                    f.field("chunks", &self.chunks());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<DocumentChunkedRef<'a>> for DocumentChunked {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: DocumentChunkedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        document_id: value.document_id()?.to_vec(),
+                        source_lsn: ::core::convert::TryInto::try_into(value.source_lsn()?)?,
+                        extraction_version: ::core::convert::TryInto::try_into(
+                            value.extraction_version()?,
+                        )?,
+                        chunker_id: ::core::convert::Into::into(value.chunker_id()?),
+                        token_budget: ::core::convert::TryInto::try_into(value.token_budget()?)?,
+                        previous_chunked_lsn: ::core::convert::TryInto::try_into(
+                            value.previous_chunked_lsn()?,
+                        )?,
+                        chunks: value.chunks()?.to_vec_result()?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for DocumentChunkedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for DocumentChunkedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[DocumentChunkedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<DocumentChunked>> for DocumentChunked {
+                type Value = ::planus::Offset<DocumentChunked>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<DocumentChunked>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for DocumentChunkedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[DocumentChunkedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:487`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:541`
             #[derive(
                 Clone,
                 Debug,
@@ -29836,6 +33213,15 @@ mod root {
 
                 /// The variant of type `VocabularyImported` in the union `EventPayload`
                 VocabularyImported(::planus::alloc::boxed::Box<self::VocabularyImported>),
+
+                /// The variant of type `DocumentIngested` in the union `EventPayload`
+                DocumentIngested(::planus::alloc::boxed::Box<self::DocumentIngested>),
+
+                /// The variant of type `DocumentExtracted` in the union `EventPayload`
+                DocumentExtracted(::planus::alloc::boxed::Box<self::DocumentExtracted>),
+
+                /// The variant of type `DocumentChunked` in the union `EventPayload`
+                DocumentChunked(::planus::alloc::boxed::Box<self::DocumentChunked>),
             }
 
             impl EventPayload {
@@ -30196,6 +33582,30 @@ mod root {
                 ) -> ::planus::UnionOffset<Self> {
                     ::planus::UnionOffset::new(44, value.prepare(builder).downcast())
                 }
+
+                #[inline]
+                pub fn create_document_ingested(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::DocumentIngested>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(45, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_document_extracted(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::DocumentExtracted>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(46, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_document_chunked(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::DocumentChunked>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(47, value.prepare(builder).downcast())
+                }
             }
 
             impl ::planus::WriteAsUnion<EventPayload> for EventPayload {
@@ -30267,6 +33677,15 @@ mod root {
                         }
                         Self::VocabularyImported(value) => {
                             Self::create_vocabulary_imported(builder, value)
+                        }
+                        Self::DocumentIngested(value) => {
+                            Self::create_document_ingested(builder, value)
+                        }
+                        Self::DocumentExtracted(value) => {
+                            Self::create_document_extracted(builder, value)
+                        }
+                        Self::DocumentChunked(value) => {
+                            Self::create_document_chunked(builder, value)
                         }
                     }
                 }
@@ -30811,6 +34230,42 @@ mod root {
                 ) -> EventPayloadBuilder<::planus::Initialized<44, T>>
                 where
                     T: ::planus::WriteAsOffset<self::VocabularyImported>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`DocumentIngested` variant](EventPayload#variant.DocumentIngested).
+                #[inline]
+                pub fn document_ingested<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<45, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::DocumentIngested>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`DocumentExtracted` variant](EventPayload#variant.DocumentExtracted).
+                #[inline]
+                pub fn document_extracted<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<46, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::DocumentExtracted>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`DocumentChunked` variant](EventPayload#variant.DocumentChunked).
+                #[inline]
+                pub fn document_chunked<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<47, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::DocumentChunked>,
                 {
                     EventPayloadBuilder(::planus::Initialized(value))
                 }
@@ -31974,6 +35429,84 @@ mod root {
                     ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
                 }
             }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<45, T>>
+            where
+                T: ::planus::WriteAsOffset<self::DocumentIngested>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(45, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<45, T>>
+            where
+                T: ::planus::WriteAsOffset<self::DocumentIngested>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<46, T>>
+            where
+                T: ::planus::WriteAsOffset<self::DocumentExtracted>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(46, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<46, T>>
+            where
+                T: ::planus::WriteAsOffset<self::DocumentExtracted>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<47, T>>
+            where
+                T: ::planus::WriteAsOffset<self::DocumentChunked>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(47, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<47, T>>
+            where
+                T: ::planus::WriteAsOffset<self::DocumentChunked>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
 
             /// Reference to a deserialized [EventPayload].
             #[derive(Copy, Clone, Debug)]
@@ -32022,6 +35555,9 @@ mod root {
                 ProcedureRevised(self::ProcedureRevisedRef<'a>),
                 ProcedureAdopted(self::ProcedureAdoptedRef<'a>),
                 VocabularyImported(self::VocabularyImportedRef<'a>),
+                DocumentIngested(self::DocumentIngestedRef<'a>),
+                DocumentExtracted(self::DocumentExtractedRef<'a>),
+                DocumentChunked(self::DocumentChunkedRef<'a>),
             }
 
             impl<'a> ::core::convert::TryFrom<EventPayloadRef<'a>> for EventPayload {
@@ -32292,6 +35828,24 @@ mod root {
                                 ::core::convert::TryFrom::try_from(value)?,
                             ))
                         }
+
+                        EventPayloadRef::DocumentIngested(value) => {
+                            Self::DocumentIngested(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::DocumentExtracted(value) => {
+                            Self::DocumentExtracted(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::DocumentChunked(value) => {
+                            Self::DocumentChunked(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
                     })
                 }
             }
@@ -32435,6 +35989,15 @@ mod root {
                         44 => ::core::result::Result::Ok(Self::VocabularyImported(
                             ::planus::TableRead::from_buffer(buffer, field_offset)?,
                         )),
+                        45 => ::core::result::Result::Ok(Self::DocumentIngested(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        46 => ::core::result::Result::Ok(Self::DocumentExtracted(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        47 => ::core::result::Result::Ok(Self::DocumentChunked(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
                         _ => ::core::result::Result::Err(
                             ::planus::errors::ErrorKind::UnknownUnionTag { tag },
                         ),
@@ -32449,7 +36012,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:534`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:591`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]

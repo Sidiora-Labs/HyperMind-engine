@@ -60,13 +60,16 @@ pub enum EventKind {
     ProcedureRevised = 42,
     ProcedureAdopted = 43,
     VocabularyImported = 44,
+    DocumentIngested = 45,
+    DocumentExtracted = 46,
+    DocumentChunked = 47,
 }
 
 impl TryFrom<u8> for EventKind {
     type Error = Error;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
-        const KINDS: [EventKind; 44] = [
+        const KINDS: [EventKind; 47] = [
             EventKind::UserMsg,
             EventKind::DeliveredMsg,
             EventKind::ToolCall,
@@ -111,6 +114,9 @@ impl TryFrom<u8> for EventKind {
             EventKind::ProcedureRevised,
             EventKind::ProcedureAdopted,
             EventKind::VocabularyImported,
+            EventKind::DocumentIngested,
+            EventKind::DocumentExtracted,
+            EventKind::DocumentChunked,
         ];
         let index = usize::from(value.saturating_sub(1));
         if value == 0 {

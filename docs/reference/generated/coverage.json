@@ -2457,6 +2457,16 @@
       "file": "schemas/events.fbs"
     },
     {
+      "id": "schema:schemas/events.fbs:DocumentCut",
+      "name": "events.fbs::DocumentCut",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:DocumentChange",
+      "name": "events.fbs::DocumentChange",
+      "file": "schemas/events.fbs"
+    },
+    {
       "id": "schema:schemas/events.fbs:Retention",
       "name": "events.fbs::Retention",
       "file": "schemas/events.fbs"
@@ -2814,6 +2824,31 @@
     {
       "id": "schema:schemas/events.fbs:VocabularyImported",
       "name": "events.fbs::VocabularyImported",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:DocumentPageSpan",
+      "name": "events.fbs::DocumentPageSpan",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:DocumentIngested",
+      "name": "events.fbs::DocumentIngested",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:DocumentExtracted",
+      "name": "events.fbs::DocumentExtracted",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:DocumentChunk",
+      "name": "events.fbs::DocumentChunk",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:DocumentChunked",
+      "name": "events.fbs::DocumentChunked",
       "file": "schemas/events.fbs"
     },
     {

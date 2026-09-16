@@ -1764,6 +1764,7 @@ pub enum IngestSource {
     Kernel,
     ExternalFeed,
     Derived,
+    Document,
     Memory(String),
 }
 ```
@@ -4724,6 +4725,9 @@ pub enum EventKind {
     ProcedureRevised = 42,
     ProcedureAdopted = 43,
     VocabularyImported = 44,
+    DocumentIngested = 45,
+    DocumentExtracted = 46,
+    DocumentChunked = 47,
 }
 ```
 
@@ -8749,6 +8753,9 @@ pub enum EventKind {
     ProcedureRevised = 42,
     ProcedureAdopted = 43,
     VocabularyImported = 44,
+    DocumentIngested = 45,
+    DocumentExtracted = 46,
+    DocumentChunked = 47,
 }
 ```
 

@@ -9,7 +9,7 @@ enum AssertionClaim : ubyte { affirmative, negative_existence }
 enum AttestationDisposition : ubyte { used, ignored, helpful, harmful }
 enum MemoryFadeReason : ubyte { low_retrievability, superseded, explicit }
 enum ReviewRating : ubyte { again, hard, good, easy }
-enum ConsolidationPhaseName : ubyte { nrem, connect, abstract, hindsight, review, publish }
+enum ConsolidationPhaseName : ubyte { nrem, connect, abstract, hindsight, review, publish, extract }
 enum ConsolidationPhaseState : ubyte { started, completed, aborted }
 enum Authority : ubyte {
   user_asserted,
@@ -19,6 +19,8 @@ enum Authority : ubyte {
   assistant_generated,
   derived_inference
 }
+enum DocumentCut : ubyte { paragraph_end, paragraph_cut, row_end, row_cut }
+enum DocumentChange : ubyte { retained, moved, replaced, added }
 enum Retention : ubyte { current_state, daily, durable, do_not_store }
 enum Sensitivity : ubyte { public, personal, secret }
 
@@ -484,6 +486,58 @@ table VocabularyImported {
   ignored_triples:uint;
 }
 
+table DocumentPageSpan {
+  page_number:uint;
+  byte_start:uint;
+  byte_end:uint;
+}
+
+table DocumentIngested {
+  document_id:[ubyte] (required);
+  name:string (required);
+  media_type:string (required);
+  content:[ubyte] (required);
+  content_digest:[ubyte] (required);
+}
+
+table DocumentExtracted {
+  document_id:[ubyte] (required);
+  source_lsn:ulong;
+  loader_id:string (required);
+  extraction_version:ushort;
+  text:[ubyte] (required);
+  text_digest:[ubyte] (required);
+  page_spans:[DocumentPageSpan] (required);
+  partial_reason:string;
+  failed_units:[uint];
+}
+
+table DocumentChunk {
+  chunk_id:[ubyte] (required);
+  content_hash:[ubyte] (required);
+  occurrence:uint;
+  ordinal:uint;
+  byte_start:uint;
+  byte_end:uint;
+  cut:DocumentCut;
+  change:DocumentChange;
+  page_number:uint;
+  row_index:uint;
+  column_start:uint;
+  column_end:uint;
+  token_estimate:uint;
+}
+
+table DocumentChunked {
+  document_id:[ubyte] (required);
+  source_lsn:ulong;
+  extraction_version:ushort;
+  chunker_id:string (required);
+  token_budget:uint;
+  previous_chunked_lsn:ulong;
+  chunks:[DocumentChunk] (required);
+}
+
 union EventPayload {
   UserMsg,
   DeliveredMsg,
@@ -528,7 +582,10 @@ union EventPayload {
   ProcedureMined,
   ProcedureRevised,
   ProcedureAdopted,
-  VocabularyImported
+  VocabularyImported,
+  DocumentIngested,
+  DocumentExtracted,
+  DocumentChunked
 }
 
 table EventEnvelope {
