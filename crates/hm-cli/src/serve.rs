@@ -29,6 +29,8 @@ pub(crate) struct RemoteOptions {
     tls_client_ca: Option<PathBuf>,
     #[arg(long, group = "tls_source", conflicts_with_all = ["tls_cert", "tls_key", "tls_client_ca"])]
     tls_from_env: bool,
+    #[arg(long, requires = "rest_bind")]
+    console_directory: Option<PathBuf>,
 }
 
 impl RemoteOptions {
@@ -107,11 +109,18 @@ pub(crate) async fn run(
             (options.rest_admin_bind, ListenerRole::Admin),
         ] {
             if let Some(address) = address {
-                rest.push(
+                let console = options
+                    .console_directory
+                    .clone()
+                    .filter(|_| role == ListenerRole::Actor);
+                let mut server =
                     RestServer::bind(address, Gateway::new(config.clone(), role), tls.clone())
                         .await
-                        .map_err(anyhow::Error::from_boxed)?,
-                );
+                        .map_err(anyhow::Error::from_boxed)?;
+                if let Some(directory) = console {
+                    server = server.with_console_directory(directory);
+                }
+                rest.push(server);
             }
         }
     }
@@ -201,5 +210,34 @@ mod tests {
             env.extend(["--tls-key", "server.key"]);
             assert!(crate::Cli::try_parse_from(env).is_err());
         }
+    }
+
+    #[test]
+    fn console_directory_requires_rest_bind() {
+        assert!(
+            crate::Cli::try_parse_from([
+                "hm",
+                "serve",
+                "--config",
+                "hypermind.conf",
+                "--rest-bind",
+                "127.0.0.1:0",
+                "--tls-from-env",
+                "--console-directory",
+                "/tmp/site",
+            ])
+            .is_ok()
+        );
+        assert!(
+            crate::Cli::try_parse_from([
+                "hm",
+                "serve",
+                "--config",
+                "hypermind.conf",
+                "--console-directory",
+                "/tmp/site",
+            ])
+            .is_err()
+        );
     }
 }

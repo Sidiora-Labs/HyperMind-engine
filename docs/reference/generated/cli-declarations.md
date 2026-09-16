@@ -309,5 +309,7 @@ pub(crate) struct RemoteOptions {
     tls_client_ca: Option<PathBuf>,
     #[arg(long, group = "tls_source", conflicts_with_all = ["tls_cert", "tls_key", "tls_client_ca"])]
     tls_from_env: bool,
+    #[arg(long, requires = "rest_bind")]
+    console_directory: Option<PathBuf>,
 }
 ```

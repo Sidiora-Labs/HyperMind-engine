@@ -21,6 +21,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::future::Future;
 use std::net::SocketAddr;
+use std::path::{Path as FilePath, PathBuf};
 use std::sync::Arc;
 use tokio::net::TcpListener;
 use tokio::sync::{Semaphore, watch};
@@ -43,6 +44,16 @@ pub const VERBS: [&str; 14] = [
     "inspect",
     "forget",
 ];
+
+pub const CONSOLE_ASSET_TYPES: [(&str, &str); 5] = [
+    ("html", "text/html; charset=utf-8"),
+    ("js", "text/javascript; charset=utf-8"),
+    ("css", "text/css; charset=utf-8"),
+    ("json", "application/json"),
+    ("svg", "image/svg+xml"),
+];
+
+pub const MAXIMUM_CONSOLE_ASSET_BYTES: u64 = 4 * 1024 * 1024;
 
 #[derive(Clone, Deserialize, Serialize, utoipa::ToSchema)]
 pub struct ToolCall {
@@ -127,6 +138,13 @@ pub struct RestServer {
     listener: TcpListener,
     gateway: Gateway,
     acceptor: TlsAcceptor,
+    console_directory: Option<PathBuf>,
+}
+
+#[derive(Clone)]
+struct ConsoleState {
+    directory: Option<Arc<PathBuf>>,
+    role: ListenerRole,
 }
 
 impl RestServer {
@@ -141,7 +159,14 @@ impl RestServer {
             listener,
             gateway,
             acceptor,
+            console_directory: None,
         })
+    }
+
+    #[must_use]
+    pub fn with_console_directory(mut self, directory: PathBuf) -> Self {
+        self.console_directory = Some(directory);
+        self
     }
 
     pub fn local_addr(&self) -> std::io::Result<SocketAddr> {
@@ -153,6 +178,13 @@ impl RestServer {
         shutdown: impl Future<Output = ()> + Send + 'static,
     ) -> Result<(), std::io::Error> {
         let limit = Arc::new(Semaphore::new(self.gateway.config.maximum_connections));
+        let console = Router::new()
+            .route("/console", get(console_index))
+            .route("/console/{file}", get(console_asset))
+            .with_state(ConsoleState {
+                directory: self.console_directory.map(Arc::new),
+                role: self.gateway.role,
+            });
         let app = Router::new()
             .route("/v1/{verb}", post(tool))
             .route("/v1/admin/{verb}", post(admin))
@@ -166,8 +198,9 @@ impl RestServer {
                     )
                 }),
             )
-            .layer(DefaultBodyLimit::max(MAXIMUM_QUERY_BYTES + 4096))
-            .with_state(self.gateway);
+            .with_state(self.gateway)
+            .merge(console)
+            .layer(DefaultBodyLimit::max(MAXIMUM_QUERY_BYTES + 4096));
         let (stop, stopped) = watch::channel(false);
         let mut tasks = tokio::task::JoinSet::new();
         tokio::pin!(shutdown);
@@ -508,4 +541,61 @@ fn error_envelope(message: &str, mutation: bool, effect: &str) -> ToolEnvelope {
 
 fn failure(status: StatusCode, message: &str, mutation: bool, effect: &str) -> Response {
     (status, Json(error_envelope(message, mutation, effect))).into_response()
+}
+
+async fn console_index(State(state): State<ConsoleState>) -> Response {
+    console_response(&state, "index.html").await
+}
+
+async fn console_asset(State(state): State<ConsoleState>, Path(file): Path<String>) -> Response {
+    console_response(&state, &file).await
+}
+
+async fn console_response(state: &ConsoleState, name: &str) -> Response {
+    if state.role != ListenerRole::Actor {
+        return StatusCode::FORBIDDEN.into_response();
+    }
+    let (Some(directory), Some(content_type)) =
+        (state.directory.as_ref(), console_asset_name(name))
+    else {
+        return StatusCode::NOT_FOUND.into_response();
+    };
+    let path = directory.join(name);
+    let Ok(Some(bytes)) = tokio::task::spawn_blocking(move || console_bytes(&path)).await else {
+        return StatusCode::NOT_FOUND.into_response();
+    };
+    (
+        [
+            (axum::http::header::CONTENT_TYPE, content_type),
+            (axum::http::header::CACHE_CONTROL, "no-store"),
+        ],
+        bytes,
+    )
+        .into_response()
+}
+
+fn console_asset_name(name: &str) -> Option<&'static str> {
+    let (stem, extension) = name.rsplit_once('.')?;
+    if stem.is_empty() || stem.len() > 64 {
+        return None;
+    }
+    let mut bytes = stem.bytes();
+    if !bytes.next()?.is_ascii_lowercase() {
+        return None;
+    }
+    if !bytes.all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'-') {
+        return None;
+    }
+    CONSOLE_ASSET_TYPES
+        .iter()
+        .find(|(suffix, _)| *suffix == extension)
+        .map(|(_, content_type)| *content_type)
+}
+
+fn console_bytes(path: &FilePath) -> Option<Vec<u8>> {
+    let metadata = std::fs::metadata(path).ok()?;
+    if !metadata.is_file() || metadata.len() > MAXIMUM_CONSOLE_ASSET_BYTES {
+        return None;
+    }
+    std::fs::read(path).ok()
 }

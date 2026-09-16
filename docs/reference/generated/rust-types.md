@@ -11457,6 +11457,7 @@ pub struct RestServer {
     listener: TcpListener,
     gateway: Gateway,
     acceptor: TlsAcceptor,
+    console_directory: Option<PathBuf>,
 }
 ```
 
