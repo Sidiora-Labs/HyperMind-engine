@@ -14,6 +14,7 @@ pub struct ProtectedResult {
     pub surfaced_proposals: usize,
 }
 
+#[allow(clippy::too_many_lines)]
 pub async fn run() -> Result<ProtectedResult, Error> {
     let temporary = tempfile::tempdir().map_err(|_| Error::new(ErrorCode::OpenFailed))?;
     let actor = open_actor(temporary.path()).await?;

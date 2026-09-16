@@ -8,3 +8,4 @@ pub mod longmemeval;
 pub mod ordering;
 pub mod pipeline;
 pub mod rubric;
+pub mod sweep;

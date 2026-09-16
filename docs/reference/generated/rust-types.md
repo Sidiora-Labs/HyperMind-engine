@@ -6073,6 +6073,100 @@ pub struct GradeSummary {
 }
 ```
 
+## hm-eval::RetrievalVariant
+
+<a id="rust-crates-hm-eval-src-bench-sweep-rs-retrievalvariant"></a>
+
+Source: [`crates/hm-eval/src/bench/sweep.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/sweep.rs).
+
+When to use: Use `RetrievalVariant` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct RetrievalVariant {
+    pub name: String,
+    pub lexical_limit: usize,
+    pub minimum_term_overlap: f64,
+    pub session_cap: usize,
+    pub recency_weight: f64,
+}
+```
+
+## hm-eval::ProbeOutcome
+
+<a id="rust-crates-hm-eval-src-bench-sweep-rs-probeoutcome"></a>
+
+Source: [`crates/hm-eval/src/bench/sweep.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/sweep.rs).
+
+When to use: Use `ProbeOutcome` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ProbeOutcome {
+    pub probe_id: String,
+    pub kind: ProbeKind,
+    pub evidence_expected: usize,
+    pub evidence_retrieved: usize,
+    pub first_evidence_rank: Option<usize>,
+    pub hits: usize,
+}
+```
+
+## hm-eval::VariantSummary
+
+<a id="rust-crates-hm-eval-src-bench-sweep-rs-variantsummary"></a>
+
+Source: [`crates/hm-eval/src/bench/sweep.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/sweep.rs).
+
+When to use: Use `VariantSummary` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct VariantSummary {
+    pub name: String,
+    pub identity: String,
+    pub changed_field: Option<String>,
+    pub baseline_value: String,
+    pub variant_value: String,
+    pub probes: usize,
+    pub evidence_recall: f64,
+    pub mean_reciprocal_rank: f64,
+    pub delta_evidence_recall: f64,
+    pub delta_mean_reciprocal_rank: f64,
+    pub outcomes: Vec<ProbeOutcome>,
+}
+```
+
+## hm-eval::SweepReport
+
+<a id="rust-crates-hm-eval-src-bench-sweep-rs-sweepreport"></a>
+
+Source: [`crates/hm-eval/src/bench/sweep.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/sweep.rs).
+
+When to use: Use `SweepReport` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct SweepReport {
+    pub format: String,
+    pub probe_set_digest: String,
+    pub judge_free: bool,
+    pub encoder: String,
+    pub baseline: VariantSummary,
+    pub variants: Vec<VariantSummary>,
+    pub improved: Vec<String>,
+    pub regressed: Vec<String>,
+}
+```
+
 ## hm-eval::ContractDaemon
 
 <a id="rust-crates-hm-eval-src-contract-daemon-rs-contractdaemon"></a>

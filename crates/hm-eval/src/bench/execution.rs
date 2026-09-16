@@ -1,6 +1,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use super::gateway::{DynError, Gateway, JUDGE_MODEL, MAXIMUM_BUDGET_MICROUSD, READER_MODEL};
+use super::sweep::{self, RetrievalVariant};
 use super::{beam, beam_run, judge_diagnostic, locomo, longmemeval};
 use std::path::{Path, PathBuf};
 
@@ -112,6 +113,54 @@ pub async fn adapt_beam(artifact: Option<&str>) -> Result<(), DynError> {
             "source_digest": set.source_digest,
             "conversations": set.conversations.len(),
             "probes": set.conversations.iter().map(|conversation| conversation.probes.len()).sum::<usize>(),
+        }))?
+    );
+    Ok(())
+}
+
+pub async fn retrieval_sweep() -> Result<(), DynError> {
+    let (set, fixture) = beam_run::load_or_fixture()?;
+    let baseline = RetrievalVariant::baseline();
+    let variants = vec![
+        RetrievalVariant {
+            name: "wide-lexical".to_owned(),
+            lexical_limit: 64,
+            ..RetrievalVariant::baseline()
+        },
+        RetrievalVariant {
+            name: "overlap-floor".to_owned(),
+            minimum_term_overlap: 0.25,
+            ..RetrievalVariant::baseline()
+        },
+        RetrievalVariant {
+            name: "recency-tilt".to_owned(),
+            recency_weight: 0.25,
+            ..RetrievalVariant::baseline()
+        },
+    ];
+    let root = repository_root();
+    let report = sweep::run(
+        &set,
+        &baseline,
+        &variants,
+        &root.join("eval/datasets/beam/sweep"),
+    )
+    .await?;
+    let output = root.join("eval/results/retrieval-sweep.json");
+    let value = serde_json::to_value(&report)?;
+    super::gateway::write_json(&output, &value)?;
+    println!(
+        "{}",
+        serde_json::to_string(&serde_json::json!({
+            "report": output.display().to_string(),
+            "probe_set_digest": report.probe_set_digest,
+            "fixture_probe_set": fixture,
+            "judge_free": report.judge_free,
+            "encoder": report.encoder,
+            "baseline": report.baseline.name,
+            "variants": report.variants.iter().map(|variant| variant.name.clone()).collect::<Vec<_>>(),
+            "improved": report.improved,
+            "regressed": report.regressed,
         }))?
     );
     Ok(())

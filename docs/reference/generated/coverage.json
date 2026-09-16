@@ -1462,6 +1462,26 @@
       "file": "crates/hm-eval/src/bench/rubric.rs"
     },
     {
+      "id": "rust:crates/hm-eval/src/bench/sweep.rs:RetrievalVariant",
+      "name": "hm-eval::RetrievalVariant",
+      "file": "crates/hm-eval/src/bench/sweep.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/sweep.rs:ProbeOutcome",
+      "name": "hm-eval::ProbeOutcome",
+      "file": "crates/hm-eval/src/bench/sweep.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/sweep.rs:VariantSummary",
+      "name": "hm-eval::VariantSummary",
+      "file": "crates/hm-eval/src/bench/sweep.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/sweep.rs:SweepReport",
+      "name": "hm-eval::SweepReport",
+      "file": "crates/hm-eval/src/bench/sweep.rs"
+    },
+    {
       "id": "rust:crates/hm-eval/src/contract/daemon.rs:ContractDaemon",
       "name": "hm-eval::ContractDaemon",
       "file": "crates/hm-eval/src/contract/daemon.rs"
