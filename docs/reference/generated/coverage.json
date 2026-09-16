@@ -5597,6 +5597,66 @@
       "file": "sdk/typescript/packages/console/src/errors.ts"
     },
     {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:EvidenceIntegrity",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::EvidenceIntegrity",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:EvidenceStep",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::EvidenceStep",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:EvidencePathView",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::EvidencePathView",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:EvidenceClass",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::EvidenceClass",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:AnswerLookupCounts",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::AnswerLookupCounts",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:AnswerLookupAnswer",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::AnswerLookupAnswer",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:AnswerLookupView",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::AnswerLookupView",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:buildEvidencePath",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::buildEvidencePath",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:classifyEvidence",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::classifyEvidence",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:buildAnswerLookup",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::buildAnswerLookup",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:renderEvidencePath",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::renderEvidencePath",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/evidence.ts:renderAnswerLookup",
+      "name": "sdk/typescript/packages/console/src/evidence.ts::renderAnswerLookup",
+      "file": "sdk/typescript/packages/console/src/evidence.ts"
+    },
+    {
       "id": "sdk:sdk/typescript/packages/console/src/html.ts:escapeText",
       "name": "sdk/typescript/packages/console/src/html.ts::escapeText",
       "file": "sdk/typescript/packages/console/src/html.ts"

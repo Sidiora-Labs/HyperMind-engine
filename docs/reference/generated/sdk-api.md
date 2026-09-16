@@ -4303,6 +4303,186 @@ Do not use: Do not substitute unchecked request objects, discard provenance, or 
 constructor(surface: string, field: string, detail?: string) {
 ```
 
+## sdk/typescript/packages/console/src/evidence.ts::EvidenceIntegrity
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-evidenceintegrity"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use Evidence Integrity through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface EvidenceIntegrity {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::EvidenceStep
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-evidencestep"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use Evidence Step through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface EvidenceStep {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::EvidencePathView
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-evidencepathview"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use Evidence Path View through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface EvidencePathView {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::EvidenceClass
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-evidenceclass"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use Evidence Class through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface EvidenceClass {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::AnswerLookupCounts
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-answerlookupcounts"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use Answer Lookup Counts through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface AnswerLookupCounts {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::AnswerLookupAnswer
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-answerlookupanswer"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use Answer Lookup Answer through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface AnswerLookupAnswer {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::AnswerLookupView
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-answerlookupview"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use Answer Lookup View through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface AnswerLookupView {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::buildEvidencePath
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-buildevidencepath"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use build Evidence Path through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function buildEvidencePath(envelope: ConsoleEnvelope): EvidencePathView {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::classifyEvidence
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-classifyevidence"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use classify Evidence through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function classifyEvidence(manifest: ConsoleManifest, evidence: AnswerLookupView[]): EvidenceClass[] {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::buildAnswerLookup
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-buildanswerlookup"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use build Answer Lookup through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function buildAnswerLookup(envelope: ConsoleEnvelope): AnswerLookupView {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::renderEvidencePath
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-renderevidencepath"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use render Evidence Path through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderEvidencePath(view: EvidencePathView): string {
+```
+
+## sdk/typescript/packages/console/src/evidence.ts::renderAnswerLookup
+
+<a id="sdk-sdk-typescript-packages-console-src-evidence-ts-renderanswerlookup"></a>
+
+Source: [`sdk/typescript/packages/console/src/evidence.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/evidence.ts).
+
+When to use: Use render Answer Lookup through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderAnswerLookup(view: AnswerLookupView): string {
+```
+
 ## sdk/typescript/packages/console/src/html.ts::escapeText
 
 <a id="sdk-sdk-typescript-packages-console-src-html-ts-escapetext"></a>
