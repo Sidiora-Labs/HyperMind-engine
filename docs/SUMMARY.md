@@ -8,6 +8,7 @@
   - [Consolidation](concepts/consolidation.md)
   - [Repository graph](concepts/repository-graph.md)
   - [Documents](concepts/documents.md)
+  - [Source connectors](concepts/connectors.md)
   - [Anticipation](concepts/anticipation.md)
 - [Operations and recovery](guides/operations.md)
   - [Console](guides/console.md)
