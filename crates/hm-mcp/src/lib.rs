@@ -556,8 +556,13 @@ impl McpServer {
         }
         for record in records {
             let (content, authority) = event_content(record.kind, &record.payload)?;
+            let preference = if record.preference_q16 == hm_compose::fusion::Q16_ONE {
+                String::new()
+            } else {
+                format!("&pref={}", record.preference_q16)
+            };
             let uri = format!(
-                "hm://{}/{}/{}?at={}&src={}&score={}",
+                "hm://{}/{}/{}?at={}&src={}&score={}{preference}",
                 self.actor.actor(),
                 record.conversation,
                 record.lsn,
@@ -571,6 +576,7 @@ impl McpServer {
                 "content": content,
                 "authority": authority_name(authority),
                 "score_q32": record.score_q32,
+                "preference_q16": record.preference_q16,
                 "uri": uri,
             }));
             envelope.provenance.push(uri);

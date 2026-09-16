@@ -3,6 +3,7 @@
 use crate::anticipation::{self, WakeDecision, WakeEvaluation};
 use hm_compose::bundle::{self, ActivationBundle, ActivationRequest};
 use hm_compose::lanes::relation::{self, RelationHit};
+use hm_compose::preference::{PreferenceProfile, adjust_q32};
 use hm_compose::tokens::{FallbackWeights, TokenCounter};
 use hm_core::telemetry::{Attribute, SpanBuilder, SpanKind, SpanOutcome};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
@@ -20,6 +21,7 @@ use hm_ledger::segment::{AppendRequest, SegmentLog, SegmentLogOptions};
 use hm_ledger::shred::{crypto_shred, encode_deletion_receipt};
 use hm_ledger::tripwire::TripwireSet;
 use hm_proj::attention::{AttentionProjection, AttentionRecord};
+use hm_proj::attestations::{MAXIMUM_PREFERENCE_TARGETS, PREFERENCE_NEUTRAL_Q16};
 use hm_proj::beliefs::{BeliefAsOf, BeliefAsOfResult, BeliefProjection};
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
@@ -103,6 +105,7 @@ pub struct RecallItem {
     pub wall_timestamp_ns: UtcNanos,
     pub payload: Vec<u8>,
     pub score_q32: u64,
+    pub preference_q16: u32,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -1655,7 +1658,14 @@ impl WriterState {
     #[allow(clippy::too_many_lines)]
     fn recall(&self, request: RecallRequest) -> Result<Vec<RecallItem>, Error> {
         let snapshot = self.projections.begin_snapshot()?;
-        match request {
+        let ranked = matches!(
+            &request,
+            RecallRequest::Vector { .. }
+                | RecallRequest::Lexical { .. }
+                | RecallRequest::Entity { .. }
+                | RecallRequest::Near { .. }
+        );
+        let mut items: Vec<RecallItem> = match request {
             RecallRequest::Vector {
                 space_id,
                 query,
@@ -1781,7 +1791,27 @@ impl WriterState {
             .map(|record| recall_item(record, 0))
             .collect()),
             RecallRequest::Relation { .. } => Err(Error::new(ErrorCode::InvalidArgument)),
+        }?;
+        if !ranked || items.is_empty() || items.len() > MAXIMUM_PREFERENCE_TARGETS {
+            return Ok(items);
         }
+        let targets = items.iter().map(|item| item.lsn).collect::<Vec<_>>();
+        let preferences = PreferenceProfile::load(&snapshot, &targets)?;
+        if preferences.is_neutral() {
+            return Ok(items);
+        }
+        for item in &mut items {
+            let weight = preferences.weight_q16(item.lsn);
+            item.score_q32 = adjust_q32(item.score_q32, weight)?;
+            item.preference_q16 = weight;
+        }
+        items.sort_by(|left, right| {
+            right
+                .score_q32
+                .cmp(&left.score_q32)
+                .then_with(|| left.lsn.cmp(&right.lsn))
+        });
+        Ok(items)
     }
 
     fn as_of(
@@ -2108,6 +2138,7 @@ fn recall_item(record: ConversationRecord, score_q32: u64) -> RecallItem {
         wall_timestamp_ns: record.wall_timestamp_ns,
         payload: record.payload,
         score_q32,
+        preference_q16: PREFERENCE_NEUTRAL_Q16,
     }
 }
 

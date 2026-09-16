@@ -11820,6 +11820,7 @@ pub struct RecallItem {
     pub wall_timestamp_ns: UtcNanos,
     pub payload: Vec<u8>,
     pub score_q32: u64,
+    pub preference_q16: u32,
 }
 ```
 
