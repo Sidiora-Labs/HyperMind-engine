@@ -24,10 +24,12 @@ use hm_proj::lexical::LexicalProjection;
 use hm_proj::rebuild::rebuild_projection_stream;
 use hm_proj::store::{ProjectionId, ProjectionStore};
 use hm_proj::timeline::{ConversationRecord, read_conversation_record, read_conversation_records};
+use hm_proj::vectors::{VectorEntry, VectorLane};
 use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{
     Authority, BeliefType, Checkpoint, EventEnvelope, EventPayload, Retention, Sensitivity,
 };
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -87,6 +89,12 @@ pub struct RecallItem {
 
 #[derive(Clone, Debug)]
 pub enum RecallRequest {
+    Vector {
+        space_id: String,
+        query: Vec<i8>,
+        binary_prefilter: Vec<u8>,
+        limit: usize,
+    },
     Semantic {
         query: String,
         limit: usize,
@@ -258,6 +266,8 @@ struct WriterState {
     mmr: MmrStore,
     signing_keys: SigningKeyPair,
     tripwires: TripwireSet,
+    vector_lanes: BTreeMap<String, VectorLane>,
+    vector_digests: BTreeMap<(String, u64), [u8; 32]>,
 }
 
 impl ActorEngine {
@@ -613,6 +623,17 @@ impl WriterState {
             return Err(Error::new(ErrorCode::ProjectionCheckpoint));
         }
         let dedup = DedupTable::rebuild(&plaintext_frames)?;
+        let (vector_lanes, vector_digests) =
+            open_vector_lanes(&config.actor_directory, &plaintext_frames)?;
+        let vector_checkpoint = projections
+            .begin_snapshot()?
+            .checkpoint(ProjectionId::VectorLane)?;
+        for frame in plaintext_frames
+            .iter()
+            .filter(|frame| frame.header.lsn > vector_checkpoint)
+        {
+            projections.apply(ProjectionId::VectorLane, frame.header.lsn, &[])?;
+        }
         Ok(Self {
             config,
             log,
@@ -628,6 +649,8 @@ impl WriterState {
             mmr,
             signing_keys,
             tripwires,
+            vector_lanes,
+            vector_digests,
         })
     }
 
@@ -638,6 +661,8 @@ impl WriterState {
         let first_lsn = self.log.next_lsn().get();
         let mut verified_kinds = self.kinds.clone();
         let mut verified_authorities = self.authorities.clone();
+        let mut batch_vectors = BTreeMap::new();
+        let mut batch_dimensions = BTreeMap::new();
         for (index, incoming) in events.iter().enumerate() {
             let kind = schema_kind(incoming.kind)?;
             let verified = event::verify_event_with_history(
@@ -647,6 +672,30 @@ impl WriterState {
                 &ActorHistory::new(&verified_kinds, &verified_authorities),
             )
             .map_err(|error| error.at_lsn(LSN::new(first_lsn + index as u64)))?;
+            if let EventPayload::Embedding(embedding) = &verified.envelope.payload {
+                if embedding.target_lsn >= first_lsn + index as u64 {
+                    return Err(Error::new(ErrorCode::InvalidArgument));
+                }
+                let key = (embedding.space_id.clone(), embedding.target_lsn);
+                let digest = embedding_digest(embedding);
+                if self
+                    .vector_lanes
+                    .get(&embedding.space_id)
+                    .is_some_and(|lane| lane.dimensions() != embedding.dimension as usize)
+                    || self
+                        .vector_digests
+                        .get(&key)
+                        .is_some_and(|prior| *prior != digest)
+                    || batch_vectors
+                        .insert(key, digest)
+                        .is_some_and(|prior| prior != digest)
+                    || batch_dimensions
+                        .insert(embedding.space_id.clone(), embedding.dimension)
+                        .is_some_and(|prior| prior != embedding.dimension)
+                {
+                    return Err(Error::new(ErrorCode::InvalidArgument));
+                }
+            }
             verified_kinds.push(kind);
             verified_authorities.push(verified.envelope.authority);
         }
@@ -687,6 +736,9 @@ impl WriterState {
         self.mmr.create_checkpoint(&self.signing_keys)?;
         self.plaintext_frames.extend(plaintext.iter().cloned());
         rebuild_projection_stream(&self.projections, &self.plaintext_frames, false, usize::MAX)?;
+        for frame in &plaintext {
+            self.apply_vector_frame(frame)?;
+        }
         for frame in &plaintext {
             self.applied.apply(frame)?;
         }
@@ -848,9 +900,76 @@ impl WriterState {
         }
     }
 
+    fn apply_vector_frame(&mut self, frame: &Frame) -> Result<(), Error> {
+        if frame.header.kind == EventKind::Embedding {
+            let verified = event::verify_event(
+                &frame.sealed_payload,
+                event::EventKind::Embedding,
+                Boundary::Disk,
+            )?;
+            let EventPayload::Embedding(embedding) = verified.envelope.payload else {
+                return Err(Error::new(ErrorCode::InvariantViolation));
+            };
+            let key = (embedding.space_id.clone(), embedding.target_lsn);
+            if !self.vector_digests.contains_key(&key) {
+                if !self.vector_lanes.contains_key(&embedding.space_id) {
+                    let lane = VectorLane::open(
+                        self.config.actor_directory.join("vectors"),
+                        &embedding.space_id,
+                        &embedding.space_id,
+                        embedding.dimension as usize,
+                    )?;
+                    self.vector_lanes.insert(embedding.space_id.clone(), lane);
+                }
+                self.vector_lanes
+                    .get(&embedding.space_id)
+                    .ok_or_else(|| Error::new(ErrorCode::InvariantViolation))?
+                    .append(
+                        LSN::new(embedding.target_lsn),
+                        &embedding.quantized,
+                        &embedding.binary_prefilter,
+                    )?;
+                self.vector_digests
+                    .insert(key, embedding_digest(&embedding));
+            }
+        }
+        self.projections
+            .apply(ProjectionId::VectorLane, frame.header.lsn, &[])
+    }
+
     fn recall(&self, request: RecallRequest) -> Result<Vec<RecallItem>, Error> {
         let snapshot = self.projections.begin_snapshot()?;
         match request {
+            RecallRequest::Vector {
+                space_id,
+                query,
+                binary_prefilter,
+                limit,
+            } => {
+                if limit == 0 || limit > bundle::MAXIMUM_CANDIDATES {
+                    return Err(Error::new(ErrorCode::InvalidArgument));
+                }
+                let lane = self
+                    .vector_lanes
+                    .get(&space_id)
+                    .ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
+                let hits =
+                    lane.search(&query, &binary_prefilter, limit.saturating_mul(4), limit)?;
+                self.tripwires
+                    .guard(hits.iter().map(|hit| hit.target_lsn))?;
+                hits.into_iter()
+                    .filter_map(
+                        |hit| match read_conversation_record(&snapshot, hit.target_lsn) {
+                            Ok(Some(record)) => Some(Ok(recall_item(
+                                record,
+                                u64::try_from(hit.score.max(0)).unwrap_or(0),
+                            ))),
+                            Ok(None) => None,
+                            Err(error) => Some(Err(error)),
+                        },
+                    )
+                    .collect()
+            }
             RecallRequest::Semantic { query, limit } => {
                 let _ = (query, limit);
                 Err(Error::new(ErrorCode::OperationUnavailable))
@@ -1075,6 +1194,76 @@ impl WriterState {
             applied: self.applied,
         })
     }
+}
+
+type VectorState = (
+    BTreeMap<String, VectorLane>,
+    BTreeMap<(String, u64), [u8; 32]>,
+);
+
+fn open_vector_lanes(directory: &Path, frames: &[Frame]) -> Result<VectorState, Error> {
+    let mut entries: BTreeMap<String, Vec<VectorEntry>> = BTreeMap::new();
+    let mut digests = BTreeMap::new();
+    for frame in frames
+        .iter()
+        .filter(|frame| frame.header.kind == EventKind::Embedding)
+    {
+        let verified = event::verify_event(
+            &frame.sealed_payload,
+            event::EventKind::Embedding,
+            Boundary::Disk,
+        )?;
+        let EventPayload::Embedding(embedding) = verified.envelope.payload else {
+            return Err(Error::new(ErrorCode::InvariantViolation));
+        };
+        if embedding.target_lsn >= frame.header.lsn.get() {
+            return Err(Error::new(ErrorCode::VectorIndexCorrupt));
+        }
+        let key = (embedding.space_id.clone(), embedding.target_lsn);
+        let digest = embedding_digest(&embedding);
+        if let Some(prior) = digests.insert(key, digest) {
+            if prior != digest {
+                return Err(Error::new(ErrorCode::VectorIndexCorrupt));
+            }
+            continue;
+        }
+        entries
+            .entry(embedding.space_id)
+            .or_default()
+            .push(VectorEntry {
+                target_lsn: LSN::new(embedding.target_lsn),
+                quantized: embedding.quantized,
+                binary_prefilter: embedding.binary_prefilter,
+            });
+    }
+    let mut lanes = BTreeMap::new();
+    for (space, records) in entries {
+        let dimensions = records
+            .first()
+            .ok_or_else(|| Error::new(ErrorCode::InvariantViolation))?
+            .quantized
+            .len();
+        if records
+            .iter()
+            .any(|record| record.quantized.len() != dimensions)
+        {
+            return Err(Error::new(ErrorCode::VectorIndexCorrupt));
+        }
+        let lane = VectorLane::open(directory.join("vectors"), &space, &space, dimensions)?;
+        lane.replay(&records)?;
+        lanes.insert(space, lane);
+    }
+    Ok((lanes, digests))
+}
+
+fn embedding_digest(embedding: &hm_schema::events::Embedding) -> [u8; 32] {
+    let mut hasher = blake3::Hasher::new();
+    hasher.update(&embedding.dimension.to_le_bytes());
+    for value in &embedding.quantized {
+        hasher.update(&value.to_ne_bytes());
+    }
+    hasher.update(&embedding.binary_prefilter);
+    *hasher.finalize().as_bytes()
 }
 
 fn recall_item(record: ConversationRecord, score_q32: u64) -> RecallItem {

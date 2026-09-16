@@ -2,6 +2,8 @@
 
 pub mod bm25;
 pub mod entity_rules;
+#[cfg(feature = "hnsw")]
+pub mod hnsw;
 pub mod simd;
 pub mod tokenize;
 

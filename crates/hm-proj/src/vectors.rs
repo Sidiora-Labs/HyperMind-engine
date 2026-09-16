@@ -1,11 +1,18 @@
 #![allow(clippy::missing_errors_doc)]
 
+#[cfg(feature = "hnsw")]
+use crate::vectors_hnsw::{HnswProjection, HnswVector};
 use hm_core::{Error, ErrorCode, LSN};
 use hm_index::simd::simd_dot;
 use memmap2::MmapOptions;
 use std::fs::{self, File, OpenOptions};
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
+#[cfg(feature = "hnsw")]
+use std::sync::{
+    Arc, Mutex,
+    atomic::{AtomicUsize, Ordering},
+};
 
 const FILE_MAGIC: &[u8; 8] = b"HMVEC001";
 const RECORD_MAGIC: &[u8; 4] = b"HMVR";
@@ -19,12 +26,23 @@ pub struct VectorHit {
     pub hamming_distance: u32,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct VectorEntry {
+    pub target_lsn: LSN,
+    pub quantized: Vec<i8>,
+    pub binary_prefilter: Vec<u8>,
+}
+
 #[derive(Clone, Debug)]
 pub struct VectorLane {
     path: PathBuf,
     generation_id: String,
     space_id: String,
     dimensions: usize,
+    #[cfg(feature = "hnsw")]
+    count: Arc<AtomicUsize>,
+    #[cfg(feature = "hnsw")]
+    hnsw: Arc<Mutex<Option<HnswProjection>>>,
 }
 
 impl VectorLane {
@@ -52,11 +70,27 @@ impl VectorLane {
             generation_id: generation_id.to_owned(),
             space_id: space_id.to_owned(),
             dimensions,
+            #[cfg(feature = "hnsw")]
+            count: Arc::new(AtomicUsize::new(0)),
+            #[cfg(feature = "hnsw")]
+            hnsw: Arc::new(Mutex::new(None)),
         };
         if lane.path.exists() {
             lane.with_map(|bytes| lane.validate_file(bytes))?;
         } else {
             lane.initialize()?;
+        }
+        #[cfg(feature = "hnsw")]
+        {
+            let count = lane.validate()?;
+            lane.count.store(count, Ordering::Release);
+            if count > hm_index::hnsw::HNSW_THRESHOLD {
+                *lane
+                    .hnsw
+                    .lock()
+                    .map_err(|_| Error::new(ErrorCode::InvariantViolation))? =
+                    Some(lane.open_hnsw()?);
+            }
         }
         Ok(lane)
     }
@@ -81,8 +115,99 @@ impl VectorLane {
         self.dimensions
     }
 
+    pub fn replay(&self, entries: &[VectorEntry]) -> Result<(), Error> {
+        let existing = self.with_map(|bytes| {
+            let records = self.records(bytes)?;
+            if records.len() > entries.len() {
+                return Err(Error::new(ErrorCode::ProjectionCheckpoint));
+            }
+            for (record, expected) in records.iter().zip(entries) {
+                if record.target_lsn != expected.target_lsn.get()
+                    || record.quantized != expected.quantized
+                    || record.binary_prefilter != expected.binary_prefilter
+                {
+                    return Err(Error::new(ErrorCode::VectorIndexCorrupt));
+                }
+            }
+            Ok(records.len())
+        })?;
+        if existing != entries.len() {
+            let mut file = OpenOptions::new()
+                .append(true)
+                .open(&self.path)
+                .map_err(|_| Error::new(ErrorCode::OpenFailed))?;
+            for entry in &entries[existing..] {
+                self.write_record(
+                    &mut file,
+                    entry.target_lsn,
+                    &entry.quantized,
+                    &entry.binary_prefilter,
+                )?;
+            }
+            file.sync_data()
+                .map_err(|_| Error::new(ErrorCode::SyncFailed))?;
+        }
+        #[cfg(feature = "hnsw")]
+        {
+            self.count.store(entries.len(), Ordering::Release);
+            if entries.len() > hm_index::hnsw::HNSW_THRESHOLD && existing != entries.len() {
+                *self
+                    .hnsw
+                    .lock()
+                    .map_err(|_| Error::new(ErrorCode::InvariantViolation))? =
+                    Some(self.open_hnsw()?);
+            }
+        }
+        Ok(())
+    }
+
     pub fn append(
         &self,
+        target_lsn: LSN,
+        quantized: &[i8],
+        binary_prefilter: &[u8],
+    ) -> Result<(), Error> {
+        self.append_record(target_lsn, quantized, binary_prefilter)?;
+        #[cfg(feature = "hnsw")]
+        {
+            let count = self.count.fetch_add(1, Ordering::AcqRel) + 1;
+            if count > hm_index::hnsw::HNSW_THRESHOLD {
+                let mut projection = self
+                    .hnsw
+                    .lock()
+                    .map_err(|_| Error::new(ErrorCode::InvariantViolation))?;
+                if let Some(index) = projection.as_mut() {
+                    index.append(HnswVector {
+                        target_lsn: target_lsn.get(),
+                        quantized: quantized.to_vec(),
+                        binary_prefilter: binary_prefilter.to_vec(),
+                    })?;
+                } else {
+                    *projection = Some(self.open_hnsw()?);
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn append_record(
+        &self,
+        target_lsn: LSN,
+        quantized: &[i8],
+        binary_prefilter: &[u8],
+    ) -> Result<(), Error> {
+        let mut file = OpenOptions::new()
+            .append(true)
+            .open(&self.path)
+            .map_err(|_| Error::new(ErrorCode::OpenFailed))?;
+        self.write_record(&mut file, target_lsn, quantized, binary_prefilter)?;
+        file.sync_data()
+            .map_err(|_| Error::new(ErrorCode::SyncFailed))
+    }
+
+    fn write_record(
+        &self,
+        file: &mut File,
         target_lsn: LSN,
         quantized: &[i8],
         binary_prefilter: &[u8],
@@ -108,16 +233,10 @@ impl VectorLane {
         body.extend_from_slice(digest.as_bytes());
         let body_len =
             u32::try_from(body.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
-        let mut file = OpenOptions::new()
-            .append(true)
-            .open(&self.path)
-            .map_err(|_| Error::new(ErrorCode::OpenFailed))?;
         file.write_all(RECORD_MAGIC)
             .and_then(|()| file.write_all(&body_len.to_le_bytes()))
             .and_then(|()| file.write_all(&body))
-            .map_err(|_| Error::new(ErrorCode::WriteFailed))?;
-        file.sync_data()
-            .map_err(|_| Error::new(ErrorCode::SyncFailed))
+            .map_err(|_| Error::new(ErrorCode::WriteFailed))
     }
 
     pub fn search(
@@ -127,13 +246,27 @@ impl VectorLane {
         prefilter_limit: usize,
         limit: usize,
     ) -> Result<Vec<VectorHit>, Error> {
-        if query.len() != self.dimensions
-            || query_prefilter.len() != self.dimensions.div_ceil(8)
-            || prefilter_limit == 0
-            || limit == 0
+        self.validate_query(query, query_prefilter, prefilter_limit, limit)?;
+        #[cfg(feature = "hnsw")]
+        if let Some(projection) = self
+            .hnsw
+            .lock()
+            .map_err(|_| Error::new(ErrorCode::InvariantViolation))?
+            .as_ref()
         {
-            return Err(Error::new(ErrorCode::InvalidArgument));
+            return projection.search(query, query_prefilter, prefilter_limit, limit);
         }
+        self.search_flat(query, query_prefilter, prefilter_limit, limit)
+    }
+
+    pub fn search_flat(
+        &self,
+        query: &[i8],
+        query_prefilter: &[u8],
+        prefilter_limit: usize,
+        limit: usize,
+    ) -> Result<Vec<VectorHit>, Error> {
+        self.validate_query(query, query_prefilter, prefilter_limit, limit)?;
         self.with_map(|bytes| {
             let records = self.records(bytes)?;
             let mut candidates: Vec<_> = records
@@ -166,6 +299,55 @@ impl VectorLane {
             });
             hits.truncate(limit);
             Ok(hits)
+        })
+    }
+
+    fn validate_query(
+        &self,
+        query: &[i8],
+        query_prefilter: &[u8],
+        prefilter_limit: usize,
+        limit: usize,
+    ) -> Result<(), Error> {
+        if query.len() != self.dimensions
+            || query_prefilter.len() != self.dimensions.div_ceil(8)
+            || prefilter_limit == 0
+            || limit == 0
+        {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        Ok(())
+    }
+
+    #[cfg(feature = "hnsw")]
+    pub fn hnsw_checkpoint_count(&self) -> Result<Option<usize>, Error> {
+        Ok(self
+            .hnsw
+            .lock()
+            .map_err(|_| Error::new(ErrorCode::InvariantViolation))?
+            .as_ref()
+            .map(HnswProjection::checkpoint_count))
+    }
+
+    #[cfg(feature = "hnsw")]
+    fn open_hnsw(&self) -> Result<HnswProjection, Error> {
+        self.with_map(|bytes| {
+            let records = self
+                .records(bytes)?
+                .into_iter()
+                .map(|record| HnswVector {
+                    target_lsn: record.target_lsn,
+                    quantized: record.quantized,
+                    binary_prefilter: record.binary_prefilter.to_vec(),
+                })
+                .collect();
+            HnswProjection::open(
+                self.path.with_extension("hnsw"),
+                &self.generation_id,
+                &self.space_id,
+                self.dimensions,
+                records,
+            )
         })
     }
 
@@ -286,7 +468,7 @@ struct Record<'a> {
     binary_prefilter: &'a [u8],
 }
 
-fn hamming(left: &[u8], right: &[u8]) -> u32 {
+pub(crate) fn hamming(left: &[u8], right: &[u8]) -> u32 {
     left.iter()
         .zip(right)
         .map(|(left, right)| (left ^ right).count_ones())

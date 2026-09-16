@@ -10,6 +10,9 @@ repository.workspace = true
 name = "hm"
 path = "src/main.rs"
 
+[features]
+hnsw = ["hm-mcp/hnsw", "hm-serve/hnsw"]
+
 [dependencies]
 anyhow = "1.0.100"
 base64 = "0.22.1"

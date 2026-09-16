@@ -820,7 +820,7 @@ do_2 = "recall mode reconstruct narrates between anchors with prompt reconstruct
 
 [task.7.4]
 title = "HNSW lane above 50k with recall parity"
-status = "pending"
+status = "done"
 wave = 7
 owner_lane = "index"
 requires = ["6.8"]

@@ -6,10 +6,18 @@ rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 
+[features]
+hnsw = ["dep:usearch"]
+
 [dependencies]
 hm-core = { path = "../hm-core" }
 tantivy = { version = "0.25.0", default-features = false }
 wide = "0.8.1"
+usearch = { version = "=2.26.1", optional = true, default-features = false }
+
+[dev-dependencies]
+hm-proj = { path = "../hm-proj", features = ["hnsw"] }
+tempfile = "3.23.0"
 
 [lints]
 workspace = true

@@ -1,6 +1,124 @@
+use hm_core::{Error, ErrorCode};
+use hm_embed::{
+    CachedEmbedder, Embedder, HttpTransport, InputRole, Provider, QuantizedEmbedding, RemoteConfig,
+    RemoteEmbedder, SpaceIdentity, quantize,
+};
 use hm_schema::events::{Retention, Sensitivity};
 use rmcp::schemars;
 use serde::Deserialize;
+use std::sync::Arc;
+
+#[derive(Clone)]
+pub struct EmbeddingRuntime {
+    embedder: Arc<dyn Embedder>,
+}
+
+impl EmbeddingRuntime {
+    #[must_use]
+    pub fn new(embedder: Arc<dyn Embedder>) -> Self {
+        Self { embedder }
+    }
+
+    pub(crate) fn health(&self) -> &'static str {
+        if self.embedder.report_label() == "lexical_only" {
+            "lexical_only"
+        } else {
+            "semantic_ready"
+        }
+    }
+
+    pub fn from_env() -> Result<Option<Self>, &'static str> {
+        match std::env::var("HM_EMBEDDING_PROVIDER").as_deref() {
+            Err(_) | Ok("") => return Ok(None),
+            Ok("centra") => {}
+            _ => return Err("HM_EMBEDDING_PROVIDER must be centra or unset"),
+        }
+        let api_key = std::env::var("CENTRA_GATEWAY_API_KEY")
+            .ok()
+            .filter(|key| !key.is_empty())
+            .ok_or("CENTRA_GATEWAY_API_KEY is required for the embedding provider")?;
+        let embedder = RemoteEmbedder::new(
+            Provider::OpenAi,
+            RemoteConfig {
+                endpoint: "https://gateway.centra.ag/v1/embeddings".to_owned(),
+                api_key: Some(api_key),
+                model: "openrouter/openai/text-embedding-3-large".to_owned(),
+                revision: "centra-openrouter-live".to_owned(),
+                dimensions: 3072,
+                maximum_batch: 16,
+            },
+            HttpTransport::default(),
+        )
+        .map_err(|_| "embedding provider configuration is invalid")?;
+        let cached = CachedEmbedder::new(embedder, 16)
+            .map_err(|_| "embedding cache configuration is invalid")?;
+        Ok(Some(Self::new(Arc::new(cached))))
+    }
+
+    pub(crate) async fn documents(
+        &self,
+        documents: Vec<String>,
+    ) -> Result<Vec<QuantizedEmbedding>, Error> {
+        let embedder = self.embedder.clone();
+        tokio::task::spawn_blocking(move || {
+            let identity = embedder.identity(InputRole::Document);
+            let inputs = documents.iter().map(String::as_str).collect::<Vec<_>>();
+            let embeddings = embedder
+                .embed_documents(&inputs)
+                .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?;
+            if embeddings.len() != inputs.len() {
+                return Err(Error::new(ErrorCode::SchemaInvalid));
+            }
+            embeddings
+                .into_iter()
+                .map(|embedding| {
+                    if embedding.space != identity {
+                        return Err(Error::new(ErrorCode::SchemaInvalid));
+                    }
+                    quantize(&embedding).map_err(|_| Error::new(ErrorCode::SchemaInvalid))
+                })
+                .collect()
+        })
+        .await
+        .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
+    }
+
+    pub(crate) async fn query(&self, query: String) -> Result<QuantizedEmbedding, Error> {
+        let embedder = self.embedder.clone();
+        tokio::task::spawn_blocking(move || {
+            let document_identity = embedder.identity(InputRole::Document);
+            let mut query_identity = embedder.identity(InputRole::Query);
+            let embedding = embedder
+                .embed_query(&query)
+                .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?;
+            if embedding.space != query_identity || query_identity.input_role != InputRole::Query {
+                return Err(Error::new(ErrorCode::SchemaInvalid));
+            }
+            query_identity.input_role = InputRole::Document;
+            if query_identity != document_identity {
+                return Err(Error::new(ErrorCode::SchemaInvalid));
+            }
+            quantize(&embedding).map_err(|_| Error::new(ErrorCode::SchemaInvalid))
+        })
+        .await
+        .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
+    }
+}
+
+pub(crate) fn space_id(identity: &SpaceIdentity) -> String {
+    let canonical = serde_json::json!({
+        "encoder": identity.encoder_id,
+        "revision": identity.revision,
+        "dimensions": identity.dimensions,
+        "distance": format!("{:?}", identity.distance),
+        "normalization": format!("{:?}", identity.normalization),
+        "input_role": "document",
+    });
+    format!(
+        "hm-space-v1:{}",
+        blake3::hash(canonical.to_string().as_bytes()).to_hex()
+    )
+}
 
 #[derive(Clone, Copy, Debug, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]

@@ -208,7 +208,7 @@
     - Prospective tier admits only notify, ask_user and start_work decisions; batch decisions render as one digest item; adopted procedures render as instructions, tentative as observations.
     - recall mode reconstruct narrates between anchors with prompt reconstruct@1, labelled RECONSTRUCTION with assistant_generated; the renderers and SDKs refuse to remember such output verbatim; optional cross-encoder rerank of the top 32 through ort behind a per-deployment flag that hm-eval must justify.
     - _Requirements: 7.1, 6.3, 4.3_
-  - [ ] 7.4 HNSW lane above 50k with recall parity
+  - [x] 7.4 HNSW lane above 50k with recall parity
     - usearch behind the hnsw feature as a checkpointed projection selected automatically above 50k vectors per space; parity test against the flat lane reports recall@10 and is a gate at 0.98; the flat lane stays the default and the deterministic reference.
     - _Requirements: 6.1_
   - [ ] 7.5 MCP predict and outcome; intend with wake triggers; recall reconstruct; attention history via inspect

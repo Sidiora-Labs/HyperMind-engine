@@ -27,5 +27,7 @@ pub mod store;
 pub mod timeline;
 #[allow(unsafe_code)]
 pub mod vectors;
+#[cfg(feature = "hnsw")]
+pub mod vectors_hnsw;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

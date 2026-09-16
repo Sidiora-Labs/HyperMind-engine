@@ -32,7 +32,8 @@ pub use tools::inspect::InspectInput;
 pub use tools::intend::{IntendAction, IntendCloseReason, IntendInput};
 pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
 pub use tools::remember::{
-    AnchorFacet, RememberAnchor, RememberInput, RememberKind, RetentionInput, SensitivityInput,
+    AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberInput, RememberKind, RetentionInput,
+    SensitivityInput,
 };
 pub use tools::retract::RetractInput;
 
@@ -112,6 +113,7 @@ pub struct McpServer {
     admin_token: Option<hm_serve::config::CapabilityToken>,
     dispute_runtime: Option<DisputeRuntime>,
     consolidation_runtime: Option<ConsolidationRuntime>,
+    embedding_runtime: Option<EmbeddingRuntime>,
 }
 
 impl McpServer {
@@ -122,6 +124,7 @@ impl McpServer {
             admin_token: None,
             dispute_runtime: None,
             consolidation_runtime: None,
+            embedding_runtime: None,
         }
     }
 
@@ -135,6 +138,7 @@ impl McpServer {
             admin_token: Some(admin_token),
             dispute_runtime: None,
             consolidation_runtime: None,
+            embedding_runtime: None,
         }
     }
 
@@ -150,6 +154,12 @@ impl McpServer {
         self
     }
 
+    #[must_use]
+    pub fn with_embedding_runtime(mut self, runtime: EmbeddingRuntime) -> Self {
+        self.embedding_runtime = Some(runtime);
+        self
+    }
+
     pub async fn remember_envelope(&self, input: RememberInput) -> Envelope {
         match self.remember_inner(input).await {
             Ok(value) => value,
@@ -162,6 +172,7 @@ impl McpServer {
         if input.conversation.is_empty() || input.content.is_empty() {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
+        hm_compose::reconstruct::guard_remember(&input.content)?;
         if input
             .anchor
             .as_ref()
@@ -208,6 +219,12 @@ impl McpServer {
         };
         let event_count =
             u32::try_from(chunks.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+        let embedding_documents = self.embedding_runtime.as_ref().map(|_| {
+            chunks
+                .iter()
+                .map(|chunk| (*chunk).to_owned())
+                .collect::<Vec<_>>()
+        });
         let mut events = Vec::with_capacity(chunks.len());
         for (index, chunk) in chunks.into_iter().enumerate() {
             let payload = match kind {
@@ -258,7 +275,101 @@ impl McpServer {
                 .provenance
                 .push(format!("hm://{}/lsn/{lsn}", self.actor.actor()));
         }
+        if let (Some(runtime), Some(documents)) = (&self.embedding_runtime, embedding_documents) {
+            match self
+                .append_embeddings(
+                    runtime,
+                    documents,
+                    outcome.first_lsn,
+                    conversation,
+                    retention,
+                    sensitivity,
+                )
+                .await
+            {
+                Ok((first_lsn, last_lsn)) => {
+                    envelope.items[0]["embedding_first_lsn"] = json!(first_lsn.get());
+                    envelope.items[0]["embedding_last_lsn"] = json!(last_lsn.get());
+                    envelope.health["encoder"] = json!(runtime.health());
+                    envelope.health["backlog"] = json!("semantic_ready");
+                }
+                Err(_) => {
+                    envelope.health["encoder"] = json!("semantic_lagging");
+                    envelope.health["backlog"] = json!("semantic_lagging");
+                    envelope.gaps.push(json!({"kind": "embedding_pending", "first_lsn": outcome.first_lsn.get(), "last_lsn": outcome.last_lsn.get()}));
+                    envelope.warnings.push(
+                        "Observation stored; its embedding was not confirmed committed.".to_owned(),
+                    );
+                }
+            }
+        } else {
+            envelope.health["encoder"] = json!("lexical_only");
+        }
         Ok(envelope)
+    }
+
+    async fn append_embeddings(
+        &self,
+        runtime: &EmbeddingRuntime,
+        documents: Vec<String>,
+        first_target_lsn: LSN,
+        conversation: ConversationId,
+        retention: Retention,
+        sensitivity: Sensitivity,
+    ) -> Result<(LSN, LSN), Error> {
+        let embeddings = runtime.documents(documents).await?;
+        let count =
+            u32::try_from(embeddings.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+        let mut events = Vec::with_capacity(embeddings.len());
+        for (index, embedding) in embeddings.into_iter().enumerate() {
+            let index =
+                u32::try_from(index).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+            let dimension = u32::try_from(embedding.space.dimensions)
+                .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+            let space_id = tools::remember::space_id(&embedding.space);
+            let model_id = format!(
+                "{}@{}",
+                embedding.space.encoder_id, embedding.space.revision
+            );
+            events.push(IncomingEvent {
+                kind: hm_ledger::frame::EventKind::Embedding,
+                conversation,
+                payload: encode_event_envelope(&EventEnvelope {
+                    schema_version: CURRENT_SCHEMA_VERSION,
+                    payload: EventPayload::Embedding(Box::new(hm_schema::events::Embedding {
+                        target_lsn: first_target_lsn.get() + u64::from(index),
+                        dimension,
+                        quantized: embedding.values,
+                        binary_prefilter: embedding.binary_prefilter,
+                        space_id,
+                    })),
+                    connection_id: None,
+                    client_seq: 0,
+                    client_event_index: index,
+                    client_event_count: count,
+                    origin_actor: 0,
+                    run_id: None,
+                    model_provenance: Some(Box::new(hm_schema::events::ModelProvenance {
+                        model_id,
+                        prompt_id: "embedding/document".to_owned(),
+                        prompt_version: 1,
+                        temperature: 0.0,
+                        call_id: None,
+                        input_tokens: 0,
+                        output_tokens: 0,
+                        cache_read_tokens: 0,
+                        cache_write_tokens: 0,
+                        cost_microusd: 0,
+                    })),
+                    authority: Authority::DerivedInference,
+                    retention,
+                    sensitivity,
+                    event_time_ns: 0,
+                }),
+            });
+        }
+        let outcome = self.actor.append(events).await?;
+        Ok((outcome.first_lsn, outcome.last_lsn))
     }
 
     pub async fn recall_envelope(&self, input: RecallInput) -> Envelope {
@@ -273,10 +384,19 @@ impl McpServer {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
         let request = match input.mode {
-            RecallMode::Semantic if !input.query.is_empty() => RecallRequest::Semantic {
-                query: input.query.clone(),
-                limit: input.limit,
-            },
+            RecallMode::Semantic if !input.query.is_empty() => {
+                let runtime = self
+                    .embedding_runtime
+                    .as_ref()
+                    .ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
+                let embedding = runtime.query(input.query.clone()).await?;
+                RecallRequest::Vector {
+                    space_id: tools::remember::space_id(&embedding.space),
+                    query: embedding.values,
+                    binary_prefilter: embedding.binary_prefilter,
+                    limit: input.limit,
+                }
+            }
             RecallMode::Lexical if !input.query.is_empty() => RecallRequest::Lexical {
                 query: input.query.clone(),
                 limit: input.limit,
@@ -338,6 +458,13 @@ impl McpServer {
                     && conversation_filter.is_none_or(|value| value == record.conversation)
             });
         let mut envelope = Envelope::empty();
+        if matches!(input.mode, RecallMode::Semantic) {
+            envelope.health["encoder"] = json!(
+                self.embedding_runtime
+                    .as_ref()
+                    .map(EmbeddingRuntime::health)
+            );
+        }
         for record in records {
             let (content, authority) = event_content(record.kind, &record.payload)?;
             let uri = format!(

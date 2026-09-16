@@ -10,12 +10,16 @@ repository.workspace = true
 name = "hm-mcp"
 path = "src/main.rs"
 
+[features]
+hnsw = ["hm-serve/hnsw"]
+
 [dependencies]
 base64 = "0.22.1"
 blake3 = "1.8.2"
 hm-compose = { path = "../hm-compose" }
 hm-core = { path = "../hm-core" }
 hm-cortex = { path = "../hm-cortex" }
+hm-embed = { path = "../hm-embed" }
 hm-ledger = { path = "../hm-ledger" }
 hm-llm = { path = "../hm-llm" }
 hm-schema = { path = "../hm-schema" }
@@ -26,7 +30,6 @@ serde_json = "1.0.145"
 tokio = { version = "1.48.0", features = ["io-std", "macros", "rt-multi-thread"] }
 
 [dev-dependencies]
-hm-embed = { path = "../hm-embed" }
 hm-proj = { path = "../hm-proj" }
 tempfile = "3.23.0"
 
