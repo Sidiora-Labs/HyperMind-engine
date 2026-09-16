@@ -552,6 +552,26 @@
       "file": "crates/hm-cortex/src/ingest.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/media.rs:MediaDerivationKind",
+      "name": "hm-cortex::MediaDerivationKind",
+      "file": "crates/hm-cortex/src/media.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/media.rs:MediaSubject",
+      "name": "hm-cortex::MediaSubject",
+      "file": "crates/hm-cortex/src/media.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/media.rs:MediaDerivation",
+      "name": "hm-cortex::MediaDerivation",
+      "file": "crates/hm-cortex/src/media.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/media.rs:MediaDropReason",
+      "name": "hm-cortex::MediaDropReason",
+      "file": "crates/hm-cortex/src/media.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/nli.rs:NliScores",
       "name": "hm-cortex::NliScores",
       "file": "crates/hm-cortex/src/nli.rs"

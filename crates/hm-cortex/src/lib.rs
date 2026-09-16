@@ -8,6 +8,7 @@ pub mod citations;
 pub mod connectors;
 pub mod fsrs;
 pub mod ingest;
+pub mod media;
 pub mod nli;
 pub mod nrem;
 pub mod predict;

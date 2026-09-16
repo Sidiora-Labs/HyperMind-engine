@@ -2332,6 +2332,88 @@ pub enum IngestResult {
 }
 ```
 
+## hm-cortex::MediaDerivationKind
+
+<a id="rust-crates-hm-cortex-src-media-rs-mediaderivationkind"></a>
+
+Source: [`crates/hm-cortex/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/media.rs).
+
+When to use: Use `MediaDerivationKind` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub enum MediaDerivationKind {
+    Transcript,
+    Description,
+}
+```
+
+## hm-cortex::MediaSubject
+
+<a id="rust-crates-hm-cortex-src-media-rs-mediasubject"></a>
+
+Source: [`crates/hm-cortex/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/media.rs).
+
+When to use: Use `MediaSubject` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct MediaSubject {
+    pub media_lsn: u64,
+    pub media_type: String,
+    pub source_uri: String,
+    pub digest: [u8; 32],
+}
+```
+
+## hm-cortex::MediaDerivation
+
+<a id="rust-crates-hm-cortex-src-media-rs-mediaderivation"></a>
+
+Source: [`crates/hm-cortex/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/media.rs).
+
+When to use: Use `MediaDerivation` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct MediaDerivation {
+    pub kind: MediaDerivationKind,
+    pub text: String,
+    pub language: Option<String>,
+    pub confidence_micros: u32,
+    pub authority: Authority,
+    pub model_provenance: ModelProvenance,
+    pub usage: Usage,
+}
+```
+
+## hm-cortex::MediaDropReason
+
+<a id="rust-crates-hm-cortex-src-media-rs-mediadropreason"></a>
+
+Source: [`crates/hm-cortex/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/media.rs).
+
+When to use: Use `MediaDropReason` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub enum MediaDropReason {
+    UnsupportedMediaType,
+    Refused(String),
+    EmptyText,
+    Schema(String),
+    Provider(LlmError),
+}
+```
+
 ## hm-cortex::NliScores
 
 <a id="rust-crates-hm-cortex-src-nli-rs-nliscores"></a>
