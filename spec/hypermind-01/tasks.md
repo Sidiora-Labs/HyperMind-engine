@@ -166,7 +166,7 @@
     - Gemini provider; prompt registry loading prompts/<id>@<version>.md with snapshot tests that fail on wording changes without a version bump; ported cortex-engine prompts refine-definition, edge-discover, abstract-synthesis, hindsight-review rewritten for citations and structured output.
     - Cost accounting per call and per run in calls, tokens and USD from a pinned price table; usage recorded on every LLM-derived event's model_provenance.
     - _Requirements: 9.3, 17.2_
-  - [ ] 6.2 Memory, edge and consolidation events; run_id and model_provenance on the envelope
+  - [x] 6.2 Memory, edge and consolidation events; run_id and model_provenance on the envelope
     - Add MemoryMinted, MemoryRevised, MemoryMerged, MemoryFaded, EdgeAsserted, EdgeRetracted, ConsolidationOpened, ConsolidationPhase, ConsolidationClosed, ConsolidationRetracted, Reviewed; VerifyEvent requires run_id and model_provenance on every LLM-derived kind and citations with byte ranges on minted and revised memories and asserted edges.
     - _Requirements: 9.1, 5.2_
   - [ ] 6.3 Memories, graph and fsrs projections; runs, active_generation, leases, retraction override

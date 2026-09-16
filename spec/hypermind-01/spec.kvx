@@ -697,7 +697,7 @@ do_2 = "Cost accounting per call and per run in calls, tokens and USD from a pin
 
 [task.6.2]
 title = "Memory, edge and consolidation events; run_id and model_provenance on the envelope"
-status = "pending"
+status = "done"
 wave = 6
 owner_lane = "schema"
 requires = ["5.7"]

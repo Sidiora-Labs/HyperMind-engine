@@ -5,9 +5,13 @@ use hm_schema::event::{
 };
 use hm_schema::events::{
     Approval, Assertion, AssertionClaim, Attestation, AttestationDisposition, Authority,
-    BeliefType, Binding, Checkpoint, Consolidation, DeliveredMsg, Effect, Embedding, EventEnvelope,
-    EventPayload, IntentSet, LoopCloseReason, LoopClosed, LoopOpened, Outcome, ProposedAssertion,
-    ProvenanceRange, Reasoning, Recovery, Retention, Retract, Sensitivity, Supervisor, ToolCall,
+    BeliefType, Binding, Checkpoint, Consolidation, ConsolidationBudget, ConsolidationClosed,
+    ConsolidationOpened, ConsolidationPhase, ConsolidationPhaseName, ConsolidationPhaseState,
+    ConsolidationRetracted, DeliveredMsg, EdgeAsserted, EdgeRetracted, Effect, Embedding,
+    EventEnvelope, EventPayload, IntentSet, LoopCloseReason, LoopClosed, LoopOpened,
+    MemoryFadeReason, MemoryFaded, MemoryId, MemoryMerged, MemoryMinted, MemoryRevised,
+    ModelProvenance, Outcome, PromptVersion, ProposedAssertion, ProvenanceRange, Reasoning,
+    Recovery, Retention, Retract, ReviewRating, Reviewed, Sensitivity, Supervisor, ToolCall,
     ToolResult, UserMsg,
 };
 use hm_schema::protocol::{
@@ -619,6 +623,262 @@ fn belief_assertion() -> Assertion {
         conflict_domain: Some("deployment:region".to_owned()),
         claim: AssertionClaim::Affirmative,
     }
+}
+
+fn model_provenance() -> ModelProvenance {
+    ModelProvenance {
+        model_id: "fixture-model".to_owned(),
+        prompt_id: "merge-cluster".to_owned(),
+        prompt_version: 1,
+        temperature: 0.2,
+        call_id: Some(b"call-7".to_vec()),
+        input_tokens: 120,
+        output_tokens: 30,
+        cache_read_tokens: 20,
+        cache_write_tokens: 0,
+        cost_microusd: 17,
+    }
+}
+
+fn memory_minted() -> MemoryMinted {
+    MemoryMinted {
+        memory_id: b"memory-1".to_vec(),
+        name: "Deployment region".to_owned(),
+        definition: b"The service is deployed in eu-central.".to_vec(),
+        tags: vec!["deployment".to_owned(), "region".to_owned()],
+        salience_micros: 700_000,
+        citations: belief_provenance(),
+    }
+}
+
+fn wave_six_envelope(payload: EventPayload, llm_derived: bool) -> EventEnvelope {
+    let mut envelope = event_envelope(payload, 2);
+    envelope.run_id = Some(b"run-6".to_vec());
+    envelope.authority = Authority::DerivedInference;
+    if llm_derived {
+        envelope.model_provenance = Some(Box::new(model_provenance()));
+    }
+    envelope
+}
+
+#[test]
+#[allow(clippy::too_many_lines)]
+fn consolidation_events_round_trip_with_generation_and_model_provenance() {
+    let minted = memory_minted();
+    let cases = [
+        (
+            EventKind::MemoryMinted,
+            EventPayload::MemoryMinted(Box::new(minted.clone())),
+            true,
+        ),
+        (
+            EventKind::MemoryRevised,
+            EventPayload::MemoryRevised(Box::new(MemoryRevised {
+                memory_id: minted.memory_id.clone(),
+                previous_lsn: 21,
+                name: minted.name.clone(),
+                definition: b"The service remains in eu-central.".to_vec(),
+                tags: minted.tags.clone(),
+                salience_micros: 750_000,
+                citations: belief_provenance(),
+            })),
+            true,
+        ),
+        (
+            EventKind::MemoryMerged,
+            EventPayload::MemoryMerged(Box::new(MemoryMerged {
+                memory_id: b"memory-merged".to_vec(),
+                merged_memory_ids: vec![
+                    MemoryId {
+                        value: b"memory-1".to_vec(),
+                    },
+                    MemoryId {
+                        value: b"memory-2".to_vec(),
+                    },
+                ],
+                name: "Deployment".to_owned(),
+                definition: b"The service deployment is in eu-central.".to_vec(),
+                tags: vec!["deployment".to_owned()],
+                salience_micros: 800_000,
+                citations: belief_provenance(),
+            })),
+            true,
+        ),
+        (
+            EventKind::MemoryFaded,
+            EventPayload::MemoryFaded(Box::new(MemoryFaded {
+                memory_id: minted.memory_id.clone(),
+                reason: MemoryFadeReason::LowRetrievability,
+                evidence_lsns: Some(vec![31]),
+            })),
+            false,
+        ),
+        (
+            EventKind::EdgeAsserted,
+            EventPayload::EdgeAsserted(Box::new(EdgeAsserted {
+                edge_id: b"edge-1".to_vec(),
+                source_id: b"memory-1".to_vec(),
+                target_id: b"memory-2".to_vec(),
+                relation: "supports".to_owned(),
+                weight_micros: 500_000,
+                valid_from_ns: 100,
+                valid_to_ns: 0,
+                citations: belief_provenance(),
+            })),
+            true,
+        ),
+        (
+            EventKind::EdgeRetracted,
+            EventPayload::EdgeRetracted(Box::new(EdgeRetracted {
+                edge_id: b"edge-1".to_vec(),
+                citations: belief_provenance(),
+            })),
+            true,
+        ),
+        (
+            EventKind::ConsolidationOpened,
+            EventPayload::ConsolidationOpened(Box::new(ConsolidationOpened {
+                scope_digest: vec![0x61; 32],
+                cadence_key: "daily:2026-09-16".to_owned(),
+                generation: 6,
+                expected_active_generation: 5,
+                phases: vec![
+                    ConsolidationPhaseName::Nrem,
+                    ConsolidationPhaseName::Connect,
+                ],
+                prompts: vec![PromptVersion {
+                    prompt_id: "merge-cluster".to_owned(),
+                    version: 1,
+                    model_id: "fixture-model".to_owned(),
+                }],
+                budget: Box::new(ConsolidationBudget {
+                    max_llm_calls: 8,
+                    max_tokens: 8_000,
+                    max_microusd: 100_000,
+                    max_wall_ms: 30_000,
+                }),
+            })),
+            false,
+        ),
+        (
+            EventKind::ConsolidationPhase,
+            EventPayload::ConsolidationPhase(Box::new(ConsolidationPhase {
+                phase: ConsolidationPhaseName::Nrem,
+                state: ConsolidationPhaseState::Completed,
+                attempt_prefix: b"run-6:nrem:1".to_vec(),
+                cursor: Some(b"cluster-4".to_vec()),
+                llm_calls: 1,
+                input_tokens: 120,
+                output_tokens: 30,
+                cost_microusd: 17,
+                dropped_candidates: 0,
+            })),
+            false,
+        ),
+        (
+            EventKind::ConsolidationClosed,
+            EventPayload::ConsolidationClosed(Box::new(ConsolidationClosed {
+                generation: 6,
+                expected_active_generation: 5,
+                derived_records: 3,
+                dropped_candidates: 1,
+                llm_calls: 1,
+                input_tokens: 120,
+                output_tokens: 30,
+                cost_microusd: 17,
+            })),
+            false,
+        ),
+        (
+            EventKind::ConsolidationRetracted,
+            EventPayload::ConsolidationRetracted(Box::new(ConsolidationRetracted {
+                target_run_id: b"run-6".to_vec(),
+                previous_generation: 5,
+                reason: "operator rollback".to_owned(),
+            })),
+            false,
+        ),
+        (
+            EventKind::Reviewed,
+            EventPayload::Reviewed(Box::new(Reviewed {
+                memory_id: minted.memory_id,
+                rating: ReviewRating::Good,
+                source_lsn: 41,
+                reviewed_at_ns: 1_000,
+                stability_millis: 86_400_000,
+                difficulty_micros: 400_000,
+                due_at_ns: 2_000,
+            })),
+            false,
+        ),
+    ];
+    for (kind, payload, llm_derived) in cases {
+        assert_eq!(EventKind::try_from(kind as u8), Ok(kind));
+        let encoded = encode_event(&wave_six_envelope(payload, llm_derived));
+        let verified = verify_event(&encoded, kind, Boundary::Socket).expect("wave six event");
+        assert_eq!(verified.kind, kind);
+        assert_eq!(
+            verified.envelope.run_id.as_deref(),
+            Some(b"run-6".as_slice())
+        );
+        if llm_derived {
+            let model = verified.envelope.model_provenance.unwrap();
+            assert_eq!(model.call_id.as_deref(), Some(b"call-7".as_slice()));
+            assert_eq!(model.input_tokens, 120);
+            assert_eq!(model.cost_microusd, 17);
+        }
+    }
+}
+
+#[test]
+fn llm_derived_events_require_run_model_usage_and_byte_range_citations() {
+    let payload = EventPayload::MemoryMinted(Box::new(memory_minted()));
+    let encoded = encode_event(&event_envelope(payload.clone(), 2));
+    assert_eq!(
+        verify_event(&encoded, EventKind::MemoryMinted, Boundary::Socket)
+            .expect_err("run and model provenance")
+            .code,
+        ErrorCode::SchemaInvalid
+    );
+
+    let mut without_model = event_envelope(payload.clone(), 2);
+    without_model.run_id = Some(b"run-6".to_vec());
+    assert_eq!(
+        verify_event(
+            &encode_event(&without_model),
+            EventKind::MemoryMinted,
+            Boundary::Socket,
+        )
+        .expect_err("model provenance")
+        .code,
+        ErrorCode::SchemaInvalid
+    );
+
+    let mut invalid_usage = wave_six_envelope(payload, true);
+    invalid_usage.model_provenance.as_mut().unwrap().call_id = None;
+    assert_eq!(
+        verify_event(
+            &encode_event(&invalid_usage),
+            EventKind::MemoryMinted,
+            Boundary::Socket,
+        )
+        .expect_err("per-call usage identity")
+        .code,
+        ErrorCode::SchemaInvalid
+    );
+
+    let mut invalid_citation = memory_minted();
+    invalid_citation.citations[0].byte_end = invalid_citation.citations[0].byte_start;
+    let encoded = encode_event(&wave_six_envelope(
+        EventPayload::MemoryMinted(Box::new(invalid_citation)),
+        true,
+    ));
+    assert_eq!(
+        verify_event(&encoded, EventKind::MemoryMinted, Boundary::Socket)
+            .expect_err("nonempty citation byte range")
+            .code,
+        ErrorCode::SchemaInvalid
+    );
 }
 
 #[test]

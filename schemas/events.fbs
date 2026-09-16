@@ -7,6 +7,10 @@ enum LoopCloseReason : ubyte { done, abandoned, handed_off, superseded }
 enum BeliefType : ubyte { fact, preference, constraint, goal, identity }
 enum AssertionClaim : ubyte { affirmative, negative_existence }
 enum AttestationDisposition : ubyte { used, ignored }
+enum MemoryFadeReason : ubyte { low_retrievability, superseded, explicit }
+enum ReviewRating : ubyte { again, hard, good, easy }
+enum ConsolidationPhaseName : ubyte { nrem, connect, abstract, hindsight, review, publish }
+enum ConsolidationPhaseState : ubyte { started, completed, aborted }
 enum Authority : ubyte {
   user_asserted,
   external_observed,
@@ -30,6 +34,12 @@ table ModelProvenance {
   prompt_id:string (required);
   prompt_version:ushort;
   temperature:float;
+  call_id:[ubyte];
+  input_tokens:ulong;
+  output_tokens:ulong;
+  cache_read_tokens:ulong;
+  cache_write_tokens:ulong;
+  cost_microusd:ulong;
 }
 
 table UserMsg {
@@ -172,6 +182,123 @@ table Attestation {
   disposition:AttestationDisposition;
 }
 
+table MemoryMinted {
+  memory_id:[ubyte] (required);
+  name:string (required);
+  definition:[ubyte] (required);
+  tags:[string] (required);
+  salience_micros:uint;
+  citations:[ProvenanceRange] (required);
+}
+
+table MemoryRevised {
+  memory_id:[ubyte] (required);
+  previous_lsn:ulong;
+  name:string (required);
+  definition:[ubyte] (required);
+  tags:[string] (required);
+  salience_micros:uint;
+  citations:[ProvenanceRange] (required);
+}
+
+table MemoryId {
+  value:[ubyte] (required);
+}
+
+table MemoryMerged {
+  memory_id:[ubyte] (required);
+  merged_memory_ids:[MemoryId] (required);
+  name:string (required);
+  definition:[ubyte] (required);
+  tags:[string] (required);
+  salience_micros:uint;
+  citations:[ProvenanceRange] (required);
+}
+
+table MemoryFaded {
+  memory_id:[ubyte] (required);
+  reason:MemoryFadeReason;
+  evidence_lsns:[ulong];
+}
+
+table EdgeAsserted {
+  edge_id:[ubyte] (required);
+  source_id:[ubyte] (required);
+  target_id:[ubyte] (required);
+  relation:string (required);
+  weight_micros:uint;
+  valid_from_ns:long;
+  valid_to_ns:long;
+  citations:[ProvenanceRange] (required);
+}
+
+table EdgeRetracted {
+  edge_id:[ubyte] (required);
+  citations:[ProvenanceRange] (required);
+}
+
+table ConsolidationBudget {
+  max_llm_calls:ulong;
+  max_tokens:ulong;
+  max_microusd:ulong;
+  max_wall_ms:ulong;
+}
+
+table PromptVersion {
+  prompt_id:string (required);
+  version:ushort;
+  model_id:string (required);
+}
+
+table ConsolidationOpened {
+  scope_digest:[ubyte] (required);
+  cadence_key:string (required);
+  generation:ulong;
+  expected_active_generation:ulong;
+  phases:[ConsolidationPhaseName] (required);
+  prompts:[PromptVersion] (required);
+  budget:ConsolidationBudget (required);
+}
+
+table ConsolidationPhase {
+  phase:ConsolidationPhaseName;
+  state:ConsolidationPhaseState;
+  attempt_prefix:[ubyte] (required);
+  cursor:[ubyte];
+  llm_calls:ulong;
+  input_tokens:ulong;
+  output_tokens:ulong;
+  cost_microusd:ulong;
+  dropped_candidates:ulong;
+}
+
+table ConsolidationClosed {
+  generation:ulong;
+  expected_active_generation:ulong;
+  derived_records:ulong;
+  dropped_candidates:ulong;
+  llm_calls:ulong;
+  input_tokens:ulong;
+  output_tokens:ulong;
+  cost_microusd:ulong;
+}
+
+table ConsolidationRetracted {
+  target_run_id:[ubyte] (required);
+  previous_generation:ulong;
+  reason:string (required);
+}
+
+table Reviewed {
+  memory_id:[ubyte] (required);
+  rating:ReviewRating;
+  source_lsn:ulong;
+  reviewed_at_ns:long;
+  stability_millis:ulong;
+  difficulty_micros:uint;
+  due_at_ns:long;
+}
+
 union EventPayload {
   UserMsg,
   DeliveredMsg,
@@ -195,7 +322,18 @@ union EventPayload {
   Retract,
   Attestation,
   Binding,
-  ProposedAssertion
+  ProposedAssertion,
+  MemoryMinted,
+  MemoryRevised,
+  MemoryMerged,
+  MemoryFaded,
+  EdgeAsserted,
+  EdgeRetracted,
+  ConsolidationOpened,
+  ConsolidationPhase,
+  ConsolidationClosed,
+  ConsolidationRetracted,
+  Reviewed
 }
 
 table EventEnvelope {

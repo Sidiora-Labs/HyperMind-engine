@@ -1,9 +1,11 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::events::{
-    Assertion, AttestationDisposition, Authority, Binding, Consolidation, Effect, Embedding,
-    EventEnvelope, EventEnvelopeRef, EventPayload, LoopCloseReason, LoopClosed, Outcome,
-    ProposedAssertion, ProvenanceRange, Retract, ToolResult,
+    Assertion, AttestationDisposition, Authority, Binding, Consolidation, ConsolidationClosed,
+    ConsolidationOpened, ConsolidationPhase, ConsolidationRetracted, EdgeAsserted, EdgeRetracted,
+    Effect, Embedding, EventEnvelope, EventEnvelopeRef, EventPayload, LoopCloseReason, LoopClosed,
+    MemoryFaded, MemoryMerged, MemoryMinted, MemoryRevised, Outcome, ProposedAssertion,
+    ProvenanceRange, Retract, Reviewed, ToolResult,
 };
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
@@ -47,6 +49,17 @@ pub enum EventKind {
     Attestation = 21,
     Binding = 22,
     ProposedAssertion = 23,
+    MemoryMinted = 24,
+    MemoryRevised = 25,
+    MemoryMerged = 26,
+    MemoryFaded = 27,
+    EdgeAsserted = 28,
+    EdgeRetracted = 29,
+    ConsolidationOpened = 30,
+    ConsolidationPhase = 31,
+    ConsolidationClosed = 32,
+    ConsolidationRetracted = 33,
+    Reviewed = 34,
 }
 
 impl EventKind {
@@ -99,6 +112,55 @@ impl EventKind {
                 Self::Assertion | Self::Consolidation | Self::Retract | Self::ProposedAssertion
             )
     }
+
+    #[must_use]
+    pub const fn is_wave_six(self) -> bool {
+        self.is_wave_five()
+            || matches!(
+                self,
+                Self::MemoryMinted
+                    | Self::MemoryRevised
+                    | Self::MemoryMerged
+                    | Self::MemoryFaded
+                    | Self::EdgeAsserted
+                    | Self::EdgeRetracted
+                    | Self::ConsolidationOpened
+                    | Self::ConsolidationPhase
+                    | Self::ConsolidationClosed
+                    | Self::ConsolidationRetracted
+                    | Self::Reviewed
+            )
+    }
+
+    #[must_use]
+    pub const fn is_llm_derived(self) -> bool {
+        matches!(
+            self,
+            Self::MemoryMinted
+                | Self::MemoryRevised
+                | Self::MemoryMerged
+                | Self::EdgeAsserted
+                | Self::EdgeRetracted
+        )
+    }
+
+    #[must_use]
+    pub const fn requires_run_id(self) -> bool {
+        matches!(
+            self,
+            Self::MemoryMinted
+                | Self::MemoryRevised
+                | Self::MemoryMerged
+                | Self::MemoryFaded
+                | Self::EdgeAsserted
+                | Self::EdgeRetracted
+                | Self::ConsolidationOpened
+                | Self::ConsolidationPhase
+                | Self::ConsolidationClosed
+                | Self::ConsolidationRetracted
+                | Self::Reviewed
+        )
+    }
 }
 
 impl TryFrom<u8> for EventKind {
@@ -129,6 +191,17 @@ impl TryFrom<u8> for EventKind {
             21 => Ok(Self::Attestation),
             22 => Ok(Self::Binding),
             23 => Ok(Self::ProposedAssertion),
+            24 => Ok(Self::MemoryMinted),
+            25 => Ok(Self::MemoryRevised),
+            26 => Ok(Self::MemoryMerged),
+            27 => Ok(Self::MemoryFaded),
+            28 => Ok(Self::EdgeAsserted),
+            29 => Ok(Self::EdgeRetracted),
+            30 => Ok(Self::ConsolidationOpened),
+            31 => Ok(Self::ConsolidationPhase),
+            32 => Ok(Self::ConsolidationClosed),
+            33 => Ok(Self::ConsolidationRetracted),
+            34 => Ok(Self::Reviewed),
             _ => Err(()),
         }
     }
@@ -202,10 +275,10 @@ pub fn verify_event_with_history(
     if envelope.schema_version == 0 || envelope.schema_version > CURRENT_SCHEMA_VERSION {
         return Err(Error::new(ErrorCode::SchemaVersion));
     }
-    if !expected_kind.is_wave_five() || payload_kind(&envelope.payload) != expected_kind {
+    if !expected_kind.is_wave_six() || payload_kind(&envelope.payload) != expected_kind {
         return Err(Error::new(ErrorCode::ForbiddenKind));
     }
-    validate_envelope(&envelope)?;
+    validate_envelope(&envelope, expected_kind)?;
     let legacy_evidence_allowed = envelope.schema_version == 1 && boundary != Boundary::Socket;
     validate_payload(&envelope.payload, history, legacy_evidence_allowed)?;
     Ok(VerifiedEvent {
@@ -232,7 +305,7 @@ fn finish_with_identifier(encoded: &[u8], identifier: [u8; 4]) -> Vec<u8> {
     output
 }
 
-fn validate_envelope(envelope: &EventEnvelope) -> Result<(), Error> {
+fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Error> {
     if envelope
         .connection_id
         .as_ref()
@@ -248,8 +321,19 @@ fn validate_envelope(envelope: &EventEnvelope) -> Result<(), Error> {
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
     if let Some(model) = &envelope.model_provenance
-        && (model.model_id.is_empty() || model.prompt_id.is_empty())
+        && (model.model_id.is_empty()
+            || model.prompt_id.is_empty()
+            || (kind.is_llm_derived()
+                && (model.prompt_version == 0
+                    || !model.call_id.as_deref().is_some_and(bounded_identifier)
+                    || model.input_tokens.saturating_add(model.output_tokens) == 0)))
     {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    if kind.requires_run_id() && !envelope.run_id.as_deref().is_some_and(bounded_identifier) {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    if kind.is_llm_derived() && envelope.model_provenance.is_none() {
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
     Ok(())
@@ -264,19 +348,8 @@ fn validate_payload(
         EventPayload::UserMsg(_) | EventPayload::DeliveredMsg(_) | EventPayload::Reasoning(_) => {
             Ok(())
         }
-        EventPayload::ProviderFrame(value) => {
-            if value.provider.is_empty() || value.api_content.is_empty() {
-                Err(Error::new(ErrorCode::SchemaInvalid))
-            } else {
-                Ok(())
-            }
-        }
-        EventPayload::MediaRef(value) => {
-            if value.uri.is_empty() || value.media_type.is_empty() || value.digest.is_empty() {
-                Err(Error::new(ErrorCode::SchemaInvalid))
-            } else {
-                Ok(())
-            }
+        EventPayload::ProviderFrame(_) | EventPayload::MediaRef(_) => {
+            validate_external_payload(payload)
         }
         EventPayload::ToolCall(value) => {
             if bounded_identifier(&value.call_id) && !value.tool_name.is_empty() {
@@ -351,6 +424,51 @@ fn validate_payload(
         EventPayload::ProposedAssertion(value) => validate_proposed_assertion(value),
         EventPayload::Consolidation(value) => validate_consolidation(value),
         EventPayload::Retract(value) => validate_retract(value),
+        EventPayload::MemoryMinted(_)
+        | EventPayload::MemoryRevised(_)
+        | EventPayload::MemoryMerged(_)
+        | EventPayload::MemoryFaded(_)
+        | EventPayload::EdgeAsserted(_)
+        | EventPayload::EdgeRetracted(_)
+        | EventPayload::ConsolidationOpened(_)
+        | EventPayload::ConsolidationPhase(_)
+        | EventPayload::ConsolidationClosed(_)
+        | EventPayload::ConsolidationRetracted(_)
+        | EventPayload::Reviewed(_) => validate_wave_six_payload(payload),
+    }
+}
+
+fn validate_external_payload(payload: &EventPayload) -> Result<(), Error> {
+    let valid = match payload {
+        EventPayload::ProviderFrame(value) => {
+            !value.provider.is_empty() && !value.api_content.is_empty()
+        }
+        EventPayload::MediaRef(value) => {
+            !value.uri.is_empty() && !value.media_type.is_empty() && !value.digest.is_empty()
+        }
+        _ => false,
+    };
+    if valid {
+        Ok(())
+    } else {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    }
+}
+
+fn validate_wave_six_payload(payload: &EventPayload) -> Result<(), Error> {
+    match payload {
+        EventPayload::MemoryMinted(value) => validate_memory_minted(value),
+        EventPayload::MemoryRevised(value) => validate_memory_revised(value),
+        EventPayload::MemoryMerged(value) => validate_memory_merged(value),
+        EventPayload::MemoryFaded(value) => validate_memory_faded(value),
+        EventPayload::EdgeAsserted(value) => validate_edge_asserted(value),
+        EventPayload::EdgeRetracted(value) => validate_edge_retracted(value),
+        EventPayload::ConsolidationOpened(value) => validate_consolidation_opened(value),
+        EventPayload::ConsolidationPhase(value) => validate_consolidation_phase(value),
+        EventPayload::ConsolidationClosed(value) => validate_consolidation_closed(value),
+        EventPayload::ConsolidationRetracted(value) => validate_consolidation_retracted(value),
+        EventPayload::Reviewed(value) => validate_reviewed(value),
+        _ => Err(Error::new(ErrorCode::ForbiddenKind)),
     }
 }
 
@@ -472,6 +590,192 @@ fn validate_retract(value: &Retract) -> Result<(), Error> {
     validate_provenance(&value.provenance)
 }
 
+fn validate_memory_minted(value: &MemoryMinted) -> Result<(), Error> {
+    validate_memory_fields(
+        &value.memory_id,
+        &value.name,
+        &value.definition,
+        &value.tags,
+        value.salience_micros,
+        &value.citations,
+    )
+}
+
+fn validate_memory_revised(value: &MemoryRevised) -> Result<(), Error> {
+    if value.previous_lsn == 0 {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_memory_fields(
+        &value.memory_id,
+        &value.name,
+        &value.definition,
+        &value.tags,
+        value.salience_micros,
+        &value.citations,
+    )
+}
+
+fn validate_memory_merged(value: &MemoryMerged) -> Result<(), Error> {
+    if value.merged_memory_ids.len() < 2
+        || value
+            .merged_memory_ids
+            .iter()
+            .any(|source| !bounded_identifier(&source.value) || source.value == value.memory_id)
+        || value
+            .merged_memory_ids
+            .iter()
+            .enumerate()
+            .any(|(index, source)| {
+                value.merged_memory_ids[index + 1..]
+                    .iter()
+                    .any(|other| source.value == other.value)
+            })
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_memory_fields(
+        &value.memory_id,
+        &value.name,
+        &value.definition,
+        &value.tags,
+        value.salience_micros,
+        &value.citations,
+    )
+}
+
+fn validate_memory_fields(
+    memory_id: &[u8],
+    name: &str,
+    definition: &[u8],
+    tags: &[String],
+    salience_micros: u32,
+    citations: &[ProvenanceRange],
+) -> Result<(), Error> {
+    if !bounded_identifier(memory_id)
+        || name.is_empty()
+        || name.len() > MAXIMUM_IDENTIFIER_BYTES
+        || definition.is_empty()
+        || definition.len() > MAXIMUM_EVENT_BYTES
+        || tags.is_empty()
+        || tags
+            .iter()
+            .any(|tag| tag.is_empty() || tag.len() > MAXIMUM_IDENTIFIER_BYTES)
+        || salience_micros > 1_000_000
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_provenance(citations)
+}
+
+fn validate_memory_faded(value: &MemoryFaded) -> Result<(), Error> {
+    if !bounded_identifier(&value.memory_id)
+        || value
+            .evidence_lsns
+            .as_ref()
+            .is_some_and(|lsns| lsns.is_empty() || lsns.contains(&0))
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_edge_asserted(value: &EdgeAsserted) -> Result<(), Error> {
+    if !bounded_identifier(&value.edge_id)
+        || !bounded_identifier(&value.source_id)
+        || !bounded_identifier(&value.target_id)
+        || value.source_id == value.target_id
+        || value.relation.is_empty()
+        || value.relation.len() > MAXIMUM_IDENTIFIER_BYTES
+        || value.weight_micros == 0
+        || value.weight_micros > 1_000_000
+        || (value.valid_to_ns != 0 && value.valid_to_ns < value.valid_from_ns)
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_provenance(&value.citations)
+}
+
+fn validate_edge_retracted(value: &EdgeRetracted) -> Result<(), Error> {
+    if !bounded_identifier(&value.edge_id) {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_provenance(&value.citations)
+}
+
+fn validate_consolidation_opened(value: &ConsolidationOpened) -> Result<(), Error> {
+    if value.scope_digest.len() != 32
+        || value.cadence_key.is_empty()
+        || value.cadence_key.len() > MAXIMUM_IDENTIFIER_BYTES
+        || value.generation == 0
+        || value.phases.is_empty()
+        || value.prompts.is_empty()
+        || value.prompts.iter().any(|prompt| {
+            prompt.prompt_id.is_empty()
+                || prompt.prompt_id.len() > MAXIMUM_IDENTIFIER_BYTES
+                || prompt.version == 0
+                || prompt.model_id.is_empty()
+                || prompt.model_id.len() > MAXIMUM_IDENTIFIER_BYTES
+        })
+        || value.budget.max_llm_calls == 0
+        || value.budget.max_tokens == 0
+        || value.budget.max_microusd == 0
+        || value.budget.max_wall_ms == 0
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_consolidation_phase(value: &ConsolidationPhase) -> Result<(), Error> {
+    if !bounded_identifier(&value.attempt_prefix)
+        || value.cursor.as_ref().is_some_and(Vec::is_empty)
+        || (value.llm_calls == 0
+            && (value.input_tokens != 0 || value.output_tokens != 0 || value.cost_microusd != 0))
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_consolidation_closed(value: &ConsolidationClosed) -> Result<(), Error> {
+    if value.generation == 0
+        || (value.llm_calls == 0
+            && (value.input_tokens != 0 || value.output_tokens != 0 || value.cost_microusd != 0))
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_consolidation_retracted(value: &ConsolidationRetracted) -> Result<(), Error> {
+    if !bounded_identifier(&value.target_run_id)
+        || value.reason.is_empty()
+        || value.reason.len() > MAXIMUM_IDENTIFIER_BYTES
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_reviewed(value: &Reviewed) -> Result<(), Error> {
+    if !bounded_identifier(&value.memory_id)
+        || value.source_lsn == 0
+        || value.reviewed_at_ns <= 0
+        || value.stability_millis == 0
+        || value.difficulty_micros > 1_000_000
+        || value.due_at_ns < value.reviewed_at_ns
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
 fn validate_belief_fields(
     belief_id: &[u8],
     canonical_identity: &str,
@@ -546,5 +850,16 @@ fn payload_kind(payload: &EventPayload) -> EventKind {
         EventPayload::Attestation(_) => EventKind::Attestation,
         EventPayload::Binding(_) => EventKind::Binding,
         EventPayload::ProposedAssertion(_) => EventKind::ProposedAssertion,
+        EventPayload::MemoryMinted(_) => EventKind::MemoryMinted,
+        EventPayload::MemoryRevised(_) => EventKind::MemoryRevised,
+        EventPayload::MemoryMerged(_) => EventKind::MemoryMerged,
+        EventPayload::MemoryFaded(_) => EventKind::MemoryFaded,
+        EventPayload::EdgeAsserted(_) => EventKind::EdgeAsserted,
+        EventPayload::EdgeRetracted(_) => EventKind::EdgeRetracted,
+        EventPayload::ConsolidationOpened(_) => EventKind::ConsolidationOpened,
+        EventPayload::ConsolidationPhase(_) => EventKind::ConsolidationPhase,
+        EventPayload::ConsolidationClosed(_) => EventKind::ConsolidationClosed,
+        EventPayload::ConsolidationRetracted(_) => EventKind::ConsolidationRetracted,
+        EventPayload::Reviewed(_) => EventKind::Reviewed,
     }
 }
