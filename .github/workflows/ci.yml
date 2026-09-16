@@ -108,7 +108,7 @@ jobs:
         run: |
           python -m venv target/python-sdk-venv
           target/python-sdk-venv/bin/pip install -r sdk/python/requirements-ci.txt
-          VIRTUAL_ENV="$GITHUB_WORKSPACE/target/python-sdk-venv" target/python-sdk-venv/bin/maturin develop --locked --manifest-path sdk/python/native/Cargo.toml
+          VIRTUAL_ENV="$GITHUB_WORKSPACE/target/python-sdk-venv" PATH="$GITHUB_WORKSPACE/target/python-sdk-venv/bin:$PATH" target/python-sdk-venv/bin/maturin develop --locked --manifest-path sdk/python/native/Cargo.toml
           target/python-sdk-venv/bin/python -m pytest sdk/python/tests -q
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         if: matrix.language == 'go'
