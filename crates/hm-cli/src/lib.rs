@@ -64,7 +64,7 @@ enum Command {
         #[arg(long)]
         init_if_missing: bool,
         #[command(flatten)]
-        remote: serve::RemoteOptions,
+        remote: Box<serve::RemoteOptions>,
         #[arg(long, value_enum)]
         model: Option<models::Choice>,
         #[arg(long)]
@@ -293,7 +293,7 @@ async fn execute(command: Command) -> Result<Value> {
                 telemetry_file.as_deref(),
                 telemetry_service.as_deref().unwrap_or("hypermind"),
             )?;
-            let served = serve::run(load(&config)?, remote, tls).await;
+            let served = serve::run(load(&config)?, *remote, tls).await;
             hm_serve::telemetry::flush();
             served
         }

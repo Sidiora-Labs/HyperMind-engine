@@ -143,7 +143,7 @@ enum Command {
         #[arg(long)]
         init_if_missing: bool,
         #[command(flatten)]
-        remote: serve::RemoteOptions,
+        remote: Box<serve::RemoteOptions>,
         #[arg(long, value_enum)]
         model: Option<models::Choice>,
         #[arg(long)]
