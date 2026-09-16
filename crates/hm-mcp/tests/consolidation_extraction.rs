@@ -63,6 +63,8 @@ async fn seed(server: &McpServer, topics: &[&str]) {
                     vocabulary: None,
                     source: None,
                     derive: None,
+                    source_delivery: None,
+                    source_settlement: None,
                 })
                 .await;
             assert!(envelope.ok, "{envelope:?}");

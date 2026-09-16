@@ -38,6 +38,8 @@ fn snapshot_input() -> RememberInput {
         vocabulary: None,
         source: None,
         derive: None,
+        source_delivery: None,
+        source_settlement: None,
     }
 }
 

@@ -1,3 +1,4 @@
+use super::source::{SourceDeliveryInput, SourceSettlementInput};
 use hm_core::{Error, ErrorCode};
 use hm_embed::{
     CachedEmbedder, Embedder, HttpTransport, InputRole, Provider, QuantizedEmbedding, RemoteConfig,
@@ -242,4 +243,8 @@ pub struct RememberInput {
     pub source: Option<RememberSource>,
     #[serde(default)]
     pub derive: Option<RememberDerive>,
+    #[serde(default)]
+    pub source_delivery: Option<SourceDeliveryInput>,
+    #[serde(default)]
+    pub source_settlement: Option<SourceSettlementInput>,
 }

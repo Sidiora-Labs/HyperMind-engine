@@ -30,6 +30,8 @@ async fn remember(server: &McpServer, conversation: &str, content: &str) -> u64 
             vocabulary: None,
             source: None,
             derive: None,
+            source_delivery: None,
+            source_settlement: None,
         })
         .await;
     assert!(stored.ok, "remember failed: {:?}", stored.items);

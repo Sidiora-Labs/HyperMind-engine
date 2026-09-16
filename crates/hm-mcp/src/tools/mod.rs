@@ -20,6 +20,7 @@ pub mod remember;
 pub(crate) mod removal;
 pub mod repository;
 pub mod retract;
+pub mod source;
 pub(crate) mod sources;
 pub mod surfaces;
 pub mod websource;

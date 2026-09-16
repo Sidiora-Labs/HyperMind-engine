@@ -52,6 +52,7 @@ pub use tools::remember::{
     RememberSource, RetentionInput, SensitivityInput, VocabularyInput,
 };
 pub use tools::retract::RetractInput;
+pub use tools::source::{SourceDeliveryInput, SourceOutcome, SourceSettlementInput};
 pub use tools::websource::WebSourceRuntime;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -238,9 +239,18 @@ impl McpServer {
     }
 
     #[allow(clippy::too_many_lines, clippy::single_match_else)]
-    async fn remember_inner(&self, input: RememberInput) -> Result<Envelope, Error> {
+    async fn remember_inner(&self, mut input: RememberInput) -> Result<Envelope, Error> {
         if input.conversation.is_empty() {
             return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        if let Some(delivery) = input.source_delivery.take() {
+            if input.source_settlement.is_some() {
+                return Err(Error::new(ErrorCode::InvalidArgument));
+            }
+            return tools::source::deliver(&self.actor, delivery).await;
+        }
+        if let Some(settlement) = input.source_settlement.take() {
+            return tools::source::settle(&self.actor, settlement).await;
         }
         let selectors = usize::from(!input.content.is_empty())
             + usize::from(input.source.is_some())

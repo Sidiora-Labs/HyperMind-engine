@@ -9667,6 +9667,10 @@ pub struct RememberInput {
     pub source: Option<RememberSource>,
     #[serde(default)]
     pub derive: Option<RememberDerive>,
+    #[serde(default)]
+    pub source_delivery: Option<SourceDeliveryInput>,
+    #[serde(default)]
+    pub source_settlement: Option<SourceSettlementInput>,
 }
 ```
 
@@ -9686,6 +9690,71 @@ pub struct RetractInput {
     pub conversation: String,
     pub belief_id: String,
     pub provenance: Vec<ProvenanceInput>,
+}
+```
+
+## hm-mcp::SourceDeliveryInput
+
+<a id="rust-crates-hm-mcp-src-tools-source-rs-sourcedeliveryinput"></a>
+
+Source: [`crates/hm-mcp/src/tools/source.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/source.rs).
+
+When to use: Use `SourceDeliveryInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority. Do not treat constructing or serializing a request as evidence that it was accepted or executed.
+
+
+```rust
+pub struct SourceDeliveryInput {
+    pub connector_id: String,
+    pub delivery_id: String,
+    pub event_name: String,
+    pub credential_version: u32,
+    pub signed_at_ns: i64,
+    pub signature: String,
+    pub body_base64: String,
+    #[serde(default)]
+    pub conversation: Option<String>,
+}
+```
+
+## hm-mcp::SourceOutcome
+
+<a id="rust-crates-hm-mcp-src-tools-source-rs-sourceoutcome"></a>
+
+Source: [`crates/hm-mcp/src/tools/source.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/source.rs).
+
+When to use: Use `SourceOutcome` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub enum SourceOutcome {
+    Applied,
+    Failed,
+}
+```
+
+## hm-mcp::SourceSettlementInput
+
+<a id="rust-crates-hm-mcp-src-tools-source-rs-sourcesettlementinput"></a>
+
+Source: [`crates/hm-mcp/src/tools/source.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/source.rs).
+
+When to use: Use `SourceSettlementInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority. Do not treat constructing or serializing a request as evidence that it was accepted or executed.
+
+
+```rust
+pub struct SourceSettlementInput {
+    pub connector_id: String,
+    pub delivery_id: String,
+    pub attempt: u32,
+    pub outcome: SourceOutcome,
+    #[serde(default)]
+    pub detail: Option<String>,
 }
 ```
 

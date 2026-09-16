@@ -160,6 +160,8 @@ fn derive_input(media_lsn: u64) -> RememberInput {
         vocabulary: None,
         source: None,
         derive: Some(RememberDerive { media_lsn }),
+        source_delivery: None,
+        source_settlement: None,
     }
 }
 

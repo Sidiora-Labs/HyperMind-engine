@@ -32,6 +32,8 @@ async fn seeded_server(path: &std::path::Path) -> McpServer {
                 vocabulary: None,
                 source: None,
                 derive: None,
+                source_delivery: None,
+                source_settlement: None,
             })
             .await;
         assert!(remembered.ok);
@@ -114,6 +116,8 @@ async fn other_verbs_do_not_carry_a_manifest() {
             vocabulary: None,
             source: None,
             derive: None,
+            source_delivery: None,
+            source_settlement: None,
         })
         .await;
     assert!(remembered.ok);

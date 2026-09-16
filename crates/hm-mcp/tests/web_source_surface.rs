@@ -75,6 +75,8 @@ fn source_input(conversation: &str, url: &str) -> RememberInput {
             url: url.to_owned(),
         }),
         derive: None,
+        source_delivery: None,
+        source_settlement: None,
     }
 }
 

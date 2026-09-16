@@ -35,6 +35,8 @@ fn snapshot_input(content: &str, chunk_bytes: usize) -> RememberInput {
         vocabulary: None,
         source: None,
         derive: None,
+        source_delivery: None,
+        source_settlement: None,
     }
 }
 

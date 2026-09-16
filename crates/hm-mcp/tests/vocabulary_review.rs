@@ -42,6 +42,8 @@ fn import() -> RememberInput {
         }),
         source: None,
         derive: None,
+        source_delivery: None,
+        source_settlement: None,
     }
 }
 
