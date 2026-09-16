@@ -76,6 +76,19 @@ pub fn validate_request(request: &Request) -> Result<(), Error> {
         RequestPayload::Checkpoint(value) => validate_checkpoint(value),
         RequestPayload::LatestCheckpoint(value) => validate_latest_checkpoint(value),
         RequestPayload::Subscribe(value) => validate_subscribe(value),
+        RequestPayload::ToolRequest(value) => {
+            if matches!(
+                value.verb.as_str(),
+                "intend" | "predict" | "outcome" | "inspect" | "recall"
+            ) && !value.arguments_json.is_empty()
+                && value.arguments_json.len() <= MAXIMUM_QUERY_BYTES
+                && std::str::from_utf8(&value.arguments_json).is_ok()
+            {
+                Ok(())
+            } else {
+                Err(Error::new(ErrorCode::ProtocolInvalid))
+            }
+        }
         RequestPayload::Health(_) | RequestPayload::LatencyHistograms(_) => Ok(()),
         RequestPayload::Stats(value) if value.actor != 0 => Ok(()),
         RequestPayload::Stats(_) => Err(Error::new(ErrorCode::ProtocolInvalid)),

@@ -6,9 +6,9 @@ use hm_core::{ActorId, ConversationId};
 use hm_ledger::idempotency::ConnectionId;
 use hm_mcp::{
     AttestInput, BeliefClaimInput, BeliefTypeInput, BelieveInput, BindInput, ClaimInput,
-    ConsolidateInput, IntendInput, McpServer, ProvenanceInput, RecallFilters, RecallInput,
-    RecallMode, RememberAnchor, RememberInput, RememberKind, RetentionInput, RetractInput,
-    SensitivityInput,
+    ConsolidateInput, InspectInput, IntendInput, McpServer, OutcomeInput, PredictInput,
+    ProvenanceInput, RecallFilters, RecallInput, RecallMode, RememberAnchor, RememberInput,
+    RememberKind, RetentionInput, RetractInput, SensitivityInput,
 };
 use hm_proj::beliefs::BeliefAsOf;
 use hm_schema::events::BeliefType;
@@ -73,6 +73,7 @@ struct RememberOptionsJson {
 #[napi]
 pub struct NativeEngine {
     actor: ActorEngine,
+    mcp: McpServer,
 }
 
 #[napi]
@@ -94,7 +95,10 @@ impl NativeEngine {
         })
         .await
         .map_err(napi_error)?;
-        Ok(Self { actor })
+        let mcp = McpServer::configured(actor.clone(), None)
+            .await
+            .map_err(napi_error)?;
+        Ok(Self { actor, mcp })
     }
 
     #[napi]
@@ -105,7 +109,7 @@ impl NativeEngine {
         let connection_id = checkpoint_connection(&conversation);
         Ok(NativeSession {
             actor: self.actor.clone(),
-            mcp: McpServer::new(self.actor.clone()),
+            mcp: self.mcp.clone(),
             conversation,
             connection_id,
             checkpoint_lock: Arc::new(tokio::sync::Mutex::new(())),
@@ -169,6 +173,8 @@ impl NativeSession {
             "entity" => RecallMode::Entity,
             "temporal" => RecallMode::Temporal,
             "near" => RecallMode::Near,
+            "timeline" => RecallMode::Timeline,
+            "reconstruct" => RecallMode::Reconstruct,
             _ => return Err(napi::Error::from_reason("invalid recall mode")),
         };
         let filters: RecallFilters = serde_json::from_str(&filters_json).map_err(napi_error)?;
@@ -178,7 +184,7 @@ impl NativeSession {
                 .recall_envelope(RecallInput {
                     mode,
                     query,
-                    conversation: String::new(),
+                    conversation: self.conversation.clone(),
                     limit: limit as usize,
                     since_lsn: 0,
                     filters,
@@ -229,6 +235,26 @@ impl NativeSession {
         let mut input: IntendInput = serde_json::from_str(&input_json).map_err(napi_error)?;
         input.conversation.clone_from(&self.conversation);
         encode_json(&self.mcp.intend_envelope(input).await)
+    }
+
+    #[napi]
+    pub async fn predict(&self, input_json: String) -> napi::Result<String> {
+        let mut input: PredictInput = serde_json::from_str(&input_json).map_err(napi_error)?;
+        input.conversation.clone_from(&self.conversation);
+        encode_json(&self.mcp.predict_envelope(input).await)
+    }
+
+    #[napi]
+    pub async fn outcome(&self, input_json: String) -> napi::Result<String> {
+        let mut input: OutcomeInput = serde_json::from_str(&input_json).map_err(napi_error)?;
+        input.conversation.clone_from(&self.conversation);
+        encode_json(&self.mcp.outcome_envelope(input).await)
+    }
+
+    #[napi]
+    pub async fn inspect(&self, input_json: String) -> napi::Result<String> {
+        let input: InspectInput = serde_json::from_str(&input_json).map_err(napi_error)?;
+        encode_json(&self.mcp.inspect_envelope(input).await)
     }
 
     #[napi]

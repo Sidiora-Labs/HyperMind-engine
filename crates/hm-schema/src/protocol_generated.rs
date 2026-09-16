@@ -7179,10 +7179,313 @@ mod root {
                 }
             }
 
+            /// The table `ToolRequest` in the namespace `hypermind.protocol`
+            ///
+            /// Generated from these locations:
+            /// * Table `ToolRequest` in the file `schemas/protocol.fbs:118`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ToolRequest {
+                /// The field `verb` in the table `ToolRequest`
+                pub verb: ::planus::alloc::string::String,
+                /// The field `arguments_json` in the table `ToolRequest`
+                pub arguments_json: ::planus::alloc::vec::Vec<u8>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ToolRequest {
+                fn default() -> Self {
+                    Self {
+                        verb: ::core::default::Default::default(),
+                        arguments_json: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl ToolRequest {
+                /// Creates a [ToolRequestBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ToolRequestBuilder<()> {
+                    ToolRequestBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_verb: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_arguments_json: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_verb = field_verb.prepare(builder);
+                    let prepared_arguments_json = field_arguments_json.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<8> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_verb);
+                            object_writer.write::<_, _, 4>(&prepared_arguments_json);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ToolRequest>> for ToolRequest {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ToolRequest> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ToolRequest>> for ToolRequest {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ToolRequest>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ToolRequest> for ToolRequest {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ToolRequest> {
+                    ToolRequest::create(builder, &self.verb, &self.arguments_json)
+                }
+            }
+
+            /// Builder for serializing an instance of the [ToolRequest] type.
+            ///
+            /// Can be created using the [ToolRequest::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ToolRequestBuilder<State>(State);
+
+            impl ToolRequestBuilder<()> {
+                /// Setter for the [`verb` field](ToolRequest#structfield.verb).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn verb<T0>(self, value: T0) -> ToolRequestBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    ToolRequestBuilder((value,))
+                }
+            }
+
+            impl<T0> ToolRequestBuilder<(T0,)> {
+                /// Setter for the [`arguments_json` field](ToolRequest#structfield.arguments_json).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn arguments_json<T1>(self, value: T1) -> ToolRequestBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    ToolRequestBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> ToolRequestBuilder<(T0, T1)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ToolRequest].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ToolRequest>
+                where
+                    Self: ::planus::WriteAsOffset<ToolRequest>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAs<::planus::Offset<str>>,
+                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+            > ::planus::WriteAs<::planus::Offset<ToolRequest>> for ToolRequestBuilder<(T0, T1)>
+            {
+                type Prepared = ::planus::Offset<ToolRequest>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ToolRequest> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAs<::planus::Offset<str>>,
+                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+            > ::planus::WriteAsOptional<::planus::Offset<ToolRequest>>
+                for ToolRequestBuilder<(T0, T1)>
+            {
+                type Prepared = ::planus::Offset<ToolRequest>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ToolRequest>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                T0: ::planus::WriteAs<::planus::Offset<str>>,
+                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+            > ::planus::WriteAsOffset<ToolRequest> for ToolRequestBuilder<(T0, T1)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ToolRequest> {
+                    let (v0, v1) = &self.0;
+                    ToolRequest::create(builder, v0, v1)
+                }
+            }
+
+            /// Reference to a deserialized [ToolRequest].
+            #[derive(Copy, Clone)]
+            pub struct ToolRequestRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> ToolRequestRef<'a> {
+                /// Getter for the [`verb` field](ToolRequest#structfield.verb).
+                #[inline]
+                pub fn verb(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(0, "ToolRequest", "verb")
+                }
+
+                /// Getter for the [`arguments_json` field](ToolRequest#structfield.arguments_json).
+                #[inline]
+                pub fn arguments_json(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(1, "ToolRequest", "arguments_json")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ToolRequestRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ToolRequestRef");
+                    f.field("verb", &self.verb());
+                    f.field("arguments_json", &self.arguments_json());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ToolRequestRef<'a>> for ToolRequest {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ToolRequestRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        verb: ::core::convert::Into::into(value.verb()?),
+                        arguments_json: value.arguments_json()?.to_vec(),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ToolRequestRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ToolRequestRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ToolRequestRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ToolRequest>> for ToolRequest {
+                type Value = ::planus::Offset<ToolRequest>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ToolRequest>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ToolRequestRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[ToolRequestRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
             /// The union `RequestPayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `RequestPayload` in the file `schemas/protocol.fbs:118`
+            /// * Union `RequestPayload` in the file `schemas/protocol.fbs:123`
             #[derive(
                 Clone,
                 Debug,
@@ -7239,6 +7542,9 @@ mod root {
 
                 /// The variant of type `CryptoDelete` in the union `RequestPayload`
                 CryptoDelete(::planus::alloc::boxed::Box<self::CryptoDelete>),
+
+                /// The variant of type `ToolRequest` in the union `RequestPayload`
+                ToolRequest(::planus::alloc::boxed::Box<self::ToolRequest>),
             }
 
             impl RequestPayload {
@@ -7367,6 +7673,14 @@ mod root {
                 ) -> ::planus::UnionOffset<Self> {
                     ::planus::UnionOffset::new(15, value.prepare(builder).downcast())
                 }
+
+                #[inline]
+                pub fn create_tool_request(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::ToolRequest>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(16, value.prepare(builder).downcast())
+                }
             }
 
             impl ::planus::WriteAsUnion<RequestPayload> for RequestPayload {
@@ -7394,6 +7708,7 @@ mod root {
                             Self::create_rebuild_projection(builder, value)
                         }
                         Self::CryptoDelete(value) => Self::create_crypto_delete(builder, value),
+                        Self::ToolRequest(value) => Self::create_tool_request(builder, value),
                     }
                 }
             }
@@ -7592,6 +7907,18 @@ mod root {
                 ) -> RequestPayloadBuilder<::planus::Initialized<15, T>>
                 where
                     T: ::planus::WriteAsOffset<self::CryptoDelete>,
+                {
+                    RequestPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`ToolRequest` variant](RequestPayload#variant.ToolRequest).
+                #[inline]
+                pub fn tool_request<T>(
+                    self,
+                    value: T,
+                ) -> RequestPayloadBuilder<::planus::Initialized<16, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::ToolRequest>,
                 {
                     RequestPayloadBuilder(::planus::Initialized(value))
                 }
@@ -8016,6 +8343,33 @@ mod root {
                     ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
                 }
             }
+            impl<T> ::planus::WriteAsUnion<RequestPayload>
+                for RequestPayloadBuilder<::planus::Initialized<16, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ToolRequest>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<RequestPayload> {
+                    ::planus::UnionOffset::new(16, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<RequestPayload>
+                for RequestPayloadBuilder<::planus::Initialized<16, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ToolRequest>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<RequestPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
 
             /// Reference to a deserialized [RequestPayload].
             #[derive(Copy, Clone, Debug)]
@@ -8035,6 +8389,7 @@ mod root {
                 VerifyStatus(self::VerifyStatusRef<'a>),
                 RebuildProjection(self::RebuildProjectionRef<'a>),
                 CryptoDelete(self::CryptoDeleteRef<'a>),
+                ToolRequest(self::ToolRequestRef<'a>),
             }
 
             impl<'a> ::core::convert::TryFrom<RequestPayloadRef<'a>> for RequestPayload {
@@ -8131,6 +8486,12 @@ mod root {
                                 ::core::convert::TryFrom::try_from(value)?,
                             ))
                         }
+
+                        RequestPayloadRef::ToolRequest(value) => {
+                            Self::ToolRequest(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
                     })
                 }
             }
@@ -8187,6 +8548,9 @@ mod root {
                         15 => ::core::result::Result::Ok(Self::CryptoDelete(
                             ::planus::TableRead::from_buffer(buffer, field_offset)?,
                         )),
+                        16 => ::core::result::Result::Ok(Self::ToolRequest(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
                         _ => ::core::result::Result::Err(
                             ::planus::errors::ErrorKind::UnknownUnionTag { tag },
                         ),
@@ -8201,7 +8565,7 @@ mod root {
             /// The table `Request` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Request` in the file `schemas/protocol.fbs:136`
+            /// * Table `Request` in the file `schemas/protocol.fbs:142`
             #[derive(
                 Clone,
                 Debug,
@@ -8495,7 +8859,7 @@ mod root {
             /// The table `ErrorDetail` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `ErrorDetail` in the file `schemas/protocol.fbs:141`
+            /// * Table `ErrorDetail` in the file `schemas/protocol.fbs:147`
             #[derive(
                 Clone,
                 Debug,
@@ -8985,7 +9349,7 @@ mod root {
             /// The table `AppendAck` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AppendAck` in the file `schemas/protocol.fbs:149`
+            /// * Table `AppendAck` in the file `schemas/protocol.fbs:155`
             #[derive(
                 Clone,
                 Debug,
@@ -9562,7 +9926,7 @@ mod root {
             /// The table `BytesResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BytesResult` in the file `schemas/protocol.fbs:159`
+            /// * Table `BytesResult` in the file `schemas/protocol.fbs:165`
             #[derive(
                 Clone,
                 Debug,
@@ -9831,7 +10195,7 @@ mod root {
             ///  Confirms the server-assigned bounded subscription identity.
             ///
             /// Generated from these locations:
-            /// * Table `SubscriptionAck` in the file `schemas/protocol.fbs:164`
+            /// * Table `SubscriptionAck` in the file `schemas/protocol.fbs:170`
             #[derive(
                 Clone,
                 Debug,
@@ -10122,7 +10486,7 @@ mod root {
             /// The table `HealthResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `HealthResult` in the file `schemas/protocol.fbs:168`
+            /// * Table `HealthResult` in the file `schemas/protocol.fbs:174`
             #[derive(
                 Clone,
                 Debug,
@@ -10515,7 +10879,7 @@ mod root {
             /// The table `ProjectionStat` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `ProjectionStat` in the file `schemas/protocol.fbs:174`
+            /// * Table `ProjectionStat` in the file `schemas/protocol.fbs:180`
             #[derive(
                 Clone,
                 Debug,
@@ -10838,7 +11202,7 @@ mod root {
             /// The table `StatsResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `StatsResult` in the file `schemas/protocol.fbs:179`
+            /// * Table `StatsResult` in the file `schemas/protocol.fbs:185`
             #[derive(
                 Clone,
                 Debug,
@@ -11268,7 +11632,7 @@ mod root {
             /// The table `LatencyBucket` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyBucket` in the file `schemas/protocol.fbs:186`
+            /// * Table `LatencyBucket` in the file `schemas/protocol.fbs:192`
             #[derive(
                 Clone,
                 Debug,
@@ -11639,7 +12003,7 @@ mod root {
             /// The table `LatencyResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `LatencyResult` in the file `schemas/protocol.fbs:192`
+            /// * Table `LatencyResult` in the file `schemas/protocol.fbs:198`
             #[derive(
                 Clone,
                 Debug,
@@ -11917,7 +12281,7 @@ mod root {
             /// The table `VerifyResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `VerifyResult` in the file `schemas/protocol.fbs:196`
+            /// * Table `VerifyResult` in the file `schemas/protocol.fbs:202`
             #[derive(
                 Clone,
                 Debug,
@@ -12395,7 +12759,7 @@ mod root {
             /// The table `RebuildResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RebuildResult` in the file `schemas/protocol.fbs:204`
+            /// * Table `RebuildResult` in the file `schemas/protocol.fbs:210`
             #[derive(
                 Clone,
                 Debug,
@@ -12762,7 +13126,7 @@ mod root {
             /// The table `DeleteResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `DeleteResult` in the file `schemas/protocol.fbs:210`
+            /// * Table `DeleteResult` in the file `schemas/protocol.fbs:216`
             #[derive(
                 Clone,
                 Debug,
@@ -13078,7 +13442,7 @@ mod root {
             /// The table `FrameRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `FrameRecord` in the file `schemas/protocol.fbs:215`
+            /// * Table `FrameRecord` in the file `schemas/protocol.fbs:221`
             #[derive(
                 Clone,
                 Debug,
@@ -13575,7 +13939,7 @@ mod root {
             /// The table `TranscriptResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `TranscriptResult` in the file `schemas/protocol.fbs:224`
+            /// * Table `TranscriptResult` in the file `schemas/protocol.fbs:230`
             #[derive(
                 Clone,
                 Debug,
@@ -13907,7 +14271,7 @@ mod root {
             /// The table `TemporalWindowRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `TemporalWindowRecord` in the file `schemas/protocol.fbs:229`
+            /// * Table `TemporalWindowRecord` in the file `schemas/protocol.fbs:235`
             #[derive(
                 Clone,
                 Debug,
@@ -14364,7 +14728,7 @@ mod root {
             /// The table `RecallResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `RecallResult` in the file `schemas/protocol.fbs:236`
+            /// * Table `RecallResult` in the file `schemas/protocol.fbs:242`
             #[derive(
                 Clone,
                 Debug,
@@ -14727,7 +15091,7 @@ mod root {
             /// The table `BeliefProvenanceRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefProvenanceRecord` in the file `schemas/protocol.fbs:241`
+            /// * Table `BeliefProvenanceRecord` in the file `schemas/protocol.fbs:247`
             #[derive(
                 Clone,
                 Debug,
@@ -15196,7 +15560,7 @@ mod root {
             /// The table `BeliefConflictRecord` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefConflictRecord` in the file `schemas/protocol.fbs:248`
+            /// * Table `BeliefConflictRecord` in the file `schemas/protocol.fbs:254`
             #[derive(
                 Clone,
                 Debug,
@@ -15705,7 +16069,7 @@ mod root {
             /// The table `BeliefResult` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `BeliefResult` in the file `schemas/protocol.fbs:256`
+            /// * Table `BeliefResult` in the file `schemas/protocol.fbs:262`
             #[derive(
                 Clone,
                 Debug,
@@ -16937,7 +17301,7 @@ mod root {
             ///  Identifies the ledger record containing the accepted checkpoint.
             ///
             /// Generated from these locations:
-            /// * Table `CheckpointAck` in the file `schemas/protocol.fbs:275`
+            /// * Table `CheckpointAck` in the file `schemas/protocol.fbs:281`
             #[derive(
                 Clone,
                 Debug,
@@ -17217,7 +17581,7 @@ mod root {
             ///  Returns the latest opaque turn state without interpreting its bytes.
             ///
             /// Generated from these locations:
-            /// * Table `CheckpointResult` in the file `schemas/protocol.fbs:280`
+            /// * Table `CheckpointResult` in the file `schemas/protocol.fbs:286`
             #[derive(
                 Clone,
                 Debug,
@@ -17600,7 +17964,7 @@ mod root {
             /// The table `AttestAck` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `AttestAck` in the file `schemas/protocol.fbs:286`
+            /// * Table `AttestAck` in the file `schemas/protocol.fbs:292`
             #[derive(
                 Clone,
                 Debug,
@@ -17962,7 +18326,7 @@ mod root {
             /// The union `ResponsePayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `ResponsePayload` in the file `schemas/protocol.fbs:292`
+            /// * Union `ResponsePayload` in the file `schemas/protocol.fbs:298`
             #[derive(
                 Clone,
                 Debug,
@@ -19058,7 +19422,7 @@ mod root {
             /// The table `Response` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `Response` in the file `schemas/protocol.fbs:311`
+            /// * Table `Response` in the file `schemas/protocol.fbs:317`
             #[derive(
                 Clone,
                 Debug,
@@ -19441,7 +19805,7 @@ mod root {
             ///  Pushes one committed ledger event to a subscriber.
             ///
             /// Generated from these locations:
-            /// * Table `Event` in the file `schemas/protocol.fbs:318`
+            /// * Table `Event` in the file `schemas/protocol.fbs:324`
             #[derive(
                 Clone,
                 Debug,
@@ -19965,7 +20329,7 @@ mod root {
             /// The union `WirePayload` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Union `WirePayload` in the file `schemas/protocol.fbs:328`
+            /// * Union `WirePayload` in the file `schemas/protocol.fbs:334`
             #[derive(
                 Clone,
                 Debug,
@@ -20351,7 +20715,7 @@ mod root {
             /// The table `WireEnvelope` in the namespace `hypermind.protocol`
             ///
             /// Generated from these locations:
-            /// * Table `WireEnvelope` in the file `schemas/protocol.fbs:336`
+            /// * Table `WireEnvelope` in the file `schemas/protocol.fbs:342`
             #[derive(
                 Clone,
                 Debug,

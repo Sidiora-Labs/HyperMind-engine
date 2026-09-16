@@ -13,7 +13,7 @@ pub struct WakeSignal {
 #[must_use]
 pub fn evaluate(intention: &IntentionSet, signal: &WakeSignal) -> Option<IntentionFired> {
     if signal.trigger_lsn == 0
-        || signal.now_ns > intention.expires_at_ns
+        || (intention.expires_at_ns != 0 && signal.now_ns >= intention.expires_at_ns)
         || !matches_signal(intention.trigger.as_ref()?, signal)
     {
         return None;
@@ -21,6 +21,7 @@ pub fn evaluate(intention: &IntentionSet, signal: &WakeSignal) -> Option<Intenti
     let mut hasher = blake3::Hasher::new();
     hasher.update(b"hypermind.wake.v1\0");
     hasher.update(&intention.intention_id);
+    hasher.update(&signal.trigger_lsn.to_le_bytes());
     hasher.update(signal.kind.as_bytes());
     hasher.update(&signal.key);
     Some(IntentionFired {
@@ -38,10 +39,17 @@ pub fn rearm(
 ) -> Option<IntentionSet> {
     (decision == AttentionDecision::Schedule
         && next_at_ns > 0
-        && next_at_ns < intention.expires_at_ns)
-        .then(|| IntentionSet {
-            trigger: Some(WakeTrigger::WakeAt(Box::new(WakeAt { at_ns: next_at_ns }))),
-            ..intention.clone()
+        && (intention.expires_at_ns == 0 || next_at_ns < intention.expires_at_ns))
+        .then(|| {
+            let mut hasher = blake3::Hasher::new();
+            hasher.update(b"hypermind.intention.rearm.v1\0");
+            hasher.update(&intention.intention_id);
+            hasher.update(&next_at_ns.to_le_bytes());
+            IntentionSet {
+                intention_id: hasher.finalize().as_bytes().to_vec(),
+                trigger: Some(WakeTrigger::WakeAt(Box::new(WakeAt { at_ns: next_at_ns }))),
+                ..intention.clone()
+            }
         })
 }
 

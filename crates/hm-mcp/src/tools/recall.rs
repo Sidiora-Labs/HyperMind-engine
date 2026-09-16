@@ -10,10 +10,15 @@ pub enum RecallMode {
     Temporal,
     Near,
     Timeline,
+    Reconstruct,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, schemars::JsonSchema)]
 pub struct RecallFilters {
+    #[serde(default)]
+    pub anchor_lsns: Vec<u64>,
+    #[serde(default)]
+    pub maximum_output_tokens: Option<u32>,
     #[serde(default)]
     pub conversation: Option<String>,
     #[serde(default)]

@@ -43,6 +43,7 @@ export { StatsResult, StatsResultT } from './hypermind/protocol/stats-result';
 export { Subscribe, SubscribeT } from './hypermind/protocol/subscribe';
 export { SubscriptionAck, SubscriptionAckT } from './hypermind/protocol/subscription-ack';
 export { TemporalWindowRecord, TemporalWindowRecordT } from './hypermind/protocol/temporal-window-record';
+export { ToolRequest, ToolRequestT } from './hypermind/protocol/tool-request';
 export { Transcript, TranscriptT } from './hypermind/protocol/transcript';
 export { TranscriptResult, TranscriptResultT } from './hypermind/protocol/transcript-result';
 export { VerifyResult, VerifyResultT } from './hypermind/protocol/verify-result';

@@ -115,6 +115,11 @@ table CryptoDelete {
   actor:ushort;
 }
 
+table ToolRequest {
+  verb:string (required);
+  arguments_json:[ubyte] (required);
+}
+
 union RequestPayload {
   Append,
   Activate,
@@ -130,7 +135,8 @@ union RequestPayload {
   LatencyHistograms,
   VerifyStatus,
   RebuildProjection,
-  CryptoDelete
+  CryptoDelete,
+  ToolRequest
 }
 
 table Request {

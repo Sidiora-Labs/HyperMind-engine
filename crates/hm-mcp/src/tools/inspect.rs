@@ -3,7 +3,7 @@
 use crate::Envelope;
 use hm_core::{Error, ErrorCode, LSN};
 use hm_schema::event::{self, Boundary, EventHistory};
-use hm_schema::events::{Authority, EventPayload};
+use hm_schema::events::{AttentionDecision, Authority, EventPayload};
 use hm_serve::actor::ActorEngine;
 use rmcp::schemars;
 use serde::Deserialize;
@@ -40,6 +40,44 @@ pub async fn run(actor: &ActorEngine, input: InspectInput) -> Result<Envelope, E
     let Some(uri) = input.uri else {
         return Ok(envelope);
     };
+    if uri == format!("hm://{}/attention", actor.actor()) {
+        let history = actor.attention_history(256).await?;
+        envelope.items[0]["attention"] = json!(
+            history
+                .iter()
+                .map(|record| json!({
+                    "lsn": record.lsn,
+                    "intention_id": String::from_utf8_lossy(&record.intention_id),
+                    "wake_id": hex(&record.wake_id),
+                    "decision": attention_name(record.decision),
+                    "reason": record.reason,
+                }))
+                .collect::<Vec<_>>()
+        );
+        envelope.provenance.extend(
+            history
+                .iter()
+                .map(|record| format!("hm://{}/lsn/{}", actor.actor(), record.lsn)),
+        );
+        return Ok(envelope);
+    }
+    if uri == format!("hm://{}/calibration", actor.actor()) {
+        let counters = actor.calibration().await?;
+        envelope.items[0]["calibration"] = json!(
+            counters
+                .iter()
+                .map(|(kind, counts)| json!({
+                    "predicate_kind": super::predict::kind_name(*kind),
+                    "supported": counts.supported,
+                    "contradicted": counts.contradicted,
+                    "pending": counts.pending,
+                    "unresolvable": counts.unresolvable,
+                    "not_executed": counts.not_executed,
+                }))
+                .collect::<Vec<_>>()
+        );
+        return Ok(envelope);
+    }
     let all_frames = actor.frames_since(LSN::new(0), None, usize::MAX).await?;
     let mut history = InspectHistory::default();
     for frame in &all_frames {
@@ -136,12 +174,25 @@ fn references(payload: &EventPayload) -> Vec<LSN> {
         EventPayload::LoopClosed(value) => value.evidence_lsns.clone().unwrap_or_default(),
         EventPayload::Binding(value) => vec![value.evidence_lsn],
         EventPayload::Attestation(value) => vec![value.target_lsn],
+        EventPayload::OutcomeObserved(value) => value.observation_lsns.clone(),
         _ => Vec::new(),
     };
     raw.into_iter()
         .filter(|value| *value != 0)
         .map(LSN::new)
         .collect()
+}
+
+const fn attention_name(value: AttentionDecision) -> &'static str {
+    match value {
+        AttentionDecision::Ignore => "ignore",
+        AttentionDecision::Remember => "remember",
+        AttentionDecision::Batch => "batch",
+        AttentionDecision::Schedule => "schedule",
+        AttentionDecision::AskUser => "ask_user",
+        AttentionDecision::StartWork => "start_work",
+        AttentionDecision::Notify => "notify",
+    }
 }
 
 const fn authority_name(authority: Authority) -> &'static str {

@@ -17,6 +17,7 @@ use rmcp::{Json, ServiceExt, schemars, tool, tool_router, transport::stdio};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 
+pub mod dispatcher;
 pub mod tools;
 pub use tools::attest::{AttestDisposition, AttestInput};
 pub use tools::believe::{
@@ -29,8 +30,13 @@ pub use tools::consolidate::{
 pub use tools::dispute::{DisputeInput, DisputeRuntime};
 pub use tools::forget::{ForgetAction, ForgetInput};
 pub use tools::inspect::InspectInput;
-pub use tools::intend::{IntendAction, IntendCloseReason, IntendInput};
+pub use tools::intend::{
+    AttentionFactorsInput, IntendAction, IntendCloseReason, IntendInput, WakeTriggerInput,
+};
+pub use tools::outcome::OutcomeInput;
+pub use tools::predict::{ExpectedPredicateInput, PredicateKindInput, PredictInput};
 pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
+pub use tools::reconstruct::ReconstructionRuntime;
 pub use tools::remember::{
     AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberInput, RememberKind, RetentionInput,
     SensitivityInput,
@@ -114,6 +120,7 @@ pub struct McpServer {
     dispute_runtime: Option<DisputeRuntime>,
     consolidation_runtime: Option<ConsolidationRuntime>,
     embedding_runtime: Option<EmbeddingRuntime>,
+    reconstruction_runtime: Option<ReconstructionRuntime>,
 }
 
 impl McpServer {
@@ -125,6 +132,7 @@ impl McpServer {
             dispute_runtime: None,
             consolidation_runtime: None,
             embedding_runtime: None,
+            reconstruction_runtime: None,
         }
     }
 
@@ -139,6 +147,7 @@ impl McpServer {
             dispute_runtime: None,
             consolidation_runtime: None,
             embedding_runtime: None,
+            reconstruction_runtime: None,
         }
     }
 
@@ -158,6 +167,24 @@ impl McpServer {
     pub fn with_embedding_runtime(mut self, runtime: EmbeddingRuntime) -> Self {
         self.embedding_runtime = Some(runtime);
         self
+    }
+
+    #[must_use]
+    pub fn with_reconstruction_runtime(mut self, runtime: ReconstructionRuntime) -> Self {
+        self.reconstruction_runtime = Some(runtime);
+        self
+    }
+
+    pub async fn configured(
+        actor: ActorEngine,
+        admin_token: Option<hm_serve::config::CapabilityToken>,
+    ) -> Result<Self, Error> {
+        let dispatcher = tokio::task::spawn_blocking(dispatcher::McpToolDispatcher::from_env)
+            .await
+            .map_err(|_| Error::new(ErrorCode::OperationUnavailable))??;
+        let mut server = dispatcher.server(actor);
+        server.admin_token = admin_token;
+        Ok(server)
     }
 
     pub async fn remember_envelope(&self, input: RememberInput) -> Envelope {
@@ -380,6 +407,14 @@ impl McpServer {
     }
 
     async fn recall_inner(&self, input: RecallInput) -> Result<Envelope, Error> {
+        if matches!(input.mode, RecallMode::Reconstruct) {
+            return tools::reconstruct::run(
+                &self.actor,
+                self.reconstruction_runtime.as_ref(),
+                input,
+            )
+            .await;
+        }
         if input.limit == 0 || input.limit > 4096 {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
@@ -521,6 +556,20 @@ impl McpServer {
         }
     }
 
+    pub async fn predict_envelope(&self, input: PredictInput) -> Envelope {
+        match tools::predict::run(&self.actor, input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, true),
+        }
+    }
+
+    pub async fn outcome_envelope(&self, input: OutcomeInput) -> Envelope {
+        match tools::outcome::run(&self.actor, input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, true),
+        }
+    }
+
     pub async fn forget_envelope(&self, input: ForgetInput) -> Envelope {
         match tools::forget::run(&self.actor, self.admin_token.as_ref(), input).await {
             Ok(value) => value,
@@ -583,6 +632,17 @@ impl McpServer {
 
 #[tool_router(server_handler)]
 impl McpServer {
+    #[tool(description = "Register immutable bounded expectations before observing results")]
+    async fn predict(&self, Parameters(input): Parameters<PredictInput>) -> Json<Envelope> {
+        Json(self.predict_envelope(input).await)
+    }
+
+    #[tool(
+        description = "Assess a prediction from cited observed ledger events, never remembered narrative"
+    )]
+    async fn outcome(&self, Parameters(input): Parameters<OutcomeInput>) -> Json<Envelope> {
+        Json(self.outcome_envelope(input).await)
+    }
     #[tool(
         description = "Persist a user message, delivered assistant message, or chunked document with optional anchor, retention, and sensitivity"
     )]
@@ -780,6 +840,8 @@ mod tests {
                 "forget",
                 "inspect",
                 "intend",
+                "outcome",
+                "predict",
                 "recall",
                 "remember",
                 "retract"

@@ -97,9 +97,14 @@ impl PredictionsProjection {
                         Error::new(ErrorCode::OrderingViolation).at_lsn(frame.header.lsn)
                     })
                     .and_then(|bytes| decode::<PredictionRecord>(&bytes))?;
-                if record.revision != value.revision || record.assessment.is_some() {
+                if record.revision != value.revision
+                    || record
+                        .assessment
+                        .is_some_and(|assessment| assessment != OutcomeAssessment::Pending)
+                {
                     return Err(Error::new(ErrorCode::IdempotencyConflict).at_lsn(frame.header.lsn));
                 }
+                let previous_assessment = record.assessment;
                 record.assessment = Some(value.assessment);
                 record.observation_lsns = value.observation_lsns;
                 record.evaluator_version = Some(value.evaluator_version);
@@ -117,6 +122,9 @@ impl PredictionsProjection {
                         .map(|bytes| decode::<CalibrationCounters>(&bytes))
                         .transpose()?
                         .unwrap_or_default();
+                    if previous_assessment == Some(OutcomeAssessment::Pending) {
+                        counters.pending = counters.pending.saturating_sub(1);
+                    }
                     counters.increment(value.assessment);
                     mutations.push(Mutation::put(key, encode(&counters)?));
                 }

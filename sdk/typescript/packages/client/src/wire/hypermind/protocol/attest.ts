@@ -47,8 +47,28 @@ clientSeq():bigint {
   return offset ? this.bb!.readUint64(this.bb_pos + offset) : BigInt('0');
 }
 
+helpful(index: number):bigint|null {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.readUint64(this.bb!.__vector(this.bb_pos + offset) + index * 8) : BigInt(0);
+}
+
+helpfulLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 10);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
+harmful(index: number):bigint|null {
+  const offset = this.bb!.__offset(this.bb_pos, 12);
+  return offset ? this.bb!.readUint64(this.bb!.__vector(this.bb_pos + offset) + index * 8) : BigInt(0);
+}
+
+harmfulLength():number {
+  const offset = this.bb!.__offset(this.bb_pos, 12);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+}
+
 static startAttest(builder:flatbuffers.Builder) {
-  builder.startObject(3);
+  builder.startObject(5);
 }
 
 static addUsed(builder:flatbuffers.Builder, usedOffset:flatbuffers.Offset) {
@@ -87,16 +107,50 @@ static addClientSeq(builder:flatbuffers.Builder, clientSeq:bigint) {
   builder.addFieldInt64(2, clientSeq, BigInt('0'));
 }
 
+static addHelpful(builder:flatbuffers.Builder, helpfulOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(3, helpfulOffset, 0);
+}
+
+static createHelpfulVector(builder:flatbuffers.Builder, data:bigint[]):flatbuffers.Offset {
+  builder.startVector(8, data.length, 8);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addInt64(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startHelpfulVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(8, numElems, 8);
+}
+
+static addHarmful(builder:flatbuffers.Builder, harmfulOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(4, harmfulOffset, 0);
+}
+
+static createHarmfulVector(builder:flatbuffers.Builder, data:bigint[]):flatbuffers.Offset {
+  builder.startVector(8, data.length, 8);
+  for (let i = data.length - 1; i >= 0; i--) {
+    builder.addInt64(data[i]!);
+  }
+  return builder.endVector();
+}
+
+static startHarmfulVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(8, numElems, 8);
+}
+
 static endAttest(builder:flatbuffers.Builder):flatbuffers.Offset {
   const offset = builder.endObject();
   return offset;
 }
 
-static createAttest(builder:flatbuffers.Builder, usedOffset:flatbuffers.Offset, ignoredOffset:flatbuffers.Offset, clientSeq:bigint):flatbuffers.Offset {
+static createAttest(builder:flatbuffers.Builder, usedOffset:flatbuffers.Offset, ignoredOffset:flatbuffers.Offset, clientSeq:bigint, helpfulOffset:flatbuffers.Offset, harmfulOffset:flatbuffers.Offset):flatbuffers.Offset {
   Attest.startAttest(builder);
   Attest.addUsed(builder, usedOffset);
   Attest.addIgnored(builder, ignoredOffset);
   Attest.addClientSeq(builder, clientSeq);
+  Attest.addHelpful(builder, helpfulOffset);
+  Attest.addHarmful(builder, harmfulOffset);
   return Attest.endAttest(builder);
 }
 
@@ -104,7 +158,9 @@ unpack(): AttestT {
   return new AttestT(
     this.bb!.createScalarList(this.used.bind(this), this.usedLength()),
     this.bb!.createScalarList(this.ignored.bind(this), this.ignoredLength()),
-    this.clientSeq()
+    this.clientSeq(),
+    this.bb!.createScalarList(this.helpful.bind(this), this.helpfulLength()),
+    this.bb!.createScalarList(this.harmful.bind(this), this.harmfulLength())
   );
 }
 
@@ -113,6 +169,8 @@ unpackTo(_o: AttestT): void {
   _o.used = this.bb!.createScalarList(this.used.bind(this), this.usedLength());
   _o.ignored = this.bb!.createScalarList(this.ignored.bind(this), this.ignoredLength());
   _o.clientSeq = this.clientSeq();
+  _o.helpful = this.bb!.createScalarList(this.helpful.bind(this), this.helpfulLength());
+  _o.harmful = this.bb!.createScalarList(this.harmful.bind(this), this.harmfulLength());
 }
 }
 
@@ -120,18 +178,24 @@ export class AttestT {
 constructor(
   public used: (bigint)[] = [],
   public ignored: (bigint)[] = [],
-  public clientSeq: bigint = BigInt('0')
+  public clientSeq: bigint = BigInt('0'),
+  public helpful: (bigint)[] = [],
+  public harmful: (bigint)[] = []
 ){}
 
 
 pack(builder:flatbuffers.Builder): flatbuffers.Offset {
   const used = Attest.createUsedVector(builder, this.used);
   const ignored = Attest.createIgnoredVector(builder, this.ignored);
+  const helpful = Attest.createHelpfulVector(builder, this.helpful);
+  const harmful = Attest.createHarmfulVector(builder, this.harmful);
 
   return Attest.createAttest(builder,
     used,
     ignored,
-    this.clientSeq
+    this.clientSeq,
+    helpful,
+    harmful
   );
 }
 }

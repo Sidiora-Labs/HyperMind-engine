@@ -31,10 +31,6 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
         projection_map_bytes: config.projection_map_bytes,
     })
     .await?;
-    let runtime = tokio::task::spawn_blocking(hm_mcp::EmbeddingRuntime::from_env).await??;
-    let mut server = hm_mcp::McpServer::new_with_admin(actor, config.admin_token);
-    if let Some(runtime) = runtime {
-        server = server.with_embedding_runtime(runtime);
-    }
+    let server = hm_mcp::McpServer::configured(actor, Some(config.admin_token)).await?;
     hm_mcp::serve_stdio(server).await
 }

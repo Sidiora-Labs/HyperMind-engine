@@ -6,10 +6,19 @@ import {
   BeliefRecord,
   BeliefType,
   BelieveInput,
+  InspectInput,
+  IntendAction,
+  OutcomeInput,
+  PredictInput,
+  encodeToolArguments,
   parseBundle,
 } from "@hypermind/client";
 
 export type { AsOfOptions, BeliefProvenance, BeliefRecord, BeliefType, BelieveInput };
+export type {
+  AttentionFactors, ExpectedPredicateInput, InspectInput, IntendAction, LedgerInteger,
+  OutcomeInput, PredicateKind, PredictInput, WakeTrigger,
+} from "@hypermind/client";
 
 interface NativeEngineHandle {
   session(conversation: string): NativeSessionHandle;
@@ -21,6 +30,9 @@ interface NativeSessionHandle {
   activate(query: string, budgetTokens: number): Promise<Uint8Array>;
   checkpoint(turnId: string, blob: Uint8Array): Promise<string>;
   intend(input: string): Promise<string>;
+  predict(input: string): Promise<string>;
+  outcome(input: string): Promise<string>;
+  inspect(input: string): Promise<string>;
   bind(input: string): Promise<string>;
   attest(input: string): Promise<string>;
   consolidate(input: string): Promise<string>;
@@ -48,7 +60,7 @@ export interface EngineConfig {
 }
 
 export type HealthStatus = "semantic_ready" | "semantic_lagging" | "lexical_only" | "unavailable";
-export type RecallMode = "semantic" | "lexical" | "entity" | "temporal" | "near";
+export type RecallMode = "semantic" | "lexical" | "entity" | "temporal" | "near" | "timeline" | "reconstruct";
 export type Retention = "current_state" | "daily" | "durable" | "do_not_store";
 export type Sensitivity = "public" | "personal" | "secret";
 export type AnchorFacet = "path" | "symbol" | "url" | "entity";
@@ -94,6 +106,8 @@ export interface RecallOptions {
     temporal_to_ns?: number;
     anchor?: string;
     turn_text?: string;
+    anchor_lsns?: Array<number | bigint>;
+    maximum_output_tokens?: number;
   };
 }
 
@@ -185,7 +199,7 @@ export class Session {
         query,
         normalized.limit ?? 32,
         normalized.mode ?? "lexical",
-        JSON.stringify(normalized.filters ?? {}),
+        encodeToolArguments(normalized.filters ?? {}),
       ),
     );
   }
@@ -198,10 +212,26 @@ export class Session {
     return BigInt(await this.native.checkpoint(turnId, blob));
   }
 
-  async intend(action: unknown): Promise<Envelope> {
+  async intend(action: IntendAction): Promise<Envelope> {
     return decodeEnvelope(
-      await this.native.intend(JSON.stringify({ conversation: this.conversation, action })),
+      await this.native.intend(encodeToolArguments({ conversation: this.conversation, action })),
     );
+  }
+
+  async predict(input: PredictInput): Promise<Envelope> {
+    return decodeEnvelope(await this.native.predict(encodeToolArguments({
+      ...input, conversation: this.conversation,
+    })));
+  }
+
+  async outcome(input: OutcomeInput): Promise<Envelope> {
+    return decodeEnvelope(await this.native.outcome(encodeToolArguments({
+      ...input, conversation: this.conversation,
+    })));
+  }
+
+  async inspect(input: InspectInput = {}): Promise<Envelope> {
+    return decodeEnvelope(await this.native.inspect(encodeToolArguments(input)));
   }
 
   async bind(input: BindInput): Promise<Envelope> {

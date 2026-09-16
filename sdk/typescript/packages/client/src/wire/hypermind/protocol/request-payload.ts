@@ -13,6 +13,7 @@ import { RebuildProjection, RebuildProjectionT } from '../../hypermind/protocol/
 import { Recall, RecallT } from '../../hypermind/protocol/recall';
 import { Stats, StatsT } from '../../hypermind/protocol/stats';
 import { Subscribe, SubscribeT } from '../../hypermind/protocol/subscribe';
+import { ToolRequest, ToolRequestT } from '../../hypermind/protocol/tool-request';
 import { Transcript, TranscriptT } from '../../hypermind/protocol/transcript';
 import { VerifyStatus, VerifyStatusT } from '../../hypermind/protocol/verify-status';
 
@@ -33,13 +34,14 @@ export enum RequestPayload {
   LatencyHistograms = 12,
   VerifyStatus = 13,
   RebuildProjection = 14,
-  CryptoDelete = 15
+  CryptoDelete = 15,
+  ToolRequest = 16
 }
 
 export function unionToRequestPayload(
   type: RequestPayload,
-  accessor: (obj:Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|Transcript|VerifyStatus) => Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|Transcript|VerifyStatus|null
-): Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|Transcript|VerifyStatus|null {
+  accessor: (obj:Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|ToolRequest|Transcript|VerifyStatus) => Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|ToolRequest|Transcript|VerifyStatus|null
+): Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|ToolRequest|Transcript|VerifyStatus|null {
   switch(RequestPayload[type]) {
     case 'NONE': return null; 
     case 'Append': return accessor(new Append())! as Append;
@@ -57,15 +59,16 @@ export function unionToRequestPayload(
     case 'VerifyStatus': return accessor(new VerifyStatus())! as VerifyStatus;
     case 'RebuildProjection': return accessor(new RebuildProjection())! as RebuildProjection;
     case 'CryptoDelete': return accessor(new CryptoDelete())! as CryptoDelete;
+    case 'ToolRequest': return accessor(new ToolRequest())! as ToolRequest;
     default: return null;
   }
 }
 
 export function unionListToRequestPayload(
   type: RequestPayload, 
-  accessor: (index: number, obj:Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|Transcript|VerifyStatus) => Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|Transcript|VerifyStatus|null, 
+  accessor: (index: number, obj:Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|ToolRequest|Transcript|VerifyStatus) => Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|ToolRequest|Transcript|VerifyStatus|null,
   index: number
-): Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|Transcript|VerifyStatus|null {
+): Activate|Append|AsOf|Attest|Checkpoint|CryptoDelete|Health|LatencyHistograms|LatestCheckpoint|RebuildProjection|Recall|Stats|Subscribe|ToolRequest|Transcript|VerifyStatus|null {
   switch(RequestPayload[type]) {
     case 'NONE': return null; 
     case 'Append': return accessor(index, new Append())! as Append;
@@ -83,6 +86,7 @@ export function unionListToRequestPayload(
     case 'VerifyStatus': return accessor(index, new VerifyStatus())! as VerifyStatus;
     case 'RebuildProjection': return accessor(index, new RebuildProjection())! as RebuildProjection;
     case 'CryptoDelete': return accessor(index, new CryptoDelete())! as CryptoDelete;
+    case 'ToolRequest': return accessor(index, new ToolRequest())! as ToolRequest;
     default: return null;
   }
 }

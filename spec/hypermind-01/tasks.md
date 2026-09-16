@@ -211,7 +211,7 @@
   - [x] 7.4 HNSW lane above 50k with recall parity
     - usearch behind the hnsw feature as a checkpointed projection selected automatically above 50k vectors per space; parity test against the flat lane reports recall@10 and is a gate at 0.98; the flat lane stays the default and the deterministic reference.
     - _Requirements: 6.1_
-  - [ ] 7.5 MCP predict and outcome; intend with wake triggers; recall reconstruct; attention history via inspect
+  - [x] 7.5 MCP predict and outcome; intend with wake triggers; recall reconstruct; attention history via inspect
     - predict registers a prediction with predicates and a deadline; outcome records an assessment citing observation LSNs; intend accepts the wake-trigger vocabulary and cancels intentions; inspect exposes attention history with reasons and prediction calibration; the TypeScript SDK mirrors all of it.
     - _Requirements: 13.2, 14.2, 11.3_
   - [ ] 7.6 Attention precision, calibration, HNSW parity; LongMemEval at 90 and LoCoMo at 75

@@ -131,7 +131,12 @@ async fn execute(command: Command) -> Result<Value> {
     match command {
         Command::Init { path, actor } => initialize(&path, actor).await,
         Command::Serve { config } => {
-            let server = UdsServer::bind(load(&config)?).await?;
+            let dispatcher =
+                tokio::task::spawn_blocking(hm_mcp::dispatcher::McpToolDispatcher::from_env)
+                    .await??;
+            let server = UdsServer::bind(load(&config)?)
+                .await?
+                .with_tool_dispatcher(std::sync::Arc::new(dispatcher));
             server
                 .serve_until(async {
                     let _ = tokio::signal::ctrl_c().await;

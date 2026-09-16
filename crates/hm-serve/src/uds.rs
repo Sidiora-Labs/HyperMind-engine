@@ -32,12 +32,22 @@ use tokio::sync::{Semaphore, mpsc, watch};
 
 const MAXIMUM_SUBSCRIPTIONS: u32 = 64;
 
+pub trait ToolDispatcher: Send + Sync {
+    fn dispatch(
+        &self,
+        actor: ActorEngine,
+        verb: String,
+        arguments_json: Vec<u8>,
+    ) -> std::pin::Pin<Box<dyn Future<Output = Result<Vec<u8>, Error>> + Send + '_>>;
+}
+
 pub struct UdsServer {
     config: Arc<ServerConfig>,
     actors: Arc<BTreeMap<u16, ActorEngine>>,
     listener: UnixListener,
     active_connections: Arc<AtomicUsize>,
     latencies: LatencyHistograms,
+    tool_dispatcher: Option<Arc<dyn ToolDispatcher>>,
 }
 
 impl UdsServer {
@@ -78,7 +88,14 @@ impl UdsServer {
             listener,
             active_connections: Arc::new(AtomicUsize::new(0)),
             latencies: LatencyHistograms::default(),
+            tool_dispatcher: None,
         })
+    }
+
+    #[must_use]
+    pub fn with_tool_dispatcher(mut self, dispatcher: Arc<dyn ToolDispatcher>) -> Self {
+        self.tool_dispatcher = Some(dispatcher);
+        self
     }
 
     pub async fn serve_until(self, shutdown: impl Future<Output = ()>) -> Result<(), Error> {
@@ -96,6 +113,7 @@ impl UdsServer {
                     let actors = Arc::clone(&self.actors);
                     let active = Arc::clone(&self.active_connections);
                     let latencies = self.latencies.clone();
+                    let tool_dispatcher = self.tool_dispatcher.clone();
                     active.fetch_add(1, Ordering::Relaxed);
                     tokio::spawn(async move {
                         let _permit = permit;
@@ -105,6 +123,7 @@ impl UdsServer {
                             actors,
                             Arc::clone(&active),
                             latencies,
+                            tool_dispatcher,
                         )
                         .await;
                         active.fetch_sub(1, Ordering::Relaxed);
@@ -141,6 +160,7 @@ async fn handle_connection(
     actors: Arc<BTreeMap<u16, ActorEngine>>,
     active_connections: Arc<AtomicUsize>,
     latencies: LatencyHistograms,
+    tool_dispatcher: Option<Arc<dyn ToolDispatcher>>,
 ) -> Result<(), Error> {
     let (mut reader, mut writer) = stream.into_split();
     let (output, mut queued) = mpsc::channel::<Vec<u8>>(config.maximum_output_frames);
@@ -271,6 +291,7 @@ async fn handle_connection(
                 &actors,
                 active_connections.load(Ordering::Relaxed),
                 &latencies,
+                tool_dispatcher.as_deref(),
             )
             .await;
             latencies.observe(operation, started.elapsed());
@@ -327,6 +348,7 @@ async fn handle_request(
     actors: &BTreeMap<u16, ActorEngine>,
     active_connections: usize,
     latencies: &LatencyHistograms,
+    tool_dispatcher: Option<&dyn ToolDispatcher>,
 ) -> Result<(u64, ResponsePayload), (u64, Error)> {
     let request = Request {
         request_id,
@@ -365,6 +387,15 @@ async fn handle_request(
         .get(&actor_id)
         .ok_or((request_id, Error::new(ErrorCode::CapabilityDenied)))?;
     let payload = match request.payload {
+        RequestPayload::ToolRequest(value) => {
+            let dispatcher =
+                tool_dispatcher.ok_or((request_id, Error::new(ErrorCode::OperationUnavailable)))?;
+            let bytes = dispatcher
+                .dispatch(actor.clone(), value.verb, value.arguments_json)
+                .await
+                .map_err(|error| (request_id, error))?;
+            ResponsePayload::BytesResult(Box::new(BytesResult { bytes }))
+        }
         RequestPayload::Append(append) => {
             let mut incoming = Vec::with_capacity(append.events.len());
             for event in append.events {
@@ -582,6 +613,7 @@ const fn request_name(request: &RequestPayload) -> &'static str {
         RequestPayload::VerifyStatus(_) => "verify_status",
         RequestPayload::RebuildProjection(_) => "rebuild_projection",
         RequestPayload::CryptoDelete(_) => "crypto_delete",
+        RequestPayload::ToolRequest(_) => "tool_request",
     }
 }
 
@@ -695,6 +727,9 @@ async fn handle_subscribe(
 }
 
 fn mutation_request(payload: &RequestPayload) -> bool {
+    if let RequestPayload::ToolRequest(value) = payload {
+        return matches!(value.verb.as_str(), "intend" | "predict" | "outcome");
+    }
     matches!(
         payload,
         RequestPayload::Append(_)

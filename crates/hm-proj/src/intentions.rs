@@ -119,6 +119,10 @@ impl IntentionsProjection {
                     record.status_lsn = frame.header.lsn.get();
                     record.wake_id = Some(value.wake_id.clone());
                     record.trigger_lsn = value.trigger_lsn;
+                    mutations.push(Mutation::delete(trigger_index_key(
+                        record.trigger_kind,
+                        &record.intention_id,
+                    )));
                     mutations.push(Mutation::put(key, encode(&record)?));
                     mutations.push(Mutation::put(wake_key, value.intention_id));
                 }
@@ -132,6 +136,10 @@ impl IntentionsProjection {
                 record.status = IntentionStatus::Cancelled;
                 record.status_lsn = frame.header.lsn.get();
                 record.cancellation_reason = Some(value.reason);
+                mutations.push(Mutation::delete(trigger_index_key(
+                    record.trigger_kind,
+                    &record.intention_id,
+                )));
                 mutations.push(Mutation::put(key, encode(&record)?));
             }
             _ => return Err(Error::new(ErrorCode::InvalidKind).at_lsn(frame.header.lsn)),

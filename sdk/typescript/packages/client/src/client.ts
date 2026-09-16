@@ -3,6 +3,10 @@ import net from "node:net";
 import * as flatbuffers from "flatbuffers";
 import { assertRememberable, Bundle } from "@hypermind/render";
 import { parseBundle } from "./canonical";
+import {
+  encodeToolArguments, InspectInput, IntendAction, OutcomeInput, PredictInput,
+  ReconstructionRecallOptions, ToolEnvelope,
+} from "./anticipation";
 import { Activate } from "./wire/hypermind/protocol/activate";
 import { AppendEventT } from "./wire/hypermind/protocol/append-event";
 import { AppendT } from "./wire/hypermind/protocol/append";
@@ -24,6 +28,7 @@ import { RequestT } from "./wire/hypermind/protocol/request";
 import { ResponsePayload, unionToResponsePayload } from "./wire/hypermind/protocol/response-payload";
 import { ResponseStatus } from "./wire/hypermind/protocol/response-status";
 import { Response } from "./wire/hypermind/protocol/response";
+import { ToolRequest } from "./wire/hypermind/protocol/tool-request";
 import { Welcome } from "./wire/hypermind/protocol/welcome";
 import { WireEnvelope, WireEnvelopeT } from "./wire/hypermind/protocol/wire-envelope";
 import { WirePayload } from "./wire/hypermind/protocol/wire-payload";
@@ -167,6 +172,12 @@ export class PendingWriteError extends Error {
 
   constructor(public readonly clientSeq: bigint, public readonly cause: unknown) {
     super(`write pending reconnect at client_seq=${clientSeq}`);
+  }
+}
+
+export class ToolTransportError extends Error {
+  constructor(public readonly effectState: EffectState, public readonly cause: unknown) {
+    super(`tool request failed effect_state=${effectState}`);
   }
 }
 
@@ -328,7 +339,16 @@ export class Client {
     });
   }
 
-  async recall(query: string, options: number | RecallOptions = {}): Promise<bigint[]> {
+  recall(query: string, options: ReconstructionRecallOptions): Promise<ToolEnvelope>;
+  recall(query: string, options?: number | RecallOptions): Promise<bigint[]>;
+  async recall(query: string, options: number | RecallOptions | ReconstructionRecallOptions = {}): Promise<bigint[] | ToolEnvelope> {
+    if (typeof options !== "number" && options.mode === "reconstruct") {
+      return this.callTool("recall", {
+        query,
+        mode: "reconstruct",
+        filters: { anchor_lsns: options.anchorLsns, maximum_output_tokens: options.maximumOutputTokens },
+      });
+    }
     const normalized = typeof options === "number" ? { limit: options } : options;
     const mode = normalized.mode ?? "lexical";
     const selectors: Record<RecallMode, { mode: WireRecallMode; level: number }> = {
@@ -359,6 +379,37 @@ export class Client {
       return result.members.filter((lsn) =>
         (normalized.sinceLsn === undefined || lsn > normalized.sinceLsn)
         && (normalized.untilLsn === undefined || lsn <= normalized.untilLsn));
+    });
+  }
+
+  async callTool(
+    verb: "intend" | "predict" | "outcome" | "inspect" | "recall",
+    input: unknown,
+  ): Promise<ToolEnvelope> {
+    let argumentsJson: Uint8Array;
+    try {
+      argumentsJson = text.encode(encodeToolArguments(input));
+    } catch (error) {
+      throw new ToolTransportError("not_dispatched", error);
+    }
+    return this.exclusive(async () => {
+      let dispatched = false;
+      try {
+        await this.ensure();
+        dispatched = true;
+        const result = await this.request(RequestPayload.ToolRequest, {
+          pack(builder: flatbuffers.Builder): flatbuffers.Offset {
+            const verbOffset = builder.createString(verb);
+            const argumentsOffset = ToolRequest.createArgumentsJsonVector(builder, argumentsJson);
+            return ToolRequest.createToolRequest(builder, verbOffset, argumentsOffset);
+          },
+        }, ResponsePayload.BytesResult) as BytesResultT;
+        return JSON.parse(utf8.decode(Uint8Array.from(result.bytes))) as ToolEnvelope;
+      } catch (error) {
+        if (error instanceof EngineError) throw error;
+        this.dropTransport();
+        throw new ToolTransportError(dispatched ? "unknown" : "not_dispatched", error);
+      }
     });
   }
 
@@ -635,7 +686,17 @@ export class Session {
     ));
   }
 
-  recall(query: string, options: number | RecallOptions = {}): Promise<bigint[]> {
+  recall(query: string, options: ReconstructionRecallOptions): Promise<ToolEnvelope>;
+  recall(query: string, options?: number | RecallOptions): Promise<bigint[]>;
+  recall(query: string, options: number | RecallOptions | ReconstructionRecallOptions = {}): Promise<bigint[] | ToolEnvelope> {
+    if (typeof options !== "number" && options.mode === "reconstruct") {
+      return this.client.callTool("recall", {
+        conversation: this.conversation,
+        query,
+        mode: "reconstruct",
+        filters: { anchor_lsns: options.anchorLsns, maximum_output_tokens: options.maximumOutputTokens },
+      });
+    }
     return this.client.recall(query, options);
   }
 
@@ -701,7 +762,11 @@ export class Session {
   intend(action: "set_objective", objective: string): Promise<bigint>;
   intend(action: "open_loop", loopId: string, objective: string): Promise<bigint>;
   intend(action: "close_loop", loopId: string, reason: CloseReason, cause?: string, evidenceLsns?: bigint[]): Promise<bigint>;
-  intend(action: string, first: string, second?: string, cause = "", evidenceLsns: bigint[] = []): Promise<bigint> {
+  intend(action: IntendAction): Promise<ToolEnvelope>;
+  intend(action: string | IntendAction, first?: string, second?: string, cause = "", evidenceLsns: bigint[] = []): Promise<bigint | ToolEnvelope> {
+    if (typeof action !== "string") {
+      return this.client.callTool("intend", { conversation: this.conversation, action });
+    }
     if (action === "set_objective") {
       return this.client.append(14, this.conversationBytes, eventEnvelope(EventPayload.IntentSet, new IntentSetT([...text.encode(first)]), Authority.user_asserted));
     }
@@ -710,6 +775,18 @@ export class Session {
     }
     const reason = ({ done: 0, abandoned: 1, handed_off: 2, superseded: 3 } as const)[second as CloseReason];
     return this.client.append(16, this.conversationBytes, eventEnvelope(EventPayload.LoopClosed, new LoopClosedT([...text.encode(first)], reason as LoopCloseReason, [...text.encode(cause)], evidenceLsns), Authority.user_asserted));
+  }
+
+  predict(input: PredictInput): Promise<ToolEnvelope> {
+    return this.client.callTool("predict", { ...input, conversation: this.conversation });
+  }
+
+  outcome(input: OutcomeInput): Promise<ToolEnvelope> {
+    return this.client.callTool("outcome", { ...input, conversation: this.conversation });
+  }
+
+  inspect(input: InspectInput = {}): Promise<ToolEnvelope> {
+    return this.client.callTool("inspect", input);
   }
 
   bind(input: {

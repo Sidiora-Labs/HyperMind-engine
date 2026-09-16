@@ -831,7 +831,7 @@ do_1 = "usearch behind the hnsw feature as a checkpointed projection selected au
 
 [task.7.5]
 title = "MCP predict and outcome; intend with wake triggers; recall reconstruct; attention history via inspect"
-status = "pending"
+status = "done"
 wave = 7
 owner_lane = "surface"
 requires = ["7.3", "7.4"]

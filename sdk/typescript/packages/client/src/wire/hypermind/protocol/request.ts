@@ -16,6 +16,7 @@ import { Recall, RecallT } from '../../hypermind/protocol/recall';
 import { RequestPayload, unionToRequestPayload, unionListToRequestPayload } from '../../hypermind/protocol/request-payload';
 import { Stats, StatsT } from '../../hypermind/protocol/stats';
 import { Subscribe, SubscribeT } from '../../hypermind/protocol/subscribe';
+import { ToolRequest, ToolRequestT } from '../../hypermind/protocol/tool-request';
 import { Transcript, TranscriptT } from '../../hypermind/protocol/transcript';
 import { VerifyStatus, VerifyStatusT } from '../../hypermind/protocol/verify-status';
 
@@ -111,7 +112,7 @@ export class RequestT {
 constructor(
   public requestId: bigint = BigInt('0'),
   public payloadType: RequestPayload = RequestPayload.NONE,
-  public payload: ActivateT|AppendT|AsOfT|AttestT|CheckpointT|CryptoDeleteT|HealthT|LatencyHistogramsT|LatestCheckpointT|RebuildProjectionT|RecallT|StatsT|SubscribeT|TranscriptT|VerifyStatusT|null = null
+  public payload: ActivateT|AppendT|AsOfT|AttestT|CheckpointT|CryptoDeleteT|HealthT|LatencyHistogramsT|LatestCheckpointT|RebuildProjectionT|RecallT|StatsT|SubscribeT|ToolRequestT|TranscriptT|VerifyStatusT|null = null
 ){}
 
 

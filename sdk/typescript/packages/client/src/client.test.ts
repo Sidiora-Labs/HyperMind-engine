@@ -1,14 +1,33 @@
 import assert from "node:assert/strict";
-import { chmod, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { chmod, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import * as flatbuffers from "flatbuffers";
 import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { spawn } from "node:child_process";
 import test from "node:test";
 import { Client, EngineError, PendingWriteError } from "./index";
+import { EventEnvelope } from "./wire/hypermind/schema/event-envelope";
+import { EventPayload } from "./wire/hypermind/schema/event-payload";
+import { Authority } from "./wire/hypermind/schema/authority";
+import { ProviderFrameT } from "./wire/hypermind/schema/provider-frame";
 
 const ROOT = path.resolve(__dirname, "../../../../..");
 const HM = path.join(ROOT, "target/debug/hm");
+
+function observedProviderFrame(content: unknown): Uint8Array {
+  const builder = new flatbuffers.Builder(512);
+  const payload = new ProviderFrameT("filesystem", [...Buffer.from(JSON.stringify(content))]).pack(builder);
+  EventEnvelope.startEventEnvelope(builder);
+  EventEnvelope.addSchemaVersion(builder, 2);
+  EventEnvelope.addPayloadType(builder, EventPayload.ProviderFrame);
+  EventEnvelope.addPayload(builder, payload);
+  EventEnvelope.addAuthority(builder, Authority.external_observed);
+  EventEnvelope.addClientEventCount(builder, 1);
+  builder.finish(EventEnvelope.endEventEnvelope(builder), "NCEV");
+  return builder.asUint8Array();
+}
 
 async function daemonFixture(): Promise<{
   directory: string;
@@ -36,7 +55,9 @@ async function daemonFixture(): Promise<{
     { mode: 0o600 },
   );
   await chmod(config, 0o600);
-  const child = spawn(HM, ["serve", "--config", config], { stdio: "ignore" });
+  const child = spawn(HM, ["serve", "--config", config], {
+    stdio: "ignore", env: { ...process.env, HM_RECONSTRUCTION_PROVIDER: "" },
+  });
   let ready = false;
   for (let attempt = 0; attempt < 200; attempt += 1) {
     try {
@@ -131,6 +152,78 @@ test("client uses the real daemon and recovers stable sequence history", async (
   context.after(() => resumed.close());
   assert.equal(resumed.welcome.nextClientSeq, 5n);
   assert.equal(await resumed.session("typescript-continuity").remember("after reconnect"), 5n);
+});
+
+test("anticipation tools cross the real daemon with observed evidence", async (context) => {
+  const fixture = await daemonFixture();
+  context.after(fixture.stop);
+  const client = await Client.connect({ socketPath: fixture.socket, capabilityToken: fixture.token });
+  context.after(() => client.close());
+  const conversation = "typescript-anticipation";
+  const session = client.session(conversation);
+  const revisionFile = path.join(fixture.directory, "revision");
+  await writeFile(revisionFile, "v1");
+  const prediction = await session.predict({
+    prediction_id: "revision-prediction", revision: 1, mechanism: "deploy",
+    predicates: [{ kind: "revision_equals", scope: revisionFile, property: "revision", expected: "v2" }],
+    deadline_ns: 9_000_000_000_000_000_000n, uncertainty: "the deployment may fail",
+  });
+  assert.equal(prediction.ok, true);
+  const observed = await readFile(revisionFile, "utf8");
+  const observation = { schema_version: 1, observations: [{
+    kind: "revision_equals", scope: revisionFile, property: "revision", value: observed,
+    executed: true, resolvable: true,
+  }] };
+  const conversationBytes = createHash("sha256").update("neocortex-conversation-v1\0")
+    .update(conversation).digest().subarray(0, 16);
+  const observationLsn = await client.append(6, conversationBytes, observedProviderFrame(observation));
+  const result = await session.outcome({
+    prediction_id: "revision-prediction", revision: 1, observation_lsns: [observationLsn],
+  });
+  assert.equal(result.ok, true);
+  assert.equal((result.items[0] as { assessment: string }).assessment, "contradicted");
+  const calibration = await session.inspect({ uri: "hm://7/calibration" });
+  assert.equal(calibration.ok, true);
+  const rows = (calibration.items[0] as { calibration: Array<{ predicate_kind: string; contradicted: number }> }).calibration;
+  assert.equal(rows.find((row) => row.predicate_kind === "revision_equals")?.contradicted, 1);
+  const intention = await session.intend({
+    kind: "set_intention", intention_id: "revision-followup", objective: "check deployment",
+    trigger: { kind: "repository_changed", repository: fixture.directory },
+    expires_at_ns: 9_000_000_000_000_000_000n, reply_route: conversation,
+  });
+  assert.equal(intention.ok, true);
+  await writeFile(revisionFile, "v2");
+  assert.equal(await readFile(revisionFile, "utf8"), "v2");
+  const wakeLsn = await client.append(6, conversationBytes, observedProviderFrame({
+    wake: { kind: "repository_changed", key: fixture.directory },
+  }));
+  const wake = await session.intend({
+    kind: "evaluate_wake", observation_lsn: wakeLsn,
+    factors: {
+      urgency: 1_000_000, expected_value: 1_000_000, confidence: 1_000_000,
+      interruption_cost: 0, resource_cost: 0, duplication_penalty: 0,
+      quiet_hours: true, notifications_remaining: 1, workload: 0,
+    },
+  });
+  assert.equal(wake.ok, true);
+  assert.equal((await session.intend({
+    kind: "set_intention", intention_id: "cancel-followup", objective: "cancelled followup",
+    trigger: { kind: "repository_changed", repository: fixture.directory },
+    expires_at_ns: 9_000_000_000_000_000_000n, reply_route: conversation,
+  })).ok, true);
+  assert.equal((await session.intend({
+    kind: "cancel_intention", intention_id: "cancel-followup", reason: "cancel requested",
+  })).ok, true);
+  const attention = await session.inspect({ uri: "hm://7/attention" });
+  assert.equal(attention.ok, true);
+  const history = (attention.items[0] as { attention: Array<{ decision: string; reason: string }> }).attention;
+  assert.equal(history.length, 1);
+  assert.equal(history[0]!.decision, "batch");
+  assert.match(history[0]!.reason, /quiet hours/);
+  const reconstruction = await session.recall("deployment", {
+    mode: "reconstruct", anchorLsns: [1n, observationLsn], maximumOutputTokens: 256,
+  });
+  assert.equal(reconstruction.ok, false);
 });
 
 test("known pre-dispatch rejection does not burn a sequence", async (context) => {

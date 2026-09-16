@@ -2,6 +2,7 @@
 
 pub mod actor;
 pub mod admin;
+pub mod anticipation;
 pub mod auth;
 pub mod config;
 pub mod embedded;

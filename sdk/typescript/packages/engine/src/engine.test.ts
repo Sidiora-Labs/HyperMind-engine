@@ -116,3 +116,37 @@ test("napi engine exposes one embedded continuity session", async (context) => {
     undefined,
   );
 });
+
+test("napi anticipation calls persist predictions and reject memory as outcome evidence", async (context) => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), "hypermind-napi-anticipation-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const engine = await HyperMind.open(directory, {
+    actor: 7, userHex: "11".repeat(16), kekHex: "22".repeat(32),
+  });
+  const session = engine.session("napi-anticipation");
+  assert.equal((await session.predict({
+    prediction_id: "native-prediction", revision: 1, mechanism: "deploy",
+    predicates: [{ kind: "revision_equals", scope: "repository", property: "revision", expected: "v2" }],
+    deadline_ns: 9_000_000_000_000_000_000n, uncertainty: "not yet observed",
+  })).ok, true);
+  const remembered = await session.remember("The deployment is probably complete", "assistant");
+  const memoryLsn = (remembered.items[0] as { first_lsn: number }).first_lsn;
+  const outcome = await session.outcome({
+    prediction_id: "native-prediction", revision: 1, observation_lsns: [memoryLsn],
+  });
+  assert.equal(outcome.ok, false);
+  assert.notEqual(outcome.effect_state, undefined);
+  assert.equal((await session.intend({
+    kind: "set_intention", intention_id: "native-followup", objective: "await observation",
+    trigger: { kind: "at", at_ns: 9_000_000_000_000_000_000n },
+    expires_at_ns: 9_000_000_000_000_000_000n, reply_route: "conversation",
+  })).ok, true);
+  assert.equal((await session.intend({
+    kind: "cancel_intention", intention_id: "native-followup", reason: "user cancellation",
+  })).ok, true);
+  const attention = await session.inspect({ uri: "hm://7/attention" });
+  assert.equal(attention.ok, true);
+  assert.deepEqual((attention.items[0] as { attention: unknown[] }).attention, []);
+  const calibration = await session.inspect({ uri: "hm://7/calibration" });
+  assert.equal(calibration.ok, true);
+});

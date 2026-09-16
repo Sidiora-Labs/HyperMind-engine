@@ -1,8 +1,10 @@
 #![allow(clippy::missing_errors_doc)]
 
+use crate::anticipation::{self, WakeDecision, WakeEvaluation};
 use hm_compose::bundle::{self, ActivationBundle, ActivationRequest};
 use hm_compose::tokens::{FallbackWeights, TokenCounter};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
+use hm_cortex::attention::AttentionFactors;
 use hm_ledger::checkpoint::{SigningKeyPair, signing_key_pair_for};
 use hm_ledger::frame::{EventKind, Frame, FrameHeader};
 use hm_ledger::idempotency::{
@@ -15,19 +17,26 @@ use hm_ledger::rotate::rotate_keys;
 use hm_ledger::segment::{AppendRequest, SegmentLog, SegmentLogOptions};
 use hm_ledger::shred::{crypto_shred, encode_deletion_receipt};
 use hm_ledger::tripwire::TripwireSet;
+use hm_proj::attention::{AttentionProjection, AttentionRecord};
 use hm_proj::beliefs::{BeliefAsOf, BeliefAsOfResult, BeliefProjection};
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
 };
 use hm_proj::entities::EntityProjection;
+use hm_proj::intentions::{IntentionRecord, IntentionStatus, IntentionsProjection};
 use hm_proj::lexical::LexicalProjection;
+use hm_proj::predictions::{
+    CalibrationCounters, MechanismFailures, PredictionRecord, PredictionsProjection,
+};
+use hm_proj::procedures::{ProcedureRecord, ProcedureState, ProceduresProjection};
 use hm_proj::rebuild::rebuild_projection_stream;
 use hm_proj::store::{ProjectionId, ProjectionStore};
 use hm_proj::timeline::{ConversationRecord, read_conversation_record, read_conversation_records};
 use hm_proj::vectors::{VectorEntry, VectorLane};
 use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{
-    Authority, BeliefType, Checkpoint, EventEnvelope, EventPayload, Retention, Sensitivity,
+    Authority, BeliefType, Checkpoint, EventEnvelope, EventPayload, IntentionSet,
+    OutcomeAssessment, PredicateKind, ProcedureRevised, Retention, Sensitivity,
 };
 use std::collections::BTreeMap;
 use std::fs;
@@ -199,6 +208,29 @@ pub struct ActorEngine {
 }
 
 enum Command {
+    VerifiedEvent(LSN, oneshot::Sender<Result<event::VerifiedEvent, Error>>),
+    EvaluateWake(
+        LSN,
+        AttentionFactors,
+        Option<i64>,
+        oneshot::Sender<Result<WakeEvaluation, Error>>,
+    ),
+    Intention(
+        Vec<u8>,
+        oneshot::Sender<Result<Option<IntentionRecord>, Error>>,
+    ),
+    Prediction(
+        Vec<u8>,
+        oneshot::Sender<Result<Option<PredictionRecord>, Error>>,
+    ),
+    AttentionHistory(usize, oneshot::Sender<Result<Vec<AttentionRecord>, Error>>),
+    Calibration(oneshot::Sender<Result<Vec<(PredicateKind, CalibrationCounters)>, Error>>),
+    MechanismFailures(String, oneshot::Sender<Result<MechanismFailures, Error>>),
+    Procedure(
+        Vec<u8>,
+        oneshot::Sender<Result<Option<ProcedureRecord>, Error>>,
+    ),
+    Procedures(usize, oneshot::Sender<Result<Vec<ProcedureRecord>, Error>>),
     Append(
         Vec<IncomingEvent>,
         oneshot::Sender<Result<AppendOutcome, Error>>,
@@ -422,6 +454,56 @@ impl ActorEngine {
         request(&self.commands, Command::Stats).await
     }
 
+    pub async fn evaluate_wake(
+        &self,
+        observation_lsn: LSN,
+        factors: AttentionFactors,
+        rearm_at_ns: Option<i64>,
+    ) -> Result<WakeEvaluation, Error> {
+        request(&self.commands, |reply| {
+            Command::EvaluateWake(observation_lsn, factors, rearm_at_ns, reply)
+        })
+        .await
+    }
+
+    pub async fn verified_event(&self, lsn: LSN) -> Result<event::VerifiedEvent, Error> {
+        request(&self.commands, |reply| Command::VerifiedEvent(lsn, reply)).await
+    }
+
+    pub async fn intention(&self, id: Vec<u8>) -> Result<Option<IntentionRecord>, Error> {
+        request(&self.commands, |reply| Command::Intention(id, reply)).await
+    }
+
+    pub async fn prediction(&self, id: Vec<u8>) -> Result<Option<PredictionRecord>, Error> {
+        request(&self.commands, |reply| Command::Prediction(id, reply)).await
+    }
+
+    pub async fn attention_history(&self, limit: usize) -> Result<Vec<AttentionRecord>, Error> {
+        request(&self.commands, |reply| {
+            Command::AttentionHistory(limit, reply)
+        })
+        .await
+    }
+
+    pub async fn calibration(&self) -> Result<Vec<(PredicateKind, CalibrationCounters)>, Error> {
+        request(&self.commands, Command::Calibration).await
+    }
+
+    pub async fn mechanism_failures(&self, mechanism: String) -> Result<MechanismFailures, Error> {
+        request(&self.commands, |reply| {
+            Command::MechanismFailures(mechanism, reply)
+        })
+        .await
+    }
+
+    pub async fn procedure(&self, id: Vec<u8>) -> Result<Option<ProcedureRecord>, Error> {
+        request(&self.commands, |reply| Command::Procedure(id, reply)).await
+    }
+
+    pub async fn procedures(&self, limit: usize) -> Result<Vec<ProcedureRecord>, Error> {
+        request(&self.commands, |reply| Command::Procedures(limit, reply)).await
+    }
+
     pub async fn verification_status(&self) -> Result<VerificationStatus, Error> {
         request(&self.commands, Command::VerificationStatus).await
     }
@@ -478,6 +560,77 @@ async fn request<T>(
 async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Command>) {
     while let Some(command) = commands.recv().await {
         match command {
+            Command::VerifiedEvent(lsn, reply) => {
+                let result = state.verified_event(lsn);
+                let _ = reply.send(result);
+            }
+            Command::EvaluateWake(lsn, factors, rearm_at, reply) => {
+                let before = state.plaintext_frames.len();
+                let result = state.evaluate_wake(lsn, factors, rearm_at);
+                state.publish_from(before);
+                let _ = reply.send(result);
+            }
+            Command::Intention(id, reply) => {
+                let result = state
+                    .projections
+                    .begin_snapshot()
+                    .and_then(|snapshot| IntentionsProjection::get(&snapshot, &id));
+                let _ = reply.send(result);
+            }
+            Command::Prediction(id, reply) => {
+                let result = state
+                    .projections
+                    .begin_snapshot()
+                    .and_then(|snapshot| PredictionsProjection::get(&snapshot, &id));
+                let _ = reply.send(result);
+            }
+            Command::AttentionHistory(limit, reply) => {
+                let result = state
+                    .projections
+                    .begin_snapshot()
+                    .and_then(|snapshot| AttentionProjection::recent(&snapshot, limit));
+                let _ = reply.send(result);
+            }
+            Command::Calibration(reply) => {
+                let result = state.projections.begin_snapshot().and_then(|snapshot| {
+                    [
+                        PredicateKind::ObjectExists,
+                        PredicateKind::RevisionEquals,
+                        PredicateKind::DigestEquals,
+                        PredicateKind::ReceiptMatches,
+                        PredicateKind::PropertySatisfies,
+                        PredicateKind::ProcessTerminated,
+                        PredicateKind::AnswerCommitted,
+                    ]
+                    .into_iter()
+                    .map(|kind| {
+                        PredictionsProjection::calibration(&snapshot, kind)
+                            .map(|counters| (kind, counters))
+                    })
+                    .collect()
+                });
+                let _ = reply.send(result);
+            }
+            Command::MechanismFailures(mechanism, reply) => {
+                let result = state.projections.begin_snapshot().and_then(|snapshot| {
+                    PredictionsProjection::mechanism_failures(&snapshot, &mechanism)
+                });
+                let _ = reply.send(result);
+            }
+            Command::Procedure(id, reply) => {
+                let result = state
+                    .projections
+                    .begin_snapshot()
+                    .and_then(|snapshot| ProceduresProjection::get(&snapshot, &id));
+                let _ = reply.send(result);
+            }
+            Command::Procedures(limit, reply) => {
+                let result = state
+                    .projections
+                    .begin_snapshot()
+                    .and_then(|snapshot| ProceduresProjection::list(&snapshot, limit));
+                let _ = reply.send(result);
+            }
             Command::Append(events, reply) => {
                 let before = state.plaintext_frames.len();
                 let result = state.append(events);
@@ -553,6 +706,275 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
 }
 
 impl WriterState {
+    fn verified_event(&self, lsn: LSN) -> Result<event::VerifiedEvent, Error> {
+        self.tripwires.guard([lsn])?;
+        let index = usize::try_from(lsn.get())
+            .ok()
+            .and_then(|lsn| lsn.checked_sub(1))
+            .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+        let frame = self
+            .plaintext_frames
+            .get(index)
+            .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+        event::verify_event_with_history(
+            &frame.sealed_payload,
+            schema_kind(frame.header.kind)?,
+            Boundary::Disk,
+            &ActorHistory::new(&self.kinds[..index], &self.authorities[..index]),
+        )
+    }
+
+    fn validate_anticipation(&self, payload: &EventPayload) -> Result<(), Error> {
+        let snapshot = self.projections.begin_snapshot()?;
+        match payload {
+            EventPayload::IntentionSet(value) => {
+                if IntentionsProjection::get(&snapshot, &value.intention_id)?.is_some() {
+                    return Err(Error::new(ErrorCode::AlreadyExists));
+                }
+            }
+            EventPayload::IntentionCancelled(value) => {
+                if IntentionsProjection::get(&snapshot, &value.intention_id)?
+                    .is_none_or(|record| record.status == IntentionStatus::Cancelled)
+                {
+                    return Err(Error::new(ErrorCode::OrderingViolation));
+                }
+            }
+            EventPayload::Predicted(value) => {
+                let prior = PredictionsProjection::get(&snapshot, &value.prediction_id)?;
+                if prior.map_or(value.revision != 1, |prior| {
+                    prior.revision.checked_add(1) != Some(value.revision)
+                }) {
+                    return Err(Error::new(ErrorCode::OrderingViolation));
+                }
+            }
+            EventPayload::OutcomeObserved(value) => {
+                let prior = PredictionsProjection::get(&snapshot, &value.prediction_id)?
+                    .ok_or_else(|| Error::new(ErrorCode::OrderingViolation))?;
+                if prior.revision != value.revision
+                    || prior
+                        .assessment
+                        .is_some_and(|assessment| assessment != OutcomeAssessment::Pending)
+                {
+                    return Err(Error::new(ErrorCode::IdempotencyConflict));
+                }
+            }
+            EventPayload::ProcedureMined(value) => {
+                if ProceduresProjection::get(&snapshot, &value.procedure_id)?.is_some() {
+                    return Err(Error::new(ErrorCode::AlreadyExists));
+                }
+            }
+            EventPayload::ProcedureRevised(value) => {
+                if ProceduresProjection::get(&snapshot, &value.procedure_id)?.is_none_or(|prior| {
+                    prior.version_lsn != value.previous_lsn
+                        || prior.state == ProcedureState::Adopted
+                }) {
+                    return Err(Error::new(ErrorCode::IdempotencyConflict));
+                }
+            }
+            EventPayload::ProcedureAdopted(value) => {
+                if ProceduresProjection::get(&snapshot, &value.procedure_id)?.is_none_or(|prior| {
+                    prior.version_lsn != value.procedure_lsn
+                        || prior.state != ProcedureState::Supported
+                }) {
+                    return Err(Error::new(ErrorCode::OrderingViolation));
+                }
+            }
+            _ => {}
+        }
+        Ok(())
+    }
+
+    fn evaluate_wake(
+        &mut self,
+        observation_lsn: LSN,
+        factors: AttentionFactors,
+        rearm_at_ns: Option<i64>,
+    ) -> Result<WakeEvaluation, Error> {
+        self.tripwires.guard([observation_lsn])?;
+        let source = self
+            .plaintext_frames
+            .get(
+                usize::try_from(observation_lsn.get())
+                    .ok()
+                    .and_then(|lsn| lsn.checked_sub(1))
+                    .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?,
+            )
+            .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+        let envelope = event::verify_event_with_history(
+            &source.sealed_payload,
+            schema_kind(source.header.kind)?,
+            Boundary::Disk,
+            &ActorHistory::new(&self.kinds, &self.authorities),
+        )?
+        .envelope;
+        let signal = anticipation::signal(&source.header, &envelope)?;
+        let snapshot = self.projections.begin_snapshot()?;
+        let pending = IntentionsProjection::pending_by_trigger(
+            &snapshot,
+            anticipation::trigger_kind(&signal),
+            hm_proj::intentions::MAXIMUM_INTENTIONS_PER_TRIGGER,
+        )?;
+        let mut actions = Vec::new();
+        for record in pending {
+            if record.set_lsn >= observation_lsn.get() {
+                continue;
+            }
+            let intention = IntentionSet {
+                intention_id: record.intention_id,
+                objective: record.objective,
+                trigger: Some(record.trigger),
+                expires_at_ns: record.expires_at_ns,
+                reply_route: record.reply_route,
+            };
+            let Some(fired) = hm_cortex::prospective::evaluate(&intention, &signal) else {
+                continue;
+            };
+            let decision =
+                hm_cortex::attention::decide(&intention.intention_id, &fired.wake_id, factors)?;
+            let rearmed = if decision.decision == hm_schema::events::AttentionDecision::Schedule {
+                let next = rearm_at_ns
+                    .filter(|next| *next > signal.now_ns)
+                    .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+                Some(
+                    hm_cortex::prospective::rearm(&intention, decision.decision, next)
+                        .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?,
+                )
+            } else {
+                None
+            };
+            let source = self
+                .plaintext_frames
+                .get(record.set_lsn as usize - 1)
+                .ok_or_else(|| Error::new(ErrorCode::InvariantViolation))?;
+            actions.push((source.header.conversation, fired, decision, rearmed));
+        }
+        drop(snapshot);
+        let mut result = WakeEvaluation {
+            observation_lsn: observation_lsn.get(),
+            fired: Vec::new(),
+        };
+        for (conversation, fired, decision, rearmed) in actions {
+            let mut events = vec![
+                runtime_event(
+                    EventKind::IntentionFired,
+                    EventPayload::IntentionFired(Box::new(fired.clone())),
+                    conversation,
+                    Authority::RuntimeFact,
+                ),
+                runtime_event(
+                    EventKind::AttentionDecided,
+                    EventPayload::AttentionDecided(Box::new(decision.clone())),
+                    conversation,
+                    Authority::DerivedInference,
+                ),
+            ];
+            if let Some(rearmed) = &rearmed {
+                events.push(runtime_event(
+                    EventKind::IntentionSet,
+                    EventPayload::IntentionSet(Box::new(rearmed.clone())),
+                    conversation,
+                    Authority::RuntimeFact,
+                ));
+            }
+            let mut identity = blake3::Hasher::new();
+            identity.update(b"hypermind.wake.commit.v1\0");
+            identity.update(&fired.wake_id);
+            let mut connection = [0; 16];
+            connection.copy_from_slice(&identity.finalize().as_bytes()[..16]);
+            let committed = self.append_idempotent(connection, 1, events)?;
+            result.fired.push(WakeDecision {
+                intention_id: fired.intention_id,
+                wake_id: fired.wake_id,
+                decision: decision.decision,
+                reason: decision.reason,
+                fired_lsn: committed.first_lsn.get(),
+                decision_lsn: committed.first_lsn.get() + 1,
+                rearmed_intention_id: rearmed.map(|value| value.intention_id),
+            });
+        }
+        Ok(result)
+    }
+
+    fn mine_procedures(&mut self) -> Result<(), Error> {
+        if !self
+            .plaintext_frames
+            .iter()
+            .any(|frame| frame.header.kind == EventKind::LoopClosed)
+        {
+            return Ok(());
+        }
+        let history = ActorHistory::new(&self.kinds, &self.authorities);
+        let decoded = self
+            .plaintext_frames
+            .iter()
+            .filter(|frame| {
+                matches!(
+                    frame.header.kind,
+                    EventKind::LoopOpened
+                        | EventKind::LoopClosed
+                        | EventKind::ToolCall
+                        | EventKind::ToolResult
+                        | EventKind::Effect
+                        | EventKind::Outcome
+                )
+            })
+            .map(|frame| {
+                event::verify_event_with_history(
+                    &frame.sealed_payload,
+                    schema_kind(frame.header.kind)?,
+                    Boundary::Disk,
+                    &history,
+                )
+                .map(|event| (frame.header.clone(), event.envelope))
+            })
+            .collect::<Result<Vec<_>, _>>()?;
+        let mined = anticipation::mined_procedures(&decoded)?;
+        for value in mined {
+            if value.supports.is_empty() {
+                continue;
+            }
+            let prior = ProceduresProjection::get(
+                &self.projections.begin_snapshot()?,
+                &value.procedure_id,
+            )?;
+            let (kind, payload) = if let Some(prior) = prior {
+                if prior.state == ProcedureState::Adopted
+                    || (prior.supports == value.supports
+                        && prior.failures == value.failures.clone().unwrap_or_default()
+                        && prior.counterexamples
+                            == value.counterexamples.clone().unwrap_or_default())
+                {
+                    continue;
+                }
+                (
+                    EventKind::ProcedureRevised,
+                    EventPayload::ProcedureRevised(Box::new(ProcedureRevised {
+                        procedure_id: value.procedure_id,
+                        previous_lsn: prior.version_lsn,
+                        strategy: value.strategy,
+                        expected_outcomes: value.expected_outcomes,
+                        preconditions: value.preconditions,
+                        supports: value.supports,
+                        failures: value.failures,
+                        counterexamples: value.counterexamples,
+                    })),
+                )
+            } else {
+                (
+                    EventKind::ProcedureMined,
+                    EventPayload::ProcedureMined(Box::new(value)),
+                )
+            };
+            self.append(vec![runtime_event(
+                kind,
+                payload,
+                ConversationId::derive("hypermind-procedural-learning"),
+                Authority::DerivedInference,
+            )])?;
+        }
+        Ok(())
+    }
+
     fn open(
         config: ActorConfig,
         events: broadcast::Sender<Frame>,
@@ -634,7 +1056,7 @@ impl WriterState {
         {
             projections.apply(ProjectionId::VectorLane, frame.header.lsn, &[])?;
         }
-        Ok(Self {
+        let mut state = Self {
             config,
             log,
             keys,
@@ -651,7 +1073,9 @@ impl WriterState {
             tripwires,
             vector_lanes,
             vector_digests,
-        })
+        };
+        state.mine_procedures()?;
+        Ok(state)
     }
 
     fn append(&mut self, events: Vec<IncomingEvent>) -> Result<AppendOutcome, Error> {
@@ -663,6 +1087,7 @@ impl WriterState {
         let mut verified_authorities = self.authorities.clone();
         let mut batch_vectors = BTreeMap::new();
         let mut batch_dimensions = BTreeMap::new();
+        let mut anticipation_ids = std::collections::BTreeSet::new();
         for (index, incoming) in events.iter().enumerate() {
             let kind = schema_kind(incoming.kind)?;
             let verified = event::verify_event_with_history(
@@ -672,6 +1097,20 @@ impl WriterState {
                 &ActorHistory::new(&verified_kinds, &verified_authorities),
             )
             .map_err(|error| error.at_lsn(LSN::new(first_lsn + index as u64)))?;
+            self.validate_anticipation(&verified.envelope.payload)?;
+            let key = match &verified.envelope.payload {
+                EventPayload::IntentionSet(value) => Some((0, value.intention_id.clone())),
+                EventPayload::IntentionCancelled(value) => Some((0, value.intention_id.clone())),
+                EventPayload::Predicted(value) => Some((1, value.prediction_id.clone())),
+                EventPayload::OutcomeObserved(value) => Some((1, value.prediction_id.clone())),
+                EventPayload::ProcedureMined(value) => Some((2, value.procedure_id.clone())),
+                EventPayload::ProcedureRevised(value) => Some((2, value.procedure_id.clone())),
+                EventPayload::ProcedureAdopted(value) => Some((2, value.procedure_id.clone())),
+                _ => None,
+            };
+            if key.is_some_and(|key| !anticipation_ids.insert(key)) {
+                return Err(Error::new(ErrorCode::IdempotencyConflict));
+            }
             if let EventPayload::Embedding(embedding) = &verified.envelope.payload {
                 if embedding.target_lsn >= first_lsn + index as u64 {
                     return Err(Error::new(ErrorCode::InvalidArgument));
@@ -750,14 +1189,21 @@ impl WriterState {
                 frame.header.wall_timestamp_ns.get()
             });
         let mmr = self.mmr.verification_status();
-        Ok(AppendOutcome {
+        let outcome = AppendOutcome {
             first_lsn: commit.first_lsn,
             last_lsn: commit.last_lsn,
             duplicate: false,
             leaf_count: mmr.leaf_count,
             last_leaf_hash: self.mmr.leaf_hash(mmr.leaf_count - 1)?,
             mmr_root: mmr.root,
-        })
+        };
+        if plaintext
+            .iter()
+            .any(|frame| frame.header.kind == EventKind::LoopClosed)
+        {
+            self.mine_procedures()?;
+        }
+        Ok(outcome)
     }
 
     fn append_idempotent(
@@ -1200,6 +1646,33 @@ type VectorState = (
     BTreeMap<String, VectorLane>,
     BTreeMap<(String, u64), [u8; 32]>,
 );
+
+fn runtime_event(
+    kind: EventKind,
+    payload: EventPayload,
+    conversation: ConversationId,
+    authority: Authority,
+) -> IncomingEvent {
+    IncomingEvent {
+        kind,
+        conversation,
+        payload: encode_event_envelope(&EventEnvelope {
+            schema_version: CURRENT_SCHEMA_VERSION,
+            payload,
+            connection_id: None,
+            client_seq: 0,
+            client_event_index: 0,
+            client_event_count: 0,
+            origin_actor: 0,
+            run_id: None,
+            model_provenance: None,
+            authority,
+            retention: Retention::Durable,
+            sensitivity: Sensitivity::Personal,
+            event_time_ns: 0,
+        }),
+    }
+}
 
 fn open_vector_lanes(directory: &Path, frames: &[Frame]) -> Result<VectorState, Error> {
     let mut entries: BTreeMap<String, Vec<VectorEntry>> = BTreeMap::new();
