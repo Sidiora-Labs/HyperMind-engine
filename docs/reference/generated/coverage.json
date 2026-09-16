@@ -2007,6 +2007,11 @@
       "file": "crates/hm-mcp/src/tools/remember.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:VocabularyInput",
+      "name": "hm-mcp::VocabularyInput",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
       "id": "rust:crates/hm-mcp/src/tools/remember.rs:RememberInput",
       "name": "hm-mcp::RememberInput",
       "file": "crates/hm-mcp/src/tools/remember.rs"

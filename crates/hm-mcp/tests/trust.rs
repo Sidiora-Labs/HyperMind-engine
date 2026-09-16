@@ -145,6 +145,7 @@ async fn tripwire_is_a_warning_and_crypto_shred_requires_the_admin_token() {
             anchor: None,
             retention: None,
             sensitivity: None,
+            vocabulary: None,
         })
         .await;
     assert!(remembered.ok);

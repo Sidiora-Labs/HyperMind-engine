@@ -8210,6 +8210,7 @@ pub enum RememberKind {
     User,
     Assistant,
     Document,
+    Vocabulary,
 }
 ```
 
@@ -8290,6 +8291,25 @@ pub enum SensitivityInput {
 }
 ```
 
+## hm-mcp::VocabularyInput
+
+<a id="rust-crates-hm-mcp-src-tools-remember-rs-vocabularyinput"></a>
+
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
+
+When to use: Use `VocabularyInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority. Do not treat constructing or serializing a request as evidence that it was accepted or executed.
+
+
+```rust
+pub struct VocabularyInput {
+    pub vocabulary_id: String,
+    pub version: u16,
+    pub source_uri: String,
+}
+```
+
 ## hm-mcp::RememberInput
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberinput"></a>
@@ -8314,6 +8334,8 @@ pub struct RememberInput {
     pub retention: Option<RetentionInput>,
     #[serde(default)]
     pub sensitivity: Option<SensitivityInput>,
+    #[serde(default)]
+    pub vocabulary: Option<VocabularyInput>,
 }
 ```
 

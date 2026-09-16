@@ -40,6 +40,7 @@ async fn seeded(path: &std::path::Path) -> McpServer {
                 anchor: None,
                 retention: None,
                 sensitivity: None,
+                vocabulary: None,
             })
             .await;
         assert!(stored.ok, "remember failed: {:?}", stored.items);

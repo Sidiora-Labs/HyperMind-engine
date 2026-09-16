@@ -304,9 +304,9 @@ Do not use: Do not interpret recall as current external-state verification or si
 
 Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/dispatcher.rs).
 
-When to use: Append user statements, delivered assistant output, or external documents with their source-derived authority and retention. Optional embeddings are configured separately.
+When to use: Append user statements, delivered assistant output, or external documents with their source-derived authority and retention, or import a versioned vocabulary of terms from an N-Triples source with kind vocabulary. Optional embeddings are configured separately.
 
-Do not use: Do not store secrets unnecessarily, mark model narrative as tool-observed, or re-ingest reconstructed memory. do_not_store returns a receipt without a ledger mutation.
+Do not use: Do not store secrets unnecessarily, mark model narrative as tool-observed, or re-ingest reconstructed memory. A vocabulary import declares terms and never merges an existing identity. do_not_store returns a receipt without a ledger mutation.
 
 
 ```json

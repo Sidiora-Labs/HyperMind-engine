@@ -26,6 +26,7 @@ fn remember(content: &str) -> RememberInput {
         anchor: None,
         retention: None,
         sensitivity: None,
+        vocabulary: None,
     }
 }
 

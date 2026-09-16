@@ -69,6 +69,7 @@ async fn evidence(server: &McpServer, conversation: &str) -> u64 {
             anchor: None,
             retention: None,
             sensitivity: None,
+            vocabulary: None,
         })
         .await;
     assert!(result.ok);

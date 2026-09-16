@@ -43,6 +43,7 @@ async fn anchored_remember_and_entity_near_recall_preserve_policy_fields() {
             }),
             retention: Some(RetentionInput::Daily),
             sensitivity: Some(SensitivityInput::Public),
+            vocabulary: None,
         })
         .await;
     assert!(remembered.ok);
@@ -96,6 +97,7 @@ async fn anchored_remember_and_entity_near_recall_preserve_policy_fields() {
             anchor: None,
             retention: Some(RetentionInput::DoNotStore),
             sensitivity: Some(SensitivityInput::Secret),
+            vocabulary: None,
         })
         .await;
     assert!(discarded.ok);

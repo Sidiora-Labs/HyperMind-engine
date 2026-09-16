@@ -128,6 +128,7 @@ pub enum RememberKind {
     User,
     Assistant,
     Document,
+    Vocabulary,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, schemars::JsonSchema)]
@@ -184,6 +185,13 @@ impl From<SensitivityInput> for Sensitivity {
 }
 
 #[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
+pub struct VocabularyInput {
+    pub vocabulary_id: String,
+    pub version: u16,
+    pub source_uri: String,
+}
+
+#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
 pub struct RememberInput {
     pub conversation: String,
     pub content: String,
@@ -196,4 +204,6 @@ pub struct RememberInput {
     pub retention: Option<RetentionInput>,
     #[serde(default)]
     pub sensitivity: Option<SensitivityInput>,
+    #[serde(default)]
+    pub vocabulary: Option<VocabularyInput>,
 }

@@ -5,6 +5,8 @@ use base64::Engine as _;
 use hm_compose::bundle::{ActivationBundle, HealthStatus, RetrievalLane};
 use hm_compose::tokens::FallbackWeights;
 use hm_core::{ConversationId, Error, ErrorCode, LSN};
+use hm_cortex::ingest::IngestResult;
+use hm_cortex::vocabulary::{VocabularySource, import_envelope};
 use hm_schema::event::{CURRENT_SCHEMA_VERSION, encode_event_envelope, verify_event};
 use hm_schema::events::{
     Authority, DeliveredMsg, EventEnvelope, EventPayload, Retention, Sensitivity, UserMsg,
@@ -40,12 +42,13 @@ pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
 pub use tools::reconstruct::ReconstructionRuntime;
 pub use tools::remember::{
     AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberInput, RememberKind, RetentionInput,
-    SensitivityInput,
+    SensitivityInput, VocabularyInput,
 };
 pub use tools::retract::RetractInput;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 const DEFAULT_CHUNK_BYTES: usize = 32 * 1024;
+const MAXIMUM_VOCABULARY_ID_BYTES: usize = 4096;
 
 #[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Envelope {
@@ -235,6 +238,9 @@ impl McpServer {
             }));
             return Ok(envelope);
         }
+        if matches!(input.kind, RememberKind::Vocabulary) {
+            return self.import_vocabulary(&input, retention, sensitivity).await;
+        }
         let conversation = ConversationId::derive(&input.conversation);
         let (kind, authority) = match input.kind {
             RememberKind::User => (
@@ -249,6 +255,7 @@ impl McpServer {
                 hm_ledger::frame::EventKind::UserMsg,
                 Authority::ExternalObserved,
             ),
+            RememberKind::Vocabulary => return Err(Error::new(ErrorCode::InvariantViolation)),
         };
         let chunks = if matches!(input.kind, RememberKind::Document) {
             chunk_text(
@@ -347,6 +354,70 @@ impl McpServer {
             envelope.health["encoder"] = json!("lexical_only");
         }
         Ok(envelope)
+    }
+
+    async fn import_vocabulary(
+        &self,
+        input: &RememberInput,
+        retention: Retention,
+        sensitivity: Sensitivity,
+    ) -> Result<Envelope, Error> {
+        let vocabulary = input
+            .vocabulary
+            .as_ref()
+            .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+        if vocabulary.vocabulary_id.is_empty()
+            || vocabulary.vocabulary_id.len() > MAXIMUM_VOCABULARY_ID_BYTES
+            || vocabulary.version == 0
+        {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let imported = import_envelope(&VocabularySource {
+            vocabulary_id: vocabulary.vocabulary_id.as_bytes(),
+            version: vocabulary.version,
+            source_uri: vocabulary.source_uri.as_str(),
+            document: input.content.as_str(),
+            retention,
+            sensitivity,
+        })?;
+        let IngestResult::Append(envelope) = imported else {
+            return Err(Error::new(ErrorCode::InvariantViolation));
+        };
+        let payload = encode_event_envelope(&envelope);
+        let EventPayload::VocabularyImported(value) = envelope.payload else {
+            return Err(Error::new(ErrorCode::InvariantViolation));
+        };
+        let outcome = self
+            .actor
+            .append(vec![IncomingEvent {
+                kind: hm_ledger::frame::EventKind::VocabularyImported,
+                conversation: ConversationId::derive(&input.conversation),
+                payload,
+            }])
+            .await?;
+        let mut result = Envelope::empty();
+        result.items.push(json!({
+            "first_lsn": outcome.first_lsn.get(),
+            "last_lsn": outcome.last_lsn.get(),
+            "count": outcome.last_lsn.get() - outcome.first_lsn.get() + 1,
+            "vocabulary_id": vocabulary.vocabulary_id,
+            "version": value.version,
+            "source_uri": value.source_uri,
+            "source_media_type": value.source_media_type,
+            "source_digest": hex(&value.source_digest),
+            "term_count": value.terms.len(),
+            "ignored_triples": value.ignored_triples,
+        }));
+        result.provenance.push(format!(
+            "hm://{}/lsn/{}",
+            self.actor.actor(),
+            outcome.first_lsn.get()
+        ));
+        result.warnings.push(
+            "A vocabulary import declares terms for this actor; it merges no existing identity."
+                .to_owned(),
+        );
+        Ok(result)
     }
 
     async fn append_embeddings(
