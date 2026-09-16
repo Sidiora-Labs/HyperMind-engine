@@ -1,3 +1,4 @@
+use super::connector::ConnectorInput;
 use crate::Envelope;
 use hm_core::{ConversationId, Error, ErrorCode};
 use hm_ledger::frame::EventKind;
@@ -20,9 +21,14 @@ pub struct BindInput {
     pub evidence_lsn: u64,
     pub revision: String,
     pub freshness_requirement_ns: u64,
+    #[serde(default)]
+    pub connector: Option<ConnectorInput>,
 }
 
-pub async fn run(actor: &ActorEngine, input: BindInput) -> Result<Envelope, Error> {
+pub async fn run(actor: &ActorEngine, mut input: BindInput) -> Result<Envelope, Error> {
+    if let Some(connector) = input.connector.take() {
+        return super::connector::run(actor, connector).await;
+    }
     let has_task = input.task.as_ref().is_some_and(|value| !value.is_empty());
     let has_scope = input.scope.as_ref().is_some_and(|value| !value.is_empty());
     if input.conversation.is_empty()

@@ -2097,6 +2097,16 @@
       "file": "crates/hm-mcp/src/tools/bind.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/tools/connector.rs:ConnectorAction",
+      "name": "hm-mcp::ConnectorAction",
+      "file": "crates/hm-mcp/src/tools/connector.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/connector.rs:ConnectorInput",
+      "name": "hm-mcp::ConnectorInput",
+      "file": "crates/hm-mcp/src/tools/connector.rs"
+    },
+    {
       "id": "rust:crates/hm-mcp/src/tools/consolidate.rs:ConsolidationRuntime",
       "name": "hm-mcp::ConsolidationRuntime",
       "file": "crates/hm-mcp/src/tools/consolidate.rs"
@@ -6277,27 +6287,27 @@
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9029:attest",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9058:attest",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::attest",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9274:consolidate",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9303:consolidate",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::consolidate",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9534:believe",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9563:believe",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::believe",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:10752:retract",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:10781:retract",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::retract",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:11320:as_of",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:11349:as_of",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::as_of",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },

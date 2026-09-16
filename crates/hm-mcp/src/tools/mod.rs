@@ -2,6 +2,7 @@ pub(crate) mod access;
 pub mod attest;
 pub mod believe;
 pub mod bind;
+pub mod connector;
 pub mod consolidate;
 pub mod dispute;
 pub(crate) mod evidence;

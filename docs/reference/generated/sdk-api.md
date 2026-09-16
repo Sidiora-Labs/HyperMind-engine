@@ -6300,7 +6300,7 @@ pub async fn bind(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::attest
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9029-attest"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9058-attest"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6315,7 +6315,7 @@ pub async fn attest(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::consolidate
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9274-consolidate"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9303-consolidate"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6330,7 +6330,7 @@ pub async fn consolidate(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::believe
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9534-believe"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9563-believe"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6345,7 +6345,7 @@ pub async fn believe(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::retract
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-10752-retract"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-10781-retract"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6360,7 +6360,7 @@ pub async fn retract(
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::as_of
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-11320-as-of"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-11349-as-of"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 

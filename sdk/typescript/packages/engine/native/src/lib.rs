@@ -271,6 +271,7 @@ impl NativeSession {
             evidence_lsn: raw.evidence_lsn.parse().map_err(napi_error)?,
             revision: raw.revision,
             freshness_requirement_ns: raw.freshness_requirement_ns.parse().map_err(napi_error)?,
+            connector: None,
         };
         encode_json(&self.mcp.bind_envelope(input).await)
     }

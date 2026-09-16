@@ -17,6 +17,7 @@ const MAXIMUM_VOCABULARY_ITEMS: usize = 256;
 const MAXIMUM_ALIAS_PROPOSALS: usize = 64;
 const MAXIMUM_PREFERENCE_ITEMS: usize = 256;
 const MAXIMUM_MEDIA_ITEMS: usize = 256;
+const MAXIMUM_CONNECTOR_ITEMS: usize = 256;
 const REVIEW_WARNING: &str = "An alias proposal changes nothing; it is accepted only by importing a new vocabulary version that declares the alias.";
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, schemars::JsonSchema)]
@@ -127,6 +128,33 @@ pub async fn run(
             weights
                 .iter()
                 .map(|weight| format!("hm://{}/lsn/{}", actor.actor(), weight.target_lsn)),
+        );
+        return Ok(envelope);
+    }
+    if uri == format!("hm://{}/connectors", actor.actor()) {
+        let records = actor.connectors(MAXIMUM_CONNECTOR_ITEMS).await?;
+        envelope.items[0]["connectors"] = json!(
+            records
+                .iter()
+                .map(|record| json!({
+                    "connector_id": hex(&record.connector_id),
+                    "provider": record.provider,
+                    "external_account": record.external_account,
+                    "credential_version": record.credential_version,
+                    "signature_scheme": super::connector::signature_scheme_name(
+                        record.signature_scheme,
+                    ),
+                    "scopes": record.scopes,
+                    "state": super::connector::connector_state_name(record.state),
+                    "bound_lsn": record.bound_lsn,
+                    "uri": format!("hm://{}/lsn/{}", actor.actor(), record.bound_lsn),
+                }))
+                .collect::<Vec<_>>()
+        );
+        envelope.provenance.extend(
+            records
+                .iter()
+                .map(|record| format!("hm://{}/lsn/{}", actor.actor(), record.bound_lsn)),
         );
         return Ok(envelope);
     }

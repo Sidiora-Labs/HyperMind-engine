@@ -74,6 +74,7 @@ async fn intend_and_bind_append_real_continuity_events() {
             evidence_lsn,
             revision: "abc123".to_owned(),
             freshness_requirement_ns: 60_000_000_000,
+            connector: None,
         })
         .await;
     assert!(bound.ok);
@@ -123,6 +124,7 @@ async fn intend_and_bind_append_real_continuity_events() {
             evidence_lsn,
             revision: "abc123".to_owned(),
             freshness_requirement_ns: 1,
+            connector: None,
         })
         .await;
     assert!(!invalid.ok);

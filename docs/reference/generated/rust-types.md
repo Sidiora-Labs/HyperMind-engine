@@ -8583,6 +8583,59 @@ pub struct BindInput {
     pub evidence_lsn: u64,
     pub revision: String,
     pub freshness_requirement_ns: u64,
+    #[serde(default)]
+    pub connector: Option<ConnectorInput>,
+}
+```
+
+## hm-mcp::ConnectorAction
+
+<a id="rust-crates-hm-mcp-src-tools-connector-rs-connectoraction"></a>
+
+Source: [`crates/hm-mcp/src/tools/connector.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/connector.rs).
+
+When to use: Use `ConnectorAction` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub enum ConnectorAction {
+    Consent,
+    Bind,
+    Rotate,
+    Revoke,
+}
+```
+
+## hm-mcp::ConnectorInput
+
+<a id="rust-crates-hm-mcp-src-tools-connector-rs-connectorinput"></a>
+
+Source: [`crates/hm-mcp/src/tools/connector.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/connector.rs).
+
+When to use: Use `ConnectorInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority. Do not treat constructing or serializing a request as evidence that it was accepted or executed.
+
+
+```rust
+pub struct ConnectorInput {
+    pub action: ConnectorAction,
+    pub provider: String,
+    pub connector_id: String,
+    #[serde(default)]
+    pub external_account: Option<String>,
+    #[serde(default)]
+    pub consent_state: Option<String>,
+    #[serde(default)]
+    pub consent_ttl_ns: Option<i64>,
+    #[serde(default)]
+    pub credential_version: Option<u32>,
+    #[serde(default)]
+    pub signing_secret: Option<String>,
+    #[serde(default)]
+    pub scopes: Option<Vec<String>>,
 }
 ```
 

@@ -31,6 +31,7 @@ pub use tools::believe::{
     BeliefClaimInput, BeliefTypeInput, BelieveInput, ClaimInput, ProvenanceInput,
 };
 pub use tools::bind::BindInput;
+pub use tools::connector::{ConnectorAction, ConnectorInput};
 pub use tools::consolidate::{
     ConsolidateAction, ConsolidateBudget, ConsolidateInput, ConsolidateMode, ConsolidationRuntime,
 };
