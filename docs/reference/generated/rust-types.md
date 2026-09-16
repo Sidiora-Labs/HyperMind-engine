@@ -4355,6 +4355,106 @@ pub struct LoaderRegistry {
 }
 ```
 
+## hm-docs::ChangeKind
+
+<a id="rust-crates-hm-docs-src-plan-rs-changekind"></a>
+
+Source: [`crates/hm-docs/src/plan.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/plan.rs).
+
+When to use: Use `ChangeKind` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub enum ChangeKind {
+    Retained,
+    Moved,
+    Replaced,
+    Added,
+}
+```
+
+## hm-docs::StoredChunk
+
+<a id="rust-crates-hm-docs-src-plan-rs-storedchunk"></a>
+
+Source: [`crates/hm-docs/src/plan.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/plan.rs).
+
+When to use: Use `StoredChunk` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct StoredChunk {
+    pub chunk_id: [u8; 32],
+    pub content_hash: [u8; 32],
+    pub occurrence: u32,
+    pub ordinal: u32,
+    pub byte_start: usize,
+    pub byte_end: usize,
+    pub cut: ChunkCut,
+    pub page_number: u32,
+    pub row_index: u32,
+    pub column_start: u32,
+    pub column_end: u32,
+    pub token_estimate: u32,
+}
+```
+
+## hm-docs::PlannedChunk
+
+<a id="rust-crates-hm-docs-src-plan-rs-plannedchunk"></a>
+
+Source: [`crates/hm-docs/src/plan.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/plan.rs).
+
+When to use: Use `PlannedChunk` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct PlannedChunk {
+    pub chunk_id: [u8; 32],
+    pub content_hash: [u8; 32],
+    pub occurrence: u32,
+    pub ordinal: u32,
+    pub byte_start: usize,
+    pub byte_end: usize,
+    pub cut: ChunkCut,
+    pub change: ChangeKind,
+    pub page_number: u32,
+    pub row_index: u32,
+    pub column_start: u32,
+    pub column_end: u32,
+    pub token_estimate: u32,
+}
+```
+
+## hm-docs::ChangePlan
+
+<a id="rust-crates-hm-docs-src-plan-rs-changeplan"></a>
+
+Source: [`crates/hm-docs/src/plan.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/plan.rs).
+
+When to use: Use `ChangePlan` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct ChangePlan {
+    pub document_id: [u8; 32],
+    pub chunks: Vec<PlannedChunk>,
+    pub regions: u32,
+    pub retained: u32,
+    pub moved: u32,
+    pub replaced: u32,
+    pub added: u32,
+}
+```
+
 ## hm-embed::CachedEmbedder
 
 <a id="rust-crates-hm-embed-src-cache-rs-cachedembedder"></a>

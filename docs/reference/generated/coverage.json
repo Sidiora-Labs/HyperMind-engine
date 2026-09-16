@@ -1062,6 +1062,26 @@
       "file": "crates/hm-docs/src/loader.rs"
     },
     {
+      "id": "rust:crates/hm-docs/src/plan.rs:ChangeKind",
+      "name": "hm-docs::ChangeKind",
+      "file": "crates/hm-docs/src/plan.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/plan.rs:StoredChunk",
+      "name": "hm-docs::StoredChunk",
+      "file": "crates/hm-docs/src/plan.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/plan.rs:PlannedChunk",
+      "name": "hm-docs::PlannedChunk",
+      "file": "crates/hm-docs/src/plan.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/plan.rs:ChangePlan",
+      "name": "hm-docs::ChangePlan",
+      "file": "crates/hm-docs/src/plan.rs"
+    },
+    {
       "id": "rust:crates/hm-embed/src/cache.rs:CachedEmbedder",
       "name": "hm-embed::CachedEmbedder",
       "file": "crates/hm-embed/src/cache.rs"
