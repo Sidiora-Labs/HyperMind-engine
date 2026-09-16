@@ -1,3 +1,4 @@
+import { createActivityFeed, renderActivity } from "./activity.js";
 import {
   applyDomainAction,
   compileDomainProfile,
@@ -160,6 +161,14 @@ function paintDomainProfile(): void {
   panel.innerHTML = renderDomainProfile(profile, compileDomainProfile(profile)) + editor() + message;
 }
 
+function showActivity(mount: HTMLElement): void {
+  if (session === undefined) return;
+  const panel = document.createElement("div");
+  panel.id = "console-activity";
+  panel.innerHTML = renderActivity(createActivityFeed({ actorKey: String(session.actor) }));
+  mount.append(panel);
+}
+
 function showDomainProfile(mount: HTMLElement): void {
   const panel = document.createElement("div");
   panel.id = "console-domain-profile";
@@ -261,6 +270,7 @@ async function render(): Promise<void> {
   summary.id = "console-overview";
   summary.innerHTML = renderOverview(overview);
   mount.append(summary);
+  showActivity(mount);
   await showSources(mount);
   await showEvidence(mount, values);
   showDomainProfile(mount);

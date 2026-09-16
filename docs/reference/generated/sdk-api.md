@@ -4273,9 +4273,249 @@ Do not use: Do not substitute unchecked request objects, discard provenance, or 
 close(): void { this.client.close(); }
 ```
 
+## sdk/typescript/packages/console/src/activity.ts::ActivityLane
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-activitylane"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use Activity Lane through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export type ActivityLane = "ingestion" | "recall" | "consolidation" | "other";
+```
+
+## sdk/typescript/packages/console/src/activity.ts::ActivityEvent
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-activityevent"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use Activity Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface ActivityEvent {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::ActivitySubscribeFailure
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-activitysubscribefailure"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use Activity Subscribe Failure through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface ActivitySubscribeFailure {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::ActivityFeed
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-activityfeed"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use Activity Feed through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface ActivityFeed {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::ACTIVITY_LANES
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-activity-lanes"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use ACTIVITY_LANES through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export const ACTIVITY_LANES: Readonly<Record<number, ActivityLane>> = Object.freeze(
+```
+
+## sdk/typescript/packages/console/src/activity.ts::MAXIMUM_ACTIVITY_EVENTS
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-maximum-activity-events"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use MAXIMUM_ACTIVITY_EVENTS through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export const MAXIMUM_ACTIVITY_EVENTS = 512;
+```
+
+## sdk/typescript/packages/console/src/activity.ts::classifyActivity
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-classifyactivity"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use classify Activity through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function classifyActivity(kind: number): ActivityLane {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::createActivityFeed
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-createactivityfeed"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use create Activity Feed through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function createActivityFeed(options: {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::renderActivity
+
+<a id="sdk-sdk-typescript-packages-console-src-activity-ts-renderactivity"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use render Activity through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderActivity(feed: ActivityFeed): string {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::note
+
+<a id="sdk-method-sdk-typescript-packages-console-src-activity-ts-555-note"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use this note method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+note(event: { lsn: bigint; kind: number; conversation: string; wallTimestampNs: bigint }): void;
+```
+
+## sdk/typescript/packages/console/src/activity.ts::switchActor
+
+<a id="sdk-method-sdk-typescript-packages-console-src-activity-ts-654-switchactor"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use this switchActor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+switchActor(actorKey: string): void;
+```
+
+## sdk/typescript/packages/console/src/activity.ts::recordSubscribeFailure
+
+<a id="sdk-method-sdk-typescript-packages-console-src-activity-ts-693-recordsubscribefailure"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use this recordSubscribeFailure method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+recordSubscribeFailure(error: unknown): "reset" | "retry";
+```
+
+## sdk/typescript/packages/console/src/activity.ts::constructor
+
+<a id="sdk-method-sdk-typescript-packages-console-src-activity-ts-3199-constructor"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+constructor(actorKey: string, sinceLsn: bigint, maximumEvents: number) {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::note
+
+<a id="sdk-method-sdk-typescript-packages-console-src-activity-ts-3377-note"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use this note method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+note(event: { lsn: bigint; kind: number; conversation: string; wallTimestampNs: bigint }): void {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::switchActor
+
+<a id="sdk-method-sdk-typescript-packages-console-src-activity-ts-3955-switchactor"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use this switchActor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+switchActor(actorKey: string): void {
+```
+
+## sdk/typescript/packages/console/src/activity.ts::recordSubscribeFailure
+
+<a id="sdk-method-sdk-typescript-packages-console-src-activity-ts-4185-recordsubscribefailure"></a>
+
+Source: [`sdk/typescript/packages/console/src/activity.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/activity.ts).
+
+When to use: Use this recordSubscribeFailure method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+recordSubscribeFailure(error: unknown): "reset" | "retry" {
+```
+
 ## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-6496-paintdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-6850-paintdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4290,7 +4530,7 @@ paintDomainProfile();
 
 ## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-8766-paintdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-9120-paintdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4301,11 +4541,26 @@ Do not use: Do not substitute unchecked request objects, discard provenance, or 
 
 ```typescript
 paintDomainProfile();
+```
+
+## sdk/typescript/packages/console/src/app.ts::showActivity
+
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10045-showactivity"></a>
+
+Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
+
+When to use: Use this showActivity method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+showActivity(mount);
 ```
 
 ## sdk/typescript/packages/console/src/app.ts::showDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-9756-showdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10133-showdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4781,6 +5036,21 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 ```typescript
 export function clientTransport(client: Client): ConsoleTransport {
+```
+
+## sdk/typescript/packages/console/src/node-transport.ts::subscribeActivity
+
+<a id="sdk-sdk-typescript-packages-console-src-node-transport-ts-subscribeactivity"></a>
+
+Source: [`sdk/typescript/packages/console/src/node-transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/node-transport.ts).
+
+When to use: Use subscribe Activity through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function subscribeActivity(
 ```
 
 ## sdk/typescript/packages/console/src/overview.ts::OverviewProjection

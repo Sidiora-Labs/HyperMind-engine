@@ -5587,17 +5587,102 @@
       "file": "sdk/typescript/packages/client/src/grpc.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:6496:paintDomainProfile",
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:ActivityLane",
+      "name": "sdk/typescript/packages/console/src/activity.ts::ActivityLane",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:ActivityEvent",
+      "name": "sdk/typescript/packages/console/src/activity.ts::ActivityEvent",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:ActivitySubscribeFailure",
+      "name": "sdk/typescript/packages/console/src/activity.ts::ActivitySubscribeFailure",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:ActivityFeed",
+      "name": "sdk/typescript/packages/console/src/activity.ts::ActivityFeed",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:ACTIVITY_LANES",
+      "name": "sdk/typescript/packages/console/src/activity.ts::ACTIVITY_LANES",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:MAXIMUM_ACTIVITY_EVENTS",
+      "name": "sdk/typescript/packages/console/src/activity.ts::MAXIMUM_ACTIVITY_EVENTS",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:classifyActivity",
+      "name": "sdk/typescript/packages/console/src/activity.ts::classifyActivity",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:createActivityFeed",
+      "name": "sdk/typescript/packages/console/src/activity.ts::createActivityFeed",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/activity.ts:renderActivity",
+      "name": "sdk/typescript/packages/console/src/activity.ts::renderActivity",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/activity.ts:555:note",
+      "name": "sdk/typescript/packages/console/src/activity.ts::note",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/activity.ts:654:switchActor",
+      "name": "sdk/typescript/packages/console/src/activity.ts::switchActor",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/activity.ts:693:recordSubscribeFailure",
+      "name": "sdk/typescript/packages/console/src/activity.ts::recordSubscribeFailure",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/activity.ts:3199:constructor",
+      "name": "sdk/typescript/packages/console/src/activity.ts::constructor",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/activity.ts:3377:note",
+      "name": "sdk/typescript/packages/console/src/activity.ts::note",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/activity.ts:3955:switchActor",
+      "name": "sdk/typescript/packages/console/src/activity.ts::switchActor",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/activity.ts:4185:recordSubscribeFailure",
+      "name": "sdk/typescript/packages/console/src/activity.ts::recordSubscribeFailure",
+      "file": "sdk/typescript/packages/console/src/activity.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:6850:paintDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:8766:paintDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:9120:paintDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:9756:showDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10045:showActivity",
+      "name": "sdk/typescript/packages/console/src/app.ts::showActivity",
+      "file": "sdk/typescript/packages/console/src/app.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10133:showDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::showDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
@@ -5754,6 +5839,11 @@
     {
       "id": "sdk:sdk/typescript/packages/console/src/node-transport.ts:clientTransport",
       "name": "sdk/typescript/packages/console/src/node-transport.ts::clientTransport",
+      "file": "sdk/typescript/packages/console/src/node-transport.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/node-transport.ts:subscribeActivity",
+      "name": "sdk/typescript/packages/console/src/node-transport.ts::subscribeActivity",
       "file": "sdk/typescript/packages/console/src/node-transport.ts"
     },
     {
