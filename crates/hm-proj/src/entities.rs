@@ -108,6 +108,12 @@ fn document_text(frame: &Frame) -> Result<Option<String>, Error> {
 }
 
 fn posting_key(alias: &str) -> Vec<u8> {
+    if alias.len() > 510 {
+        let mut key = Vec::with_capacity(33);
+        key.push(b'H');
+        key.extend_from_slice(blake3::hash(alias.as_bytes()).as_bytes());
+        return key;
+    }
     let mut key = Vec::with_capacity(alias.len() + 1);
     key.push(b'P');
     key.extend_from_slice(alias.as_bytes());
@@ -128,4 +134,27 @@ fn encode_bitmap(bitmap: &RoaringTreemap) -> Result<Vec<u8>, Error> {
         .serialize_into(&mut bytes)
         .map_err(|_| Error::new(ErrorCode::BackendUnavailable))?;
     Ok(bytes)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::posting_key;
+
+    #[test]
+    fn posting_keys_preserve_legacy_bytes_and_bound_long_aliases() {
+        assert_eq!(posting_key("src/main.rs"), b"Psrc/main.rs");
+        let maximum_legacy = "a".repeat(510);
+        assert_eq!(
+            posting_key(&maximum_legacy),
+            format!("P{maximum_legacy}").as_bytes()
+        );
+        let first = format!("/{maximum_legacy}");
+        let second = format!("{first}/child");
+        let first_key = posting_key(&first);
+        assert_eq!(first_key.len(), 33);
+        assert_eq!(first_key[0], b'H');
+        assert_eq!(&first_key[1..], blake3::hash(first.as_bytes()).as_bytes());
+        assert_ne!(first_key, posting_key(&second));
+        assert_eq!(first_key, posting_key(&first));
+    }
 }

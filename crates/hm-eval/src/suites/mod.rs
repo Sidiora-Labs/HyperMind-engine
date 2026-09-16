@@ -1,8 +1,11 @@
+pub mod attention;
+pub mod calibration;
 pub mod citations;
 pub mod continuity;
 pub mod degradation;
 pub mod dream;
 pub mod generations;
+pub mod hnsw_parity;
 pub mod latency;
 pub mod laundering;
 pub mod protected;

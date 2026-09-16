@@ -439,9 +439,14 @@ fn increment_prefix(prefix: &mut Vec<u8>) -> Option<()> {
 
 #[allow(clippy::needless_pass_by_value)]
 fn database_error(error: heed::Error) -> Error {
-    let code = match error {
+    let code = match &error {
         heed::Error::Mdb(heed::MdbError::MapFull) => ErrorCode::MapFull,
         _ => ErrorCode::BackendUnavailable,
     };
-    Error::new(code)
+    let system_error = match error {
+        heed::Error::Mdb(error) => error.to_err_code(),
+        heed::Error::Io(error) => error.raw_os_error().unwrap_or_default(),
+        _ => 0,
+    };
+    Error::new(code).with_system_error(system_error)
 }
