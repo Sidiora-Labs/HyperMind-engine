@@ -1462,6 +1462,16 @@
       "file": "crates/hm-eval/src/contract/mod.rs"
     },
     {
+      "id": "rust:crates/hm-eval/src/contract/python.rs:GrpcDaemon",
+      "name": "hm-eval::GrpcDaemon",
+      "file": "crates/hm-eval/src/contract/python.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/contract/report.rs:ContractReport",
+      "name": "hm-eval::ContractReport",
+      "file": "crates/hm-eval/src/contract/report.rs"
+    },
+    {
       "id": "rust:crates/hm-eval/src/slice1.rs:Metric",
       "name": "hm-eval::Metric",
       "file": "crates/hm-eval/src/slice1.rs"

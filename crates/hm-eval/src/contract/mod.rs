@@ -1,6 +1,8 @@
 #![allow(clippy::cast_precision_loss, clippy::missing_errors_doc)]
 
 pub mod daemon;
+pub mod python;
+pub mod report;
 pub mod typescript;
 
 use crate::bench::gateway::{DynError, write_json};

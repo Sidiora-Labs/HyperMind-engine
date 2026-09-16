@@ -52,6 +52,12 @@ async fn main() {
                 .await
                 .map_err(|error| error as Box<dyn std::error::Error>)
         }
+        [command] if command == "contract" => match hm_eval::contract::report::run().await {
+            Ok(report) => serde_json::to_string(&report)
+                .map(|line| println!("{line}"))
+                .map_err(Into::into),
+            Err(error) => Err(error as Box<dyn std::error::Error>),
+        },
         [command] if command == "provider-check" => bench::execution::provider_check()
             .await
             .map_err(|error| error as Box<dyn std::error::Error>),
@@ -127,7 +133,7 @@ async fn main() {
         }
         _ => {
             eprintln!(
-                "usage: hm-eval gate <slice1|slice2|slice3|slice4|slice5|slice6|slice7> [--compare REF]\n       hm-eval bench <longmemeval|locomo> [--live]\n       hm-eval diagnose longmemeval --questions ID,ID [--live]\n       hm-eval rejudge longmemeval ID PREDICTION_PATH [--live]\n       hm-eval provider-check\n       hm-eval budget --confirm-upstream-rates"
+                "usage: hm-eval gate <slice1|slice2|slice3|slice4|slice5|slice6|slice7> [--compare REF]\n       hm-eval bench <longmemeval|locomo> [--live]\n       hm-eval diagnose longmemeval --questions ID,ID [--live]\n       hm-eval rejudge longmemeval ID PREDICTION_PATH [--live]\n       hm-eval provider-check\n       hm-eval contract\n       hm-eval budget --confirm-upstream-rates"
             );
             std::process::exit(2);
         }

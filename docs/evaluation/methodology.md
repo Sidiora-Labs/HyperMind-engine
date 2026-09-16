@@ -31,3 +31,11 @@ Reserve budget before dispatch; unknown calls retain reservations and are not au
 The current authorized campaign uses a shared $49 ledger ceiling plus $1 reserved for earlier provider checks. This is not authorization for future campaigns. Credentials/private responses are not documentation artifacts.
 
 `cargo run -p hm-eval -- gate slice7` requires full coverage, LongMemEval ≥ 0.90 accuracy, LoCoMo ≥ 0.75 non-adversarial F1, attention ≥ 0.90 suppression precision, and HNSW ≥ 0.98 parity. CI replay needs its explicitly pinned evidence artifact. Local success does not prove hosted CI or release qualification.
+
+## Cross-SDK behavioural contract
+
+`hm-eval contract` runs one fixed scenario through every SDK leg the machine can actually run and writes `eval/results/cross-sdk-contract.json`. The scenario remembers a user turn and an assistant turn, recalls them lexically, submits one rejected argument and one rejected mutation, inspects the first ledger event, then crosses a SIGKILL restart of the daemon to recall again and fade the first record. The in-process Rust leg is always run; the TypeScript leg runs over the Unix socket; the Python leg runs over mutual-TLS gRPC.
+
+Comparison is on behaviour, not structure. Each leg records raw envelopes and one normalization in Rust reduces them to item identifiers, provenance URIs stripped of clock-bound query fields, authority classes, error codes, effect states, health keys, gap kinds and warning kinds. Legs agree when those reduced observations match step for step.
+
+Runtimes that are absent are recorded, never stubbed. Every leg the harness cannot run appears in `unavailable` with the reason it could not run, and is excluded from the agreement claim rather than substituted. The Go leg is unverified here: the Go toolchain is absent and no Go contract leg is written, so the Go SDK is declared unavailable by inspection and is never reported as agreeing. The Python leg runs only where its SDK dependencies are installed; where `import hypermind` fails, the interpreter's own error is recorded as the reason. A step an SDK does not expose is listed in `unsupported` and is not counted as a divergence. The run exits non-zero when fewer than two legs participated or when the participating legs diverged.

@@ -6042,6 +6042,47 @@ pub struct ContractComparison {
 }
 ```
 
+## hm-eval::GrpcDaemon
+
+<a id="rust-crates-hm-eval-src-contract-python-rs-grpcdaemon"></a>
+
+Source: [`crates/hm-eval/src/contract/python.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/python.rs).
+
+When to use: Use `GrpcDaemon` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct GrpcDaemon {
+    child: Child,
+    root: PathBuf,
+    address: SocketAddr,
+    config: PathBuf,
+    executable: PathBuf,
+}
+```
+
+## hm-eval::ContractReport
+
+<a id="rust-crates-hm-eval-src-contract-report-rs-contractreport"></a>
+
+Source: [`crates/hm-eval/src/contract/report.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/report.rs).
+
+When to use: Use `ContractReport` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct ContractReport {
+    pub format: String,
+    pub comparison: ContractComparison,
+    pub scenario_steps: usize,
+    pub restarted: bool,
+}
+```
+
 ## hm-eval::Metric
 
 <a id="rust-crates-hm-eval-src-slice1-rs-metric"></a>
