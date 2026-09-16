@@ -1,3 +1,4 @@
+#![allow(clippy::cast_possible_wrap)]
 #![forbid(unsafe_code)]
 
 use hm_compose::bundle::{
