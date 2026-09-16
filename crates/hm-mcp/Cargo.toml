@@ -20,6 +20,7 @@ hm-compose = { path = "../hm-compose" }
 hm-core = { path = "../hm-core" }
 hm-cortex = { path = "../hm-cortex" }
 hm-embed = { path = "../hm-embed" }
+hm-index = { path = "../hm-index" }
 hm-ledger = { path = "../hm-ledger" }
 hm-llm = { path = "../hm-llm" }
 hm-schema = { path = "../hm-schema" }

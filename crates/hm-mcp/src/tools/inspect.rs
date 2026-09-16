@@ -101,6 +101,18 @@ pub async fn run(
         );
         return Ok(envelope);
     }
+    if uri == format!("hm://{}/sources", actor.actor()) {
+        let sources = super::sources::index(actor).await?;
+        envelope.items.extend(sources.items);
+        envelope.provenance.extend(sources.provenance);
+        return Ok(envelope);
+    }
+    if let Some(conversation_hex) = uri.strip_prefix(&format!("hm://{}/sources/", actor.actor())) {
+        let source = super::sources::detail(actor, conversation_hex).await?;
+        envelope.items.extend(source.items);
+        envelope.provenance.extend(source.provenance);
+        return Ok(envelope);
+    }
     let all_frames = actor.frames_since(LSN::new(0), None, usize::MAX).await?;
     let mut history = InspectHistory::default();
     for frame in &all_frames {

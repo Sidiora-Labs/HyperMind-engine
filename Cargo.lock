@@ -1507,6 +1507,7 @@ dependencies = [
  "hm-core",
  "hm-cortex",
  "hm-embed",
+ "hm-index",
  "hm-ledger",
  "hm-llm",
  "hm-proj",
