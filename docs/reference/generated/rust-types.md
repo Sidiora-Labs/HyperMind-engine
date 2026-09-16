@@ -7254,6 +7254,8 @@ pub struct Envelope {
     pub warnings: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub effect_state: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest: Option<Value>,
 }
 ```
 
@@ -11438,6 +11440,9 @@ pub struct ToolEnvelope {
     pub warnings: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub effect_state: Option<String>,
+    /// Retrieval manifest returned by activate: retrieved, selected, included, and used LSNs.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest: Option<Value>,
 }
 ```
 

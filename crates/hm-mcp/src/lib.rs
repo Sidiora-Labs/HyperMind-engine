@@ -2,7 +2,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use base64::Engine as _;
-use hm_compose::bundle::{ActivationBundle, HealthStatus};
+use hm_compose::bundle::{ActivationBundle, HealthStatus, RetrievalLane};
 use hm_compose::tokens::FallbackWeights;
 use hm_core::{ConversationId, Error, ErrorCode, LSN};
 use hm_schema::event::{CURRENT_SCHEMA_VERSION, encode_event_envelope, verify_event};
@@ -57,6 +57,8 @@ pub struct Envelope {
     pub warnings: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub effect_state: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest: Option<Value>,
 }
 
 impl Envelope {
@@ -70,6 +72,7 @@ impl Envelope {
             health: json!({"projection": "ready"}),
             warnings: Vec::new(),
             effect_state: None,
+            manifest: None,
         }
     }
 
@@ -755,7 +758,42 @@ fn bundle_envelope(bundle: &ActivationBundle) -> Envelope {
         "inclusion": health(bundle.health.inclusion),
         "bundle_hash": hex(&bundle.bundle_hash),
     });
+    envelope.manifest = Some(json!({
+        "manifest_id": hex(&bundle.manifest.manifest_id),
+        "query_digest": hex(&bundle.manifest.query_digest),
+        "snapshot_epoch": bundle.manifest.snapshot_epoch,
+        "encoder": bundle.manifest.encoder,
+        "index_generation": bundle.manifest.index_generation,
+        "candidate_lanes": bundle
+            .manifest
+            .candidate_lanes
+            .iter()
+            .copied()
+            .map(lane_name)
+            .collect::<Vec<_>>(),
+        "retrieved": lsn_numbers(&bundle.manifest.candidates),
+        "selected": lsn_numbers(&bundle.manifest.selected),
+        "included": lsn_numbers(&bundle.manifest.included),
+        "used": lsn_numbers(&bundle.manifest.used),
+    }));
     envelope
+}
+
+fn lsn_numbers(values: &[LSN]) -> Vec<u64> {
+    values.iter().map(|lsn| lsn.get()).collect()
+}
+
+const fn lane_name(lane: RetrievalLane) -> &'static str {
+    match lane {
+        RetrievalLane::Lexical => "lexical",
+        RetrievalLane::Vector => "vector",
+        RetrievalLane::Entity => "entity",
+        RetrievalLane::Temporal => "temporal",
+        RetrievalLane::Graph => "graph",
+        RetrievalLane::Belief => "belief",
+        RetrievalLane::Timeline => "timeline",
+        RetrievalLane::Reconstruct => "reconstruct",
+    }
 }
 
 fn event_content(

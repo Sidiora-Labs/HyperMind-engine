@@ -136,3 +136,7 @@ components:
           type: string
           enum: [not_dispatched, unknown, rejected]
           description: Mandatory on mutation errors; absent on successful responses
+        manifest:
+          type: object
+          additionalProperties: true
+          description: Activate only; retrieval manifest with retrieved, selected, included and used LSN sets

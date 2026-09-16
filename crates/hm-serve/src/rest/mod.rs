@@ -85,6 +85,9 @@ pub struct ToolEnvelope {
     pub warnings: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub effect_state: Option<String>,
+    /// Retrieval manifest returned by activate: retrieved, selected, included, and used LSNs.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest: Option<Value>,
 }
 
 #[derive(OpenApi)]
@@ -522,6 +525,7 @@ async fn dispatch(gateway: &Gateway, hello: &[u8], request: &[u8], mutation: boo
         health: json!({"projection":"ready"}),
         warnings: Vec::new(),
         effect_state: None,
+        manifest: None,
     })
     .into_response()
 }
@@ -536,6 +540,7 @@ fn error_envelope(message: &str, mutation: bool, effect: &str) -> ToolEnvelope {
         health: json!({"projection":"unavailable"}),
         warnings: Vec::new(),
         effect_state: mutation.then(|| effect.to_owned()),
+        manifest: None,
     }
 }
 

@@ -10,6 +10,6 @@ The [tool catalog](generated/tools.md) lists all 14 actual verbs with specific u
 
 The advertised inventory stays at fourteen verbs as the capability catalogue grows. `inspect` carries `mode: "discover"` with an optional `query` and `limit`, which enumerates the capability surfaces behind those verbs and annotates each one with whether the running server can serve it. Discovery is not authorization: unavailable and privileged surfaces are still listed, every discovery envelope carries the `discovery_is_not_authorization` warning, and dispatch still enforces capability on every call.
 
-The shared envelope has `ok`, `items`, `provenance`, `budget`, `gaps`, `health`, and `warnings`. Mutation failures add `effect_state`: `not_dispatched`, `unknown`, or `rejected`. Surfaced items retain authority. `inspect` resolves provenance chains and `hm://ACTOR/attention` or `hm://ACTOR/calibration`.
+The shared envelope has `ok`, `items`, `provenance`, `budget`, `gaps`, `health`, and `warnings`. Mutation failures add `effect_state`: `not_dispatched`, `unknown`, or `rejected`. Surfaced items retain authority. `inspect` resolves provenance chains and `hm://ACTOR/attention` or `hm://ACTOR/calibration`. `activate` additionally returns `manifest`, carrying the retrieved, selected, included, and used LSN sets for that activation.
 
 Batch digests are not interruptions. Predictions are not outcomes. Supported procedures are observations until user adoption. Consolidation needs declared budgets and configured providers; unavailable operations are not fabricated successes.

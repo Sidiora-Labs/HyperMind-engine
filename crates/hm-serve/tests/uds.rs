@@ -48,6 +48,7 @@ async fn exchange(stream: &mut UnixStream, envelope: WireEnvelope) -> WireEnvelo
 }
 
 #[tokio::test]
+#[allow(clippy::too_many_lines)]
 async fn real_socket_accepts_v2_append_and_lexical_recall() {
     let temporary = tempfile::tempdir().unwrap();
     let config = config(temporary.path());
