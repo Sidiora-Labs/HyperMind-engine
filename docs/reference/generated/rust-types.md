@@ -753,6 +753,7 @@ pub struct FusedHit {
     pub lane_ranks: BTreeMap<RetrievalLane, u32>,
     pub why: WhyCode,
     pub uri: String,
+    pub preference_q16: u32,
 }
 ```
 
@@ -1127,6 +1128,23 @@ Do not use: Do not shed required bindings silently, omit degraded health, or ren
 pub struct QueryPlan {
     pub shape: QueryShape,
     pub lanes: Vec<LanePlan>,
+}
+```
+
+## hm-compose::PreferenceProfile
+
+<a id="rust-crates-hm-compose-src-preference-rs-preferenceprofile"></a>
+
+Source: [`crates/hm-compose/src/preference.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/preference.rs).
+
+When to use: Use `PreferenceProfile` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
+
+Do not use: Do not shed required bindings silently, omit degraded health, or render memory into system/developer instructions.
+
+
+```rust
+pub struct PreferenceProfile {
+    weights: BTreeMap<u64, u32>,
 }
 ```
 

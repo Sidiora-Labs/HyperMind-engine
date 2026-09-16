@@ -1,6 +1,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::bundle::{RetrievalLane, WhyCode};
+use crate::preference::{PreferenceProfile, adjust_q32};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -44,6 +45,7 @@ pub struct FusedHit {
     pub lane_ranks: BTreeMap<RetrievalLane, u32>,
     pub why: WhyCode,
     pub uri: String,
+    pub preference_q16: u32,
 }
 
 pub fn fuse(
@@ -51,6 +53,22 @@ pub fn fuse(
     conversation: ConversationId,
     rankings: &[LaneRanking],
     limit: usize,
+) -> Result<Vec<FusedHit>, Error> {
+    fuse_with_preferences(
+        actor,
+        conversation,
+        rankings,
+        limit,
+        &PreferenceProfile::neutral(),
+    )
+}
+
+pub fn fuse_with_preferences(
+    actor: ActorId,
+    conversation: ConversationId,
+    rankings: &[LaneRanking],
+    limit: usize,
+    preferences: &PreferenceProfile,
 ) -> Result<Vec<FusedHit>, Error> {
     if actor.get() == 0 || rankings.is_empty() || limit == 0 {
         return Err(Error::new(ErrorCode::InvalidArgument));
@@ -94,9 +112,20 @@ pub fn fuse(
     let mut hits = accumulated
         .into_iter()
         .map(|(canonical_id, entry)| {
-            let score_q32 = composite(entry.rrf_q32, entry.fsrs, entry.salience, entry.recency)?;
+            let composite_q32 =
+                composite(entry.rrf_q32, entry.fsrs, entry.salience, entry.recency)?;
+            let preference_q16 = preferences.weight_q16(entry.lsn);
+            let score_q32 = adjust_q32(composite_q32, preference_q16)?;
             let why = why_code(&entry.ranks);
-            let uri = provenance_uri(actor, conversation, entry.lsn, score_q32, &entry.ranks, why);
+            let uri = provenance_uri(
+                actor,
+                conversation,
+                entry.lsn,
+                score_q32,
+                &entry.ranks,
+                why,
+                preference_q16,
+            );
             Ok(FusedHit {
                 canonical_id,
                 lsn: entry.lsn,
@@ -104,6 +133,7 @@ pub fn fuse(
                 lane_ranks: entry.ranks,
                 why,
                 uri,
+                preference_q16,
             })
         })
         .collect::<Result<Vec<_>, Error>>()?;
@@ -171,14 +201,20 @@ fn provenance_uri(
     score: u64,
     ranks: &BTreeMap<RetrievalLane, u32>,
     why: WhyCode,
+    preference_q16: u32,
 ) -> String {
     let ranks = ranks
         .iter()
         .map(|(lane, rank)| format!("{}:{rank}", lane_name(*lane)))
         .collect::<Vec<_>>()
         .join(",");
+    let preference = if preference_q16 == Q16_ONE {
+        String::new()
+    } else {
+        format!("&pref={preference_q16}")
+    };
     format!(
-        "hm://{actor}/{conversation}/{lsn}?score={score}&ranks={ranks}&why={}",
+        "hm://{actor}/{conversation}/{lsn}?score={score}&ranks={ranks}&why={}{preference}",
         why_name(why)
     )
 }

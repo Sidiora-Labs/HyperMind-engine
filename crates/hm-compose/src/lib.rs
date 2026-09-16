@@ -10,6 +10,7 @@ pub mod health;
 pub mod lanes;
 pub mod manifest;
 pub mod planner;
+pub mod preference;
 pub mod procedures;
 pub mod reconstruct;
 pub mod rerank;

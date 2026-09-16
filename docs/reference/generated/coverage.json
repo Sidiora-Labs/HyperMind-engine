@@ -257,6 +257,11 @@
       "file": "crates/hm-compose/src/planner.rs"
     },
     {
+      "id": "rust:crates/hm-compose/src/preference.rs:PreferenceProfile",
+      "name": "hm-compose::PreferenceProfile",
+      "file": "crates/hm-compose/src/preference.rs"
+    },
+    {
       "id": "rust:crates/hm-compose/src/reconstruct.rs:ReconstructionAnchor",
       "name": "hm-compose::ReconstructionAnchor",
       "file": "crates/hm-compose/src/reconstruct.rs"
