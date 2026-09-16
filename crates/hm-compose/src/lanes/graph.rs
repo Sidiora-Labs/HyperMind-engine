@@ -3,11 +3,15 @@
 use crate::bundle::RetrievalLane;
 use crate::fusion::{LaneRanking, Q16_ONE, RankedCandidate};
 use hm_core::{Error, ErrorCode, LSN};
+use hm_index::vocabulary::{normalize_name, normalized_segments};
 use hm_proj::graph::{EdgeRecord, GraphProjection};
 use hm_proj::store::ReadSnapshot;
+use hm_proj::vocabulary::VocabularyProjection;
+use hm_schema::events::VocabularyCategory;
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 pub const MAXIMUM_VISITED_NODES: usize = 200;
+pub const MAXIMUM_VOCABULARY_TERMS: usize = 64;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct GraphSeed {
@@ -34,6 +38,8 @@ pub fn search(
         return Err(Error::new(ErrorCode::InvalidArgument));
     }
     let query_terms = terms(query);
+    let mut relation_cache = BTreeMap::<String, BTreeSet<String>>::new();
+    let query_relations = vocabulary_relations(snapshot, query, &mut relation_cache)?;
     let seed_nodes = seeds
         .iter()
         .map(|seed| seed.node_id.clone())
@@ -65,7 +71,12 @@ pub fn search(
             if seed_nodes.contains(target) {
                 continue;
             }
-            let overlap = relation_overlap(&query_terms, &edge.relation);
+            let mut overlap = relation_overlap(&query_terms, &edge.relation);
+            if !query_relations.is_empty() {
+                overlap += vocabulary_relations(snapshot, &edge.relation, &mut relation_cache)?
+                    .intersection(&query_relations)
+                    .count();
+            }
             if overlap == 0 {
                 continue;
             }
@@ -144,6 +155,37 @@ fn other_endpoint<'a>(edge: &'a EdgeRecord, node: &[u8]) -> Option<&'a [u8]> {
 
 fn relation_overlap(query_terms: &BTreeSet<String>, relation: &str) -> usize {
     terms(relation).intersection(query_terms).count()
+}
+
+fn vocabulary_relations(
+    snapshot: &ReadSnapshot<'_>,
+    value: &str,
+    cache: &mut BTreeMap<String, BTreeSet<String>>,
+) -> Result<BTreeSet<String>, Error> {
+    if let Some(cached) = cache.get(value) {
+        return Ok(cached.clone());
+    }
+    let mut names = normalized_segments(value, MAXIMUM_VOCABULARY_TERMS);
+    let normalized = normalize_name(value);
+    if !normalized.is_empty() {
+        names.push(normalized);
+    }
+    names.sort();
+    names.dedup();
+    names.truncate(MAXIMUM_VOCABULARY_TERMS);
+    let mut resolved = BTreeSet::new();
+    for name in names {
+        for term in VocabularyProjection::resolve(snapshot, &name, MAXIMUM_VOCABULARY_TERMS)? {
+            if term.category == VocabularyCategory::Relation {
+                resolved.insert(term.term_id);
+            }
+        }
+    }
+    while resolved.len() > MAXIMUM_VOCABULARY_TERMS {
+        resolved.pop_last();
+    }
+    cache.insert(value.to_owned(), resolved.clone());
+    Ok(resolved)
 }
 
 fn terms(value: &str) -> BTreeSet<String> {
