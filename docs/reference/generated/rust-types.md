@@ -5659,6 +5659,7 @@ pub enum LlmError {
     Network(String),
     Wire(String),
     Schema(String),
+    Response(outcome::ResponseFault),
     Capacity,
     Admission(&'static str),
 }
@@ -5847,6 +5848,48 @@ Do not use: Do not treat model text as observed evidence or make unbounded provi
 pub struct OpenAiCompatible<T> {
     config: ProviderConfig,
     transport: T,
+}
+```
+
+## hm-llm::ResponseOutcome
+
+<a id="rust-crates-hm-llm-src-outcome-rs-responseoutcome"></a>
+
+Source: [`crates/hm-llm/src/outcome.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/outcome.rs).
+
+When to use: Use `ResponseOutcome` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub enum ResponseOutcome {
+    Refused,
+    Truncated,
+    Malformed,
+    Incomplete,
+}
+```
+
+## hm-llm::ResponseFault
+
+<a id="rust-crates-hm-llm-src-outcome-rs-responsefault"></a>
+
+Source: [`crates/hm-llm/src/outcome.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/outcome.rs).
+
+When to use: Use `ResponseFault` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub struct ResponseFault {
+    pub version: u16,
+    pub outcome: ResponseOutcome,
+    pub model_id: String,
+    pub detail: String,
+    pub requested_output_tokens: u32,
+    pub usage: Usage,
 }
 ```
 

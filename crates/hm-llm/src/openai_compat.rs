@@ -1,6 +1,8 @@
+use crate::outcome::{ResponseFault, ResponseOutcome, decode_structured_text};
 use crate::{
-    LlmError, LlmProvider, ModelTier, ProviderConfig, StructuredRequest, StructuredResponse, Usage,
-    WireRequest, WireTransport, headers, require_success, validate_request,
+    LlmError, LlmProvider, ModelTier, Pricing, ProviderConfig, StructuredRequest,
+    StructuredResponse, Usage, WireRequest, WireTransport, headers, require_success,
+    validate_request,
 };
 use serde_json::{Value, json};
 
@@ -42,12 +44,34 @@ impl<T: WireTransport> LlmProvider for OpenAiCompatible<T> {
             headers: headers(&self.config),
             body,
         })?)?;
-        let content = response
-            .pointer("/choices/0/message/content")
-            .and_then(Value::as_str)
-            .ok_or_else(|| LlmError::Wire("OpenAI response has no content".to_owned()))?;
-        let value =
-            serde_json::from_str(content).map_err(|error| LlmError::Schema(error.to_string()))?;
+        if refused(&response) {
+            return Err(ResponseFault::new(
+                ResponseOutcome::Refused,
+                &self.config.model,
+                "provider declined the structured request".to_owned(),
+                request.maximum_output_tokens,
+                observed_usage(&response, self.config.pricing),
+            )
+            .into());
+        }
+        if truncated(&response) {
+            return Err(ResponseFault::new(
+                ResponseOutcome::Truncated,
+                &self.config.model,
+                "provider stopped the generation at the output token ceiling".to_owned(),
+                request.maximum_output_tokens,
+                observed_usage(&response, self.config.pricing),
+            )
+            .into());
+        }
+        let value = decode_structured_text(
+            response
+                .pointer("/choices/0/message/content")
+                .and_then(Value::as_str),
+            &self.config.model,
+            request.maximum_output_tokens,
+            observed_usage(&response, self.config.pricing),
+        )?;
         let usage = response
             .get("usage")
             .ok_or_else(|| LlmError::Wire("OpenAI response has no usage".to_owned()))?;
@@ -75,6 +99,42 @@ impl<T: WireTransport> LlmProvider for OpenAiCompatible<T> {
             usage,
         })
     }
+}
+
+fn refused(response: &Value) -> bool {
+    response
+        .pointer("/choices/0/message/refusal")
+        .and_then(Value::as_str)
+        .is_some_and(|refusal| !refusal.trim().is_empty())
+}
+
+fn truncated(response: &Value) -> bool {
+    matches!(
+        response
+            .pointer("/choices/0/finish_reason")
+            .and_then(Value::as_str),
+        Some("length" | "max_tokens")
+    )
+}
+
+fn observed_usage(response: &Value, pricing: Pricing) -> Usage {
+    let observed = Usage {
+        input_tokens: response
+            .pointer("/usage/prompt_tokens")
+            .and_then(Value::as_u64)
+            .unwrap_or(0),
+        output_tokens: response
+            .pointer("/usage/completion_tokens")
+            .and_then(Value::as_u64)
+            .unwrap_or(0),
+        cache_read_tokens: response
+            .pointer("/usage/prompt_tokens_details/cached_tokens")
+            .and_then(Value::as_u64)
+            .unwrap_or(0),
+        cache_write_tokens: 0,
+        cost_microusd: 0,
+    };
+    observed.with_cost(pricing).unwrap_or(observed)
 }
 
 fn request_body(model: &str, request: &StructuredRequest) -> Value {

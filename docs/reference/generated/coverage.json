@@ -1427,6 +1427,16 @@
       "file": "crates/hm-llm/src/openai_compat.rs"
     },
     {
+      "id": "rust:crates/hm-llm/src/outcome.rs:ResponseOutcome",
+      "name": "hm-llm::ResponseOutcome",
+      "file": "crates/hm-llm/src/outcome.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/outcome.rs:ResponseFault",
+      "name": "hm-llm::ResponseFault",
+      "file": "crates/hm-llm/src/outcome.rs"
+    },
+    {
       "id": "rust:crates/hm-llm/src/registry.rs:Prompt",
       "name": "hm-llm::Prompt",
       "file": "crates/hm-llm/src/registry.rs"

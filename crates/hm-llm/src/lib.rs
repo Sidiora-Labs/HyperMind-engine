@@ -7,6 +7,7 @@ pub mod cost;
 pub mod gemini;
 pub mod ollama;
 pub mod openai_compat;
+pub mod outcome;
 pub mod registry;
 
 use serde::{Deserialize, Serialize};
@@ -77,6 +78,7 @@ pub enum LlmError {
     Network(String),
     Wire(String),
     Schema(String),
+    Response(outcome::ResponseFault),
     Capacity,
     Admission(&'static str),
 }

@@ -100,6 +100,14 @@ pub async fn run(
                     hm_llm::LlmError::Schema(_) | hm_llm::LlmError::Wire(_) => {
                         ErrorCode::SchemaInvalid
                     }
+                    hm_llm::LlmError::Response(fault) => match fault.outcome {
+                        hm_llm::outcome::ResponseOutcome::Refused => {
+                            ErrorCode::OperationUnavailable
+                        }
+                        hm_llm::outcome::ResponseOutcome::Truncated => ErrorCode::CapacityExceeded,
+                        hm_llm::outcome::ResponseOutcome::Malformed
+                        | hm_llm::outcome::ResponseOutcome::Incomplete => ErrorCode::SchemaInvalid,
+                    },
                     hm_llm::LlmError::Admission(_) | hm_llm::LlmError::Capacity => {
                         ErrorCode::CapacityExceeded
                     }
