@@ -1,0 +1,35 @@
+name: Feature request
+description: Propose a concrete capability with measurable acceptance criteria.
+title: '[Feature]: '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the user need and evidence for the change. Do not include secrets or private memory.
+        Vulnerabilities belong in the [security reporting process](https://github.com/Sidiora-Labs/HyperMind-engine/security/policy).
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and use case
+      description: Who needs this, and what cannot they accomplish with the current behavior?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and alternatives
+      description: Describe the desired interface and alternatives considered. Link a spec task or requirement if one already covers this.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: Describe the real end-to-end behavior or measurements that would demonstrate success. Note compatibility, migration, and failure cases.
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Security, data, and cost considerations
+      description: Note any impact on actor isolation, authority/provenance, stored data, network exposure, or provider spending. Use synthetic examples only.

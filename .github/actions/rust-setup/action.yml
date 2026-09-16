@@ -1,0 +1,24 @@
+name: Repository Rust setup
+description: Install the declared compiler and cache downloaded dependencies only
+inputs:
+  cache-scope:
+    description: Separate dependency caches by consumer
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Install native prerequisites
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install --yes --no-install-recommends build-essential cmake pkg-config libssl-dev perl clang
+    - name: Install the pinned repository compiler
+      shell: bash
+      run: rustup toolchain install 1.93.0 --profile minimal --component clippy --component rustfmt
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: |
+          ~/.cargo/registry/index
+          ~/.cargo/registry/cache
+          ~/.cargo/git/db
+        key: cargo-${{ runner.os }}-${{ runner.arch }}-1.93.0-${{ inputs.cache-scope }}-${{ hashFiles('**/Cargo.lock') }}

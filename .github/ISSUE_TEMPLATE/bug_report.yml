@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible behavior, compatibility, or deployment problem.
+title: '[Bug]: '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For vulnerabilities, follow the [security policy](https://github.com/Sidiora-Labs/HyperMind-engine/security/policy) instead of publishing details here.
+        Never include provider keys, actor/admin capabilities, TLS private keys, a complete hypermind.conf, or private memory records.
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+      description: Explain the difference, including any effect on stored data or client recovery.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Version and environment
+      description: Include only relevant tools; do not paste environment-variable dumps.
+      placeholder: |
+        HyperMind version or commit:
+        OS and CPU architecture:
+        SDK and runtime version:
+        Deployment route and image digest, if applicable:
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Provide exact commands or a small program using synthetic, non-private input. Mention whether restart changes the result.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Sanitized diagnostics
+      description: Optional error codes, redacted logs, or doctor output. Identify missing checks rather than claiming they passed.
+      render: text
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked for an existing issue and removed credentials and private memory from this report.
+          required: true

@@ -1,0 +1,44 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{ts,tsx,js,mjs,cjs,json,yml,yaml,toml,fbs,proto,sh}]
+indent_size = 2
+
+[*.go]
+indent_style = tab
+indent_size = tab
+tab_width = 8
+
+[{Makefile,*.mk}]
+indent_style = tab
+indent_size = tab
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Fixtures and carried donor vectors are byte-sensitive, not formatting targets.
+[{**/fixtures/**,**/testdata/**,*.original,*.snap,eval/datasets/**,eval/cache/**}]
+charset = unset
+end_of_line = unset
+indent_style = unset
+indent_size = unset
+tab_width = unset
+insert_final_newline = unset
+trim_trailing_whitespace = false
+
+# Regenerate bindings with their own tools; preserve vendored source verbatim.
+[{crates/hm-schema/src/*_generated.rs,sdk/go/wire/**,sdk/go/internal/flatbuffers/**,sdk/python/hypermind/protocol/**,sdk/python/hypermind/*_pb2*.py,sdk/typescript/packages/*/src/wire/**}]
+charset = unset
+end_of_line = unset
+indent_style = unset
+indent_size = unset
+tab_width = unset
+insert_final_newline = unset
+trim_trailing_whitespace = false

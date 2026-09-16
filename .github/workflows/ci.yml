@@ -3,13 +3,48 @@ name: ci
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: '1'
+  CARGO_INCREMENTAL: '0'
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
+  quality:
+    name: Formatting, lint, and workflow policy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/rust-setup
+        with:
+          cache-scope: quality
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.13.11'
+      - run: python -m pip install -r deploy/requirements.txt
+      - run: bash scripts/ci/install-tool.sh actionlint
+      - run: actionlint
+      - run: python scripts/ci/check-workflows.py
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
   rust:
-    name: rust (${{ matrix.arch }})
+    name: Rust and real journeys (${{ matrix.arch }})
     strategy:
       fail-fast: false
       matrix:
@@ -19,77 +54,228 @@ jobs:
           - arch: aarch64
             runner: ubuntu-24.04-arm
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          toolchain: 1.93.0
-          components: clippy,rustfmt
+          persist-credentials: false
+      - uses: ./.github/actions/rust-setup
+        with:
+          cache-scope: rust-${{ matrix.arch }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: sdk/typescript/package-lock.json
+      - run: npm ci --prefix sdk/typescript
       - run: cargo build --workspace --locked
-      - run: cargo clippy --workspace --locked -- -D warnings
       - run: cargo test --workspace --locked
-      - run: cargo fmt --all --check
+      - run: cargo test --locked -p hm-index --features hnsw
 
-  deny:
-    name: dependency policy
+  sdk:
+    name: SDK against real daemon (${{ matrix.language }})
     runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [typescript, python, go]
     steps:
-      - uses: actions/checkout@v4
-      - uses: EmbarkStudios/cargo-deny-action@v2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/rust-setup
+        with:
+          cache-scope: sdk-${{ matrix.language }}
+      - run: cargo build --locked -p hm-cli
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: matrix.language == 'typescript'
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: sdk/typescript/package-lock.json
+      - name: TypeScript native, client, renderer, and migration tests
+        if: matrix.language == 'typescript'
+        run: |
+          npm ci --prefix sdk/typescript
+          npm --prefix sdk/typescript test
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        if: matrix.language == 'python'
+        with:
+          python-version: '3.12.12'
+      - name: Build Python extension and test native and mTLS APIs
+        if: matrix.language == 'python'
+        run: |
+          python -m venv target/python-sdk-venv
+          target/python-sdk-venv/bin/pip install -r sdk/python/requirements-ci.txt
+          VIRTUAL_ENV="$GITHUB_WORKSPACE/target/python-sdk-venv" target/python-sdk-venv/bin/maturin develop --locked --manifest-path sdk/python/native/Cargo.toml
+          target/python-sdk-venv/bin/python -m pytest sdk/python/tests -q
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        if: matrix.language == 'go'
+        with:
+          go-version-file: sdk/go/go.mod
+          cache-dependency-path: sdk/go/go.sum
+      - name: Go recovery, mTLS, safety, and unchanged donor contracts
+        if: matrix.language == 'go'
+        env:
+          NEOCORTEX_CORTEXD: ${{ github.workspace }}/target/debug/hm
+        run: |
+          go vet ./sdk/go/...
+          go test -race -count=1 -timeout 10m ./sdk/go/...
 
-  bench-gate:
-    name: slice 1 evaluation gate
-    needs: rust
+  docs:
+    name: Documentation and generated API coverage
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/rust-setup
+        with:
+          cache-scope: docs
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - run: bash scripts/ci/install-tool.sh mdbook
+      - run: cargo run --locked -p hm-eval -- docs-gate
+      - run: mdbook build docs
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: documentation-${{ github.sha }}
+          path: docs/book
+          if-no-files-found: error
+          retention-days: 14
+
+  dependencies:
+    name: Dependency and license policy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/rust-setup
+        with:
+          cache-scope: dependencies
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - run: bash scripts/ci/install-tool.sh cargo-deny
+      - run: cargo deny --locked check
+      - run: npm audit --prefix sdk/typescript --audit-level=high
+      - run: npm audit --prefix deploy/railway --audit-level=high
+
+  internal-gates:
+    name: Internal evaluation (${{ matrix.slice }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        slice: [slice1, slice2, slice3, slice4, slice5, slice6]
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-      - uses: dtolnay/rust-toolchain@stable
+          persist-credentials: false
+      - uses: ./.github/actions/rust-setup
         with:
-          toolchain: 1.93.0
-      - uses: taiki-e/install-action@mdbook
-      - name: Compare slice against main
-        shell: bash
-        run: cargo run -p hm-eval -- gate slice1 --compare main
-      - run: mdbook build docs
+          cache-scope: gates-${{ matrix.slice }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: sdk/typescript/package-lock.json
+      - run: npm ci --prefix sdk/typescript
+      - run: cargo build --locked -p hm-cli -p hm-mcp -p hm-eval
+      - name: Absolute thresholds and available default-branch baseline
+        env:
+          BASE_REF: origin/${{ github.event.repository.default_branch }}
+          SLICE: ${{ matrix.slice }}
+        run: bash scripts/ci/internal-gates.sh "$SLICE" "$BASE_REF"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: internal-${{ matrix.slice }}-${{ github.sha }}
+          path: eval/results/${{ matrix.slice }}.json
+          if-no-files-found: warn
+          retention-days: 14
 
   slice7-gate:
-    name: slice 7 measured evaluation gate
-    needs: rust
+    name: Complete public benchmark replay (no paid calls)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
     permissions:
       contents: read
       actions: read
-    runs-on: ubuntu-24.04
-    timeout-minutes: 360
     env:
       CENTRA_GATEWAY_URL: ${{ vars.CENTRA_GATEWAY_URL || 'https://gateway.centra.ag/v1' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-      - uses: dtolnay/rust-toolchain@stable
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          toolchain: 1.93.0
-      - name: Require pinned public benchmark evidence
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: Validate explicit trusted evidence run and digest
+        id: verified-evidence
         env:
+          GH_TOKEN: ${{ github.token }}
           EVIDENCE_RUN_ID: ${{ vars.SLICE7_EVIDENCE_RUN_ID }}
-        run: test -n "$EVIDENCE_RUN_ID"
-      - uses: actions/download-artifact@v4
+          EVIDENCE_SHA256: ${{ vars.SLICE7_EVIDENCE_SHA256 }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: node scripts/ci/verify-evidence.mjs
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          name: slice7-public-evidence
+          artifact-ids: ${{ steps.verified-evidence.outputs.artifact-id }}
           path: eval
           github-token: ${{ github.token }}
           run-id: ${{ vars.SLICE7_EVIDENCE_RUN_ID }}
-      - name: Install the pinned official LoCoMo scorer dependencies
-        uses: actions/setup-python@v5
+          digest-mismatch: error
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: '3.11'
-      - name: Prepare the pinned official LoCoMo scorer
+          python-version: '3.11.14'
+      - name: Install unchanged pinned official LoCoMo scorer
         run: |
           python -m venv target/locomo-scorer-venv
           target/locomo-scorer-venv/bin/pip install -r eval/fixtures/locomo/requirements.txt
-      - name: Replay public responses and compare measured results
+      - uses: ./.github/actions/rust-setup
+        with:
+          cache-scope: public-replay
+      - name: Replay cached responses and enforce complete coverage and thresholds
         env:
           BASE_REF: origin/${{ github.event.repository.default_branch }}
-        run: cargo run -p hm-eval -- gate slice7 --compare "$BASE_REF"
+        run: cargo run --locked -p hm-eval -- gate slice7 --compare "$BASE_REF"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: slice7-measured-${{ github.sha }}
+          path: eval/results/slice7.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  required:
+    name: Required CI result
+    if: always()
+    needs: [quality, rust, sdk, docs, dependencies, internal-gates, slice7-gate]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Fail on failed, cancelled, or skipped prerequisites
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          results = json.loads(os.environ['RESULTS'])
+          failed = {name: job['result'] for name, job in results.items() if job['result'] != 'success'}
+          if failed:
+              raise SystemExit(f'Required checks did not pass: {failed}')
+          print('Every required CI job passed.')
+          PY

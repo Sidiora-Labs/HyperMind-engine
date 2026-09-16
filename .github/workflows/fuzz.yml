@@ -3,16 +3,27 @@ name: fuzz and unsafe checks
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: fuzz-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  NIGHTLY_TOOLCHAIN: nightly-2026-09-15
 
 jobs:
   fuzz:
     name: fuzz smoke (${{ matrix.target }})
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
     strategy:
       fail-fast: false
+      max-parallel: 3
       matrix:
         target:
           - frame
@@ -22,27 +33,65 @@ jobs:
           - query_input
           - mmr_state
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@nightly
-      - uses: taiki-e/install-action@cargo-fuzz
-      - run: cargo fuzz run ${{ matrix.target }} -- -max_total_time=60
-
-  miri:
-    name: miri (${{ matrix.module }})
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - module: simd
-            package: hm-index
-            filter: simd
-          - module: mmap
-            package: hm-proj
-            filter: store
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@nightly
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          components: miri
-      - run: cargo miri test -p ${{ matrix.package }} --lib ${{ matrix.filter }}
+          persist-credentials: false
+      - name: Install the pinned nightly and fuzz binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install "$NIGHTLY_TOOLCHAIN" --profile minimal --component rust-src
+          bash scripts/ci/install-tool.sh cargo-fuzz
+      - name: Run a bounded real fuzz target
+        shell: bash
+        env:
+          FUZZ_TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          cargo +"$NIGHTLY_TOOLCHAIN" fuzz run --target x86_64-unknown-linux-gnu "$FUZZ_TARGET" -- \
+            -max_total_time=60 -timeout=10 -rss_limit_mb=4096
+      - name: Preserve failure inputs
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: fuzz-${{ matrix.target }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: fuzz/artifacts/${{ matrix.target }}/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  miri-simd:
+    name: Miri real SIMD/scalar parity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Install the pinned Miri toolchain
+        run: rustup toolchain install "$NIGHTLY_TOOLCHAIN" --profile minimal --component miri --component rust-src
+      - name: Discover exactly one real test, then interpret it
+        shell: bash
+        env:
+          SIMD_TEST: simd::tests::simd_equals_scalar_for_generated_vectors
+        run: |
+          set -euo pipefail
+          cargo +"$NIGHTLY_TOOLCHAIN" miri test --locked -p hm-index --lib \
+            "$SIMD_TEST" -- --exact --list | tee "$RUNNER_TEMP/miri-tests.txt"
+          test "$(grep -Fxc "$SIMD_TEST: test" "$RUNNER_TEMP/miri-tests.txt")" = 1
+          grep -Fx '1 test, 0 benchmarks' "$RUNNER_TEMP/miri-tests.txt"
+          cargo +"$NIGHTLY_TOOLCHAIN" miri test --locked -p hm-index --lib \
+            "$SIMD_TEST" -- --exact
+
+  native-storage:
+    # LMDB/mmap and native FFI use integration tests, not claimed Miri coverage.
+    name: Native storage transaction and replay validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/rust-setup
+        with:
+          cache-scope: fuzz-native-storage
+      - run: cargo +1.93.0 test --locked -p hm-proj --test store --test rebuild

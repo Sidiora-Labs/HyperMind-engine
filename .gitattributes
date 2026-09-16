@@ -1,0 +1,32 @@
+* text=auto eol=lf
+
+# Preserve original fixture bytes on checkout and checkin, including on Windows.
+**/fixtures/** -text !eol
+**/testdata/** -text !eol
+*.original -text !eol
+*.snap -text !eol
+eval/datasets/** -text !eol
+eval/cache/** -text !eol
+
+# Generated bindings retain generator output and remain reviewable as text.
+crates/hm-schema/src/*_generated.rs -text !eol linguist-generated=true
+sdk/go/wire/** -text !eol linguist-generated=true
+sdk/python/hypermind/protocol/** -text !eol linguist-generated=true
+sdk/python/hypermind/*_pb2*.py -text !eol linguist-generated=true
+sdk/typescript/packages/*/src/wire/** -text !eol linguist-generated=true
+sdk/go/internal/flatbuffers/** -text !eol linguist-vendored=true
+
+*.png binary !eol
+*.jpg binary !eol
+*.jpeg binary !eol
+*.gif binary !eol
+*.ico binary !eol
+*.pdf binary !eol
+*.zip binary !eol
+*.gz binary !eol
+*.bin binary !eol
+*.onnx binary !eol
+*.safetensors binary !eol
+*.sqlite binary !eol
+*.db binary !eol
+*.mdb binary !eol

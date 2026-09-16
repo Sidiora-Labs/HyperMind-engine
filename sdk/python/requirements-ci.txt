@@ -1,0 +1,8 @@
+maturin==1.9.6
+patchelf==0.17.2.4; sys_platform == "linux"
+pytest==8.4.2
+pytest-asyncio==1.2.0
+flatbuffers==25.9.23
+grpcio==1.75.1
+protobuf==6.33.6
+blake3==1.0.8
