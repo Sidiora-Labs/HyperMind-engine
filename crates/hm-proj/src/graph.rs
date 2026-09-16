@@ -170,6 +170,47 @@ impl GraphProjection {
         }
         Ok(output)
     }
+
+    pub fn edge_at(
+        snapshot: &ReadSnapshot<'_>,
+        event_lsn: u64,
+    ) -> Result<Option<EdgeRecord>, Error> {
+        if event_lsn == 0 {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        snapshot
+            .get(ProjectionId::Graph, &edge_key(event_lsn))?
+            .map(|bytes| decode(&bytes))
+            .transpose()
+    }
+
+    pub fn list_edges(
+        snapshot: &ReadSnapshot<'_>,
+        generation: u64,
+        valid_at_ns: i64,
+        limit: usize,
+    ) -> Result<Vec<EdgeRecord>, Error> {
+        if limit == 0 || !RunsProjection::is_readable(snapshot, generation)? {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let mut seen = BTreeSet::new();
+        let mut output = Vec::new();
+        for candidate in RunsProjection::lineage(snapshot, generation)? {
+            let prefix = head_generation_prefix(candidate);
+            for item in snapshot.scan_prefix(ProjectionId::Graph, &prefix, usize::MAX)? {
+                let record = read_edge(snapshot, decode_lsn(&item.value)?)?;
+                if seen.insert(record.edge_id.clone())
+                    && valid_at(&record, valid_at_ns)
+                    && !is_retracted(snapshot, &record.edge_id)?
+                {
+                    output.push(record);
+                }
+            }
+        }
+        output.sort_by_key(|record| record.event_lsn);
+        output.truncate(limit);
+        Ok(output)
+    }
 }
 
 fn latest_edge(snapshot: &ReadSnapshot<'_>, edge_id: &[u8]) -> Result<Option<EdgeRecord>, Error> {
@@ -237,10 +278,15 @@ fn edge_key(lsn: u64) -> [u8; 9] {
     key
 }
 
+fn head_generation_prefix(generation: u64) -> [u8; 9] {
+    let mut key = [0_u8; 9];
+    key[0] = HEAD_PREFIX;
+    key[1..].copy_from_slice(&generation.to_be_bytes());
+    key
+}
+
 fn head_key(generation: u64, edge_id: &[u8]) -> Result<Vec<u8>, Error> {
-    let mut key = Vec::with_capacity(edge_id.len() + 11);
-    key.push(HEAD_PREFIX);
-    key.extend_from_slice(&generation.to_be_bytes());
+    let mut key = head_generation_prefix(generation).to_vec();
     append_id(&mut key, edge_id)?;
     Ok(key)
 }
