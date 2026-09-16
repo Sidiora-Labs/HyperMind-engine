@@ -1,0 +1,138 @@
+openapi: 3.1.0
+info:
+  title: HyperMind remote API
+  version: 3.0.0
+  description: >-
+    Frozen NCPR v3. Mandatory mutual TLS and a capability bearer token.
+    Actor and admin listeners are separate. The existing fourteen MCP verb
+    names are preserved; arguments and tool envelopes have identical semantics.
+    Crypto-shred and projection rebuild require the admin listener and token.
+    Logical fade and retraction remain actor-authorized operations.
+security:
+  - capability: []
+    mutualTLS: []
+paths:
+  /v1/remember: &tool
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolCall'
+      responses:
+        '200': &envelope
+          description: MCP envelope, including application errors with ok=false
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolEnvelope'
+        '400':
+          <<: *envelope
+          description: Invalid request; mutations not dispatched
+        '401':
+          <<: *envelope
+          description: Missing or invalid capability token; mutations not dispatched
+        '403':
+          <<: *envelope
+          description: Wrong listener role or destructive actor request; not dispatched
+        '429':
+          <<: *envelope
+          description: Bounded connection capacity exceeded; not dispatched
+        '503':
+          <<: *envelope
+          description: Daemon unavailable; uncertain mutation effects reported as unknown
+  /v1/recall: *tool
+  /v1/activate: *tool
+  /v1/believe: *tool
+  /v1/retract: *tool
+  /v1/dispute: *tool
+  /v1/intend: *tool
+  /v1/bind: *tool
+  /v1/predict: *tool
+  /v1/outcome: *tool
+  /v1/attest: *tool
+  /v1/consolidate: *tool
+  /v1/inspect: *tool
+  /v1/forget: *tool
+  /v1/admin/{verb}:
+    post:
+      parameters:
+        - name: verb
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [health, stats, verify, rebuild, forget]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCall'
+      responses:
+        '200': *envelope
+        '400': *envelope
+        '401': *envelope
+        '403': *envelope
+        '429': *envelope
+        '503': *envelope
+components:
+  securitySchemes:
+    capability:
+      type: http
+      scheme: bearer
+      description: 32-byte capability token as 64 hexadecimal characters
+    mutualTLS:
+      type: mutualTLS
+  schemas:
+    ToolCall:
+      type: object
+      required: [connection_id, request_id, arguments]
+      properties:
+        connection_id:
+          type: string
+          pattern: '^[0-9a-fA-F]{32}$'
+          description: Stable connection identity; preserve across reconnects
+        request_id:
+          type: integer
+          format: uint64
+          minimum: 1
+        arguments:
+          type: object
+          additionalProperties: true
+          description: Unchanged arguments for the named MCP verb
+    AdminCall:
+      type: object
+      required: [connection_id, request_id]
+      properties:
+        connection_id:
+          type: string
+          pattern: '^[0-9a-fA-F]{32}$'
+        request_id:
+          type: integer
+          format: uint64
+          minimum: 1
+        actor:
+          type: integer
+          format: uint16
+          description: Required nonzero actor for every operation except health
+        arguments:
+          type: object
+          description: Rebuild requires name; forget requires action=crypto_shred
+          additionalProperties: true
+    ToolEnvelope:
+      type: object
+      required: [ok, items, provenance, budget, gaps, health, warnings]
+      properties:
+        ok: {type: boolean}
+        items: {type: array, items: {}}
+        provenance: {type: array, items: {type: string}}
+        budget: {}
+        gaps: {type: array, items: {}}
+        health: {}
+        warnings: {type: array, items: {type: string}}
+        effect_state:
+          type: string
+          enum: [not_dispatched, unknown, rejected]
+          description: Mandatory on mutation errors; absent on successful responses

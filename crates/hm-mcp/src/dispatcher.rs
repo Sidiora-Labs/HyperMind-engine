@@ -38,6 +38,42 @@ impl ToolDispatcher for McpToolDispatcher {
             let server = self.server(actor);
             let parse_error = |_| Error::new(ErrorCode::InvalidArgument);
             let result = match verb.as_str() {
+                "remember" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.remember_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), true),
+                },
+                "activate" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.activate_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), false),
+                },
+                "believe" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.believe_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), true),
+                },
+                "retract" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.retract_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), true),
+                },
+                "dispute" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.dispute_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), true),
+                },
+                "bind" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.bind_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), true),
+                },
+                "attest" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.attest_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), true),
+                },
+                "consolidate" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.consolidate_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), true),
+                },
+                "forget" => match serde_json::from_slice(&arguments_json) {
+                    Ok(input) => server.forget_envelope(input).await,
+                    Err(error) => Envelope::error(parse_error(error), true),
+                },
                 "intend" => match serde_json::from_slice(&arguments_json) {
                     Ok(input) => server.intend_envelope(input).await,
                     Err(error) => Envelope::error(parse_error(error), true),

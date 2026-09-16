@@ -19,8 +19,9 @@ use hm_schema::protocol::{
     verify_wire_envelope,
 };
 use hm_schema::wire::{
-    Activate, AsOf, Checkpoint as CheckpointRequest, Event as WireEvent, Health, LatestCheckpoint,
-    Request, RequestPayload, Stats, Subscribe, WireEnvelope, WirePayload,
+    Activate, AsOf, Attest, Checkpoint as CheckpointRequest, Event as WireEvent, Health,
+    LatestCheckpoint, Request, RequestPayload, Stats, Subscribe, ToolRequest, WireEnvelope,
+    WirePayload,
 };
 use std::fs;
 
@@ -616,6 +617,104 @@ fn continuity_protocol_requests_and_event_push_are_enabled() {
     );
 }
 
+#[test]
+fn remote_attest_requires_a_bounded_unique_nonzero_target_set() {
+    let valid = Attest {
+        used: Some(vec![1]),
+        ignored: Some(vec![2]),
+        helpful: Some(vec![3]),
+        harmful: Some(vec![4]),
+        client_seq: 1,
+    };
+    let validate = |value| {
+        validate_request(&Request {
+            request_id: 1,
+            payload: RequestPayload::Attest(Box::new(value)),
+        })
+    };
+    validate(valid.clone()).expect("all four dispositions are supported");
+    let invalid = [
+        Attest {
+            client_seq: 0,
+            ..valid.clone()
+        },
+        Attest {
+            used: None,
+            ignored: None,
+            helpful: None,
+            harmful: None,
+            ..valid.clone()
+        },
+        Attest {
+            used: Some(vec![0]),
+            ..valid.clone()
+        },
+        Attest {
+            used: Some(vec![1, 1]),
+            ..valid.clone()
+        },
+        Attest {
+            used: Some(vec![3]),
+            ..valid.clone()
+        },
+        Attest {
+            used: Some((5..262).collect()),
+            ..valid.clone()
+        },
+    ];
+    for value in invalid {
+        assert_eq!(
+            validate(value).expect_err("invalid attestation").code,
+            ErrorCode::ProtocolInvalid
+        );
+    }
+    validate(Attest {
+        used: Some((1..=256).collect()),
+        ignored: None,
+        helpful: None,
+        harmful: None,
+        client_seq: 2,
+    })
+    .expect("maximum target set");
+}
+
+#[test]
+fn remote_streams_support_current_committed_event_kinds() {
+    for kind in [
+        EventKind::Binding,
+        EventKind::MemoryMinted,
+        EventKind::IntentionSet,
+        EventKind::AttentionDecided,
+        EventKind::Predicted,
+        EventKind::OutcomeObserved,
+        EventKind::ProcedureAdopted,
+    ] {
+        let envelope = WireEnvelope {
+            proto_version: CURRENT_PROTOCOL_VERSION,
+            payload: WirePayload::Event(Box::new(WireEvent {
+                subscription_id: 1,
+                lsn: 1,
+                kind: kind as u8,
+                wall_timestamp_ns: 1,
+                actor: 7,
+                conversation: vec![0x17; 16],
+                payload: b"committed frame".to_vec(),
+            })),
+        };
+        verify_wire_envelope(&encode_wire(&envelope)).expect("current event push");
+        let mut invalid = envelope;
+        if let WirePayload::Event(event) = &mut invalid.payload {
+            event.kind = u8::MAX;
+        }
+        assert_eq!(
+            verify_wire_envelope(&encode_wire(&invalid))
+                .expect_err("unknown event kind")
+                .code,
+            ErrorCode::ProtocolInvalid
+        );
+    }
+}
+
 fn belief_provenance() -> Vec<ProvenanceRange> {
     vec![ProvenanceRange {
         first_lsn: 7,
@@ -893,6 +992,52 @@ fn llm_derived_events_require_run_model_usage_and_byte_range_citations() {
             .code,
         ErrorCode::SchemaInvalid
     );
+}
+
+#[test]
+fn tool_request_accepts_all_existing_verbs_and_rejects_unknown_or_unbounded_input() {
+    for verb in [
+        "remember",
+        "recall",
+        "activate",
+        "believe",
+        "retract",
+        "dispute",
+        "intend",
+        "bind",
+        "predict",
+        "outcome",
+        "attest",
+        "consolidate",
+        "inspect",
+        "forget",
+    ] {
+        let request = Request {
+            request_id: 1,
+            payload: RequestPayload::ToolRequest(Box::new(ToolRequest {
+                verb: verb.into(),
+                arguments_json: b"{}".to_vec(),
+            })),
+        };
+        validate_request(&request).expect("existing MCP verb");
+    }
+    for (verb, arguments_json) in [
+        ("unknown", b"{}".to_vec()),
+        ("remember", vec![0xff]),
+        (
+            "remember",
+            vec![b'a'; hm_schema::protocol::MAXIMUM_QUERY_BYTES + 1],
+        ),
+    ] {
+        let request = Request {
+            request_id: 1,
+            payload: RequestPayload::ToolRequest(Box::new(ToolRequest {
+                verb: verb.into(),
+                arguments_json,
+            })),
+        };
+        assert!(validate_request(&request).is_err());
+    }
 }
 
 #[test]

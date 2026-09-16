@@ -2,8 +2,9 @@
 
 use crate::event::{EventKind, MAXIMUM_EVENT_BYTES};
 use crate::wire::{
-    Activate, Append, AsOf, Checkpoint, Event as EventPush, Hello, LatestCheckpoint, Recall,
-    Request, RequestPayload, Subscribe, Transcript, WireEnvelope, WireEnvelopeRef, WirePayload,
+    Activate, Append, AsOf, Attest, Checkpoint, Event as EventPush, Hello, LatestCheckpoint,
+    Recall, Request, RequestPayload, Subscribe, Transcript, WireEnvelope, WireEnvelopeRef,
+    WirePayload,
 };
 use hm_core::{Error, ErrorCode};
 use planus::ReadAsRoot;
@@ -75,11 +76,25 @@ pub fn validate_request(request: &Request) -> Result<(), Error> {
         RequestPayload::AsOf(value) => validate_asof(value),
         RequestPayload::Checkpoint(value) => validate_checkpoint(value),
         RequestPayload::LatestCheckpoint(value) => validate_latest_checkpoint(value),
+        RequestPayload::Attest(value) => validate_attest(value),
         RequestPayload::Subscribe(value) => validate_subscribe(value),
         RequestPayload::ToolRequest(value) => {
             if matches!(
                 value.verb.as_str(),
-                "intend" | "predict" | "outcome" | "inspect" | "recall"
+                "remember"
+                    | "recall"
+                    | "activate"
+                    | "believe"
+                    | "retract"
+                    | "dispute"
+                    | "intend"
+                    | "bind"
+                    | "predict"
+                    | "outcome"
+                    | "attest"
+                    | "consolidate"
+                    | "inspect"
+                    | "forget"
             ) && !value.arguments_json.is_empty()
                 && value.arguments_json.len() <= MAXIMUM_QUERY_BYTES
                 && std::str::from_utf8(&value.arguments_json).is_ok()
@@ -253,12 +268,38 @@ fn validate_subscribe(request: &Subscribe) -> Result<(), Error> {
     }
 }
 
+fn validate_attest(request: &Attest) -> Result<(), Error> {
+    let groups = [
+        &request.used,
+        &request.ignored,
+        &request.helpful,
+        &request.harmful,
+    ];
+    let count: usize = groups
+        .iter()
+        .map(|group| group.as_ref().map_or(0, Vec::len))
+        .sum();
+    if request.client_seq == 0 || count == 0 || count > MAXIMUM_BATCH_EVENTS {
+        return Err(Error::new(ErrorCode::ProtocolInvalid));
+    }
+    let mut targets = std::collections::BTreeSet::new();
+    for target in groups
+        .into_iter()
+        .flat_map(|group| group.as_deref().unwrap_or_default())
+    {
+        if *target == 0 || !targets.insert(*target) {
+            return Err(Error::new(ErrorCode::ProtocolInvalid));
+        }
+    }
+    Ok(())
+}
+
 fn validate_event_push(event: &EventPush) -> Result<(), Error> {
     let kind =
         EventKind::try_from(event.kind).map_err(|()| Error::new(ErrorCode::ProtocolInvalid))?;
     if event.subscription_id == 0
         || event.lsn == 0
-        || !kind.is_wave_five()
+        || !kind.is_wave_seven()
         || event.actor == 0
         || event.conversation.len() != 16
         || event.payload.is_empty()

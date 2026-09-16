@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package hypermind.v3;
+
+// Frozen v3 transport: each byte field is a complete NCPR WireEnvelope, without
+// the Unix socket length/CRC prefix. Existing v2 envelopes remain compatible.
+// TLS client certificates and the Hello capability token are both mandatory.
+// Actor and admin listeners are separate; a listener never accepts both roles.
+// Transport errors carry effect-state metadata (not_dispatched or unknown).
+// Application errors retain their NCPR ErrorDetail, including effect_state.
+service HyperMind {
+  // Validates Hello and returns Welcome, including the durable next_client_seq.
+  rpc Connect(Envelope) returns (Envelope);
+  // Reuses the Hello connection_id for durable idempotency across RPCs.
+  rpc Exchange(ExchangeRequest) returns (Envelope);
+  // The request must contain Subscribe. First response is SubscriptionAck,
+  // followed by unchanged NCPR Event envelopes. Resume using the last LSN.
+  // A saturated bounded queue terminates with RESOURCE_EXHAUSTED.
+  rpc Subscribe(ExchangeRequest) returns (stream Envelope);
+}
+
+message Envelope {
+  bytes ncpr = 1;
+}
+
+message ExchangeRequest {
+  bytes hello = 1;
+  bytes request = 2;
+}

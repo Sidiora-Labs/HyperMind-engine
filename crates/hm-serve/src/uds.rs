@@ -728,7 +728,20 @@ async fn handle_subscribe(
 
 fn mutation_request(payload: &RequestPayload) -> bool {
     if let RequestPayload::ToolRequest(value) = payload {
-        return matches!(value.verb.as_str(), "intend" | "predict" | "outcome");
+        return matches!(
+            value.verb.as_str(),
+            "remember"
+                | "believe"
+                | "retract"
+                | "dispute"
+                | "intend"
+                | "bind"
+                | "predict"
+                | "outcome"
+                | "attest"
+                | "consolidate"
+                | "forget"
+        );
     }
     matches!(
         payload,

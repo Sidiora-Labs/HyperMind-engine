@@ -7,8 +7,10 @@ pub mod auth;
 pub mod config;
 pub mod embedded;
 pub mod errors;
+pub mod grpc;
 pub mod protocol;
 pub mod requests;
+pub mod rest;
 pub mod uds;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
