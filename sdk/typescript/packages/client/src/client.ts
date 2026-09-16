@@ -1,8 +1,9 @@
 import { createHash, randomBytes } from "node:crypto";
 import net from "node:net";
 import * as flatbuffers from "flatbuffers";
-import { assertRememberable, Bundle } from "@hypermind/render";
+import { assertRememberable, Bundle, render, RenderOptions, RenderedPrompt } from "@hypermind/render";
 import { parseBundle } from "./canonical";
+import { GrpcConfig, GrpcFrames, GrpcTransportError } from "./grpc";
 import {
   encodeToolArguments, InspectInput, IntendAction, OutcomeInput, PredictInput,
   ReconstructionRecallOptions, ToolEnvelope,
@@ -10,6 +11,11 @@ import {
 import { Activate } from "./wire/hypermind/protocol/activate";
 import { AppendEventT } from "./wire/hypermind/protocol/append-event";
 import { AppendT } from "./wire/hypermind/protocol/append";
+import { AttestT } from "./wire/hypermind/protocol/attest";
+import { AttestAckT } from "./wire/hypermind/protocol/attest-ack";
+import { Subscribe } from "./wire/hypermind/protocol/subscribe";
+import { SubscriptionAck } from "./wire/hypermind/protocol/subscription-ack";
+import { Event, EventT } from "./wire/hypermind/protocol/event";
 import { AsOfT } from "./wire/hypermind/protocol/as-of";
 import { BeliefResultT } from "./wire/hypermind/protocol/belief-result";
 import { BytesResultT } from "./wire/hypermind/protocol/bytes-result";
@@ -141,7 +147,8 @@ export interface ActivateOptions {
 }
 
 export interface ClientConfig {
-  socketPath: string;
+  socketPath?: string;
+  grpc?: GrpcConfig;
   capabilityToken: Uint8Array;
   connectionId?: Uint8Array;
   requestTimeoutMs?: number;
@@ -201,6 +208,18 @@ class SocketFrames {
     socket.on("close", () => this.end(new Error("socket closed")));
   }
 
+  async send(encoded: Uint8Array): Promise<void> {
+    const frame = Buffer.allocUnsafe(encoded.length + 8);
+    frame.writeUInt32LE(encoded.length, 0);
+    frame.writeUInt32LE(crc32c(encoded), 4);
+    frame.set(encoded, 8);
+    await new Promise<void>((resolve, reject) => {
+      this.socket.write(frame, (error) => error == null ? resolve() : reject(error));
+    });
+  }
+
+  close(): void { this.socket.destroy(); }
+
   next(timeoutMs: number): Promise<Uint8Array> {
     const ready = this.frames.shift();
     if (ready !== undefined) return Promise.resolve(ready);
@@ -258,7 +277,7 @@ export class Client {
   private readonly timeoutMs: number;
   private readonly pendingLimit: number;
   private readonly recoveryLimit: bigint;
-  private frames: SocketFrames | undefined;
+  private frames: SocketFrames | GrpcFrames | undefined;
   private welcomeValue: WelcomeInfo | undefined;
   private requestId = 0n;
   private clientSeq = 0n;
@@ -268,6 +287,7 @@ export class Client {
   private closed = false;
 
   private constructor(private readonly config: ClientConfig) {
+    if (Boolean(config.socketPath) === Boolean(config.grpc)) throw new Error("select exactly one socketPath or grpc transport");
     if (config.capabilityToken.length !== 32) throw new Error("capability token must be 32 bytes");
     this.connectionId = config.connectionId ?? randomBytes(16);
     if (this.connectionId.length !== 16) throw new Error("connection id must be 16 bytes");
@@ -278,11 +298,13 @@ export class Client {
 
   static async connect(config: ClientConfig): Promise<Client> {
     const client = new Client(config);
-    await client.exclusive(async () => {
-      await client.connectTransport();
-      client.clientSeq = client.welcomeValue!.nextClientSeq - 1n;
-      client.consumeRecovery(client.clientSeq);
-    });
+    try {
+      await client.exclusive(async () => {
+        await client.connectTransport();
+        client.clientSeq = client.welcomeValue!.nextClientSeq - 1n;
+        client.consumeRecovery(client.clientSeq);
+      });
+    } catch (error) { client.close(); throw error; }
     return client;
   }
 
@@ -303,6 +325,60 @@ export class Client {
   close(): void {
     this.closed = true;
     this.dropTransport();
+  }
+
+  async attest(input: { used?: bigint[]; ignored?: bigint[]; helpful?: bigint[]; harmful?: bigint[] }): Promise<number> {
+    return this.sequenced(async (sequence) => {
+      const result = await this.request(RequestPayload.Attest,
+        new AttestT(input.used ?? [], input.ignored ?? [], sequence, input.helpful ?? [], input.harmful ?? []),
+        ResponsePayload.AttestAck) as AttestAckT;
+      return result.count;
+    });
+  }
+
+  async *subscribe(options: { conversation?: string; sinceLsn?: bigint; signal?: AbortSignal } = {}): AsyncIterable<EventT> {
+    const subscriber = await Client.connect({ ...this.config, connectionId: randomBytes(16) });
+    const frames = subscriber.frames!;
+    const builder = new flatbuffers.Builder(256);
+    const request = new RequestT(1n, RequestPayload.Subscribe, {
+      pack(builder: flatbuffers.Builder): flatbuffers.Offset {
+        const conversation = options.conversation === undefined ? 0
+          : Subscribe.createConversationVector(builder, conversationId(options.conversation));
+        return Subscribe.createSubscribe(builder, conversation, options.sinceLsn ?? 0n);
+      },
+    } as never);
+    builder.finish(new WireEnvelopeT(PROTOCOL_VERSION, WirePayload.Request, request).pack(builder), "NCPR");
+    const encoded = builder.asUint8Array();
+    const cancel = (): void => subscriber.close();
+    options.signal?.addEventListener("abort", cancel, { once: true });
+    const source = frames instanceof GrpcFrames ? frames.subscribe(encoded, options.signal) : (async function* () {
+      await frames.send(encoded);
+      while (!options.signal?.aborted) yield await frames.next(subscriber.timeoutMs);
+    })();
+    let subscriptionId: bigint | undefined;
+    try {
+      if (options.signal?.aborted) return;
+      for await (const bytes of source) {
+        const envelope = decodeEnvelope(bytes);
+        if (subscriptionId === undefined) {
+          if (envelope.payloadType() !== WirePayload.Response) throw new Error("missing subscription acknowledgement");
+          const response = envelope.payload(new Response())!;
+          if (response.status() !== ResponseStatus.ok) {
+            const error = unionToResponsePayload(response.payloadType(), response.payload.bind(response));
+            if (response.payloadType() === ResponsePayload.ErrorDetail && error) throw engineError(error.unpack() as ErrorDetailT);
+            throw new Error("subscription rejected");
+          }
+          if (response.requestId() !== 1n || response.payloadType() !== ResponsePayload.SubscriptionAck) throw new Error("invalid subscription acknowledgement");
+          subscriptionId = response.payload(new SubscriptionAck())!.subscriptionId();
+        } else {
+          if (envelope.payloadType() !== WirePayload.Event) throw new Error("invalid subscription event");
+          const event = envelope.payload(new Event())!.unpack();
+          if (event.subscriptionId !== subscriptionId) throw new Error("subscription id mismatch");
+          yield event;
+        }
+      }
+    } catch (error) { if (!options.signal?.aborted) throw error; }
+    finally { options.signal?.removeEventListener("abort", cancel); subscriber.close(); }
   }
 
   async checkpoint(turnId: string, blob: Uint8Array): Promise<bigint> {
@@ -383,7 +459,7 @@ export class Client {
   }
 
   async callTool(
-    verb: "intend" | "predict" | "outcome" | "inspect" | "recall",
+    verb: "remember" | "recall" | "activate" | "attest" | "believe" | "retract" | "dispute" | "intend" | "bind" | "predict" | "outcome" | "consolidate" | "forget" | "inspect",
     input: unknown,
   ): Promise<ToolEnvelope> {
     let argumentsJson: Uint8Array;
@@ -408,6 +484,7 @@ export class Client {
       } catch (error) {
         if (error instanceof EngineError) throw error;
         this.dropTransport();
+        if (error instanceof GrpcTransportError) throw new ToolTransportError(error.effectState, error);
         throw new ToolTransportError(dispatched ? "unknown" : "not_dispatched", error);
       }
     });
@@ -507,6 +584,10 @@ export class Client {
             this.clientSeq -= 1n;
             throw error;
           }
+          if (error instanceof GrpcTransportError && error.effectState === "not_dispatched") {
+            this.clientSeq -= 1n;
+            throw new ToolTransportError("not_dispatched", error);
+          }
           if (this.pending.length >= this.pendingLimit) {
             this.clientSeq -= 1n;
             throw new Error("pending queue full");
@@ -555,12 +636,17 @@ export class Client {
   }
 
   private async connectTransport(): Promise<void> {
-    const socket = net.createConnection(this.config.socketPath);
-    await new Promise<void>((resolve, reject) => {
-      socket.once("connect", resolve);
-      socket.once("error", reject);
-    });
-    const frames = new SocketFrames(socket);
+    let frames: SocketFrames | GrpcFrames;
+    if (this.config.grpc) {
+      frames = new GrpcFrames(this.config.grpc, this.timeoutMs);
+    } else {
+      const socket = net.createConnection(this.config.socketPath!);
+      await new Promise<void>((resolve, reject) => {
+        socket.once("connect", resolve);
+        socket.once("error", reject);
+      });
+      frames = new SocketFrames(socket);
+    }
     this.frames = frames;
     await this.writeEnvelope(WirePayload.Hello, new HelloT(
       PROTOCOL_VERSION,
@@ -581,7 +667,7 @@ export class Client {
   }
 
   private dropTransport(): void {
-    this.frames?.socket.destroy();
+    this.frames?.close();
     this.frames = undefined;
   }
 
@@ -629,13 +715,7 @@ export class Client {
     const offset = new WireEnvelopeT(PROTOCOL_VERSION, payloadType, payload as never).pack(builder);
     builder.finish(offset, "NCPR");
     const encoded = builder.asUint8Array();
-    const frame = Buffer.allocUnsafe(encoded.length + 8);
-    frame.writeUInt32LE(encoded.length, 0);
-    frame.writeUInt32LE(crc32c(encoded), 4);
-    frame.set(encoded, 8);
-    await new Promise<void>((resolve, reject) => {
-      this.frames!.socket.write(frame, (error) => (error == null ? resolve() : reject(error)));
-    });
+    await this.frames!.send(encoded);
   }
 
   private exclusive<T>(operation: () => Promise<T>): Promise<T> {
@@ -702,6 +782,10 @@ export class Session {
 
   activate(query: string, options: number | ActivateOptions): Promise<Bundle> {
     return this.client.activate(this.conversationBytes, query, options);
+  }
+
+  render(bundle: Bundle, options: RenderOptions = {}): RenderedPrompt {
+    return render(bundle, options);
   }
 
   believe(input: BelieveInput): Promise<bigint> {
@@ -787,6 +871,22 @@ export class Session {
 
   inspect(input: InspectInput = {}): Promise<ToolEnvelope> {
     return this.client.callTool("inspect", input);
+  }
+
+  attest(input: { used?: bigint[]; ignored?: bigint[]; helpful?: bigint[]; harmful?: bigint[] }): Promise<number> {
+    return this.client.attest(input);
+  }
+
+  consolidate(input: Record<string, unknown> = {}): Promise<ToolEnvelope> {
+    return this.client.callTool("consolidate", { ...input, conversation: this.conversation });
+  }
+
+  dispute(input: Record<string, unknown>): Promise<ToolEnvelope> {
+    return this.client.callTool("dispute", { ...input, conversation: this.conversation });
+  }
+
+  forget(input: Record<string, unknown>): Promise<ToolEnvelope> {
+    return this.client.callTool("forget", { ...input, conversation: this.conversation });
   }
 
   bind(input: {
