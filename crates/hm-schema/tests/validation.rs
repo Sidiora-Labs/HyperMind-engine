@@ -995,6 +995,76 @@ fn llm_derived_events_require_run_model_usage_and_byte_range_citations() {
 }
 
 #[test]
+fn deterministic_import_provenance_is_zero_usage_and_restricted() {
+    let mut imported =
+        wave_six_envelope(EventPayload::MemoryMinted(Box::new(memory_minted())), true);
+    imported.run_id = Some(format!("cortex-store-import/{}", "11".repeat(32)).into_bytes());
+    imported.model_provenance = Some(Box::new(ModelProvenance {
+        model_id: "cortex-store-import".into(),
+        prompt_id: "cortex-store-import/v1".into(),
+        prompt_version: 1,
+        call_id: Some(vec![0x11; 32]),
+        ..ModelProvenance::default()
+    }));
+    verify_event(
+        &encode_event(&imported),
+        EventKind::MemoryMinted,
+        Boundary::Disk,
+    )
+    .expect("explicit imported origin without invented model usage");
+    let mut invalid = Vec::new();
+    let mut changed = imported.clone();
+    changed.authority = Authority::UserAsserted;
+    invalid.push(changed);
+    let mut changed = imported.clone();
+    changed.run_id = Some(b"ordinary-model-run".to_vec());
+    invalid.push(changed);
+    let mut changed = imported.clone();
+    changed.model_provenance.as_mut().unwrap().call_id = Some(vec![0x22; 32]);
+    invalid.push(changed);
+    let mut changed = imported.clone();
+    changed.model_provenance.as_mut().unwrap().model_id = "ordinary-model".into();
+    invalid.push(changed);
+    let mut changed = imported.clone();
+    changed.model_provenance.as_mut().unwrap().prompt_id = "ordinary-prompt".into();
+    invalid.push(changed);
+    let mut changed = imported.clone();
+    changed.model_provenance.as_mut().unwrap().cost_microusd = 1;
+    invalid.push(changed);
+    for changed in invalid {
+        assert_eq!(
+            verify_event(
+                &encode_event(&changed),
+                EventKind::MemoryMinted,
+                Boundary::Disk
+            )
+            .expect_err("import marker cannot bypass model usage requirements")
+            .code,
+            ErrorCode::SchemaInvalid
+        );
+    }
+    imported.payload = EventPayload::MemoryRevised(Box::new(MemoryRevised {
+        memory_id: b"memory-1".to_vec(),
+        previous_lsn: 1,
+        name: "revision".into(),
+        definition: b"revised definition".to_vec(),
+        tags: vec!["test".into()],
+        salience_micros: 1,
+        citations: belief_provenance(),
+    }));
+    assert_eq!(
+        verify_event(
+            &encode_event(&imported),
+            EventKind::MemoryRevised,
+            Boundary::Disk
+        )
+        .expect_err("only minted memories and edges are imports")
+        .code,
+        ErrorCode::SchemaInvalid
+    );
+}
+
+#[test]
 fn tool_request_accepts_all_existing_verbs_and_rejects_unknown_or_unbounded_input() {
     for verb in [
         "remember",

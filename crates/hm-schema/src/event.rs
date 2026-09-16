@@ -363,7 +363,8 @@ fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Er
             || (kind.is_llm_derived()
                 && (model.prompt_version == 0
                     || !model.call_id.as_deref().is_some_and(bounded_identifier)
-                    || model.input_tokens.saturating_add(model.output_tokens) == 0)))
+                    || (model.input_tokens.saturating_add(model.output_tokens) == 0
+                        && !is_cortex_import(envelope, kind)))))
     {
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
@@ -377,6 +378,34 @@ fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Er
         return Err(Error::new(ErrorCode::ProtectedTypeWrite));
     }
     Ok(())
+}
+
+fn is_cortex_import(envelope: &EventEnvelope, kind: EventKind) -> bool {
+    let Some(model) = envelope.model_provenance.as_ref() else {
+        return false;
+    };
+    let Some(digest) = model.call_id.as_deref().filter(|digest| digest.len() == 32) else {
+        return false;
+    };
+    let expected_run = format!(
+        "cortex-store-import/{}",
+        digest
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect::<String>()
+    );
+    matches!(kind, EventKind::MemoryMinted | EventKind::EdgeAsserted)
+        && envelope.authority == Authority::DerivedInference
+        && envelope.run_id.as_deref() == Some(expected_run.as_bytes())
+        && model.model_id == "cortex-store-import"
+        && model.prompt_id == "cortex-store-import/v1"
+        && model.prompt_version == 1
+        && model.temperature == 0.0
+        && model.input_tokens == 0
+        && model.output_tokens == 0
+        && model.cache_read_tokens == 0
+        && model.cache_write_tokens == 0
+        && model.cost_microusd == 0
 }
 
 #[allow(clippy::too_many_lines)]

@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "namespace": "",
+  "memories": {
+    "mem-1": {
+      "id": "mem-1",
+      "name": "name-mem-1",
+      "definition": "def-mem-1",
+      "category": "topic",
+      "salience": 0.5,
+      "confidence": 0.5,
+      "access_count": 0,
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "updated_at": "2026-05-16T10:00:00.000Z",
+      "last_accessed": "2026-05-16T10:00:00.000Z",
+      "source_files": [],
+      "embedding": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "tags": [
+        "t"
+      ],
+      "fsrs": {
+        "stability": 3.1262,
+        "difficulty": 7.2102,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      }
+    },
+    "mem-2": {
+      "id": "mem-2",
+      "name": "name-mem-2",
+      "definition": "def-mem-2",
+      "category": "topic",
+      "salience": 0.5,
+      "confidence": 0.5,
+      "access_count": 0,
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "updated_at": "2026-05-16T10:00:00.000Z",
+      "last_accessed": "2026-05-16T10:00:00.000Z",
+      "source_files": [],
+      "embedding": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "tags": [
+        "t"
+      ],
+      "fsrs": {
+        "stability": 3.1262,
+        "difficulty": 7.2102,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      }
+    },
+    "mem-3": {
+      "id": "mem-3",
+      "name": "name-mem-3",
+      "definition": "def-mem-3",
+      "category": "topic",
+      "salience": 0.5,
+      "confidence": 0.5,
+      "access_count": 0,
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "updated_at": "2026-05-16T10:00:00.000Z",
+      "last_accessed": "2026-05-16T10:00:00.000Z",
+      "source_files": [],
+      "embedding": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "tags": [
+        "t"
+      ],
+      "fsrs": {
+        "stability": 3.1262,
+        "difficulty": 7.2102,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      }
+    }
+  },
+  "observations": {
+    "obs-1": {
+      "id": "obs-1",
+      "content": "obs-obs-1",
+      "source_file": "f.md",
+      "source_section": "s",
+      "salience": 0.5,
+      "processed": false,
+      "prediction_error": null,
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "updated_at": "2026-05-16T10:00:00.000Z",
+      "embedding": null,
+      "keywords": [
+        "k"
+      ],
+      "content_type": "declarative"
+    },
+    "obs-2": {
+      "id": "obs-2",
+      "content": "obs-obs-2",
+      "source_file": "f.md",
+      "source_section": "s",
+      "salience": 0.5,
+      "processed": false,
+      "prediction_error": null,
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "updated_at": "2026-05-16T10:00:00.000Z",
+      "embedding": null,
+      "keywords": [
+        "k"
+      ],
+      "content_type": "declarative"
+    }
+  },
+  "edges": {
+    "edge-1": {
+      "id": "edge-1",
+      "source_id": "mem-1",
+      "target_id": "mem-2",
+      "relation": "extends",
+      "weight": 0.5,
+      "evidence": "why",
+      "created_at": "2026-05-16T10:00:00.000Z"
+    },
+    "edge-2": {
+      "id": "edge-2",
+      "source_id": "mem-2",
+      "target_id": "mem-3",
+      "relation": "extends",
+      "weight": 0.5,
+      "evidence": "why",
+      "created_at": "2026-05-16T10:00:00.000Z"
+    }
+  },
+  "ops": {
+    "ops-1": {
+      "id": "ops-1",
+      "content": "ops-ops-1",
+      "type": "log",
+      "status": "active",
+      "project": "alpha",
+      "session_ref": "sess",
+      "keywords": [],
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "updated_at": "2026-05-16T10:00:00.000Z",
+      "expires_at": "2026-05-16T10:00:00.000Z"
+    },
+    "ops-2": {
+      "id": "ops-2",
+      "content": "ops-ops-2",
+      "type": "log",
+      "status": "active",
+      "project": null,
+      "session_ref": "sess",
+      "keywords": [],
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "updated_at": "2026-05-16T10:00:00.000Z",
+      "expires_at": "2026-05-16T10:00:00.000Z"
+    }
+  },
+  "signals": {
+    "sig-1": {
+      "id": "sig-1",
+      "type": "CONTRADICTION",
+      "description": "sig-sig-1",
+      "concept_ids": [
+        "m1",
+        "m2"
+      ],
+      "priority": 0.5,
+      "resolved": false,
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "resolution_note": null
+    },
+    "sig-2": {
+      "id": "sig-2",
+      "type": "CONTRADICTION",
+      "description": "sig-sig-2",
+      "concept_ids": [
+        "m1",
+        "m2"
+      ],
+      "priority": 0.5,
+      "resolved": false,
+      "created_at": "2026-05-16T10:00:00.000Z",
+      "resolution_note": null
+    }
+  },
+  "beliefs": {
+    "bel-1": {
+      "id": "bel-1",
+      "concept_id": "mem-1",
+      "old_definition": "old",
+      "new_definition": "new",
+      "reason": "because",
+      "changed_at": "2026-05-16T10:00:00.000Z"
+    },
+    "bel-2": {
+      "id": "bel-2",
+      "concept_id": "mem-1",
+      "old_definition": "old",
+      "new_definition": "new",
+      "reason": "because",
+      "changed_at": "2026-05-16T10:00:00.000Z"
+    }
+  },
+  "generic": {
+    "threads": {
+      "thr-1": {
+        "id": "thr-1",
+        "title": "first",
+        "open": true
+      },
+      "thr-2": {
+        "id": "thr-2",
+        "title": "second",
+        "open": false
+      }
+    }
+  }
+}
