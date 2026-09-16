@@ -26,7 +26,7 @@ This file is a GENERATED pointer to it. Do not hand-edit it; edit `spec/workflow
 
 1. Read spec/hypermind-01/spec.kvx: [meta] status, [design.*], the [req.*] acceptance criteria, and the [task.*] list with status, wave, owner_lane and requires.
 2. Run cg spec ready. Select the lowest-wave pending task in your lane whose every requires is done. Set it in_progress with cg spec start <id>.
-3. Read the referenced acceptance criteria and the design sections the task cites. Inspect only current relevant source; PLAN.md and HARNESS-LESSONS.md are rationale, spec.kvx controls.
+3. Read the referenced acceptance criteria and the design sections the task cites. Inspect only current relevant source; spec.kvx controls.
 4. Implement only the declared touches. Publish interface changes in hm-schema and hm-core before dependent lane work consumes them.
 5. Run the task verify_cmd for real. Then cg spec done <id>, which runs verify_cmd plus graph checks and records an outcome memory.
 6. Commit from the repository root with a natural commit message describing the real change. One task per commit. Never batch tasks and never leave a done task uncommitted.

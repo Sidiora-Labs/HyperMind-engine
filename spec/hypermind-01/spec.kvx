@@ -1,6 +1,6 @@
 # hypermind-01: the HyperMind memory engine, built as vertical slices.
 # Authoritative implementation contract. KVX Dialect B. Generated Markdown mirrors are views.
-# PLAN.md and HARNESS-LESSONS.md supply rationale; where wording differs, this file controls.
+# The design and acceptance criteria in this file control implementation.
 
 [meta]
 feature = "hypermind-01"
@@ -16,7 +16,7 @@ include = "design.body.md"
 
 [design.authority]
 title = "Authority, scope and milestones"
-source_of_truth = "This spec.kvx is the implementation contract. Its design sections and acceptance criteria are normative. PLAN.md and HARNESS-LESSONS.md are rationale and are not a second editable spec. Generated requirements.md, design.md and tasks.md are views."
+source_of_truth = "This spec.kvx is the implementation contract. Its design sections and acceptance criteria are normative. Generated requirements.md, design.md and tasks.md are views."
 location = "Canonical source is spec/hypermind-01/spec.kvx in the HyperMind-engine repository. The neocortex-engine and cortex-engine trees are read-only donors; their test vectors and fixtures are carried in, their code is ported, never linked."
 milestones = ["W1-W2: a daemon an agent can remember into, recall from, checkpoint against and survive a crash with, over MCP, from Rust and TypeScript, with a fault simulator and an eval gate", "W3-W5: proof, meaning and time: verifiable without keys, semantic and entity recall under a deadline, bitemporal beliefs with adjudication and a protected self", "W6-W7: sleep and anticipation: consolidation as retractable generations with citations, prospective memory gated by attention, predictions with assessment, procedures earned from independent episodes", "W8: reach and qualification: gRPC, REST, Python and Go, migration from cortex-engine, docs site, published benchmarks, v1.0.0"]
 completion = "The feature is complete when every task is done, every slice journey passes in CI, and the wave 8 benchmark run meets the targets in req.15. A milestone is usable on its own; an experimental lane left disabled after a completed and reported evaluation is acceptable and is named in the handoff."
@@ -103,7 +103,7 @@ targets = "At v1.0.0: LongMemEval at least 90 percent, LoCoMo at least 75 percen
 mode = "manual"
 status = "pending"
 audiences = ["developer", "operator", "user"]
-targets = ["README.md", "docs/reference/schematics.md", "docs/adr/**", "docs/concepts/**", "docs/guides/**", "docs/internals/**", "docs/evaluation/**", "docs/security/threat-model.md", "PLAN.md", "HARNESS-LESSONS.md"]
+targets = ["README.md", "docs/reference/schematics.md", "docs/adr/**", "docs/concepts/**", "docs/guides/**", "docs/internals/**", "docs/evaluation/**", "docs/security/threat-model.md"]
 verify_cmd = "mdbook build docs && cargo run -p hm-eval -- docs-gate"
 
 [req.1]
@@ -842,7 +842,7 @@ do_1 = "predict registers a prediction with predicates and a deadline; outcome r
 
 [task.7.6]
 title = "Attention precision, calibration, HNSW parity; LongMemEval at 90 and LoCoMo at 75"
-status = "pending"
+status = "in_progress"
 wave = 7
 owner_lane = "eval"
 requires = ["7.5"]
@@ -853,7 +853,7 @@ do_1 = "Labelled interruption set with quiet-hour and duplicate cases; suppressi
 
 [task.7.7]
 title = "Slice 7 journey: intention on repository change, batched under quiet hours, contradicted prediction, procedure earns support"
-status = "pending"
+status = "in_progress"
 wave = 7
 owner_lane = "integration"
 requires = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6"]
@@ -864,7 +864,7 @@ do_1 = "Journey: intend with a repository_changed trigger, feed the change durin
 
 [task.8.1]
 title = "gRPC over mTLS with streaming Subscribe; REST with OpenAPI; protocol v3 frozen"
-status = "pending"
+status = "in_progress"
 wave = 8
 section = "Wave 8 — Reach: gRPC, REST, Python, Go, migration, docs, benchmarks, release"
 owner_lane = "surface"
@@ -876,7 +876,7 @@ do_1 = "tonic service carrying the NCPR envelope bytes with mTLS and capability 
 
 [task.8.2]
 title = "Python SDK, Go client extension, TypeScript client over gRPC"
-status = "pending"
+status = "in_progress"
 wave = 8
 owner_lane = "sdk"
 requires = ["8.1"]
@@ -887,7 +887,7 @@ do_1 = "hypermind Python package through PyO3 and maturin wheels with the embedd
 
 [task.8.3]
 title = "migrate-from-cortex importer with verification"
-status = "pending"
+status = "in_progress"
 wave = 8
 owner_lane = "sdk"
 requires = ["8.1"]
@@ -898,7 +898,7 @@ do_1 = "Read a cortex-engine SQLite or JSON store; emit events preserving ids: o
 
 [task.8.4]
 title = "CLI completion, TUI, packaging, model download, doctor"
-status = "pending"
+status = "in_progress"
 wave = 8
 owner_lane = "surface"
 requires = ["8.1"]
@@ -909,7 +909,7 @@ do_1 = "hm actor add, list, rotate-keys, shred; bench; export and import; tui wi
 
 [task.8.5]
 title = "Docs site: start, concepts, guides, reference, internals, evaluation, security, ADRs"
-status = "pending"
+status = "in_progress"
 wave = 8
 owner_lane = "docs"
 requires = ["8.2", "8.3", "8.4"]

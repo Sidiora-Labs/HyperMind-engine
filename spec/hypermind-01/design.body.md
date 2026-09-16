@@ -1,6 +1,6 @@
 # HyperMind 01 — design body
 
-This pass implements the plan in [PLAN.md](../../PLAN.md) with the harness-derived changes in [HARNESS-LESSONS.md](../../HARNESS-LESSONS.md). This specification takes precedence where wording differs.
+This specification defines the implementation contract, including the design, acceptance criteria, vertical slices and ownership lanes.
 
 ## The stack, and how it is built
 

@@ -4,7 +4,7 @@ Eight layers: L0 schema and core, L1 ledger, L2 projections, L3 indexes and prov
 
 ## Authority, scope and milestones
 
-This spec.kvx is the implementation contract. Its design sections and acceptance criteria are normative. PLAN.md and HARNESS-LESSONS.md are rationale and are not a second editable spec. Generated requirements.md, design.md and tasks.md are views.
+This spec.kvx is the implementation contract. Its design sections and acceptance criteria are normative. Generated requirements.md, design.md and tasks.md are views.
 
 Canonical source is spec/hypermind-01/spec.kvx in the HyperMind-engine repository. The neocortex-engine and cortex-engine trees are read-only donors; their test vectors and fixtures are carried in, their code is ported, never linked.
 
@@ -164,7 +164,7 @@ At v1.0.0: LongMemEval at least 90 percent, LoCoMo at least 75 percent F1, recal
 
 # HyperMind 01 — design body
 
-This pass implements the plan in [PLAN.md](../../PLAN.md) with the harness-derived changes in [HARNESS-LESSONS.md](../../HARNESS-LESSONS.md). This specification takes precedence where wording differs.
+This specification defines the implementation contract, including the design, acceptance criteria, vertical slices and ownership lanes.
 
 ## The stack, and how it is built
 
