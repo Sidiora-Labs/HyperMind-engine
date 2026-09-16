@@ -1,3 +1,5 @@
+![HyperMind](../spec/readme_img.png)
+
 # HyperMind deployment suite
 
 Run HyperMind on your workstation, a Linux server, Kubernetes, or a persistent cloud service. These files build from this checkout; they do not assume a published image, package, or qualified v1 release.

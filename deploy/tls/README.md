@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Development certificates
 
 For local evaluation, generate a fresh CA, a server identity, and a separate client identity with OpenSSL 3 or later:

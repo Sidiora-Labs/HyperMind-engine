@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Windows: Docker Desktop with WSL 2
 
 This launcher runs the Linux daemon in Docker Desktop. It does not claim native

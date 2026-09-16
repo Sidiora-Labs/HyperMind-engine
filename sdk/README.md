@@ -1,3 +1,5 @@
+![HyperMind](../spec/readme_img.png)
+
 # HyperMind SDKs
 
 The Rust kernel is currently available through `hm-serve::embedded`. Open a

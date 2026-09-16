@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Railway
 
 Use current Railway Infrastructure as Code, not a new `railway.json`/`railway.toml` deployment: Railway has deprecated that format for new services. This directory pins the authoring SDK; the Railway CLI must be at least 5.42.1. No account or deployed service was contacted by local validation. [Railway IaC](https://docs.railway.com/infrastructure-as-code), [official SDK](https://github.com/railwayapp/railway-ts-sdk)

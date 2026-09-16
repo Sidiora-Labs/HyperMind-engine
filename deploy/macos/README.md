@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # macOS: user agent or Docker Desktop
 
 Choose one route per store. The native route builds on the Mac and installs a

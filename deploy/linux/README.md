@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Linux
 
 Use the native systemd service on a Linux host, or the [container deployment](../README.md#docker). The native route needs systemd, a C/C++ build toolchain, CMake, Perl, pkg-config, Git, and the Rust toolchain pinned in the repository.

@@ -1,3 +1,5 @@
+![HyperMind](spec/readme_img.png)
+
 # HyperMind
 
 Memoria duradera y respaldada por evidencia para agentes de IA: conserva información entre sesiones, se recupera tras reinicios y distingue los recuerdos de la autoridad.

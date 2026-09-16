@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # HyperMind for Python
 
 An async API for the native Rust memory engine and an mTLS client for the HyperMind daemon. Both expose the same `Session` tools; native mode owns the actor directory, while remote mode talks to the daemon that owns it.

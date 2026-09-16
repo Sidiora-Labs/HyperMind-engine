@@ -1,3 +1,5 @@
+![HyperMind](spec/readme_img.png)
+
 # HyperMind
 
 Dauerhafter, evidenzbasierter Speicher für KI-Agenten: Wissen über Sitzungen hinweg erhalten, nach Neustarts fortsetzen und Erinnerungen nicht mit Handlungsbefugnissen verwechseln.

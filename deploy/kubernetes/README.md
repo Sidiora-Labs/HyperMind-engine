@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Kubernetes and Helm
 
 The chart at `deploy/helm/hypermind` runs one amd64 StatefulSet replica with a persistent volume, UID/GID 65532, a read-only root filesystem, no added capabilities, and no service-account token. It starts the real daemon, not a web health shim. Build and publish your own image; no published release tag is assumed:

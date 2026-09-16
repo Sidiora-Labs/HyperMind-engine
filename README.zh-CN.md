@@ -1,3 +1,5 @@
+![HyperMind](spec/readme_img.png)
+
 # HyperMind
 
 面向 AI 智能体的持久化、可溯源记忆：跨会话保留信息，重启后继续工作，并始终区分记忆内容与行动权限。

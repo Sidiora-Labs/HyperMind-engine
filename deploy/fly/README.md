@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Fly.io
 
 This template builds the repository's amd64 distroless image, attaches one volume, and runs one writer. No Fly resources have been created or tested by this repository's local checks.

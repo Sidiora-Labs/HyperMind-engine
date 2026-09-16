@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Evaluation datasets
 
 Large public benchmark inputs and judge responses are not committed. The slice 4 gate looks for the cleaned LongMemEval-S release at `eval/datasets/longmemeval/longmemeval_s_cleaned.json` and no-consolidation predictions at `eval/datasets/longmemeval/wave4-no-consolidation.jsonl`. The paths can be overridden with `LONGMEMEVAL_DATASET` and `LONGMEMEVAL_PREDICTIONS`.

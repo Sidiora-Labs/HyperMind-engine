@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Docker and Compose
 
 The supplied image builds HyperMind from source and runs a static Linux amd64 binary as UID/GID 65532 in a shell-free distroless runtime. Docker Desktop provides the Linux VM on Windows and macOS. Apple Silicon currently needs amd64 emulation; no multi-architecture image is published by this repository.

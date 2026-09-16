@@ -1,3 +1,5 @@
+![HyperMind](spec/readme_img.png)
+
 # HyperMind
 
 Une mémoire durable, fondée sur les preuves, pour les agents IA : conserver le contexte entre sessions, reprendre après un redémarrage et ne jamais confondre un souvenir avec une autorisation.

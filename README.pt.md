@@ -1,3 +1,5 @@
+![HyperMind](spec/readme_img.png)
+
 # HyperMind
 
 Memória durável e baseada em evidências para agentes de IA: preserve informações entre sessões, retome após reinicializações e não confunda lembranças com autoridade.

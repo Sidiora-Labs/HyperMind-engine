@@ -1,3 +1,5 @@
+![HyperMind](../../spec/readme_img.png)
+
 # Render
 
 The Blueprint is a **paid private service**, not a public web service. Render private networking carries arbitrary protocols, so clients in the same workspace and region can preserve end-to-end mTLS to HyperMind. Render's managed public HTTPS frontend terminates TLS and is not a supported direct ingress for these listeners. Host a caller on the private network or choose Fly/Railway raw TCP for external access; do not weaken the daemon's client-certificate requirement. [Private services](https://render.com/docs/private-services), [private networking](https://render.com/docs/private-network), [managed TLS](https://render.com/docs/tls)

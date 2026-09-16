@@ -1,3 +1,5 @@
+![HyperMind](spec/readme_img.png)
+
 # HyperMind
 
 Durable, evidence-aware memory for AI agents. Remember across sessions, recover after restarts, and build bounded context without confusing recalled text with authority.

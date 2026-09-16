@@ -1,3 +1,5 @@
+![HyperMind](../spec/readme_img.png)
+
 # Embedding models
 
 HyperMind supports the pinned int8 ONNX exports in `manifest.toml`. `ModelStore::ensure` downloads a missing model and tokenizer on first use, verifies each SHA-256 digest before publishing it, and re-verifies cached files on every open. Revisions are immutable commit identifiers; changing a revision creates a separate embedding-space generation.
