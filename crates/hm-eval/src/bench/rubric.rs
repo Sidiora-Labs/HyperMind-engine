@@ -2,6 +2,7 @@
 
 use super::beam::{Probe, ProbeKind};
 use super::gateway::{DynError, Gateway, JUDGE_MODEL, JUDGE_SETTINGS};
+use super::ordering::{self, OrderingScore};
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value, json};
 use std::collections::BTreeMap;
@@ -73,6 +74,7 @@ pub struct ProbeGrade {
     pub graded_criteria: usize,
     pub judge_failures: usize,
     pub score: Option<f64>,
+    pub ordering: Option<OrderingScore>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -89,8 +91,11 @@ pub struct GradeSummary {
     pub probes: usize,
     pub scored_probes: usize,
     pub unscored_probes: usize,
+    pub ordering_probes: usize,
+    pub judge_scored_probes: usize,
     pub judge_failures: usize,
     pub mean_score: f64,
+    pub mean_ordering_score: f64,
     pub per_kind: Vec<KindScore>,
     pub judge_model: String,
     pub prompt_id: String,
@@ -130,6 +135,9 @@ pub fn grade_from_responses(
 ) -> Result<ProbeGrade, DynError> {
     if probe.criteria.is_empty() {
         return Err(format!("probe {} carries no grading criteria", probe.id).into());
+    }
+    if probe.kind == ProbeKind::EventOrdering {
+        return grade_ordering(probe, answer);
     }
     if responses.len() != probe.criteria.len() {
         return Err(format!(
@@ -186,6 +194,29 @@ pub fn grade_from_responses(
         graded_criteria,
         judge_failures,
         score,
+        ordering: None,
+    })
+}
+
+fn grade_ordering(probe: &Probe, answer: &str) -> Result<ProbeGrade, DynError> {
+    let observed = ordering::split_ordered_answer(answer);
+    let alignment = ordering::align_by_terms(
+        &probe.criteria,
+        &observed,
+        ordering::DEFAULT_MINIMUM_OVERLAP,
+    );
+    let ordering = ordering::score_ordering(&probe.criteria, &observed, &alignment)?;
+    Ok(ProbeGrade {
+        probe_id: probe.id.clone(),
+        kind: probe.kind,
+        question: probe.question.clone(),
+        answer: answer.to_owned(),
+        answer_digest: blake3::hash(answer.as_bytes()).to_hex().to_string(),
+        grades: Vec::new(),
+        graded_criteria: 0,
+        judge_failures: 0,
+        score: Some(ordering.score),
+        ordering: Some(ordering),
     })
 }
 
@@ -194,6 +225,9 @@ pub async fn grade_probe(
     probe: &Probe,
     answer: &str,
 ) -> Result<ProbeGrade, DynError> {
+    if probe.kind == ProbeKind::EventOrdering {
+        return grade_from_responses(probe, answer, JUDGE_MODEL, &[]);
+    }
     let mut responses = Vec::with_capacity(probe.criteria.len());
     for criterion in &probe.criteria {
         let completion = gateway
@@ -217,8 +251,11 @@ pub async fn grade_probe(
 pub fn summarize(grades: &[ProbeGrade], judge_model: &str) -> GradeSummary {
     let mut kinds: BTreeMap<ProbeKind, (usize, usize, f64, usize)> = BTreeMap::new();
     let mut scored_probes = 0;
+    let mut ordering_probes = 0;
+    let mut judge_scored_probes = 0;
     let mut judge_failures = 0;
     let mut total = 0.0;
+    let mut ordering_total = 0.0;
     for grade in grades {
         let row = kinds.entry(grade.kind).or_insert((0, 0, 0.0, 0));
         row.0 += 1;
@@ -229,6 +266,12 @@ pub fn summarize(grades: &[ProbeGrade], judge_model: &str) -> GradeSummary {
             total += score;
             row.1 += 1;
             row.2 += score;
+            if grade.ordering.is_some() {
+                ordering_probes += 1;
+                ordering_total += score;
+            } else {
+                judge_scored_probes += 1;
+            }
         }
     }
     let per_kind = kinds
@@ -245,8 +288,11 @@ pub fn summarize(grades: &[ProbeGrade], judge_model: &str) -> GradeSummary {
         probes: grades.len(),
         scored_probes,
         unscored_probes: grades.len() - scored_probes,
+        ordering_probes,
+        judge_scored_probes,
         judge_failures,
         mean_score: mean(total, scored_probes),
+        mean_ordering_score: mean(ordering_total, ordering_probes),
         per_kind,
         judge_model: judge_model.to_owned(),
         prompt_id: CRITERION_PROMPT_ID.to_owned(),

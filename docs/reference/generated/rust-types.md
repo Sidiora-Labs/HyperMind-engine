@@ -5424,6 +5424,48 @@ pub struct FullBenchmarkResult {
 }
 ```
 
+## hm-eval::Alignment
+
+<a id="rust-crates-hm-eval-src-bench-ordering-rs-alignment"></a>
+
+Source: [`crates/hm-eval/src/bench/ordering.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/ordering.rs).
+
+When to use: Use `Alignment` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct Alignment {
+    pub observed_to_reference: Vec<Option<usize>>,
+}
+```
+
+## hm-eval::OrderingScore
+
+<a id="rust-crates-hm-eval-src-bench-ordering-rs-orderingscore"></a>
+
+Source: [`crates/hm-eval/src/bench/ordering.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/ordering.rs).
+
+When to use: Use `OrderingScore` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct OrderingScore {
+    pub reference_events: usize,
+    pub observed_events: usize,
+    pub matched: usize,
+    pub precision: f64,
+    pub recall: f64,
+    pub coverage_f1: f64,
+    pub rank_correlation: f64,
+    pub normalized_correlation: f64,
+    pub score: f64,
+}
+```
+
 ## hm-eval::BenchRole
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-benchrole"></a>
@@ -5706,6 +5748,7 @@ pub struct ProbeGrade {
     pub graded_criteria: usize,
     pub judge_failures: usize,
     pub score: Option<f64>,
+    pub ordering: Option<OrderingScore>,
 }
 ```
 
@@ -5746,8 +5789,11 @@ pub struct GradeSummary {
     pub probes: usize,
     pub scored_probes: usize,
     pub unscored_probes: usize,
+    pub ordering_probes: usize,
+    pub judge_scored_probes: usize,
     pub judge_failures: usize,
     pub mean_score: f64,
+    pub mean_ordering_score: f64,
     pub per_kind: Vec<KindScore>,
     pub judge_model: String,
     pub prompt_id: String,

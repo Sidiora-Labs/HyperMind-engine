@@ -1322,6 +1322,16 @@
       "file": "crates/hm-eval/src/bench/longmemeval.rs"
     },
     {
+      "id": "rust:crates/hm-eval/src/bench/ordering.rs:Alignment",
+      "name": "hm-eval::Alignment",
+      "file": "crates/hm-eval/src/bench/ordering.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/ordering.rs:OrderingScore",
+      "name": "hm-eval::OrderingScore",
+      "file": "crates/hm-eval/src/bench/ordering.rs"
+    },
+    {
       "id": "rust:crates/hm-eval/src/bench/pipeline.rs:BenchRole",
       "name": "hm-eval::BenchRole",
       "file": "crates/hm-eval/src/bench/pipeline.rs"
