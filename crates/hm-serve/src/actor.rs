@@ -42,6 +42,7 @@ use hm_proj::entities::EntityProjection;
 use hm_proj::graph::{EdgeRecord, GraphProjection};
 use hm_proj::intentions::{IntentionRecord, IntentionStatus, IntentionsProjection};
 use hm_proj::lexical::LexicalProjection;
+use hm_proj::media::{MediaCatalogProjection, MediaRecord};
 use hm_proj::memories::{MemoryProjection, MemoryRecord};
 use hm_proj::predictions::{
     CalibrationCounters, MechanismFailures, PredictionRecord, PredictionsProjection,
@@ -67,6 +68,8 @@ use tokio::sync::{broadcast, mpsc, oneshot};
 const COMMAND_QUEUE: usize = 256;
 
 pub const MAXIMUM_GRAPH_NEIGHBOURS: usize = 256;
+
+const MAXIMUM_MEDIA_CATALOG_ROWS: usize = 256;
 
 #[derive(Clone, Debug)]
 pub struct ActorConfig {
@@ -321,6 +324,11 @@ enum Command {
         oneshot::Sender<Result<Option<ProcedureRecord>, Error>>,
     ),
     Procedures(usize, oneshot::Sender<Result<Vec<ProcedureRecord>, Error>>),
+    MediaCatalog(
+        bool,
+        usize,
+        oneshot::Sender<Result<Vec<MediaRecord>, Error>>,
+    ),
     GraphNeighbourhood(
         Vec<u8>,
         i64,
@@ -685,6 +693,17 @@ impl ActorEngine {
         request(&self.commands, |reply| Command::Procedures(limit, reply)).await
     }
 
+    pub async fn media_catalog(
+        &self,
+        pending_only: bool,
+        limit: usize,
+    ) -> Result<Vec<MediaRecord>, Error> {
+        request(&self.commands, |reply| {
+            Command::MediaCatalog(pending_only, limit, reply)
+        })
+        .await
+    }
+
     pub async fn graph_neighbourhood(
         &self,
         node_id: Vec<u8>,
@@ -1009,6 +1028,21 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
                     .projections
                     .begin_snapshot()
                     .and_then(|snapshot| ProceduresProjection::list(&snapshot, limit));
+                let _ = reply.send(result);
+            }
+            Command::MediaCatalog(pending_only, limit, reply) => {
+                let result = if limit == 0 {
+                    Err(Error::new(ErrorCode::InvalidArgument))
+                } else {
+                    let limit = limit.min(MAXIMUM_MEDIA_CATALOG_ROWS);
+                    state.projections.begin_snapshot().and_then(|snapshot| {
+                        if pending_only {
+                            MediaCatalogProjection::pending(&snapshot, limit)
+                        } else {
+                            MediaCatalogProjection::list(&snapshot, limit)
+                        }
+                    })
+                };
                 let _ = reply.send(result);
             }
             Command::GraphNeighbourhood(node_id, valid_at_ns, limit, reply) => {

@@ -188,14 +188,14 @@ Do not use: Do not use crypto_shred for ordinary relevance cleanup; it makes enc
 
 Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/dispatcher.rs).
 
-When to use: Inspect actor health, ledger/projection positions, integrity and provenance chains, attention history, per-predicate calibration, the actor-local ranking preferences learned from attestations at hm://{actor}/preferences, imported vocabularies at hm://{actor}/vocabulary, or reviewable alias proposals at hm://{actor}/vocabulary/aliases?name=<observed>, or discover the capability surfaces behind the advertised verbs with mode "discover".
+When to use: Inspect actor health, ledger/projection positions, integrity and provenance chains, attention history, per-predicate calibration, the actor-local ranking preferences learned from attestations at hm://{actor}/preferences, imported vocabularies at hm://{actor}/vocabulary, reviewable alias proposals at hm://{actor}/vocabulary/aliases?name=<observed>, the held media catalogue at hm://{actor}/media or only the entries still awaiting derivation at hm://{actor}/media/pending, or discover the capability surfaces behind the advertised verbs with mode "discover".
 
-Do not use: Do not infer that an external operation succeeded from a memory or health report; inspect the actual observed evidence chain. Do not treat a discovered surface as permission to call it. An alias proposal is not an accepted alias: it changes nothing until a new vocabulary version declares it.
+Do not use: Do not infer that an external operation succeeded from a memory or health report; inspect the actual observed evidence chain. Do not treat a discovered surface as permission to call it. An alias proposal is not an accepted alias: it changes nothing until a new vocabulary version declares it. A media row is a catalogue entry rather than the retained bytes, and a pending row records that no derivation exists, not that one is scheduled.
 
 
 ```json
 {
-  "uri": "hm://1/attention"
+  "uri": "hm://1/media/pending"
 }
 ```
 

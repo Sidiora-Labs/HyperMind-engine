@@ -16,6 +16,7 @@ use std::collections::BTreeSet;
 const MAXIMUM_VOCABULARY_ITEMS: usize = 256;
 const MAXIMUM_ALIAS_PROPOSALS: usize = 64;
 const MAXIMUM_PREFERENCE_ITEMS: usize = 256;
+const MAXIMUM_MEDIA_ITEMS: usize = 256;
 const REVIEW_WARNING: &str = "An alias proposal changes nothing; it is accepted only by importing a new vocabulary version that declares the alias.";
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, schemars::JsonSchema)]
@@ -196,6 +197,12 @@ pub async fn run(
         envelope.provenance.extend(source.provenance);
         return Ok(envelope);
     }
+    if uri == format!("hm://{}/media", actor.actor()) {
+        return media(actor, envelope, false).await;
+    }
+    if uri == format!("hm://{}/media/pending", actor.actor()) {
+        return media(actor, envelope, true).await;
+    }
     if uri.starts_with(&format!("hm://{}/evidence/", actor.actor())) {
         let evidence = super::evidence::run(actor, parse_lsn(&uri)?).await?;
         envelope.items.extend(evidence.items);
@@ -271,6 +278,44 @@ pub async fn run(
         "edges": edges,
         "visited": visited.len(),
     });
+    Ok(envelope)
+}
+
+async fn media(
+    actor: &ActorEngine,
+    mut envelope: Envelope,
+    pending_only: bool,
+) -> Result<Envelope, Error> {
+    let records = actor
+        .media_catalog(pending_only, MAXIMUM_MEDIA_ITEMS)
+        .await?;
+    envelope.items[0]["media"] = json!(
+        records
+            .iter()
+            .map(|record| json!({
+                "digest": hex(&record.digest),
+                "uri": record.uri,
+                "media_type": record.media_type,
+                "media_ref_lsn": record.media_ref_lsn,
+                "retained_lsn": record.retained_lsn,
+                "derived_lsn": record.derived_lsn,
+                "derived_prompt_id": record.derived_prompt_id,
+            }))
+            .collect::<Vec<_>>()
+    );
+    envelope.provenance.extend(
+        records
+            .iter()
+            .flat_map(|record| {
+                [
+                    record.media_ref_lsn,
+                    record.retained_lsn,
+                    record.derived_lsn,
+                ]
+            })
+            .filter(|lsn| *lsn != 0)
+            .map(|lsn| format!("hm://{}/lsn/{lsn}", actor.actor())),
+    );
     Ok(envelope)
 }
 
