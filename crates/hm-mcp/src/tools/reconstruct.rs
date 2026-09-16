@@ -4,6 +4,7 @@ use hm_compose::reconstruct::{ReconstructionAnchor, reconstruct};
 use hm_core::{Error, ErrorCode, LSN};
 use hm_llm::admission::{AdmittedProvider, CallAdmission};
 use hm_llm::openai_compat::OpenAiCompatible;
+use hm_llm::outcome::{ResponseFault, ResponseOutcome};
 use hm_llm::{HttpTransport, LlmProvider, ModelTier, Pricing, ProviderConfig};
 use hm_serve::actor::ActorEngine;
 use serde_json::json;
@@ -63,6 +64,30 @@ impl ReconstructionRuntime {
     }
 }
 
+fn outcome_envelope(fault: &ResponseFault) -> Envelope {
+    let code = match fault.outcome {
+        ResponseOutcome::Refused => ErrorCode::OperationUnavailable,
+        ResponseOutcome::Truncated => ErrorCode::CapacityExceeded,
+        ResponseOutcome::Malformed | ResponseOutcome::Incomplete => ErrorCode::SchemaInvalid,
+    };
+    let mut envelope = Envelope::error(Error::new(code), false);
+    envelope.gaps.push(json!({
+        "kind": "extraction_outcome",
+        "version": fault.version,
+        "contract": hm_compose::reconstruct::PROMPT_ID,
+        "outcome": fault.outcome.as_str(),
+        "detail": fault.detail,
+        "model_id": fault.model_id,
+        "requested_output_tokens": fault.requested_output_tokens,
+        "observed_output_tokens": fault.usage.output_tokens,
+        "cost_microusd": fault.usage.cost_microusd,
+    }));
+    envelope
+        .warnings
+        .push(format!("extraction_outcome:{}", fault.outcome.as_str()));
+    envelope
+}
+
 pub async fn run(
     actor: &ActorEngine,
     runtime: Option<&ReconstructionRuntime>,
@@ -108,30 +133,26 @@ pub async fn run(
     let provider = runtime.provider_for(actor.actor().get());
     let maximum = input.filters.maximum_output_tokens.unwrap_or(256);
     let provenance = anchors.iter().map(|anchor| anchor.uri.clone()).collect();
-    let result =
+    let completed =
         tokio::task::spawn_blocking(move || reconstruct(provider.as_ref(), &anchors, maximum))
             .await
-            .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
-            .map_err(|error| {
-                Error::new(match error {
-                    hm_llm::LlmError::InvalidArgument(_) => ErrorCode::InvalidArgument,
-                    hm_llm::LlmError::Schema(_) | hm_llm::LlmError::Wire(_) => {
-                        ErrorCode::SchemaInvalid
-                    }
-                    hm_llm::LlmError::Response(fault) => match fault.outcome {
-                        hm_llm::outcome::ResponseOutcome::Refused => {
-                            ErrorCode::OperationUnavailable
-                        }
-                        hm_llm::outcome::ResponseOutcome::Truncated => ErrorCode::CapacityExceeded,
-                        hm_llm::outcome::ResponseOutcome::Malformed
-                        | hm_llm::outcome::ResponseOutcome::Incomplete => ErrorCode::SchemaInvalid,
-                    },
-                    hm_llm::LlmError::Admission(_) | hm_llm::LlmError::Capacity => {
-                        ErrorCode::CapacityExceeded
-                    }
-                    hm_llm::LlmError::Network(_) => ErrorCode::OperationUnavailable,
-                })
-            })?;
+            .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?;
+    let result = match completed {
+        Ok(value) => value,
+        Err(hm_llm::LlmError::Response(fault)) => return Ok(outcome_envelope(&fault)),
+        Err(hm_llm::LlmError::InvalidArgument(_)) => {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        Err(hm_llm::LlmError::Schema(_) | hm_llm::LlmError::Wire(_)) => {
+            return Err(Error::new(ErrorCode::SchemaInvalid));
+        }
+        Err(hm_llm::LlmError::Admission(_) | hm_llm::LlmError::Capacity) => {
+            return Err(Error::new(ErrorCode::CapacityExceeded));
+        }
+        Err(hm_llm::LlmError::Network(_)) => {
+            return Err(Error::new(ErrorCode::OperationUnavailable));
+        }
+    };
     let mut envelope = Envelope::empty();
     envelope.provenance = provenance;
     envelope.items.push(json!({"content":result.content,"authority":"assistant_generated",

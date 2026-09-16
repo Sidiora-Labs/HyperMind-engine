@@ -12,7 +12,7 @@ use hm_schema::events::{
     ToolResult, UserMsg,
 };
 use hm_serve::actor::{ActorConfig, ActorEngine, IncomingEvent};
-use serde_json::json;
+use serde_json::{Value, json};
 use std::path::Path;
 use std::sync::Arc;
 
@@ -26,21 +26,40 @@ fn config(path: &Path) -> ActorConfig {
     }
 }
 
+type OutcomeCase = (&'static str, ErrorCode, fn(&mut Value));
+
+fn provider_config() -> ProviderConfig {
+    ProviderConfig {
+        endpoint: "https://gateway.centra.ag/v1/chat/completions".to_owned(),
+        api_key: None,
+        model: "openrouter/openai/gpt-4o-mini".to_owned(),
+        tier: ModelTier::Economy,
+        pricing: Pricing {
+            input_microusd_per_million_tokens: 150_000,
+            output_microusd_per_million_tokens: 600_000,
+        },
+    }
+}
+
 fn provider() -> Arc<OpenAiCompatible<RecordedTransport>> {
     Arc::new(
         OpenAiCompatible::new(
-            ProviderConfig {
-                endpoint: "https://gateway.centra.ag/v1/chat/completions".to_owned(),
-                api_key: None,
-                model: "openrouter/openai/gpt-4o-mini".to_owned(),
-                tier: ModelTier::Economy,
-                pricing: Pricing {
-                    input_microusd_per_million_tokens: 150_000,
-                    output_microusd_per_million_tokens: 600_000,
-                },
-            },
+            provider_config(),
             RecordedTransport::from_json(include_str!("fixtures/reconstruction-centra.json"))
                 .unwrap(),
+        )
+        .unwrap(),
+    )
+}
+
+fn provider_returning(mutate: fn(&mut Value)) -> Arc<OpenAiCompatible<RecordedTransport>> {
+    let mut recording: Value =
+        serde_json::from_str(include_str!("fixtures/reconstruction-centra.json")).unwrap();
+    mutate(&mut recording[0]["response"]["body"]["choices"][0]);
+    Arc::new(
+        OpenAiCompatible::new(
+            provider_config(),
+            RecordedTransport::from_json(&recording.to_string()).unwrap(),
         )
         .unwrap(),
     )
@@ -227,5 +246,63 @@ async fn reconstruction_tripwire_fails_before_the_provider_call() {
     assert_eq!(recorded.transport().remaining(), 1);
     assert_eq!(actor.stats().await.unwrap().log_events, 3);
     drop(server);
+    actor.shutdown().await.unwrap();
+}
+
+#[tokio::test]
+async fn provider_outcomes_are_distinct_at_the_recall_surface() {
+    let directory = tempfile::tempdir().unwrap();
+    let actor = ActorEngine::open(config(directory.path())).await.unwrap();
+    seed(&actor, directory.path()).await;
+    let narrated = "receipt confirms that release 7 completed";
+    let cases: [OutcomeCase; 4] = [
+        ("refused", ErrorCode::OperationUnavailable, |choice| {
+            choice["message"]["refusal"] = json!("the request was declined");
+        }),
+        ("truncated", ErrorCode::CapacityExceeded, |choice| {
+            choice["finish_reason"] = json!("length");
+        }),
+        ("malformed", ErrorCode::SchemaInvalid, |choice| {
+            choice["message"]["content"] = json!("{");
+        }),
+        ("incomplete", ErrorCode::SchemaInvalid, |choice| {
+            choice["message"].as_object_mut().unwrap().remove("content");
+        }),
+    ];
+    for (outcome, code, mutate) in cases {
+        let recorded = provider_returning(mutate);
+        let server = McpServer::new(actor.clone())
+            .with_reconstruction_runtime(ReconstructionRuntime::new(recorded.clone()));
+        let envelope = server.recall_envelope(recall(vec![1, 3])).await;
+        assert!(!envelope.ok, "{outcome}: {envelope:?}");
+        assert_eq!(
+            envelope.items[0]["error"],
+            code.as_str(),
+            "{outcome}: {envelope:?}"
+        );
+        assert_eq!(envelope.gaps.len(), 1, "{outcome}: {envelope:?}");
+        let gap = &envelope.gaps[0];
+        assert_eq!(gap["kind"], "extraction_outcome");
+        assert_eq!(gap["outcome"], outcome);
+        assert_eq!(gap["version"], 1);
+        assert_eq!(gap["contract"], "reconstruct@1");
+        assert_eq!(gap["model_id"], "openrouter/openai/gpt-4o-mini");
+        assert_eq!(gap["requested_output_tokens"], 256);
+        assert_eq!(gap["observed_output_tokens"], 88);
+        assert_eq!(gap["cost_microusd"], 96);
+        let detail = gap["detail"].as_str().unwrap();
+        assert!(!detail.is_empty(), "{outcome}");
+        assert!(!detail.contains(narrated), "{outcome}: {detail}");
+        assert!(
+            envelope
+                .warnings
+                .contains(&format!("extraction_outcome:{outcome}")),
+            "{outcome}: {:?}",
+            envelope.warnings
+        );
+        assert!(envelope.items[0]["content"].is_null());
+        assert_eq!(recorded.transport().remaining(), 0, "{outcome}");
+        drop(server);
+    }
     actor.shutdown().await.unwrap();
 }
