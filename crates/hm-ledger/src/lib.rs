@@ -2,6 +2,7 @@
 
 pub mod apply;
 pub mod checkpoint;
+pub mod credentials;
 pub mod frame;
 pub mod gate;
 pub mod idempotency;

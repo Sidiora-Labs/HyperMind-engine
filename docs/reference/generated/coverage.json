@@ -1382,6 +1382,11 @@
       "file": "crates/hm-ledger/src/checkpoint.rs"
     },
     {
+      "id": "rust:crates/hm-ledger/src/credentials.rs:CredentialVault",
+      "name": "hm-ledger::CredentialVault",
+      "file": "crates/hm-ledger/src/credentials.rs"
+    },
+    {
       "id": "rust:crates/hm-ledger/src/frame.rs:EventKind",
       "name": "hm-ledger::EventKind",
       "file": "crates/hm-ledger/src/frame.rs"

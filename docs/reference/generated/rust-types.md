@@ -5690,6 +5690,23 @@ pub struct Checkpoint {
 }
 ```
 
+## hm-ledger::CredentialVault
+
+<a id="rust-crates-hm-ledger-src-credentials-rs-credentialvault"></a>
+
+Source: [`crates/hm-ledger/src/credentials.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/credentials.rs).
+
+When to use: Use `CredentialVault` for durable encrypted append, recovery, key lifecycle, and integrity verification.
+
+Do not use: Do not rewrite committed records, share an actor writer, expose keys, or treat an unverified prefix as trusted.
+
+
+```rust
+pub struct CredentialVault {
+    directory: PathBuf,
+}
+```
+
 ## hm-ledger::EventKind
 
 <a id="rust-crates-hm-ledger-src-frame-rs-eventkind"></a>
