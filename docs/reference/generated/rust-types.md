@@ -4740,6 +4740,208 @@ pub struct MemoryPipeline {
 }
 ```
 
+## hm-eval::Phase
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-phase"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `Phase` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub enum Phase {
+    BeforeRestart,
+    AfterRestart,
+}
+```
+
+## hm-eval::ScenarioCall
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-scenariocall"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `ScenarioCall` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ScenarioCall {
+    pub step: &'static str,
+    pub verb: &'static str,
+    pub arguments: Value,
+    pub phase: Phase,
+}
+```
+
+## hm-eval::StepObservation
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-stepobservation"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `StepObservation` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct StepObservation {
+    pub step: String,
+    pub verb: String,
+    pub ok: bool,
+    pub error_code: Option<String>,
+    pub effect_state: Option<String>,
+    pub item_identifiers: Vec<String>,
+    pub provenance: Vec<String>,
+    pub authority: Vec<String>,
+    pub health: BTreeMap<String, String>,
+    pub gap_kinds: Vec<String>,
+    pub warning_kinds: Vec<String>,
+}
+```
+
+## hm-eval::ContractObservation
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-contractobservation"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `ContractObservation` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ContractObservation {
+    pub format: String,
+    pub sdk: String,
+    pub transport: String,
+    pub steps: Vec<StepObservation>,
+}
+```
+
+## hm-eval::RawCall
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-rawcall"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `RawCall` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct RawCall {
+    pub step: String,
+    pub verb: String,
+    pub envelope: Value,
+}
+```
+
+## hm-eval::RawDocument
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-rawdocument"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `RawDocument` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct RawDocument {
+    pub format: String,
+    pub sdk: String,
+    pub transport: String,
+    pub calls: Vec<RawCall>,
+}
+```
+
+## hm-eval::Unavailable
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-unavailable"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `Unavailable` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct Unavailable {
+    pub sdk: String,
+    pub reason: String,
+}
+```
+
+## hm-eval::Unsupported
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-unsupported"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `Unsupported` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct Unsupported {
+    pub sdk: String,
+    pub step: String,
+}
+```
+
+## hm-eval::Divergence
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-divergence"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `Divergence` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct Divergence {
+    pub step: String,
+    pub field: String,
+    pub values: BTreeMap<String, String>,
+}
+```
+
+## hm-eval::ContractComparison
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-contractcomparison"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `ContractComparison` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ContractComparison {
+    pub format: String,
+    pub participants: Vec<String>,
+    pub unavailable: Vec<Unavailable>,
+    pub unsupported: Vec<Unsupported>,
+    pub steps_compared: usize,
+    pub divergences: Vec<Divergence>,
+    pub agreed: bool,
+}
+```
+
 ## hm-eval::Metric
 
 <a id="rust-crates-hm-eval-src-slice1-rs-metric"></a>

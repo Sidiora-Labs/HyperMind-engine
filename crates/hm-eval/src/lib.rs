@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 
 pub mod bench;
+pub mod contract;
 pub mod docs;
 pub mod slice1;
 pub mod slice2;
