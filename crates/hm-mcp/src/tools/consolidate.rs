@@ -7,13 +7,13 @@ use crate::tools::relation;
 use crate::tools::remember::EmbeddingRuntime;
 use hm_core::telemetry::{Attribute, SpanBuilder, SpanKind, SpanOutcome};
 use hm_core::{ConversationId, Error, ErrorCode, LSN};
-use hm_cortex::budget::BudgetUsage;
+use hm_cortex::budget::{BudgetUsage, RunReservation};
 use hm_cortex::citations::{FrozenCandidate, SourceKind};
 use hm_cortex::nrem::cluster::{
     ClusterOptions, ObservationCluster, PendingObservation, cluster_observations,
 };
 use hm_cortex::nrem::merge::{
-    ClusterExtraction, ClusterOutcome, MergeAction, NremReport, extract_cluster,
+    MERGE_OUTPUT_TOKENS, MergeAction, MergeOptions, NremReport, consolidate_clusters_reserved,
 };
 use hm_cortex::run::{PhaseMachine, retraction_event, run_id};
 use hm_ledger::frame::EventKind;
@@ -30,11 +30,17 @@ use rmcp::schemars;
 use serde::Deserialize;
 use serde_json::json;
 use std::collections::{BTreeMap, BTreeSet};
-use std::sync::Arc;
+use std::sync::{Arc, Mutex, PoisonError};
 
 const MAXIMUM_RELATIONS: usize = 256;
 const DEFAULT_PARALLEL: usize = 4;
 const MAXIMUM_PARALLEL: usize = 64;
+
+const RUN_BUDGET_VERSION: u16 = 1;
+
+const MERGE_ATTEMPTS_PER_CLUSTER: u32 = 2;
+
+const MERGE_RETRY_OUTPUT_TOKENS: u32 = MERGE_OUTPUT_TOKENS.saturating_mul(2);
 
 #[derive(Clone)]
 pub struct ConsolidationRuntime {
@@ -354,6 +360,8 @@ async fn start(
         EventPayload::ConsolidationOpened(Box::new(opened.clone())),
     )];
     let mut machine = PhaseMachine::resume(id.to_vec(), phases, []);
+    let reservation = Arc::new(Mutex::new(RunReservation::new(budget.into())));
+    let mut retries = 0_u64;
     let mut derived = Vec::new();
     let mut dropped_candidates = 0_u64;
     let mut llm_calls = 0_u64;
@@ -399,11 +407,24 @@ async fn start(
                 let runtime = runtime.ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
                 let provider = runtime.provider_for(actor.actor().get());
                 let run = id.to_vec();
+                let reserved = Arc::clone(&reservation);
                 let outcomes = extract_bounded(
                     clusters,
                     ExtractionLimits::new(runtime.maximum_parallel(), true),
                     move |cluster: ObservationCluster| {
-                        extract_cluster(provider.as_ref(), &run, &cluster, &[])
+                        let mut reservation =
+                            reserved.lock().unwrap_or_else(PoisonError::into_inner);
+                        consolidate_clusters_reserved(
+                            provider.as_ref(),
+                            &run,
+                            std::slice::from_ref(&cluster),
+                            &[],
+                            &mut reservation,
+                            MergeOptions {
+                                maximum_attempts_per_cluster: MERGE_ATTEMPTS_PER_CLUSTER,
+                                retry_output_tokens: MERGE_RETRY_OUTPUT_TOKENS,
+                            },
+                        )
                     },
                 )
                 .await;
@@ -416,7 +437,7 @@ async fn start(
                 dropped_candidates = dropped_candidates
                     .saturating_add(counts.skipped)
                     .saturating_add(counts.aborted);
-                fold_extractions(outcomes.extracted)?
+                fold_reports(outcomes.extracted)?
             };
             if report.llm_calls > budget.max_llm_calls
                 || report.cost.tokens() > budget.max_tokens
@@ -428,6 +449,7 @@ async fn start(
                 u64::try_from(report.dropped.len())
                     .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?,
             );
+            retries = retries.saturating_add(report.retries);
             llm_calls = llm_calls.saturating_add(report.llm_calls);
             input_tokens = input_tokens.saturating_add(report.cost.input_tokens);
             output_tokens = output_tokens.saturating_add(report.cost.output_tokens);
@@ -520,6 +542,20 @@ async fn start(
         "skipped": counts.skipped,
         "aborted": counts.aborted,
     });
+    let settled = reservation
+        .lock()
+        .unwrap_or_else(PoisonError::into_inner)
+        .settled();
+    envelope.budget = Some(json!({
+        "version": RUN_BUDGET_VERSION,
+        "max_llm_calls": budget.max_llm_calls,
+        "llm_calls": settled.llm_calls,
+        "max_tokens": budget.max_tokens,
+        "tokens": settled.tokens(),
+        "max_microusd": budget.max_microusd,
+        "microusd": settled.cost_microusd,
+        "retries": retries,
+    }));
     envelope.provenance.push(format!(
         "hm://{}/lsn/{}",
         actor.actor(),
@@ -546,25 +582,34 @@ fn candidate_count(value: usize) -> Result<u64, Error> {
     u64::try_from(value).map_err(|_| Error::new(ErrorCode::CapacityExceeded))
 }
 
-fn fold_extractions(extracted: Vec<(usize, ClusterExtraction)>) -> Result<NremReport, Error> {
-    let mut report = NremReport::default();
-    for (_, extraction) in extracted {
-        if extraction.llm_calls > 0 {
-            report.llm_calls = report.llm_calls.saturating_add(extraction.llm_calls);
-            report
-                .cost
-                .record(extraction.usage)
-                .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?;
-        }
-        if extraction.citation_invalid {
-            report.citation_invalid = report.citation_invalid.saturating_add(1);
-        }
-        match extraction.outcome {
-            ClusterOutcome::Decided(decision) => report.decisions.push(*decision),
-            ClusterOutcome::Dropped(dropped) => report.dropped.push(dropped),
-        }
+fn fold_reports(reports: Vec<(usize, NremReport)>) -> Result<NremReport, Error> {
+    let mut folded = NremReport::default();
+    for (_, report) in reports {
+        folded.decisions.extend(report.decisions);
+        folded.dropped.extend(report.dropped);
+        folded.citation_invalid = folded
+            .citation_invalid
+            .saturating_add(report.citation_invalid);
+        folded.llm_calls = folded.llm_calls.saturating_add(report.llm_calls);
+        folded.retries = folded.retries.saturating_add(report.retries);
+        folded.cost.calls = sum(folded.cost.calls, report.cost.calls)?;
+        folded.cost.input_tokens = sum(folded.cost.input_tokens, report.cost.input_tokens)?;
+        folded.cost.output_tokens = sum(folded.cost.output_tokens, report.cost.output_tokens)?;
+        folded.cost.cache_read_tokens =
+            sum(folded.cost.cache_read_tokens, report.cost.cache_read_tokens)?;
+        folded.cost.cache_write_tokens = sum(
+            folded.cost.cache_write_tokens,
+            report.cost.cache_write_tokens,
+        )?;
+        folded.cost.cost_microusd = sum(folded.cost.cost_microusd, report.cost.cost_microusd)?;
     }
-    Ok(report)
+    Ok(folded)
+}
+
+fn sum(accumulated: u64, next: u64) -> Result<u64, Error> {
+    accumulated
+        .checked_add(next)
+        .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))
 }
 
 fn mint_eligible(cluster: &ObservationCluster) -> bool {
