@@ -5,7 +5,9 @@ use crate::canonical::{bundle_hash, canonical_bytes};
 use crate::lanes::lexical;
 use crate::manifest;
 use crate::safety;
-use crate::tiers::{bindings, conflicts, intent, resident, temporal as temporal_tier, work};
+use crate::tiers::{
+    bindings, conflicts, intent, prospective, resident, temporal as temporal_tier, work,
+};
 use crate::tokens::TokenCounter;
 use crate::trim::trim_to_budget_with_profile;
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
@@ -92,6 +94,8 @@ pub enum WhyCode {
     WorkLedger,
     Belief,
     Conflict,
+    Prospective,
+    Procedure,
 }
 
 pub struct ActivationRequest<'model> {
@@ -275,6 +279,23 @@ pub fn activate_with_context(
     populate_conversation(&mut bundle, snapshot, request)?;
     populate_lexical(&mut bundle, snapshot, request)?;
     populate_memories(&mut bundle, snapshot, request)?;
+    for item in prospective::read(
+        snapshot,
+        request.actor,
+        request.conversation,
+        now_ns,
+        request.token_counter,
+    )? {
+        add_item(&mut bundle, item)?;
+    }
+    for item in crate::procedures::read(
+        snapshot,
+        request.actor,
+        &request.query,
+        request.token_counter,
+    )? {
+        add_item(&mut bundle, item)?;
+    }
     let conflict_tier = conflicts::read(
         snapshot,
         request.actor,
@@ -295,6 +316,21 @@ pub fn activate_with_context(
         add_item(&mut bundle, item)?;
     }
     exclude_same_turn_content(&mut bundle, request.turn_text.as_bytes());
+    let anticipation = bundle
+        .sections
+        .iter()
+        .flat_map(|section| &section.items)
+        .filter(|item| matches!(item.why, WhyCode::Prospective | WhyCode::Procedure))
+        .flat_map(|item| item.provenance.iter().copied())
+        .collect::<BTreeSet<_>>();
+    for lsn in anticipation {
+        if !bundle.manifest.candidates.contains(&lsn) {
+            bundle.manifest.candidates.push(lsn);
+        }
+        if !bundle.manifest.selected.contains(&lsn) {
+            bundle.manifest.selected.push(lsn);
+        }
+    }
     trim_to_budget_with_profile(&mut bundle, request.token_counter, context.budget_profile)?;
     let included: BTreeSet<LSN> = bundle
         .sections
@@ -658,6 +694,8 @@ fn provenance_uri(
         WhyCode::WorkLedger => "work_ledger",
         WhyCode::Belief => "belief",
         WhyCode::Conflict => "conflict",
+        WhyCode::Prospective => "prospective",
+        WhyCode::Procedure => "procedure",
     };
     format!(
         "hm://{}/{}/{}?at={}&src={}&score={score}&vr=0&lr={lexical_rank}&why={why}",

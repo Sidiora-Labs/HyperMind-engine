@@ -197,10 +197,17 @@ impl WireTransport for HttpTransport {
             .map_err(|error| LlmError::Network(error.to_string()))?;
         let status = response.status().as_u16();
         let body = response
-            .json()
+            .text()
             .map_err(|error| LlmError::Network(error.to_string()))?;
+        let body = decode_wire_response(&body)?;
         Ok(WireResponse { status, body })
     }
+}
+
+fn decode_wire_response(body: &str) -> Result<Value, LlmError> {
+    let body = body.trim_end();
+    let body = body.strip_suffix("data: [DONE]").unwrap_or(body);
+    serde_json::from_str(body).map_err(|error| LlmError::Wire(error.to_string()))
 }
 
 pub(crate) fn headers(config: &ProviderConfig) -> BTreeMap<String, String> {
@@ -237,3 +244,20 @@ pub(crate) fn require_success(response: WireResponse) -> Result<Value, LlmError>
 }
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+#[cfg(test)]
+mod wire_tests {
+    use super::decode_wire_response;
+
+    #[test]
+    fn centra_terminal_done_marker_is_not_json_content() {
+        let recorded = include_str!("../tests/fixtures/centra-json-done.txt");
+        let decoded = decode_wire_response(recorded).unwrap();
+        assert_eq!(decoded["usage"]["prompt_tokens"], 283);
+        assert_eq!(decoded["usage"]["completion_tokens"], 92);
+        assert!(decode_wire_response("{\"ok\":true}").is_ok());
+        assert!(decode_wire_response("{\"ok\":true}arbitrary trailing text").is_err());
+        assert!(decode_wire_response("{\"ok\":true}data: [DONE] extra").is_err());
+        assert!(decode_wire_response("data: {\"ok\":true}\n\ndata: [DONE]").is_err());
+    }
+}

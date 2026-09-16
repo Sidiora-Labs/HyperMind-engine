@@ -1012,8 +1012,12 @@ dependencies = [
  "hm-core",
  "hm-index",
  "hm-ledger",
+ "hm-llm",
  "hm-proj",
  "hm-schema",
+ "ort",
+ "serde_json",
+ "sha2",
  "tiktoken-rs",
  "tokenizers",
 ]

@@ -11,13 +11,18 @@ blake3 = "1.8.2"
 hm-core = { path = "../hm-core" }
 hm-index = { path = "../hm-index" }
 hm-ledger = { path = "../hm-ledger" }
+hm-llm = { path = "../hm-llm" }
 hm-proj = { path = "../hm-proj" }
 hm-schema = { path = "../hm-schema" }
 tiktoken-rs = "0.12.0"
+ort = { version = "=2.0.0-rc.13", default-features = false, features = ["copy-dylibs", "download-binaries", "ndarray", "std", "tls-rustls"] }
+serde_json = "1.0.145"
+sha2.workspace = true
 tokenizers = { version = "0.22.1", default-features = false, features = ["fancy-regex"] }
 
 [dev-dependencies]
 tempfile = "3.23.0"
+reqwest = { version = "0.12.23", default-features = false, features = ["blocking", "rustls-tls"] }
 
 [lints]
 workspace = true

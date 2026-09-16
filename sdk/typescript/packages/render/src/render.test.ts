@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { Bundle, render } from "./index";
+import { ActivationSafetyError, assertRememberable, Bundle, isReconstruction, render } from "./index";
 
 function bundle(): Bundle {
   return {
@@ -86,4 +86,18 @@ test("render excludes uncited, non-semantic, and raw memory", () => {
       content: "same turn",
     },
   ]);
+});
+
+test("reconstructions remain assistant-generated and cannot be remembered verbatim", () => {
+  const reconstruction = "RECONSTRUCTION\nThe deployment happened between the anchors; its mechanism is unknown.";
+  const reconstructed = bundle();
+  reconstructed.sections[0]!.items[0]!.content = reconstruction;
+  assert.equal(render(reconstructed).sections[0]!.items[0]!.authority, "assistant_generated");
+  assert.equal(render(reconstructed).sections[0]!.items[0]!.content, reconstruction);
+  for (const content of [reconstruction, `  ${reconstruction}`, "RECONSTRUCTION: uncertain", "RECONSTRUCTION"]) {
+    assert.equal(isReconstruction(content), true);
+    assert.throws(() => assertRememberable(content), ActivationSafetyError);
+  }
+  assert.doesNotThrow(() => assertRememberable("A separately observed deployment receipt"));
+  assert.equal(isReconstruction("RECONSTRUCTIONS is a book title"), false);
 });

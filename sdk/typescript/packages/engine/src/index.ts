@@ -1,5 +1,5 @@
 import path from "node:path";
-import { Bundle } from "@hypermind/render";
+import { assertRememberable, Bundle } from "@hypermind/render";
 import {
   AsOfOptions,
   BeliefProvenance,
@@ -163,6 +163,7 @@ export class Session {
     content: string,
     options: "user" | "assistant" | RememberOptions = {},
   ): Promise<Envelope> {
+    assertRememberable(content);
     const normalized = typeof options === "string" ? { kind: options } : options;
     return decodeEnvelope(
       await this.native.remember(

@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import net from "node:net";
 import * as flatbuffers from "flatbuffers";
-import { Bundle } from "@hypermind/render";
+import { assertRememberable, Bundle } from "@hypermind/render";
 import { parseBundle } from "./canonical";
 import { Activate } from "./wire/hypermind/protocol/activate";
 import { AppendEventT } from "./wire/hypermind/protocol/append-event";
@@ -612,6 +612,11 @@ export class Session {
     content: string,
     options: MemoryKind | RememberOptions = {},
   ): Promise<bigint | DoNotStoreReceipt> {
+    try {
+      assertRememberable(content);
+    } catch (error) {
+      return Promise.reject(error);
+    }
     const normalized = typeof options === "string" ? { kind: options } : options;
     if (normalized.retention === "do_not_store") {
       return Promise.resolve({

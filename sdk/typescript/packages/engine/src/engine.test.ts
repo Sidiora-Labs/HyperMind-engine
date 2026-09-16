@@ -16,6 +16,7 @@ test("napi engine exposes one embedded continuity session", async (context) => {
     projectionMapBytes: 64 * 1024 * 1024,
   });
   const session = engine.session("napi-continuity");
+  await assert.rejects(session.remember("RECONSTRUCTION\nAn inferred deployment"), /cannot be remembered verbatim/);
   const remembered = await session.remember("heliotrope native evidence");
   assert.equal(remembered.ok, true);
   assert.equal(remembered.provenance.length, 1);

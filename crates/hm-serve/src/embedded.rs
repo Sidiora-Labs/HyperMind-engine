@@ -133,6 +133,7 @@ impl Session {
 
     pub async fn remember(&self, kind: MemoryKind, content: impl AsRef<str>) -> Result<LSN, Error> {
         let content = content.as_ref();
+        hm_compose::reconstruct::guard_remember(content)?;
         if content.is_empty() {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
@@ -236,7 +237,13 @@ pub fn render(bundle: &ActivationBundle, model: RenderModel) -> Result<RenderedB
                 tier: item.tier,
                 role: "user",
                 authority: RenderAuthority::UntrustedMemory,
-                source_authority: item.authority,
+                source_authority: if hm_compose::reconstruct::is_reconstruction(
+                    &String::from_utf8_lossy(&item.content),
+                ) {
+                    Authority::AssistantGenerated
+                } else {
+                    item.authority
+                },
                 provenance_uri: item.uri.clone(),
                 provenance: item.provenance.clone(),
                 content: String::from_utf8(item.content.clone())

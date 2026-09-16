@@ -82,7 +82,13 @@ pub fn render(
             rendered.items.push(PromptItem {
                 tier: item.tier,
                 role: "user",
-                authority: item.authority,
+                authority: if crate::reconstruct::is_reconstruction(&String::from_utf8_lossy(
+                    &item.content,
+                )) {
+                    Authority::AssistantGenerated
+                } else {
+                    item.authority
+                },
                 provenance_uri: item.uri.clone(),
                 provenance: item.provenance.clone(),
                 content: String::from_utf8(item.content.clone())

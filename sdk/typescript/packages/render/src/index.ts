@@ -78,6 +78,16 @@ export interface RenderOptions {
 
 export class ActivationSafetyError extends Error {}
 
+export function isReconstruction(content: string): boolean {
+  return /^RECONSTRUCTION(?:\s|:|$)/u.test(content.trimStart());
+}
+
+export function assertRememberable(content: string): void {
+  if (isReconstruction(content)) {
+    throw new ActivationSafetyError("RECONSTRUCTION cannot be remembered verbatim");
+  }
+}
+
 function rawWireBytes(content: string): boolean {
   return (
     content.startsWith("NCEV") ||
@@ -107,7 +117,9 @@ export function render(bundle: Bundle, options: RenderOptions = {}): RenderedPro
       .map((item) => {
         return {
           role: "user" as const,
-          authority: item.authority,
+          authority: isReconstruction(item.content)
+            ? "assistant_generated" as const
+            : item.authority,
           trust: "untrusted_memory" as const,
           provenanceUri: item.uri,
           provenance: item.provenance,

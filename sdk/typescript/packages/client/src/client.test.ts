@@ -78,6 +78,7 @@ test("client uses the real daemon and recovers stable sequence history", async (
   });
   context.after(() => client.close());
   const session = client.session("typescript-continuity");
+  await assert.rejects(session.remember("RECONSTRUCTION\nAn inferred deployment"), /cannot be remembered verbatim/);
   const evidence = await session.remember(
     "heliotrope continuity evidence: Alice Smith changed src/main.rs for GH-123",
   );

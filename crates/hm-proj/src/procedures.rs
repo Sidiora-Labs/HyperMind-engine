@@ -127,6 +127,17 @@ impl ProceduresProjection {
             .map(|bytes| decode(&bytes))
             .transpose()
     }
+
+    pub fn list(snapshot: &ReadSnapshot<'_>, limit: usize) -> Result<Vec<ProcedureRecord>, Error> {
+        if !(1..=4096).contains(&limit) {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        snapshot
+            .scan_prefix(ProjectionId::Procedures, &[PROCEDURE_PREFIX], limit)?
+            .into_iter()
+            .map(|entry| decode(&entry.value))
+            .collect()
+    }
 }
 
 fn supported_state(supports: &[ProcedureSupport]) -> ProcedureState {
