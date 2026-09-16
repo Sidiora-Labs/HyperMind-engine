@@ -1302,6 +1302,36 @@
       "file": "crates/hm-eval/src/bench/pipeline.rs"
     },
     {
+      "id": "rust:crates/hm-eval/src/bench/rubric.rs:Compliance",
+      "name": "hm-eval::Compliance",
+      "file": "crates/hm-eval/src/bench/rubric.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/rubric.rs:VerdictFailure",
+      "name": "hm-eval::VerdictFailure",
+      "file": "crates/hm-eval/src/bench/rubric.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/rubric.rs:CriterionGrade",
+      "name": "hm-eval::CriterionGrade",
+      "file": "crates/hm-eval/src/bench/rubric.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/rubric.rs:ProbeGrade",
+      "name": "hm-eval::ProbeGrade",
+      "file": "crates/hm-eval/src/bench/rubric.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/rubric.rs:KindScore",
+      "name": "hm-eval::KindScore",
+      "file": "crates/hm-eval/src/bench/rubric.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/rubric.rs:GradeSummary",
+      "name": "hm-eval::GradeSummary",
+      "file": "crates/hm-eval/src/bench/rubric.rs"
+    },
+    {
       "id": "rust:crates/hm-eval/src/contract/mod.rs:Phase",
       "name": "hm-eval::Phase",
       "file": "crates/hm-eval/src/contract/mod.rs"
@@ -3850,6 +3880,11 @@
       "id": "prompt:connect-long-context@1",
       "name": "connect-long-context@1",
       "file": "prompts/connect-long-context@1.md"
+    },
+    {
+      "id": "prompt:criterion-grade@1",
+      "name": "criterion-grade@1",
+      "file": "prompts/criterion-grade@1.md"
     },
     {
       "id": "prompt:edge-discover@1",

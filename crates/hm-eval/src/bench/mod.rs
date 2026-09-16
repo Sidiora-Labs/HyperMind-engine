@@ -5,3 +5,4 @@ pub mod judge_diagnostic;
 pub mod locomo;
 pub mod longmemeval;
 pub mod pipeline;
+pub mod rubric;

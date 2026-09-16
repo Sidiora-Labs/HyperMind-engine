@@ -5398,6 +5398,139 @@ pub struct MemoryPipeline {
 }
 ```
 
+## hm-eval::Compliance
+
+<a id="rust-crates-hm-eval-src-bench-rubric-rs-compliance"></a>
+
+Source: [`crates/hm-eval/src/bench/rubric.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/rubric.rs).
+
+When to use: Use `Compliance` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub enum Compliance {
+    Full,
+    Partial,
+    None,
+}
+```
+
+## hm-eval::VerdictFailure
+
+<a id="rust-crates-hm-eval-src-bench-rubric-rs-verdictfailure"></a>
+
+Source: [`crates/hm-eval/src/bench/rubric.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/rubric.rs).
+
+When to use: Use `VerdictFailure` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub enum VerdictFailure {
+    EmptyResponse,
+    Unparsable,
+    UnknownCompliance,
+    MissingEvidence,
+}
+```
+
+## hm-eval::CriterionGrade
+
+<a id="rust-crates-hm-eval-src-bench-rubric-rs-criteriongrade"></a>
+
+Source: [`crates/hm-eval/src/bench/rubric.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/rubric.rs).
+
+When to use: Use `CriterionGrade` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct CriterionGrade {
+    pub criterion_index: usize,
+    pub criterion: String,
+    pub compliance: Option<Compliance>,
+    pub evidence: String,
+    pub judge_model: String,
+    pub prompt_id: String,
+    pub response_digest: String,
+    pub failure: Option<String>,
+}
+```
+
+## hm-eval::ProbeGrade
+
+<a id="rust-crates-hm-eval-src-bench-rubric-rs-probegrade"></a>
+
+Source: [`crates/hm-eval/src/bench/rubric.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/rubric.rs).
+
+When to use: Use `ProbeGrade` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ProbeGrade {
+    pub probe_id: String,
+    pub kind: ProbeKind,
+    pub question: String,
+    pub answer: String,
+    pub answer_digest: String,
+    pub grades: Vec<CriterionGrade>,
+    pub graded_criteria: usize,
+    pub judge_failures: usize,
+    pub score: Option<f64>,
+}
+```
+
+## hm-eval::KindScore
+
+<a id="rust-crates-hm-eval-src-bench-rubric-rs-kindscore"></a>
+
+Source: [`crates/hm-eval/src/bench/rubric.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/rubric.rs).
+
+When to use: Use `KindScore` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct KindScore {
+    pub kind: ProbeKind,
+    pub probes: usize,
+    pub scored: usize,
+    pub mean_score: f64,
+    pub judge_failures: usize,
+}
+```
+
+## hm-eval::GradeSummary
+
+<a id="rust-crates-hm-eval-src-bench-rubric-rs-gradesummary"></a>
+
+Source: [`crates/hm-eval/src/bench/rubric.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/rubric.rs).
+
+When to use: Use `GradeSummary` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct GradeSummary {
+    pub probes: usize,
+    pub scored_probes: usize,
+    pub unscored_probes: usize,
+    pub judge_failures: usize,
+    pub mean_score: f64,
+    pub per_kind: Vec<KindScore>,
+    pub judge_model: String,
+    pub prompt_id: String,
+}
+```
+
 ## hm-eval::Phase
 
 <a id="rust-crates-hm-eval-src-contract-mod-rs-phase"></a>
