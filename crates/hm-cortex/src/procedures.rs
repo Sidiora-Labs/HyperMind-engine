@@ -1,7 +1,9 @@
 #![allow(clippy::missing_errors_doc)]
 
 use hm_core::{Error, ErrorCode};
-use hm_schema::events::{Authority, ProcedureMined, ProcedureSupport};
+use hm_schema::events::{
+    Authority, ProcedureImprovementProposed, ProcedureMined, ProcedureSupport,
+};
 use std::collections::BTreeSet;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -90,4 +92,61 @@ pub fn supported(procedure: &ProcedureMined) -> bool {
 #[must_use]
 pub fn can_adopt(procedure: &ProcedureMined, authority: Authority) -> bool {
     supported(procedure) && authority == Authority::UserAsserted
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ProcedureHead {
+    pub procedure_id: Vec<u8>,
+    pub version_lsn: u64,
+    pub strategy: String,
+    pub expected_outcomes: Vec<String>,
+    pub preconditions: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ImprovementDraft {
+    pub strategy: String,
+    pub expected_outcomes: Vec<String>,
+    pub preconditions: Vec<String>,
+    pub rationale: String,
+}
+
+pub fn propose_improvement(
+    proposal_id: &[u8],
+    head: &ProcedureHead,
+    draft: ImprovementDraft,
+    failure_lsns: &[u64],
+) -> Result<ProcedureImprovementProposed, Error> {
+    if proposal_id.is_empty()
+        || head.procedure_id.is_empty()
+        || head.version_lsn == 0
+        || draft.strategy.is_empty()
+        || draft.rationale.is_empty()
+        || draft.expected_outcomes.is_empty()
+        || draft.expected_outcomes.iter().any(String::is_empty)
+        || draft.preconditions.iter().any(String::is_empty)
+        || failure_lsns.is_empty()
+        || failure_lsns.contains(&0)
+    {
+        return Err(Error::new(ErrorCode::InvalidArgument));
+    }
+    if failure_lsns.windows(2).any(|pair| pair[0] >= pair[1]) {
+        return Err(Error::new(ErrorCode::OrderingViolation));
+    }
+    if draft.strategy == head.strategy
+        && draft.expected_outcomes == head.expected_outcomes
+        && draft.preconditions == head.preconditions
+    {
+        return Err(Error::new(ErrorCode::InvalidArgument));
+    }
+    Ok(ProcedureImprovementProposed {
+        proposal_id: proposal_id.to_vec(),
+        procedure_id: head.procedure_id.clone(),
+        base_lsn: head.version_lsn,
+        strategy: draft.strategy,
+        expected_outcomes: draft.expected_outcomes,
+        preconditions: draft.preconditions,
+        rationale: draft.rationale,
+        failure_lsns: failure_lsns.to_vec(),
+    })
 }

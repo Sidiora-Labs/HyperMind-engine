@@ -717,6 +717,16 @@
       "file": "crates/hm-cortex/src/procedures.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/procedures.rs:ProcedureHead",
+      "name": "hm-cortex::ProcedureHead",
+      "file": "crates/hm-cortex/src/procedures.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/procedures.rs:ImprovementDraft",
+      "name": "hm-cortex::ImprovementDraft",
+      "file": "crates/hm-cortex/src/procedures.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/prospective.rs:WakeSignal",
       "name": "hm-cortex::WakeSignal",
       "file": "crates/hm-cortex/src/prospective.rs"

@@ -3006,6 +3006,47 @@ pub struct Episode {
 }
 ```
 
+## hm-cortex::ProcedureHead
+
+<a id="rust-crates-hm-cortex-src-procedures-rs-procedurehead"></a>
+
+Source: [`crates/hm-cortex/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/procedures.rs).
+
+When to use: Use `ProcedureHead` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct ProcedureHead {
+    pub procedure_id: Vec<u8>,
+    pub version_lsn: u64,
+    pub strategy: String,
+    pub expected_outcomes: Vec<String>,
+    pub preconditions: Vec<String>,
+}
+```
+
+## hm-cortex::ImprovementDraft
+
+<a id="rust-crates-hm-cortex-src-procedures-rs-improvementdraft"></a>
+
+Source: [`crates/hm-cortex/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/procedures.rs).
+
+When to use: Use `ImprovementDraft` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct ImprovementDraft {
+    pub strategy: String,
+    pub expected_outcomes: Vec<String>,
+    pub preconditions: Vec<String>,
+    pub rationale: String,
+}
+```
+
 ## hm-cortex::WakeSignal
 
 <a id="rust-crates-hm-cortex-src-prospective-rs-wakesignal"></a>
