@@ -7851,6 +7851,7 @@ pub struct McpToolDispatcher {
     pub embedding_runtime: Option<EmbeddingRuntime>,
     pub reconstruction_runtime: Option<ReconstructionRuntime>,
     pub consolidation_runtime: Option<ConsolidationRuntime>,
+    pub web_source_runtime: Option<tools::websource::WebSourceRuntime>,
 }
 ```
 
@@ -7922,6 +7923,7 @@ pub struct McpServer {
     consolidation_runtime: Option<ConsolidationRuntime>,
     embedding_runtime: Option<EmbeddingRuntime>,
     reconstruction_runtime: Option<ReconstructionRuntime>,
+    web_source_runtime: Option<WebSourceRuntime>,
 }
 ```
 
@@ -8824,6 +8826,23 @@ pub struct VocabularyInput {
 }
 ```
 
+## hm-mcp::RememberSource
+
+<a id="rust-crates-hm-mcp-src-tools-remember-rs-remembersource"></a>
+
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
+
+When to use: Use `RememberSource` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct RememberSource {
+    pub url: String,
+}
+```
+
 ## hm-mcp::RememberInput
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberinput"></a>
@@ -8838,6 +8857,7 @@ Do not use: Do not ignore ok/effect_state, manufacture observed evidence through
 ```rust
 pub struct RememberInput {
     pub conversation: String,
+    #[serde(default)]
     pub content: String,
     pub kind: RememberKind,
     #[serde(default)]
@@ -8850,6 +8870,8 @@ pub struct RememberInput {
     pub sensitivity: Option<SensitivityInput>,
     #[serde(default)]
     pub vocabulary: Option<VocabularyInput>,
+    #[serde(default)]
+    pub source: Option<RememberSource>,
 }
 ```
 
@@ -9071,9 +9093,7 @@ Do not use: Do not ignore ok/effect_state, manufacture observed evidence through
 
 ```rust
 pub struct WebSourceRuntime {
-    policy: CrawlPolicy,
-    transport: Arc<dyn FetchTransport>,
-    last_request: Mutex<HashMap<String, Instant>>,
+    state: Arc<WebSourceState>,
 }
 ```
 

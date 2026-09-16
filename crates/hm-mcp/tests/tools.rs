@@ -34,6 +34,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
             retention: None,
             sensitivity: None,
             vocabulary: None,
+            source: None,
         })
         .await;
     assert!(remembered.ok);
@@ -92,6 +93,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
             retention: None,
             sensitivity: None,
             vocabulary: None,
+            source: None,
         })
         .await;
     assert!(!rejected.ok);

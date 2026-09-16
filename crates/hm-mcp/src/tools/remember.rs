@@ -212,8 +212,14 @@ pub struct VocabularyInput {
 }
 
 #[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
+pub struct RememberSource {
+    pub url: String,
+}
+
+#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
 pub struct RememberInput {
     pub conversation: String,
+    #[serde(default)]
     pub content: String,
     pub kind: RememberKind,
     #[serde(default)]
@@ -226,4 +232,6 @@ pub struct RememberInput {
     pub sensitivity: Option<SensitivityInput>,
     #[serde(default)]
     pub vocabulary: Option<VocabularyInput>,
+    #[serde(default)]
+    pub source: Option<RememberSource>,
 }

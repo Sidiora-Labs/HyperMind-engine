@@ -42,10 +42,11 @@ pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
 pub use tools::reconstruct::ReconstructionRuntime;
 pub use tools::relation::RelationBuildReport;
 pub use tools::remember::{
-    AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberInput, RememberKind, RetentionInput,
-    SensitivityInput, VocabularyInput,
+    AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberInput, RememberKind, RememberSource,
+    RetentionInput, SensitivityInput, VocabularyInput,
 };
 pub use tools::retract::RetractInput;
+pub use tools::websource::WebSourceRuntime;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 const DEFAULT_CHUNK_BYTES: usize = 32 * 1024;
@@ -129,6 +130,7 @@ pub struct McpServer {
     consolidation_runtime: Option<ConsolidationRuntime>,
     embedding_runtime: Option<EmbeddingRuntime>,
     reconstruction_runtime: Option<ReconstructionRuntime>,
+    web_source_runtime: Option<WebSourceRuntime>,
 }
 
 impl McpServer {
@@ -141,6 +143,7 @@ impl McpServer {
             consolidation_runtime: None,
             embedding_runtime: None,
             reconstruction_runtime: None,
+            web_source_runtime: None,
         }
     }
 
@@ -156,6 +159,7 @@ impl McpServer {
             consolidation_runtime: None,
             embedding_runtime: None,
             reconstruction_runtime: None,
+            web_source_runtime: None,
         }
     }
 
@@ -180,6 +184,12 @@ impl McpServer {
     #[must_use]
     pub fn with_reconstruction_runtime(mut self, runtime: ReconstructionRuntime) -> Self {
         self.reconstruction_runtime = Some(runtime);
+        self
+    }
+
+    #[must_use]
+    pub fn with_web_source_runtime(mut self, runtime: tools::websource::WebSourceRuntime) -> Self {
+        self.web_source_runtime = Some(runtime);
         self
     }
 
@@ -214,7 +224,22 @@ impl McpServer {
 
     #[allow(clippy::too_many_lines, clippy::single_match_else)]
     async fn remember_inner(&self, input: RememberInput) -> Result<Envelope, Error> {
-        if input.conversation.is_empty() || input.content.is_empty() {
+        if input.conversation.is_empty() {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        if input.source.is_some() {
+            if !input.content.is_empty() {
+                return Err(Error::new(ErrorCode::InvalidArgument));
+            }
+            return tools::websource::run(
+                &self.actor,
+                self.web_source_runtime.as_ref(),
+                self.embedding_runtime.as_ref(),
+                input,
+            )
+            .await;
+        }
+        if input.content.is_empty() {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
         hm_compose::reconstruct::guard_remember(&input.content)?;
@@ -325,16 +350,16 @@ impl McpServer {
                 .push(format!("hm://{}/lsn/{lsn}", self.actor.actor()));
         }
         if let (Some(runtime), Some(documents)) = (&self.embedding_runtime, embedding_documents) {
-            match self
-                .append_embeddings(
-                    runtime,
-                    documents,
-                    outcome.first_lsn,
-                    conversation,
-                    retention,
-                    sensitivity,
-                )
-                .await
+            match append_embeddings(
+                &self.actor,
+                runtime,
+                documents,
+                outcome.first_lsn,
+                conversation,
+                retention,
+                sensitivity,
+            )
+            .await
             {
                 Ok((first_lsn, last_lsn)) => {
                     envelope.items[0]["embedding_first_lsn"] = json!(first_lsn.get());
@@ -419,70 +444,6 @@ impl McpServer {
                 .to_owned(),
         );
         Ok(result)
-    }
-
-    async fn append_embeddings(
-        &self,
-        runtime: &EmbeddingRuntime,
-        documents: Vec<String>,
-        first_target_lsn: LSN,
-        conversation: ConversationId,
-        retention: Retention,
-        sensitivity: Sensitivity,
-    ) -> Result<(LSN, LSN), Error> {
-        let embeddings = runtime.documents(documents).await?;
-        let count =
-            u32::try_from(embeddings.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
-        let mut events = Vec::with_capacity(embeddings.len());
-        for (index, embedding) in embeddings.into_iter().enumerate() {
-            let index =
-                u32::try_from(index).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
-            let dimension = u32::try_from(embedding.space.dimensions)
-                .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
-            let space_id = tools::remember::space_id(&embedding.space);
-            let model_id = format!(
-                "{}@{}",
-                embedding.space.encoder_id, embedding.space.revision
-            );
-            events.push(IncomingEvent {
-                kind: hm_ledger::frame::EventKind::Embedding,
-                conversation,
-                payload: encode_event_envelope(&EventEnvelope {
-                    schema_version: CURRENT_SCHEMA_VERSION,
-                    payload: EventPayload::Embedding(Box::new(hm_schema::events::Embedding {
-                        target_lsn: first_target_lsn.get() + u64::from(index),
-                        dimension,
-                        quantized: embedding.values,
-                        binary_prefilter: embedding.binary_prefilter,
-                        space_id,
-                    })),
-                    connection_id: None,
-                    client_seq: 0,
-                    client_event_index: index,
-                    client_event_count: count,
-                    origin_actor: 0,
-                    run_id: None,
-                    model_provenance: Some(Box::new(hm_schema::events::ModelProvenance {
-                        model_id,
-                        prompt_id: "embedding/document".to_owned(),
-                        prompt_version: 1,
-                        temperature: 0.0,
-                        call_id: None,
-                        input_tokens: 0,
-                        output_tokens: 0,
-                        cache_read_tokens: 0,
-                        cache_write_tokens: 0,
-                        cost_microusd: 0,
-                    })),
-                    authority: Authority::DerivedInference,
-                    retention,
-                    sensitivity,
-                    event_time_ns: 0,
-                }),
-            });
-        }
-        let outcome = self.actor.append(events).await?;
-        Ok((outcome.first_lsn, outcome.last_lsn))
     }
 
     pub async fn recall_envelope(&self, input: RecallInput) -> Envelope {
@@ -874,6 +835,69 @@ const fn lane_name(lane: RetrievalLane) -> &'static str {
         RetrievalLane::Reconstruct => "reconstruct",
         RetrievalLane::Relation => "relation",
     }
+}
+
+pub(crate) async fn append_embeddings(
+    actor: &ActorEngine,
+    runtime: &EmbeddingRuntime,
+    documents: Vec<String>,
+    first_target_lsn: LSN,
+    conversation: ConversationId,
+    retention: Retention,
+    sensitivity: Sensitivity,
+) -> Result<(LSN, LSN), Error> {
+    let embeddings = runtime.documents(documents).await?;
+    let count =
+        u32::try_from(embeddings.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+    let mut events = Vec::with_capacity(embeddings.len());
+    for (index, embedding) in embeddings.into_iter().enumerate() {
+        let index = u32::try_from(index).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+        let dimension = u32::try_from(embedding.space.dimensions)
+            .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+        let space_id = tools::remember::space_id(&embedding.space);
+        let model_id = format!(
+            "{}@{}",
+            embedding.space.encoder_id, embedding.space.revision
+        );
+        events.push(IncomingEvent {
+            kind: hm_ledger::frame::EventKind::Embedding,
+            conversation,
+            payload: encode_event_envelope(&EventEnvelope {
+                schema_version: CURRENT_SCHEMA_VERSION,
+                payload: EventPayload::Embedding(Box::new(hm_schema::events::Embedding {
+                    target_lsn: first_target_lsn.get() + u64::from(index),
+                    dimension,
+                    quantized: embedding.values,
+                    binary_prefilter: embedding.binary_prefilter,
+                    space_id,
+                })),
+                connection_id: None,
+                client_seq: 0,
+                client_event_index: index,
+                client_event_count: count,
+                origin_actor: 0,
+                run_id: None,
+                model_provenance: Some(Box::new(hm_schema::events::ModelProvenance {
+                    model_id,
+                    prompt_id: "embedding/document".to_owned(),
+                    prompt_version: 1,
+                    temperature: 0.0,
+                    call_id: None,
+                    input_tokens: 0,
+                    output_tokens: 0,
+                    cache_read_tokens: 0,
+                    cache_write_tokens: 0,
+                    cost_microusd: 0,
+                })),
+                authority: Authority::DerivedInference,
+                retention,
+                sensitivity,
+                event_time_ns: 0,
+            }),
+        });
+    }
+    let outcome = actor.append(events).await?;
+    Ok((outcome.first_lsn, outcome.last_lsn))
 }
 
 fn event_content(

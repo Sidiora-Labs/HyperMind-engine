@@ -304,18 +304,29 @@ Do not use: Do not interpret recall as current external-state verification or si
 
 Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/dispatcher.rs).
 
-When to use: Append user statements, delivered assistant output, or external documents with their source-derived authority and retention, or import a versioned vocabulary of terms from an N-Triples source with kind vocabulary. Optional embeddings are configured separately.
+When to use: Append user statements, delivered assistant output, or external documents with their source-derived authority and retention, or import a versioned vocabulary of terms from an N-Triples source with kind vocabulary. Supply "source" instead of "content" to ingest one allowlisted http(s) URL: the response bytes are retained verbatim as a sealed ledger record, the final URL, normalised media type, and digest are recorded, and a textual payload is extracted and chunked as observed text. Optional embeddings are configured separately.
 
-Do not use: Do not store secrets unnecessarily, mark model narrative as tool-observed, or re-ingest reconstructed memory. A vocabulary import declares terms and never merges an existing identity. do_not_store returns a receipt without a ledger mutation.
+Do not use: Do not store secrets unnecessarily, mark model narrative as tool-observed, or re-ingest reconstructed memory. A vocabulary import declares terms and never merges an existing identity. do_not_store returns a receipt without a ledger mutation. Do not send "content" and "source" together, expect a transcript or description from ingestion because no model runs there, or read an unconfigured surface or an unlisted host as a fetch failure; those are kOperationUnavailable and kCapabilityDenied refusals.
 
 
 ```json
-{
-  "conversation": "release-review",
-  "kind": "user",
-  "content": "The release region is eu-central-1.",
-  "retention": "durable"
-}
+[
+  {
+    "conversation": "release-review",
+    "kind": "user",
+    "content": "The release region is eu-central-1.",
+    "retention": "durable"
+  },
+  {
+    "conversation": "release-review",
+    "kind": "document",
+    "source": {
+      "url": "https://example.com/page"
+    },
+    "retention": "durable",
+    "sensitivity": "personal"
+  }
+]
 ```
 
 ## retract

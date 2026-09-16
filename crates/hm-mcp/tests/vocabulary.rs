@@ -46,6 +46,7 @@ fn import(content: &str, vocabulary: Option<VocabularyInput>) -> RememberInput {
         retention: Some(RetentionInput::Durable),
         sensitivity: None,
         vocabulary,
+        source: None,
     }
 }
 

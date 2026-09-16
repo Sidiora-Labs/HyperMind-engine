@@ -1,4 +1,14 @@
-use hm_core::{Error, ErrorCode};
+use crate::tools::remember::{EmbeddingRuntime, RememberInput, RetentionInput, SensitivityInput};
+use crate::tools::webtext;
+use crate::{DEFAULT_CHUNK_BYTES, Envelope};
+use hm_core::{ConversationId, Error, ErrorCode, LSN};
+use hm_schema::event::{CURRENT_SCHEMA_VERSION, encode_event_envelope};
+use hm_schema::events::{
+    Authority, EventEnvelope, EventPayload, MediaRef, ProviderFrame, Retention, Sensitivity,
+    UserMsg,
+};
+use hm_serve::actor::{ActorEngine, IncomingEvent};
+use serde_json::json;
 use std::collections::{HashMap, VecDeque};
 use std::io::Read as _;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, ToSocketAddrs as _};
@@ -7,6 +17,7 @@ use std::time::{Duration, Instant};
 use url::{Host, Url};
 
 pub const MAXIMUM_SOURCE_BYTES: usize = 8 * 1024 * 1024;
+pub const WEB_SOURCE_PROVIDER_LABEL: &str = "hm-web-source@1";
 
 const DEFAULT_MAXIMUM_BYTES: u64 = 2 * 1024 * 1024;
 const DEFAULT_MAXIMUM_REDIRECTS: u64 = 3;
@@ -156,10 +167,15 @@ impl FetchTransport for RecordedFetchTransport {
     }
 }
 
-pub struct WebSourceRuntime {
+struct WebSourceState {
     policy: CrawlPolicy,
     transport: Arc<dyn FetchTransport>,
     last_request: Mutex<HashMap<String, Instant>>,
+}
+
+#[derive(Clone)]
+pub struct WebSourceRuntime {
+    state: Arc<WebSourceState>,
 }
 
 impl WebSourceRuntime {
@@ -171,9 +187,11 @@ impl WebSourceRuntime {
             .maximum_redirects
             .min(u8::try_from(MAXIMUM_REDIRECT_BUDGET).unwrap_or(u8::MAX));
         Self {
-            policy,
-            transport,
-            last_request: Mutex::new(HashMap::new()),
+            state: Arc::new(WebSourceState {
+                policy,
+                transport,
+                last_request: Mutex::new(HashMap::new()),
+            }),
         }
     }
 
@@ -186,38 +204,39 @@ impl WebSourceRuntime {
 
     #[must_use]
     pub fn policy(&self) -> &CrawlPolicy {
-        &self.policy
+        &self.state.policy
     }
 
     pub fn fetch(&self, url: &str) -> Result<FetchedSource, Error> {
-        let requested = validate_target(&self.policy, url)?;
+        let policy = &self.state.policy;
+        let requested = validate_target(policy, url)?;
         let mut current = requested.clone();
         let mut redirects: Vec<String> = Vec::new();
         let mut hops: u8 = 0;
         loop {
             self.await_interval(&current);
-            let response = self.transport.fetch(
+            let response = self.state.transport.fetch(
                 current.as_str(),
-                self.policy.request_timeout_ms,
-                self.policy.maximum_bytes,
+                policy.request_timeout_ms,
+                policy.maximum_bytes,
             )?;
-            let ceiling = u64::try_from(self.policy.maximum_bytes).unwrap_or(u64::MAX);
+            let ceiling = u64::try_from(policy.maximum_bytes).unwrap_or(u64::MAX);
             if response
                 .content_length
                 .is_some_and(|length| length > ceiling)
-                || response.body.len() > self.policy.maximum_bytes
+                || response.body.len() > policy.maximum_bytes
             {
                 return Err(Error::new(ErrorCode::CapacityExceeded));
             }
             if (300..400).contains(&response.status) {
-                if hops >= self.policy.maximum_redirects {
+                if hops >= policy.maximum_redirects {
                     return Err(Error::new(ErrorCode::CapacityExceeded));
                 }
                 let location = response
                     .location
                     .as_deref()
                     .ok_or_else(|| Error::new(ErrorCode::BackendUnavailable))?;
-                let next = validate_redirect(&self.policy, &current, location)?;
+                let next = validate_redirect(policy, &current, location)?;
                 redirects.push(current.to_string());
                 current = next;
                 hops += 1;
@@ -242,8 +261,9 @@ impl WebSourceRuntime {
 
     fn await_interval(&self, target: &Url) {
         let host = target.host_str().unwrap_or_default().to_ascii_lowercase();
-        let interval = Duration::from_millis(self.policy.minimum_interval_ms);
+        let interval = Duration::from_millis(self.state.policy.minimum_interval_ms);
         let mut last_request = self
+            .state
             .last_request
             .lock()
             .unwrap_or_else(PoisonError::into_inner);
@@ -405,4 +425,216 @@ pub fn media_type_of(content_type: Option<&str>) -> String {
         .map(str::trim)
         .filter(|value| !value.is_empty())
         .map_or_else(|| DEFAULT_MEDIA_TYPE.to_owned(), str::to_ascii_lowercase)
+}
+
+#[must_use]
+pub fn media_conversation(digest: &[u8; 32]) -> ConversationId {
+    ConversationId::derive(&format!("hm-media-v1/{}", crate::hex(digest)))
+}
+
+fn observed_envelope(
+    payload: EventPayload,
+    index: u32,
+    count: u32,
+    retention: Retention,
+    sensitivity: Sensitivity,
+) -> EventEnvelope {
+    EventEnvelope {
+        schema_version: CURRENT_SCHEMA_VERSION,
+        payload,
+        connection_id: None,
+        client_seq: 0,
+        client_event_index: index,
+        client_event_count: count,
+        origin_actor: 0,
+        run_id: None,
+        model_provenance: None,
+        authority: Authority::ExternalObserved,
+        retention,
+        sensitivity,
+        event_time_ns: 0,
+    }
+}
+
+#[allow(clippy::too_many_lines, clippy::single_match_else)]
+pub(crate) async fn run(
+    actor: &ActorEngine,
+    runtime: Option<&WebSourceRuntime>,
+    embedding: Option<&EmbeddingRuntime>,
+    input: RememberInput,
+) -> Result<Envelope, Error> {
+    let runtime = runtime
+        .ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?
+        .clone();
+    let source = input
+        .source
+        .as_ref()
+        .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+    if source.url.is_empty() {
+        return Err(Error::new(ErrorCode::InvalidArgument));
+    }
+    if input
+        .anchor
+        .as_ref()
+        .is_some_and(|anchor| anchor.value.is_empty() || anchor.value.len() > 4096)
+    {
+        return Err(Error::new(ErrorCode::InvalidArgument));
+    }
+    let retention: Retention = input.retention.unwrap_or(RetentionInput::Durable).into();
+    let sensitivity: Sensitivity = input
+        .sensitivity
+        .unwrap_or(SensitivityInput::Personal)
+        .into();
+    if retention == Retention::DoNotStore {
+        return Err(Error::new(ErrorCode::InvalidArgument));
+    }
+    let requested = source.url.clone();
+    let fetched = tokio::task::spawn_blocking(move || runtime.fetch(&requested))
+        .await
+        .map_err(|_| Error::new(ErrorCode::OperationUnavailable))??;
+    let extracted = if webtext::is_textual(&fetched.media_type) {
+        Some(webtext::extract_text(&fetched.media_type, &fetched.bytes)?)
+    } else {
+        None
+    };
+    let chunks = match extracted.as_ref() {
+        Some(extracted) => {
+            hm_compose::reconstruct::guard_remember(&extracted.text)?;
+            crate::chunk_text(
+                &extracted.text,
+                input.chunk_bytes.unwrap_or(DEFAULT_CHUNK_BYTES),
+            )?
+        }
+        None => Vec::new(),
+    };
+    let conversation = ConversationId::derive(&input.conversation);
+    let count = u32::try_from(chunks.len().saturating_add(2))
+        .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+    let mut events = Vec::with_capacity(chunks.len() + 2);
+    events.push(IncomingEvent {
+        kind: hm_ledger::frame::EventKind::MediaRef,
+        conversation,
+        payload: encode_event_envelope(&observed_envelope(
+            EventPayload::MediaRef(Box::new(MediaRef {
+                uri: fetched.final_url.clone(),
+                media_type: fetched.media_type.clone(),
+                digest: fetched.digest.to_vec(),
+            })),
+            0,
+            count,
+            retention,
+            sensitivity,
+        )),
+    });
+    events.push(IncomingEvent {
+        kind: hm_ledger::frame::EventKind::ProviderFrame,
+        conversation: media_conversation(&fetched.digest),
+        payload: encode_event_envelope(&observed_envelope(
+            EventPayload::ProviderFrame(Box::new(ProviderFrame {
+                provider: WEB_SOURCE_PROVIDER_LABEL.to_owned(),
+                api_content: fetched.bytes.clone(),
+            })),
+            1,
+            count,
+            retention,
+            sensitivity,
+        )),
+    });
+    for (offset, chunk) in chunks.iter().enumerate() {
+        let index = u32::try_from(offset.saturating_add(2))
+            .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+        events.push(IncomingEvent {
+            kind: hm_ledger::frame::EventKind::UserMsg,
+            conversation,
+            payload: encode_event_envelope(&observed_envelope(
+                EventPayload::UserMsg(Box::new(UserMsg {
+                    content: chunk.as_bytes().to_vec(),
+                })),
+                index,
+                count,
+                retention,
+                sensitivity,
+            )),
+        });
+    }
+    let documents = embedding.map(|_| {
+        chunks
+            .iter()
+            .map(|chunk| (*chunk).to_owned())
+            .collect::<Vec<_>>()
+    });
+    let outcome = actor.append(events).await?;
+    let first_lsn = outcome.first_lsn.get();
+    let media_ref_lsn = first_lsn;
+    let retained_lsn = first_lsn + 1;
+    let text_first_lsn = LSN::new(first_lsn + 2);
+    let mut envelope = Envelope::empty();
+    envelope.items.push(json!({
+        "first_lsn": first_lsn,
+        "last_lsn": outcome.last_lsn.get(),
+        "count": outcome.last_lsn.get() - first_lsn + 1,
+        "media_ref_lsn": media_ref_lsn,
+        "retained_lsn": retained_lsn,
+        "final_url": fetched.final_url,
+        "media_type": fetched.media_type,
+        "digest": crate::hex(&fetched.digest),
+        "bytes": fetched.bytes.len(),
+        "redirects": fetched.redirects,
+        "anchor": input.anchor.as_ref().map(|anchor| json!({
+            "facet": format!("{:?}", anchor.facet).to_lowercase(),
+            "value": anchor.value,
+        })),
+    }));
+    if !chunks.is_empty() {
+        envelope.items[0]["text_first_lsn"] = json!(text_first_lsn.get());
+        envelope.items[0]["text_last_lsn"] = json!(outcome.last_lsn.get());
+    }
+    for lsn in first_lsn..=outcome.last_lsn.get() {
+        envelope
+            .provenance
+            .push(format!("hm://{}/lsn/{lsn}", actor.actor()));
+    }
+    if extracted.is_none() {
+        envelope.gaps.push(json!({
+            "kind": "media_derivation_pending",
+            "media_lsn": media_ref_lsn,
+            "media_type": fetched.media_type,
+        }));
+    }
+    match (embedding, documents) {
+        (Some(runtime), Some(documents)) if !documents.is_empty() => {
+            match crate::append_embeddings(
+                actor,
+                runtime,
+                documents,
+                text_first_lsn,
+                conversation,
+                retention,
+                sensitivity,
+            )
+            .await
+            {
+                Ok((first, last)) => {
+                    envelope.items[0]["embedding_first_lsn"] = json!(first.get());
+                    envelope.items[0]["embedding_last_lsn"] = json!(last.get());
+                    envelope.health["encoder"] = json!(runtime.health());
+                    envelope.health["backlog"] = json!("semantic_ready");
+                }
+                Err(_) => {
+                    envelope.health["encoder"] = json!("semantic_lagging");
+                    envelope.health["backlog"] = json!("semantic_lagging");
+                    envelope.gaps.push(json!({
+                        "kind": "embedding_pending",
+                        "first_lsn": text_first_lsn.get(),
+                        "last_lsn": outcome.last_lsn.get(),
+                    }));
+                    envelope.warnings.push(
+                        "Observation stored; its embedding was not confirmed committed.".to_owned(),
+                    );
+                }
+            }
+        }
+        _ => envelope.health["encoder"] = json!("lexical_only"),
+    }
+    Ok(envelope)
 }

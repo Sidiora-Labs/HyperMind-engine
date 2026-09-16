@@ -154,6 +154,8 @@ impl NativeSession {
                     anchor: options.anchor,
                     retention: options.retention,
                     sensitivity: options.sensitivity,
+                    vocabulary: None,
+                    source: None,
                 })
                 .await,
         )

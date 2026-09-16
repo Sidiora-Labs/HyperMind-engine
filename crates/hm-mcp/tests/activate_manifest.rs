@@ -30,6 +30,7 @@ async fn seeded_server(path: &std::path::Path) -> McpServer {
                 retention: None,
                 sensitivity: None,
                 vocabulary: None,
+                source: None,
             })
             .await;
         assert!(remembered.ok);
@@ -110,6 +111,7 @@ async fn other_verbs_do_not_carry_a_manifest() {
             retention: None,
             sensitivity: None,
             vocabulary: None,
+            source: None,
         })
         .await;
     assert!(remembered.ok);

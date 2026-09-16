@@ -43,6 +43,7 @@ fn remember(content: &str) -> RememberInput {
         retention: None,
         sensitivity: None,
         vocabulary: None,
+        source: None,
     }
 }
 

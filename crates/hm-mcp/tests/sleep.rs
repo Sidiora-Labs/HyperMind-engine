@@ -60,6 +60,7 @@ async fn attest_and_consolidate_complete_real_ledger_lifecycles() {
             retention: None,
             sensitivity: None,
             vocabulary: None,
+            source: None,
         })
         .await;
     let source = remembered.items[0]["first_lsn"].as_u64().unwrap();

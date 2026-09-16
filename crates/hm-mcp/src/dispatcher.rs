@@ -1,4 +1,6 @@
-use crate::{ConsolidationRuntime, EmbeddingRuntime, Envelope, McpServer, ReconstructionRuntime};
+use crate::{
+    ConsolidationRuntime, EmbeddingRuntime, Envelope, McpServer, ReconstructionRuntime, tools,
+};
 use hm_core::{Error, ErrorCode};
 use hm_serve::actor::ActorEngine;
 use hm_serve::uds::ToolDispatcher;
@@ -8,6 +10,7 @@ pub struct McpToolDispatcher {
     pub embedding_runtime: Option<EmbeddingRuntime>,
     pub reconstruction_runtime: Option<ReconstructionRuntime>,
     pub consolidation_runtime: Option<ConsolidationRuntime>,
+    pub web_source_runtime: Option<tools::websource::WebSourceRuntime>,
 }
 
 impl McpToolDispatcher {
@@ -17,6 +20,7 @@ impl McpToolDispatcher {
                 .map_err(|_| Error::new(ErrorCode::InvalidArgument))?,
             reconstruction_runtime: ReconstructionRuntime::from_env()?,
             consolidation_runtime: ConsolidationRuntime::from_env()?,
+            web_source_runtime: tools::websource::WebSourceRuntime::from_env()?,
         })
     }
 
@@ -30,6 +34,9 @@ impl McpToolDispatcher {
         server
             .consolidation_runtime
             .clone_from(&self.consolidation_runtime);
+        server
+            .web_source_runtime
+            .clone_from(&self.web_source_runtime);
         server
     }
 }
