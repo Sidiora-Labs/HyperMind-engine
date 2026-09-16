@@ -45,6 +45,7 @@ async fn anchored_remember_and_entity_near_recall_preserve_policy_fields() {
             sensitivity: Some(SensitivityInput::Public),
             vocabulary: None,
             source: None,
+            derive: None,
         })
         .await;
     assert!(remembered.ok);
@@ -100,6 +101,7 @@ async fn anchored_remember_and_entity_near_recall_preserve_policy_fields() {
             sensitivity: Some(SensitivityInput::Secret),
             vocabulary: None,
             source: None,
+            derive: None,
         })
         .await;
     assert!(discarded.ok);

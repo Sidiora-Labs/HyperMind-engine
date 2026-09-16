@@ -41,6 +41,7 @@ fn import() -> RememberInput {
             source_uri: "file:///vocab/acme-crm.nt".to_owned(),
         }),
         source: None,
+        derive: None,
     }
 }
 

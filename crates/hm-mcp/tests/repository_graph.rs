@@ -37,6 +37,7 @@ fn snapshot_input() -> RememberInput {
         sensitivity: None,
         vocabulary: None,
         source: None,
+        derive: None,
     }
 }
 

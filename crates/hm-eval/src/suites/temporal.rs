@@ -152,6 +152,7 @@ async fn write_fixture(server: &McpServer, fixture: &Fixture) -> Result<(), Erro
             sensitivity: None,
             vocabulary: None,
             source: None,
+            derive: None,
         })
         .await;
     let evidence_lsn = envelope_lsn(&evidence)?;

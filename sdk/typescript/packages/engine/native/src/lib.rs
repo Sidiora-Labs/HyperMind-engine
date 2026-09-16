@@ -156,6 +156,7 @@ impl NativeSession {
                     sensitivity: options.sensitivity,
                     vocabulary: None,
                     source: None,
+                derive: None,
                 })
                 .await,
         )

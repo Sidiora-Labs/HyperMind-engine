@@ -30,6 +30,7 @@ fn evidence_document() -> RememberInput {
         sensitivity: None,
         vocabulary: None,
         source: None,
+        derive: None,
     }
 }
 

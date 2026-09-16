@@ -41,14 +41,15 @@ pub use tools::inspect::{InspectInput, InspectMode};
 pub use tools::intend::{
     AttentionFactorsInput, IntendAction, IntendCloseReason, IntendInput, WakeTriggerInput,
 };
+pub use tools::media::MediaRuntime;
 pub use tools::outcome::OutcomeInput;
 pub use tools::predict::{ExpectedPredicateInput, PredicateKindInput, PredictInput};
 pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
 pub use tools::reconstruct::ReconstructionRuntime;
 pub use tools::relation::RelationBuildReport;
 pub use tools::remember::{
-    AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberInput, RememberKind, RememberSource,
-    RetentionInput, SensitivityInput, VocabularyInput,
+    AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberDerive, RememberInput, RememberKind,
+    RememberSource, RetentionInput, SensitivityInput, VocabularyInput,
 };
 pub use tools::retract::RetractInput;
 pub use tools::websource::WebSourceRuntime;
@@ -136,6 +137,7 @@ pub struct McpServer {
     embedding_runtime: Option<EmbeddingRuntime>,
     reconstruction_runtime: Option<ReconstructionRuntime>,
     web_source_runtime: Option<WebSourceRuntime>,
+    media_runtime: Option<MediaRuntime>,
 }
 
 impl McpServer {
@@ -149,6 +151,7 @@ impl McpServer {
             embedding_runtime: None,
             reconstruction_runtime: None,
             web_source_runtime: None,
+            media_runtime: None,
         }
     }
 
@@ -165,6 +168,7 @@ impl McpServer {
             embedding_runtime: None,
             reconstruction_runtime: None,
             web_source_runtime: None,
+            media_runtime: None,
         }
     }
 
@@ -195,6 +199,12 @@ impl McpServer {
     #[must_use]
     pub fn with_web_source_runtime(mut self, runtime: tools::websource::WebSourceRuntime) -> Self {
         self.web_source_runtime = Some(runtime);
+        self
+    }
+
+    #[must_use]
+    pub fn with_media_runtime(mut self, runtime: tools::media::MediaRuntime) -> Self {
+        self.media_runtime = Some(runtime);
         self
     }
 
@@ -232,10 +242,22 @@ impl McpServer {
         if input.conversation.is_empty() {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
+        let selectors = usize::from(!input.content.is_empty())
+            + usize::from(input.source.is_some())
+            + usize::from(input.derive.is_some());
+        if selectors != 1 {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        if input.derive.is_some() {
+            return tools::media::run(
+                &self.actor,
+                self.media_runtime.as_ref(),
+                self.embedding_runtime.as_ref(),
+                input,
+            )
+            .await;
+        }
         if input.source.is_some() {
-            if !input.content.is_empty() {
-                return Err(Error::new(ErrorCode::InvalidArgument));
-            }
             return tools::websource::run(
                 &self.actor,
                 self.web_source_runtime.as_ref(),
@@ -243,9 +265,6 @@ impl McpServer {
                 input,
             )
             .await;
-        }
-        if input.content.is_empty() {
-            return Err(Error::new(ErrorCode::InvalidArgument));
         }
         hm_compose::reconstruct::guard_remember(&input.content)?;
         if input

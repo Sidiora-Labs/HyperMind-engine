@@ -59,6 +59,7 @@ async fn remember(server: &McpServer, content: &str) {
             sensitivity: None,
             vocabulary: None,
             source: None,
+            derive: None,
         })
         .await;
     assert!(envelope.ok, "{envelope:?}");

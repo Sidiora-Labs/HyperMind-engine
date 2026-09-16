@@ -47,6 +47,7 @@ fn import(content: &str, vocabulary: Option<VocabularyInput>) -> RememberInput {
         sensitivity: None,
         vocabulary,
         source: None,
+        derive: None,
     }
 }
 

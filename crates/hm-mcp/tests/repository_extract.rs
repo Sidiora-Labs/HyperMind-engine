@@ -55,6 +55,7 @@ fn snapshot_input(content: &str) -> RememberInput {
         sensitivity: None,
         vocabulary: None,
         source: None,
+        derive: None,
     }
 }
 

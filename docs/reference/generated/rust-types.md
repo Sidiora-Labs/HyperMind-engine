@@ -8496,6 +8496,7 @@ pub struct McpToolDispatcher {
     pub reconstruction_runtime: Option<ReconstructionRuntime>,
     pub consolidation_runtime: Option<ConsolidationRuntime>,
     pub web_source_runtime: Option<tools::websource::WebSourceRuntime>,
+    pub media_runtime: Option<tools::media::MediaRuntime>,
 }
 ```
 
@@ -8606,6 +8607,7 @@ pub struct McpServer {
     embedding_runtime: Option<EmbeddingRuntime>,
     reconstruction_runtime: Option<ReconstructionRuntime>,
     web_source_runtime: Option<WebSourceRuntime>,
+    media_runtime: Option<MediaRuntime>,
 }
 ```
 
@@ -9229,6 +9231,23 @@ pub struct IntendInput {
 }
 ```
 
+## hm-mcp::MediaRuntime
+
+<a id="rust-crates-hm-mcp-src-tools-media-rs-mediaruntime"></a>
+
+Source: [`crates/hm-mcp/src/tools/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/media.rs).
+
+When to use: Use `MediaRuntime` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct MediaRuntime {
+    pub provider: Arc<dyn MediaProvider>,
+}
+```
+
 ## hm-mcp::OutcomeInput
 
 <a id="rust-crates-hm-mcp-src-tools-outcome-rs-outcomeinput"></a>
@@ -9600,6 +9619,23 @@ pub struct RememberSource {
 }
 ```
 
+## hm-mcp::RememberDerive
+
+<a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberderive"></a>
+
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
+
+When to use: Use `RememberDerive` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct RememberDerive {
+    pub media_lsn: u64,
+}
+```
+
 ## hm-mcp::RememberInput
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberinput"></a>
@@ -9629,6 +9665,8 @@ pub struct RememberInput {
     pub vocabulary: Option<VocabularyInput>,
     #[serde(default)]
     pub source: Option<RememberSource>,
+    #[serde(default)]
+    pub derive: Option<RememberDerive>,
 }
 ```
 

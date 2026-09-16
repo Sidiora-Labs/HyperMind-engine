@@ -304,9 +304,9 @@ Do not use: Do not interpret recall as current external-state verification or si
 
 Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/dispatcher.rs).
 
-When to use: Append user statements, delivered assistant output, or external documents with their source-derived authority and retention, or import a versioned vocabulary of terms from an N-Triples source with kind vocabulary, or ingest a caller-supplied repository snapshot document with kind repository_snapshot, stored line aligned as externally observed provider frames and reported with its shard count and snapshot digest. Supply "source" instead of "content" to ingest one allowlisted http(s) URL: the response bytes are retained verbatim as a sealed ledger record, the final URL, normalised media type, and digest are recorded, and a textual payload is extracted and chunked as observed text. Optional embeddings are configured separately.
+When to use: Append user statements, delivered assistant output, or external documents with their source-derived authority and retention, or import a versioned vocabulary of terms from an N-Triples source with kind vocabulary, or ingest a caller-supplied repository snapshot document with kind repository_snapshot, stored line aligned as externally observed provider frames and reported with its shard count and snapshot digest. Supply "source" instead of "content" to ingest one allowlisted http(s) URL: the response bytes are retained verbatim as a sealed ledger record, the final URL, normalised media type, and digest are recorded, and a textual payload is extracted and chunked as observed text. Supply "derive" with the LSN of a MediaRef instead of "content" or "source" to run the explicit media derivation job over bytes already retained: the transcript or description is appended in the caller’s conversation as derived_inference text carrying the derivation’s model provenance, and is reported with its derived LSN range, kind, model, prompt id, language, and confidence. Optional embeddings are configured separately.
 
-Do not use: Do not store secrets unnecessarily, mark model narrative as tool-observed, or re-ingest reconstructed memory. A vocabulary import declares terms and never merges an existing identity. do_not_store returns a receipt without a ledger mutation. Do not send "content" and "source" together, expect a transcript or description from ingestion because no model runs there, or read an unconfigured surface or an unlisted host as a fetch failure; those are kOperationUnavailable and kCapabilityDenied refusals. The engine ingests the repository snapshot the caller supplies and never runs, downloads, or installs a program that produces one; a snapshot line longer than chunk_bytes or a document needing more than 256 shards is refused rather than truncated, and snapshot shards are never embedded.
+Do not use: Do not store secrets unnecessarily, mark model narrative as tool-observed, or re-ingest reconstructed memory. A vocabulary import declares terms and never merges an existing identity. do_not_store returns a receipt without a ledger mutation. Do not send "content" and "source" together, expect a transcript or description from ingestion because no model runs there, or read an unconfigured surface or an unlisted host as a fetch failure; those are kOperationUnavailable and kCapabilityDenied refusals. The engine ingests the repository snapshot the caller supplies and never runs, downloads, or installs a program that produces one; a snapshot line longer than chunk_bytes or a document needing more than 256 shards is refused rather than truncated, and snapshot shards are never embedded. Do not send "derive" with "content" or "source", expect derivation during ingestion, recall, or activation, since the job is reachable only through remember, or call it twice for the same media expecting a second provider call: an already derived record is returned from the media catalogue unchanged. A derive naming an LSN that is absent, is not a MediaRef, or is not external_observed is kInvalidArgument; an unconfigured media runtime, a media type with no supported modality, retained bytes no longer matching the recorded digest, and a model refusal are kOperationUnavailable; a malformed provider response is kSchemaInvalid; and a refused derivation appends nothing.
 
 
 ```json
@@ -325,6 +325,13 @@ Do not use: Do not store secrets unnecessarily, mark model narrative as tool-obs
     },
     "retention": "durable",
     "sensitivity": "personal"
+  },
+  {
+    "conversation": "release-review",
+    "kind": "document",
+    "derive": {
+      "media_lsn": 42
+    }
   }
 ]
 ```

@@ -2232,6 +2232,11 @@
       "file": "crates/hm-mcp/src/tools/intend.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/tools/media.rs:MediaRuntime",
+      "name": "hm-mcp::MediaRuntime",
+      "file": "crates/hm-mcp/src/tools/media.rs"
+    },
+    {
       "id": "rust:crates/hm-mcp/src/tools/outcome.rs:OutcomeInput",
       "name": "hm-mcp::OutcomeInput",
       "file": "crates/hm-mcp/src/tools/outcome.rs"
@@ -2314,6 +2319,11 @@
     {
       "id": "rust:crates/hm-mcp/src/tools/remember.rs:RememberSource",
       "name": "hm-mcp::RememberSource",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:RememberDerive",
+      "name": "hm-mcp::RememberDerive",
       "file": "crates/hm-mcp/src/tools/remember.rs"
     },
     {
@@ -6317,67 +6327,67 @@
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:4823:recall",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:4853:recall",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::recall",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:5942:activate",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:5972:activate",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::activate",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:6527:checkpoint",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:6557:checkpoint",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::checkpoint",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7167:intend",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7197:intend",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::intend",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7475:predict",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7505:predict",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::predict",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7786:outcome",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7816:outcome",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::outcome",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:8097:inspect",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:8127:inspect",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::inspect",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:8345:bind",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:8375:bind",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::bind",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9058:attest",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9088:attest",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::attest",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9303:consolidate",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9333:consolidate",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::consolidate",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9563:believe",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9593:believe",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::believe",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:10781:retract",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:10811:retract",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::retract",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:11349:as_of",
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:11379:as_of",
       "name": "sdk/typescript/packages/engine/native/src/lib.rs::as_of",
       "file": "sdk/typescript/packages/engine/native/src/lib.rs"
     },

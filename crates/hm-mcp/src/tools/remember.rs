@@ -217,6 +217,11 @@ pub struct RememberSource {
     pub url: String,
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, schemars::JsonSchema)]
+pub struct RememberDerive {
+    pub media_lsn: u64,
+}
+
 #[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
 pub struct RememberInput {
     pub conversation: String,
@@ -235,4 +240,6 @@ pub struct RememberInput {
     pub vocabulary: Option<VocabularyInput>,
     #[serde(default)]
     pub source: Option<RememberSource>,
+    #[serde(default)]
+    pub derive: Option<RememberDerive>,
 }

@@ -10,6 +10,7 @@ pub mod forget;
 pub mod graph;
 pub mod inspect;
 pub mod intend;
+pub mod media;
 pub mod outcome;
 pub mod predict;
 pub mod recall;

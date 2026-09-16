@@ -29,6 +29,7 @@ pub async fn run() -> Result<ProtectedResult, Error> {
             sensitivity: None,
             vocabulary: None,
             source: None,
+            derive: None,
         })
         .await;
     let evidence_lsn = evidence

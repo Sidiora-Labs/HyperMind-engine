@@ -59,6 +59,7 @@ async fn intend_and_bind_append_real_continuity_events() {
             sensitivity: None,
             vocabulary: None,
             source: None,
+            derive: None,
         })
         .await;
     assert!(evidence.ok);

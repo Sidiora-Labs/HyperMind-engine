@@ -49,6 +49,7 @@ async fn seeded_actor(path: &Path) -> ActorEngine {
                 sensitivity: None,
                 vocabulary: None,
                 source: None,
+                derive: None,
             })
             .await;
         assert!(remembered.ok, "{remembered:?}");

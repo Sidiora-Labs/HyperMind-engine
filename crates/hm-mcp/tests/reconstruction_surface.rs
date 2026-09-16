@@ -198,6 +198,7 @@ async fn reconstruction_uses_verified_anchors_and_cannot_be_remembered() {
                 sensitivity: None,
                 vocabulary: None,
                 source: None,
+                derive: None,
             })
             .await;
         assert!(!remembered.ok);
