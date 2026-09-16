@@ -9,6 +9,7 @@ use crate::protocol::{FrameParser, encode_frame};
 use crate::requests::{asof, attest, checkpoint, subscribe};
 use hm_compose::canonical::canonical_bytes;
 use hm_compose::tokens::FallbackWeights;
+use hm_core::telemetry::{Attribute, SpanKind, SpanOutcome};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN};
 use hm_ledger::frame::EventKind;
 use hm_schema::protocol::{
@@ -103,7 +104,10 @@ impl UdsServer {
         tokio::pin!(shutdown);
         loop {
             tokio::select! {
-                () = &mut shutdown => return Ok(()),
+                () = &mut shutdown => {
+                    crate::telemetry::flush();
+                    return Ok(());
+                }
                 accepted = self.listener.accept() => {
                     let (stream, _) = accepted.map_err(|_| Error::new(ErrorCode::ReadFailed))?;
                     let Ok(permit) = permits.clone().try_acquire_owned() else {
@@ -283,6 +287,15 @@ async fn handle_connection(
                 continue;
             }
             let operation = request_name(&request_payload);
+            let verb = tool_verb(&request_payload);
+            let actor_label = current.actor.map_or(-1, i64::from);
+            let mut span = hm_core::telemetry::start_span(SpanKind::Request, "hypermind.request");
+            if let Some(span) = span.as_mut() {
+                span.attribute(Attribute::Text("hypermind.request.kind", operation));
+                span.attribute(Attribute::Text("hypermind.request.verb", verb));
+                span.attribute(Attribute::Integer("hypermind.actor", actor_label));
+                span.attribute(Attribute::Boolean("hypermind.request.mutation", mutation));
+            }
             let started = std::time::Instant::now();
             let response = handle_request(
                 current,
@@ -295,6 +308,13 @@ async fn handle_connection(
             )
             .await;
             latencies.observe(operation, started.elapsed());
+            if let Some(span) = span {
+                span.finish(if response.is_ok() {
+                    SpanOutcome::Ok
+                } else {
+                    SpanOutcome::Error
+                });
+            }
             let envelope = match response {
                 Ok(payload) => response_wire(current.proto_version, payload.0, payload.1, true)?,
                 Err((request_id, error)) => {
@@ -594,6 +614,16 @@ async fn handle_request(
         _ => return Err((request_id, Error::new(ErrorCode::OperationUnavailable))),
     };
     Ok((request_id, payload))
+}
+
+fn tool_verb(request: &RequestPayload) -> &'static str {
+    let RequestPayload::ToolRequest(value) = request else {
+        return "none";
+    };
+    crate::rest::VERBS
+        .into_iter()
+        .find(|verb| *verb == value.verb.as_str())
+        .unwrap_or("unknown")
 }
 
 const fn request_name(request: &RequestPayload) -> &'static str {

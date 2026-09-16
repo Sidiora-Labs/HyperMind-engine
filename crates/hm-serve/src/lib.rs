@@ -12,6 +12,7 @@ pub mod leases;
 pub mod protocol;
 pub mod requests;
 pub mod rest;
+pub mod telemetry;
 pub mod uds;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

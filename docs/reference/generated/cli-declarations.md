@@ -148,6 +148,10 @@ enum Command {
         model: Option<models::Choice>,
         #[arg(long)]
         models_directory: Option<PathBuf>,
+        #[arg(long)]
+        telemetry_file: Option<PathBuf>,
+        #[arg(long)]
+        telemetry_service: Option<String>,
     },
     Doctor {
         #[arg(long)]

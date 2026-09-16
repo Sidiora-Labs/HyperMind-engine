@@ -1425,6 +1425,129 @@ Do not use: Do not interchange actor, conversation, entity, and log identities o
 pub struct ConversationId([u8; 16]);
 ```
 
+## hm-core::SpanKind
+
+<a id="rust-crates-hm-core-src-telemetry-rs-spankind"></a>
+
+Source: [`crates/hm-core/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/telemetry.rs).
+
+When to use: Use `SpanKind` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
+
+Do not use: Do not interchange actor, conversation, entity, and log identities or interpret wall time as ledger order.
+
+
+```rust
+pub enum SpanKind {
+    Request,
+    Ingestion,
+    Extraction,
+    Provider,
+}
+```
+
+## hm-core::SpanOutcome
+
+<a id="rust-crates-hm-core-src-telemetry-rs-spanoutcome"></a>
+
+Source: [`crates/hm-core/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/telemetry.rs).
+
+When to use: Use `SpanOutcome` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
+
+Do not use: Do not interchange actor, conversation, entity, and log identities or interpret wall time as ledger order.
+
+
+```rust
+pub enum SpanOutcome {
+    Ok,
+    Error,
+}
+```
+
+## hm-core::Attribute
+
+<a id="rust-crates-hm-core-src-telemetry-rs-attribute"></a>
+
+Source: [`crates/hm-core/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/telemetry.rs).
+
+When to use: Use `Attribute` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
+
+Do not use: Do not interchange actor, conversation, entity, and log identities or interpret wall time as ledger order.
+
+
+```rust
+pub enum Attribute {
+    Integer(&'static str, i64),
+    Text(&'static str, &'static str),
+    Boolean(&'static str, bool),
+}
+```
+
+## hm-core::SpanRecord
+
+<a id="rust-crates-hm-core-src-telemetry-rs-spanrecord"></a>
+
+Source: [`crates/hm-core/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/telemetry.rs).
+
+When to use: Use `SpanRecord` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
+
+Do not use: Do not interchange actor, conversation, entity, and log identities or interpret wall time as ledger order.
+
+
+```rust
+pub struct SpanRecord {
+    pub kind: SpanKind,
+    pub name: &'static str,
+    pub trace_id: [u8; 16],
+    pub span_id: [u8; 8],
+    pub start_unix_nanos: u128,
+    pub duration_nanos: u64,
+    pub outcome: SpanOutcome,
+    pub attributes: Vec<Attribute>,
+}
+```
+
+## hm-core::SpanSink
+
+<a id="rust-crates-hm-core-src-telemetry-rs-spansink"></a>
+
+Source: [`crates/hm-core/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/telemetry.rs).
+
+When to use: Use `SpanSink` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
+
+Do not use: Do not interchange actor, conversation, entity, and log identities or interpret wall time as ledger order.
+
+
+```rust
+pub trait SpanSink: Send + Sync {
+    fn enabled(&self) -> bool;
+    fn record(&self, span: &SpanRecord);
+    fn flush(&self);
+}
+```
+
+## hm-core::SpanBuilder
+
+<a id="rust-crates-hm-core-src-telemetry-rs-spanbuilder"></a>
+
+Source: [`crates/hm-core/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/telemetry.rs).
+
+When to use: Use `SpanBuilder` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
+
+Do not use: Do not interchange actor, conversation, entity, and log identities or interpret wall time as ledger order.
+
+
+```rust
+pub struct SpanBuilder {
+    kind: SpanKind,
+    name: &'static str,
+    trace_id: [u8; 16],
+    span_id: [u8; 8],
+    start_unix_nanos: u128,
+    started: Instant,
+    attributes: Vec<Attribute>,
+}
+```
+
 ## hm-cortex::AdjudicationConflict
 
 <a id="rust-crates-hm-cortex-src-adjudicate-rs-adjudicationconflict"></a>
@@ -10666,6 +10789,42 @@ pub struct RestServer {
     listener: TcpListener,
     gateway: Gateway,
     acceptor: TlsAcceptor,
+}
+```
+
+## hm-serve::TelemetryMode
+
+<a id="rust-crates-hm-serve-src-telemetry-rs-telemetrymode"></a>
+
+Source: [`crates/hm-serve/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/telemetry.rs).
+
+When to use: Use `TelemetryMode` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub enum TelemetryMode {
+    #[default]
+    Off,
+    File,
+}
+```
+
+## hm-serve::FileSpanSink
+
+<a id="rust-crates-hm-serve-src-telemetry-rs-filespansink"></a>
+
+Source: [`crates/hm-serve/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/telemetry.rs).
+
+When to use: Use `FileSpanSink` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct FileSpanSink {
+    state: Mutex<SinkState>,
 }
 ```
 

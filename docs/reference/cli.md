@@ -19,4 +19,6 @@ Do not use: embedded commands against a live owner, destructive operations witho
 | `archive pack/verify` | Package the native transfer stream with a signed manifest over an owned-member allowlist; verification needs no decryption key and accepts a pinned public key. |
 | `verify ACTOR_DIRECTORY ACTOR CHECKPOINT PUBLIC_KEY` | Offline sealed-log proof; pin the public key independently. |
 
+`serve --telemetry-file PATH` is the only way to turn span export on; there is no environment variable, no configuration key, and no default that enables it. When the flag is present the daemon appends one OpenTelemetry OTLP/JSON record per line to that owner-only file, optionally labelled by `--telemetry-service NAME`, and flushes it before the listeners stop. Span attributes are metadata only by construction: keys and string values are fixed compile-time constants, so no memory content, query text, conversation identifier, capability token, model name, or filesystem path can appear in an exported span.
+
 Provider-dependent operations may be unavailable without a configured runtime. Packaging commands are documented after their parser exists; source presence is not a release claim.

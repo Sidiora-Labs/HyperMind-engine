@@ -327,6 +327,36 @@
       "file": "crates/hm-core/src/ids.rs"
     },
     {
+      "id": "rust:crates/hm-core/src/telemetry.rs:SpanKind",
+      "name": "hm-core::SpanKind",
+      "file": "crates/hm-core/src/telemetry.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/telemetry.rs:SpanOutcome",
+      "name": "hm-core::SpanOutcome",
+      "file": "crates/hm-core/src/telemetry.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/telemetry.rs:Attribute",
+      "name": "hm-core::Attribute",
+      "file": "crates/hm-core/src/telemetry.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/telemetry.rs:SpanRecord",
+      "name": "hm-core::SpanRecord",
+      "file": "crates/hm-core/src/telemetry.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/telemetry.rs:SpanSink",
+      "name": "hm-core::SpanSink",
+      "file": "crates/hm-core/src/telemetry.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/telemetry.rs:SpanBuilder",
+      "name": "hm-core::SpanBuilder",
+      "file": "crates/hm-core/src/telemetry.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/adjudicate.rs:AdjudicationConflict",
       "name": "hm-cortex::AdjudicationConflict",
       "file": "crates/hm-cortex/src/adjudicate.rs"
@@ -2590,6 +2620,16 @@
       "id": "rust:crates/hm-serve/src/rest/mod.rs:RestServer",
       "name": "hm-serve::RestServer",
       "file": "crates/hm-serve/src/rest/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/telemetry.rs:TelemetryMode",
+      "name": "hm-serve::TelemetryMode",
+      "file": "crates/hm-serve/src/telemetry.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/telemetry.rs:FileSpanSink",
+      "name": "hm-serve::FileSpanSink",
+      "file": "crates/hm-serve/src/telemetry.rs"
     },
     {
       "id": "rust:crates/hm-serve/src/uds.rs:ToolDispatcher",

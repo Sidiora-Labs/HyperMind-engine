@@ -69,6 +69,10 @@ enum Command {
         model: Option<models::Choice>,
         #[arg(long)]
         models_directory: Option<PathBuf>,
+        #[arg(long)]
+        telemetry_file: Option<PathBuf>,
+        #[arg(long)]
+        telemetry_service: Option<String>,
     },
     Doctor {
         #[arg(long)]
@@ -246,6 +250,8 @@ async fn execute(command: Command) -> Result<Value> {
             remote,
             model,
             models_directory,
+            telemetry_file,
+            telemetry_service,
         } => {
             let tls = remote.load_tls()?;
             if init_if_missing && !config.try_exists()? {
@@ -277,7 +283,19 @@ async fn execute(command: Command) -> Result<Value> {
                 )
                 .await?;
             }
-            serve::run(load(&config)?, remote, tls).await
+            let telemetry_mode = if telemetry_file.is_some() {
+                hm_serve::telemetry::TelemetryMode::File
+            } else {
+                hm_serve::telemetry::TelemetryMode::Off
+            };
+            hm_serve::telemetry::configure(
+                telemetry_mode,
+                telemetry_file.as_deref(),
+                telemetry_service.as_deref().unwrap_or("hypermind"),
+            )?;
+            let served = serve::run(load(&config)?, remote, tls).await;
+            hm_serve::telemetry::flush();
+            served
         }
         Command::Doctor {
             config,
