@@ -189,6 +189,7 @@ pub(crate) const fn schema_kind(kind: EventKind) -> Option<event::EventKind> {
         EventKind::ProcedureMined => event::EventKind::ProcedureMined,
         EventKind::ProcedureRevised => event::EventKind::ProcedureRevised,
         EventKind::ProcedureAdopted => event::EventKind::ProcedureAdopted,
+        EventKind::VocabularyImported => event::EventKind::VocabularyImported,
         EventKind::Assertion
         | EventKind::Consolidation
         | EventKind::Embedding

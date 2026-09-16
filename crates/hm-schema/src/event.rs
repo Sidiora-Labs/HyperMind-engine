@@ -7,7 +7,8 @@ use crate::events::{
     ExpectedPredicate, IntentionCancelled, IntentionFired, IntentionSet, LoopCloseReason,
     LoopClosed, MemoryFaded, MemoryMerged, MemoryMinted, MemoryRevised, Outcome, OutcomeObserved,
     Predicted, ProcedureAdopted, ProcedureMined, ProcedureRevised, ProcedureSupport,
-    ProposedAssertion, ProvenanceRange, Retract, Reviewed, ToolResult, WakeTrigger,
+    ProposedAssertion, ProvenanceRange, Retract, Reviewed, ToolResult, VocabularyImported,
+    VocabularyTerm, WakeTrigger,
 };
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
@@ -18,6 +19,9 @@ use crate::validate::authority::{validate_observed_evidence, validate_optional_o
 pub const CURRENT_SCHEMA_VERSION: u16 = 2;
 pub const MAXIMUM_EVENT_BYTES: usize = 16 * 1024 * 1024;
 pub const MAXIMUM_IDENTIFIER_BYTES: usize = 4096;
+pub const MAXIMUM_VOCABULARY_TERMS: usize = 4096;
+pub const MAXIMUM_VOCABULARY_ALIASES: usize = 32;
+pub const MAXIMUM_VOCABULARY_NAME_BYTES: usize = 512;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Boundary {
@@ -72,6 +76,7 @@ pub enum EventKind {
     ProcedureMined = 41,
     ProcedureRevised = 42,
     ProcedureAdopted = 43,
+    VocabularyImported = 44,
 }
 
 impl EventKind {
@@ -158,6 +163,7 @@ impl EventKind {
                     | Self::ProcedureMined
                     | Self::ProcedureRevised
                     | Self::ProcedureAdopted
+                    | Self::VocabularyImported
             )
     }
 
@@ -240,6 +246,7 @@ impl TryFrom<u8> for EventKind {
             41 => Ok(Self::ProcedureMined),
             42 => Ok(Self::ProcedureRevised),
             43 => Ok(Self::ProcedureAdopted),
+            44 => Ok(Self::VocabularyImported),
             _ => Err(()),
         }
     }
@@ -376,6 +383,9 @@ fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Er
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
     if kind == EventKind::ProcedureAdopted && envelope.authority != Authority::UserAsserted {
+        return Err(Error::new(ErrorCode::ProtectedTypeWrite));
+    }
+    if kind == EventKind::VocabularyImported && envelope.authority != Authority::UserAsserted {
         return Err(Error::new(ErrorCode::ProtectedTypeWrite));
     }
     Ok(())
@@ -516,6 +526,7 @@ fn validate_payload(
         EventPayload::ProcedureMined(value) => validate_procedure_mined(value),
         EventPayload::ProcedureRevised(value) => validate_procedure_revised(value),
         EventPayload::ProcedureAdopted(value) => validate_procedure_adopted(value),
+        EventPayload::VocabularyImported(value) => validate_vocabulary_imported(value),
     }
 }
 
@@ -701,6 +712,45 @@ fn validate_procedure_adopted(value: &ProcedureAdopted) -> Result<(), Error> {
     } else {
         Err(Error::new(ErrorCode::SchemaInvalid))
     }
+}
+
+fn validate_vocabulary_imported(value: &VocabularyImported) -> Result<(), Error> {
+    if !bounded_identifier(&value.vocabulary_id)
+        || value.version == 0
+        || value.source_uri.is_empty()
+        || value.source_media_type.is_empty()
+        || value.source_digest.len() != 32
+        || value.terms.is_empty()
+        || value.terms.len() > MAXIMUM_VOCABULARY_TERMS
+        || !value.terms.iter().all(valid_vocabulary_term)
+        || value
+            .terms
+            .windows(2)
+            .any(|pair| pair[0].term_id >= pair[1].term_id)
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn valid_vocabulary_term(term: &VocabularyTerm) -> bool {
+    bounded_vocabulary_name(&term.term_id)
+        && bounded_vocabulary_name(&term.canonical_name)
+        && term
+            .parent_term_id
+            .as_deref()
+            .is_none_or(bounded_vocabulary_name)
+        && term.aliases.as_deref().is_none_or(|aliases| {
+            aliases.len() <= MAXIMUM_VOCABULARY_ALIASES
+                && aliases
+                    .iter()
+                    .all(|alias| bounded_vocabulary_name(alias.as_str()))
+        })
+}
+
+fn bounded_vocabulary_name(value: &str) -> bool {
+    !value.is_empty() && value.len() <= MAXIMUM_VOCABULARY_NAME_BYTES
 }
 
 fn validate_external_payload(payload: &EventPayload) -> Result<(), Error> {
@@ -1135,5 +1185,6 @@ fn payload_kind(payload: &EventPayload) -> EventKind {
         EventPayload::ProcedureMined(_) => EventKind::ProcedureMined,
         EventPayload::ProcedureRevised(_) => EventKind::ProcedureRevised,
         EventPayload::ProcedureAdopted(_) => EventKind::ProcedureAdopted,
+        EventPayload::VocabularyImported(_) => EventKind::VocabularyImported,
     }
 }

@@ -28485,10 +28485,1214 @@ mod root {
                 }
             }
 
+            /// The enum `VocabularyCategory` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `VocabularyCategory` in the file `schemas/events.fbs:467`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum VocabularyCategory {
+                /// The variant `entity_type` in the enum `VocabularyCategory`
+                EntityType = 0,
+
+                /// The variant `entity_instance` in the enum `VocabularyCategory`
+                EntityInstance = 1,
+
+                /// The variant `relation` in the enum `VocabularyCategory`
+                Relation = 2,
+            }
+
+            impl VocabularyCategory {
+                /// Array containing all valid variants of VocabularyCategory
+                pub const ENUM_VALUES: [Self; 3] =
+                    [Self::EntityType, Self::EntityInstance, Self::Relation];
+            }
+
+            impl ::core::convert::TryFrom<u8> for VocabularyCategory {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(VocabularyCategory::EntityType),
+                        1 => ::core::result::Result::Ok(VocabularyCategory::EntityInstance),
+                        2 => ::core::result::Result::Ok(VocabularyCategory::Relation),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<VocabularyCategory> for u8 {
+                #[inline]
+                fn from(value: VocabularyCategory) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for VocabularyCategory {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<VocabularyCategory> for VocabularyCategory {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<VocabularyCategory> for VocabularyCategory {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> VocabularyCategory {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<VocabularyCategory, VocabularyCategory> for VocabularyCategory {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &VocabularyCategory,
+                ) -> ::core::option::Option<VocabularyCategory> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<VocabularyCategory> for VocabularyCategory {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<VocabularyCategory> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for VocabularyCategory {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for VocabularyCategory {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "VocabularyCategory",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<VocabularyCategory> for VocabularyCategory {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
+            /// The table `VocabularyTerm` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `VocabularyTerm` in the file `schemas/events.fbs:469`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct VocabularyTerm {
+                /// The field `term_id` in the table `VocabularyTerm`
+                pub term_id: ::planus::alloc::string::String,
+                /// The field `canonical_name` in the table `VocabularyTerm`
+                pub canonical_name: ::planus::alloc::string::String,
+                /// The field `category` in the table `VocabularyTerm`
+                pub category: self::VocabularyCategory,
+                /// The field `parent_term_id` in the table `VocabularyTerm`
+                pub parent_term_id: ::core::option::Option<::planus::alloc::string::String>,
+                /// The field `aliases` in the table `VocabularyTerm`
+                pub aliases: ::core::option::Option<
+                    ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                >,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for VocabularyTerm {
+                fn default() -> Self {
+                    Self {
+                        term_id: ::core::default::Default::default(),
+                        canonical_name: ::core::default::Default::default(),
+                        category: self::VocabularyCategory::EntityType,
+                        parent_term_id: ::core::default::Default::default(),
+                        aliases: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl VocabularyTerm {
+                /// Creates a [VocabularyTermBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> VocabularyTermBuilder<()> {
+                    VocabularyTermBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_term_id: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_canonical_name: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_category: impl ::planus::WriteAsDefault<
+                        self::VocabularyCategory,
+                        self::VocabularyCategory,
+                    >,
+                    field_parent_term_id: impl ::planus::WriteAsOptional<
+                        ::planus::Offset<::core::primitive::str>,
+                    >,
+                    field_aliases: impl ::planus::WriteAsOptional<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_term_id = field_term_id.prepare(builder);
+                    let prepared_canonical_name = field_canonical_name.prepare(builder);
+                    let prepared_category =
+                        field_category.prepare(builder, &self::VocabularyCategory::EntityType);
+                    let prepared_parent_term_id = field_parent_term_id.prepare(builder);
+                    let prepared_aliases = field_aliases.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<14> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(1);
+                    if prepared_parent_term_id.is_some() {
+                        table_writer.write_entry::<::planus::Offset<str>>(3);
+                    }
+                    if prepared_aliases.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(4);
+                    }
+                    if prepared_category.is_some() {
+                        table_writer.write_entry::<self::VocabularyCategory>(2);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_term_id);
+                            object_writer.write::<_, _, 4>(&prepared_canonical_name);
+                            if let ::core::option::Option::Some(prepared_parent_term_id) =
+                                prepared_parent_term_id
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_parent_term_id);
+                            }
+                            if let ::core::option::Option::Some(prepared_aliases) = prepared_aliases
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_aliases);
+                            }
+                            if let ::core::option::Option::Some(prepared_category) =
+                                prepared_category
+                            {
+                                object_writer.write::<_, _, 1>(&prepared_category);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<VocabularyTerm>> for VocabularyTerm {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyTerm> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<VocabularyTerm>> for VocabularyTerm {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<VocabularyTerm>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<VocabularyTerm> for VocabularyTerm {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyTerm> {
+                    VocabularyTerm::create(
+                        builder,
+                        &self.term_id,
+                        &self.canonical_name,
+                        self.category,
+                        &self.parent_term_id,
+                        &self.aliases,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [VocabularyTerm] type.
+            ///
+            /// Can be created using the [VocabularyTerm::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct VocabularyTermBuilder<State>(State);
+
+            impl VocabularyTermBuilder<()> {
+                /// Setter for the [`term_id` field](VocabularyTerm#structfield.term_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn term_id<T0>(self, value: T0) -> VocabularyTermBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    VocabularyTermBuilder((value,))
+                }
+            }
+
+            impl<T0> VocabularyTermBuilder<(T0,)> {
+                /// Setter for the [`canonical_name` field](VocabularyTerm#structfield.canonical_name).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn canonical_name<T1>(self, value: T1) -> VocabularyTermBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0,) = self.0;
+                    VocabularyTermBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> VocabularyTermBuilder<(T0, T1)> {
+                /// Setter for the [`category` field](VocabularyTerm#structfield.category).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn category<T2>(self, value: T2) -> VocabularyTermBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<
+                        self::VocabularyCategory,
+                        self::VocabularyCategory,
+                    >,
+                {
+                    let (v0, v1) = self.0;
+                    VocabularyTermBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`category` field](VocabularyTerm#structfield.category) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn category_as_default(
+                    self,
+                ) -> VocabularyTermBuilder<(T0, T1, ::planus::DefaultValue)> {
+                    self.category(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> VocabularyTermBuilder<(T0, T1, T2)> {
+                /// Setter for the [`parent_term_id` field](VocabularyTerm#structfield.parent_term_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn parent_term_id<T3>(
+                    self,
+                    value: T3,
+                ) -> VocabularyTermBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    VocabularyTermBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`parent_term_id` field](VocabularyTerm#structfield.parent_term_id) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn parent_term_id_as_null(self) -> VocabularyTermBuilder<(T0, T1, T2, ())> {
+                    self.parent_term_id(())
+                }
+            }
+
+            impl<T0, T1, T2, T3> VocabularyTermBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`aliases` field](VocabularyTerm#structfield.aliases).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn aliases<T4>(self, value: T4) -> VocabularyTermBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    VocabularyTermBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`aliases` field](VocabularyTerm#structfield.aliases) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn aliases_as_null(self) -> VocabularyTermBuilder<(T0, T1, T2, T3, ())> {
+                    self.aliases(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> VocabularyTermBuilder<(T0, T1, T2, T3, T4)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [VocabularyTerm].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyTerm>
+                where
+                    Self: ::planus::WriteAsOffset<VocabularyTerm>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<self::VocabularyCategory, self::VocabularyCategory>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<str>]>>,
+                > ::planus::WriteAs<::planus::Offset<VocabularyTerm>>
+                for VocabularyTermBuilder<(T0, T1, T2, T3, T4)>
+            {
+                type Prepared = ::planus::Offset<VocabularyTerm>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyTerm> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<self::VocabularyCategory, self::VocabularyCategory>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<str>]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<VocabularyTerm>>
+                for VocabularyTermBuilder<(T0, T1, T2, T3, T4)>
+            {
+                type Prepared = ::planus::Offset<VocabularyTerm>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<VocabularyTerm>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<self::VocabularyCategory, self::VocabularyCategory>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<str>]>>,
+                > ::planus::WriteAsOffset<VocabularyTerm>
+                for VocabularyTermBuilder<(T0, T1, T2, T3, T4)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyTerm> {
+                    let (v0, v1, v2, v3, v4) = &self.0;
+                    VocabularyTerm::create(builder, v0, v1, v2, v3, v4)
+                }
+            }
+
+            /// Reference to a deserialized [VocabularyTerm].
+            #[derive(Copy, Clone)]
+            pub struct VocabularyTermRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> VocabularyTermRef<'a> {
+                /// Getter for the [`term_id` field](VocabularyTerm#structfield.term_id).
+                #[inline]
+                pub fn term_id(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(0, "VocabularyTerm", "term_id")
+                }
+
+                /// Getter for the [`canonical_name` field](VocabularyTerm#structfield.canonical_name).
+                #[inline]
+                pub fn canonical_name(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(1, "VocabularyTerm", "canonical_name")
+                }
+
+                /// Getter for the [`category` field](VocabularyTerm#structfield.category).
+                #[inline]
+                pub fn category(&self) -> ::planus::Result<self::VocabularyCategory> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "VocabularyTerm", "category")?
+                            .unwrap_or(self::VocabularyCategory::EntityType),
+                    )
+                }
+
+                /// Getter for the [`parent_term_id` field](VocabularyTerm#structfield.parent_term_id).
+                #[inline]
+                pub fn parent_term_id(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<&'a ::core::primitive::str>>
+                {
+                    self.0.access(3, "VocabularyTerm", "parent_term_id")
+                }
+
+                /// Getter for the [`aliases` field](VocabularyTerm#structfield.aliases).
+                #[inline]
+                pub fn aliases(
+                    &self,
+                ) -> ::planus::Result<
+                    ::core::option::Option<
+                        ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                    >,
+                > {
+                    self.0.access(4, "VocabularyTerm", "aliases")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for VocabularyTermRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("VocabularyTermRef");
+                    f.field("term_id", &self.term_id());
+                    f.field("canonical_name", &self.canonical_name());
+                    f.field("category", &self.category());
+                    if let ::core::option::Option::Some(field_parent_term_id) =
+                        self.parent_term_id().transpose()
+                    {
+                        f.field("parent_term_id", &field_parent_term_id);
+                    }
+                    if let ::core::option::Option::Some(field_aliases) = self.aliases().transpose()
+                    {
+                        f.field("aliases", &field_aliases);
+                    }
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<VocabularyTermRef<'a>> for VocabularyTerm {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: VocabularyTermRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        term_id: ::core::convert::Into::into(value.term_id()?),
+                        canonical_name: ::core::convert::Into::into(value.canonical_name()?),
+                        category: ::core::convert::TryInto::try_into(value.category()?)?,
+                        parent_term_id: value.parent_term_id()?.map(::core::convert::Into::into),
+                        aliases: if let ::core::option::Option::Some(aliases) = value.aliases()? {
+                            ::core::option::Option::Some(aliases.to_vec_result()?)
+                        } else {
+                            ::core::option::Option::None
+                        },
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for VocabularyTermRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for VocabularyTermRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[VocabularyTermRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<VocabularyTerm>> for VocabularyTerm {
+                type Value = ::planus::Offset<VocabularyTerm>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<VocabularyTerm>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for VocabularyTermRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[VocabularyTermRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `VocabularyImported` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `VocabularyImported` in the file `schemas/events.fbs:477`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct VocabularyImported {
+                /// The field `vocabulary_id` in the table `VocabularyImported`
+                pub vocabulary_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `version` in the table `VocabularyImported`
+                pub version: u16,
+                /// The field `source_uri` in the table `VocabularyImported`
+                pub source_uri: ::planus::alloc::string::String,
+                /// The field `source_media_type` in the table `VocabularyImported`
+                pub source_media_type: ::planus::alloc::string::String,
+                /// The field `source_digest` in the table `VocabularyImported`
+                pub source_digest: ::planus::alloc::vec::Vec<u8>,
+                /// The field `terms` in the table `VocabularyImported`
+                pub terms: ::planus::alloc::vec::Vec<self::VocabularyTerm>,
+                /// The field `ignored_triples` in the table `VocabularyImported`
+                pub ignored_triples: u32,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for VocabularyImported {
+                fn default() -> Self {
+                    Self {
+                        vocabulary_id: ::core::default::Default::default(),
+                        version: 0,
+                        source_uri: ::core::default::Default::default(),
+                        source_media_type: ::core::default::Default::default(),
+                        source_digest: ::core::default::Default::default(),
+                        terms: ::core::default::Default::default(),
+                        ignored_triples: 0,
+                    }
+                }
+            }
+
+            impl VocabularyImported {
+                /// Creates a [VocabularyImportedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> VocabularyImportedBuilder<()> {
+                    VocabularyImportedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_vocabulary_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_version: impl ::planus::WriteAsDefault<u16, u16>,
+                    field_source_uri: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_source_media_type: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_source_digest: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_terms: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::VocabularyTerm>]>,
+                    >,
+                    field_ignored_triples: impl ::planus::WriteAsDefault<u32, u32>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_vocabulary_id = field_vocabulary_id.prepare(builder);
+                    let prepared_version = field_version.prepare(builder, &0);
+                    let prepared_source_uri = field_source_uri.prepare(builder);
+                    let prepared_source_media_type = field_source_media_type.prepare(builder);
+                    let prepared_source_digest = field_source_digest.prepare(builder);
+                    let prepared_terms = field_terms.prepare(builder);
+                    let prepared_ignored_triples = field_ignored_triples.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<18> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(2);
+                    table_writer.write_entry::<::planus::Offset<str>>(3);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(4);
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::VocabularyTerm>]>>(
+                            5,
+                        );
+                    if prepared_ignored_triples.is_some() {
+                        table_writer.write_entry::<u32>(6);
+                    }
+                    if prepared_version.is_some() {
+                        table_writer.write_entry::<u16>(1);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_vocabulary_id);
+                            object_writer.write::<_, _, 4>(&prepared_source_uri);
+                            object_writer.write::<_, _, 4>(&prepared_source_media_type);
+                            object_writer.write::<_, _, 4>(&prepared_source_digest);
+                            object_writer.write::<_, _, 4>(&prepared_terms);
+                            if let ::core::option::Option::Some(prepared_ignored_triples) =
+                                prepared_ignored_triples
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_ignored_triples);
+                            }
+                            if let ::core::option::Option::Some(prepared_version) = prepared_version
+                            {
+                                object_writer.write::<_, _, 2>(&prepared_version);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<VocabularyImported>> for VocabularyImported {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyImported> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<VocabularyImported>> for VocabularyImported {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<VocabularyImported>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<VocabularyImported> for VocabularyImported {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyImported> {
+                    VocabularyImported::create(
+                        builder,
+                        &self.vocabulary_id,
+                        self.version,
+                        &self.source_uri,
+                        &self.source_media_type,
+                        &self.source_digest,
+                        &self.terms,
+                        self.ignored_triples,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [VocabularyImported] type.
+            ///
+            /// Can be created using the [VocabularyImported::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct VocabularyImportedBuilder<State>(State);
+
+            impl VocabularyImportedBuilder<()> {
+                /// Setter for the [`vocabulary_id` field](VocabularyImported#structfield.vocabulary_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn vocabulary_id<T0>(self, value: T0) -> VocabularyImportedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    VocabularyImportedBuilder((value,))
+                }
+            }
+
+            impl<T0> VocabularyImportedBuilder<(T0,)> {
+                /// Setter for the [`version` field](VocabularyImported#structfield.version).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn version<T1>(self, value: T1) -> VocabularyImportedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<u16, u16>,
+                {
+                    let (v0,) = self.0;
+                    VocabularyImportedBuilder((v0, value))
+                }
+
+                /// Sets the [`version` field](VocabularyImported#structfield.version) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn version_as_default(
+                    self,
+                ) -> VocabularyImportedBuilder<(T0, ::planus::DefaultValue)> {
+                    self.version(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> VocabularyImportedBuilder<(T0, T1)> {
+                /// Setter for the [`source_uri` field](VocabularyImported#structfield.source_uri).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_uri<T2>(self, value: T2) -> VocabularyImportedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1) = self.0;
+                    VocabularyImportedBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> VocabularyImportedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`source_media_type` field](VocabularyImported#structfield.source_media_type).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_media_type<T3>(
+                    self,
+                    value: T3,
+                ) -> VocabularyImportedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    VocabularyImportedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> VocabularyImportedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`source_digest` field](VocabularyImported#structfield.source_digest).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_digest<T4>(
+                    self,
+                    value: T4,
+                ) -> VocabularyImportedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    VocabularyImportedBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> VocabularyImportedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`terms` field](VocabularyImported#structfield.terms).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn terms<T5>(
+                    self,
+                    value: T5,
+                ) -> VocabularyImportedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::VocabularyTerm>]>,
+                    >,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    VocabularyImportedBuilder((v0, v1, v2, v3, v4, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> VocabularyImportedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`ignored_triples` field](VocabularyImported#structfield.ignored_triples).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn ignored_triples<T6>(
+                    self,
+                    value: T6,
+                ) -> VocabularyImportedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    VocabularyImportedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+
+                /// Sets the [`ignored_triples` field](VocabularyImported#structfield.ignored_triples) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn ignored_triples_as_default(
+                    self,
+                ) -> VocabularyImportedBuilder<(T0, T1, T2, T3, T4, T5, ::planus::DefaultValue)>
+                {
+                    self.ignored_triples(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> VocabularyImportedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [VocabularyImported].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyImported>
+                where
+                    Self: ::planus::WriteAsOffset<VocabularyImported>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u16, u16>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::VocabularyTerm>]>>,
+                    T6: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAs<::planus::Offset<VocabularyImported>>
+                for VocabularyImportedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<VocabularyImported>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyImported> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u16, u16>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::VocabularyTerm>]>>,
+                    T6: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAsOptional<::planus::Offset<VocabularyImported>>
+                for VocabularyImportedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<VocabularyImported>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<VocabularyImported>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u16, u16>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::VocabularyTerm>]>>,
+                    T6: ::planus::WriteAsDefault<u32, u32>,
+                > ::planus::WriteAsOffset<VocabularyImported>
+                for VocabularyImportedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<VocabularyImported> {
+                    let (v0, v1, v2, v3, v4, v5, v6) = &self.0;
+                    VocabularyImported::create(builder, v0, v1, v2, v3, v4, v5, v6)
+                }
+            }
+
+            /// Reference to a deserialized [VocabularyImported].
+            #[derive(Copy, Clone)]
+            pub struct VocabularyImportedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> VocabularyImportedRef<'a> {
+                /// Getter for the [`vocabulary_id` field](VocabularyImported#structfield.vocabulary_id).
+                #[inline]
+                pub fn vocabulary_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "VocabularyImported", "vocabulary_id")
+                }
+
+                /// Getter for the [`version` field](VocabularyImported#structfield.version).
+                #[inline]
+                pub fn version(&self) -> ::planus::Result<u16> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(1, "VocabularyImported", "version")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`source_uri` field](VocabularyImported#structfield.source_uri).
+                #[inline]
+                pub fn source_uri(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(2, "VocabularyImported", "source_uri")
+                }
+
+                /// Getter for the [`source_media_type` field](VocabularyImported#structfield.source_media_type).
+                #[inline]
+                pub fn source_media_type(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(3, "VocabularyImported", "source_media_type")
+                }
+
+                /// Getter for the [`source_digest` field](VocabularyImported#structfield.source_digest).
+                #[inline]
+                pub fn source_digest(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(4, "VocabularyImported", "source_digest")
+                }
+
+                /// Getter for the [`terms` field](VocabularyImported#structfield.terms).
+                #[inline]
+                pub fn terms(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<self::VocabularyTermRef<'a>>>,
+                > {
+                    self.0.access_required(5, "VocabularyImported", "terms")
+                }
+
+                /// Getter for the [`ignored_triples` field](VocabularyImported#structfield.ignored_triples).
+                #[inline]
+                pub fn ignored_triples(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(6, "VocabularyImported", "ignored_triples")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for VocabularyImportedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("VocabularyImportedRef");
+                    f.field("vocabulary_id", &self.vocabulary_id());
+                    f.field("version", &self.version());
+                    f.field("source_uri", &self.source_uri());
+                    f.field("source_media_type", &self.source_media_type());
+                    f.field("source_digest", &self.source_digest());
+                    f.field("terms", &self.terms());
+                    f.field("ignored_triples", &self.ignored_triples());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<VocabularyImportedRef<'a>> for VocabularyImported {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: VocabularyImportedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        vocabulary_id: value.vocabulary_id()?.to_vec(),
+                        version: ::core::convert::TryInto::try_into(value.version()?)?,
+                        source_uri: ::core::convert::Into::into(value.source_uri()?),
+                        source_media_type: ::core::convert::Into::into(value.source_media_type()?),
+                        source_digest: value.source_digest()?.to_vec(),
+                        terms: value.terms()?.to_vec_result()?,
+                        ignored_triples: ::core::convert::TryInto::try_into(
+                            value.ignored_triples()?,
+                        )?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for VocabularyImportedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for VocabularyImportedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[VocabularyImportedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<VocabularyImported>> for VocabularyImported {
+                type Value = ::planus::Offset<VocabularyImported>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<VocabularyImported>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for VocabularyImportedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[VocabularyImportedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:467`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:487`
             #[derive(
                 Clone,
                 Debug,
@@ -28629,6 +29833,9 @@ mod root {
 
                 /// The variant of type `ProcedureAdopted` in the union `EventPayload`
                 ProcedureAdopted(::planus::alloc::boxed::Box<self::ProcedureAdopted>),
+
+                /// The variant of type `VocabularyImported` in the union `EventPayload`
+                VocabularyImported(::planus::alloc::boxed::Box<self::VocabularyImported>),
             }
 
             impl EventPayload {
@@ -28981,6 +30188,14 @@ mod root {
                 ) -> ::planus::UnionOffset<Self> {
                     ::planus::UnionOffset::new(43, value.prepare(builder).downcast())
                 }
+
+                #[inline]
+                pub fn create_vocabulary_imported(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::VocabularyImported>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(44, value.prepare(builder).downcast())
+                }
             }
 
             impl ::planus::WriteAsUnion<EventPayload> for EventPayload {
@@ -29049,6 +30264,9 @@ mod root {
                         }
                         Self::ProcedureAdopted(value) => {
                             Self::create_procedure_adopted(builder, value)
+                        }
+                        Self::VocabularyImported(value) => {
+                            Self::create_vocabulary_imported(builder, value)
                         }
                     }
                 }
@@ -29581,6 +30799,18 @@ mod root {
                 ) -> EventPayloadBuilder<::planus::Initialized<43, T>>
                 where
                     T: ::planus::WriteAsOffset<self::ProcedureAdopted>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`VocabularyImported` variant](EventPayload#variant.VocabularyImported).
+                #[inline]
+                pub fn vocabulary_imported<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<44, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::VocabularyImported>,
                 {
                     EventPayloadBuilder(::planus::Initialized(value))
                 }
@@ -30718,6 +31948,32 @@ mod root {
                     ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
                 }
             }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<44, T>>
+            where
+                T: ::planus::WriteAsOffset<self::VocabularyImported>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(44, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<44, T>>
+            where
+                T: ::planus::WriteAsOffset<self::VocabularyImported>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
 
             /// Reference to a deserialized [EventPayload].
             #[derive(Copy, Clone, Debug)]
@@ -30765,6 +32021,7 @@ mod root {
                 ProcedureMined(self::ProcedureMinedRef<'a>),
                 ProcedureRevised(self::ProcedureRevisedRef<'a>),
                 ProcedureAdopted(self::ProcedureAdoptedRef<'a>),
+                VocabularyImported(self::VocabularyImportedRef<'a>),
             }
 
             impl<'a> ::core::convert::TryFrom<EventPayloadRef<'a>> for EventPayload {
@@ -31029,6 +32286,12 @@ mod root {
                                 ::core::convert::TryFrom::try_from(value)?,
                             ))
                         }
+
+                        EventPayloadRef::VocabularyImported(value) => {
+                            Self::VocabularyImported(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
                     })
                 }
             }
@@ -31169,6 +32432,9 @@ mod root {
                         43 => ::core::result::Result::Ok(Self::ProcedureAdopted(
                             ::planus::TableRead::from_buffer(buffer, field_offset)?,
                         )),
+                        44 => ::core::result::Result::Ok(Self::VocabularyImported(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
                         _ => ::core::result::Result::Err(
                             ::planus::errors::ErrorKind::UnknownUnionTag { tag },
                         ),
@@ -31183,7 +32449,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:513`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:534`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]

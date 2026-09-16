@@ -4705,6 +4705,7 @@ pub enum EventKind {
     ProcedureMined = 41,
     ProcedureRevised = 42,
     ProcedureAdopted = 43,
+    VocabularyImported = 44,
 }
 ```
 
@@ -8686,6 +8687,7 @@ pub enum EventKind {
     ProcedureMined = 41,
     ProcedureRevised = 42,
     ProcedureAdopted = 43,
+    VocabularyImported = 44,
 }
 ```
 

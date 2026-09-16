@@ -1518,6 +1518,8 @@ name = "hm-schema"
 version = "0.1.0"
 dependencies = [
  "hm-core",
+ "hm-cortex",
+ "hm-ledger",
  "planus",
  "serde",
 ]

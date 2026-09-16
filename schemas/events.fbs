@@ -464,6 +464,26 @@ table ProcedureAdopted {
   procedure_lsn:ulong;
 }
 
+enum VocabularyCategory : ubyte { entity_type, entity_instance, relation }
+
+table VocabularyTerm {
+  term_id:string (required);
+  canonical_name:string (required);
+  category:VocabularyCategory;
+  parent_term_id:string;
+  aliases:[string];
+}
+
+table VocabularyImported {
+  vocabulary_id:[ubyte] (required);
+  version:ushort;
+  source_uri:string (required);
+  source_media_type:string (required);
+  source_digest:[ubyte] (required);
+  terms:[VocabularyTerm] (required);
+  ignored_triples:uint;
+}
+
 union EventPayload {
   UserMsg,
   DeliveredMsg,
@@ -507,7 +527,8 @@ union EventPayload {
   OutcomeObserved,
   ProcedureMined,
   ProcedureRevised,
-  ProcedureAdopted
+  ProcedureAdopted,
+  VocabularyImported
 }
 
 table EventEnvelope {

@@ -11,6 +11,10 @@ hm-core = { path = "../hm-core" }
 planus = "=1.3.0"
 serde = { version = "1.0.228", features = ["derive"] }
 
+[dev-dependencies]
+hm-cortex = { path = "../hm-cortex" }
+hm-ledger = { path = "../hm-ledger" }
+
 [lints.rust]
 unsafe_code = "allow"
 

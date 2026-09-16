@@ -2787,6 +2787,21 @@
       "file": "schemas/events.fbs"
     },
     {
+      "id": "schema:schemas/events.fbs:VocabularyCategory",
+      "name": "events.fbs::VocabularyCategory",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:VocabularyTerm",
+      "name": "events.fbs::VocabularyTerm",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:VocabularyImported",
+      "name": "events.fbs::VocabularyImported",
+      "file": "schemas/events.fbs"
+    },
+    {
       "id": "schema:schemas/events.fbs:EventPayload",
       "name": "events.fbs::EventPayload",
       "file": "schemas/events.fbs"

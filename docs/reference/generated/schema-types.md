@@ -1534,6 +1534,65 @@ table ProcedureAdopted {
 }
 ```
 
+## events.fbs::VocabularyCategory
+
+<a id="schema-schemas-events-fbs-vocabularycategory"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Vocabulary Category when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+enum VocabularyCategory : ubyte { entity_type, entity_instance, relation }
+```
+
+## events.fbs::VocabularyTerm
+
+<a id="schema-schemas-events-fbs-vocabularyterm"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Vocabulary Term when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table VocabularyTerm {
+  term_id:string (required);
+  canonical_name:string (required);
+  category:VocabularyCategory;
+  parent_term_id:string;
+  aliases:[string];
+}
+```
+
+## events.fbs::VocabularyImported
+
+<a id="schema-schemas-events-fbs-vocabularyimported"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Vocabulary Imported when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table VocabularyImported {
+  vocabulary_id:[ubyte] (required);
+  version:ushort;
+  source_uri:string (required);
+  source_media_type:string (required);
+  source_digest:[ubyte] (required);
+  terms:[VocabularyTerm] (required);
+  ignored_triples:uint;
+}
+```
+
 ## events.fbs::EventPayload
 
 <a id="schema-schemas-events-fbs-eventpayload"></a>
@@ -1589,7 +1648,8 @@ union EventPayload {
   OutcomeObserved,
   ProcedureMined,
   ProcedureRevised,
-  ProcedureAdopted
+  ProcedureAdopted,
+  VocabularyImported
 }
 ```
 
