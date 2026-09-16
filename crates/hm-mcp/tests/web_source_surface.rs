@@ -77,6 +77,7 @@ fn source_input(conversation: &str, url: &str) -> RememberInput {
         derive: None,
         source_delivery: None,
         source_settlement: None,
+        document: None,
     }
 }
 

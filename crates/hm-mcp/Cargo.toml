@@ -19,6 +19,7 @@ blake3 = "1.8.2"
 hm-compose = { path = "../hm-compose" }
 hm-core = { path = "../hm-core" }
 hm-cortex = { path = "../hm-cortex" }
+hm-docs = { path = "../hm-docs" }
 hm-embed = { path = "../hm-embed" }
 hm-index = { path = "../hm-index" }
 hm-ledger = { path = "../hm-ledger" }

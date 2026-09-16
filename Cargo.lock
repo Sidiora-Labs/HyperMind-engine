@@ -1673,6 +1673,7 @@ dependencies = [
  "hm-compose",
  "hm-core",
  "hm-cortex",
+ "hm-docs",
  "hm-embed",
  "hm-index",
  "hm-ledger",

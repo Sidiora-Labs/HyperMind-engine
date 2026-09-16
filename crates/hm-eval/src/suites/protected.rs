@@ -33,6 +33,7 @@ pub async fn run() -> Result<ProtectedResult, Error> {
             derive: None,
             source_delivery: None,
             source_settlement: None,
+            document: None,
         })
         .await;
     let evidence_lsn = evidence

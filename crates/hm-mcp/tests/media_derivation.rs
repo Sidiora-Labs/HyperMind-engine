@@ -162,6 +162,7 @@ fn derive_input(media_lsn: u64) -> RememberInput {
         derive: Some(RememberDerive { media_lsn }),
         source_delivery: None,
         source_settlement: None,
+        document: None,
     }
 }
 

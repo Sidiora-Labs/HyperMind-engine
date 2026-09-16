@@ -5,6 +5,7 @@ pub mod bind;
 pub mod connector;
 pub mod consolidate;
 pub mod dispute;
+pub mod document;
 pub(crate) mod evidence;
 pub mod forget;
 pub mod graph;

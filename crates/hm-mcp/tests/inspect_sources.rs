@@ -45,6 +45,7 @@ async fn seeded(path: &std::path::Path) -> McpServer {
                 derive: None,
                 source_delivery: None,
                 source_settlement: None,
+                document: None,
             })
             .await;
         assert!(stored.ok, "remember failed: {:?}", stored.items);

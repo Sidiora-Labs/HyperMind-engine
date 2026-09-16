@@ -58,6 +58,7 @@ fn snapshot_input(content: &str) -> RememberInput {
         derive: None,
         source_delivery: None,
         source_settlement: None,
+        document: None,
     }
 }
 

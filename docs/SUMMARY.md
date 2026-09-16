@@ -7,6 +7,7 @@
   - [Time and beliefs](concepts/time.md)
   - [Consolidation](concepts/consolidation.md)
   - [Repository graph](concepts/repository-graph.md)
+  - [Documents](concepts/documents.md)
   - [Anticipation](concepts/anticipation.md)
 - [Operations and recovery](guides/operations.md)
   - [Deployment](guides/deployment.md)

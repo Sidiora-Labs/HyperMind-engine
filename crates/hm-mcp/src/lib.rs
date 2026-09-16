@@ -48,7 +48,8 @@ pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
 pub use tools::reconstruct::ReconstructionRuntime;
 pub use tools::relation::RelationBuildReport;
 pub use tools::remember::{
-    AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberDerive, RememberInput, RememberKind,
+    AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberDerive, RememberDocument, RememberInput,
+    RememberKind,
     RememberSource, RetentionInput, SensitivityInput, VocabularyInput,
 };
 pub use tools::retract::RetractInput;
@@ -254,9 +255,23 @@ impl McpServer {
         }
         let selectors = usize::from(!input.content.is_empty())
             + usize::from(input.source.is_some())
-            + usize::from(input.derive.is_some());
+            + usize::from(input.derive.is_some())
+            + usize::from(input.document.is_some());
         if selectors != 1 {
             return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        if let Some(document) = input.document.as_ref() {
+            return tools::document::run(
+                &self.actor,
+                ConversationId::derive(&input.conversation),
+                document,
+                input.retention.unwrap_or(RetentionInput::Durable).into(),
+                input
+                    .sensitivity
+                    .unwrap_or(SensitivityInput::Personal)
+                    .into(),
+            )
+            .await;
         }
         if input.derive.is_some() {
             return tools::media::run(

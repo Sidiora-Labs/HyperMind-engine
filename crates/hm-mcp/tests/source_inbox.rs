@@ -93,6 +93,7 @@ fn remember(
         derive: None,
         source_delivery,
         source_settlement,
+        document: None,
     }
 }
 

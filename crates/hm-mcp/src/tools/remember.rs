@@ -224,6 +224,19 @@ pub struct RememberDerive {
 }
 
 #[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
+pub struct RememberDocument {
+    pub name: String,
+    pub media_type: String,
+    pub content_base64: String,
+    #[serde(default)]
+    pub loader: Option<String>,
+    #[serde(default)]
+    pub token_budget: Option<u32>,
+    #[serde(default)]
+    pub plan_only: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
 pub struct RememberInput {
     pub conversation: String,
     #[serde(default)]
@@ -247,4 +260,6 @@ pub struct RememberInput {
     pub source_delivery: Option<SourceDeliveryInput>,
     #[serde(default)]
     pub source_settlement: Option<SourceSettlementInput>,
+    #[serde(default)]
+    pub document: Option<RememberDocument>,
 }

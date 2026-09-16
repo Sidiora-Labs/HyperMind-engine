@@ -2347,6 +2347,11 @@
       "file": "crates/hm-mcp/src/tools/remember.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:RememberDocument",
+      "name": "hm-mcp::RememberDocument",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
       "id": "rust:crates/hm-mcp/src/tools/remember.rs:RememberInput",
       "name": "hm-mcp::RememberInput",
       "file": "crates/hm-mcp/src/tools/remember.rs"

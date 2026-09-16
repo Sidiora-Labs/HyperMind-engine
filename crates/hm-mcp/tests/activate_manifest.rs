@@ -34,6 +34,7 @@ async fn seeded_server(path: &std::path::Path) -> McpServer {
                 derive: None,
                 source_delivery: None,
                 source_settlement: None,
+                document: None,
             })
             .await;
         assert!(remembered.ok);
@@ -118,6 +119,7 @@ async fn other_verbs_do_not_carry_a_manifest() {
             derive: None,
             source_delivery: None,
             source_settlement: None,
+            document: None,
         })
         .await;
     assert!(remembered.ok);

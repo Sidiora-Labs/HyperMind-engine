@@ -38,6 +38,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
             derive: None,
             source_delivery: None,
             source_settlement: None,
+            document: None,
         })
         .await;
     assert!(remembered.ok);
@@ -100,6 +101,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
             derive: None,
             source_delivery: None,
             source_settlement: None,
+            document: None,
         })
         .await;
     assert!(!rejected.ok);

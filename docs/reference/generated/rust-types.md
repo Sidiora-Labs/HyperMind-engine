@@ -9730,6 +9730,31 @@ pub struct RememberDerive {
 }
 ```
 
+## hm-mcp::RememberDocument
+
+<a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberdocument"></a>
+
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
+
+When to use: Use `RememberDocument` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct RememberDocument {
+    pub name: String,
+    pub media_type: String,
+    pub content_base64: String,
+    #[serde(default)]
+    pub loader: Option<String>,
+    #[serde(default)]
+    pub token_budget: Option<u32>,
+    #[serde(default)]
+    pub plan_only: bool,
+}
+```
+
 ## hm-mcp::RememberInput
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberinput"></a>
@@ -9765,6 +9790,8 @@ pub struct RememberInput {
     pub source_delivery: Option<SourceDeliveryInput>,
     #[serde(default)]
     pub source_settlement: Option<SourceSettlementInput>,
+    #[serde(default)]
+    pub document: Option<RememberDocument>,
 }
 ```
 
