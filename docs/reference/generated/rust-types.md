@@ -2790,6 +2790,149 @@ pub enum HindsightError {
 }
 ```
 
+## hm-cortex::RepoFactKind
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-repofactkind"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoFactKind` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub enum RepoFactKind {
+    File,
+    Symbol,
+    Dependency,
+    Route,
+    Test,
+    Storage,
+}
+```
+
+## hm-cortex::RepoCitation
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-repocitation"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoCitation` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoCitation {
+    pub lsn: u64,
+    pub byte_start: u32,
+    pub byte_end: u32,
+}
+```
+
+## hm-cortex::RepoRelation
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-reporelation"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoRelation` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoRelation {
+    pub relation: String,
+    pub target: String,
+}
+```
+
+## hm-cortex::RepoFact
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-repofact"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoFact` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoFact {
+    pub kind: RepoFactKind,
+    pub name: String,
+    pub path: Option<String>,
+    pub line: Option<u32>,
+    pub end_line: Option<u32>,
+    pub attributes: BTreeMap<String, String>,
+    pub relations: Vec<RepoRelation>,
+    pub source: RepoCitation,
+}
+```
+
+## hm-cortex::RepoSnapshotShard
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-reposnapshotshard"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoSnapshotShard` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoSnapshotShard {
+    pub lsn: u64,
+    pub content: Vec<u8>,
+}
+```
+
+## hm-cortex::RepoSnapshot
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-reposnapshot"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoSnapshot` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoSnapshot {
+    pub repository: String,
+    pub digest: [u8; 32],
+    pub facts: Vec<RepoFact>,
+    pub skipped: u64,
+}
+```
+
+## hm-cortex::RepoGraphError
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-repographerror"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoGraphError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub enum RepoGraphError {
+    Empty,
+    Contract,
+    Header,
+    Truncated,
+    Count,
+    TooManyFacts,
+}
+```
+
 ## hm-cortex::AttestationSignal
 
 <a id="rust-crates-hm-cortex-src-review-rs-attestationsignal"></a>

@@ -667,6 +667,41 @@
       "file": "crates/hm-cortex/src/rem/hindsight.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/repograph.rs:RepoFactKind",
+      "name": "hm-cortex::RepoFactKind",
+      "file": "crates/hm-cortex/src/repograph.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/repograph.rs:RepoCitation",
+      "name": "hm-cortex::RepoCitation",
+      "file": "crates/hm-cortex/src/repograph.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/repograph.rs:RepoRelation",
+      "name": "hm-cortex::RepoRelation",
+      "file": "crates/hm-cortex/src/repograph.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/repograph.rs:RepoFact",
+      "name": "hm-cortex::RepoFact",
+      "file": "crates/hm-cortex/src/repograph.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/repograph.rs:RepoSnapshotShard",
+      "name": "hm-cortex::RepoSnapshotShard",
+      "file": "crates/hm-cortex/src/repograph.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/repograph.rs:RepoSnapshot",
+      "name": "hm-cortex::RepoSnapshot",
+      "file": "crates/hm-cortex/src/repograph.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/repograph.rs:RepoGraphError",
+      "name": "hm-cortex::RepoGraphError",
+      "file": "crates/hm-cortex/src/repograph.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/review.rs:AttestationSignal",
       "name": "hm-cortex::AttestationSignal",
       "file": "crates/hm-cortex/src/review.rs"

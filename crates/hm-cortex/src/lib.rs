@@ -15,6 +15,7 @@ pub mod prospective;
 pub mod quality;
 pub mod relations;
 pub mod rem;
+pub mod repograph;
 pub mod review;
 pub mod run;
 
