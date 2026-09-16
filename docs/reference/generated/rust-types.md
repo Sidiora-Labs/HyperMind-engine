@@ -4082,6 +4082,24 @@ pub struct ChunkSpan {
 }
 ```
 
+## hm-docs::ChangedRegion
+
+<a id="rust-crates-hm-docs-src-diff-rs-changedregion"></a>
+
+Source: [`crates/hm-docs/src/diff.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/diff.rs).
+
+When to use: Use `ChangedRegion` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct ChangedRegion {
+    pub old: Range<usize>,
+    pub new: Range<usize>,
+}
+```
+
 ## hm-docs::MailLoader
 
 <a id="rust-crates-hm-docs-src-formats-mail-rs-mailloader"></a>
@@ -4140,6 +4158,23 @@ Do not use: Do not use it to write to the ledger or a projection, and do not tre
 
 ```rust
 pub struct TextLoader;
+```
+
+## hm-docs::OccurrenceCounter
+
+<a id="rust-crates-hm-docs-src-identity-rs-occurrencecounter"></a>
+
+Source: [`crates/hm-docs/src/identity.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/identity.rs).
+
+When to use: Use `OccurrenceCounter` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct OccurrenceCounter {
+    claims: HashMap<[u8; 32], Claims>,
+}
 ```
 
 ## hm-docs::LoaderId

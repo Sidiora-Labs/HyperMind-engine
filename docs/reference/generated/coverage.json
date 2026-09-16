@@ -987,6 +987,11 @@
       "file": "crates/hm-docs/src/chunk.rs"
     },
     {
+      "id": "rust:crates/hm-docs/src/diff.rs:ChangedRegion",
+      "name": "hm-docs::ChangedRegion",
+      "file": "crates/hm-docs/src/diff.rs"
+    },
+    {
       "id": "rust:crates/hm-docs/src/formats/mail.rs:MailLoader",
       "name": "hm-docs::MailLoader",
       "file": "crates/hm-docs/src/formats/mail.rs"
@@ -1005,6 +1010,11 @@
       "id": "rust:crates/hm-docs/src/formats/text.rs:TextLoader",
       "name": "hm-docs::TextLoader",
       "file": "crates/hm-docs/src/formats/text.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/identity.rs:OccurrenceCounter",
+      "name": "hm-docs::OccurrenceCounter",
+      "file": "crates/hm-docs/src/identity.rs"
     },
     {
       "id": "rust:crates/hm-docs/src/loader.rs:LoaderId",
