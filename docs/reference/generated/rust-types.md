@@ -7632,6 +7632,25 @@ pub struct WebSourceRuntime {
 }
 ```
 
+## hm-mcp::ExtractedText
+
+<a id="rust-crates-hm-mcp-src-tools-webtext-rs-extractedtext"></a>
+
+Source: [`crates/hm-mcp/src/tools/webtext.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/webtext.rs).
+
+When to use: Use `ExtractedText` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct ExtractedText {
+    pub media_type: String,
+    pub title: Option<String>,
+    pub text: String,
+}
+```
+
 ## hm-proj::AttentionRecord
 
 <a id="rust-crates-hm-proj-src-attention-rs-attentionrecord"></a>

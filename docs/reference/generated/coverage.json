@@ -1852,6 +1852,11 @@
       "file": "crates/hm-mcp/src/tools/websource.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/tools/webtext.rs:ExtractedText",
+      "name": "hm-mcp::ExtractedText",
+      "file": "crates/hm-mcp/src/tools/webtext.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/attention.rs:AttentionRecord",
       "name": "hm-proj::AttentionRecord",
       "file": "crates/hm-proj/src/attention.rs"

@@ -13,3 +13,4 @@ pub mod reconstruct;
 pub mod remember;
 pub mod retract;
 pub mod websource;
+pub mod webtext;
