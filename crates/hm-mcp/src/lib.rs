@@ -9,7 +9,8 @@ use hm_cortex::ingest::IngestResult;
 use hm_cortex::vocabulary::{VocabularySource, import_envelope};
 use hm_schema::event::{CURRENT_SCHEMA_VERSION, encode_event_envelope, verify_event};
 use hm_schema::events::{
-    Authority, DeliveredMsg, EventEnvelope, EventPayload, Retention, Sensitivity, UserMsg,
+    Authority, DeliveredMsg, EventEnvelope, EventPayload, ProviderFrame, Retention, Sensitivity,
+    UserMsg,
 };
 use hm_serve::actor::{
     ActivateRequest as ActorActivateRequest, ActorEngine, IncomingEvent, RecallRequest,
@@ -284,24 +285,40 @@ impl McpServer {
                 hm_ledger::frame::EventKind::UserMsg,
                 Authority::ExternalObserved,
             ),
+            RememberKind::RepositorySnapshot => (
+                hm_ledger::frame::EventKind::ProviderFrame,
+                Authority::ExternalObserved,
+            ),
             RememberKind::Vocabulary => return Err(Error::new(ErrorCode::InvariantViolation)),
         };
-        let chunks = if matches!(input.kind, RememberKind::Document) {
-            chunk_text(
+        let snapshot = matches!(input.kind, RememberKind::RepositorySnapshot);
+        let chunks = match input.kind {
+            RememberKind::Document => chunk_text(
                 &input.content,
                 input.chunk_bytes.unwrap_or(DEFAULT_CHUNK_BYTES),
-            )?
-        } else {
-            vec![input.content.as_str()]
+            )?,
+            RememberKind::RepositorySnapshot => chunk_lines(
+                &input.content,
+                input.chunk_bytes.unwrap_or(DEFAULT_CHUNK_BYTES),
+            )?,
+            _ => vec![input.content.as_str()],
         };
+        if snapshot && chunks.len() > hm_schema::protocol::MAXIMUM_BATCH_EVENTS {
+            return Err(Error::new(ErrorCode::CapacityExceeded));
+        }
+        let shards = chunks.len();
         let event_count =
             u32::try_from(chunks.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
-        let embedding_documents = self.embedding_runtime.as_ref().map(|_| {
-            chunks
-                .iter()
-                .map(|chunk| (*chunk).to_owned())
-                .collect::<Vec<_>>()
-        });
+        let embedding_documents = if snapshot {
+            None
+        } else {
+            self.embedding_runtime.as_ref().map(|_| {
+                chunks
+                    .iter()
+                    .map(|chunk| (*chunk).to_owned())
+                    .collect::<Vec<_>>()
+            })
+        };
         let mut events = Vec::with_capacity(chunks.len());
         for (index, chunk) in chunks.into_iter().enumerate() {
             let payload = match kind {
@@ -311,6 +328,12 @@ impl McpServer {
                 hm_ledger::frame::EventKind::DeliveredMsg => {
                     EventPayload::DeliveredMsg(Box::new(DeliveredMsg {
                         content: chunk.as_bytes().to_vec(),
+                    }))
+                }
+                hm_ledger::frame::EventKind::ProviderFrame => {
+                    EventPayload::ProviderFrame(Box::new(ProviderFrame {
+                        provider: hm_schema::event::REPOSITORY_SNAPSHOT_PROVIDER.to_owned(),
+                        api_content: chunk.as_bytes().to_vec(),
                     }))
                 }
                 _ => return Err(Error::new(ErrorCode::InvariantViolation)),
@@ -347,6 +370,10 @@ impl McpServer {
                 "value": anchor.value,
             })),
         }));
+        if snapshot {
+            envelope.items[0]["shards"] = json!(shards);
+            envelope.items[0]["snapshot_digest"] = json!(snapshot_digest(&input.content));
+        }
         for lsn in outcome.first_lsn.get()..=outcome.last_lsn.get() {
             envelope
                 .provenance
@@ -972,6 +999,11 @@ fn event_content(
     let bytes = match verified.envelope.payload {
         EventPayload::UserMsg(message) => message.content,
         EventPayload::DeliveredMsg(message) => message.content,
+        EventPayload::ProviderFrame(observed)
+            if observed.provider == hm_schema::event::REPOSITORY_SNAPSHOT_PROVIDER =>
+        {
+            observed.api_content
+        }
         _ => return Ok((String::new(), authority)),
     };
     String::from_utf8(bytes)
@@ -1011,6 +1043,40 @@ fn chunk_text(text: &str, maximum_bytes: usize) -> Result<Vec<&str>, Error> {
         start = end;
     }
     Ok(chunks)
+}
+
+fn chunk_lines(text: &str, maximum_bytes: usize) -> Result<Vec<&str>, Error> {
+    if maximum_bytes == 0 || maximum_bytes > hm_schema::event::MAXIMUM_EVENT_BYTES {
+        return Err(Error::new(ErrorCode::InvalidArgument));
+    }
+    let mut chunks = Vec::new();
+    let mut start = 0;
+    let mut end = 0;
+    while end < text.len() {
+        let line_end = text[end..]
+            .find('\n')
+            .map_or(text.len(), |offset| end + offset + 1);
+        if line_end - end > maximum_bytes {
+            return Err(Error::new(ErrorCode::CapacityExceeded));
+        }
+        if line_end - start > maximum_bytes {
+            chunks.push(&text[start..end]);
+            start = end;
+        }
+        end = line_end;
+    }
+    if start < end {
+        chunks.push(&text[start..end]);
+    }
+    Ok(chunks)
+}
+
+fn snapshot_digest(document: &str) -> String {
+    let mut hasher = blake3::Hasher::new();
+    hasher.update(hm_cortex::repograph::SNAPSHOT_DIGEST_DOMAIN.as_bytes());
+    hasher.update(&[0u8]);
+    hasher.update(document.as_bytes());
+    hex(hasher.finalize().as_bytes())
 }
 
 const fn health(status: HealthStatus) -> &'static str {

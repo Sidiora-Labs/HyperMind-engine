@@ -9067,6 +9067,7 @@ pub enum RememberKind {
     Assistant,
     Document,
     Vocabulary,
+    RepositorySnapshot,
 }
 ```
 

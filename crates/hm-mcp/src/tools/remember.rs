@@ -149,6 +149,7 @@ pub enum RememberKind {
     Assistant,
     Document,
     Vocabulary,
+    RepositorySnapshot,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, schemars::JsonSchema)]
