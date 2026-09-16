@@ -1146,6 +1146,7 @@ dependencies = [
  "hm-llm",
  "hm-schema",
  "ort",
+ "regex",
  "reqwest",
  "serde_json",
  "sha2",

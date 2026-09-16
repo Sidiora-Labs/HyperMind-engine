@@ -720,7 +720,7 @@ do_2 = "Runs projection and generations: staged records under run_id are invisib
 
 [task.6.4]
 title = "NREM: clustering, merge and mint with citation validation, independence rule, quality classifiers"
-status = "pending"
+status = "done"
 wave = 6
 owner_lane = "cognition"
 requires = ["6.1", "6.3"]

@@ -173,7 +173,7 @@
     - Memories projection with version chains and faded state; graph as adjacency bitmaps with relation, weight, evidence LSNs and validity; fsrs state per memory.
     - Runs projection and generations: staged records under run_id are invisible until publish; publish is a compare-and-swap on active_generation refusing when any staged record lacks a projection; lease(generation, seconds) pins a read view; retractions apply to every generation including leased; retract switches the pointer back and schedules cleanup. Test: two leased readers see different derived content simultaneously; a lost publish ack resumes to exactly one published generation.
     - _Requirements: 5.2, 5.3, 10.3_
-  - [ ] 6.4 NREM: clustering, merge and mint with citation validation, independence rule, quality classifiers
+  - [x] 6.4 NREM: clustering, merge and mint with citation validation, independence rule, quality classifiers
     - Cluster pending observations by embedding and entity overlap without an LLM, sampled by salience and recency, never by key order; one structured-output call per cluster under merge-cluster@1 returning attach, revise or mint with name, definition, tags, salience and citations.
     - Citation validator: every quoted span must be a substring of a cited byte range inside the frozen candidate set or the candidate is dropped and counted as citation_invalid; derived authority through derive_authority; mint requires at least three independent source roots from at least two conversations; a speculation-typed source poisons the candidate.
     - Port thought-quality and rewrite-guard as classifiers with logged decisions and measured precision on the dream fixture.

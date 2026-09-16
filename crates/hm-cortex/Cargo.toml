@@ -13,6 +13,7 @@ hm-llm = { path = "../hm-llm" }
 hm-schema = { path = "../hm-schema" }
 ort = { version = "=2.0.0-rc.13", default-features = false, features = ["copy-dylibs", "download-binaries", "ndarray", "std", "tls-rustls"] }
 reqwest = { version = "0.12.23", default-features = false, features = ["blocking", "rustls-tls"] }
+regex = "1.12.2"
 serde_json = "1.0.145"
 sha2.workspace = true
 tokenizers = { version = "0.22.2", default-features = false, features = ["fancy-regex"] }

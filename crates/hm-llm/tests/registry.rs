@@ -9,7 +9,7 @@ use std::path::Path;
 fn prompt_wording_is_frozen_per_version() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../prompts");
     let registry = PromptRegistry::load(&root).unwrap();
-    assert_eq!(registry.len(), 5);
+    assert_eq!(registry.len(), 6);
     let snapshots = [
         (
             "abstract-synthesis",
@@ -25,6 +25,11 @@ fn prompt_wording_is_frozen_per_version() {
             "hindsight-review",
             1,
             "851e8930b922217af99f05c7a4648a11e0621ede09c39b0e8b278bcf40eda42a",
+        ),
+        (
+            "merge-cluster",
+            1,
+            "6acd857b60f0ba8a1513575ba1183d6b29f82b8ab22862b0350023719f227a2c",
         ),
         (
             "refine-definition",

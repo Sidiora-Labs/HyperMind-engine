@@ -56,6 +56,11 @@ pub fn ingest(
                     | EventKind::Consolidation
                     | EventKind::Embedding
                     | EventKind::ProposedAssertion
+                    | EventKind::MemoryMinted
+                    | EventKind::MemoryRevised
+                    | EventKind::MemoryMerged
+                    | EventKind::EdgeAsserted
+                    | EventKind::EdgeRetracted
             ) =>
         {
             authority_for_event(kind)
@@ -98,5 +103,11 @@ const fn runtime_event(kind: EventKind) -> bool {
             | EventKind::Retract
             | EventKind::Attestation
             | EventKind::Binding
+            | EventKind::MemoryFaded
+            | EventKind::ConsolidationOpened
+            | EventKind::ConsolidationPhase
+            | EventKind::ConsolidationClosed
+            | EventKind::ConsolidationRetracted
+            | EventKind::Reviewed
     )
 }
