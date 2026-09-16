@@ -782,7 +782,7 @@ do_1 = "Journey: remember twenty observations across two conversations, run cons
 
 [task.7.1]
 title = "Intention, attention, prediction and procedure events and projections"
-status = "pending"
+status = "done"
 wave = 7
 section = "Wave 7 — Anticipation: wake triggers, attention, predictions, procedures"
 owner_lane = "projections"

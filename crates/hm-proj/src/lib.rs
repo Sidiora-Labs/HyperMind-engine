@@ -1,5 +1,7 @@
 #![deny(unsafe_code)]
 
+pub mod attention;
+pub mod attestations;
 pub mod beliefs;
 pub mod bindings;
 pub mod checkpoint;
@@ -8,11 +10,14 @@ pub mod fsrs;
 pub mod generation;
 pub mod graph;
 pub mod intent;
+pub mod intentions;
 pub mod ladder;
 pub mod lease;
 pub mod ledger;
 pub mod lexical;
 pub mod memories;
+pub mod predictions;
+pub mod procedures;
 pub mod protected;
 pub mod rebuild;
 pub mod runs;

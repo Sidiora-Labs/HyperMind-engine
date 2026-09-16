@@ -3326,17 +3326,17 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAsDefault<u16, u16>,
-                T3: ::planus::WriteAsDefault<f32, f32>,
-                T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-                T8: ::planus::WriteAsDefault<u64, u64>,
-                T9: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAs<::planus::Offset<ModelProvenance>>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<u16, u16>,
+                    T3: ::planus::WriteAsDefault<f32, f32>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
+                    T9: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<ModelProvenance>>
                 for ModelProvenanceBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
             {
                 type Prepared = ::planus::Offset<ModelProvenance>;
@@ -3351,17 +3351,17 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAsDefault<u16, u16>,
-                T3: ::planus::WriteAsDefault<f32, f32>,
-                T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-                T8: ::planus::WriteAsDefault<u64, u64>,
-                T9: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOptional<::planus::Offset<ModelProvenance>>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<u16, u16>,
+                    T3: ::planus::WriteAsDefault<f32, f32>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
+                    T9: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<ModelProvenance>>
                 for ModelProvenanceBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
             {
                 type Prepared = ::planus::Offset<ModelProvenance>;
@@ -3376,17 +3376,17 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAsDefault<u16, u16>,
-                T3: ::planus::WriteAsDefault<f32, f32>,
-                T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-                T8: ::planus::WriteAsDefault<u64, u64>,
-                T9: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<ModelProvenance>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<u16, u16>,
+                    T3: ::planus::WriteAsDefault<f32, f32>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
+                    T9: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<ModelProvenance>
                 for ModelProvenanceBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
             {
                 #[inline]
@@ -4291,10 +4291,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAs<::planus::Offset<ToolCall>> for ToolCallBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAs<::planus::Offset<ToolCall>> for ToolCallBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<ToolCall>;
 
@@ -4305,10 +4305,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<ToolCall>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<ToolCall>>
                 for ToolCallBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<ToolCall>;
@@ -4323,10 +4323,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<ToolCall> for ToolCallBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOffset<ToolCall> for ToolCallBuilder<(T0, T1, T2)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ToolCall> {
@@ -4664,11 +4664,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAs<::planus::Offset<ToolResult>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAs<::planus::Offset<ToolResult>>
                 for ToolResultBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<ToolResult>;
@@ -4680,11 +4680,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<ToolResult>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<ToolResult>>
                 for ToolResultBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<ToolResult>;
@@ -4699,11 +4699,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<ToolResult> for ToolResultBuilder<(T0, T1, T2, T3)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOffset<ToolResult> for ToolResultBuilder<(T0, T1, T2, T3)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ToolResult> {
@@ -5245,9 +5245,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAs<::planus::Offset<ProviderFrame>>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAs<::planus::Offset<ProviderFrame>>
                 for ProviderFrameBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<ProviderFrame>;
@@ -5262,9 +5262,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<ProviderFrame>>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<ProviderFrame>>
                 for ProviderFrameBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<ProviderFrame>;
@@ -5279,9 +5279,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<ProviderFrame> for ProviderFrameBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOffset<ProviderFrame> for ProviderFrameBuilder<(T0, T1)>
             {
                 #[inline]
                 fn prepare(
@@ -5560,10 +5560,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAs<::planus::Offset<MediaRef>> for MediaRefBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAs<::planus::Offset<MediaRef>> for MediaRefBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<MediaRef>;
 
@@ -5574,10 +5574,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<MediaRef>>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<MediaRef>>
                 for MediaRefBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<MediaRef>;
@@ -5592,10 +5592,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<MediaRef> for MediaRefBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOffset<MediaRef> for MediaRefBuilder<(T0, T1, T2)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<MediaRef> {
@@ -5906,10 +5906,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<self::EffectState, self::EffectState>,
-            > ::planus::WriteAs<::planus::Offset<Effect>> for EffectBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<self::EffectState, self::EffectState>,
+                > ::planus::WriteAs<::planus::Offset<Effect>> for EffectBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<Effect>;
 
@@ -5920,10 +5920,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<self::EffectState, self::EffectState>,
-            > ::planus::WriteAsOptional<::planus::Offset<Effect>> for EffectBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<self::EffectState, self::EffectState>,
+                > ::planus::WriteAsOptional<::planus::Offset<Effect>>
+                for EffectBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<Effect>;
 
@@ -5937,10 +5938,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<self::EffectState, self::EffectState>,
-            > ::planus::WriteAsOffset<Effect> for EffectBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<self::EffectState, self::EffectState>,
+                > ::planus::WriteAsOffset<Effect> for EffectBuilder<(T0, T1, T2)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Effect> {
@@ -6227,9 +6228,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ApprovalDecision, self::ApprovalDecision>,
-            > ::planus::WriteAs<::planus::Offset<Approval>> for ApprovalBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ApprovalDecision, self::ApprovalDecision>,
+                > ::planus::WriteAs<::planus::Offset<Approval>> for ApprovalBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Approval>;
 
@@ -6240,9 +6241,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ApprovalDecision, self::ApprovalDecision>,
-            > ::planus::WriteAsOptional<::planus::Offset<Approval>> for ApprovalBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ApprovalDecision, self::ApprovalDecision>,
+                > ::planus::WriteAsOptional<::planus::Offset<Approval>>
+                for ApprovalBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Approval>;
 
@@ -6256,9 +6258,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ApprovalDecision, self::ApprovalDecision>,
-            > ::planus::WriteAsOffset<Approval> for ApprovalBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ApprovalDecision, self::ApprovalDecision>,
+                > ::planus::WriteAsOffset<Approval> for ApprovalBuilder<(T0, T1)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Approval> {
@@ -6588,11 +6590,12 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAs<::planus::Offset<Outcome>> for OutcomeBuilder<(T0, T1, T2, T3)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAs<::planus::Offset<Outcome>>
+                for OutcomeBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<Outcome>;
 
@@ -6603,11 +6606,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<Outcome>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<Outcome>>
                 for OutcomeBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<Outcome>;
@@ -6622,11 +6625,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAsOffset<Outcome> for OutcomeBuilder<(T0, T1, T2, T3)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ResultStatus, self::ResultStatus>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOffset<Outcome> for OutcomeBuilder<(T0, T1, T2, T3)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Outcome> {
@@ -7169,9 +7172,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAs<::planus::Offset<Supervisor>> for SupervisorBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAs<::planus::Offset<Supervisor>> for SupervisorBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Supervisor>;
 
@@ -7182,9 +7185,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<Supervisor>>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<Supervisor>>
                 for SupervisorBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Supervisor>;
@@ -7199,9 +7202,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<Supervisor> for SupervisorBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOffset<Supervisor> for SupervisorBuilder<(T0, T1)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Supervisor> {
@@ -7472,9 +7475,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAs<::planus::Offset<Recovery>> for RecoveryBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<Recovery>> for RecoveryBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Recovery>;
 
@@ -7485,9 +7488,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOptional<::planus::Offset<Recovery>> for RecoveryBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<Recovery>>
+                for RecoveryBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Recovery>;
 
@@ -7501,9 +7505,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<Recovery> for RecoveryBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<Recovery> for RecoveryBuilder<(T0, T1)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Recovery> {
@@ -8014,9 +8018,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAs<::planus::Offset<LoopOpened>> for LoopOpenedBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAs<::planus::Offset<LoopOpened>> for LoopOpenedBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<LoopOpened>;
 
@@ -8027,9 +8031,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<LoopOpened>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<LoopOpened>>
                 for LoopOpenedBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<LoopOpened>;
@@ -8044,9 +8048,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-            > ::planus::WriteAsOffset<LoopOpened> for LoopOpenedBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOffset<LoopOpened> for LoopOpenedBuilder<(T0, T1)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<LoopOpened> {
@@ -8376,11 +8380,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAs<::planus::Offset<LoopClosed>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAs<::planus::Offset<LoopClosed>>
                 for LoopClosedBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<LoopClosed>;
@@ -8392,11 +8396,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<LoopClosed>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<LoopClosed>>
                 for LoopClosedBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<LoopClosed>;
@@ -8411,11 +8415,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAsOffset<LoopClosed> for LoopClosedBuilder<(T0, T1, T2, T3)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::LoopCloseReason, self::LoopCloseReason>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOffset<LoopClosed> for LoopClosedBuilder<(T0, T1, T2, T3)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<LoopClosed> {
@@ -8870,14 +8874,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<str>>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAs<::planus::Offset<Binding>>
+                    T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<Binding>>
                 for BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<Binding>;
@@ -8889,14 +8893,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<str>>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOptional<::planus::Offset<Binding>>
+                    T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<Binding>>
                 for BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<Binding>;
@@ -8911,14 +8915,15 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<str>>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<Binding> for BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                    T0: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<Binding>
+                for BindingBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Binding> {
@@ -9471,16 +9476,16 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<i64, i64>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
-                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
-            > ::planus::WriteAs<::planus::Offset<Assertion>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+                > ::planus::WriteAs<::planus::Offset<Assertion>>
                 for AssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 type Prepared = ::planus::Offset<Assertion>;
@@ -9492,16 +9497,16 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<i64, i64>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
-                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
-            > ::planus::WriteAsOptional<::planus::Offset<Assertion>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+                > ::planus::WriteAsOptional<::planus::Offset<Assertion>>
                 for AssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 type Prepared = ::planus::Offset<Assertion>;
@@ -9516,16 +9521,16 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<i64, i64>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
-                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
-            > ::planus::WriteAsOffset<Assertion>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+                > ::planus::WriteAsOffset<Assertion>
                 for AssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 #[inline]
@@ -10409,16 +10414,16 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<i64, i64>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
-                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
-            > ::planus::WriteAs<::planus::Offset<ProposedAssertion>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+                > ::planus::WriteAs<::planus::Offset<ProposedAssertion>>
                 for ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 type Prepared = ::planus::Offset<ProposedAssertion>;
@@ -10433,16 +10438,16 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<i64, i64>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
-                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
-            > ::planus::WriteAsOptional<::planus::Offset<ProposedAssertion>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+                > ::planus::WriteAsOptional<::planus::Offset<ProposedAssertion>>
                 for ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 type Prepared = ::planus::Offset<ProposedAssertion>;
@@ -10457,16 +10462,16 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<i64, i64>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
-                T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
-            > ::planus::WriteAsOffset<ProposedAssertion>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::BeliefType, self::BeliefType>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T8: ::planus::WriteAsDefault<self::AssertionClaim, self::AssertionClaim>,
+                > ::planus::WriteAsOffset<ProposedAssertion>
                 for ProposedAssertionBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 #[inline]
@@ -10908,12 +10913,12 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u32, u32>,
-                T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAs<::planus::Offset<Embedding>>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<Embedding>>
                 for EmbeddingBuilder<(T0, T1, T2, T3, T4)>
             {
                 type Prepared = ::planus::Offset<Embedding>;
@@ -10925,12 +10930,12 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u32, u32>,
-                T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAsOptional<::planus::Offset<Embedding>>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<Embedding>>
                 for EmbeddingBuilder<(T0, T1, T2, T3, T4)>
             {
                 type Prepared = ::planus::Offset<Embedding>;
@@ -10945,12 +10950,12 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u32, u32>,
-                T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAsOffset<Embedding> for EmbeddingBuilder<(T0, T1, T2, T3, T4)>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAs<::planus::Offset<[i8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<Embedding> for EmbeddingBuilder<(T0, T1, T2, T3, T4)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Embedding> {
@@ -11234,9 +11239,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAs<::planus::Offset<Retract>> for RetractBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAs<::planus::Offset<Retract>> for RetractBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Retract>;
 
@@ -11247,9 +11252,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<Retract>> for RetractBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<Retract>>
+                for RetractBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Retract>;
 
@@ -11263,9 +11269,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOffset<Retract> for RetractBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOffset<Retract> for RetractBuilder<(T0, T1)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Retract> {
@@ -11537,9 +11543,9 @@ mod root {
                 pub fn disposition<T1>(self, value: T1) -> AttestationBuilder<(T0, T1)>
                 where
                     T1: ::planus::WriteAsDefault<
-                            self::AttestationDisposition,
-                            self::AttestationDisposition,
-                        >,
+                        self::AttestationDisposition,
+                        self::AttestationDisposition,
+                    >,
                 {
                     let (v0,) = self.0;
                     AttestationBuilder((v0, value))
@@ -11570,12 +11576,13 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<
                         self::AttestationDisposition,
                         self::AttestationDisposition,
                     >,
-            > ::planus::WriteAs<::planus::Offset<Attestation>> for AttestationBuilder<(T0, T1)>
+                > ::planus::WriteAs<::planus::Offset<Attestation>>
+                for AttestationBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Attestation>;
 
@@ -11589,12 +11596,12 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<
                         self::AttestationDisposition,
                         self::AttestationDisposition,
                     >,
-            > ::planus::WriteAsOptional<::planus::Offset<Attestation>>
+                > ::planus::WriteAsOptional<::planus::Offset<Attestation>>
                 for AttestationBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<Attestation>;
@@ -11609,12 +11616,12 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<
                         self::AttestationDisposition,
                         self::AttestationDisposition,
                     >,
-            > ::planus::WriteAsOffset<Attestation> for AttestationBuilder<(T0, T1)>
+                > ::planus::WriteAsOffset<Attestation> for AttestationBuilder<(T0, T1)>
             {
                 #[inline]
                 fn prepare(
@@ -11997,13 +12004,13 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAs<::planus::Offset<MemoryMinted>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAs<::planus::Offset<MemoryMinted>>
                 for MemoryMintedBuilder<(T0, T1, T2, T3, T4, T5)>
             {
                 type Prepared = ::planus::Offset<MemoryMinted>;
@@ -12018,13 +12025,13 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<MemoryMinted>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<MemoryMinted>>
                 for MemoryMintedBuilder<(T0, T1, T2, T3, T4, T5)>
             {
                 type Prepared = ::planus::Offset<MemoryMinted>;
@@ -12039,13 +12046,13 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOffset<MemoryMinted>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOffset<MemoryMinted>
                 for MemoryMintedBuilder<(T0, T1, T2, T3, T4, T5)>
             {
                 #[inline]
@@ -12505,14 +12512,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAs<::planus::Offset<MemoryRevised>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAs<::planus::Offset<MemoryRevised>>
                 for MemoryRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<MemoryRevised>;
@@ -12527,14 +12534,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<MemoryRevised>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<MemoryRevised>>
                 for MemoryRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<MemoryRevised>;
@@ -12549,14 +12556,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOffset<MemoryRevised>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOffset<MemoryRevised>
                 for MemoryRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 #[inline]
@@ -13269,14 +13276,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::MemoryId>]>>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAs<::planus::Offset<MemoryMerged>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::MemoryId>]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAs<::planus::Offset<MemoryMerged>>
                 for MemoryMergedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<MemoryMerged>;
@@ -13291,14 +13298,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::MemoryId>]>>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<MemoryMerged>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::MemoryId>]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<MemoryMerged>>
                 for MemoryMergedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<MemoryMerged>;
@@ -13313,14 +13320,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::MemoryId>]>>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-                T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOffset<MemoryMerged>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::MemoryId>]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOffset<MemoryMerged>
                 for MemoryMergedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 #[inline]
@@ -13694,10 +13701,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::MemoryFadeReason, self::MemoryFadeReason>,
-                T2: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAs<::planus::Offset<MemoryFaded>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::MemoryFadeReason, self::MemoryFadeReason>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAs<::planus::Offset<MemoryFaded>>
                 for MemoryFadedBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<MemoryFaded>;
@@ -13712,10 +13719,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::MemoryFadeReason, self::MemoryFadeReason>,
-                T2: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<MemoryFaded>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::MemoryFadeReason, self::MemoryFadeReason>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<MemoryFaded>>
                 for MemoryFadedBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<MemoryFaded>;
@@ -13730,10 +13737,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::MemoryFadeReason, self::MemoryFadeReason>,
-                T2: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
-            > ::planus::WriteAsOffset<MemoryFaded> for MemoryFadedBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::MemoryFadeReason, self::MemoryFadeReason>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOffset<MemoryFaded> for MemoryFadedBuilder<(T0, T1, T2)>
             {
                 #[inline]
                 fn prepare(
@@ -14215,15 +14222,15 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<str>>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAsDefault<i64, i64>,
-                T7: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAs<::planus::Offset<EdgeAsserted>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAsDefault<i64, i64>,
+                    T7: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAs<::planus::Offset<EdgeAsserted>>
                 for EdgeAssertedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
             {
                 type Prepared = ::planus::Offset<EdgeAsserted>;
@@ -14238,15 +14245,15 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<str>>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAsDefault<i64, i64>,
-                T7: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<EdgeAsserted>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAsDefault<i64, i64>,
+                    T7: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<EdgeAsserted>>
                 for EdgeAssertedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
             {
                 type Prepared = ::planus::Offset<EdgeAsserted>;
@@ -14261,15 +14268,15 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAs<::planus::Offset<str>>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAsDefault<i64, i64>,
-                T6: ::planus::WriteAsDefault<i64, i64>,
-                T7: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOffset<EdgeAsserted>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAsDefault<i64, i64>,
+                    T7: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOffset<EdgeAsserted>
                 for EdgeAssertedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
             {
                 #[inline]
@@ -14601,9 +14608,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAs<::planus::Offset<EdgeRetracted>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAs<::planus::Offset<EdgeRetracted>>
                 for EdgeRetractedBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<EdgeRetracted>;
@@ -14618,9 +14625,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOptional<::planus::Offset<EdgeRetracted>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<EdgeRetracted>>
                 for EdgeRetractedBuilder<(T0, T1)>
             {
                 type Prepared = ::planus::Offset<EdgeRetracted>;
@@ -14635,9 +14642,9 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
-            > ::planus::WriteAsOffset<EdgeRetracted> for EdgeRetractedBuilder<(T0, T1)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[self::ProvenanceRange]>>,
+                > ::planus::WriteAsOffset<EdgeRetracted> for EdgeRetractedBuilder<(T0, T1)>
             {
                 #[inline]
                 fn prepare(
@@ -15018,11 +15025,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAs<::planus::Offset<ConsolidationBudget>>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<ConsolidationBudget>>
                 for ConsolidationBudgetBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<ConsolidationBudget>;
@@ -15037,11 +15044,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOptional<::planus::Offset<ConsolidationBudget>>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<ConsolidationBudget>>
                 for ConsolidationBudgetBuilder<(T0, T1, T2, T3)>
             {
                 type Prepared = ::planus::Offset<ConsolidationBudget>;
@@ -15056,11 +15063,11 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<ConsolidationBudget>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<ConsolidationBudget>
                 for ConsolidationBudgetBuilder<(T0, T1, T2, T3)>
             {
                 #[inline]
@@ -15401,10 +15408,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAsDefault<u16, u16>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAs<::planus::Offset<PromptVersion>>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAsDefault<u16, u16>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<PromptVersion>>
                 for PromptVersionBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<PromptVersion>;
@@ -15419,10 +15426,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAsDefault<u16, u16>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAsOptional<::planus::Offset<PromptVersion>>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAsDefault<u16, u16>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<PromptVersion>>
                 for PromptVersionBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<PromptVersion>;
@@ -15437,10 +15444,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<str>>,
-                T1: ::planus::WriteAsDefault<u16, u16>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAsOffset<PromptVersion> for PromptVersionBuilder<(T0, T1, T2)>
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                    T1: ::planus::WriteAsDefault<u16, u16>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<PromptVersion> for PromptVersionBuilder<(T0, T1, T2)>
             {
                 #[inline]
                 fn prepare(
@@ -15842,7 +15849,9 @@ mod root {
                     value: T5,
                 ) -> ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5)>
                 where
-                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
+                    T5: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::PromptVersion>]>,
+                    >,
                 {
                     let (v0, v1, v2, v3, v4) = self.0;
                     ConsolidationOpenedBuilder((v0, v1, v2, v3, v4, value))
@@ -15880,14 +15889,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
-                T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
-                T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
-            > ::planus::WriteAs<::planus::Offset<ConsolidationOpened>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
+                > ::planus::WriteAs<::planus::Offset<ConsolidationOpened>>
                 for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<ConsolidationOpened>;
@@ -15902,14 +15911,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
-                T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
-                T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
-            > ::planus::WriteAsOptional<::planus::Offset<ConsolidationOpened>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
+                > ::planus::WriteAsOptional<::planus::Offset<ConsolidationOpened>>
                 for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<ConsolidationOpened>;
@@ -15924,14 +15933,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAs<::planus::Offset<str>>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
-                T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
-                T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
-            > ::planus::WriteAsOffset<ConsolidationOpened>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
+                > ::planus::WriteAsOffset<ConsolidationOpened>
                 for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 #[inline]
@@ -16354,9 +16363,9 @@ mod root {
                 pub fn phase<T0>(self, value: T0) -> ConsolidationPhaseBuilder<(T0,)>
                 where
                     T0: ::planus::WriteAsDefault<
-                            self::ConsolidationPhaseName,
-                            self::ConsolidationPhaseName,
-                        >,
+                        self::ConsolidationPhaseName,
+                        self::ConsolidationPhaseName,
+                    >,
                 {
                     ConsolidationPhaseBuilder((value,))
                 }
@@ -16378,9 +16387,9 @@ mod root {
                 pub fn state<T1>(self, value: T1) -> ConsolidationPhaseBuilder<(T0, T1)>
                 where
                     T1: ::planus::WriteAsDefault<
-                            self::ConsolidationPhaseState,
-                            self::ConsolidationPhaseState,
-                        >,
+                        self::ConsolidationPhaseState,
+                        self::ConsolidationPhaseState,
+                    >,
                 {
                     let (v0,) = self.0;
                     ConsolidationPhaseBuilder((v0, value))
@@ -16588,22 +16597,22 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<
+                    T0: ::planus::WriteAsDefault<
                         self::ConsolidationPhaseName,
                         self::ConsolidationPhaseName,
                     >,
-                T1: ::planus::WriteAsDefault<
+                    T1: ::planus::WriteAsDefault<
                         self::ConsolidationPhaseState,
                         self::ConsolidationPhaseState,
                     >,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-                T8: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAs<::planus::Offset<ConsolidationPhase>>
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<ConsolidationPhase>>
                 for ConsolidationPhaseBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 type Prepared = ::planus::Offset<ConsolidationPhase>;
@@ -16618,22 +16627,22 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<
+                    T0: ::planus::WriteAsDefault<
                         self::ConsolidationPhaseName,
                         self::ConsolidationPhaseName,
                     >,
-                T1: ::planus::WriteAsDefault<
+                    T1: ::planus::WriteAsDefault<
                         self::ConsolidationPhaseState,
                         self::ConsolidationPhaseState,
                     >,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-                T8: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOptional<::planus::Offset<ConsolidationPhase>>
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<ConsolidationPhase>>
                 for ConsolidationPhaseBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 type Prepared = ::planus::Offset<ConsolidationPhase>;
@@ -16648,22 +16657,22 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<
+                    T0: ::planus::WriteAsDefault<
                         self::ConsolidationPhaseName,
                         self::ConsolidationPhaseName,
                     >,
-                T1: ::planus::WriteAsDefault<
+                    T1: ::planus::WriteAsDefault<
                         self::ConsolidationPhaseState,
                         self::ConsolidationPhaseState,
                     >,
-                T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-                T8: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<ConsolidationPhase>
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<ConsolidationPhase>
                 for ConsolidationPhaseBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 #[inline]
@@ -17302,15 +17311,15 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAs<::planus::Offset<ConsolidationClosed>>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<ConsolidationClosed>>
                 for ConsolidationClosedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
             {
                 type Prepared = ::planus::Offset<ConsolidationClosed>;
@@ -17325,15 +17334,15 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOptional<::planus::Offset<ConsolidationClosed>>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<ConsolidationClosed>>
                 for ConsolidationClosedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
             {
                 type Prepared = ::planus::Offset<ConsolidationClosed>;
@@ -17348,15 +17357,15 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u64, u64>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u64, u64>,
-                T6: ::planus::WriteAsDefault<u64, u64>,
-                T7: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<ConsolidationClosed>
+                    T0: ::planus::WriteAsDefault<u64, u64>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<ConsolidationClosed>
                 for ConsolidationClosedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
             {
                 #[inline]
@@ -17767,10 +17776,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAs<::planus::Offset<ConsolidationRetracted>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<ConsolidationRetracted>>
                 for ConsolidationRetractedBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<ConsolidationRetracted>;
@@ -17785,10 +17794,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAsOptional<::planus::Offset<ConsolidationRetracted>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<ConsolidationRetracted>>
                 for ConsolidationRetractedBuilder<(T0, T1, T2)>
             {
                 type Prepared = ::planus::Offset<ConsolidationRetracted>;
@@ -17804,10 +17813,10 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<u64, u64>,
-                T2: ::planus::WriteAs<::planus::Offset<str>>,
-            > ::planus::WriteAsOffset<ConsolidationRetracted>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<ConsolidationRetracted>
                 for ConsolidationRetractedBuilder<(T0, T1, T2)>
             {
                 #[inline]
@@ -18296,14 +18305,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ReviewRating, self::ReviewRating>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<i64, i64>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAsDefault<i64, i64>,
-            > ::planus::WriteAs<::planus::Offset<Reviewed>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ReviewRating, self::ReviewRating>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<i64, i64>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<i64, i64>,
+                > ::planus::WriteAs<::planus::Offset<Reviewed>>
                 for ReviewedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<Reviewed>;
@@ -18315,14 +18324,14 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ReviewRating, self::ReviewRating>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<i64, i64>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAsDefault<i64, i64>,
-            > ::planus::WriteAsOptional<::planus::Offset<Reviewed>>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ReviewRating, self::ReviewRating>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<i64, i64>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<i64, i64>,
+                > ::planus::WriteAsOptional<::planus::Offset<Reviewed>>
                 for ReviewedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 type Prepared = ::planus::Offset<Reviewed>;
@@ -18337,14 +18346,15 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
-                T1: ::planus::WriteAsDefault<self::ReviewRating, self::ReviewRating>,
-                T2: ::planus::WriteAsDefault<u64, u64>,
-                T3: ::planus::WriteAsDefault<i64, i64>,
-                T4: ::planus::WriteAsDefault<u64, u64>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAsDefault<i64, i64>,
-            > ::planus::WriteAsOffset<Reviewed> for ReviewedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<self::ReviewRating, self::ReviewRating>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<i64, i64>,
+                    T4: ::planus::WriteAsDefault<u64, u64>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<i64, i64>,
+                > ::planus::WriteAsOffset<Reviewed>
+                for ReviewedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
             {
                 #[inline]
                 fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Reviewed> {
@@ -18529,10 +18539,9956 @@ mod root {
                 }
             }
 
+            /// The enum `AttentionDecision` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `AttentionDecision` in the file `schemas/events.fbs:302`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum AttentionDecision {
+                /// The variant `ignore` in the enum `AttentionDecision`
+                Ignore = 0,
+
+                /// The variant `remember` in the enum `AttentionDecision`
+                Remember = 1,
+
+                /// The variant `batch` in the enum `AttentionDecision`
+                Batch = 2,
+
+                /// The variant `schedule` in the enum `AttentionDecision`
+                Schedule = 3,
+
+                /// The variant `ask_user` in the enum `AttentionDecision`
+                AskUser = 4,
+
+                /// The variant `start_work` in the enum `AttentionDecision`
+                StartWork = 5,
+
+                /// The variant `notify` in the enum `AttentionDecision`
+                Notify = 6,
+            }
+
+            impl AttentionDecision {
+                /// Array containing all valid variants of AttentionDecision
+                pub const ENUM_VALUES: [Self; 7] = [
+                    Self::Ignore,
+                    Self::Remember,
+                    Self::Batch,
+                    Self::Schedule,
+                    Self::AskUser,
+                    Self::StartWork,
+                    Self::Notify,
+                ];
+            }
+
+            impl ::core::convert::TryFrom<u8> for AttentionDecision {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(AttentionDecision::Ignore),
+                        1 => ::core::result::Result::Ok(AttentionDecision::Remember),
+                        2 => ::core::result::Result::Ok(AttentionDecision::Batch),
+                        3 => ::core::result::Result::Ok(AttentionDecision::Schedule),
+                        4 => ::core::result::Result::Ok(AttentionDecision::AskUser),
+                        5 => ::core::result::Result::Ok(AttentionDecision::StartWork),
+                        6 => ::core::result::Result::Ok(AttentionDecision::Notify),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<AttentionDecision> for u8 {
+                #[inline]
+                fn from(value: AttentionDecision) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for AttentionDecision {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<AttentionDecision> for AttentionDecision {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<AttentionDecision> for AttentionDecision {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> AttentionDecision {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<AttentionDecision, AttentionDecision> for AttentionDecision {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &AttentionDecision,
+                ) -> ::core::option::Option<AttentionDecision> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<AttentionDecision> for AttentionDecision {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<AttentionDecision> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for AttentionDecision {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for AttentionDecision {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "AttentionDecision",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<AttentionDecision> for AttentionDecision {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
+            /// The enum `PredicateKind` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `PredicateKind` in the file `schemas/events.fbs:303`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum PredicateKind {
+                /// The variant `object_exists` in the enum `PredicateKind`
+                ObjectExists = 0,
+
+                /// The variant `revision_equals` in the enum `PredicateKind`
+                RevisionEquals = 1,
+
+                /// The variant `digest_equals` in the enum `PredicateKind`
+                DigestEquals = 2,
+
+                /// The variant `receipt_matches` in the enum `PredicateKind`
+                ReceiptMatches = 3,
+
+                /// The variant `property_satisfies` in the enum `PredicateKind`
+                PropertySatisfies = 4,
+
+                /// The variant `process_terminated` in the enum `PredicateKind`
+                ProcessTerminated = 5,
+
+                /// The variant `answer_committed` in the enum `PredicateKind`
+                AnswerCommitted = 6,
+            }
+
+            impl PredicateKind {
+                /// Array containing all valid variants of PredicateKind
+                pub const ENUM_VALUES: [Self; 7] = [
+                    Self::ObjectExists,
+                    Self::RevisionEquals,
+                    Self::DigestEquals,
+                    Self::ReceiptMatches,
+                    Self::PropertySatisfies,
+                    Self::ProcessTerminated,
+                    Self::AnswerCommitted,
+                ];
+            }
+
+            impl ::core::convert::TryFrom<u8> for PredicateKind {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(PredicateKind::ObjectExists),
+                        1 => ::core::result::Result::Ok(PredicateKind::RevisionEquals),
+                        2 => ::core::result::Result::Ok(PredicateKind::DigestEquals),
+                        3 => ::core::result::Result::Ok(PredicateKind::ReceiptMatches),
+                        4 => ::core::result::Result::Ok(PredicateKind::PropertySatisfies),
+                        5 => ::core::result::Result::Ok(PredicateKind::ProcessTerminated),
+                        6 => ::core::result::Result::Ok(PredicateKind::AnswerCommitted),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<PredicateKind> for u8 {
+                #[inline]
+                fn from(value: PredicateKind) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for PredicateKind {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<PredicateKind> for PredicateKind {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<PredicateKind> for PredicateKind {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> PredicateKind {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<PredicateKind, PredicateKind> for PredicateKind {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &PredicateKind,
+                ) -> ::core::option::Option<PredicateKind> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<PredicateKind> for PredicateKind {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<PredicateKind> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for PredicateKind {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for PredicateKind {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "PredicateKind",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<PredicateKind> for PredicateKind {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
+            /// The enum `OutcomeAssessment` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `OutcomeAssessment` in the file `schemas/events.fbs:312`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum OutcomeAssessment {
+                /// The variant `supported` in the enum `OutcomeAssessment`
+                Supported = 0,
+
+                /// The variant `contradicted` in the enum `OutcomeAssessment`
+                Contradicted = 1,
+
+                /// The variant `pending` in the enum `OutcomeAssessment`
+                Pending = 2,
+
+                /// The variant `unresolvable` in the enum `OutcomeAssessment`
+                Unresolvable = 3,
+
+                /// The variant `not_executed` in the enum `OutcomeAssessment`
+                NotExecuted = 4,
+            }
+
+            impl OutcomeAssessment {
+                /// Array containing all valid variants of OutcomeAssessment
+                pub const ENUM_VALUES: [Self; 5] = [
+                    Self::Supported,
+                    Self::Contradicted,
+                    Self::Pending,
+                    Self::Unresolvable,
+                    Self::NotExecuted,
+                ];
+            }
+
+            impl ::core::convert::TryFrom<u8> for OutcomeAssessment {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(OutcomeAssessment::Supported),
+                        1 => ::core::result::Result::Ok(OutcomeAssessment::Contradicted),
+                        2 => ::core::result::Result::Ok(OutcomeAssessment::Pending),
+                        3 => ::core::result::Result::Ok(OutcomeAssessment::Unresolvable),
+                        4 => ::core::result::Result::Ok(OutcomeAssessment::NotExecuted),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<OutcomeAssessment> for u8 {
+                #[inline]
+                fn from(value: OutcomeAssessment) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for OutcomeAssessment {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<OutcomeAssessment> for OutcomeAssessment {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<OutcomeAssessment> for OutcomeAssessment {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> OutcomeAssessment {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<OutcomeAssessment, OutcomeAssessment> for OutcomeAssessment {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &OutcomeAssessment,
+                ) -> ::core::option::Option<OutcomeAssessment> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<OutcomeAssessment> for OutcomeAssessment {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<OutcomeAssessment> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for OutcomeAssessment {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for OutcomeAssessment {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "OutcomeAssessment",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<OutcomeAssessment> for OutcomeAssessment {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
+            /// The table `WakeAt` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeAt` in the file `schemas/events.fbs:314`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeAt {
+                /// The field `at_ns` in the table `WakeAt`
+                pub at_ns: i64,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeAt {
+                fn default() -> Self {
+                    Self { at_ns: 0 }
+                }
+            }
+
+            impl WakeAt {
+                /// Creates a [WakeAtBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeAtBuilder<()> {
+                    WakeAtBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_at_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_at_ns = field_at_ns.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    if prepared_at_ns.is_some() {
+                        table_writer.write_entry::<i64>(0);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_at_ns) = prepared_at_ns {
+                                object_writer.write::<_, _, 8>(&prepared_at_ns);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeAt>> for WakeAt {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<WakeAt> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeAt>> for WakeAt {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeAt>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeAt> for WakeAt {
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<WakeAt> {
+                    WakeAt::create(builder, self.at_ns)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeAt] type.
+            ///
+            /// Can be created using the [WakeAt::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeAtBuilder<State>(State);
+
+            impl WakeAtBuilder<()> {
+                /// Setter for the [`at_ns` field](WakeAt#structfield.at_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn at_ns<T0>(self, value: T0) -> WakeAtBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    WakeAtBuilder((value,))
+                }
+
+                /// Sets the [`at_ns` field](WakeAt#structfield.at_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn at_ns_as_default(self) -> WakeAtBuilder<(::planus::DefaultValue,)> {
+                    self.at_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0> WakeAtBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeAt].
+                #[inline]
+                pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<WakeAt>
+                where
+                    Self: ::planus::WriteAsOffset<WakeAt>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAsDefault<i64, i64>> ::planus::WriteAs<::planus::Offset<WakeAt>>
+                for WakeAtBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeAt>;
+
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<WakeAt> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAsDefault<i64, i64>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeAt>> for WakeAtBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeAt>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeAt>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAsDefault<i64, i64>> ::planus::WriteAsOffset<WakeAt>
+                for WakeAtBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<WakeAt> {
+                    let (v0,) = &self.0;
+                    WakeAt::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeAt].
+            #[derive(Copy, Clone)]
+            pub struct WakeAtRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> WakeAtRef<'a> {
+                /// Getter for the [`at_ns` field](WakeAt#structfield.at_ns).
+                #[inline]
+                pub fn at_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(self.0.access(0, "WakeAt", "at_ns")?.unwrap_or(0))
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeAtRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeAtRef");
+                    f.field("at_ns", &self.at_ns());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeAtRef<'a>> for WakeAt {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeAtRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        at_ns: ::core::convert::TryInto::try_into(value.at_ns()?)?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeAtRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeAtRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeAtRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeAt>> for WakeAt {
+                type Value = ::planus::Offset<WakeAt>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeAt>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeAtRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeAtRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `WakeSchedule` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeSchedule` in the file `schemas/events.fbs:318`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeSchedule {
+                /// The field `schedule` in the table `WakeSchedule`
+                pub schedule: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeSchedule {
+                fn default() -> Self {
+                    Self {
+                        schedule: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeSchedule {
+                /// Creates a [WakeScheduleBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeScheduleBuilder<()> {
+                    WakeScheduleBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_schedule: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_schedule = field_schedule.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_schedule);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeSchedule>> for WakeSchedule {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeSchedule> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeSchedule>> for WakeSchedule {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeSchedule>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeSchedule> for WakeSchedule {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeSchedule> {
+                    WakeSchedule::create(builder, &self.schedule)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeSchedule] type.
+            ///
+            /// Can be created using the [WakeSchedule::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeScheduleBuilder<State>(State);
+
+            impl WakeScheduleBuilder<()> {
+                /// Setter for the [`schedule` field](WakeSchedule#structfield.schedule).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn schedule<T0>(self, value: T0) -> WakeScheduleBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    WakeScheduleBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeScheduleBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeSchedule].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeSchedule>
+                where
+                    Self: ::planus::WriteAsOffset<WakeSchedule>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAs<::planus::Offset<WakeSchedule>> for WakeScheduleBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeSchedule>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeSchedule> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeSchedule>>
+                for WakeScheduleBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeSchedule>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeSchedule>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>> ::planus::WriteAsOffset<WakeSchedule>
+                for WakeScheduleBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeSchedule> {
+                    let (v0,) = &self.0;
+                    WakeSchedule::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeSchedule].
+            #[derive(Copy, Clone)]
+            pub struct WakeScheduleRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> WakeScheduleRef<'a> {
+                /// Getter for the [`schedule` field](WakeSchedule#structfield.schedule).
+                #[inline]
+                pub fn schedule(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(0, "WakeSchedule", "schedule")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeScheduleRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeScheduleRef");
+                    f.field("schedule", &self.schedule());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeScheduleRef<'a>> for WakeSchedule {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeScheduleRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        schedule: ::core::convert::Into::into(value.schedule()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeScheduleRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeScheduleRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeScheduleRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeSchedule>> for WakeSchedule {
+                type Value = ::planus::Offset<WakeSchedule>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeSchedule>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeScheduleRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeScheduleRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `WakeChildTerminal` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeChildTerminal` in the file `schemas/events.fbs:322`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeChildTerminal {
+                /// The field `child_id` in the table `WakeChildTerminal`
+                pub child_id: ::planus::alloc::vec::Vec<u8>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeChildTerminal {
+                fn default() -> Self {
+                    Self {
+                        child_id: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeChildTerminal {
+                /// Creates a [WakeChildTerminalBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeChildTerminalBuilder<()> {
+                    WakeChildTerminalBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_child_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_child_id = field_child_id.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_child_id);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeChildTerminal>> for WakeChildTerminal {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChildTerminal> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeChildTerminal>> for WakeChildTerminal {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeChildTerminal>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeChildTerminal> for WakeChildTerminal {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChildTerminal> {
+                    WakeChildTerminal::create(builder, &self.child_id)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeChildTerminal] type.
+            ///
+            /// Can be created using the [WakeChildTerminal::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeChildTerminalBuilder<State>(State);
+
+            impl WakeChildTerminalBuilder<()> {
+                /// Setter for the [`child_id` field](WakeChildTerminal#structfield.child_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn child_id<T0>(self, value: T0) -> WakeChildTerminalBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    WakeChildTerminalBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeChildTerminalBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeChildTerminal].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChildTerminal>
+                where
+                    Self: ::planus::WriteAsOffset<WakeChildTerminal>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAs<::planus::Offset<WakeChildTerminal>>
+                for WakeChildTerminalBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeChildTerminal>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChildTerminal> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeChildTerminal>>
+                for WakeChildTerminalBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeChildTerminal>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeChildTerminal>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOffset<WakeChildTerminal> for WakeChildTerminalBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChildTerminal> {
+                    let (v0,) = &self.0;
+                    WakeChildTerminal::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeChildTerminal].
+            #[derive(Copy, Clone)]
+            pub struct WakeChildTerminalRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeChildTerminalRef<'a> {
+                /// Getter for the [`child_id` field](WakeChildTerminal#structfield.child_id).
+                #[inline]
+                pub fn child_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "WakeChildTerminal", "child_id")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeChildTerminalRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeChildTerminalRef");
+                    f.field("child_id", &self.child_id());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeChildTerminalRef<'a>> for WakeChildTerminal {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeChildTerminalRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        child_id: value.child_id()?.to_vec(),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeChildTerminalRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeChildTerminalRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeChildTerminalRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeChildTerminal>> for WakeChildTerminal {
+                type Value = ::planus::Offset<WakeChildTerminal>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeChildTerminal>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeChildTerminalRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeChildTerminalRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `WakeProcessExit` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeProcessExit` in the file `schemas/events.fbs:326`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeProcessExit {
+                /// The field `process_id` in the table `WakeProcessExit`
+                pub process_id: ::planus::alloc::vec::Vec<u8>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeProcessExit {
+                fn default() -> Self {
+                    Self {
+                        process_id: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeProcessExit {
+                /// Creates a [WakeProcessExitBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeProcessExitBuilder<()> {
+                    WakeProcessExitBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_process_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_process_id = field_process_id.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_process_id);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeProcessExit>> for WakeProcessExit {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeProcessExit> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeProcessExit>> for WakeProcessExit {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeProcessExit>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeProcessExit> for WakeProcessExit {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeProcessExit> {
+                    WakeProcessExit::create(builder, &self.process_id)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeProcessExit] type.
+            ///
+            /// Can be created using the [WakeProcessExit::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeProcessExitBuilder<State>(State);
+
+            impl WakeProcessExitBuilder<()> {
+                /// Setter for the [`process_id` field](WakeProcessExit#structfield.process_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn process_id<T0>(self, value: T0) -> WakeProcessExitBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    WakeProcessExitBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeProcessExitBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeProcessExit].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeProcessExit>
+                where
+                    Self: ::planus::WriteAsOffset<WakeProcessExit>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAs<::planus::Offset<WakeProcessExit>>
+                for WakeProcessExitBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeProcessExit>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeProcessExit> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeProcessExit>>
+                for WakeProcessExitBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeProcessExit>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeProcessExit>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOffset<WakeProcessExit> for WakeProcessExitBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeProcessExit> {
+                    let (v0,) = &self.0;
+                    WakeProcessExit::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeProcessExit].
+            #[derive(Copy, Clone)]
+            pub struct WakeProcessExitRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeProcessExitRef<'a> {
+                /// Getter for the [`process_id` field](WakeProcessExit#structfield.process_id).
+                #[inline]
+                pub fn process_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "WakeProcessExit", "process_id")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeProcessExitRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeProcessExitRef");
+                    f.field("process_id", &self.process_id());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeProcessExitRef<'a>> for WakeProcessExit {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeProcessExitRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        process_id: value.process_id()?.to_vec(),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeProcessExitRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeProcessExitRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeProcessExitRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeProcessExit>> for WakeProcessExit {
+                type Value = ::planus::Offset<WakeProcessExit>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeProcessExit>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeProcessExitRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeProcessExitRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `WakeFileChanged` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeFileChanged` in the file `schemas/events.fbs:330`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeFileChanged {
+                /// The field `path` in the table `WakeFileChanged`
+                pub path: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeFileChanged {
+                fn default() -> Self {
+                    Self {
+                        path: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeFileChanged {
+                /// Creates a [WakeFileChangedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeFileChangedBuilder<()> {
+                    WakeFileChangedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_path: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_path = field_path.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_path);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeFileChanged>> for WakeFileChanged {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeFileChanged> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeFileChanged>> for WakeFileChanged {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeFileChanged>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeFileChanged> for WakeFileChanged {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeFileChanged> {
+                    WakeFileChanged::create(builder, &self.path)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeFileChanged] type.
+            ///
+            /// Can be created using the [WakeFileChanged::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeFileChangedBuilder<State>(State);
+
+            impl WakeFileChangedBuilder<()> {
+                /// Setter for the [`path` field](WakeFileChanged#structfield.path).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn path<T0>(self, value: T0) -> WakeFileChangedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    WakeFileChangedBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeFileChangedBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeFileChanged].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeFileChanged>
+                where
+                    Self: ::planus::WriteAsOffset<WakeFileChanged>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAs<::planus::Offset<WakeFileChanged>>
+                for WakeFileChangedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeFileChanged>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeFileChanged> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeFileChanged>>
+                for WakeFileChangedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeFileChanged>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeFileChanged>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOffset<WakeFileChanged> for WakeFileChangedBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeFileChanged> {
+                    let (v0,) = &self.0;
+                    WakeFileChanged::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeFileChanged].
+            #[derive(Copy, Clone)]
+            pub struct WakeFileChangedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeFileChangedRef<'a> {
+                /// Getter for the [`path` field](WakeFileChanged#structfield.path).
+                #[inline]
+                pub fn path(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(0, "WakeFileChanged", "path")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeFileChangedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeFileChangedRef");
+                    f.field("path", &self.path());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeFileChangedRef<'a>> for WakeFileChanged {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeFileChangedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        path: ::core::convert::Into::into(value.path()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeFileChangedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeFileChangedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeFileChangedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeFileChanged>> for WakeFileChanged {
+                type Value = ::planus::Offset<WakeFileChanged>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeFileChanged>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeFileChangedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeFileChangedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `WakeRepositoryChanged` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeRepositoryChanged` in the file `schemas/events.fbs:334`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeRepositoryChanged {
+                /// The field `repository` in the table `WakeRepositoryChanged`
+                pub repository: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeRepositoryChanged {
+                fn default() -> Self {
+                    Self {
+                        repository: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeRepositoryChanged {
+                /// Creates a [WakeRepositoryChangedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeRepositoryChangedBuilder<()> {
+                    WakeRepositoryChangedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_repository: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_repository = field_repository.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_repository);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeRepositoryChanged>> for WakeRepositoryChanged {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeRepositoryChanged> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeRepositoryChanged>> for WakeRepositoryChanged {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeRepositoryChanged>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeRepositoryChanged> for WakeRepositoryChanged {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeRepositoryChanged> {
+                    WakeRepositoryChanged::create(builder, &self.repository)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeRepositoryChanged] type.
+            ///
+            /// Can be created using the [WakeRepositoryChanged::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeRepositoryChangedBuilder<State>(State);
+
+            impl WakeRepositoryChangedBuilder<()> {
+                /// Setter for the [`repository` field](WakeRepositoryChanged#structfield.repository).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn repository<T0>(self, value: T0) -> WakeRepositoryChangedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    WakeRepositoryChangedBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeRepositoryChangedBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeRepositoryChanged].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeRepositoryChanged>
+                where
+                    Self: ::planus::WriteAsOffset<WakeRepositoryChanged>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAs<::planus::Offset<WakeRepositoryChanged>>
+                for WakeRepositoryChangedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeRepositoryChanged>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeRepositoryChanged> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeRepositoryChanged>>
+                for WakeRepositoryChangedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeRepositoryChanged>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeRepositoryChanged>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOffset<WakeRepositoryChanged>
+                for WakeRepositoryChangedBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeRepositoryChanged> {
+                    let (v0,) = &self.0;
+                    WakeRepositoryChanged::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeRepositoryChanged].
+            #[derive(Copy, Clone)]
+            pub struct WakeRepositoryChangedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeRepositoryChangedRef<'a> {
+                /// Getter for the [`repository` field](WakeRepositoryChanged#structfield.repository).
+                #[inline]
+                pub fn repository(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(0, "WakeRepositoryChanged", "repository")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeRepositoryChangedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeRepositoryChangedRef");
+                    f.field("repository", &self.repository());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeRepositoryChangedRef<'a>> for WakeRepositoryChanged {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeRepositoryChangedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        repository: ::core::convert::Into::into(value.repository()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeRepositoryChangedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeRepositoryChangedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeRepositoryChangedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeRepositoryChanged>>
+                for WakeRepositoryChanged
+            {
+                type Value = ::planus::Offset<WakeRepositoryChanged>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeRepositoryChanged>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeRepositoryChangedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeRepositoryChangedRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
+            /// The table `WakeChannelMessage` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeChannelMessage` in the file `schemas/events.fbs:338`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeChannelMessage {
+                /// The field `channel` in the table `WakeChannelMessage`
+                pub channel: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeChannelMessage {
+                fn default() -> Self {
+                    Self {
+                        channel: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeChannelMessage {
+                /// Creates a [WakeChannelMessageBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeChannelMessageBuilder<()> {
+                    WakeChannelMessageBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_channel: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_channel = field_channel.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_channel);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeChannelMessage>> for WakeChannelMessage {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChannelMessage> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeChannelMessage>> for WakeChannelMessage {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeChannelMessage>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeChannelMessage> for WakeChannelMessage {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChannelMessage> {
+                    WakeChannelMessage::create(builder, &self.channel)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeChannelMessage] type.
+            ///
+            /// Can be created using the [WakeChannelMessage::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeChannelMessageBuilder<State>(State);
+
+            impl WakeChannelMessageBuilder<()> {
+                /// Setter for the [`channel` field](WakeChannelMessage#structfield.channel).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn channel<T0>(self, value: T0) -> WakeChannelMessageBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    WakeChannelMessageBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeChannelMessageBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeChannelMessage].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChannelMessage>
+                where
+                    Self: ::planus::WriteAsOffset<WakeChannelMessage>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAs<::planus::Offset<WakeChannelMessage>>
+                for WakeChannelMessageBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeChannelMessage>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChannelMessage> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeChannelMessage>>
+                for WakeChannelMessageBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeChannelMessage>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeChannelMessage>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOffset<WakeChannelMessage> for WakeChannelMessageBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeChannelMessage> {
+                    let (v0,) = &self.0;
+                    WakeChannelMessage::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeChannelMessage].
+            #[derive(Copy, Clone)]
+            pub struct WakeChannelMessageRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeChannelMessageRef<'a> {
+                /// Getter for the [`channel` field](WakeChannelMessage#structfield.channel).
+                #[inline]
+                pub fn channel(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(0, "WakeChannelMessage", "channel")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeChannelMessageRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeChannelMessageRef");
+                    f.field("channel", &self.channel());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeChannelMessageRef<'a>> for WakeChannelMessage {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeChannelMessageRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        channel: ::core::convert::Into::into(value.channel()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeChannelMessageRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeChannelMessageRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeChannelMessageRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeChannelMessage>> for WakeChannelMessage {
+                type Value = ::planus::Offset<WakeChannelMessage>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeChannelMessage>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeChannelMessageRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeChannelMessageRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `WakeExternalCondition` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeExternalCondition` in the file `schemas/events.fbs:342`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeExternalCondition {
+                /// The field `condition` in the table `WakeExternalCondition`
+                pub condition: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeExternalCondition {
+                fn default() -> Self {
+                    Self {
+                        condition: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeExternalCondition {
+                /// Creates a [WakeExternalConditionBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeExternalConditionBuilder<()> {
+                    WakeExternalConditionBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_condition: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_condition = field_condition.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_condition);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeExternalCondition>> for WakeExternalCondition {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeExternalCondition> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeExternalCondition>> for WakeExternalCondition {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeExternalCondition>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeExternalCondition> for WakeExternalCondition {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeExternalCondition> {
+                    WakeExternalCondition::create(builder, &self.condition)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeExternalCondition] type.
+            ///
+            /// Can be created using the [WakeExternalCondition::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeExternalConditionBuilder<State>(State);
+
+            impl WakeExternalConditionBuilder<()> {
+                /// Setter for the [`condition` field](WakeExternalCondition#structfield.condition).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn condition<T0>(self, value: T0) -> WakeExternalConditionBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    WakeExternalConditionBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeExternalConditionBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeExternalCondition].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeExternalCondition>
+                where
+                    Self: ::planus::WriteAsOffset<WakeExternalCondition>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAs<::planus::Offset<WakeExternalCondition>>
+                for WakeExternalConditionBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeExternalCondition>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeExternalCondition> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeExternalCondition>>
+                for WakeExternalConditionBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeExternalCondition>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeExternalCondition>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOffset<WakeExternalCondition>
+                for WakeExternalConditionBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeExternalCondition> {
+                    let (v0,) = &self.0;
+                    WakeExternalCondition::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeExternalCondition].
+            #[derive(Copy, Clone)]
+            pub struct WakeExternalConditionRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeExternalConditionRef<'a> {
+                /// Getter for the [`condition` field](WakeExternalCondition#structfield.condition).
+                #[inline]
+                pub fn condition(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(0, "WakeExternalCondition", "condition")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeExternalConditionRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeExternalConditionRef");
+                    f.field("condition", &self.condition());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeExternalConditionRef<'a>> for WakeExternalCondition {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeExternalConditionRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        condition: ::core::convert::Into::into(value.condition()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeExternalConditionRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeExternalConditionRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeExternalConditionRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeExternalCondition>>
+                for WakeExternalCondition
+            {
+                type Value = ::planus::Offset<WakeExternalCondition>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeExternalCondition>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeExternalConditionRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeExternalConditionRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
+            /// The table `WakeUserResponse` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeUserResponse` in the file `schemas/events.fbs:346`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeUserResponse {
+                /// The field `reply_to` in the table `WakeUserResponse`
+                pub reply_to: ::planus::alloc::vec::Vec<u8>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeUserResponse {
+                fn default() -> Self {
+                    Self {
+                        reply_to: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeUserResponse {
+                /// Creates a [WakeUserResponseBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeUserResponseBuilder<()> {
+                    WakeUserResponseBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_reply_to: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_reply_to = field_reply_to.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_reply_to);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeUserResponse>> for WakeUserResponse {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeUserResponse> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeUserResponse>> for WakeUserResponse {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeUserResponse>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeUserResponse> for WakeUserResponse {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeUserResponse> {
+                    WakeUserResponse::create(builder, &self.reply_to)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeUserResponse] type.
+            ///
+            /// Can be created using the [WakeUserResponse::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeUserResponseBuilder<State>(State);
+
+            impl WakeUserResponseBuilder<()> {
+                /// Setter for the [`reply_to` field](WakeUserResponse#structfield.reply_to).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn reply_to<T0>(self, value: T0) -> WakeUserResponseBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    WakeUserResponseBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeUserResponseBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeUserResponse].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeUserResponse>
+                where
+                    Self: ::planus::WriteAsOffset<WakeUserResponse>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAs<::planus::Offset<WakeUserResponse>>
+                for WakeUserResponseBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeUserResponse>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeUserResponse> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeUserResponse>>
+                for WakeUserResponseBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeUserResponse>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeUserResponse>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOffset<WakeUserResponse> for WakeUserResponseBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeUserResponse> {
+                    let (v0,) = &self.0;
+                    WakeUserResponse::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeUserResponse].
+            #[derive(Copy, Clone)]
+            pub struct WakeUserResponseRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeUserResponseRef<'a> {
+                /// Getter for the [`reply_to` field](WakeUserResponse#structfield.reply_to).
+                #[inline]
+                pub fn reply_to(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "WakeUserResponse", "reply_to")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeUserResponseRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeUserResponseRef");
+                    f.field("reply_to", &self.reply_to());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeUserResponseRef<'a>> for WakeUserResponse {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeUserResponseRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        reply_to: value.reply_to()?.to_vec(),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeUserResponseRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeUserResponseRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeUserResponseRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeUserResponse>> for WakeUserResponse {
+                type Value = ::planus::Offset<WakeUserResponse>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeUserResponse>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeUserResponseRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeUserResponseRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `WakeEntityMentioned` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeEntityMentioned` in the file `schemas/events.fbs:350`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeEntityMentioned {
+                /// The field `entity_id` in the table `WakeEntityMentioned`
+                pub entity_id: ::planus::alloc::vec::Vec<u8>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeEntityMentioned {
+                fn default() -> Self {
+                    Self {
+                        entity_id: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeEntityMentioned {
+                /// Creates a [WakeEntityMentionedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeEntityMentionedBuilder<()> {
+                    WakeEntityMentionedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_entity_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_entity_id = field_entity_id.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_entity_id);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeEntityMentioned>> for WakeEntityMentioned {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeEntityMentioned> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeEntityMentioned>> for WakeEntityMentioned {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeEntityMentioned>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeEntityMentioned> for WakeEntityMentioned {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeEntityMentioned> {
+                    WakeEntityMentioned::create(builder, &self.entity_id)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeEntityMentioned] type.
+            ///
+            /// Can be created using the [WakeEntityMentioned::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeEntityMentionedBuilder<State>(State);
+
+            impl WakeEntityMentionedBuilder<()> {
+                /// Setter for the [`entity_id` field](WakeEntityMentioned#structfield.entity_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn entity_id<T0>(self, value: T0) -> WakeEntityMentionedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    WakeEntityMentionedBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeEntityMentionedBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeEntityMentioned].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeEntityMentioned>
+                where
+                    Self: ::planus::WriteAsOffset<WakeEntityMentioned>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAs<::planus::Offset<WakeEntityMentioned>>
+                for WakeEntityMentionedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeEntityMentioned>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeEntityMentioned> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeEntityMentioned>>
+                for WakeEntityMentionedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeEntityMentioned>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeEntityMentioned>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOffset<WakeEntityMentioned> for WakeEntityMentionedBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeEntityMentioned> {
+                    let (v0,) = &self.0;
+                    WakeEntityMentioned::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeEntityMentioned].
+            #[derive(Copy, Clone)]
+            pub struct WakeEntityMentionedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeEntityMentionedRef<'a> {
+                /// Getter for the [`entity_id` field](WakeEntityMentioned#structfield.entity_id).
+                #[inline]
+                pub fn entity_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "WakeEntityMentioned", "entity_id")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeEntityMentionedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeEntityMentionedRef");
+                    f.field("entity_id", &self.entity_id());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeEntityMentionedRef<'a>> for WakeEntityMentioned {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeEntityMentionedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        entity_id: value.entity_id()?.to_vec(),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeEntityMentionedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeEntityMentionedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeEntityMentionedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeEntityMentioned>> for WakeEntityMentioned {
+                type Value = ::planus::Offset<WakeEntityMentioned>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeEntityMentioned>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeEntityMentionedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeEntityMentionedRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
+            /// The table `WakeLoopClosed` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeLoopClosed` in the file `schemas/events.fbs:354`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeLoopClosed {
+                /// The field `loop_id` in the table `WakeLoopClosed`
+                pub loop_id: ::planus::alloc::vec::Vec<u8>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeLoopClosed {
+                fn default() -> Self {
+                    Self {
+                        loop_id: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeLoopClosed {
+                /// Creates a [WakeLoopClosedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeLoopClosedBuilder<()> {
+                    WakeLoopClosedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_loop_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_loop_id = field_loop_id.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_loop_id);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeLoopClosed>> for WakeLoopClosed {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeLoopClosed> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeLoopClosed>> for WakeLoopClosed {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeLoopClosed>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeLoopClosed> for WakeLoopClosed {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeLoopClosed> {
+                    WakeLoopClosed::create(builder, &self.loop_id)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeLoopClosed] type.
+            ///
+            /// Can be created using the [WakeLoopClosed::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeLoopClosedBuilder<State>(State);
+
+            impl WakeLoopClosedBuilder<()> {
+                /// Setter for the [`loop_id` field](WakeLoopClosed#structfield.loop_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn loop_id<T0>(self, value: T0) -> WakeLoopClosedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    WakeLoopClosedBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeLoopClosedBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeLoopClosed].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeLoopClosed>
+                where
+                    Self: ::planus::WriteAsOffset<WakeLoopClosed>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAs<::planus::Offset<WakeLoopClosed>>
+                for WakeLoopClosedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeLoopClosed>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeLoopClosed> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeLoopClosed>>
+                for WakeLoopClosedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeLoopClosed>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeLoopClosed>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOffset<WakeLoopClosed> for WakeLoopClosedBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeLoopClosed> {
+                    let (v0,) = &self.0;
+                    WakeLoopClosed::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeLoopClosed].
+            #[derive(Copy, Clone)]
+            pub struct WakeLoopClosedRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> WakeLoopClosedRef<'a> {
+                /// Getter for the [`loop_id` field](WakeLoopClosed#structfield.loop_id).
+                #[inline]
+                pub fn loop_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "WakeLoopClosed", "loop_id")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeLoopClosedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeLoopClosedRef");
+                    f.field("loop_id", &self.loop_id());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeLoopClosedRef<'a>> for WakeLoopClosed {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeLoopClosedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        loop_id: value.loop_id()?.to_vec(),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeLoopClosedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeLoopClosedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeLoopClosedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeLoopClosed>> for WakeLoopClosed {
+                type Value = ::planus::Offset<WakeLoopClosed>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeLoopClosed>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeLoopClosedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeLoopClosedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `WakePredictionResolved` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakePredictionResolved` in the file `schemas/events.fbs:358`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakePredictionResolved {
+                /// The field `prediction_id` in the table `WakePredictionResolved`
+                pub prediction_id: ::planus::alloc::vec::Vec<u8>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakePredictionResolved {
+                fn default() -> Self {
+                    Self {
+                        prediction_id: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakePredictionResolved {
+                /// Creates a [WakePredictionResolvedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakePredictionResolvedBuilder<()> {
+                    WakePredictionResolvedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_prediction_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_prediction_id = field_prediction_id.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_prediction_id);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakePredictionResolved>> for WakePredictionResolved {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakePredictionResolved> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakePredictionResolved>>
+                for WakePredictionResolved
+            {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakePredictionResolved>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakePredictionResolved> for WakePredictionResolved {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakePredictionResolved> {
+                    WakePredictionResolved::create(builder, &self.prediction_id)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakePredictionResolved] type.
+            ///
+            /// Can be created using the [WakePredictionResolved::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakePredictionResolvedBuilder<State>(State);
+
+            impl WakePredictionResolvedBuilder<()> {
+                /// Setter for the [`prediction_id` field](WakePredictionResolved#structfield.prediction_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn prediction_id<T0>(self, value: T0) -> WakePredictionResolvedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    WakePredictionResolvedBuilder((value,))
+                }
+            }
+
+            impl<T0> WakePredictionResolvedBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakePredictionResolved].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakePredictionResolved>
+                where
+                    Self: ::planus::WriteAsOffset<WakePredictionResolved>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAs<::planus::Offset<WakePredictionResolved>>
+                for WakePredictionResolvedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakePredictionResolved>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakePredictionResolved> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakePredictionResolved>>
+                for WakePredictionResolvedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakePredictionResolved>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakePredictionResolved>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<[u8]>>>
+                ::planus::WriteAsOffset<WakePredictionResolved>
+                for WakePredictionResolvedBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakePredictionResolved> {
+                    let (v0,) = &self.0;
+                    WakePredictionResolved::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakePredictionResolved].
+            #[derive(Copy, Clone)]
+            pub struct WakePredictionResolvedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakePredictionResolvedRef<'a> {
+                /// Getter for the [`prediction_id` field](WakePredictionResolved#structfield.prediction_id).
+                #[inline]
+                pub fn prediction_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "WakePredictionResolved", "prediction_id")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakePredictionResolvedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakePredictionResolvedRef");
+                    f.field("prediction_id", &self.prediction_id());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakePredictionResolvedRef<'a>> for WakePredictionResolved {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakePredictionResolvedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        prediction_id: value.prediction_id()?.to_vec(),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakePredictionResolvedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakePredictionResolvedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakePredictionResolvedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakePredictionResolved>>
+                for WakePredictionResolved
+            {
+                type Value = ::planus::Offset<WakePredictionResolved>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakePredictionResolved>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakePredictionResolvedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakePredictionResolvedRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
+            /// The table `WakeBeliefChanged` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `WakeBeliefChanged` in the file `schemas/events.fbs:362`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct WakeBeliefChanged {
+                /// The field `canonical_identity` in the table `WakeBeliefChanged`
+                pub canonical_identity: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for WakeBeliefChanged {
+                fn default() -> Self {
+                    Self {
+                        canonical_identity: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl WakeBeliefChanged {
+                /// Creates a [WakeBeliefChangedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeBeliefChangedBuilder<()> {
+                    WakeBeliefChangedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_canonical_identity: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_canonical_identity = field_canonical_identity.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<6> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_canonical_identity);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<WakeBeliefChanged>> for WakeBeliefChanged {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeBeliefChanged> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<WakeBeliefChanged>> for WakeBeliefChanged {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeBeliefChanged>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<WakeBeliefChanged> for WakeBeliefChanged {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeBeliefChanged> {
+                    WakeBeliefChanged::create(builder, &self.canonical_identity)
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeBeliefChanged] type.
+            ///
+            /// Can be created using the [WakeBeliefChanged::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeBeliefChangedBuilder<State>(State);
+
+            impl WakeBeliefChangedBuilder<()> {
+                /// Setter for the [`canonical_identity` field](WakeBeliefChanged#structfield.canonical_identity).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn canonical_identity<T0>(self, value: T0) -> WakeBeliefChangedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    WakeBeliefChangedBuilder((value,))
+                }
+            }
+
+            impl<T0> WakeBeliefChangedBuilder<(T0,)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [WakeBeliefChanged].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeBeliefChanged>
+                where
+                    Self: ::planus::WriteAsOffset<WakeBeliefChanged>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAs<::planus::Offset<WakeBeliefChanged>>
+                for WakeBeliefChangedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeBeliefChanged>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeBeliefChanged> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOptional<::planus::Offset<WakeBeliefChanged>>
+                for WakeBeliefChangedBuilder<(T0,)>
+            {
+                type Prepared = ::planus::Offset<WakeBeliefChanged>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<WakeBeliefChanged>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<T0: ::planus::WriteAs<::planus::Offset<str>>>
+                ::planus::WriteAsOffset<WakeBeliefChanged> for WakeBeliefChangedBuilder<(T0,)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<WakeBeliefChanged> {
+                    let (v0,) = &self.0;
+                    WakeBeliefChanged::create(builder, v0)
+                }
+            }
+
+            /// Reference to a deserialized [WakeBeliefChanged].
+            #[derive(Copy, Clone)]
+            pub struct WakeBeliefChangedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> WakeBeliefChangedRef<'a> {
+                /// Getter for the [`canonical_identity` field](WakeBeliefChanged#structfield.canonical_identity).
+                #[inline]
+                pub fn canonical_identity(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(0, "WakeBeliefChanged", "canonical_identity")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for WakeBeliefChangedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("WakeBeliefChangedRef");
+                    f.field("canonical_identity", &self.canonical_identity());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeBeliefChangedRef<'a>> for WakeBeliefChanged {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: WakeBeliefChangedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        canonical_identity: ::core::convert::Into::into(
+                            value.canonical_identity()?,
+                        ),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for WakeBeliefChangedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for WakeBeliefChangedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[WakeBeliefChangedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<WakeBeliefChanged>> for WakeBeliefChanged {
+                type Value = ::planus::Offset<WakeBeliefChanged>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<WakeBeliefChanged>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for WakeBeliefChangedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[WakeBeliefChangedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The union `WakeTrigger` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Union `WakeTrigger` in the file `schemas/events.fbs:366`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub enum WakeTrigger {
+                /// The variant of type `WakeAt` in the union `WakeTrigger`
+                WakeAt(::planus::alloc::boxed::Box<self::WakeAt>),
+
+                /// The variant of type `WakeSchedule` in the union `WakeTrigger`
+                WakeSchedule(::planus::alloc::boxed::Box<self::WakeSchedule>),
+
+                /// The variant of type `WakeChildTerminal` in the union `WakeTrigger`
+                WakeChildTerminal(::planus::alloc::boxed::Box<self::WakeChildTerminal>),
+
+                /// The variant of type `WakeProcessExit` in the union `WakeTrigger`
+                WakeProcessExit(::planus::alloc::boxed::Box<self::WakeProcessExit>),
+
+                /// The variant of type `WakeFileChanged` in the union `WakeTrigger`
+                WakeFileChanged(::planus::alloc::boxed::Box<self::WakeFileChanged>),
+
+                /// The variant of type `WakeRepositoryChanged` in the union `WakeTrigger`
+                WakeRepositoryChanged(::planus::alloc::boxed::Box<self::WakeRepositoryChanged>),
+
+                /// The variant of type `WakeChannelMessage` in the union `WakeTrigger`
+                WakeChannelMessage(::planus::alloc::boxed::Box<self::WakeChannelMessage>),
+
+                /// The variant of type `WakeExternalCondition` in the union `WakeTrigger`
+                WakeExternalCondition(::planus::alloc::boxed::Box<self::WakeExternalCondition>),
+
+                /// The variant of type `WakeUserResponse` in the union `WakeTrigger`
+                WakeUserResponse(::planus::alloc::boxed::Box<self::WakeUserResponse>),
+
+                /// The variant of type `WakeEntityMentioned` in the union `WakeTrigger`
+                WakeEntityMentioned(::planus::alloc::boxed::Box<self::WakeEntityMentioned>),
+
+                /// The variant of type `WakeLoopClosed` in the union `WakeTrigger`
+                WakeLoopClosed(::planus::alloc::boxed::Box<self::WakeLoopClosed>),
+
+                /// The variant of type `WakePredictionResolved` in the union `WakeTrigger`
+                WakePredictionResolved(::planus::alloc::boxed::Box<self::WakePredictionResolved>),
+
+                /// The variant of type `WakeBeliefChanged` in the union `WakeTrigger`
+                WakeBeliefChanged(::planus::alloc::boxed::Box<self::WakeBeliefChanged>),
+            }
+
+            impl WakeTrigger {
+                /// Creates a [WakeTriggerBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> WakeTriggerBuilder<::planus::Uninitialized> {
+                    WakeTriggerBuilder(::planus::Uninitialized)
+                }
+
+                #[inline]
+                pub fn create_wake_at(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeAt>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(1, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_schedule(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeSchedule>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(2, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_child_terminal(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeChildTerminal>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(3, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_process_exit(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeProcessExit>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(4, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_file_changed(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeFileChanged>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(5, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_repository_changed(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeRepositoryChanged>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(6, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_channel_message(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeChannelMessage>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(7, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_external_condition(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeExternalCondition>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(8, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_user_response(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeUserResponse>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(9, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_entity_mentioned(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeEntityMentioned>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(10, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_loop_closed(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeLoopClosed>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(11, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_prediction_resolved(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakePredictionResolved>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(12, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_wake_belief_changed(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::WakeBeliefChanged>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(13, value.prepare(builder).downcast())
+                }
+            }
+
+            impl ::planus::WriteAsUnion<WakeTrigger> for WakeTrigger {
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::UnionOffset<Self> {
+                    match self {
+                        Self::WakeAt(value) => Self::create_wake_at(builder, value),
+                        Self::WakeSchedule(value) => Self::create_wake_schedule(builder, value),
+                        Self::WakeChildTerminal(value) => {
+                            Self::create_wake_child_terminal(builder, value)
+                        }
+                        Self::WakeProcessExit(value) => {
+                            Self::create_wake_process_exit(builder, value)
+                        }
+                        Self::WakeFileChanged(value) => {
+                            Self::create_wake_file_changed(builder, value)
+                        }
+                        Self::WakeRepositoryChanged(value) => {
+                            Self::create_wake_repository_changed(builder, value)
+                        }
+                        Self::WakeChannelMessage(value) => {
+                            Self::create_wake_channel_message(builder, value)
+                        }
+                        Self::WakeExternalCondition(value) => {
+                            Self::create_wake_external_condition(builder, value)
+                        }
+                        Self::WakeUserResponse(value) => {
+                            Self::create_wake_user_response(builder, value)
+                        }
+                        Self::WakeEntityMentioned(value) => {
+                            Self::create_wake_entity_mentioned(builder, value)
+                        }
+                        Self::WakeLoopClosed(value) => {
+                            Self::create_wake_loop_closed(builder, value)
+                        }
+                        Self::WakePredictionResolved(value) => {
+                            Self::create_wake_prediction_resolved(builder, value)
+                        }
+                        Self::WakeBeliefChanged(value) => {
+                            Self::create_wake_belief_changed(builder, value)
+                        }
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptionalUnion<WakeTrigger> for WakeTrigger {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<Self>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+
+            /// Builder for serializing an instance of the [WakeTrigger] type.
+            ///
+            /// Can be created using the [WakeTrigger::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct WakeTriggerBuilder<T>(T);
+
+            impl WakeTriggerBuilder<::planus::Uninitialized> {
+                /// Creates an instance of the [`WakeAt` variant](WakeTrigger#variant.WakeAt).
+                #[inline]
+                pub fn wake_at<T>(self, value: T) -> WakeTriggerBuilder<::planus::Initialized<1, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeAt>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeSchedule` variant](WakeTrigger#variant.WakeSchedule).
+                #[inline]
+                pub fn wake_schedule<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<2, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeSchedule>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeChildTerminal` variant](WakeTrigger#variant.WakeChildTerminal).
+                #[inline]
+                pub fn wake_child_terminal<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<3, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeChildTerminal>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeProcessExit` variant](WakeTrigger#variant.WakeProcessExit).
+                #[inline]
+                pub fn wake_process_exit<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<4, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeProcessExit>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeFileChanged` variant](WakeTrigger#variant.WakeFileChanged).
+                #[inline]
+                pub fn wake_file_changed<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<5, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeFileChanged>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeRepositoryChanged` variant](WakeTrigger#variant.WakeRepositoryChanged).
+                #[inline]
+                pub fn wake_repository_changed<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<6, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeRepositoryChanged>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeChannelMessage` variant](WakeTrigger#variant.WakeChannelMessage).
+                #[inline]
+                pub fn wake_channel_message<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<7, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeChannelMessage>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeExternalCondition` variant](WakeTrigger#variant.WakeExternalCondition).
+                #[inline]
+                pub fn wake_external_condition<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<8, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeExternalCondition>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeUserResponse` variant](WakeTrigger#variant.WakeUserResponse).
+                #[inline]
+                pub fn wake_user_response<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<9, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeUserResponse>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeEntityMentioned` variant](WakeTrigger#variant.WakeEntityMentioned).
+                #[inline]
+                pub fn wake_entity_mentioned<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<10, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeEntityMentioned>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeLoopClosed` variant](WakeTrigger#variant.WakeLoopClosed).
+                #[inline]
+                pub fn wake_loop_closed<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<11, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeLoopClosed>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakePredictionResolved` variant](WakeTrigger#variant.WakePredictionResolved).
+                #[inline]
+                pub fn wake_prediction_resolved<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<12, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakePredictionResolved>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`WakeBeliefChanged` variant](WakeTrigger#variant.WakeBeliefChanged).
+                #[inline]
+                pub fn wake_belief_changed<T>(
+                    self,
+                    value: T,
+                ) -> WakeTriggerBuilder<::planus::Initialized<13, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::WakeBeliefChanged>,
+                {
+                    WakeTriggerBuilder(::planus::Initialized(value))
+                }
+            }
+
+            impl<const N: u8, T> WakeTriggerBuilder<::planus::Initialized<N, T>> {
+                /// Finish writing the builder to get an [UnionOffset](::planus::UnionOffset) to a serialized [WakeTrigger].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger>
+                where
+                    Self: ::planus::WriteAsUnion<WakeTrigger>,
+                {
+                    ::planus::WriteAsUnion::prepare(&self, builder)
+                }
+            }
+
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<1, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeAt>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(1, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<1, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeAt>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<2, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeSchedule>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(2, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<2, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeSchedule>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<3, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeChildTerminal>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(3, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<3, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeChildTerminal>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<4, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeProcessExit>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(4, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<4, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeProcessExit>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<5, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeFileChanged>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(5, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<5, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeFileChanged>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<6, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeRepositoryChanged>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(6, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<6, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeRepositoryChanged>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<7, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeChannelMessage>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(7, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<7, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeChannelMessage>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<8, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeExternalCondition>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(8, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<8, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeExternalCondition>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<9, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeUserResponse>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(9, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<9, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeUserResponse>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<10, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeEntityMentioned>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(10, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<10, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeEntityMentioned>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<11, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeLoopClosed>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(11, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<11, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeLoopClosed>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<12, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakePredictionResolved>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(12, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<12, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakePredictionResolved>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<WakeTrigger> for WakeTriggerBuilder<::planus::Initialized<13, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeBeliefChanged>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<WakeTrigger> {
+                    ::planus::UnionOffset::new(13, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<WakeTrigger>
+                for WakeTriggerBuilder<::planus::Initialized<13, T>>
+            where
+                T: ::planus::WriteAsOffset<self::WakeBeliefChanged>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<WakeTrigger>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+
+            /// Reference to a deserialized [WakeTrigger].
+            #[derive(Copy, Clone, Debug)]
+            pub enum WakeTriggerRef<'a> {
+                WakeAt(self::WakeAtRef<'a>),
+                WakeSchedule(self::WakeScheduleRef<'a>),
+                WakeChildTerminal(self::WakeChildTerminalRef<'a>),
+                WakeProcessExit(self::WakeProcessExitRef<'a>),
+                WakeFileChanged(self::WakeFileChangedRef<'a>),
+                WakeRepositoryChanged(self::WakeRepositoryChangedRef<'a>),
+                WakeChannelMessage(self::WakeChannelMessageRef<'a>),
+                WakeExternalCondition(self::WakeExternalConditionRef<'a>),
+                WakeUserResponse(self::WakeUserResponseRef<'a>),
+                WakeEntityMentioned(self::WakeEntityMentionedRef<'a>),
+                WakeLoopClosed(self::WakeLoopClosedRef<'a>),
+                WakePredictionResolved(self::WakePredictionResolvedRef<'a>),
+                WakeBeliefChanged(self::WakeBeliefChangedRef<'a>),
+            }
+
+            impl<'a> ::core::convert::TryFrom<WakeTriggerRef<'a>> for WakeTrigger {
+                type Error = ::planus::Error;
+
+                fn try_from(value: WakeTriggerRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(match value {
+                        WakeTriggerRef::WakeAt(value) => {
+                            Self::WakeAt(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeSchedule(value) => {
+                            Self::WakeSchedule(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeChildTerminal(value) => {
+                            Self::WakeChildTerminal(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeProcessExit(value) => {
+                            Self::WakeProcessExit(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeFileChanged(value) => {
+                            Self::WakeFileChanged(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeRepositoryChanged(value) => {
+                            Self::WakeRepositoryChanged(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeChannelMessage(value) => {
+                            Self::WakeChannelMessage(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeExternalCondition(value) => {
+                            Self::WakeExternalCondition(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeUserResponse(value) => {
+                            Self::WakeUserResponse(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeEntityMentioned(value) => {
+                            Self::WakeEntityMentioned(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeLoopClosed(value) => {
+                            Self::WakeLoopClosed(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakePredictionResolved(value) => {
+                            Self::WakePredictionResolved(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        WakeTriggerRef::WakeBeliefChanged(value) => {
+                            Self::WakeBeliefChanged(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableReadUnion<'a> for WakeTriggerRef<'a> {
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    tag: u8,
+                    field_offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    match tag {
+                        1 => ::core::result::Result::Ok(Self::WakeAt(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        2 => ::core::result::Result::Ok(Self::WakeSchedule(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        3 => ::core::result::Result::Ok(Self::WakeChildTerminal(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        4 => ::core::result::Result::Ok(Self::WakeProcessExit(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        5 => ::core::result::Result::Ok(Self::WakeFileChanged(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        6 => ::core::result::Result::Ok(Self::WakeRepositoryChanged(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        7 => ::core::result::Result::Ok(Self::WakeChannelMessage(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        8 => ::core::result::Result::Ok(Self::WakeExternalCondition(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        9 => ::core::result::Result::Ok(Self::WakeUserResponse(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        10 => ::core::result::Result::Ok(Self::WakeEntityMentioned(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        11 => ::core::result::Result::Ok(Self::WakeLoopClosed(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        12 => ::core::result::Result::Ok(Self::WakePredictionResolved(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        13 => ::core::result::Result::Ok(Self::WakeBeliefChanged(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        _ => ::core::result::Result::Err(
+                            ::planus::errors::ErrorKind::UnknownUnionTag { tag },
+                        ),
+                    }
+                }
+            }
+
+            impl<'a> ::planus::VectorReadUnion<'a> for WakeTriggerRef<'a> {
+                const VECTOR_NAME: &'static str = "[WakeTriggerRef]";
+            }
+
+            /// The table `IntentionSet` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `IntentionSet` in the file `schemas/events.fbs:382`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct IntentionSet {
+                /// The field `intention_id` in the table `IntentionSet`
+                pub intention_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `objective` in the table `IntentionSet`
+                pub objective: ::planus::alloc::vec::Vec<u8>,
+                /// The field `trigger` in the table `IntentionSet`
+                pub trigger: ::core::option::Option<self::WakeTrigger>,
+                /// The field `expires_at_ns` in the table `IntentionSet`
+                pub expires_at_ns: i64,
+                /// The field `reply_route` in the table `IntentionSet`
+                pub reply_route: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for IntentionSet {
+                fn default() -> Self {
+                    Self {
+                        intention_id: ::core::default::Default::default(),
+                        objective: ::core::default::Default::default(),
+                        trigger: ::core::default::Default::default(),
+                        expires_at_ns: 0,
+                        reply_route: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl IntentionSet {
+                /// Creates a [IntentionSetBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> IntentionSetBuilder<()> {
+                    IntentionSetBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_intention_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_objective: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_trigger: impl ::planus::WriteAsOptionalUnion<self::WakeTrigger>,
+                    field_expires_at_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                    field_reply_route: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_intention_id = field_intention_id.prepare(builder);
+                    let prepared_objective = field_objective.prepare(builder);
+                    let prepared_trigger = field_trigger.prepare(builder);
+                    let prepared_expires_at_ns = field_expires_at_ns.prepare(builder, &0);
+                    let prepared_reply_route = field_reply_route.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<16> =
+                        ::core::default::Default::default();
+                    if prepared_expires_at_ns.is_some() {
+                        table_writer.write_entry::<i64>(4);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+                    if prepared_trigger.is_some() {
+                        table_writer.write_entry::<::planus::Offset<self::WakeTrigger>>(3);
+                    }
+                    table_writer.write_entry::<::planus::Offset<str>>(5);
+                    if prepared_trigger.is_some() {
+                        table_writer.write_entry::<u8>(2);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_expires_at_ns) =
+                                prepared_expires_at_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_expires_at_ns);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_intention_id);
+                            object_writer.write::<_, _, 4>(&prepared_objective);
+                            if let ::core::option::Option::Some(prepared_trigger) = prepared_trigger
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_trigger.offset());
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_reply_route);
+                            if let ::core::option::Option::Some(prepared_trigger) = prepared_trigger
+                            {
+                                object_writer.write::<_, _, 1>(&prepared_trigger.tag());
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<IntentionSet>> for IntentionSet {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionSet> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<IntentionSet>> for IntentionSet {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<IntentionSet>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<IntentionSet> for IntentionSet {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionSet> {
+                    IntentionSet::create(
+                        builder,
+                        &self.intention_id,
+                        &self.objective,
+                        &self.trigger,
+                        self.expires_at_ns,
+                        &self.reply_route,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [IntentionSet] type.
+            ///
+            /// Can be created using the [IntentionSet::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct IntentionSetBuilder<State>(State);
+
+            impl IntentionSetBuilder<()> {
+                /// Setter for the [`intention_id` field](IntentionSet#structfield.intention_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn intention_id<T0>(self, value: T0) -> IntentionSetBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    IntentionSetBuilder((value,))
+                }
+            }
+
+            impl<T0> IntentionSetBuilder<(T0,)> {
+                /// Setter for the [`objective` field](IntentionSet#structfield.objective).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn objective<T1>(self, value: T1) -> IntentionSetBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    IntentionSetBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> IntentionSetBuilder<(T0, T1)> {
+                /// Setter for the [`trigger` field](IntentionSet#structfield.trigger).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn trigger<T2>(self, value: T2) -> IntentionSetBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsOptionalUnion<self::WakeTrigger>,
+                {
+                    let (v0, v1) = self.0;
+                    IntentionSetBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`trigger` field](IntentionSet#structfield.trigger) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn trigger_as_null(self) -> IntentionSetBuilder<(T0, T1, ())> {
+                    self.trigger(())
+                }
+            }
+
+            impl<T0, T1, T2> IntentionSetBuilder<(T0, T1, T2)> {
+                /// Setter for the [`expires_at_ns` field](IntentionSet#structfield.expires_at_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn expires_at_ns<T3>(self, value: T3) -> IntentionSetBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    IntentionSetBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`expires_at_ns` field](IntentionSet#structfield.expires_at_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn expires_at_ns_as_default(
+                    self,
+                ) -> IntentionSetBuilder<(T0, T1, T2, ::planus::DefaultValue)> {
+                    self.expires_at_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3> IntentionSetBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`reply_route` field](IntentionSet#structfield.reply_route).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn reply_route<T4>(self, value: T4) -> IntentionSetBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    IntentionSetBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> IntentionSetBuilder<(T0, T1, T2, T3, T4)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [IntentionSet].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionSet>
+                where
+                    Self: ::planus::WriteAsOffset<IntentionSet>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsOptionalUnion<self::WakeTrigger>,
+                    T3: ::planus::WriteAsDefault<i64, i64>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<IntentionSet>>
+                for IntentionSetBuilder<(T0, T1, T2, T3, T4)>
+            {
+                type Prepared = ::planus::Offset<IntentionSet>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionSet> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsOptionalUnion<self::WakeTrigger>,
+                    T3: ::planus::WriteAsDefault<i64, i64>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<IntentionSet>>
+                for IntentionSetBuilder<(T0, T1, T2, T3, T4)>
+            {
+                type Prepared = ::planus::Offset<IntentionSet>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<IntentionSet>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsOptionalUnion<self::WakeTrigger>,
+                    T3: ::planus::WriteAsDefault<i64, i64>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<IntentionSet>
+                for IntentionSetBuilder<(T0, T1, T2, T3, T4)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionSet> {
+                    let (v0, v1, v2, v3, v4) = &self.0;
+                    IntentionSet::create(builder, v0, v1, v2, v3, v4)
+                }
+            }
+
+            /// Reference to a deserialized [IntentionSet].
+            #[derive(Copy, Clone)]
+            pub struct IntentionSetRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> IntentionSetRef<'a> {
+                /// Getter for the [`intention_id` field](IntentionSet#structfield.intention_id).
+                #[inline]
+                pub fn intention_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "IntentionSet", "intention_id")
+                }
+
+                /// Getter for the [`objective` field](IntentionSet#structfield.objective).
+                #[inline]
+                pub fn objective(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(1, "IntentionSet", "objective")
+                }
+
+                /// Getter for the [`trigger` field](IntentionSet#structfield.trigger).
+                #[inline]
+                pub fn trigger(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<self::WakeTriggerRef<'a>>>
+                {
+                    self.0.access_union(2, "IntentionSet", "trigger")
+                }
+
+                /// Getter for the [`expires_at_ns` field](IntentionSet#structfield.expires_at_ns).
+                #[inline]
+                pub fn expires_at_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "IntentionSet", "expires_at_ns")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`reply_route` field](IntentionSet#structfield.reply_route).
+                #[inline]
+                pub fn reply_route(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(5, "IntentionSet", "reply_route")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for IntentionSetRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("IntentionSetRef");
+                    f.field("intention_id", &self.intention_id());
+                    f.field("objective", &self.objective());
+                    if let ::core::option::Option::Some(field_trigger) = self.trigger().transpose()
+                    {
+                        f.field("trigger", &field_trigger);
+                    }
+                    f.field("expires_at_ns", &self.expires_at_ns());
+                    f.field("reply_route", &self.reply_route());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<IntentionSetRef<'a>> for IntentionSet {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: IntentionSetRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        intention_id: value.intention_id()?.to_vec(),
+                        objective: value.objective()?.to_vec(),
+                        trigger: if let ::core::option::Option::Some(trigger) = value.trigger()? {
+                            ::core::option::Option::Some(::core::convert::TryInto::try_into(
+                                trigger,
+                            )?)
+                        } else {
+                            ::core::option::Option::None
+                        },
+                        expires_at_ns: ::core::convert::TryInto::try_into(value.expires_at_ns()?)?,
+                        reply_route: ::core::convert::Into::into(value.reply_route()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for IntentionSetRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for IntentionSetRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[IntentionSetRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<IntentionSet>> for IntentionSet {
+                type Value = ::planus::Offset<IntentionSet>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<IntentionSet>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for IntentionSetRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[IntentionSetRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `IntentionFired` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `IntentionFired` in the file `schemas/events.fbs:390`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct IntentionFired {
+                /// The field `intention_id` in the table `IntentionFired`
+                pub intention_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `wake_id` in the table `IntentionFired`
+                pub wake_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `trigger_lsn` in the table `IntentionFired`
+                pub trigger_lsn: u64,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for IntentionFired {
+                fn default() -> Self {
+                    Self {
+                        intention_id: ::core::default::Default::default(),
+                        wake_id: ::core::default::Default::default(),
+                        trigger_lsn: 0,
+                    }
+                }
+            }
+
+            impl IntentionFired {
+                /// Creates a [IntentionFiredBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> IntentionFiredBuilder<()> {
+                    IntentionFiredBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_intention_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_wake_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_trigger_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_intention_id = field_intention_id.prepare(builder);
+                    let prepared_wake_id = field_wake_id.prepare(builder);
+                    let prepared_trigger_lsn = field_trigger_lsn.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<10> =
+                        ::core::default::Default::default();
+                    if prepared_trigger_lsn.is_some() {
+                        table_writer.write_entry::<u64>(2);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_trigger_lsn) =
+                                prepared_trigger_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_trigger_lsn);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_intention_id);
+                            object_writer.write::<_, _, 4>(&prepared_wake_id);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<IntentionFired>> for IntentionFired {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionFired> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<IntentionFired>> for IntentionFired {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<IntentionFired>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<IntentionFired> for IntentionFired {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionFired> {
+                    IntentionFired::create(
+                        builder,
+                        &self.intention_id,
+                        &self.wake_id,
+                        self.trigger_lsn,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [IntentionFired] type.
+            ///
+            /// Can be created using the [IntentionFired::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct IntentionFiredBuilder<State>(State);
+
+            impl IntentionFiredBuilder<()> {
+                /// Setter for the [`intention_id` field](IntentionFired#structfield.intention_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn intention_id<T0>(self, value: T0) -> IntentionFiredBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    IntentionFiredBuilder((value,))
+                }
+            }
+
+            impl<T0> IntentionFiredBuilder<(T0,)> {
+                /// Setter for the [`wake_id` field](IntentionFired#structfield.wake_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn wake_id<T1>(self, value: T1) -> IntentionFiredBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    IntentionFiredBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> IntentionFiredBuilder<(T0, T1)> {
+                /// Setter for the [`trigger_lsn` field](IntentionFired#structfield.trigger_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn trigger_lsn<T2>(self, value: T2) -> IntentionFiredBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1) = self.0;
+                    IntentionFiredBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`trigger_lsn` field](IntentionFired#structfield.trigger_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn trigger_lsn_as_default(
+                    self,
+                ) -> IntentionFiredBuilder<(T0, T1, ::planus::DefaultValue)> {
+                    self.trigger_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> IntentionFiredBuilder<(T0, T1, T2)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [IntentionFired].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionFired>
+                where
+                    Self: ::planus::WriteAsOffset<IntentionFired>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<IntentionFired>>
+                for IntentionFiredBuilder<(T0, T1, T2)>
+            {
+                type Prepared = ::planus::Offset<IntentionFired>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionFired> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<IntentionFired>>
+                for IntentionFiredBuilder<(T0, T1, T2)>
+            {
+                type Prepared = ::planus::Offset<IntentionFired>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<IntentionFired>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<IntentionFired> for IntentionFiredBuilder<(T0, T1, T2)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionFired> {
+                    let (v0, v1, v2) = &self.0;
+                    IntentionFired::create(builder, v0, v1, v2)
+                }
+            }
+
+            /// Reference to a deserialized [IntentionFired].
+            #[derive(Copy, Clone)]
+            pub struct IntentionFiredRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> IntentionFiredRef<'a> {
+                /// Getter for the [`intention_id` field](IntentionFired#structfield.intention_id).
+                #[inline]
+                pub fn intention_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "IntentionFired", "intention_id")
+                }
+
+                /// Getter for the [`wake_id` field](IntentionFired#structfield.wake_id).
+                #[inline]
+                pub fn wake_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(1, "IntentionFired", "wake_id")
+                }
+
+                /// Getter for the [`trigger_lsn` field](IntentionFired#structfield.trigger_lsn).
+                #[inline]
+                pub fn trigger_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "IntentionFired", "trigger_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for IntentionFiredRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("IntentionFiredRef");
+                    f.field("intention_id", &self.intention_id());
+                    f.field("wake_id", &self.wake_id());
+                    f.field("trigger_lsn", &self.trigger_lsn());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<IntentionFiredRef<'a>> for IntentionFired {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: IntentionFiredRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        intention_id: value.intention_id()?.to_vec(),
+                        wake_id: value.wake_id()?.to_vec(),
+                        trigger_lsn: ::core::convert::TryInto::try_into(value.trigger_lsn()?)?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for IntentionFiredRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for IntentionFiredRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[IntentionFiredRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<IntentionFired>> for IntentionFired {
+                type Value = ::planus::Offset<IntentionFired>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<IntentionFired>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for IntentionFiredRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[IntentionFiredRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `AttentionDecided` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `AttentionDecided` in the file `schemas/events.fbs:396`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct AttentionDecided {
+                /// The field `intention_id` in the table `AttentionDecided`
+                pub intention_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `wake_id` in the table `AttentionDecided`
+                pub wake_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `decision` in the table `AttentionDecided`
+                pub decision: self::AttentionDecision,
+                /// The field `reason` in the table `AttentionDecided`
+                pub reason: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for AttentionDecided {
+                fn default() -> Self {
+                    Self {
+                        intention_id: ::core::default::Default::default(),
+                        wake_id: ::core::default::Default::default(),
+                        decision: self::AttentionDecision::Ignore,
+                        reason: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl AttentionDecided {
+                /// Creates a [AttentionDecidedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> AttentionDecidedBuilder<()> {
+                    AttentionDecidedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_intention_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_wake_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_decision: impl ::planus::WriteAsDefault<
+                        self::AttentionDecision,
+                        self::AttentionDecision,
+                    >,
+                    field_reason: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_intention_id = field_intention_id.prepare(builder);
+                    let prepared_wake_id = field_wake_id.prepare(builder);
+                    let prepared_decision =
+                        field_decision.prepare(builder, &self::AttentionDecision::Ignore);
+                    let prepared_reason = field_reason.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<12> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+                    table_writer.write_entry::<::planus::Offset<str>>(3);
+                    if prepared_decision.is_some() {
+                        table_writer.write_entry::<self::AttentionDecision>(2);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_intention_id);
+                            object_writer.write::<_, _, 4>(&prepared_wake_id);
+                            object_writer.write::<_, _, 4>(&prepared_reason);
+                            if let ::core::option::Option::Some(prepared_decision) =
+                                prepared_decision
+                            {
+                                object_writer.write::<_, _, 1>(&prepared_decision);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<AttentionDecided>> for AttentionDecided {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<AttentionDecided> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<AttentionDecided>> for AttentionDecided {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<AttentionDecided>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<AttentionDecided> for AttentionDecided {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<AttentionDecided> {
+                    AttentionDecided::create(
+                        builder,
+                        &self.intention_id,
+                        &self.wake_id,
+                        self.decision,
+                        &self.reason,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [AttentionDecided] type.
+            ///
+            /// Can be created using the [AttentionDecided::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct AttentionDecidedBuilder<State>(State);
+
+            impl AttentionDecidedBuilder<()> {
+                /// Setter for the [`intention_id` field](AttentionDecided#structfield.intention_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn intention_id<T0>(self, value: T0) -> AttentionDecidedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    AttentionDecidedBuilder((value,))
+                }
+            }
+
+            impl<T0> AttentionDecidedBuilder<(T0,)> {
+                /// Setter for the [`wake_id` field](AttentionDecided#structfield.wake_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn wake_id<T1>(self, value: T1) -> AttentionDecidedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    AttentionDecidedBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> AttentionDecidedBuilder<(T0, T1)> {
+                /// Setter for the [`decision` field](AttentionDecided#structfield.decision).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn decision<T2>(self, value: T2) -> AttentionDecidedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<self::AttentionDecision, self::AttentionDecision>,
+                {
+                    let (v0, v1) = self.0;
+                    AttentionDecidedBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`decision` field](AttentionDecided#structfield.decision) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn decision_as_default(
+                    self,
+                ) -> AttentionDecidedBuilder<(T0, T1, ::planus::DefaultValue)> {
+                    self.decision(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> AttentionDecidedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`reason` field](AttentionDecided#structfield.reason).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn reason<T3>(self, value: T3) -> AttentionDecidedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    AttentionDecidedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> AttentionDecidedBuilder<(T0, T1, T2, T3)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [AttentionDecided].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<AttentionDecided>
+                where
+                    Self: ::planus::WriteAsOffset<AttentionDecided>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<self::AttentionDecision, self::AttentionDecision>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<AttentionDecided>>
+                for AttentionDecidedBuilder<(T0, T1, T2, T3)>
+            {
+                type Prepared = ::planus::Offset<AttentionDecided>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<AttentionDecided> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<self::AttentionDecision, self::AttentionDecision>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<AttentionDecided>>
+                for AttentionDecidedBuilder<(T0, T1, T2, T3)>
+            {
+                type Prepared = ::planus::Offset<AttentionDecided>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<AttentionDecided>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<self::AttentionDecision, self::AttentionDecision>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<AttentionDecided>
+                for AttentionDecidedBuilder<(T0, T1, T2, T3)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<AttentionDecided> {
+                    let (v0, v1, v2, v3) = &self.0;
+                    AttentionDecided::create(builder, v0, v1, v2, v3)
+                }
+            }
+
+            /// Reference to a deserialized [AttentionDecided].
+            #[derive(Copy, Clone)]
+            pub struct AttentionDecidedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> AttentionDecidedRef<'a> {
+                /// Getter for the [`intention_id` field](AttentionDecided#structfield.intention_id).
+                #[inline]
+                pub fn intention_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "AttentionDecided", "intention_id")
+                }
+
+                /// Getter for the [`wake_id` field](AttentionDecided#structfield.wake_id).
+                #[inline]
+                pub fn wake_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(1, "AttentionDecided", "wake_id")
+                }
+
+                /// Getter for the [`decision` field](AttentionDecided#structfield.decision).
+                #[inline]
+                pub fn decision(&self) -> ::planus::Result<self::AttentionDecision> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "AttentionDecided", "decision")?
+                            .unwrap_or(self::AttentionDecision::Ignore),
+                    )
+                }
+
+                /// Getter for the [`reason` field](AttentionDecided#structfield.reason).
+                #[inline]
+                pub fn reason(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(3, "AttentionDecided", "reason")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for AttentionDecidedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("AttentionDecidedRef");
+                    f.field("intention_id", &self.intention_id());
+                    f.field("wake_id", &self.wake_id());
+                    f.field("decision", &self.decision());
+                    f.field("reason", &self.reason());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<AttentionDecidedRef<'a>> for AttentionDecided {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: AttentionDecidedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        intention_id: value.intention_id()?.to_vec(),
+                        wake_id: value.wake_id()?.to_vec(),
+                        decision: ::core::convert::TryInto::try_into(value.decision()?)?,
+                        reason: ::core::convert::Into::into(value.reason()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for AttentionDecidedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for AttentionDecidedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[AttentionDecidedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<AttentionDecided>> for AttentionDecided {
+                type Value = ::planus::Offset<AttentionDecided>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<AttentionDecided>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for AttentionDecidedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[AttentionDecidedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `IntentionCancelled` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `IntentionCancelled` in the file `schemas/events.fbs:403`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct IntentionCancelled {
+                /// The field `intention_id` in the table `IntentionCancelled`
+                pub intention_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `reason` in the table `IntentionCancelled`
+                pub reason: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for IntentionCancelled {
+                fn default() -> Self {
+                    Self {
+                        intention_id: ::core::default::Default::default(),
+                        reason: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl IntentionCancelled {
+                /// Creates a [IntentionCancelledBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> IntentionCancelledBuilder<()> {
+                    IntentionCancelledBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_intention_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_reason: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_intention_id = field_intention_id.prepare(builder);
+                    let prepared_reason = field_reason.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<8> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(1);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_intention_id);
+                            object_writer.write::<_, _, 4>(&prepared_reason);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<IntentionCancelled>> for IntentionCancelled {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionCancelled> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<IntentionCancelled>> for IntentionCancelled {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<IntentionCancelled>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<IntentionCancelled> for IntentionCancelled {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionCancelled> {
+                    IntentionCancelled::create(builder, &self.intention_id, &self.reason)
+                }
+            }
+
+            /// Builder for serializing an instance of the [IntentionCancelled] type.
+            ///
+            /// Can be created using the [IntentionCancelled::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct IntentionCancelledBuilder<State>(State);
+
+            impl IntentionCancelledBuilder<()> {
+                /// Setter for the [`intention_id` field](IntentionCancelled#structfield.intention_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn intention_id<T0>(self, value: T0) -> IntentionCancelledBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    IntentionCancelledBuilder((value,))
+                }
+            }
+
+            impl<T0> IntentionCancelledBuilder<(T0,)> {
+                /// Setter for the [`reason` field](IntentionCancelled#structfield.reason).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn reason<T1>(self, value: T1) -> IntentionCancelledBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0,) = self.0;
+                    IntentionCancelledBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> IntentionCancelledBuilder<(T0, T1)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [IntentionCancelled].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionCancelled>
+                where
+                    Self: ::planus::WriteAsOffset<IntentionCancelled>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<IntentionCancelled>>
+                for IntentionCancelledBuilder<(T0, T1)>
+            {
+                type Prepared = ::planus::Offset<IntentionCancelled>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionCancelled> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<IntentionCancelled>>
+                for IntentionCancelledBuilder<(T0, T1)>
+            {
+                type Prepared = ::planus::Offset<IntentionCancelled>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<IntentionCancelled>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<IntentionCancelled>
+                for IntentionCancelledBuilder<(T0, T1)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<IntentionCancelled> {
+                    let (v0, v1) = &self.0;
+                    IntentionCancelled::create(builder, v0, v1)
+                }
+            }
+
+            /// Reference to a deserialized [IntentionCancelled].
+            #[derive(Copy, Clone)]
+            pub struct IntentionCancelledRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> IntentionCancelledRef<'a> {
+                /// Getter for the [`intention_id` field](IntentionCancelled#structfield.intention_id).
+                #[inline]
+                pub fn intention_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "IntentionCancelled", "intention_id")
+                }
+
+                /// Getter for the [`reason` field](IntentionCancelled#structfield.reason).
+                #[inline]
+                pub fn reason(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(1, "IntentionCancelled", "reason")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for IntentionCancelledRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("IntentionCancelledRef");
+                    f.field("intention_id", &self.intention_id());
+                    f.field("reason", &self.reason());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<IntentionCancelledRef<'a>> for IntentionCancelled {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: IntentionCancelledRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        intention_id: value.intention_id()?.to_vec(),
+                        reason: ::core::convert::Into::into(value.reason()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for IntentionCancelledRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for IntentionCancelledRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[IntentionCancelledRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<IntentionCancelled>> for IntentionCancelled {
+                type Value = ::planus::Offset<IntentionCancelled>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<IntentionCancelled>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for IntentionCancelledRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[IntentionCancelledRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `ExpectedPredicate` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `ExpectedPredicate` in the file `schemas/events.fbs:408`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ExpectedPredicate {
+                /// The field `kind` in the table `ExpectedPredicate`
+                pub kind: self::PredicateKind,
+                /// The field `scope` in the table `ExpectedPredicate`
+                pub scope: ::planus::alloc::string::String,
+                /// The field `property` in the table `ExpectedPredicate`
+                pub property: ::core::option::Option<::planus::alloc::string::String>,
+                /// The field `expected` in the table `ExpectedPredicate`
+                pub expected: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ExpectedPredicate {
+                fn default() -> Self {
+                    Self {
+                        kind: self::PredicateKind::ObjectExists,
+                        scope: ::core::default::Default::default(),
+                        property: ::core::default::Default::default(),
+                        expected: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl ExpectedPredicate {
+                /// Creates a [ExpectedPredicateBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ExpectedPredicateBuilder<()> {
+                    ExpectedPredicateBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_kind: impl ::planus::WriteAsDefault<self::PredicateKind, self::PredicateKind>,
+                    field_scope: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_property: impl ::planus::WriteAsOptional<
+                        ::planus::Offset<::core::primitive::str>,
+                    >,
+                    field_expected: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_kind =
+                        field_kind.prepare(builder, &self::PredicateKind::ObjectExists);
+                    let prepared_scope = field_scope.prepare(builder);
+                    let prepared_property = field_property.prepare(builder);
+                    let prepared_expected = field_expected.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<12> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<str>>(1);
+                    if prepared_property.is_some() {
+                        table_writer.write_entry::<::planus::Offset<str>>(2);
+                    }
+                    if prepared_expected.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u8]>>(3);
+                    }
+                    if prepared_kind.is_some() {
+                        table_writer.write_entry::<self::PredicateKind>(0);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_scope);
+                            if let ::core::option::Option::Some(prepared_property) =
+                                prepared_property
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_property);
+                            }
+                            if let ::core::option::Option::Some(prepared_expected) =
+                                prepared_expected
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_expected);
+                            }
+                            if let ::core::option::Option::Some(prepared_kind) = prepared_kind {
+                                object_writer.write::<_, _, 1>(&prepared_kind);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ExpectedPredicate>> for ExpectedPredicate {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ExpectedPredicate> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ExpectedPredicate>> for ExpectedPredicate {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ExpectedPredicate>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ExpectedPredicate> for ExpectedPredicate {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ExpectedPredicate> {
+                    ExpectedPredicate::create(
+                        builder,
+                        self.kind,
+                        &self.scope,
+                        &self.property,
+                        &self.expected,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [ExpectedPredicate] type.
+            ///
+            /// Can be created using the [ExpectedPredicate::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ExpectedPredicateBuilder<State>(State);
+
+            impl ExpectedPredicateBuilder<()> {
+                /// Setter for the [`kind` field](ExpectedPredicate#structfield.kind).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn kind<T0>(self, value: T0) -> ExpectedPredicateBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAsDefault<self::PredicateKind, self::PredicateKind>,
+                {
+                    ExpectedPredicateBuilder((value,))
+                }
+
+                /// Sets the [`kind` field](ExpectedPredicate#structfield.kind) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn kind_as_default(
+                    self,
+                ) -> ExpectedPredicateBuilder<(::planus::DefaultValue,)> {
+                    self.kind(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0> ExpectedPredicateBuilder<(T0,)> {
+                /// Setter for the [`scope` field](ExpectedPredicate#structfield.scope).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn scope<T1>(self, value: T1) -> ExpectedPredicateBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0,) = self.0;
+                    ExpectedPredicateBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> ExpectedPredicateBuilder<(T0, T1)> {
+                /// Setter for the [`property` field](ExpectedPredicate#structfield.property).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn property<T2>(self, value: T2) -> ExpectedPredicateBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                {
+                    let (v0, v1) = self.0;
+                    ExpectedPredicateBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`property` field](ExpectedPredicate#structfield.property) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn property_as_null(self) -> ExpectedPredicateBuilder<(T0, T1, ())> {
+                    self.property(())
+                }
+            }
+
+            impl<T0, T1, T2> ExpectedPredicateBuilder<(T0, T1, T2)> {
+                /// Setter for the [`expected` field](ExpectedPredicate#structfield.expected).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn expected<T3>(self, value: T3) -> ExpectedPredicateBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    ExpectedPredicateBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`expected` field](ExpectedPredicate#structfield.expected) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn expected_as_null(self) -> ExpectedPredicateBuilder<(T0, T1, T2, ())> {
+                    self.expected(())
+                }
+            }
+
+            impl<T0, T1, T2, T3> ExpectedPredicateBuilder<(T0, T1, T2, T3)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ExpectedPredicate].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ExpectedPredicate>
+                where
+                    Self: ::planus::WriteAsOffset<ExpectedPredicate>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAsDefault<self::PredicateKind, self::PredicateKind>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                > ::planus::WriteAs<::planus::Offset<ExpectedPredicate>>
+                for ExpectedPredicateBuilder<(T0, T1, T2, T3)>
+            {
+                type Prepared = ::planus::Offset<ExpectedPredicate>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ExpectedPredicate> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAsDefault<self::PredicateKind, self::PredicateKind>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<ExpectedPredicate>>
+                for ExpectedPredicateBuilder<(T0, T1, T2, T3)>
+            {
+                type Prepared = ::planus::Offset<ExpectedPredicate>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ExpectedPredicate>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAsDefault<self::PredicateKind, self::PredicateKind>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                > ::planus::WriteAsOffset<ExpectedPredicate>
+                for ExpectedPredicateBuilder<(T0, T1, T2, T3)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ExpectedPredicate> {
+                    let (v0, v1, v2, v3) = &self.0;
+                    ExpectedPredicate::create(builder, v0, v1, v2, v3)
+                }
+            }
+
+            /// Reference to a deserialized [ExpectedPredicate].
+            #[derive(Copy, Clone)]
+            pub struct ExpectedPredicateRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> ExpectedPredicateRef<'a> {
+                /// Getter for the [`kind` field](ExpectedPredicate#structfield.kind).
+                #[inline]
+                pub fn kind(&self) -> ::planus::Result<self::PredicateKind> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(0, "ExpectedPredicate", "kind")?
+                            .unwrap_or(self::PredicateKind::ObjectExists),
+                    )
+                }
+
+                /// Getter for the [`scope` field](ExpectedPredicate#structfield.scope).
+                #[inline]
+                pub fn scope(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(1, "ExpectedPredicate", "scope")
+                }
+
+                /// Getter for the [`property` field](ExpectedPredicate#structfield.property).
+                #[inline]
+                pub fn property(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<&'a ::core::primitive::str>>
+                {
+                    self.0.access(2, "ExpectedPredicate", "property")
+                }
+
+                /// Getter for the [`expected` field](ExpectedPredicate#structfield.expected).
+                #[inline]
+                pub fn expected(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                    self.0.access(3, "ExpectedPredicate", "expected")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ExpectedPredicateRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ExpectedPredicateRef");
+                    f.field("kind", &self.kind());
+                    f.field("scope", &self.scope());
+                    if let ::core::option::Option::Some(field_property) =
+                        self.property().transpose()
+                    {
+                        f.field("property", &field_property);
+                    }
+                    if let ::core::option::Option::Some(field_expected) =
+                        self.expected().transpose()
+                    {
+                        f.field("expected", &field_expected);
+                    }
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ExpectedPredicateRef<'a>> for ExpectedPredicate {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ExpectedPredicateRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        kind: ::core::convert::TryInto::try_into(value.kind()?)?,
+                        scope: ::core::convert::Into::into(value.scope()?),
+                        property: value.property()?.map(::core::convert::Into::into),
+                        expected: value.expected()?.map(|v| v.to_vec()),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ExpectedPredicateRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ExpectedPredicateRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ExpectedPredicateRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ExpectedPredicate>> for ExpectedPredicate {
+                type Value = ::planus::Offset<ExpectedPredicate>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ExpectedPredicate>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ExpectedPredicateRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[ExpectedPredicateRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `Predicted` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `Predicted` in the file `schemas/events.fbs:415`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct Predicted {
+                /// The field `prediction_id` in the table `Predicted`
+                pub prediction_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `revision` in the table `Predicted`
+                pub revision: u32,
+                /// The field `task_id` in the table `Predicted`
+                pub task_id: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
+                /// The field `attempt_id` in the table `Predicted`
+                pub attempt_id: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
+                /// The field `operation_id` in the table `Predicted`
+                pub operation_id: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
+                /// The field `mechanism` in the table `Predicted`
+                pub mechanism: ::planus::alloc::string::String,
+                /// The field `predicates` in the table `Predicted`
+                pub predicates: ::planus::alloc::vec::Vec<self::ExpectedPredicate>,
+                /// The field `deadline_ns` in the table `Predicted`
+                pub deadline_ns: i64,
+                /// The field `uncertainty` in the table `Predicted`
+                pub uncertainty: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for Predicted {
+                fn default() -> Self {
+                    Self {
+                        prediction_id: ::core::default::Default::default(),
+                        revision: 0,
+                        task_id: ::core::default::Default::default(),
+                        attempt_id: ::core::default::Default::default(),
+                        operation_id: ::core::default::Default::default(),
+                        mechanism: ::core::default::Default::default(),
+                        predicates: ::core::default::Default::default(),
+                        deadline_ns: 0,
+                        uncertainty: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl Predicted {
+                /// Creates a [PredictedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> PredictedBuilder<()> {
+                    PredictedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_prediction_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_revision: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_task_id: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    field_attempt_id: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    field_operation_id: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    field_mechanism: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_predicates: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ExpectedPredicate>]>,
+                    >,
+                    field_deadline_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                    field_uncertainty: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_prediction_id = field_prediction_id.prepare(builder);
+                    let prepared_revision = field_revision.prepare(builder, &0);
+                    let prepared_task_id = field_task_id.prepare(builder);
+                    let prepared_attempt_id = field_attempt_id.prepare(builder);
+                    let prepared_operation_id = field_operation_id.prepare(builder);
+                    let prepared_mechanism = field_mechanism.prepare(builder);
+                    let prepared_predicates = field_predicates.prepare(builder);
+                    let prepared_deadline_ns = field_deadline_ns.prepare(builder, &0);
+                    let prepared_uncertainty = field_uncertainty.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<22> =
+                        ::core::default::Default::default();
+                    if prepared_deadline_ns.is_some() {
+                        table_writer.write_entry::<i64>(7);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    if prepared_revision.is_some() {
+                        table_writer.write_entry::<u32>(1);
+                    }
+                    if prepared_task_id.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u8]>>(2);
+                    }
+                    if prepared_attempt_id.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u8]>>(3);
+                    }
+                    if prepared_operation_id.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u8]>>(4);
+                    }
+                    table_writer.write_entry::<::planus::Offset<str>>(5);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<self::ExpectedPredicate>]>>(6);
+                    table_writer.write_entry::<::planus::Offset<str>>(8);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_deadline_ns) =
+                                prepared_deadline_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_deadline_ns);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_prediction_id);
+                            if let ::core::option::Option::Some(prepared_revision) =
+                                prepared_revision
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_revision);
+                            }
+                            if let ::core::option::Option::Some(prepared_task_id) = prepared_task_id
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_task_id);
+                            }
+                            if let ::core::option::Option::Some(prepared_attempt_id) =
+                                prepared_attempt_id
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_attempt_id);
+                            }
+                            if let ::core::option::Option::Some(prepared_operation_id) =
+                                prepared_operation_id
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_operation_id);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_mechanism);
+                            object_writer.write::<_, _, 4>(&prepared_predicates);
+                            object_writer.write::<_, _, 4>(&prepared_uncertainty);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<Predicted>> for Predicted {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Predicted> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<Predicted>> for Predicted {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<Predicted>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<Predicted> for Predicted {
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Predicted> {
+                    Predicted::create(
+                        builder,
+                        &self.prediction_id,
+                        self.revision,
+                        &self.task_id,
+                        &self.attempt_id,
+                        &self.operation_id,
+                        &self.mechanism,
+                        &self.predicates,
+                        self.deadline_ns,
+                        &self.uncertainty,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [Predicted] type.
+            ///
+            /// Can be created using the [Predicted::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct PredictedBuilder<State>(State);
+
+            impl PredictedBuilder<()> {
+                /// Setter for the [`prediction_id` field](Predicted#structfield.prediction_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn prediction_id<T0>(self, value: T0) -> PredictedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    PredictedBuilder((value,))
+                }
+            }
+
+            impl<T0> PredictedBuilder<(T0,)> {
+                /// Setter for the [`revision` field](Predicted#structfield.revision).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn revision<T1>(self, value: T1) -> PredictedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0,) = self.0;
+                    PredictedBuilder((v0, value))
+                }
+
+                /// Sets the [`revision` field](Predicted#structfield.revision) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn revision_as_default(self) -> PredictedBuilder<(T0, ::planus::DefaultValue)> {
+                    self.revision(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> PredictedBuilder<(T0, T1)> {
+                /// Setter for the [`task_id` field](Predicted#structfield.task_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn task_id<T2>(self, value: T2) -> PredictedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1) = self.0;
+                    PredictedBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`task_id` field](Predicted#structfield.task_id) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn task_id_as_null(self) -> PredictedBuilder<(T0, T1, ())> {
+                    self.task_id(())
+                }
+            }
+
+            impl<T0, T1, T2> PredictedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`attempt_id` field](Predicted#structfield.attempt_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn attempt_id<T3>(self, value: T3) -> PredictedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    PredictedBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`attempt_id` field](Predicted#structfield.attempt_id) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn attempt_id_as_null(self) -> PredictedBuilder<(T0, T1, T2, ())> {
+                    self.attempt_id(())
+                }
+            }
+
+            impl<T0, T1, T2, T3> PredictedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`operation_id` field](Predicted#structfield.operation_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn operation_id<T4>(self, value: T4) -> PredictedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    PredictedBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`operation_id` field](Predicted#structfield.operation_id) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn operation_id_as_null(self) -> PredictedBuilder<(T0, T1, T2, T3, ())> {
+                    self.operation_id(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> PredictedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`mechanism` field](Predicted#structfield.mechanism).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn mechanism<T5>(self, value: T5) -> PredictedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    PredictedBuilder((v0, v1, v2, v3, v4, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> PredictedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`predicates` field](Predicted#structfield.predicates).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn predicates<T6>(
+                    self,
+                    value: T6,
+                ) -> PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ExpectedPredicate>]>,
+                    >,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    PredictedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`deadline_ns` field](Predicted#structfield.deadline_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn deadline_ns<T7>(
+                    self,
+                    value: T7,
+                ) -> PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    PredictedBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+
+                /// Sets the [`deadline_ns` field](Predicted#structfield.deadline_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn deadline_ns_as_default(
+                    self,
+                ) -> PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6, ::planus::DefaultValue)>
+                {
+                    self.deadline_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7> PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
+                /// Setter for the [`uncertainty` field](Predicted#structfield.uncertainty).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn uncertainty<T8>(
+                    self,
+                    value: T8,
+                ) -> PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+                where
+                    T8: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = self.0;
+                    PredictedBuilder((v0, v1, v2, v3, v4, v5, v6, v7, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8> PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [Predicted].
+                #[inline]
+                pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<Predicted>
+                where
+                    Self: ::planus::WriteAsOffset<Predicted>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<str>>,
+                    T6: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ExpectedPredicate>]>,
+                    >,
+                    T7: ::planus::WriteAsDefault<i64, i64>,
+                    T8: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<Predicted>>
+                for PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                type Prepared = ::planus::Offset<Predicted>;
+
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Predicted> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<str>>,
+                    T6: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ExpectedPredicate>]>,
+                    >,
+                    T7: ::planus::WriteAsDefault<i64, i64>,
+                    T8: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<Predicted>>
+                for PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                type Prepared = ::planus::Offset<Predicted>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<Predicted>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<str>>,
+                    T6: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ExpectedPredicate>]>,
+                    >,
+                    T7: ::planus::WriteAsDefault<i64, i64>,
+                    T8: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<Predicted>
+                for PredictedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<Predicted> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8) = &self.0;
+                    Predicted::create(builder, v0, v1, v2, v3, v4, v5, v6, v7, v8)
+                }
+            }
+
+            /// Reference to a deserialized [Predicted].
+            #[derive(Copy, Clone)]
+            pub struct PredictedRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> PredictedRef<'a> {
+                /// Getter for the [`prediction_id` field](Predicted#structfield.prediction_id).
+                #[inline]
+                pub fn prediction_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "Predicted", "prediction_id")
+                }
+
+                /// Getter for the [`revision` field](Predicted#structfield.revision).
+                #[inline]
+                pub fn revision(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0.access(1, "Predicted", "revision")?.unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`task_id` field](Predicted#structfield.task_id).
+                #[inline]
+                pub fn task_id(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                    self.0.access(2, "Predicted", "task_id")
+                }
+
+                /// Getter for the [`attempt_id` field](Predicted#structfield.attempt_id).
+                #[inline]
+                pub fn attempt_id(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                    self.0.access(3, "Predicted", "attempt_id")
+                }
+
+                /// Getter for the [`operation_id` field](Predicted#structfield.operation_id).
+                #[inline]
+                pub fn operation_id(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                    self.0.access(4, "Predicted", "operation_id")
+                }
+
+                /// Getter for the [`mechanism` field](Predicted#structfield.mechanism).
+                #[inline]
+                pub fn mechanism(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(5, "Predicted", "mechanism")
+                }
+
+                /// Getter for the [`predicates` field](Predicted#structfield.predicates).
+                #[inline]
+                pub fn predicates(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<self::ExpectedPredicateRef<'a>>>,
+                > {
+                    self.0.access_required(6, "Predicted", "predicates")
+                }
+
+                /// Getter for the [`deadline_ns` field](Predicted#structfield.deadline_ns).
+                #[inline]
+                pub fn deadline_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(
+                        self.0.access(7, "Predicted", "deadline_ns")?.unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`uncertainty` field](Predicted#structfield.uncertainty).
+                #[inline]
+                pub fn uncertainty(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(8, "Predicted", "uncertainty")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for PredictedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("PredictedRef");
+                    f.field("prediction_id", &self.prediction_id());
+                    f.field("revision", &self.revision());
+                    if let ::core::option::Option::Some(field_task_id) = self.task_id().transpose()
+                    {
+                        f.field("task_id", &field_task_id);
+                    }
+                    if let ::core::option::Option::Some(field_attempt_id) =
+                        self.attempt_id().transpose()
+                    {
+                        f.field("attempt_id", &field_attempt_id);
+                    }
+                    if let ::core::option::Option::Some(field_operation_id) =
+                        self.operation_id().transpose()
+                    {
+                        f.field("operation_id", &field_operation_id);
+                    }
+                    f.field("mechanism", &self.mechanism());
+                    f.field("predicates", &self.predicates());
+                    f.field("deadline_ns", &self.deadline_ns());
+                    f.field("uncertainty", &self.uncertainty());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<PredictedRef<'a>> for Predicted {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: PredictedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        prediction_id: value.prediction_id()?.to_vec(),
+                        revision: ::core::convert::TryInto::try_into(value.revision()?)?,
+                        task_id: value.task_id()?.map(|v| v.to_vec()),
+                        attempt_id: value.attempt_id()?.map(|v| v.to_vec()),
+                        operation_id: value.operation_id()?.map(|v| v.to_vec()),
+                        mechanism: ::core::convert::Into::into(value.mechanism()?),
+                        predicates: value.predicates()?.to_vec_result()?,
+                        deadline_ns: ::core::convert::TryInto::try_into(value.deadline_ns()?)?,
+                        uncertainty: ::core::convert::Into::into(value.uncertainty()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for PredictedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for PredictedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[PredictedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<Predicted>> for Predicted {
+                type Value = ::planus::Offset<Predicted>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<Predicted>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for PredictedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[PredictedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `OutcomeObserved` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `OutcomeObserved` in the file `schemas/events.fbs:427`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct OutcomeObserved {
+                /// The field `prediction_id` in the table `OutcomeObserved`
+                pub prediction_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `revision` in the table `OutcomeObserved`
+                pub revision: u32,
+                /// The field `assessment` in the table `OutcomeObserved`
+                pub assessment: self::OutcomeAssessment,
+                /// The field `observation_lsns` in the table `OutcomeObserved`
+                pub observation_lsns: ::planus::alloc::vec::Vec<u64>,
+                /// The field `evaluator_version` in the table `OutcomeObserved`
+                pub evaluator_version: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for OutcomeObserved {
+                fn default() -> Self {
+                    Self {
+                        prediction_id: ::core::default::Default::default(),
+                        revision: 0,
+                        assessment: self::OutcomeAssessment::Supported,
+                        observation_lsns: ::core::default::Default::default(),
+                        evaluator_version: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl OutcomeObserved {
+                /// Creates a [OutcomeObservedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> OutcomeObservedBuilder<()> {
+                    OutcomeObservedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_prediction_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_revision: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_assessment: impl ::planus::WriteAsDefault<
+                        self::OutcomeAssessment,
+                        self::OutcomeAssessment,
+                    >,
+                    field_observation_lsns: impl ::planus::WriteAs<::planus::Offset<[u64]>>,
+                    field_evaluator_version: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_prediction_id = field_prediction_id.prepare(builder);
+                    let prepared_revision = field_revision.prepare(builder, &0);
+                    let prepared_assessment =
+                        field_assessment.prepare(builder, &self::OutcomeAssessment::Supported);
+                    let prepared_observation_lsns = field_observation_lsns.prepare(builder);
+                    let prepared_evaluator_version = field_evaluator_version.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<14> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    if prepared_revision.is_some() {
+                        table_writer.write_entry::<u32>(1);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u64]>>(3);
+                    table_writer.write_entry::<::planus::Offset<str>>(4);
+                    if prepared_assessment.is_some() {
+                        table_writer.write_entry::<self::OutcomeAssessment>(2);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_prediction_id);
+                            if let ::core::option::Option::Some(prepared_revision) =
+                                prepared_revision
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_revision);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_observation_lsns);
+                            object_writer.write::<_, _, 4>(&prepared_evaluator_version);
+                            if let ::core::option::Option::Some(prepared_assessment) =
+                                prepared_assessment
+                            {
+                                object_writer.write::<_, _, 1>(&prepared_assessment);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<OutcomeObserved>> for OutcomeObserved {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<OutcomeObserved> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<OutcomeObserved>> for OutcomeObserved {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<OutcomeObserved>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<OutcomeObserved> for OutcomeObserved {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<OutcomeObserved> {
+                    OutcomeObserved::create(
+                        builder,
+                        &self.prediction_id,
+                        self.revision,
+                        self.assessment,
+                        &self.observation_lsns,
+                        &self.evaluator_version,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [OutcomeObserved] type.
+            ///
+            /// Can be created using the [OutcomeObserved::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct OutcomeObservedBuilder<State>(State);
+
+            impl OutcomeObservedBuilder<()> {
+                /// Setter for the [`prediction_id` field](OutcomeObserved#structfield.prediction_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn prediction_id<T0>(self, value: T0) -> OutcomeObservedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    OutcomeObservedBuilder((value,))
+                }
+            }
+
+            impl<T0> OutcomeObservedBuilder<(T0,)> {
+                /// Setter for the [`revision` field](OutcomeObserved#structfield.revision).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn revision<T1>(self, value: T1) -> OutcomeObservedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0,) = self.0;
+                    OutcomeObservedBuilder((v0, value))
+                }
+
+                /// Sets the [`revision` field](OutcomeObserved#structfield.revision) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn revision_as_default(
+                    self,
+                ) -> OutcomeObservedBuilder<(T0, ::planus::DefaultValue)> {
+                    self.revision(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> OutcomeObservedBuilder<(T0, T1)> {
+                /// Setter for the [`assessment` field](OutcomeObserved#structfield.assessment).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn assessment<T2>(self, value: T2) -> OutcomeObservedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<self::OutcomeAssessment, self::OutcomeAssessment>,
+                {
+                    let (v0, v1) = self.0;
+                    OutcomeObservedBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`assessment` field](OutcomeObserved#structfield.assessment) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn assessment_as_default(
+                    self,
+                ) -> OutcomeObservedBuilder<(T0, T1, ::planus::DefaultValue)> {
+                    self.assessment(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> OutcomeObservedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`observation_lsns` field](OutcomeObserved#structfield.observation_lsns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn observation_lsns<T3>(
+                    self,
+                    value: T3,
+                ) -> OutcomeObservedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<[u64]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    OutcomeObservedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> OutcomeObservedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`evaluator_version` field](OutcomeObserved#structfield.evaluator_version).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn evaluator_version<T4>(
+                    self,
+                    value: T4,
+                ) -> OutcomeObservedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    OutcomeObservedBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> OutcomeObservedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [OutcomeObserved].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<OutcomeObserved>
+                where
+                    Self: ::planus::WriteAsOffset<OutcomeObserved>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsDefault<self::OutcomeAssessment, self::OutcomeAssessment>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u64]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<OutcomeObserved>>
+                for OutcomeObservedBuilder<(T0, T1, T2, T3, T4)>
+            {
+                type Prepared = ::planus::Offset<OutcomeObserved>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<OutcomeObserved> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsDefault<self::OutcomeAssessment, self::OutcomeAssessment>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u64]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<OutcomeObserved>>
+                for OutcomeObservedBuilder<(T0, T1, T2, T3, T4)>
+            {
+                type Prepared = ::planus::Offset<OutcomeObserved>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<OutcomeObserved>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u32, u32>,
+                    T2: ::planus::WriteAsDefault<self::OutcomeAssessment, self::OutcomeAssessment>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u64]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<OutcomeObserved>
+                for OutcomeObservedBuilder<(T0, T1, T2, T3, T4)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<OutcomeObserved> {
+                    let (v0, v1, v2, v3, v4) = &self.0;
+                    OutcomeObserved::create(builder, v0, v1, v2, v3, v4)
+                }
+            }
+
+            /// Reference to a deserialized [OutcomeObserved].
+            #[derive(Copy, Clone)]
+            pub struct OutcomeObservedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> OutcomeObservedRef<'a> {
+                /// Getter for the [`prediction_id` field](OutcomeObserved#structfield.prediction_id).
+                #[inline]
+                pub fn prediction_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "OutcomeObserved", "prediction_id")
+                }
+
+                /// Getter for the [`revision` field](OutcomeObserved#structfield.revision).
+                #[inline]
+                pub fn revision(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(1, "OutcomeObserved", "revision")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`assessment` field](OutcomeObserved#structfield.assessment).
+                #[inline]
+                pub fn assessment(&self) -> ::planus::Result<self::OutcomeAssessment> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "OutcomeObserved", "assessment")?
+                            .unwrap_or(self::OutcomeAssessment::Supported),
+                    )
+                }
+
+                /// Getter for the [`observation_lsns` field](OutcomeObserved#structfield.observation_lsns).
+                #[inline]
+                pub fn observation_lsns(&self) -> ::planus::Result<::planus::Vector<'a, u64>> {
+                    self.0
+                        .access_required(3, "OutcomeObserved", "observation_lsns")
+                }
+
+                /// Getter for the [`evaluator_version` field](OutcomeObserved#structfield.evaluator_version).
+                #[inline]
+                pub fn evaluator_version(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(4, "OutcomeObserved", "evaluator_version")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for OutcomeObservedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("OutcomeObservedRef");
+                    f.field("prediction_id", &self.prediction_id());
+                    f.field("revision", &self.revision());
+                    f.field("assessment", &self.assessment());
+                    f.field("observation_lsns", &self.observation_lsns());
+                    f.field("evaluator_version", &self.evaluator_version());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<OutcomeObservedRef<'a>> for OutcomeObserved {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: OutcomeObservedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        prediction_id: value.prediction_id()?.to_vec(),
+                        revision: ::core::convert::TryInto::try_into(value.revision()?)?,
+                        assessment: ::core::convert::TryInto::try_into(value.assessment()?)?,
+                        observation_lsns: value.observation_lsns()?.to_vec()?,
+                        evaluator_version: ::core::convert::Into::into(value.evaluator_version()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for OutcomeObservedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for OutcomeObservedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[OutcomeObservedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<OutcomeObserved>> for OutcomeObserved {
+                type Value = ::planus::Offset<OutcomeObserved>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<OutcomeObserved>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for OutcomeObservedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[OutcomeObservedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `ProcedureSupport` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `ProcedureSupport` in the file `schemas/events.fbs:435`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ProcedureSupport {
+                /// The field `source_root` in the table `ProcedureSupport`
+                pub source_root: ::planus::alloc::vec::Vec<u8>,
+                /// The field `conversation` in the table `ProcedureSupport`
+                pub conversation: ::planus::alloc::vec::Vec<u8>,
+                /// The field `episode_lsn` in the table `ProcedureSupport`
+                pub episode_lsn: u64,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ProcedureSupport {
+                fn default() -> Self {
+                    Self {
+                        source_root: ::core::default::Default::default(),
+                        conversation: ::core::default::Default::default(),
+                        episode_lsn: 0,
+                    }
+                }
+            }
+
+            impl ProcedureSupport {
+                /// Creates a [ProcedureSupportBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ProcedureSupportBuilder<()> {
+                    ProcedureSupportBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_source_root: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_conversation: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_episode_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_source_root = field_source_root.prepare(builder);
+                    let prepared_conversation = field_conversation.prepare(builder);
+                    let prepared_episode_lsn = field_episode_lsn.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<10> =
+                        ::core::default::Default::default();
+                    if prepared_episode_lsn.is_some() {
+                        table_writer.write_entry::<u64>(2);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_episode_lsn) =
+                                prepared_episode_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_episode_lsn);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_source_root);
+                            object_writer.write::<_, _, 4>(&prepared_conversation);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ProcedureSupport>> for ProcedureSupport {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureSupport> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ProcedureSupport>> for ProcedureSupport {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureSupport>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ProcedureSupport> for ProcedureSupport {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureSupport> {
+                    ProcedureSupport::create(
+                        builder,
+                        &self.source_root,
+                        &self.conversation,
+                        self.episode_lsn,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [ProcedureSupport] type.
+            ///
+            /// Can be created using the [ProcedureSupport::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ProcedureSupportBuilder<State>(State);
+
+            impl ProcedureSupportBuilder<()> {
+                /// Setter for the [`source_root` field](ProcedureSupport#structfield.source_root).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_root<T0>(self, value: T0) -> ProcedureSupportBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    ProcedureSupportBuilder((value,))
+                }
+            }
+
+            impl<T0> ProcedureSupportBuilder<(T0,)> {
+                /// Setter for the [`conversation` field](ProcedureSupport#structfield.conversation).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn conversation<T1>(self, value: T1) -> ProcedureSupportBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    ProcedureSupportBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> ProcedureSupportBuilder<(T0, T1)> {
+                /// Setter for the [`episode_lsn` field](ProcedureSupport#structfield.episode_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn episode_lsn<T2>(self, value: T2) -> ProcedureSupportBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1) = self.0;
+                    ProcedureSupportBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`episode_lsn` field](ProcedureSupport#structfield.episode_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn episode_lsn_as_default(
+                    self,
+                ) -> ProcedureSupportBuilder<(T0, T1, ::planus::DefaultValue)> {
+                    self.episode_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> ProcedureSupportBuilder<(T0, T1, T2)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ProcedureSupport].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureSupport>
+                where
+                    Self: ::planus::WriteAsOffset<ProcedureSupport>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<ProcedureSupport>>
+                for ProcedureSupportBuilder<(T0, T1, T2)>
+            {
+                type Prepared = ::planus::Offset<ProcedureSupport>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureSupport> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<ProcedureSupport>>
+                for ProcedureSupportBuilder<(T0, T1, T2)>
+            {
+                type Prepared = ::planus::Offset<ProcedureSupport>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureSupport>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<ProcedureSupport>
+                for ProcedureSupportBuilder<(T0, T1, T2)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureSupport> {
+                    let (v0, v1, v2) = &self.0;
+                    ProcedureSupport::create(builder, v0, v1, v2)
+                }
+            }
+
+            /// Reference to a deserialized [ProcedureSupport].
+            #[derive(Copy, Clone)]
+            pub struct ProcedureSupportRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> ProcedureSupportRef<'a> {
+                /// Getter for the [`source_root` field](ProcedureSupport#structfield.source_root).
+                #[inline]
+                pub fn source_root(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "ProcedureSupport", "source_root")
+                }
+
+                /// Getter for the [`conversation` field](ProcedureSupport#structfield.conversation).
+                #[inline]
+                pub fn conversation(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(1, "ProcedureSupport", "conversation")
+                }
+
+                /// Getter for the [`episode_lsn` field](ProcedureSupport#structfield.episode_lsn).
+                #[inline]
+                pub fn episode_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "ProcedureSupport", "episode_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ProcedureSupportRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ProcedureSupportRef");
+                    f.field("source_root", &self.source_root());
+                    f.field("conversation", &self.conversation());
+                    f.field("episode_lsn", &self.episode_lsn());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ProcedureSupportRef<'a>> for ProcedureSupport {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ProcedureSupportRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        source_root: value.source_root()?.to_vec(),
+                        conversation: value.conversation()?.to_vec(),
+                        episode_lsn: ::core::convert::TryInto::try_into(value.episode_lsn()?)?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ProcedureSupportRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ProcedureSupportRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ProcedureSupportRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ProcedureSupport>> for ProcedureSupport {
+                type Value = ::planus::Offset<ProcedureSupport>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ProcedureSupport>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ProcedureSupportRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[ProcedureSupportRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `ProcedureMined` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `ProcedureMined` in the file `schemas/events.fbs:441`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ProcedureMined {
+                /// The field `procedure_id` in the table `ProcedureMined`
+                pub procedure_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `strategy` in the table `ProcedureMined`
+                pub strategy: ::planus::alloc::string::String,
+                /// The field `expected_outcomes` in the table `ProcedureMined`
+                pub expected_outcomes: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `preconditions` in the table `ProcedureMined`
+                pub preconditions: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `supports` in the table `ProcedureMined`
+                pub supports: ::planus::alloc::vec::Vec<self::ProcedureSupport>,
+                /// The field `failures` in the table `ProcedureMined`
+                pub failures: ::core::option::Option<::planus::alloc::vec::Vec<u64>>,
+                /// The field `counterexamples` in the table `ProcedureMined`
+                pub counterexamples: ::core::option::Option<::planus::alloc::vec::Vec<u64>>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ProcedureMined {
+                fn default() -> Self {
+                    Self {
+                        procedure_id: ::core::default::Default::default(),
+                        strategy: ::core::default::Default::default(),
+                        expected_outcomes: ::core::default::Default::default(),
+                        preconditions: ::core::default::Default::default(),
+                        supports: ::core::default::Default::default(),
+                        failures: ::core::default::Default::default(),
+                        counterexamples: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl ProcedureMined {
+                /// Creates a [ProcedureMinedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ProcedureMinedBuilder<()> {
+                    ProcedureMinedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_procedure_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_strategy: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_expected_outcomes: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_preconditions: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_supports: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>,
+                    >,
+                    field_failures: impl ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                    field_counterexamples: impl ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_procedure_id = field_procedure_id.prepare(builder);
+                    let prepared_strategy = field_strategy.prepare(builder);
+                    let prepared_expected_outcomes = field_expected_outcomes.prepare(builder);
+                    let prepared_preconditions = field_preconditions.prepare(builder);
+                    let prepared_supports = field_supports.prepare(builder);
+                    let prepared_failures = field_failures.prepare(builder);
+                    let prepared_counterexamples = field_counterexamples.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<18> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(1);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(2);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(3);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>>(4);
+                    if prepared_failures.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u64]>>(5);
+                    }
+                    if prepared_counterexamples.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u64]>>(6);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_procedure_id);
+                            object_writer.write::<_, _, 4>(&prepared_strategy);
+                            object_writer.write::<_, _, 4>(&prepared_expected_outcomes);
+                            object_writer.write::<_, _, 4>(&prepared_preconditions);
+                            object_writer.write::<_, _, 4>(&prepared_supports);
+                            if let ::core::option::Option::Some(prepared_failures) =
+                                prepared_failures
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_failures);
+                            }
+                            if let ::core::option::Option::Some(prepared_counterexamples) =
+                                prepared_counterexamples
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_counterexamples);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ProcedureMined>> for ProcedureMined {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureMined> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ProcedureMined>> for ProcedureMined {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureMined>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ProcedureMined> for ProcedureMined {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureMined> {
+                    ProcedureMined::create(
+                        builder,
+                        &self.procedure_id,
+                        &self.strategy,
+                        &self.expected_outcomes,
+                        &self.preconditions,
+                        &self.supports,
+                        &self.failures,
+                        &self.counterexamples,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [ProcedureMined] type.
+            ///
+            /// Can be created using the [ProcedureMined::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ProcedureMinedBuilder<State>(State);
+
+            impl ProcedureMinedBuilder<()> {
+                /// Setter for the [`procedure_id` field](ProcedureMined#structfield.procedure_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn procedure_id<T0>(self, value: T0) -> ProcedureMinedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    ProcedureMinedBuilder((value,))
+                }
+            }
+
+            impl<T0> ProcedureMinedBuilder<(T0,)> {
+                /// Setter for the [`strategy` field](ProcedureMined#structfield.strategy).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn strategy<T1>(self, value: T1) -> ProcedureMinedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0,) = self.0;
+                    ProcedureMinedBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> ProcedureMinedBuilder<(T0, T1)> {
+                /// Setter for the [`expected_outcomes` field](ProcedureMined#structfield.expected_outcomes).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn expected_outcomes<T2>(self, value: T2) -> ProcedureMinedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1) = self.0;
+                    ProcedureMinedBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> ProcedureMinedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`preconditions` field](ProcedureMined#structfield.preconditions).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn preconditions<T3>(self, value: T3) -> ProcedureMinedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    ProcedureMinedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> ProcedureMinedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`supports` field](ProcedureMined#structfield.supports).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn supports<T4>(self, value: T4) -> ProcedureMinedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>,
+                    >,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    ProcedureMinedBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> ProcedureMinedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`failures` field](ProcedureMined#structfield.failures).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn failures<T5>(
+                    self,
+                    value: T5,
+                ) -> ProcedureMinedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    ProcedureMinedBuilder((v0, v1, v2, v3, v4, value))
+                }
+
+                /// Sets the [`failures` field](ProcedureMined#structfield.failures) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn failures_as_null(self) -> ProcedureMinedBuilder<(T0, T1, T2, T3, T4, ())> {
+                    self.failures(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> ProcedureMinedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`counterexamples` field](ProcedureMined#structfield.counterexamples).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn counterexamples<T6>(
+                    self,
+                    value: T6,
+                ) -> ProcedureMinedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    ProcedureMinedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+
+                /// Sets the [`counterexamples` field](ProcedureMined#structfield.counterexamples) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn counterexamples_as_null(
+                    self,
+                ) -> ProcedureMinedBuilder<(T0, T1, T2, T3, T4, T5, ())> {
+                    self.counterexamples(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> ProcedureMinedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ProcedureMined].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureMined>
+                where
+                    Self: ::planus::WriteAsOffset<ProcedureMined>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>>,
+                    T5: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                    T6: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAs<::planus::Offset<ProcedureMined>>
+                for ProcedureMinedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<ProcedureMined>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureMined> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>>,
+                    T5: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                    T6: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<ProcedureMined>>
+                for ProcedureMinedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<ProcedureMined>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureMined>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>>,
+                    T5: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                    T6: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOffset<ProcedureMined>
+                for ProcedureMinedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureMined> {
+                    let (v0, v1, v2, v3, v4, v5, v6) = &self.0;
+                    ProcedureMined::create(builder, v0, v1, v2, v3, v4, v5, v6)
+                }
+            }
+
+            /// Reference to a deserialized [ProcedureMined].
+            #[derive(Copy, Clone)]
+            pub struct ProcedureMinedRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+            impl<'a> ProcedureMinedRef<'a> {
+                /// Getter for the [`procedure_id` field](ProcedureMined#structfield.procedure_id).
+                #[inline]
+                pub fn procedure_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0.access_required(0, "ProcedureMined", "procedure_id")
+                }
+
+                /// Getter for the [`strategy` field](ProcedureMined#structfield.strategy).
+                #[inline]
+                pub fn strategy(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(1, "ProcedureMined", "strategy")
+                }
+
+                /// Getter for the [`expected_outcomes` field](ProcedureMined#structfield.expected_outcomes).
+                #[inline]
+                pub fn expected_outcomes(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0
+                        .access_required(2, "ProcedureMined", "expected_outcomes")
+                }
+
+                /// Getter for the [`preconditions` field](ProcedureMined#structfield.preconditions).
+                #[inline]
+                pub fn preconditions(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0.access_required(3, "ProcedureMined", "preconditions")
+                }
+
+                /// Getter for the [`supports` field](ProcedureMined#structfield.supports).
+                #[inline]
+                pub fn supports(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<self::ProcedureSupportRef<'a>>>,
+                > {
+                    self.0.access_required(4, "ProcedureMined", "supports")
+                }
+
+                /// Getter for the [`failures` field](ProcedureMined#structfield.failures).
+                #[inline]
+                pub fn failures(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<::planus::Vector<'a, u64>>>
+                {
+                    self.0.access(5, "ProcedureMined", "failures")
+                }
+
+                /// Getter for the [`counterexamples` field](ProcedureMined#structfield.counterexamples).
+                #[inline]
+                pub fn counterexamples(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<::planus::Vector<'a, u64>>>
+                {
+                    self.0.access(6, "ProcedureMined", "counterexamples")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ProcedureMinedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ProcedureMinedRef");
+                    f.field("procedure_id", &self.procedure_id());
+                    f.field("strategy", &self.strategy());
+                    f.field("expected_outcomes", &self.expected_outcomes());
+                    f.field("preconditions", &self.preconditions());
+                    f.field("supports", &self.supports());
+                    if let ::core::option::Option::Some(field_failures) =
+                        self.failures().transpose()
+                    {
+                        f.field("failures", &field_failures);
+                    }
+                    if let ::core::option::Option::Some(field_counterexamples) =
+                        self.counterexamples().transpose()
+                    {
+                        f.field("counterexamples", &field_counterexamples);
+                    }
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ProcedureMinedRef<'a>> for ProcedureMined {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ProcedureMinedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        procedure_id: value.procedure_id()?.to_vec(),
+                        strategy: ::core::convert::Into::into(value.strategy()?),
+                        expected_outcomes: value.expected_outcomes()?.to_vec_result()?,
+                        preconditions: value.preconditions()?.to_vec_result()?,
+                        supports: value.supports()?.to_vec_result()?,
+                        failures: if let ::core::option::Option::Some(failures) =
+                            value.failures()?
+                        {
+                            ::core::option::Option::Some(failures.to_vec()?)
+                        } else {
+                            ::core::option::Option::None
+                        },
+                        counterexamples: if let ::core::option::Option::Some(counterexamples) =
+                            value.counterexamples()?
+                        {
+                            ::core::option::Option::Some(counterexamples.to_vec()?)
+                        } else {
+                            ::core::option::Option::None
+                        },
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ProcedureMinedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ProcedureMinedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ProcedureMinedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ProcedureMined>> for ProcedureMined {
+                type Value = ::planus::Offset<ProcedureMined>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ProcedureMined>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ProcedureMinedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[ProcedureMinedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `ProcedureRevised` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `ProcedureRevised` in the file `schemas/events.fbs:451`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ProcedureRevised {
+                /// The field `procedure_id` in the table `ProcedureRevised`
+                pub procedure_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `previous_lsn` in the table `ProcedureRevised`
+                pub previous_lsn: u64,
+                /// The field `strategy` in the table `ProcedureRevised`
+                pub strategy: ::planus::alloc::string::String,
+                /// The field `expected_outcomes` in the table `ProcedureRevised`
+                pub expected_outcomes: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `preconditions` in the table `ProcedureRevised`
+                pub preconditions: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `supports` in the table `ProcedureRevised`
+                pub supports: ::planus::alloc::vec::Vec<self::ProcedureSupport>,
+                /// The field `failures` in the table `ProcedureRevised`
+                pub failures: ::core::option::Option<::planus::alloc::vec::Vec<u64>>,
+                /// The field `counterexamples` in the table `ProcedureRevised`
+                pub counterexamples: ::core::option::Option<::planus::alloc::vec::Vec<u64>>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ProcedureRevised {
+                fn default() -> Self {
+                    Self {
+                        procedure_id: ::core::default::Default::default(),
+                        previous_lsn: 0,
+                        strategy: ::core::default::Default::default(),
+                        expected_outcomes: ::core::default::Default::default(),
+                        preconditions: ::core::default::Default::default(),
+                        supports: ::core::default::Default::default(),
+                        failures: ::core::default::Default::default(),
+                        counterexamples: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl ProcedureRevised {
+                /// Creates a [ProcedureRevisedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ProcedureRevisedBuilder<()> {
+                    ProcedureRevisedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_procedure_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_previous_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_strategy: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_expected_outcomes: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_preconditions: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_supports: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>,
+                    >,
+                    field_failures: impl ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                    field_counterexamples: impl ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_procedure_id = field_procedure_id.prepare(builder);
+                    let prepared_previous_lsn = field_previous_lsn.prepare(builder, &0);
+                    let prepared_strategy = field_strategy.prepare(builder);
+                    let prepared_expected_outcomes = field_expected_outcomes.prepare(builder);
+                    let prepared_preconditions = field_preconditions.prepare(builder);
+                    let prepared_supports = field_supports.prepare(builder);
+                    let prepared_failures = field_failures.prepare(builder);
+                    let prepared_counterexamples = field_counterexamples.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<20> =
+                        ::core::default::Default::default();
+                    if prepared_previous_lsn.is_some() {
+                        table_writer.write_entry::<u64>(1);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(2);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(3);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(4);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>>(5);
+                    if prepared_failures.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u64]>>(6);
+                    }
+                    if prepared_counterexamples.is_some() {
+                        table_writer.write_entry::<::planus::Offset<[u64]>>(7);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_previous_lsn) =
+                                prepared_previous_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_previous_lsn);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_procedure_id);
+                            object_writer.write::<_, _, 4>(&prepared_strategy);
+                            object_writer.write::<_, _, 4>(&prepared_expected_outcomes);
+                            object_writer.write::<_, _, 4>(&prepared_preconditions);
+                            object_writer.write::<_, _, 4>(&prepared_supports);
+                            if let ::core::option::Option::Some(prepared_failures) =
+                                prepared_failures
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_failures);
+                            }
+                            if let ::core::option::Option::Some(prepared_counterexamples) =
+                                prepared_counterexamples
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_counterexamples);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ProcedureRevised>> for ProcedureRevised {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureRevised> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ProcedureRevised>> for ProcedureRevised {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureRevised>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ProcedureRevised> for ProcedureRevised {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureRevised> {
+                    ProcedureRevised::create(
+                        builder,
+                        &self.procedure_id,
+                        self.previous_lsn,
+                        &self.strategy,
+                        &self.expected_outcomes,
+                        &self.preconditions,
+                        &self.supports,
+                        &self.failures,
+                        &self.counterexamples,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [ProcedureRevised] type.
+            ///
+            /// Can be created using the [ProcedureRevised::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ProcedureRevisedBuilder<State>(State);
+
+            impl ProcedureRevisedBuilder<()> {
+                /// Setter for the [`procedure_id` field](ProcedureRevised#structfield.procedure_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn procedure_id<T0>(self, value: T0) -> ProcedureRevisedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    ProcedureRevisedBuilder((value,))
+                }
+            }
+
+            impl<T0> ProcedureRevisedBuilder<(T0,)> {
+                /// Setter for the [`previous_lsn` field](ProcedureRevised#structfield.previous_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn previous_lsn<T1>(self, value: T1) -> ProcedureRevisedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0,) = self.0;
+                    ProcedureRevisedBuilder((v0, value))
+                }
+
+                /// Sets the [`previous_lsn` field](ProcedureRevised#structfield.previous_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn previous_lsn_as_default(
+                    self,
+                ) -> ProcedureRevisedBuilder<(T0, ::planus::DefaultValue)> {
+                    self.previous_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> ProcedureRevisedBuilder<(T0, T1)> {
+                /// Setter for the [`strategy` field](ProcedureRevised#structfield.strategy).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn strategy<T2>(self, value: T2) -> ProcedureRevisedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1) = self.0;
+                    ProcedureRevisedBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> ProcedureRevisedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`expected_outcomes` field](ProcedureRevised#structfield.expected_outcomes).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn expected_outcomes<T3>(
+                    self,
+                    value: T3,
+                ) -> ProcedureRevisedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    ProcedureRevisedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> ProcedureRevisedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`preconditions` field](ProcedureRevised#structfield.preconditions).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn preconditions<T4>(
+                    self,
+                    value: T4,
+                ) -> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    ProcedureRevisedBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`supports` field](ProcedureRevised#structfield.supports).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn supports<T5>(
+                    self,
+                    value: T5,
+                ) -> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>,
+                    >,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    ProcedureRevisedBuilder((v0, v1, v2, v3, v4, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`failures` field](ProcedureRevised#structfield.failures).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn failures<T6>(
+                    self,
+                    value: T6,
+                ) -> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    ProcedureRevisedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+
+                /// Sets the [`failures` field](ProcedureRevised#structfield.failures) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn failures_as_null(
+                    self,
+                ) -> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, ())> {
+                    self.failures(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`counterexamples` field](ProcedureRevised#structfield.counterexamples).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn counterexamples<T7>(
+                    self,
+                    value: T7,
+                ) -> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    ProcedureRevisedBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+
+                /// Sets the [`counterexamples` field](ProcedureRevised#structfield.counterexamples) to null.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn counterexamples_as_null(
+                    self,
+                ) -> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6, ())> {
+                    self.counterexamples(())
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7> ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ProcedureRevised].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureRevised>
+                where
+                    Self: ::planus::WriteAsOffset<ProcedureRevised>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>>,
+                    T6: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAs<::planus::Offset<ProcedureRevised>>
+                for ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                type Prepared = ::planus::Offset<ProcedureRevised>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureRevised> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>>,
+                    T6: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOptional<::planus::Offset<ProcedureRevised>>
+                for ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                type Prepared = ::planus::Offset<ProcedureRevised>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureRevised>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::ProcedureSupport>]>>,
+                    T6: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOffset<ProcedureRevised>
+                for ProcedureRevisedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureRevised> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = &self.0;
+                    ProcedureRevised::create(builder, v0, v1, v2, v3, v4, v5, v6, v7)
+                }
+            }
+
+            /// Reference to a deserialized [ProcedureRevised].
+            #[derive(Copy, Clone)]
+            pub struct ProcedureRevisedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> ProcedureRevisedRef<'a> {
+                /// Getter for the [`procedure_id` field](ProcedureRevised#structfield.procedure_id).
+                #[inline]
+                pub fn procedure_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "ProcedureRevised", "procedure_id")
+                }
+
+                /// Getter for the [`previous_lsn` field](ProcedureRevised#structfield.previous_lsn).
+                #[inline]
+                pub fn previous_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(1, "ProcedureRevised", "previous_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`strategy` field](ProcedureRevised#structfield.strategy).
+                #[inline]
+                pub fn strategy(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(2, "ProcedureRevised", "strategy")
+                }
+
+                /// Getter for the [`expected_outcomes` field](ProcedureRevised#structfield.expected_outcomes).
+                #[inline]
+                pub fn expected_outcomes(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0
+                        .access_required(3, "ProcedureRevised", "expected_outcomes")
+                }
+
+                /// Getter for the [`preconditions` field](ProcedureRevised#structfield.preconditions).
+                #[inline]
+                pub fn preconditions(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0
+                        .access_required(4, "ProcedureRevised", "preconditions")
+                }
+
+                /// Getter for the [`supports` field](ProcedureRevised#structfield.supports).
+                #[inline]
+                pub fn supports(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<self::ProcedureSupportRef<'a>>>,
+                > {
+                    self.0.access_required(5, "ProcedureRevised", "supports")
+                }
+
+                /// Getter for the [`failures` field](ProcedureRevised#structfield.failures).
+                #[inline]
+                pub fn failures(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<::planus::Vector<'a, u64>>>
+                {
+                    self.0.access(6, "ProcedureRevised", "failures")
+                }
+
+                /// Getter for the [`counterexamples` field](ProcedureRevised#structfield.counterexamples).
+                #[inline]
+                pub fn counterexamples(
+                    &self,
+                ) -> ::planus::Result<::core::option::Option<::planus::Vector<'a, u64>>>
+                {
+                    self.0.access(7, "ProcedureRevised", "counterexamples")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ProcedureRevisedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ProcedureRevisedRef");
+                    f.field("procedure_id", &self.procedure_id());
+                    f.field("previous_lsn", &self.previous_lsn());
+                    f.field("strategy", &self.strategy());
+                    f.field("expected_outcomes", &self.expected_outcomes());
+                    f.field("preconditions", &self.preconditions());
+                    f.field("supports", &self.supports());
+                    if let ::core::option::Option::Some(field_failures) =
+                        self.failures().transpose()
+                    {
+                        f.field("failures", &field_failures);
+                    }
+                    if let ::core::option::Option::Some(field_counterexamples) =
+                        self.counterexamples().transpose()
+                    {
+                        f.field("counterexamples", &field_counterexamples);
+                    }
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ProcedureRevisedRef<'a>> for ProcedureRevised {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ProcedureRevisedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        procedure_id: value.procedure_id()?.to_vec(),
+                        previous_lsn: ::core::convert::TryInto::try_into(value.previous_lsn()?)?,
+                        strategy: ::core::convert::Into::into(value.strategy()?),
+                        expected_outcomes: value.expected_outcomes()?.to_vec_result()?,
+                        preconditions: value.preconditions()?.to_vec_result()?,
+                        supports: value.supports()?.to_vec_result()?,
+                        failures: if let ::core::option::Option::Some(failures) =
+                            value.failures()?
+                        {
+                            ::core::option::Option::Some(failures.to_vec()?)
+                        } else {
+                            ::core::option::Option::None
+                        },
+                        counterexamples: if let ::core::option::Option::Some(counterexamples) =
+                            value.counterexamples()?
+                        {
+                            ::core::option::Option::Some(counterexamples.to_vec()?)
+                        } else {
+                            ::core::option::Option::None
+                        },
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ProcedureRevisedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ProcedureRevisedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ProcedureRevisedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ProcedureRevised>> for ProcedureRevised {
+                type Value = ::planus::Offset<ProcedureRevised>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ProcedureRevised>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ProcedureRevisedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[ProcedureRevisedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `ProcedureAdopted` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `ProcedureAdopted` in the file `schemas/events.fbs:462`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ProcedureAdopted {
+                /// The field `procedure_id` in the table `ProcedureAdopted`
+                pub procedure_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `procedure_lsn` in the table `ProcedureAdopted`
+                pub procedure_lsn: u64,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ProcedureAdopted {
+                fn default() -> Self {
+                    Self {
+                        procedure_id: ::core::default::Default::default(),
+                        procedure_lsn: 0,
+                    }
+                }
+            }
+
+            impl ProcedureAdopted {
+                /// Creates a [ProcedureAdoptedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ProcedureAdoptedBuilder<()> {
+                    ProcedureAdoptedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_procedure_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_procedure_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_procedure_id = field_procedure_id.prepare(builder);
+                    let prepared_procedure_lsn = field_procedure_lsn.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<8> =
+                        ::core::default::Default::default();
+                    if prepared_procedure_lsn.is_some() {
+                        table_writer.write_entry::<u64>(1);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_procedure_lsn) =
+                                prepared_procedure_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_procedure_lsn);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_procedure_id);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ProcedureAdopted>> for ProcedureAdopted {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureAdopted> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ProcedureAdopted>> for ProcedureAdopted {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureAdopted>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ProcedureAdopted> for ProcedureAdopted {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureAdopted> {
+                    ProcedureAdopted::create(builder, &self.procedure_id, self.procedure_lsn)
+                }
+            }
+
+            /// Builder for serializing an instance of the [ProcedureAdopted] type.
+            ///
+            /// Can be created using the [ProcedureAdopted::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ProcedureAdoptedBuilder<State>(State);
+
+            impl ProcedureAdoptedBuilder<()> {
+                /// Setter for the [`procedure_id` field](ProcedureAdopted#structfield.procedure_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn procedure_id<T0>(self, value: T0) -> ProcedureAdoptedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    ProcedureAdoptedBuilder((value,))
+                }
+            }
+
+            impl<T0> ProcedureAdoptedBuilder<(T0,)> {
+                /// Setter for the [`procedure_lsn` field](ProcedureAdopted#structfield.procedure_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn procedure_lsn<T1>(self, value: T1) -> ProcedureAdoptedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0,) = self.0;
+                    ProcedureAdoptedBuilder((v0, value))
+                }
+
+                /// Sets the [`procedure_lsn` field](ProcedureAdopted#structfield.procedure_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn procedure_lsn_as_default(
+                    self,
+                ) -> ProcedureAdoptedBuilder<(T0, ::planus::DefaultValue)> {
+                    self.procedure_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1> ProcedureAdoptedBuilder<(T0, T1)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ProcedureAdopted].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureAdopted>
+                where
+                    Self: ::planus::WriteAsOffset<ProcedureAdopted>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<ProcedureAdopted>>
+                for ProcedureAdoptedBuilder<(T0, T1)>
+            {
+                type Prepared = ::planus::Offset<ProcedureAdopted>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureAdopted> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<ProcedureAdopted>>
+                for ProcedureAdoptedBuilder<(T0, T1)>
+            {
+                type Prepared = ::planus::Offset<ProcedureAdopted>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureAdopted>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<ProcedureAdopted> for ProcedureAdoptedBuilder<(T0, T1)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureAdopted> {
+                    let (v0, v1) = &self.0;
+                    ProcedureAdopted::create(builder, v0, v1)
+                }
+            }
+
+            /// Reference to a deserialized [ProcedureAdopted].
+            #[derive(Copy, Clone)]
+            pub struct ProcedureAdoptedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> ProcedureAdoptedRef<'a> {
+                /// Getter for the [`procedure_id` field](ProcedureAdopted#structfield.procedure_id).
+                #[inline]
+                pub fn procedure_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "ProcedureAdopted", "procedure_id")
+                }
+
+                /// Getter for the [`procedure_lsn` field](ProcedureAdopted#structfield.procedure_lsn).
+                #[inline]
+                pub fn procedure_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(1, "ProcedureAdopted", "procedure_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ProcedureAdoptedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ProcedureAdoptedRef");
+                    f.field("procedure_id", &self.procedure_id());
+                    f.field("procedure_lsn", &self.procedure_lsn());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ProcedureAdoptedRef<'a>> for ProcedureAdopted {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ProcedureAdoptedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        procedure_id: value.procedure_id()?.to_vec(),
+                        procedure_lsn: ::core::convert::TryInto::try_into(value.procedure_lsn()?)?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ProcedureAdoptedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ProcedureAdoptedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ProcedureAdoptedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ProcedureAdopted>> for ProcedureAdopted {
+                type Value = ::planus::Offset<ProcedureAdopted>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ProcedureAdopted>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ProcedureAdoptedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[ProcedureAdoptedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:302`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:467`
             #[derive(
                 Clone,
                 Debug,
@@ -18646,6 +28602,33 @@ mod root {
 
                 /// The variant of type `Reviewed` in the union `EventPayload`
                 Reviewed(::planus::alloc::boxed::Box<self::Reviewed>),
+
+                /// The variant of type `IntentionSet` in the union `EventPayload`
+                IntentionSet(::planus::alloc::boxed::Box<self::IntentionSet>),
+
+                /// The variant of type `IntentionFired` in the union `EventPayload`
+                IntentionFired(::planus::alloc::boxed::Box<self::IntentionFired>),
+
+                /// The variant of type `AttentionDecided` in the union `EventPayload`
+                AttentionDecided(::planus::alloc::boxed::Box<self::AttentionDecided>),
+
+                /// The variant of type `IntentionCancelled` in the union `EventPayload`
+                IntentionCancelled(::planus::alloc::boxed::Box<self::IntentionCancelled>),
+
+                /// The variant of type `Predicted` in the union `EventPayload`
+                Predicted(::planus::alloc::boxed::Box<self::Predicted>),
+
+                /// The variant of type `OutcomeObserved` in the union `EventPayload`
+                OutcomeObserved(::planus::alloc::boxed::Box<self::OutcomeObserved>),
+
+                /// The variant of type `ProcedureMined` in the union `EventPayload`
+                ProcedureMined(::planus::alloc::boxed::Box<self::ProcedureMined>),
+
+                /// The variant of type `ProcedureRevised` in the union `EventPayload`
+                ProcedureRevised(::planus::alloc::boxed::Box<self::ProcedureRevised>),
+
+                /// The variant of type `ProcedureAdopted` in the union `EventPayload`
+                ProcedureAdopted(::planus::alloc::boxed::Box<self::ProcedureAdopted>),
             }
 
             impl EventPayload {
@@ -18926,6 +28909,78 @@ mod root {
                 ) -> ::planus::UnionOffset<Self> {
                     ::planus::UnionOffset::new(34, value.prepare(builder).downcast())
                 }
+
+                #[inline]
+                pub fn create_intention_set(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::IntentionSet>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(35, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_intention_fired(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::IntentionFired>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(36, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_attention_decided(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::AttentionDecided>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(37, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_intention_cancelled(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::IntentionCancelled>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(38, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_predicted(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::Predicted>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(39, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_outcome_observed(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::OutcomeObserved>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(40, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_procedure_mined(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::ProcedureMined>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(41, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_procedure_revised(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::ProcedureRevised>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(42, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_procedure_adopted(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::ProcedureAdopted>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(43, value.prepare(builder).downcast())
+                }
             }
 
             impl ::planus::WriteAsUnion<EventPayload> for EventPayload {
@@ -18976,6 +29031,25 @@ mod root {
                             Self::create_consolidation_retracted(builder, value)
                         }
                         Self::Reviewed(value) => Self::create_reviewed(builder, value),
+                        Self::IntentionSet(value) => Self::create_intention_set(builder, value),
+                        Self::IntentionFired(value) => Self::create_intention_fired(builder, value),
+                        Self::AttentionDecided(value) => {
+                            Self::create_attention_decided(builder, value)
+                        }
+                        Self::IntentionCancelled(value) => {
+                            Self::create_intention_cancelled(builder, value)
+                        }
+                        Self::Predicted(value) => Self::create_predicted(builder, value),
+                        Self::OutcomeObserved(value) => {
+                            Self::create_outcome_observed(builder, value)
+                        }
+                        Self::ProcedureMined(value) => Self::create_procedure_mined(builder, value),
+                        Self::ProcedureRevised(value) => {
+                            Self::create_procedure_revised(builder, value)
+                        }
+                        Self::ProcedureAdopted(value) => {
+                            Self::create_procedure_adopted(builder, value)
+                        }
                     }
                 }
             }
@@ -19399,6 +29473,114 @@ mod root {
                 ) -> EventPayloadBuilder<::planus::Initialized<34, T>>
                 where
                     T: ::planus::WriteAsOffset<self::Reviewed>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`IntentionSet` variant](EventPayload#variant.IntentionSet).
+                #[inline]
+                pub fn intention_set<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<35, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::IntentionSet>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`IntentionFired` variant](EventPayload#variant.IntentionFired).
+                #[inline]
+                pub fn intention_fired<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<36, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::IntentionFired>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`AttentionDecided` variant](EventPayload#variant.AttentionDecided).
+                #[inline]
+                pub fn attention_decided<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<37, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::AttentionDecided>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`IntentionCancelled` variant](EventPayload#variant.IntentionCancelled).
+                #[inline]
+                pub fn intention_cancelled<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<38, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::IntentionCancelled>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`Predicted` variant](EventPayload#variant.Predicted).
+                #[inline]
+                pub fn predicted<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<39, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::Predicted>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`OutcomeObserved` variant](EventPayload#variant.OutcomeObserved).
+                #[inline]
+                pub fn outcome_observed<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<40, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::OutcomeObserved>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`ProcedureMined` variant](EventPayload#variant.ProcedureMined).
+                #[inline]
+                pub fn procedure_mined<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<41, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::ProcedureMined>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`ProcedureRevised` variant](EventPayload#variant.ProcedureRevised).
+                #[inline]
+                pub fn procedure_revised<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<42, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::ProcedureRevised>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`ProcedureAdopted` variant](EventPayload#variant.ProcedureAdopted).
+                #[inline]
+                pub fn procedure_adopted<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<43, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::ProcedureAdopted>,
                 {
                     EventPayloadBuilder(::planus::Initialized(value))
                 }
@@ -20302,6 +30484,240 @@ mod root {
                     ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
                 }
             }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<35, T>>
+            where
+                T: ::planus::WriteAsOffset<self::IntentionSet>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(35, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<35, T>>
+            where
+                T: ::planus::WriteAsOffset<self::IntentionSet>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<36, T>>
+            where
+                T: ::planus::WriteAsOffset<self::IntentionFired>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(36, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<36, T>>
+            where
+                T: ::planus::WriteAsOffset<self::IntentionFired>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<37, T>>
+            where
+                T: ::planus::WriteAsOffset<self::AttentionDecided>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(37, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<37, T>>
+            where
+                T: ::planus::WriteAsOffset<self::AttentionDecided>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<38, T>>
+            where
+                T: ::planus::WriteAsOffset<self::IntentionCancelled>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(38, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<38, T>>
+            where
+                T: ::planus::WriteAsOffset<self::IntentionCancelled>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<39, T>>
+            where
+                T: ::planus::WriteAsOffset<self::Predicted>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(39, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<39, T>>
+            where
+                T: ::planus::WriteAsOffset<self::Predicted>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<40, T>>
+            where
+                T: ::planus::WriteAsOffset<self::OutcomeObserved>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(40, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<40, T>>
+            where
+                T: ::planus::WriteAsOffset<self::OutcomeObserved>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<41, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureMined>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(41, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<41, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureMined>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<42, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureRevised>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(42, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<42, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureRevised>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<43, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureAdopted>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(43, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<43, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureAdopted>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
 
             /// Reference to a deserialized [EventPayload].
             #[derive(Copy, Clone, Debug)]
@@ -20340,6 +30756,15 @@ mod root {
                 ConsolidationClosed(self::ConsolidationClosedRef<'a>),
                 ConsolidationRetracted(self::ConsolidationRetractedRef<'a>),
                 Reviewed(self::ReviewedRef<'a>),
+                IntentionSet(self::IntentionSetRef<'a>),
+                IntentionFired(self::IntentionFiredRef<'a>),
+                AttentionDecided(self::AttentionDecidedRef<'a>),
+                IntentionCancelled(self::IntentionCancelledRef<'a>),
+                Predicted(self::PredictedRef<'a>),
+                OutcomeObserved(self::OutcomeObservedRef<'a>),
+                ProcedureMined(self::ProcedureMinedRef<'a>),
+                ProcedureRevised(self::ProcedureRevisedRef<'a>),
+                ProcedureAdopted(self::ProcedureAdoptedRef<'a>),
             }
 
             impl<'a> ::core::convert::TryFrom<EventPayloadRef<'a>> for EventPayload {
@@ -20550,6 +30975,60 @@ mod root {
                                 ::core::convert::TryFrom::try_from(value)?,
                             ))
                         }
+
+                        EventPayloadRef::IntentionSet(value) => {
+                            Self::IntentionSet(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::IntentionFired(value) => {
+                            Self::IntentionFired(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::AttentionDecided(value) => {
+                            Self::AttentionDecided(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::IntentionCancelled(value) => {
+                            Self::IntentionCancelled(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::Predicted(value) => {
+                            Self::Predicted(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::OutcomeObserved(value) => {
+                            Self::OutcomeObserved(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::ProcedureMined(value) => {
+                            Self::ProcedureMined(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::ProcedureRevised(value) => {
+                            Self::ProcedureRevised(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::ProcedureAdopted(value) => {
+                            Self::ProcedureAdopted(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
                     })
                 }
             }
@@ -20663,6 +31142,33 @@ mod root {
                         34 => ::core::result::Result::Ok(Self::Reviewed(
                             ::planus::TableRead::from_buffer(buffer, field_offset)?,
                         )),
+                        35 => ::core::result::Result::Ok(Self::IntentionSet(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        36 => ::core::result::Result::Ok(Self::IntentionFired(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        37 => ::core::result::Result::Ok(Self::AttentionDecided(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        38 => ::core::result::Result::Ok(Self::IntentionCancelled(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        39 => ::core::result::Result::Ok(Self::Predicted(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        40 => ::core::result::Result::Ok(Self::OutcomeObserved(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        41 => ::core::result::Result::Ok(Self::ProcedureMined(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        42 => ::core::result::Result::Ok(Self::ProcedureRevised(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        43 => ::core::result::Result::Ok(Self::ProcedureAdopted(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
                         _ => ::core::result::Result::Err(
                             ::planus::errors::ErrorKind::UnknownUnionTag { tag },
                         ),
@@ -20677,7 +31183,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:339`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:513`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]
@@ -21301,20 +31807,20 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u16, u16>,
-                T1: ::planus::WriteAsUnion<self::EventPayload>,
-                T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAsDefault<u16, u16>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T8: ::planus::WriteAsOptional<::planus::Offset<self::ModelProvenance>>,
-                T9: ::planus::WriteAsDefault<self::Authority, self::Authority>,
-                T10: ::planus::WriteAsDefault<self::Retention, self::Retention>,
-                T11: ::planus::WriteAsDefault<self::Sensitivity, self::Sensitivity>,
-                T12: ::planus::WriteAsDefault<i64, i64>,
-            > ::planus::WriteAs<::planus::Offset<EventEnvelope>>
+                    T0: ::planus::WriteAsDefault<u16, u16>,
+                    T1: ::planus::WriteAsUnion<self::EventPayload>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<u16, u16>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T8: ::planus::WriteAsOptional<::planus::Offset<self::ModelProvenance>>,
+                    T9: ::planus::WriteAsDefault<self::Authority, self::Authority>,
+                    T10: ::planus::WriteAsDefault<self::Retention, self::Retention>,
+                    T11: ::planus::WriteAsDefault<self::Sensitivity, self::Sensitivity>,
+                    T12: ::planus::WriteAsDefault<i64, i64>,
+                > ::planus::WriteAs<::planus::Offset<EventEnvelope>>
                 for EventEnvelopeBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>
             {
                 type Prepared = ::planus::Offset<EventEnvelope>;
@@ -21329,20 +31835,20 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u16, u16>,
-                T1: ::planus::WriteAsUnion<self::EventPayload>,
-                T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAsDefault<u16, u16>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T8: ::planus::WriteAsOptional<::planus::Offset<self::ModelProvenance>>,
-                T9: ::planus::WriteAsDefault<self::Authority, self::Authority>,
-                T10: ::planus::WriteAsDefault<self::Retention, self::Retention>,
-                T11: ::planus::WriteAsDefault<self::Sensitivity, self::Sensitivity>,
-                T12: ::planus::WriteAsDefault<i64, i64>,
-            > ::planus::WriteAsOptional<::planus::Offset<EventEnvelope>>
+                    T0: ::planus::WriteAsDefault<u16, u16>,
+                    T1: ::planus::WriteAsUnion<self::EventPayload>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<u16, u16>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T8: ::planus::WriteAsOptional<::planus::Offset<self::ModelProvenance>>,
+                    T9: ::planus::WriteAsDefault<self::Authority, self::Authority>,
+                    T10: ::planus::WriteAsDefault<self::Retention, self::Retention>,
+                    T11: ::planus::WriteAsDefault<self::Sensitivity, self::Sensitivity>,
+                    T12: ::planus::WriteAsDefault<i64, i64>,
+                > ::planus::WriteAsOptional<::planus::Offset<EventEnvelope>>
                 for EventEnvelopeBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>
             {
                 type Prepared = ::planus::Offset<EventEnvelope>;
@@ -21357,20 +31863,20 @@ mod root {
             }
 
             impl<
-                T0: ::planus::WriteAsDefault<u16, u16>,
-                T1: ::planus::WriteAsUnion<self::EventPayload>,
-                T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T3: ::planus::WriteAsDefault<u64, u64>,
-                T4: ::planus::WriteAsDefault<u32, u32>,
-                T5: ::planus::WriteAsDefault<u32, u32>,
-                T6: ::planus::WriteAsDefault<u16, u16>,
-                T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
-                T8: ::planus::WriteAsOptional<::planus::Offset<self::ModelProvenance>>,
-                T9: ::planus::WriteAsDefault<self::Authority, self::Authority>,
-                T10: ::planus::WriteAsDefault<self::Retention, self::Retention>,
-                T11: ::planus::WriteAsDefault<self::Sensitivity, self::Sensitivity>,
-                T12: ::planus::WriteAsDefault<i64, i64>,
-            > ::planus::WriteAsOffset<EventEnvelope>
+                    T0: ::planus::WriteAsDefault<u16, u16>,
+                    T1: ::planus::WriteAsUnion<self::EventPayload>,
+                    T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAsDefault<u64, u64>,
+                    T4: ::planus::WriteAsDefault<u32, u32>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<u16, u16>,
+                    T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+                    T8: ::planus::WriteAsOptional<::planus::Offset<self::ModelProvenance>>,
+                    T9: ::planus::WriteAsDefault<self::Authority, self::Authority>,
+                    T10: ::planus::WriteAsDefault<self::Retention, self::Retention>,
+                    T11: ::planus::WriteAsDefault<self::Sensitivity, self::Sensitivity>,
+                    T12: ::planus::WriteAsDefault<i64, i64>,
+                > ::planus::WriteAsOffset<EventEnvelope>
                 for EventEnvelopeBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)>
             {
                 #[inline]

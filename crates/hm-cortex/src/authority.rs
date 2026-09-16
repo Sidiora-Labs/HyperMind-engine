@@ -24,7 +24,11 @@ pub const fn authority_for_event(kind: EventKind) -> Authority {
         | EventKind::MemoryRevised
         | EventKind::MemoryMerged
         | EventKind::EdgeAsserted
-        | EventKind::EdgeRetracted => Authority::DerivedInference,
+        | EventKind::EdgeRetracted
+        | EventKind::Predicted
+        | EventKind::ProcedureMined
+        | EventKind::ProcedureRevised => Authority::DerivedInference,
+        EventKind::ProcedureAdopted => Authority::UserAsserted,
         EventKind::ToolCall
         | EventKind::Effect
         | EventKind::Approval
@@ -43,7 +47,12 @@ pub const fn authority_for_event(kind: EventKind) -> Authority {
         | EventKind::ConsolidationPhase
         | EventKind::ConsolidationClosed
         | EventKind::ConsolidationRetracted
-        | EventKind::Reviewed => Authority::RuntimeFact,
+        | EventKind::Reviewed
+        | EventKind::IntentionSet
+        | EventKind::IntentionFired
+        | EventKind::AttentionDecided
+        | EventKind::IntentionCancelled
+        | EventKind::OutcomeObserved => Authority::RuntimeFact,
     }
 }
 

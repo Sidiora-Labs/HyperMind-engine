@@ -180,6 +180,15 @@ pub(crate) const fn schema_kind(kind: EventKind) -> Option<event::EventKind> {
         EventKind::ConsolidationClosed => event::EventKind::ConsolidationClosed,
         EventKind::ConsolidationRetracted => event::EventKind::ConsolidationRetracted,
         EventKind::Reviewed => event::EventKind::Reviewed,
+        EventKind::IntentionSet => event::EventKind::IntentionSet,
+        EventKind::IntentionFired => event::EventKind::IntentionFired,
+        EventKind::AttentionDecided => event::EventKind::AttentionDecided,
+        EventKind::IntentionCancelled => event::EventKind::IntentionCancelled,
+        EventKind::Predicted => event::EventKind::Predicted,
+        EventKind::OutcomeObserved => event::EventKind::OutcomeObserved,
+        EventKind::ProcedureMined => event::EventKind::ProcedureMined,
+        EventKind::ProcedureRevised => event::EventKind::ProcedureRevised,
+        EventKind::ProcedureAdopted => event::EventKind::ProcedureAdopted,
         EventKind::Assertion
         | EventKind::Consolidation
         | EventKind::Embedding

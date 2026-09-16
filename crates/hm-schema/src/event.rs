@@ -1,16 +1,18 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::events::{
-    Assertion, AttestationDisposition, Authority, Binding, Consolidation, ConsolidationClosed,
-    ConsolidationOpened, ConsolidationPhase, ConsolidationRetracted, EdgeAsserted, EdgeRetracted,
-    Effect, Embedding, EventEnvelope, EventEnvelopeRef, EventPayload, LoopCloseReason, LoopClosed,
-    MemoryFaded, MemoryMerged, MemoryMinted, MemoryRevised, Outcome, ProposedAssertion,
-    ProvenanceRange, Retract, Reviewed, ToolResult,
+    Assertion, AttentionDecided, AttestationDisposition, Authority, Binding, Consolidation,
+    ConsolidationClosed, ConsolidationOpened, ConsolidationPhase, ConsolidationRetracted,
+    EdgeAsserted, EdgeRetracted, Effect, Embedding, EventEnvelope, EventEnvelopeRef, EventPayload,
+    ExpectedPredicate, IntentionCancelled, IntentionFired, IntentionSet, LoopCloseReason,
+    LoopClosed, MemoryFaded, MemoryMerged, MemoryMinted, MemoryRevised, Outcome, OutcomeObserved,
+    Predicted, ProcedureAdopted, ProcedureMined, ProcedureRevised, ProcedureSupport,
+    ProposedAssertion, ProvenanceRange, Retract, Reviewed, ToolResult, WakeTrigger,
 };
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
 
-use crate::validate::authority::validate_optional_observed_evidence;
+use crate::validate::authority::{validate_observed_evidence, validate_optional_observed_evidence};
 
 pub const CURRENT_SCHEMA_VERSION: u16 = 2;
 pub const MAXIMUM_EVENT_BYTES: usize = 16 * 1024 * 1024;
@@ -60,6 +62,15 @@ pub enum EventKind {
     ConsolidationClosed = 32,
     ConsolidationRetracted = 33,
     Reviewed = 34,
+    IntentionSet = 35,
+    IntentionFired = 36,
+    AttentionDecided = 37,
+    IntentionCancelled = 38,
+    Predicted = 39,
+    OutcomeObserved = 40,
+    ProcedureMined = 41,
+    ProcedureRevised = 42,
+    ProcedureAdopted = 43,
 }
 
 impl EventKind {
@@ -133,6 +144,23 @@ impl EventKind {
     }
 
     #[must_use]
+    pub const fn is_wave_seven(self) -> bool {
+        self.is_wave_six()
+            || matches!(
+                self,
+                Self::IntentionSet
+                    | Self::IntentionFired
+                    | Self::AttentionDecided
+                    | Self::IntentionCancelled
+                    | Self::Predicted
+                    | Self::OutcomeObserved
+                    | Self::ProcedureMined
+                    | Self::ProcedureRevised
+                    | Self::ProcedureAdopted
+            )
+    }
+
+    #[must_use]
     pub const fn is_llm_derived(self) -> bool {
         matches!(
             self,
@@ -202,6 +230,15 @@ impl TryFrom<u8> for EventKind {
             32 => Ok(Self::ConsolidationClosed),
             33 => Ok(Self::ConsolidationRetracted),
             34 => Ok(Self::Reviewed),
+            35 => Ok(Self::IntentionSet),
+            36 => Ok(Self::IntentionFired),
+            37 => Ok(Self::AttentionDecided),
+            38 => Ok(Self::IntentionCancelled),
+            39 => Ok(Self::Predicted),
+            40 => Ok(Self::OutcomeObserved),
+            41 => Ok(Self::ProcedureMined),
+            42 => Ok(Self::ProcedureRevised),
+            43 => Ok(Self::ProcedureAdopted),
             _ => Err(()),
         }
     }
@@ -275,7 +312,7 @@ pub fn verify_event_with_history(
     if envelope.schema_version == 0 || envelope.schema_version > CURRENT_SCHEMA_VERSION {
         return Err(Error::new(ErrorCode::SchemaVersion));
     }
-    if !expected_kind.is_wave_six() || payload_kind(&envelope.payload) != expected_kind {
+    if !expected_kind.is_wave_seven() || payload_kind(&envelope.payload) != expected_kind {
         return Err(Error::new(ErrorCode::ForbiddenKind));
     }
     validate_envelope(&envelope, expected_kind)?;
@@ -336,9 +373,13 @@ fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Er
     if kind.is_llm_derived() && envelope.model_provenance.is_none() {
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
+    if kind == EventKind::ProcedureAdopted && envelope.authority != Authority::UserAsserted {
+        return Err(Error::new(ErrorCode::ProtectedTypeWrite));
+    }
     Ok(())
 }
 
+#[allow(clippy::too_many_lines)]
 fn validate_payload(
     payload: &EventPayload,
     history: &impl EventHistory,
@@ -438,6 +479,199 @@ fn validate_payload(
         | EventPayload::ConsolidationClosed(_)
         | EventPayload::ConsolidationRetracted(_)
         | EventPayload::Reviewed(_) => validate_wave_six_payload(payload),
+        EventPayload::IntentionSet(value) => validate_intention_set(value),
+        EventPayload::IntentionFired(value) => validate_intention_fired(value),
+        EventPayload::AttentionDecided(value) => validate_attention_decided(value),
+        EventPayload::IntentionCancelled(value) => validate_intention_cancelled(value),
+        EventPayload::Predicted(value) => validate_predicted(value),
+        EventPayload::OutcomeObserved(value) => validate_outcome_observed(value, history),
+        EventPayload::ProcedureMined(value) => validate_procedure_mined(value),
+        EventPayload::ProcedureRevised(value) => validate_procedure_revised(value),
+        EventPayload::ProcedureAdopted(value) => validate_procedure_adopted(value),
+    }
+}
+
+fn validate_intention_set(value: &IntentionSet) -> Result<(), Error> {
+    if !bounded_identifier(&value.intention_id)
+        || value.objective.is_empty()
+        || value
+            .trigger
+            .as_ref()
+            .is_none_or(|trigger| !valid_trigger(trigger))
+        || value.expires_at_ns == 0
+        || value.reply_route.is_empty()
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn valid_trigger(trigger: &WakeTrigger) -> bool {
+    match trigger {
+        WakeTrigger::WakeAt(value) => value.at_ns != 0,
+        WakeTrigger::WakeSchedule(value) => !value.schedule.is_empty(),
+        WakeTrigger::WakeChildTerminal(value) => bounded_identifier(&value.child_id),
+        WakeTrigger::WakeProcessExit(value) => bounded_identifier(&value.process_id),
+        WakeTrigger::WakeFileChanged(value) => !value.path.is_empty(),
+        WakeTrigger::WakeRepositoryChanged(value) => !value.repository.is_empty(),
+        WakeTrigger::WakeChannelMessage(value) => !value.channel.is_empty(),
+        WakeTrigger::WakeExternalCondition(value) => !value.condition.is_empty(),
+        WakeTrigger::WakeUserResponse(value) => bounded_identifier(&value.reply_to),
+        WakeTrigger::WakeEntityMentioned(value) => bounded_identifier(&value.entity_id),
+        WakeTrigger::WakeLoopClosed(value) => bounded_identifier(&value.loop_id),
+        WakeTrigger::WakePredictionResolved(value) => bounded_identifier(&value.prediction_id),
+        WakeTrigger::WakeBeliefChanged(value) => !value.canonical_identity.is_empty(),
+    }
+}
+
+fn validate_intention_fired(value: &IntentionFired) -> Result<(), Error> {
+    if bounded_identifier(&value.intention_id)
+        && bounded_identifier(&value.wake_id)
+        && value.trigger_lsn != 0
+    {
+        Ok(())
+    } else {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    }
+}
+
+fn validate_attention_decided(value: &AttentionDecided) -> Result<(), Error> {
+    if bounded_identifier(&value.intention_id)
+        && bounded_identifier(&value.wake_id)
+        && !value.reason.is_empty()
+    {
+        Ok(())
+    } else {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    }
+}
+
+fn validate_intention_cancelled(value: &IntentionCancelled) -> Result<(), Error> {
+    if bounded_identifier(&value.intention_id) && !value.reason.is_empty() {
+        Ok(())
+    } else {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    }
+}
+
+fn validate_predicted(value: &Predicted) -> Result<(), Error> {
+    if !bounded_identifier(&value.prediction_id)
+        || value.revision == 0
+        || value
+            .task_id
+            .as_deref()
+            .is_some_and(|identifier| !bounded_identifier(identifier))
+        || value
+            .attempt_id
+            .as_deref()
+            .is_some_and(|identifier| !bounded_identifier(identifier))
+        || value
+            .operation_id
+            .as_deref()
+            .is_some_and(|identifier| !bounded_identifier(identifier))
+        || value.mechanism.is_empty()
+        || value.predicates.is_empty()
+        || value.predicates.len() > 16
+        || value
+            .predicates
+            .iter()
+            .any(|predicate| !valid_predicate(predicate))
+        || value.deadline_ns == 0
+        || value.uncertainty.is_empty()
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn valid_predicate(predicate: &ExpectedPredicate) -> bool {
+    !predicate.scope.is_empty()
+        && predicate
+            .property
+            .as_ref()
+            .is_none_or(|property| !property.is_empty())
+        && predicate
+            .expected
+            .as_ref()
+            .is_none_or(|expected| !expected.is_empty())
+}
+
+fn validate_outcome_observed(
+    value: &OutcomeObserved,
+    history: &impl EventHistory,
+) -> Result<(), Error> {
+    if !bounded_identifier(&value.prediction_id)
+        || value.revision == 0
+        || value.evaluator_version.is_empty()
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_observed_evidence(&value.observation_lsns, history)
+}
+
+fn validate_procedure_mined(value: &ProcedureMined) -> Result<(), Error> {
+    validate_procedure(
+        &value.procedure_id,
+        &value.strategy,
+        &value.expected_outcomes,
+        &value.preconditions,
+        &value.supports,
+        value.failures.as_deref(),
+        value.counterexamples.as_deref(),
+    )
+}
+
+fn validate_procedure_revised(value: &ProcedureRevised) -> Result<(), Error> {
+    if value.previous_lsn == 0 {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_procedure(
+        &value.procedure_id,
+        &value.strategy,
+        &value.expected_outcomes,
+        &value.preconditions,
+        &value.supports,
+        value.failures.as_deref(),
+        value.counterexamples.as_deref(),
+    )
+}
+
+fn validate_procedure(
+    procedure_id: &[u8],
+    strategy: &str,
+    expected_outcomes: &[String],
+    preconditions: &[String],
+    supports: &[ProcedureSupport],
+    failures: Option<&[u64]>,
+    counterexamples: Option<&[u64]>,
+) -> Result<(), Error> {
+    if !bounded_identifier(procedure_id)
+        || strategy.is_empty()
+        || expected_outcomes.is_empty()
+        || expected_outcomes.iter().any(String::is_empty)
+        || preconditions.iter().any(String::is_empty)
+        || supports.is_empty()
+        || supports.iter().any(|support| {
+            !bounded_identifier(&support.source_root)
+                || support.conversation.len() != 16
+                || support.episode_lsn == 0
+        })
+        || failures.is_some_and(|lsns| lsns.contains(&0))
+        || counterexamples.is_some_and(|lsns| lsns.contains(&0))
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_procedure_adopted(value: &ProcedureAdopted) -> Result<(), Error> {
+    if bounded_identifier(&value.procedure_id) && value.procedure_lsn != 0 {
+        Ok(())
+    } else {
+        Err(Error::new(ErrorCode::SchemaInvalid))
     }
 }
 
@@ -864,5 +1098,14 @@ fn payload_kind(payload: &EventPayload) -> EventKind {
         EventPayload::ConsolidationClosed(_) => EventKind::ConsolidationClosed,
         EventPayload::ConsolidationRetracted(_) => EventKind::ConsolidationRetracted,
         EventPayload::Reviewed(_) => EventKind::Reviewed,
+        EventPayload::IntentionSet(_) => EventKind::IntentionSet,
+        EventPayload::IntentionFired(_) => EventKind::IntentionFired,
+        EventPayload::AttentionDecided(_) => EventKind::AttentionDecided,
+        EventPayload::IntentionCancelled(_) => EventKind::IntentionCancelled,
+        EventPayload::Predicted(_) => EventKind::Predicted,
+        EventPayload::OutcomeObserved(_) => EventKind::OutcomeObserved,
+        EventPayload::ProcedureMined(_) => EventKind::ProcedureMined,
+        EventPayload::ProcedureRevised(_) => EventKind::ProcedureRevised,
+        EventPayload::ProcedureAdopted(_) => EventKind::ProcedureAdopted,
     }
 }

@@ -195,7 +195,7 @@
   - [x] 6.8 Slice 6 journey: consolidate as a generation, cited mint, retract, instant switch back, idempotent rerun
     - Journey: remember twenty observations across two conversations, run consolidate with a budget against a fixture provider, observe a minted memory whose citations resolve to byte ranges, activate and see it in fused, retract the run and observe activation without it on the next call, rerun and receive the identical run id and result, gate slice6 green.
     - _Requirements: 1.1, 9.1, 9.2, 9.3, 5.2_
-  - [ ] 7.1 Intention, attention, prediction and procedure events and projections
+  - [x] 7.1 Intention, attention, prediction and procedure events and projections
     - Add IntentionSet with the WakeTrigger union, IntentionFired with wake id, AttentionDecided, IntentionCancelled, Predicted with bounded predicates and deadline, OutcomeObserved with five assessment states, ProcedureMined, ProcedureRevised, ProcedureAdopted.
     - Projections: intentions with a condition index by trigger kind; attention history bounded per actor with reasons; predictions with calibration counters per predicate kind; procedures with state, independent source roots, counterexamples.
     - _Requirements: 11.1, 12.1, 12.2, 5.3_

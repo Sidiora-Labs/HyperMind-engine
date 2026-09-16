@@ -21,6 +21,11 @@ const PROJECTION_NAMES: [&str; ProjectionId::COUNT] = [
     "graph",
     "fsrs",
     "runs",
+    "intentions",
+    "attention_history",
+    "predictions",
+    "procedures",
+    "attestations",
 ];
 
 type ByteDatabase = Database<Bytes, Bytes>;
@@ -41,10 +46,15 @@ pub enum ProjectionId {
     Graph,
     Fsrs,
     Runs,
+    Intentions,
+    AttentionHistory,
+    Predictions,
+    Procedures,
+    Attestations,
 }
 
 impl ProjectionId {
-    pub const COUNT: usize = 13;
+    pub const COUNT: usize = 18;
 
     #[must_use]
     pub const fn name(self) -> &'static str {

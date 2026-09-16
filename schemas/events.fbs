@@ -299,6 +299,171 @@ table Reviewed {
   due_at_ns:long;
 }
 
+enum AttentionDecision : ubyte { ignore, remember, batch, schedule, ask_user, start_work, notify }
+enum PredicateKind : ubyte {
+  object_exists,
+  revision_equals,
+  digest_equals,
+  receipt_matches,
+  property_satisfies,
+  process_terminated,
+  answer_committed
+}
+enum OutcomeAssessment : ubyte { supported, contradicted, pending, unresolvable, not_executed }
+
+table WakeAt {
+  at_ns:long;
+}
+
+table WakeSchedule {
+  schedule:string (required);
+}
+
+table WakeChildTerminal {
+  child_id:[ubyte] (required);
+}
+
+table WakeProcessExit {
+  process_id:[ubyte] (required);
+}
+
+table WakeFileChanged {
+  path:string (required);
+}
+
+table WakeRepositoryChanged {
+  repository:string (required);
+}
+
+table WakeChannelMessage {
+  channel:string (required);
+}
+
+table WakeExternalCondition {
+  condition:string (required);
+}
+
+table WakeUserResponse {
+  reply_to:[ubyte] (required);
+}
+
+table WakeEntityMentioned {
+  entity_id:[ubyte] (required);
+}
+
+table WakeLoopClosed {
+  loop_id:[ubyte] (required);
+}
+
+table WakePredictionResolved {
+  prediction_id:[ubyte] (required);
+}
+
+table WakeBeliefChanged {
+  canonical_identity:string (required);
+}
+
+union WakeTrigger {
+  WakeAt,
+  WakeSchedule,
+  WakeChildTerminal,
+  WakeProcessExit,
+  WakeFileChanged,
+  WakeRepositoryChanged,
+  WakeChannelMessage,
+  WakeExternalCondition,
+  WakeUserResponse,
+  WakeEntityMentioned,
+  WakeLoopClosed,
+  WakePredictionResolved,
+  WakeBeliefChanged
+}
+
+table IntentionSet {
+  intention_id:[ubyte] (required);
+  objective:[ubyte] (required);
+  trigger:WakeTrigger;
+  expires_at_ns:long;
+  reply_route:string (required);
+}
+
+table IntentionFired {
+  intention_id:[ubyte] (required);
+  wake_id:[ubyte] (required);
+  trigger_lsn:ulong;
+}
+
+table AttentionDecided {
+  intention_id:[ubyte] (required);
+  wake_id:[ubyte] (required);
+  decision:AttentionDecision;
+  reason:string (required);
+}
+
+table IntentionCancelled {
+  intention_id:[ubyte] (required);
+  reason:string (required);
+}
+
+table ExpectedPredicate {
+  kind:PredicateKind;
+  scope:string (required);
+  property:string;
+  expected:[ubyte];
+}
+
+table Predicted {
+  prediction_id:[ubyte] (required);
+  revision:uint;
+  task_id:[ubyte];
+  attempt_id:[ubyte];
+  operation_id:[ubyte];
+  mechanism:string (required);
+  predicates:[ExpectedPredicate] (required);
+  deadline_ns:long;
+  uncertainty:string (required);
+}
+
+table OutcomeObserved {
+  prediction_id:[ubyte] (required);
+  revision:uint;
+  assessment:OutcomeAssessment;
+  observation_lsns:[ulong] (required);
+  evaluator_version:string (required);
+}
+
+table ProcedureSupport {
+  source_root:[ubyte] (required);
+  conversation:[ubyte] (required);
+  episode_lsn:ulong;
+}
+
+table ProcedureMined {
+  procedure_id:[ubyte] (required);
+  strategy:string (required);
+  expected_outcomes:[string] (required);
+  preconditions:[string] (required);
+  supports:[ProcedureSupport] (required);
+  failures:[ulong];
+  counterexamples:[ulong];
+}
+
+table ProcedureRevised {
+  procedure_id:[ubyte] (required);
+  previous_lsn:ulong;
+  strategy:string (required);
+  expected_outcomes:[string] (required);
+  preconditions:[string] (required);
+  supports:[ProcedureSupport] (required);
+  failures:[ulong];
+  counterexamples:[ulong];
+}
+
+table ProcedureAdopted {
+  procedure_id:[ubyte] (required);
+  procedure_lsn:ulong;
+}
+
 union EventPayload {
   UserMsg,
   DeliveredMsg,
@@ -333,7 +498,16 @@ union EventPayload {
   ConsolidationPhase,
   ConsolidationClosed,
   ConsolidationRetracted,
-  Reviewed
+  Reviewed,
+  IntentionSet,
+  IntentionFired,
+  AttentionDecided,
+  IntentionCancelled,
+  Predicted,
+  OutcomeObserved,
+  ProcedureMined,
+  ProcedureRevised,
+  ProcedureAdopted
 }
 
 table EventEnvelope {

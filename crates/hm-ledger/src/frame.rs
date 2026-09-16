@@ -50,13 +50,22 @@ pub enum EventKind {
     ConsolidationClosed = 32,
     ConsolidationRetracted = 33,
     Reviewed = 34,
+    IntentionSet = 35,
+    IntentionFired = 36,
+    AttentionDecided = 37,
+    IntentionCancelled = 38,
+    Predicted = 39,
+    OutcomeObserved = 40,
+    ProcedureMined = 41,
+    ProcedureRevised = 42,
+    ProcedureAdopted = 43,
 }
 
 impl TryFrom<u8> for EventKind {
     type Error = Error;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
-        const KINDS: [EventKind; 34] = [
+        const KINDS: [EventKind; 43] = [
             EventKind::UserMsg,
             EventKind::DeliveredMsg,
             EventKind::ToolCall,
@@ -91,6 +100,15 @@ impl TryFrom<u8> for EventKind {
             EventKind::ConsolidationClosed,
             EventKind::ConsolidationRetracted,
             EventKind::Reviewed,
+            EventKind::IntentionSet,
+            EventKind::IntentionFired,
+            EventKind::AttentionDecided,
+            EventKind::IntentionCancelled,
+            EventKind::Predicted,
+            EventKind::OutcomeObserved,
+            EventKind::ProcedureMined,
+            EventKind::ProcedureRevised,
+            EventKind::ProcedureAdopted,
         ];
         let index = usize::from(value.saturating_sub(1));
         if value == 0 {

@@ -1,13 +1,18 @@
 #![allow(clippy::missing_errors_doc)]
 
+use crate::attention::AttentionProjection;
+use crate::attestations::AttestationsProjection;
 use crate::beliefs::BeliefProjection;
 use crate::bindings::BindingsProjection;
 use crate::entities::EntityProjection;
 use crate::generation::GenerationProjection;
 use crate::intent::IntentFrameProjection;
+use crate::intentions::IntentionsProjection;
 use crate::ladder::TemporalLadder;
 use crate::ledger::WorkLedgerProjection;
 use crate::lexical::LexicalProjection;
+use crate::predictions::PredictionsProjection;
+use crate::procedures::ProceduresProjection;
 use crate::store::{ProjectionId, ProjectionStore};
 use crate::timeline::apply_timeline;
 use hm_core::{Error, ErrorCode, LSN};
@@ -43,6 +48,11 @@ pub fn rebuild_projection_stream(
     let mut graph_checkpoint = snapshot.checkpoint(ProjectionId::Graph)?.get();
     let mut fsrs_checkpoint = snapshot.checkpoint(ProjectionId::Fsrs)?.get();
     let mut runs_checkpoint = snapshot.checkpoint(ProjectionId::Runs)?.get();
+    let mut intentions_checkpoint = snapshot.checkpoint(ProjectionId::Intentions)?.get();
+    let mut attention_checkpoint = snapshot.checkpoint(ProjectionId::AttentionHistory)?.get();
+    let mut predictions_checkpoint = snapshot.checkpoint(ProjectionId::Predictions)?.get();
+    let mut procedures_checkpoint = snapshot.checkpoint(ProjectionId::Procedures)?.get();
+    let mut attestations_checkpoint = snapshot.checkpoint(ProjectionId::Attestations)?.get();
     drop(snapshot);
     let checkpoints = [
         timeline_checkpoint,
@@ -57,6 +67,11 @@ pub fn rebuild_projection_stream(
         graph_checkpoint,
         fsrs_checkpoint,
         runs_checkpoint,
+        intentions_checkpoint,
+        attention_checkpoint,
+        predictions_checkpoint,
+        procedures_checkpoint,
+        attestations_checkpoint,
     ];
     let minimum = checkpoints.into_iter().min().unwrap_or(0);
     if checkpoints
@@ -122,6 +137,26 @@ pub fn rebuild_projection_stream(
             fsrs_checkpoint = expected_lsn;
             runs_checkpoint = expected_lsn;
         }
+        if intentions_checkpoint < expected_lsn {
+            IntentionsProjection::apply_event(store, frame)?;
+            intentions_checkpoint = expected_lsn;
+        }
+        if attention_checkpoint < expected_lsn {
+            AttentionProjection::apply_event(store, frame)?;
+            attention_checkpoint = expected_lsn;
+        }
+        if predictions_checkpoint < expected_lsn {
+            PredictionsProjection::apply_event(store, frame)?;
+            predictions_checkpoint = expected_lsn;
+        }
+        if procedures_checkpoint < expected_lsn {
+            ProceduresProjection::apply_event(store, frame)?;
+            procedures_checkpoint = expected_lsn;
+        }
+        if attestations_checkpoint < expected_lsn {
+            AttestationsProjection::apply_event(store, frame)?;
+            attestations_checkpoint = expected_lsn;
+        }
         applied_frames += 1;
     }
     let checkpoints = [
@@ -137,6 +172,11 @@ pub fn rebuild_projection_stream(
         graph_checkpoint,
         fsrs_checkpoint,
         runs_checkpoint,
+        intentions_checkpoint,
+        attention_checkpoint,
+        predictions_checkpoint,
+        procedures_checkpoint,
+        attestations_checkpoint,
     ];
     let applied_lsn = checkpoints.into_iter().min().unwrap_or(0);
     Ok(RebuildProgress {
@@ -162,6 +202,11 @@ fn reset_all(store: &ProjectionStore) -> Result<(), Error> {
         ProjectionId::Graph,
         ProjectionId::Fsrs,
         ProjectionId::Runs,
+        ProjectionId::Intentions,
+        ProjectionId::AttentionHistory,
+        ProjectionId::Predictions,
+        ProjectionId::Procedures,
+        ProjectionId::Attestations,
     ] {
         store.reset(projection)?;
     }
