@@ -3,6 +3,7 @@
 use crate::beliefs::BeliefProjection;
 use crate::bindings::BindingsProjection;
 use crate::entities::EntityProjection;
+use crate::generation::GenerationProjection;
 use crate::intent::IntentFrameProjection;
 use crate::ladder::TemporalLadder;
 use crate::ledger::WorkLedgerProjection;
@@ -19,6 +20,7 @@ pub struct RebuildProgress {
     pub complete: bool,
 }
 
+#[allow(clippy::too_many_lines)]
 pub fn rebuild_projection_stream(
     store: &ProjectionStore,
     frames: &[Frame],
@@ -37,6 +39,10 @@ pub fn rebuild_projection_stream(
     let mut entity_checkpoint = snapshot.checkpoint(ProjectionId::EntityIndex)?.get();
     let mut belief_checkpoint = snapshot.checkpoint(ProjectionId::BeliefStore)?.get();
     let mut ladder_checkpoint = snapshot.checkpoint(ProjectionId::TemporalLadder)?.get();
+    let mut memories_checkpoint = snapshot.checkpoint(ProjectionId::Memories)?.get();
+    let mut graph_checkpoint = snapshot.checkpoint(ProjectionId::Graph)?.get();
+    let mut fsrs_checkpoint = snapshot.checkpoint(ProjectionId::Fsrs)?.get();
+    let mut runs_checkpoint = snapshot.checkpoint(ProjectionId::Runs)?.get();
     drop(snapshot);
     let checkpoints = [
         timeline_checkpoint,
@@ -47,6 +53,10 @@ pub fn rebuild_projection_stream(
         entity_checkpoint,
         belief_checkpoint,
         ladder_checkpoint,
+        memories_checkpoint,
+        graph_checkpoint,
+        fsrs_checkpoint,
+        runs_checkpoint,
     ];
     let minimum = checkpoints.into_iter().min().unwrap_or(0);
     if checkpoints
@@ -97,6 +107,21 @@ pub fn rebuild_projection_stream(
             TemporalLadder::apply_event(store, frame)?;
             ladder_checkpoint = expected_lsn;
         }
+        if [
+            memories_checkpoint,
+            graph_checkpoint,
+            fsrs_checkpoint,
+            runs_checkpoint,
+        ]
+        .into_iter()
+        .any(|checkpoint| checkpoint < expected_lsn)
+        {
+            GenerationProjection::apply_event(store, frame)?;
+            memories_checkpoint = expected_lsn;
+            graph_checkpoint = expected_lsn;
+            fsrs_checkpoint = expected_lsn;
+            runs_checkpoint = expected_lsn;
+        }
         applied_frames += 1;
     }
     let checkpoints = [
@@ -108,6 +133,10 @@ pub fn rebuild_projection_stream(
         entity_checkpoint,
         belief_checkpoint,
         ladder_checkpoint,
+        memories_checkpoint,
+        graph_checkpoint,
+        fsrs_checkpoint,
+        runs_checkpoint,
     ];
     let applied_lsn = checkpoints.into_iter().min().unwrap_or(0);
     Ok(RebuildProgress {
@@ -129,6 +158,10 @@ fn reset_all(store: &ProjectionStore) -> Result<(), Error> {
         ProjectionId::EntityIndex,
         ProjectionId::BeliefStore,
         ProjectionId::TemporalLadder,
+        ProjectionId::Memories,
+        ProjectionId::Graph,
+        ProjectionId::Fsrs,
+        ProjectionId::Runs,
     ] {
         store.reset(projection)?;
     }

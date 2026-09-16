@@ -4,12 +4,18 @@ pub mod beliefs;
 pub mod bindings;
 pub mod checkpoint;
 pub mod entities;
+pub mod fsrs;
+pub mod generation;
+pub mod graph;
 pub mod intent;
 pub mod ladder;
+pub mod lease;
 pub mod ledger;
 pub mod lexical;
+pub mod memories;
 pub mod protected;
 pub mod rebuild;
+pub mod runs;
 pub mod spaces;
 #[allow(unsafe_code)]
 pub mod store;

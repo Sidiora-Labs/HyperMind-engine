@@ -708,7 +708,7 @@ do_1 = "Add MemoryMinted, MemoryRevised, MemoryMerged, MemoryFaded, EdgeAsserted
 
 [task.6.3]
 title = "Memories, graph and fsrs projections; runs, active_generation, leases, retraction override"
-status = "pending"
+status = "done"
 wave = 6
 owner_lane = "projections"
 requires = ["6.2"]

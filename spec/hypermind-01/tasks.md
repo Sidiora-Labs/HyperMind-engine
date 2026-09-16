@@ -169,7 +169,7 @@
   - [x] 6.2 Memory, edge and consolidation events; run_id and model_provenance on the envelope
     - Add MemoryMinted, MemoryRevised, MemoryMerged, MemoryFaded, EdgeAsserted, EdgeRetracted, ConsolidationOpened, ConsolidationPhase, ConsolidationClosed, ConsolidationRetracted, Reviewed; VerifyEvent requires run_id and model_provenance on every LLM-derived kind and citations with byte ranges on minted and revised memories and asserted edges.
     - _Requirements: 9.1, 5.2_
-  - [ ] 6.3 Memories, graph and fsrs projections; runs, active_generation, leases, retraction override
+  - [x] 6.3 Memories, graph and fsrs projections; runs, active_generation, leases, retraction override
     - Memories projection with version chains and faded state; graph as adjacency bitmaps with relation, weight, evidence LSNs and validity; fsrs state per memory.
     - Runs projection and generations: staged records under run_id are invisible until publish; publish is a compare-and-swap on active_generation refusing when any staged record lacks a projection; lease(generation, seconds) pins a read view; retractions apply to every generation including leased; retract switches the pointer back and schedules cleanup. Test: two leased readers see different derived content simultaneously; a lost publish ack resumes to exactly one published generation.
     - _Requirements: 5.2, 5.3, 10.3_

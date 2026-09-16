@@ -43,6 +43,16 @@ fn neocortex_vectors_round_trip_all_legacy_kinds() {
 }
 
 #[test]
+fn hypermind_event_kind_extensions_round_trip_without_renumbering() {
+    for kind in 22..=34 {
+        let frame = donor_frame(kind);
+        assert_eq!(decode(&encode(&frame).unwrap()).unwrap(), frame);
+        assert_eq!(frame.header.kind as u8, kind);
+    }
+    assert!(EventKind::try_from(35).is_err());
+}
+
+#[test]
 fn encoding_is_byte_exact_with_donor_fixture() {
     let expected: Vec<u8> = include_str!("../fixtures/frame_kind_01.hex")
         .trim()

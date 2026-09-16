@@ -169,6 +169,17 @@ pub(crate) const fn schema_kind(kind: EventKind) -> Option<event::EventKind> {
         EventKind::Attestation => event::EventKind::Attestation,
         EventKind::Binding => event::EventKind::Binding,
         EventKind::ProposedAssertion => event::EventKind::ProposedAssertion,
+        EventKind::MemoryMinted => event::EventKind::MemoryMinted,
+        EventKind::MemoryRevised => event::EventKind::MemoryRevised,
+        EventKind::MemoryMerged => event::EventKind::MemoryMerged,
+        EventKind::MemoryFaded => event::EventKind::MemoryFaded,
+        EventKind::EdgeAsserted => event::EventKind::EdgeAsserted,
+        EventKind::EdgeRetracted => event::EventKind::EdgeRetracted,
+        EventKind::ConsolidationOpened => event::EventKind::ConsolidationOpened,
+        EventKind::ConsolidationPhase => event::EventKind::ConsolidationPhase,
+        EventKind::ConsolidationClosed => event::EventKind::ConsolidationClosed,
+        EventKind::ConsolidationRetracted => event::EventKind::ConsolidationRetracted,
+        EventKind::Reviewed => event::EventKind::Reviewed,
         EventKind::Assertion
         | EventKind::Consolidation
         | EventKind::Embedding
