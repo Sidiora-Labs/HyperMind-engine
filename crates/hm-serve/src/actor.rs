@@ -47,7 +47,9 @@ use hm_proj::memories::{MemoryProjection, MemoryRecord};
 use hm_proj::predictions::{
     CalibrationCounters, MechanismFailures, PredictionRecord, PredictionsProjection,
 };
-use hm_proj::procedures::{ProcedureRecord, ProcedureState, ProceduresProjection};
+use hm_proj::procedures::{
+    ImprovementProposal, PlaybookMetadata, ProcedureRecord, ProcedureState, ProceduresProjection,
+};
 use hm_proj::rebuild::rebuild_projection_stream;
 use hm_proj::runs::RunsProjection;
 use hm_proj::store::{ProjectionId, ProjectionStore, ReadSnapshot};
@@ -324,6 +326,16 @@ enum Command {
         oneshot::Sender<Result<Option<ProcedureRecord>, Error>>,
     ),
     Procedures(usize, oneshot::Sender<Result<Vec<ProcedureRecord>, Error>>),
+    Playbook(
+        Vec<u8>,
+        oneshot::Sender<Result<Option<PlaybookMetadata>, Error>>,
+    ),
+    PlaybookInstructions(Vec<u8>, oneshot::Sender<Result<Option<Vec<u8>>, Error>>),
+    ProcedureProposals(
+        Vec<u8>,
+        usize,
+        oneshot::Sender<Result<Vec<ImprovementProposal>, Error>>,
+    ),
     MediaCatalog(
         bool,
         usize,
@@ -693,6 +705,34 @@ impl ActorEngine {
         request(&self.commands, |reply| Command::Procedures(limit, reply)).await
     }
 
+    pub async fn playbook(&self, procedure_id: Vec<u8>) -> Result<Option<PlaybookMetadata>, Error> {
+        request(&self.commands, |reply| {
+            Command::Playbook(procedure_id, reply)
+        })
+        .await
+    }
+
+    pub async fn playbook_instructions(
+        &self,
+        procedure_id: Vec<u8>,
+    ) -> Result<Option<Vec<u8>>, Error> {
+        request(&self.commands, |reply| {
+            Command::PlaybookInstructions(procedure_id, reply)
+        })
+        .await
+    }
+
+    pub async fn procedure_proposals(
+        &self,
+        procedure_id: Vec<u8>,
+        limit: usize,
+    ) -> Result<Vec<ImprovementProposal>, Error> {
+        request(&self.commands, |reply| {
+            Command::ProcedureProposals(procedure_id, limit, reply)
+        })
+        .await
+    }
+
     pub async fn media_catalog(
         &self,
         pending_only: bool,
@@ -1030,6 +1070,26 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
                     .and_then(|snapshot| ProceduresProjection::list(&snapshot, limit));
                 let _ = reply.send(result);
             }
+            Command::Playbook(id, reply) => {
+                let result = state
+                    .projections
+                    .begin_snapshot()
+                    .and_then(|snapshot| ProceduresProjection::playbook_metadata(&snapshot, &id));
+                let _ = reply.send(result);
+            }
+            Command::PlaybookInstructions(id, reply) => {
+                let result = state.projections.begin_snapshot().and_then(|snapshot| {
+                    ProceduresProjection::playbook_instructions(&snapshot, &id)
+                });
+                let _ = reply.send(result);
+            }
+            Command::ProcedureProposals(id, limit, reply) => {
+                let result = state
+                    .projections
+                    .begin_snapshot()
+                    .and_then(|snapshot| ProceduresProjection::proposals(&snapshot, &id, limit));
+                let _ = reply.send(result);
+            }
             Command::MediaCatalog(pending_only, limit, reply) => {
                 let result = if limit == 0 {
                     Err(Error::new(ErrorCode::InvalidArgument))
@@ -1209,6 +1269,7 @@ impl WriterState {
         )
     }
 
+    #[allow(clippy::too_many_lines)]
     fn validate_anticipation(&self, payload: &EventPayload) -> Result<(), Error> {
         let snapshot = self.projections.begin_snapshot()?;
         match payload {
@@ -1257,11 +1318,37 @@ impl WriterState {
                 }
             }
             EventPayload::ProcedureAdopted(value) => {
-                if ProceduresProjection::get(&snapshot, &value.procedure_id)?.is_none_or(|prior| {
-                    prior.version_lsn != value.procedure_lsn
-                        || prior.state != ProcedureState::Supported
-                }) {
+                let head = ProceduresProjection::get(&snapshot, &value.procedure_id)?
+                    .ok_or_else(|| Error::new(ErrorCode::OrderingViolation))?;
+                let admissible = if head.version_lsn == value.procedure_lsn {
+                    matches!(
+                        head.state,
+                        ProcedureState::Supported | ProcedureState::Imported
+                    )
+                } else {
+                    ProceduresProjection::proposal(
+                        &snapshot,
+                        &value.procedure_id,
+                        value.procedure_lsn,
+                    )?
+                    .is_some_and(|proposal| {
+                        proposal.base_lsn == head.version_lsn && proposal.adopted_lsn == 0
+                    })
+                };
+                if !admissible {
                     return Err(Error::new(ErrorCode::OrderingViolation));
+                }
+            }
+            EventPayload::ProcedureImported(value) => {
+                if ProceduresProjection::get(&snapshot, &value.procedure_id)?.is_some() {
+                    return Err(Error::new(ErrorCode::AlreadyExists));
+                }
+            }
+            EventPayload::ProcedureImprovementProposed(value) => {
+                let head = ProceduresProjection::get(&snapshot, &value.procedure_id)?
+                    .ok_or_else(|| Error::new(ErrorCode::OrderingViolation))?;
+                if head.version_lsn != value.base_lsn {
+                    return Err(Error::new(ErrorCode::IdempotencyConflict));
                 }
             }
             EventPayload::SourceConnectorBound(value) => {
@@ -1715,6 +1802,10 @@ impl WriterState {
                 EventPayload::ProcedureMined(value) => Some((2, value.procedure_id.clone())),
                 EventPayload::ProcedureRevised(value) => Some((2, value.procedure_id.clone())),
                 EventPayload::ProcedureAdopted(value) => Some((2, value.procedure_id.clone())),
+                EventPayload::ProcedureImported(value) => Some((2, value.procedure_id.clone())),
+                EventPayload::ProcedureImprovementProposed(value) => {
+                    Some((4, value.proposal_id.clone()))
+                }
                 EventPayload::SourceDeliveryAccepted(value) => Some((
                     3,
                     source_delivery_key(&value.connector_id, &value.delivery_id),
