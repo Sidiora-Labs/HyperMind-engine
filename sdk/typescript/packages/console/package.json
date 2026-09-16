@@ -1,0 +1,14 @@
+{
+  "name": "@hypermind/console",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.browser.json && node build/site.mjs",
+    "test": "cargo build --manifest-path ../../../../Cargo.toml -p hm-cli && npm run build --prefix ../render && npm run build --prefix ../client && npm run build && node --test dist/*.test.js"
+  },
+  "dependencies": {
+    "@hypermind/client": "0.1.0"
+  }
+}

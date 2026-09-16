@@ -5502,6 +5502,91 @@
       "file": "sdk/typescript/packages/client/src/grpc.ts"
     },
     {
+      "id": "sdk:sdk/typescript/packages/console/src/errors.ts:ConsoleDataError",
+      "name": "sdk/typescript/packages/console/src/errors.ts::ConsoleDataError",
+      "file": "sdk/typescript/packages/console/src/errors.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/errors.ts:101:constructor",
+      "name": "sdk/typescript/packages/console/src/errors.ts::constructor",
+      "file": "sdk/typescript/packages/console/src/errors.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/html.ts:escapeText",
+      "name": "sdk/typescript/packages/console/src/html.ts::escapeText",
+      "file": "sdk/typescript/packages/console/src/html.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/html.ts:uriLink",
+      "name": "sdk/typescript/packages/console/src/html.ts::uriLink",
+      "file": "sdk/typescript/packages/console/src/html.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/html.ts:section",
+      "name": "sdk/typescript/packages/console/src/html.ts::section",
+      "file": "sdk/typescript/packages/console/src/html.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/node-transport.ts:clientTransport",
+      "name": "sdk/typescript/packages/console/src/node-transport.ts::clientTransport",
+      "file": "sdk/typescript/packages/console/src/node-transport.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/overview.ts:OverviewProjection",
+      "name": "sdk/typescript/packages/console/src/overview.ts::OverviewProjection",
+      "file": "sdk/typescript/packages/console/src/overview.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/overview.ts:OverviewView",
+      "name": "sdk/typescript/packages/console/src/overview.ts::OverviewView",
+      "file": "sdk/typescript/packages/console/src/overview.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/overview.ts:buildOverview",
+      "name": "sdk/typescript/packages/console/src/overview.ts::buildOverview",
+      "file": "sdk/typescript/packages/console/src/overview.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/overview.ts:renderOverview",
+      "name": "sdk/typescript/packages/console/src/overview.ts::renderOverview",
+      "file": "sdk/typescript/packages/console/src/overview.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/transport.ts:ConsoleManifest",
+      "name": "sdk/typescript/packages/console/src/transport.ts::ConsoleManifest",
+      "file": "sdk/typescript/packages/console/src/transport.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/transport.ts:ConsoleEnvelope",
+      "name": "sdk/typescript/packages/console/src/transport.ts::ConsoleEnvelope",
+      "file": "sdk/typescript/packages/console/src/transport.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/transport.ts:ConsoleTransport",
+      "name": "sdk/typescript/packages/console/src/transport.ts::ConsoleTransport",
+      "file": "sdk/typescript/packages/console/src/transport.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/transport.ts:RestTransportOptions",
+      "name": "sdk/typescript/packages/console/src/transport.ts::RestTransportOptions",
+      "file": "sdk/typescript/packages/console/src/transport.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/transport.ts:restTransport",
+      "name": "sdk/typescript/packages/console/src/transport.ts::restTransport",
+      "file": "sdk/typescript/packages/console/src/transport.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/transport.ts:requireItem",
+      "name": "sdk/typescript/packages/console/src/transport.ts::requireItem",
+      "file": "sdk/typescript/packages/console/src/transport.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/transport.ts:609:callTool",
+      "name": "sdk/typescript/packages/console/src/transport.ts::callTool",
+      "file": "sdk/typescript/packages/console/src/transport.ts"
+    },
+    {
       "id": "sdk:sdk/typescript/packages/engine/index.d.ts:NativeEngine",
       "name": "sdk/typescript/packages/engine/index.d.ts::NativeEngine",
       "file": "sdk/typescript/packages/engine/index.d.ts"

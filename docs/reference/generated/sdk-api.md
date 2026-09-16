@@ -4273,6 +4273,261 @@ Do not use: Do not substitute unchecked request objects, discard provenance, or 
 close(): void { this.client.close(); }
 ```
 
+## sdk/typescript/packages/console/src/errors.ts::ConsoleDataError
+
+<a id="sdk-sdk-typescript-packages-console-src-errors-ts-consoledataerror"></a>
+
+Source: [`sdk/typescript/packages/console/src/errors.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/errors.ts).
+
+When to use: Use Console Data Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export class ConsoleDataError extends Error {
+```
+
+## sdk/typescript/packages/console/src/errors.ts::constructor
+
+<a id="sdk-method-sdk-typescript-packages-console-src-errors-ts-101-constructor"></a>
+
+Source: [`sdk/typescript/packages/console/src/errors.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/errors.ts).
+
+When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+constructor(surface: string, field: string, detail?: string) {
+```
+
+## sdk/typescript/packages/console/src/html.ts::escapeText
+
+<a id="sdk-sdk-typescript-packages-console-src-html-ts-escapetext"></a>
+
+Source: [`sdk/typescript/packages/console/src/html.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/html.ts).
+
+When to use: Use escape Text through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function escapeText(value: string): string {
+```
+
+## sdk/typescript/packages/console/src/html.ts::uriLink
+
+<a id="sdk-sdk-typescript-packages-console-src-html-ts-urilink"></a>
+
+Source: [`sdk/typescript/packages/console/src/html.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/html.ts).
+
+When to use: Use uri Link through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function uriLink(uri: string): string {
+```
+
+## sdk/typescript/packages/console/src/html.ts::section
+
+<a id="sdk-sdk-typescript-packages-console-src-html-ts-section"></a>
+
+Source: [`sdk/typescript/packages/console/src/html.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/html.ts).
+
+When to use: Use section through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function section(title: string, body: string): string {
+```
+
+## sdk/typescript/packages/console/src/node-transport.ts::clientTransport
+
+<a id="sdk-sdk-typescript-packages-console-src-node-transport-ts-clienttransport"></a>
+
+Source: [`sdk/typescript/packages/console/src/node-transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/node-transport.ts).
+
+When to use: Use client Transport through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function clientTransport(client: Client): ConsoleTransport {
+```
+
+## sdk/typescript/packages/console/src/overview.ts::OverviewProjection
+
+<a id="sdk-sdk-typescript-packages-console-src-overview-ts-overviewprojection"></a>
+
+Source: [`sdk/typescript/packages/console/src/overview.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/overview.ts).
+
+When to use: Use Overview Projection through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface OverviewProjection {
+```
+
+## sdk/typescript/packages/console/src/overview.ts::OverviewView
+
+<a id="sdk-sdk-typescript-packages-console-src-overview-ts-overviewview"></a>
+
+Source: [`sdk/typescript/packages/console/src/overview.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/overview.ts).
+
+When to use: Use Overview View through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface OverviewView {
+```
+
+## sdk/typescript/packages/console/src/overview.ts::buildOverview
+
+<a id="sdk-sdk-typescript-packages-console-src-overview-ts-buildoverview"></a>
+
+Source: [`sdk/typescript/packages/console/src/overview.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/overview.ts).
+
+When to use: Use build Overview through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function buildOverview(envelope: ConsoleEnvelope): OverviewView {
+```
+
+## sdk/typescript/packages/console/src/overview.ts::renderOverview
+
+<a id="sdk-sdk-typescript-packages-console-src-overview-ts-renderoverview"></a>
+
+Source: [`sdk/typescript/packages/console/src/overview.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/overview.ts).
+
+When to use: Use render Overview through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderOverview(view: OverviewView): string {
+```
+
+## sdk/typescript/packages/console/src/transport.ts::ConsoleManifest
+
+<a id="sdk-sdk-typescript-packages-console-src-transport-ts-consolemanifest"></a>
+
+Source: [`sdk/typescript/packages/console/src/transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/transport.ts).
+
+When to use: Use Console Manifest through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface ConsoleManifest {
+```
+
+## sdk/typescript/packages/console/src/transport.ts::ConsoleEnvelope
+
+<a id="sdk-sdk-typescript-packages-console-src-transport-ts-consoleenvelope"></a>
+
+Source: [`sdk/typescript/packages/console/src/transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/transport.ts).
+
+When to use: Use Console Envelope through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface ConsoleEnvelope {
+```
+
+## sdk/typescript/packages/console/src/transport.ts::ConsoleTransport
+
+<a id="sdk-sdk-typescript-packages-console-src-transport-ts-consoletransport"></a>
+
+Source: [`sdk/typescript/packages/console/src/transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/transport.ts).
+
+When to use: Use Console Transport through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface ConsoleTransport {
+```
+
+## sdk/typescript/packages/console/src/transport.ts::RestTransportOptions
+
+<a id="sdk-sdk-typescript-packages-console-src-transport-ts-resttransportoptions"></a>
+
+Source: [`sdk/typescript/packages/console/src/transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/transport.ts).
+
+When to use: Use Rest Transport Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface RestTransportOptions {
+```
+
+## sdk/typescript/packages/console/src/transport.ts::restTransport
+
+<a id="sdk-sdk-typescript-packages-console-src-transport-ts-resttransport"></a>
+
+Source: [`sdk/typescript/packages/console/src/transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/transport.ts).
+
+When to use: Use rest Transport through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function restTransport(options: RestTransportOptions): ConsoleTransport {
+```
+
+## sdk/typescript/packages/console/src/transport.ts::requireItem
+
+<a id="sdk-sdk-typescript-packages-console-src-transport-ts-requireitem"></a>
+
+Source: [`sdk/typescript/packages/console/src/transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/transport.ts).
+
+When to use: Use require Item through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function requireItem<T>(envelope: ConsoleEnvelope, surface: string, index = 0): T {
+```
+
+## sdk/typescript/packages/console/src/transport.ts::callTool
+
+<a id="sdk-method-sdk-typescript-packages-console-src-transport-ts-609-calltool"></a>
+
+Source: [`sdk/typescript/packages/console/src/transport.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/transport.ts).
+
+When to use: Use this callTool method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+callTool(verb: string, args: unknown): Promise<ConsoleEnvelope>;
+```
+
 ## sdk/typescript/packages/engine/index.d.ts::NativeEngine
 
 <a id="sdk-sdk-typescript-packages-engine-index-d-ts-nativeengine"></a>

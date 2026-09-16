@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HyperMind console</title>
+  </head>
+  <body>
+    <h1>HyperMind console</h1>
+    <form id="console-connection">
+      <label for="console-base-url">Base URL</label>
+      <input id="console-base-url" name="base-url" type="url" value="https://127.0.0.1:8443" required />
+      <label for="console-token">Capability token</label>
+      <input id="console-token" name="token" type="password" required />
+      <label for="console-connection-id">Connection id</label>
+      <input id="console-connection-id" name="connection-id" type="text" value="99999999999999999999999999999999" required />
+      <button type="submit">Load</button>
+    </form>
+    <main id="console"></main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

@@ -3,8 +3,8 @@
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {
-    "build": "npm run build -w @hypermind/render && npm run build -w @hypermind/client && npm run build -w @hypermind/engine && npm run build -w @hypermind/migrate",
-    "test": "cargo build --manifest-path ../../Cargo.toml -p hm-cli && npm run build && node --test packages/render/dist/*.test.js packages/client/dist/*.test.js packages/engine/dist/*.test.js packages/migrate/dist/*.test.js"
+    "build": "npm run build -w @hypermind/render && npm run build -w @hypermind/client && npm run build -w @hypermind/engine && npm run build -w @hypermind/migrate && npm run build -w @hypermind/console",
+    "test": "cargo build --manifest-path ../../Cargo.toml -p hm-cli && npm run build && node --test packages/render/dist/*.test.js packages/client/dist/*.test.js packages/engine/dist/*.test.js packages/migrate/dist/*.test.js packages/console/dist/*.test.js"
   },
   "devDependencies": {
     "@types/node": "22.19.1",
