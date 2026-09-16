@@ -19,5 +19,6 @@ pub mod rem;
 pub mod repograph;
 pub mod review;
 pub mod run;
+pub mod vocabulary;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

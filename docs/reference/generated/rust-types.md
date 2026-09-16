@@ -3459,6 +3459,28 @@ pub enum CadenceError {
 }
 ```
 
+## hm-cortex::VocabularySource
+
+<a id="rust-crates-hm-cortex-src-vocabulary-rs-vocabularysource"></a>
+
+Source: [`crates/hm-cortex/src/vocabulary.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/vocabulary.rs).
+
+When to use: Use `VocabularySource` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct VocabularySource<'a> {
+    pub vocabulary_id: &'a [u8],
+    pub version: u16,
+    pub source_uri: &'a str,
+    pub document: &'a str,
+    pub retention: Retention,
+    pub sensitivity: Sensitivity,
+}
+```
+
 ## hm-docs::TableLoader
 
 <a id="rust-crates-hm-docs-src-formats-table-rs-tableloader"></a>

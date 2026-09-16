@@ -832,6 +832,11 @@
       "file": "crates/hm-cortex/src/run.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/vocabulary.rs:VocabularySource",
+      "name": "hm-cortex::VocabularySource",
+      "file": "crates/hm-cortex/src/vocabulary.rs"
+    },
+    {
       "id": "rust:crates/hm-docs/src/formats/table.rs:TableLoader",
       "name": "hm-docs::TableLoader",
       "file": "crates/hm-docs/src/formats/table.rs"

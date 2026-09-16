@@ -38,7 +38,12 @@ pub fn ingest(
 ) -> Result<IngestResult, Error> {
     envelope.authority = match source {
         IngestSource::User
-            if matches!(kind, EventKind::UserMsg | EventKind::SourceConnectorBound) =>
+            if matches!(
+                kind,
+                EventKind::UserMsg
+                    | EventKind::SourceConnectorBound
+                    | EventKind::VocabularyImported
+            ) =>
         {
             authority_for_event(kind)
         }
