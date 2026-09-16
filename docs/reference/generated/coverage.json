@@ -1507,6 +1507,11 @@
       "file": "crates/hm-eval/src/suites/generations.rs"
     },
     {
+      "id": "rust:crates/hm-eval/src/suites/geometry.rs:GeometryResult",
+      "name": "hm-eval::GeometryResult",
+      "file": "crates/hm-eval/src/suites/geometry.rs"
+    },
+    {
       "id": "rust:crates/hm-eval/src/suites/hnsw_parity.rs:ParityResult",
       "name": "hm-eval::ParityResult",
       "file": "crates/hm-eval/src/suites/hnsw_parity.rs"

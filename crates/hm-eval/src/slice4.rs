@@ -2,7 +2,7 @@
 
 use crate::bench::longmemeval;
 use crate::slice1::{GateResult, Metric};
-use crate::suites::{latency, recall};
+use crate::suites::{geometry, latency, recall};
 use hm_core::{Error, ErrorCode};
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -66,6 +66,35 @@ pub fn run() -> Result<GateResult, Box<dyn std::error::Error>> {
         higher_is_better: true,
         judged: false,
     });
+    let geometry = geometry::run()?;
+    judge_free.push(Metric {
+        name: "geometry_baseline_mrr_at_10".to_owned(),
+        value: geometry.baseline_mrr_at_10,
+        unit: "ratio".to_owned(),
+        tolerance: 0.0,
+        higher_is_better: true,
+        judged: false,
+    });
+    judge_free.push(Metric {
+        name: "geometry_boosted_mrr_at_10".to_owned(),
+        value: geometry.boosted_mrr_at_10,
+        unit: "ratio".to_owned(),
+        tolerance: 0.0,
+        higher_is_better: true,
+        judged: false,
+    });
+    judge_free.push(Metric {
+        name: "geometry_boost_enabled".to_owned(),
+        value: if geometry.enabled_by_default {
+            1.0
+        } else {
+            0.0
+        },
+        unit: "boolean".to_owned(),
+        tolerance: 0.0,
+        higher_is_better: true,
+        judged: false,
+    });
     require(&judge_free, "recall_at_10_10000", |value| value >= 0.95)?;
     let latency_target_met = judge_free
         .iter()
@@ -88,6 +117,7 @@ pub fn run() -> Result<GateResult, Box<dyn std::error::Error>> {
             "seeded_vector_recall_1k_10k_100k".to_owned(),
             "activation_latency_10k_100k".to_owned(),
             "longmemeval_s_no_consolidation".to_owned(),
+            "geometry_alignment_ablation".to_owned(),
         ],
         judge_free,
         judged: vec![Metric {

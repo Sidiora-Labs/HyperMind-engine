@@ -6224,6 +6224,27 @@ pub struct GenerationResult {
 }
 ```
 
+## hm-eval::GeometryResult
+
+<a id="rust-crates-hm-eval-src-suites-geometry-rs-geometryresult"></a>
+
+Source: [`crates/hm-eval/src/suites/geometry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/geometry.rs).
+
+When to use: Use `GeometryResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct GeometryResult {
+    pub fixture_hash: String,
+    pub queries: u64,
+    pub baseline_mrr_at_10: f64,
+    pub boosted_mrr_at_10: f64,
+    pub enabled_by_default: bool,
+}
+```
+
 ## hm-eval::ParityResult
 
 <a id="rust-crates-hm-eval-src-suites-hnsw-parity-rs-parityresult"></a>

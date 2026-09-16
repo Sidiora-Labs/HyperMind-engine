@@ -8,6 +8,8 @@ Reports separate judge-free/judged metrics, coverage, encoder, model route, prom
 
 Seeded recall/latency cohorts measure bounded mechanics at 1k/10k/100k records. Duplicated paraphrases are not open-domain generalization. Report cold/warm latency and query-embedding inclusion; corpus construction is outside timing. An unmet target is not silently relabeled achieved.
 
+The geometry alignment ablation ranks a committed 28-document, 14-query fixture (`eval/fixtures/geometry/alignment.json`) twice with the hash-feature embedder and no network: once by plain int8 dot product and once with the experimental alignment boost applied to the fused hits. Slice 4 publishes `geometry_baseline_mrr_at_10`, `geometry_boosted_mrr_at_10` and `geometry_boost_enabled` as judge-free metrics under the suite name `geometry_alignment_ablation`, with no threshold: a lower boosted number is reported, not failed. The boost stays off by default and may only be enabled for a deployment on the strength of this measured pair, which qualifies only when the boosted MRR@10 exceeds the baseline.
+
 ## Public benchmarks
 
 LongMemEval uses the pinned 500-question cleaned S split and unchanged category-specific upstream judge prompts. LoCoMo uses all 1,986 questions and the unchanged upstream Python F1 scorer/license. Non-adversarial and all-category metrics stay separate; optional judged accuracy is never blended into F1. Reader inputs contain only question metadata and real ledger-retrieved content. References and annotated evidence are scoring-only.

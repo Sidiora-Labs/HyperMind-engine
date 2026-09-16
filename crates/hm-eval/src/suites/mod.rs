@@ -5,6 +5,7 @@ pub mod continuity;
 pub mod degradation;
 pub mod dream;
 pub mod generations;
+pub mod geometry;
 pub mod hnsw_parity;
 pub mod latency;
 pub mod laundering;
