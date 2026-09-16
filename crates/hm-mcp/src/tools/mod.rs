@@ -3,6 +3,7 @@ pub mod believe;
 pub mod bind;
 pub mod consolidate;
 pub mod dispute;
+pub(crate) mod evidence;
 pub mod forget;
 pub mod inspect;
 pub mod intend;

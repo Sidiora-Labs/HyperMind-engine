@@ -113,6 +113,12 @@ pub async fn run(
         envelope.provenance.extend(source.provenance);
         return Ok(envelope);
     }
+    if uri.starts_with(&format!("hm://{}/evidence/", actor.actor())) {
+        let evidence = super::evidence::run(actor, parse_lsn(&uri)?).await?;
+        envelope.items.extend(evidence.items);
+        envelope.provenance.extend(evidence.provenance);
+        return Ok(envelope);
+    }
     let all_frames = actor.frames_since(LSN::new(0), None, usize::MAX).await?;
     let mut history = InspectHistory::default();
     for frame in &all_frames {
@@ -124,13 +130,12 @@ pub async fn run(
             Boundary::Disk,
             &history,
         )?;
-        history
-            .records
-            .insert(frame.header.lsn, (kind, verified.envelope.authority));
+        history.record(frame.header.lsn, kind, verified.envelope.authority);
     }
     let first = parse_lsn(&uri)?;
     let mut pending = vec![first];
     let mut visited = BTreeSet::new();
+    let mut edges: Vec<Value> = Vec::new();
     while let Some(lsn) = pending.pop() {
         if !visited.insert(lsn) {
             continue;
@@ -153,7 +158,15 @@ pub async fn run(
             Boundary::Disk,
             &history,
         )?;
-        pending.extend(references(&verified.envelope.payload).into_iter().rev());
+        let hops = references(&verified.envelope.payload);
+        for (target, relation) in &hops {
+            edges.push(json!({
+                "from": lsn.get(),
+                "to": target.get(),
+                "relation": relation,
+            }));
+        }
+        pending.extend(hops.into_iter().rev().map(|(target, _)| target));
         let integrity = actor.integrity_at(lsn).await?;
         let item_uri = format!("hm://{}/lsn/{}", actor.actor(), lsn.get());
         envelope.items.push(json!({
@@ -169,6 +182,12 @@ pub async fn run(
         }));
         envelope.provenance.push(item_uri);
     }
+    envelope.items[0]["evidence_path"] = json!({
+        "label": "evidence_path",
+        "root_lsn": first.get(),
+        "edges": edges,
+        "visited": visited.len(),
+    });
     Ok(envelope)
 }
 
@@ -215,8 +234,14 @@ fn discovery_item(surface: &Surface, availability: Availability) -> Value {
 }
 
 #[derive(Default)]
-struct InspectHistory {
+pub(crate) struct InspectHistory {
     records: std::collections::BTreeMap<LSN, (event::EventKind, Authority)>,
+}
+
+impl InspectHistory {
+    pub(crate) fn record(&mut self, lsn: LSN, kind: event::EventKind, authority: Authority) {
+        self.records.insert(lsn, (kind, authority));
+    }
 }
 
 impl EventHistory for InspectHistory {
@@ -243,20 +268,28 @@ fn parse_lsn(uri: &str) -> Result<LSN, Error> {
     Ok(LSN::new(raw))
 }
 
-fn references(payload: &EventPayload) -> Vec<LSN> {
-    let raw = match payload {
-        EventPayload::ToolResult(value) => vec![value.tool_call_lsn],
-        EventPayload::Effect(value) => vec![value.tool_call_lsn],
-        EventPayload::Outcome(value) => value.evidence_lsns.clone().unwrap_or_default(),
-        EventPayload::LoopClosed(value) => value.evidence_lsns.clone().unwrap_or_default(),
-        EventPayload::Binding(value) => vec![value.evidence_lsn],
-        EventPayload::Attestation(value) => vec![value.target_lsn],
-        EventPayload::OutcomeObserved(value) => value.observation_lsns.clone(),
-        _ => Vec::new(),
+fn references(payload: &EventPayload) -> Vec<(LSN, &'static str)> {
+    let (raw, relation) = match payload {
+        EventPayload::ToolResult(value) => (vec![value.tool_call_lsn], "tool_call_lsn"),
+        EventPayload::Effect(value) => (vec![value.tool_call_lsn], "tool_call_lsn"),
+        EventPayload::Outcome(value) => (
+            value.evidence_lsns.clone().unwrap_or_default(),
+            "evidence_lsns",
+        ),
+        EventPayload::LoopClosed(value) => (
+            value.evidence_lsns.clone().unwrap_or_default(),
+            "evidence_lsns",
+        ),
+        EventPayload::Binding(value) => (vec![value.evidence_lsn], "evidence_lsn"),
+        EventPayload::Attestation(value) => (vec![value.target_lsn], "target_lsn"),
+        EventPayload::OutcomeObserved(value) => {
+            (value.observation_lsns.clone(), "observation_lsns")
+        }
+        _ => (Vec::new(), ""),
     };
     raw.into_iter()
         .filter(|value| *value != 0)
-        .map(LSN::new)
+        .map(|value| (LSN::new(value), relation))
         .collect()
 }
 
