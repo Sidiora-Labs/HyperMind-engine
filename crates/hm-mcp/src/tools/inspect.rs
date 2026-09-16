@@ -7,6 +7,7 @@ use hm_index::vocabulary::{DEFAULT_SIMILARITY_THRESHOLD_Q16, Q16_ONE};
 use hm_schema::event::{self, Boundary, EventHistory};
 use hm_schema::events::{AttentionDecision, Authority, EventPayload, VocabularyCategory};
 use hm_serve::actor::ActorEngine;
+use hm_serve::config::CapabilityToken;
 use rmcp::schemars;
 use serde::Deserialize;
 use serde_json::{Value, json};
@@ -40,6 +41,7 @@ pub struct InspectInput {
 pub async fn run(
     actor: &ActorEngine,
     availability: Availability,
+    admin_token: Option<&CapabilityToken>,
     input: InspectInput,
 ) -> Result<Envelope, Error> {
     if matches!(input.mode, InspectMode::Discover) {
@@ -154,6 +156,11 @@ pub async fn run(
                 .collect::<Vec<_>>()
         );
         envelope.warnings.push(REVIEW_WARNING.to_owned());
+        return Ok(envelope);
+    }
+    if uri == format!("hm://{}/access", actor.actor()) {
+        let access = super::access::run(actor, admin_token);
+        envelope.items.extend(access.items);
         return Ok(envelope);
     }
     if uri == format!("hm://{}/sources", actor.actor()) {

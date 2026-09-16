@@ -1,3 +1,4 @@
+pub(crate) mod access;
 pub mod attest;
 pub mod believe;
 pub mod bind;

@@ -686,7 +686,14 @@ impl McpServer {
     }
 
     pub async fn inspect_envelope(&self, input: InspectInput) -> Envelope {
-        match tools::inspect::run(&self.actor, self.availability(), input).await {
+        match tools::inspect::run(
+            &self.actor,
+            self.availability(),
+            self.admin_token.as_ref(),
+            input,
+        )
+        .await
+        {
             Ok(value) => value,
             Err(error) => Envelope::error(error, false),
         }

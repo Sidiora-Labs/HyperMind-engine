@@ -22,6 +22,15 @@ pub fn authenticate(config: &ServerConfig, token: &[u8]) -> Result<Principal, Er
         .ok_or_else(|| Error::new(ErrorCode::CapabilityDenied))
 }
 
+pub const ADMIN_OPERATIONS: [&str; 6] = [
+    "health",
+    "stats",
+    "latency_histograms",
+    "verify",
+    "rebuild",
+    "crypto_delete",
+];
+
 #[must_use]
 pub const fn is_admin_request(request: &RequestPayload) -> bool {
     matches!(
