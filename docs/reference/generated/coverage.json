@@ -2477,6 +2477,26 @@
       "file": "crates/hm-proj/src/vectors.rs"
     },
     {
+      "id": "rust:crates/hm-proj/src/vocabulary.rs:VocabularyRecord",
+      "name": "hm-proj::VocabularyRecord",
+      "file": "crates/hm-proj/src/vocabulary.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/vocabulary.rs:TermRecord",
+      "name": "hm-proj::TermRecord",
+      "file": "crates/hm-proj/src/vocabulary.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/vocabulary.rs:AliasEntry",
+      "name": "hm-proj::AliasEntry",
+      "file": "crates/hm-proj/src/vocabulary.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/vocabulary.rs:VocabularyProjection",
+      "name": "hm-proj::VocabularyProjection",
+      "file": "crates/hm-proj/src/vocabulary.rs"
+    },
+    {
       "id": "rust:crates/hm-schema/src/event.rs:Boundary",
       "name": "hm-schema::Boundary",
       "file": "crates/hm-schema/src/event.rs"

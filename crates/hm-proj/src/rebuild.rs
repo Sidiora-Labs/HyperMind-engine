@@ -15,6 +15,7 @@ use crate::predictions::PredictionsProjection;
 use crate::procedures::ProceduresProjection;
 use crate::store::{ProjectionId, ProjectionStore};
 use crate::timeline::apply_timeline;
+use crate::vocabulary::VocabularyProjection;
 use hm_core::{Error, ErrorCode, LSN};
 use hm_ledger::frame::Frame;
 
@@ -53,6 +54,7 @@ pub fn rebuild_projection_stream(
     let mut predictions_checkpoint = snapshot.checkpoint(ProjectionId::Predictions)?.get();
     let mut procedures_checkpoint = snapshot.checkpoint(ProjectionId::Procedures)?.get();
     let mut attestations_checkpoint = snapshot.checkpoint(ProjectionId::Attestations)?.get();
+    let mut vocabulary_checkpoint = snapshot.checkpoint(ProjectionId::Vocabulary)?.get();
     drop(snapshot);
     let checkpoints = [
         timeline_checkpoint,
@@ -72,6 +74,7 @@ pub fn rebuild_projection_stream(
         predictions_checkpoint,
         procedures_checkpoint,
         attestations_checkpoint,
+        vocabulary_checkpoint,
     ];
     let minimum = checkpoints.into_iter().min().unwrap_or(0);
     if checkpoints
@@ -157,6 +160,10 @@ pub fn rebuild_projection_stream(
             AttestationsProjection::apply_event(store, frame)?;
             attestations_checkpoint = expected_lsn;
         }
+        if vocabulary_checkpoint < expected_lsn {
+            VocabularyProjection::apply_event(store, frame)?;
+            vocabulary_checkpoint = expected_lsn;
+        }
         applied_frames += 1;
     }
     let checkpoints = [
@@ -177,6 +184,7 @@ pub fn rebuild_projection_stream(
         predictions_checkpoint,
         procedures_checkpoint,
         attestations_checkpoint,
+        vocabulary_checkpoint,
     ];
     let applied_lsn = checkpoints.into_iter().min().unwrap_or(0);
     Ok(RebuildProgress {
@@ -207,6 +215,7 @@ fn reset_all(store: &ProjectionStore) -> Result<(), Error> {
         ProjectionId::Predictions,
         ProjectionId::Procedures,
         ProjectionId::Attestations,
+        ProjectionId::Vocabulary,
     ] {
         store.reset(projection)?;
     }

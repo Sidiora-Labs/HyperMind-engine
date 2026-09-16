@@ -9964,6 +9964,7 @@ pub enum ProjectionId {
     Predictions,
     Procedures,
     Attestations,
+    Vocabulary,
 }
 ```
 
@@ -10183,6 +10184,88 @@ pub struct VectorLane {
     #[cfg(feature = "hnsw")]
     hnsw: Arc<Mutex<Option<HnswProjection>>>,
 }
+```
+
+## hm-proj::VocabularyRecord
+
+<a id="rust-crates-hm-proj-src-vocabulary-rs-vocabularyrecord"></a>
+
+Source: [`crates/hm-proj/src/vocabulary.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vocabulary.rs).
+
+When to use: Use `VocabularyRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct VocabularyRecord {
+    pub vocabulary_id: Vec<u8>,
+    pub version: u16,
+    pub source_uri: String,
+    pub source_media_type: String,
+    pub source_digest: Vec<u8>,
+    pub term_count: u32,
+    pub ignored_triples: u32,
+    pub event_lsn: u64,
+}
+```
+
+## hm-proj::TermRecord
+
+<a id="rust-crates-hm-proj-src-vocabulary-rs-termrecord"></a>
+
+Source: [`crates/hm-proj/src/vocabulary.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vocabulary.rs).
+
+When to use: Use `TermRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct TermRecord {
+    pub vocabulary_id: Vec<u8>,
+    pub version: u16,
+    pub term_id: String,
+    pub canonical_name: String,
+    pub category: VocabularyCategory,
+    pub parent_term_id: Option<String>,
+    pub aliases: Vec<String>,
+    pub event_lsn: u64,
+}
+```
+
+## hm-proj::AliasEntry
+
+<a id="rust-crates-hm-proj-src-vocabulary-rs-aliasentry"></a>
+
+Source: [`crates/hm-proj/src/vocabulary.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vocabulary.rs).
+
+When to use: Use `AliasEntry` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct AliasEntry {
+    pub vocabulary_id: Vec<u8>,
+    pub version: u16,
+    pub term_id: String,
+}
+```
+
+## hm-proj::VocabularyProjection
+
+<a id="rust-crates-hm-proj-src-vocabulary-rs-vocabularyprojection"></a>
+
+Source: [`crates/hm-proj/src/vocabulary.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vocabulary.rs).
+
+When to use: Use `VocabularyProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct VocabularyProjection;
 ```
 
 ## hm-schema::Boundary

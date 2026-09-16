@@ -29,5 +29,6 @@ pub mod timeline;
 pub mod vectors;
 #[cfg(feature = "hnsw")]
 pub mod vectors_hnsw;
+pub mod vocabulary;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
