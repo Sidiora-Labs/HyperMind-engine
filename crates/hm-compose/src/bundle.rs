@@ -221,6 +221,7 @@ pub fn activate(
     activate_with_context(snapshot, request, &ActivationContext::default())
 }
 
+#[allow(clippy::too_many_lines)]
 pub fn activate_with_context(
     snapshot: &ReadSnapshot<'_>,
     request: &ActivationRequest<'_>,

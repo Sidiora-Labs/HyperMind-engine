@@ -1,3 +1,5 @@
+#![allow(clippy::missing_errors_doc)]
+
 use hm_core::{Error, ErrorCode, LSN};
 use hm_llm::{LlmError, LlmProvider, StructuredRequest, Usage};
 use hm_schema::events::Authority;
