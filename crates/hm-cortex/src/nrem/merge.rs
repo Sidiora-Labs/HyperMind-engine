@@ -85,6 +85,69 @@ impl From<LlmError> for NremError {
     }
 }
 
+#[derive(Clone, Debug, PartialEq)]
+pub enum ClusterOutcome {
+    Decided(Box<NremDecision>),
+    Dropped(DroppedCandidate),
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ClusterExtraction {
+    pub outcome: ClusterOutcome,
+    pub usage: hm_llm::Usage,
+    pub llm_calls: u64,
+    pub citation_invalid: bool,
+}
+
+pub fn extract_cluster(
+    provider: &dyn LlmProvider,
+    run_id: &[u8],
+    cluster: &ObservationCluster,
+    existing: &[ExistingMemory],
+) -> Result<ClusterExtraction, NremError> {
+    let request = match merge_request(cluster, existing) {
+        Ok(request) => request,
+        Err(reason) => {
+            return Ok(ClusterExtraction {
+                outcome: ClusterOutcome::Dropped(DroppedCandidate {
+                    cluster_id: cluster.cluster_id,
+                    reason,
+                }),
+                usage: hm_llm::Usage::default(),
+                llm_calls: 0,
+                citation_invalid: false,
+            });
+        }
+    };
+    let response = provider.generate_structured(&request)?;
+    let (outcome, citation_invalid) = match validate_response(
+        run_id,
+        cluster,
+        existing,
+        &response.model_id,
+        response.usage,
+        &response.value,
+    ) {
+        Ok(decision) => (ClusterOutcome::Decided(Box::new(decision)), false),
+        Err(reason) => {
+            let citation_invalid = matches!(reason, DropReason::Citation(_));
+            (
+                ClusterOutcome::Dropped(DroppedCandidate {
+                    cluster_id: cluster.cluster_id,
+                    reason,
+                }),
+                citation_invalid,
+            )
+        }
+    };
+    Ok(ClusterExtraction {
+        outcome,
+        usage: response.usage,
+        llm_calls: 1,
+        citation_invalid,
+    })
+}
+
 pub fn consolidate_clusters(
     provider: &dyn LlmProvider,
     run_id: &[u8],
@@ -93,40 +156,20 @@ pub fn consolidate_clusters(
 ) -> Result<NremReport, NremError> {
     let mut report = NremReport::default();
     for cluster in clusters {
-        let request = match merge_request(cluster, existing) {
-            Ok(request) => request,
-            Err(reason) => {
-                report.dropped.push(DroppedCandidate {
-                    cluster_id: cluster.cluster_id,
-                    reason,
-                });
-                continue;
-            }
-        };
-        let response = provider.generate_structured(&request)?;
-        report.llm_calls = report.llm_calls.saturating_add(1);
-        report
-            .cost
-            .record(response.usage)
-            .map_err(NremError::Cost)?;
-        match validate_response(
-            run_id,
-            cluster,
-            existing,
-            &response.model_id,
-            response.usage,
-            &response.value,
-        ) {
-            Ok(decision) => report.decisions.push(decision),
-            Err(reason) => {
-                if matches!(reason, DropReason::Citation(_)) {
-                    report.citation_invalid = report.citation_invalid.saturating_add(1);
-                }
-                report.dropped.push(DroppedCandidate {
-                    cluster_id: cluster.cluster_id,
-                    reason,
-                });
-            }
+        let extraction = extract_cluster(provider, run_id, cluster, existing)?;
+        if extraction.llm_calls > 0 {
+            report.llm_calls = report.llm_calls.saturating_add(extraction.llm_calls);
+            report
+                .cost
+                .record(extraction.usage)
+                .map_err(NremError::Cost)?;
+        }
+        if extraction.citation_invalid {
+            report.citation_invalid = report.citation_invalid.saturating_add(1);
+        }
+        match extraction.outcome {
+            ClusterOutcome::Decided(decision) => report.decisions.push(*decision),
+            ClusterOutcome::Dropped(dropped) => report.dropped.push(dropped),
         }
     }
     Ok(report)

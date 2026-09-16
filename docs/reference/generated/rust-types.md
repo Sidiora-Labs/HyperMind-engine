@@ -2112,6 +2112,44 @@ pub enum NremError {
 }
 ```
 
+## hm-cortex::ClusterOutcome
+
+<a id="rust-crates-hm-cortex-src-nrem-merge-rs-clusteroutcome"></a>
+
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
+
+When to use: Use `ClusterOutcome` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub enum ClusterOutcome {
+    Decided(Box<NremDecision>),
+    Dropped(DroppedCandidate),
+}
+```
+
+## hm-cortex::ClusterExtraction
+
+<a id="rust-crates-hm-cortex-src-nrem-merge-rs-clusterextraction"></a>
+
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
+
+When to use: Use `ClusterExtraction` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct ClusterExtraction {
+    pub outcome: ClusterOutcome,
+    pub usage: hm_llm::Usage,
+    pub llm_calls: u64,
+    pub citation_invalid: bool,
+}
+```
+
 ## hm-cortex::Observation
 
 <a id="rust-crates-hm-cortex-src-predict-rs-observation"></a>

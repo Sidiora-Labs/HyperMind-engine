@@ -497,6 +497,16 @@
       "file": "crates/hm-cortex/src/nrem/merge.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:ClusterOutcome",
+      "name": "hm-cortex::ClusterOutcome",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:ClusterExtraction",
+      "name": "hm-cortex::ClusterExtraction",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/predict.rs:Observation",
       "name": "hm-cortex::Observation",
       "file": "crates/hm-cortex/src/predict.rs"

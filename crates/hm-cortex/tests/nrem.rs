@@ -12,7 +12,8 @@ use hm_cortex::nrem::cluster::{
     ClusterOptions, ObservationCluster, PendingObservation, cluster_observations,
 };
 use hm_cortex::nrem::merge::{
-    DropReason, ExistingMemory, MergeAction, consolidate_clusters, merge_request,
+    ClusterOutcome, DropReason, ExistingMemory, MergeAction, consolidate_clusters, extract_cluster,
+    merge_request,
 };
 use hm_cortex::quality::{
     LabelledDecision, ThoughtQualityOptions, assess_thought, check_rewrite, grounding_score_micros,
@@ -713,4 +714,137 @@ fn revision_targets_are_hex_stable() {
     let request = merge_request(&cluster, &[target, faded]).unwrap();
     assert!(request.prompt.contains("target=6d656d6f72792d31"));
     assert!(!request.prompt.contains("66616465642d6d656d6f7279"));
+}
+
+#[test]
+fn cluster_extraction_reports_one_outcome_per_candidate() {
+    let cluster = ObservationCluster {
+        cluster_id: [1; 32],
+        priority: 10,
+        observations: vec![
+            observation(
+                1,
+                1,
+                1,
+                "The auth service rotates refresh tokens on every use.",
+                &[10, 1],
+                &["auth"],
+                1,
+                1,
+            ),
+            observation(
+                2,
+                2,
+                2,
+                "Rotation failures are logged to the ops collection.",
+                &[10, 1],
+                &["auth"],
+                1,
+                2,
+            ),
+            observation(
+                3,
+                2,
+                3,
+                "Refresh tokens are stored hashed in SQLite.",
+                &[10, 1],
+                &["auth"],
+                1,
+                3,
+            ),
+        ],
+    };
+    let invalid = ObservationCluster {
+        cluster_id: [2; 32],
+        priority: 9,
+        observations: vec![observation(
+            4,
+            3,
+            4,
+            "The deployment region is eu-central.",
+            &[1, 10],
+            &["deployment"],
+            1,
+            4,
+        )],
+    };
+    let mut poisoned = cluster.clone();
+    poisoned.cluster_id = [3; 32];
+    poisoned.observations[2].source.kind = SourceKind::Speculation;
+    let grounded = json!({
+        "action": "mint",
+        "target": null,
+        "name": "Refresh token rotation",
+        "definition": "The auth service rotates refresh tokens on every use, stores them hashed in SQLite, and logs rotation failures to ops.",
+        "tags": ["auth", "tokens"],
+        "salience_micros": 800_000,
+        "citations": [
+            {"lsn": 1, "byte_start": 0, "byte_end": 53, "quote": "rotates refresh tokens"},
+            {"lsn": 2, "byte_start": 0, "byte_end": 51, "quote": "Rotation failures"},
+            {"lsn": 3, "byte_start": 0, "byte_end": 43, "quote": "stored hashed in SQLite"}
+        ]
+    });
+    let outputs = [
+        grounded.clone(),
+        json!({
+            "action": "mint",
+            "target": null,
+            "name": "Deployment region",
+            "definition": "The deployment region is eu-central.",
+            "tags": ["deployment"],
+            "salience_micros": 700_000,
+            "citations": [
+                {"lsn": 4, "byte_start": 0, "byte_end": 36, "quote": "us-west"}
+            ]
+        }),
+        grounded,
+    ];
+    let clusters = [cluster, invalid, poisoned];
+    let extractions = clusters
+        .iter()
+        .zip(outputs)
+        .map(|(cluster, output)| {
+            let request = merge_request(cluster, &[]).unwrap();
+            let provider = OpenAiCompatible::new(
+                ProviderConfig {
+                    endpoint: "https://fixture.invalid/v1/chat/completions".to_owned(),
+                    api_key: Some("fixture-key".to_owned()),
+                    model: "fixture-model".to_owned(),
+                    tier: ModelTier::Capable,
+                    pricing: Pricing {
+                        input_microusd_per_million_tokens: 1_000_000,
+                        output_microusd_per_million_tokens: 2_000_000,
+                    },
+                },
+                RecordedTransport::new(vec![fixture(&request, &output)]),
+            )
+            .unwrap();
+            let extraction = extract_cluster(&provider, b"run-1", cluster, &[]).unwrap();
+            assert_eq!(provider.transport().remaining(), 0);
+            extraction
+        })
+        .collect::<Vec<_>>();
+    for extraction in &extractions {
+        assert_eq!(extraction.llm_calls, 1);
+        assert_eq!(extraction.usage.input_tokens, 100);
+        assert_eq!(extraction.usage.output_tokens, 25);
+    }
+    let ClusterOutcome::Decided(decision) = &extractions[0].outcome else {
+        panic!("expected a decision for the grounded cluster");
+    };
+    assert_eq!(decision.cluster_id, [1; 32]);
+    assert_eq!(decision.action, MergeAction::Mint);
+    assert!(!extractions[0].citation_invalid);
+    let ClusterOutcome::Dropped(uncited) = &extractions[1].outcome else {
+        panic!("expected a drop for the uncited cluster");
+    };
+    assert_eq!(uncited.cluster_id, [2; 32]);
+    assert!(matches!(uncited.reason, DropReason::Citation(_)));
+    assert!(extractions[1].citation_invalid);
+    let ClusterOutcome::Dropped(speculative) = &extractions[2].outcome else {
+        panic!("expected a drop for the speculative cluster");
+    };
+    assert_eq!(speculative.cluster_id, [3; 32]);
+    assert_eq!(speculative.reason, DropReason::SpeculationPoisoned);
+    assert!(!extractions[2].citation_invalid);
 }
