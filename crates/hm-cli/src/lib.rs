@@ -28,6 +28,7 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::UnixStream;
 
 mod actors;
+mod archive;
 mod consolidate;
 pub mod import;
 mod models;
@@ -156,6 +157,10 @@ enum Command {
         config: PathBuf,
         #[arg(long)]
         input: PathBuf,
+    },
+    Archive {
+        #[command(subcommand)]
+        command: archive::Command,
     },
     Verify {
         actor_directory: PathBuf,
@@ -317,6 +322,7 @@ async fn execute(command: Command) -> Result<Value> {
         } => activate(&config, &conversation, &query, budget_tokens, embedded).await,
         Command::Consolidate { command } => consolidate::execute(command).await,
         Command::Import { config, input } => transfer::import(&config, &input).await,
+        Command::Archive { command } => archive::execute(command).await,
         Command::Verify {
             actor_directory,
             actor,

@@ -7,6 +7,21 @@
       "file": "crates/hm-cli/src/actors.rs"
     },
     {
+      "id": "rust:crates/hm-cli/src/archive.rs:ArchiveMember",
+      "name": "hm-cli::ArchiveMember",
+      "file": "crates/hm-cli/src/archive.rs"
+    },
+    {
+      "id": "rust:crates/hm-cli/src/archive.rs:ArchiveManifest",
+      "name": "hm-cli::ArchiveManifest",
+      "file": "crates/hm-cli/src/archive.rs"
+    },
+    {
+      "id": "rust:crates/hm-cli/src/archive.rs:Command",
+      "name": "hm-cli::Command",
+      "file": "crates/hm-cli/src/archive.rs"
+    },
+    {
       "id": "rust:crates/hm-cli/src/consolidate.rs:Command",
       "name": "hm-cli::Command",
       "file": "crates/hm-cli/src/consolidate.rs"
@@ -5740,6 +5755,11 @@
       "id": "cli:crates/hm-cli/src/actors.rs",
       "name": "crates/hm-cli/src/actors.rs command/options",
       "file": "crates/hm-cli/src/actors.rs"
+    },
+    {
+      "id": "cli:crates/hm-cli/src/archive.rs",
+      "name": "crates/hm-cli/src/archive.rs command/options",
+      "file": "crates/hm-cli/src/archive.rs"
     },
     {
       "id": "cli:crates/hm-cli/src/consolidate.rs",

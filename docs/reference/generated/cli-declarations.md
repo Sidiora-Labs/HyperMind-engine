@@ -42,6 +42,34 @@ pub enum Command {
 }
 ```
 
+## crates/hm-cli/src/archive.rs command/options
+
+<a id="cli-crates-hm-cli-src-archive-rs"></a>
+
+Source: [`crates/hm-cli/src/archive.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/archive.rs).
+
+When to use: Use these options when invoking the matching hm subcommand; select daemon or embedded access deliberately.
+
+Do not use: Do not open an actor directory from an embedded command while a daemon owns it, or expose remote listeners without both mutual TLS and capabilities.
+
+
+```rust
+pub enum Command {
+    Pack {
+        #[arg(long)]
+        config: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    Verify {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        public_key: Option<String>,
+    },
+}
+```
+
 ## crates/hm-cli/src/consolidate.rs command/options
 
 <a id="cli-crates-hm-cli-src-consolidate-rs"></a>
@@ -208,6 +236,10 @@ enum Command {
         config: PathBuf,
         #[arg(long)]
         input: PathBuf,
+    },
+    Archive {
+        #[command(subcommand)]
+        command: archive::Command,
     },
     Verify {
         actor_directory: PathBuf,

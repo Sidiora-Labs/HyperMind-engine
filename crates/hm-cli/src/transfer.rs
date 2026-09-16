@@ -4,7 +4,7 @@ use anyhow::{Context, Result, ensure};
 use hm_core::{ConversationId, LSN};
 use hm_schema::event::{self, Boundary, EventHistory};
 use hm_schema::events::{Authority, EventEnvelope};
-use hm_serve::actor::IncomingEvent;
+use hm_serve::actor::{ActorEngine, IncomingEvent};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::fs::{File, OpenOptions};
@@ -23,26 +23,50 @@ struct ExportEvent {
     envelope: EventEnvelope,
 }
 
+pub(crate) async fn export_stream(actor: &ActorEngine) -> Result<(Vec<u8>, u64)> {
+    let count = actor.stats().await?.log_events;
+    let mut body = Vec::new();
+    writeln!(
+        body,
+        "{}",
+        json!({"format":FORMAT,"actor":actor.actor().get(),"events":count,"plaintext":true})
+    )?;
+    let mut cursor = 0;
+    while cursor < count {
+        let frames = actor.frames_since(LSN::new(cursor), None, 256).await?;
+        ensure!(
+            !frames.is_empty(),
+            "export stopped before the recorded event count"
+        );
+        for frame in frames {
+            let verified = actor.verified_event(frame.header.lsn).await?;
+            let row = ExportEvent {
+                lsn: frame.header.lsn.get(),
+                kind: frame.header.kind as u8,
+                conversation: frame.header.conversation.into_bytes(),
+                source_wall_timestamp_ns: frame.header.wall_timestamp_ns.get(),
+                envelope: verified.envelope,
+            };
+            writeln!(body, "{}", serde_json::to_string(&row)?)?;
+            cursor = row.lsn;
+        }
+        ensure!(
+            body.len() <= crate::archive::MAXIMUM_MEMBER_BYTES,
+            "this ledger exports more than the maximum member size; this version cannot archive it and will not truncate the stream"
+        );
+    }
+    Ok((body, count))
+}
+
 pub async fn export(path: &Path, output: &Path) -> Result<Value> {
     let _lock = crate::actors::operation_lock(path)?;
     let config = hm_serve::config::load(path)?;
     crate::actors::require_offline(&config)?;
     let actor = crate::actors::open(&config, crate::first_actor(&config)?.actor).await?;
     let result = async {
-        let count = actor.stats().await?.log_events;
         let mut file = OpenOptions::new().write(true).create_new(true).mode(0o600).open(output)?;
-        writeln!(file,"{}",json!({"format":FORMAT,"actor":actor.actor().get(),"events":count,"plaintext":true}))?;
-        let mut cursor = 0;
-        while cursor < count {
-            let frames = actor.frames_since(LSN::new(cursor),None,256).await?;
-            ensure!(!frames.is_empty(), "export stopped before the recorded event count");
-            for frame in frames {
-                let verified = actor.verified_event(frame.header.lsn).await?;
-                let row = ExportEvent {lsn:frame.header.lsn.get(),kind:frame.header.kind as u8,conversation:frame.header.conversation.into_bytes(),source_wall_timestamp_ns:frame.header.wall_timestamp_ns.get(),envelope:verified.envelope};
-                writeln!(file,"{}",serde_json::to_string(&row)?)?;
-                cursor = row.lsn;
-            }
-        }
+        let (body, count) = export_stream(&actor).await?;
+        file.write_all(&body)?;
         file.sync_all()?;
         File::open(output.parent().context("output directory missing")?)?.sync_all()?;
         Ok(json!({"ok":true,"format":FORMAT,"events":count,"output":output,"plaintext":true,"permissions":"0600"}))

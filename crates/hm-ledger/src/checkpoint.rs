@@ -21,6 +21,8 @@ const CHECKPOINT_VERSION: u32 = 1;
 const CHECKPOINT_CHECKSUM_OFFSET: usize = 160;
 const CHECKPOINT_DOMAIN: &[u8] = b"neocortex-checkpoint-v1";
 
+pub const ARCHIVE_MANIFEST_DOMAIN: &[u8] = b"hypermind.archive-manifest.v1";
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SigningKeyPair {
     seed: Zeroizing<SigningSeed>,
@@ -81,6 +83,32 @@ impl SigningKeyPair {
         checkpoint.signature = self.sign(&checkpoint_message(&checkpoint));
         Ok(checkpoint)
     }
+
+    #[must_use]
+    pub fn sign_archive_manifest(&self, digest: &[u8; 32]) -> Signature {
+        self.sign(&archive_manifest_message(digest))
+    }
+}
+
+pub fn verify_archive_manifest_signature(
+    digest: &[u8; 32],
+    signature: &Signature,
+    public_key: &PublicKey,
+) -> Result<(), Error> {
+    let key = VerifyingKey::from_bytes(public_key)
+        .map_err(|_| Error::new(ErrorCode::SignatureInvalid))?;
+    key.verify(
+        &archive_manifest_message(digest),
+        &DalekSignature::from_bytes(signature),
+    )
+    .map_err(|_| Error::new(ErrorCode::SignatureInvalid))
+}
+
+fn archive_manifest_message(digest: &[u8; 32]) -> Vec<u8> {
+    let mut message = Vec::with_capacity(ARCHIVE_MANIFEST_DOMAIN.len() + digest.len());
+    message.extend_from_slice(ARCHIVE_MANIFEST_DOMAIN);
+    message.extend_from_slice(digest);
+    message
 }
 
 pub fn verify_checkpoint_signature(

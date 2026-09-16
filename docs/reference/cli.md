@@ -16,6 +16,7 @@ Do not use: embedded commands against a live owner, destructive operations witho
 | `activate --config PATH --conversation ID --budget-tokens N` | Produce bounded context; retain health and provenance. |
 | `consolidate run/list/retract` | Budget, inspect, or retract generations; CLI opens the actor directly. |
 | `import --config PATH --input PATH` | Migrate a supported source; stop other destination writers. |
+| `archive pack/verify` | Package the native transfer stream with a signed manifest over an owned-member allowlist; verification needs no decryption key and accepts a pinned public key. |
 | `verify ACTOR_DIRECTORY ACTOR CHECKPOINT PUBLIC_KEY` | Offline sealed-log proof; pin the public key independently. |
 
 Provider-dependent operations may be unavailable without a configured runtime. Packaging commands are documented after their parser exists; source presence is not a release claim.

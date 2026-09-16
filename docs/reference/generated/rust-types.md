@@ -42,6 +42,77 @@ pub enum Command {
 }
 ```
 
+## hm-cli::ArchiveMember
+
+<a id="rust-crates-hm-cli-src-archive-rs-archivemember"></a>
+
+Source: [`crates/hm-cli/src/archive.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/archive.rs).
+
+When to use: Use `ArchiveMember` for command-line orchestration and validated migration into the actor ledger.
+
+Do not use: Do not run embedded import against a live writer, overwrite original migration data, or claim verification without the command report.
+
+
+```rust
+pub struct ArchiveMember {
+    pub name: String,
+    pub bytes: u64,
+    pub digest: String,
+}
+```
+
+## hm-cli::ArchiveManifest
+
+<a id="rust-crates-hm-cli-src-archive-rs-archivemanifest"></a>
+
+Source: [`crates/hm-cli/src/archive.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/archive.rs).
+
+When to use: Use `ArchiveManifest` for command-line orchestration and validated migration into the actor ledger.
+
+Do not use: Do not run embedded import against a live writer, overwrite original migration data, or claim verification without the command report.
+
+
+```rust
+pub struct ArchiveManifest {
+    pub format: String,
+    pub archive_version: u16,
+    pub actor: u16,
+    pub events: u64,
+    pub created_ns: i64,
+    pub members: Vec<ArchiveMember>,
+    pub public_key: String,
+    pub signature: String,
+}
+```
+
+## hm-cli::Command
+
+<a id="rust-crates-hm-cli-src-archive-rs-command"></a>
+
+Source: [`crates/hm-cli/src/archive.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/archive.rs).
+
+When to use: Use `Command` for command-line orchestration and validated migration into the actor ledger.
+
+Do not use: Do not run embedded import against a live writer, overwrite original migration data, or claim verification without the command report.
+
+
+```rust
+pub enum Command {
+    Pack {
+        #[arg(long)]
+        config: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    Verify {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        public_key: Option<String>,
+    },
+}
+```
+
 ## hm-cli::Command
 
 <a id="rust-crates-hm-cli-src-consolidate-rs-command"></a>
