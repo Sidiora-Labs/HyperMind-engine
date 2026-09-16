@@ -11,6 +11,7 @@ pub mod ingest;
 pub mod media;
 pub mod nli;
 pub mod nrem;
+pub mod playbook;
 pub mod predict;
 pub mod procedures;
 pub mod prospective;
