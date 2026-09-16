@@ -5637,6 +5637,41 @@
       "file": "sdk/typescript/packages/console/src/overview.ts"
     },
     {
+      "id": "sdk:sdk/typescript/packages/console/src/sources.ts:SourceSummary",
+      "name": "sdk/typescript/packages/console/src/sources.ts::SourceSummary",
+      "file": "sdk/typescript/packages/console/src/sources.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/sources.ts:SourceIndexView",
+      "name": "sdk/typescript/packages/console/src/sources.ts::SourceIndexView",
+      "file": "sdk/typescript/packages/console/src/sources.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/sources.ts:SourceDetailView",
+      "name": "sdk/typescript/packages/console/src/sources.ts::SourceDetailView",
+      "file": "sdk/typescript/packages/console/src/sources.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/sources.ts:buildSourceIndex",
+      "name": "sdk/typescript/packages/console/src/sources.ts::buildSourceIndex",
+      "file": "sdk/typescript/packages/console/src/sources.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/sources.ts:buildSourceDetail",
+      "name": "sdk/typescript/packages/console/src/sources.ts::buildSourceDetail",
+      "file": "sdk/typescript/packages/console/src/sources.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/sources.ts:renderSourceIndex",
+      "name": "sdk/typescript/packages/console/src/sources.ts::renderSourceIndex",
+      "file": "sdk/typescript/packages/console/src/sources.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/sources.ts:renderSourceDetail",
+      "name": "sdk/typescript/packages/console/src/sources.ts::renderSourceDetail",
+      "file": "sdk/typescript/packages/console/src/sources.ts"
+    },
+    {
       "id": "sdk:sdk/typescript/packages/console/src/transport.ts:ConsoleManifest",
       "name": "sdk/typescript/packages/console/src/transport.ts::ConsoleManifest",
       "file": "sdk/typescript/packages/console/src/transport.ts"

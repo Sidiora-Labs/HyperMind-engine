@@ -4423,6 +4423,111 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 export function renderOverview(view: OverviewView): string {
 ```
 
+## sdk/typescript/packages/console/src/sources.ts::SourceSummary
+
+<a id="sdk-sdk-typescript-packages-console-src-sources-ts-sourcesummary"></a>
+
+Source: [`sdk/typescript/packages/console/src/sources.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/sources.ts).
+
+When to use: Use Source Summary through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface SourceSummary {
+```
+
+## sdk/typescript/packages/console/src/sources.ts::SourceIndexView
+
+<a id="sdk-sdk-typescript-packages-console-src-sources-ts-sourceindexview"></a>
+
+Source: [`sdk/typescript/packages/console/src/sources.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/sources.ts).
+
+When to use: Use Source Index View through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface SourceIndexView {
+```
+
+## sdk/typescript/packages/console/src/sources.ts::SourceDetailView
+
+<a id="sdk-sdk-typescript-packages-console-src-sources-ts-sourcedetailview"></a>
+
+Source: [`sdk/typescript/packages/console/src/sources.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/sources.ts).
+
+When to use: Use Source Detail View through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface SourceDetailView {
+```
+
+## sdk/typescript/packages/console/src/sources.ts::buildSourceIndex
+
+<a id="sdk-sdk-typescript-packages-console-src-sources-ts-buildsourceindex"></a>
+
+Source: [`sdk/typescript/packages/console/src/sources.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/sources.ts).
+
+When to use: Use build Source Index through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function buildSourceIndex(envelope: ConsoleEnvelope): SourceIndexView {
+```
+
+## sdk/typescript/packages/console/src/sources.ts::buildSourceDetail
+
+<a id="sdk-sdk-typescript-packages-console-src-sources-ts-buildsourcedetail"></a>
+
+Source: [`sdk/typescript/packages/console/src/sources.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/sources.ts).
+
+When to use: Use build Source Detail through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function buildSourceDetail(envelope: ConsoleEnvelope): SourceDetailView {
+```
+
+## sdk/typescript/packages/console/src/sources.ts::renderSourceIndex
+
+<a id="sdk-sdk-typescript-packages-console-src-sources-ts-rendersourceindex"></a>
+
+Source: [`sdk/typescript/packages/console/src/sources.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/sources.ts).
+
+When to use: Use render Source Index through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderSourceIndex(view: SourceIndexView): string {
+```
+
+## sdk/typescript/packages/console/src/sources.ts::renderSourceDetail
+
+<a id="sdk-sdk-typescript-packages-console-src-sources-ts-rendersourcedetail"></a>
+
+Source: [`sdk/typescript/packages/console/src/sources.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/sources.ts).
+
+When to use: Use render Source Detail through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderSourceDetail(view: SourceDetailView): string {
+```
+
 ## sdk/typescript/packages/console/src/transport.ts::ConsoleManifest
 
 <a id="sdk-sdk-typescript-packages-console-src-transport-ts-consolemanifest"></a>
