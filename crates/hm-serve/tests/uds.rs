@@ -1,4 +1,4 @@
-use hm_core::ConversationId;
+use hm_core::{ConversationId, ErrorCode};
 use hm_schema::event::{CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{Authority, EventEnvelope, EventPayload, Retention, Sensitivity, UserMsg};
 use hm_schema::protocol::{encode_wire_envelope, verify_wire_envelope};
@@ -132,7 +132,7 @@ async fn real_socket_accepts_v2_append_and_lexical_recall() {
                     query: b"heliotrope".to_vec(),
                     limit: 10,
                     mode: RecallMode::ListWindows,
-                    level: 0,
+                    level: 1,
                     start_ns: 0,
                     end_ns: 0,
                 })),
@@ -147,6 +147,32 @@ async fn real_socket_accepts_v2_append_and_lexical_recall() {
         panic!("expected recall result");
     };
     assert_eq!(result.members.unwrap(), vec![1]);
+
+    let semantic = exchange(
+        &mut stream,
+        WireEnvelope {
+            proto_version: 2,
+            payload: WirePayload::Request(Box::new(Request {
+                request_id: 3,
+                payload: RequestPayload::Recall(Box::new(Recall {
+                    query: b"heliotrope".to_vec(),
+                    limit: 10,
+                    mode: RecallMode::ListWindows,
+                    level: 0,
+                    start_ns: 0,
+                    end_ns: 0,
+                })),
+            })),
+        },
+    )
+    .await;
+    let WirePayload::Response(response) = semantic.payload else {
+        panic!("expected response");
+    };
+    let Some(ResponsePayload::ErrorDetail(detail)) = response.payload else {
+        panic!("expected error detail");
+    };
+    assert_eq!(detail.code, ErrorCode::OperationUnavailable as u8);
     drop(stream);
     shutdown_tx.send(()).unwrap();
     task.await.unwrap().unwrap();
