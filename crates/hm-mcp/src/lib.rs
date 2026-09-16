@@ -53,7 +53,9 @@ pub use tools::remember::{
     RememberSource, RetentionInput, SensitivityInput, VocabularyInput,
 };
 pub use tools::retract::RetractInput;
-pub use tools::source::{SourceDeliveryInput, SourceOutcome, SourceSettlementInput};
+pub use tools::source::{
+    SourceDeliveryInput, SourceOutcome, SourceRuntime, SourceSettlementInput, SourceSyncInput,
+};
 pub use tools::websource::WebSourceRuntime;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -140,6 +142,7 @@ pub struct McpServer {
     reconstruction_runtime: Option<ReconstructionRuntime>,
     web_source_runtime: Option<WebSourceRuntime>,
     media_runtime: Option<MediaRuntime>,
+    source_runtime: Option<SourceRuntime>,
 }
 
 impl McpServer {
@@ -154,6 +157,7 @@ impl McpServer {
             reconstruction_runtime: None,
             web_source_runtime: None,
             media_runtime: None,
+            source_runtime: None,
         }
     }
 
@@ -171,6 +175,7 @@ impl McpServer {
             reconstruction_runtime: None,
             web_source_runtime: None,
             media_runtime: None,
+            source_runtime: None,
         }
     }
 
@@ -210,6 +215,12 @@ impl McpServer {
         self
     }
 
+    #[must_use]
+    pub fn with_source_runtime(mut self, runtime: SourceRuntime) -> Self {
+        self.source_runtime = Some(runtime);
+        self
+    }
+
     pub async fn configured(
         actor: ActorEngine,
         admin_token: Option<hm_serve::config::CapabilityToken>,
@@ -245,13 +256,24 @@ impl McpServer {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
         if let Some(delivery) = input.source_delivery.take() {
-            if input.source_settlement.is_some() {
+            if input.source_settlement.is_some() || input.source_sync.is_some() {
                 return Err(Error::new(ErrorCode::InvalidArgument));
             }
             return tools::source::deliver(&self.actor, delivery).await;
         }
         if let Some(settlement) = input.source_settlement.take() {
+            if input.source_sync.is_some() {
+                return Err(Error::new(ErrorCode::InvalidArgument));
+            }
             return tools::source::settle(&self.actor, settlement).await;
+        }
+        if let Some(source_sync) = input.source_sync.take() {
+            let Some(runtime) = self.source_runtime.as_ref() else {
+                return Ok(tools::source::not_dispatched(Error::new(
+                    ErrorCode::OperationUnavailable,
+                )));
+            };
+            return tools::source::sync(&self.actor, runtime, source_sync).await;
         }
         let selectors = usize::from(!input.content.is_empty())
             + usize::from(input.source.is_some())

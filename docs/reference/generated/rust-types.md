@@ -8591,6 +8591,7 @@ pub struct McpToolDispatcher {
     pub consolidation_runtime: Option<ConsolidationRuntime>,
     pub web_source_runtime: Option<tools::websource::WebSourceRuntime>,
     pub media_runtime: Option<tools::media::MediaRuntime>,
+    pub source_runtime: Option<tools::source::SourceRuntime>,
 }
 ```
 
@@ -8702,6 +8703,7 @@ pub struct McpServer {
     reconstruction_runtime: Option<ReconstructionRuntime>,
     web_source_runtime: Option<WebSourceRuntime>,
     media_runtime: Option<MediaRuntime>,
+    source_runtime: Option<SourceRuntime>,
 }
 ```
 
@@ -9792,6 +9794,8 @@ pub struct RememberInput {
     pub source_settlement: Option<SourceSettlementInput>,
     #[serde(default)]
     pub document: Option<RememberDocument>,
+    #[serde(default)]
+    pub source_sync: Option<SourceSyncInput>,
 }
 ```
 
@@ -9876,6 +9880,43 @@ pub struct SourceSettlementInput {
     pub outcome: SourceOutcome,
     #[serde(default)]
     pub detail: Option<String>,
+}
+```
+
+## hm-mcp::SourceSyncInput
+
+<a id="rust-crates-hm-mcp-src-tools-source-rs-sourcesyncinput"></a>
+
+Source: [`crates/hm-mcp/src/tools/source.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/source.rs).
+
+When to use: Use `SourceSyncInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority. Do not treat constructing or serializing a request as evidence that it was accepted or executed.
+
+
+```rust
+pub struct SourceSyncInput {
+    pub connector_id: String,
+    pub base_url: String,
+    pub credential_version: u32,
+}
+```
+
+## hm-mcp::SourceRuntime
+
+<a id="rust-crates-hm-mcp-src-tools-source-rs-sourceruntime"></a>
+
+Source: [`crates/hm-mcp/src/tools/source.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/source.rs).
+
+When to use: Use `SourceRuntime` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct SourceRuntime {
+    transport: Arc<dyn SourceTransport>,
+    access_token: Arc<str>,
 }
 ```
 

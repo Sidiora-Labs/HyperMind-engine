@@ -159,6 +159,7 @@ impl NativeSession {
                 derive: None,
                     source_delivery: None,
                     source_settlement: None,
+                    source_sync: None,
                 })
                 .await,
         )

@@ -78,6 +78,7 @@ fn source_input(conversation: &str, url: &str) -> RememberInput {
         source_delivery: None,
         source_settlement: None,
         document: None,
+        source_sync: None,
     }
 }
 

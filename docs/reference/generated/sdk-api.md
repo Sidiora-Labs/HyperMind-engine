@@ -6315,7 +6315,7 @@ pub async fn remember(
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::recall
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-4941-recall"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-4980-recall"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6330,7 +6330,7 @@ pub async fn recall(
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::activate
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-6060-activate"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-6099-activate"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6345,7 +6345,7 @@ pub async fn activate(&self, query: String, budget_tokens: u32) -> napi::Result<
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::checkpoint
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-6645-checkpoint"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-6684-checkpoint"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6360,7 +6360,7 @@ pub async fn checkpoint(&self, turn_id: String, blob: Buffer) -> napi::Result<St
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::intend
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7285-intend"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7324-intend"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6375,7 +6375,7 @@ pub async fn intend(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::predict
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7593-predict"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7632-predict"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6390,7 +6390,7 @@ pub async fn predict(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::outcome
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7904-outcome"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7943-outcome"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6405,7 +6405,7 @@ pub async fn outcome(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::inspect
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-8215-inspect"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-8254-inspect"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6420,7 +6420,7 @@ pub async fn inspect(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::bind
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-8463-bind"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-8502-bind"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6435,7 +6435,7 @@ pub async fn bind(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::attest
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9176-attest"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9215-attest"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6450,7 +6450,7 @@ pub async fn attest(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::consolidate
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9421-consolidate"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9460-consolidate"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6465,7 +6465,7 @@ pub async fn consolidate(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::believe
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9681-believe"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9720-believe"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6480,7 +6480,7 @@ pub async fn believe(&self, input_json: String) -> napi::Result<String> {
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::retract
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-10899-retract"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-10938-retract"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
@@ -6495,7 +6495,7 @@ pub async fn retract(
 
 ## sdk/typescript/packages/engine/native/src/lib.rs::as_of
 
-<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-11467-as-of"></a>
+<a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-11506-as-of"></a>
 
 Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 

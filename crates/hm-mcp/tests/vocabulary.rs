@@ -51,6 +51,7 @@ fn import(content: &str, vocabulary: Option<VocabularyInput>) -> RememberInput {
         source_delivery: None,
         source_settlement: None,
         document: None,
+        source_sync: None,
     }
 }
 

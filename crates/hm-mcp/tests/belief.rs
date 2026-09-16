@@ -75,6 +75,7 @@ async fn evidence(server: &McpServer, conversation: &str) -> u64 {
             source_delivery: None,
             source_settlement: None,
             document: None,
+            source_sync: None,
         })
         .await;
     assert!(result.ok);

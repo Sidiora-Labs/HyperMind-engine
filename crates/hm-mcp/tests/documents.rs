@@ -54,6 +54,7 @@ fn document(
             token_budget: Some(token_budget),
             plan_only,
         }),
+        source_sync: None,
     }
 }
 

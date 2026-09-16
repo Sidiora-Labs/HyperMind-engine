@@ -94,6 +94,7 @@ fn remember(
         source_delivery,
         source_settlement,
         document: None,
+        source_sync: None,
     }
 }
 

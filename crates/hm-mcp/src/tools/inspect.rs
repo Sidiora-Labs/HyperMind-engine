@@ -19,6 +19,7 @@ const MAXIMUM_PREFERENCE_ITEMS: usize = 256;
 const MAXIMUM_MEDIA_ITEMS: usize = 256;
 const MAXIMUM_CONNECTOR_ITEMS: usize = 256;
 const MAXIMUM_DELIVERY_ITEMS: usize = 256;
+const MAXIMUM_REVISION_ITEMS: usize = 256;
 const REVIEW_WARNING: &str = "An alias proposal changes nothing; it is accepted only by importing a new vocabulary version that declares the alias.";
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, schemars::JsonSchema)]
@@ -201,6 +202,46 @@ pub async fn run(
             records
                 .iter()
                 .map(|record| format!("hm://{}/lsn/{}", actor.actor(), record.accepted_lsn)),
+        );
+        return Ok(envelope);
+    }
+    if uri == format!("hm://{}/revisions", actor.actor()) {
+        let mut records = Vec::new();
+        for connector in actor.connectors(MAXIMUM_CONNECTOR_ITEMS).await? {
+            let Ok(connector_id) = <[u8; 16]>::try_from(connector.connector_id.as_slice()) else {
+                continue;
+            };
+            records.extend(
+                actor
+                    .source_revisions(connector_id, MAXIMUM_REVISION_ITEMS)
+                    .await?,
+            );
+        }
+        records.sort_by(|left, right| {
+            right
+                .lsn
+                .cmp(&left.lsn)
+                .then_with(|| left.source_id.cmp(&right.source_id))
+        });
+        records.truncate(MAXIMUM_REVISION_ITEMS);
+        envelope.items[0]["revisions"] = json!(
+            records
+                .iter()
+                .map(|record| json!({
+                    "connector_id": hex(&record.connector_id),
+                    "source_id": record.source_id,
+                    "revision": hex(&record.revision),
+                    "content_digest": hex(&record.content_digest),
+                    "observed_at_ns": record.observed_at_ns,
+                    "lsn": record.lsn,
+                    "uri": format!("hm://{}/lsn/{}", actor.actor(), record.lsn),
+                }))
+                .collect::<Vec<_>>()
+        );
+        envelope.provenance.extend(
+            records
+                .iter()
+                .map(|record| format!("hm://{}/lsn/{}", actor.actor(), record.lsn)),
         );
         return Ok(envelope);
     }

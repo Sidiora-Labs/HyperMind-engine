@@ -38,6 +38,7 @@ fn snapshot_input(content: &str, chunk_bytes: usize) -> RememberInput {
         source_delivery: None,
         source_settlement: None,
         document: None,
+        source_sync: None,
     }
 }
 

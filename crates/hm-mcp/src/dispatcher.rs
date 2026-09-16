@@ -12,6 +12,7 @@ pub struct McpToolDispatcher {
     pub consolidation_runtime: Option<ConsolidationRuntime>,
     pub web_source_runtime: Option<tools::websource::WebSourceRuntime>,
     pub media_runtime: Option<tools::media::MediaRuntime>,
+    pub source_runtime: Option<tools::source::SourceRuntime>,
 }
 
 impl McpToolDispatcher {
@@ -23,6 +24,7 @@ impl McpToolDispatcher {
             consolidation_runtime: ConsolidationRuntime::from_env()?,
             web_source_runtime: tools::websource::WebSourceRuntime::from_env()?,
             media_runtime: tools::media::MediaRuntime::from_env()?,
+            source_runtime: tools::source::SourceRuntime::from_env()?,
         })
     }
 
@@ -40,6 +42,7 @@ impl McpToolDispatcher {
             .web_source_runtime
             .clone_from(&self.web_source_runtime);
         server.media_runtime.clone_from(&self.media_runtime);
+        server.source_runtime.clone_from(&self.source_runtime);
         server
     }
 }

@@ -3,24 +3,33 @@
 use crate::Envelope;
 use base64::Engine as _;
 use hm_core::{ConversationId, Error, ErrorCode};
+use hm_cortex::connectors::sync::{
+    HttpSourceTransport, RecordedSourceTransport, SourceRequest, SourceResponse, SourceTransport,
+    list_revisions,
+};
 use hm_cortex::connectors::{MAXIMUM_DELIVERY_BYTES, retry_delay_ns, retry_exhausted};
 use hm_ledger::frame::EventKind;
 use hm_schema::event::{CURRENT_SCHEMA_VERSION, MAXIMUM_IDENTIFIER_BYTES, encode_event_envelope};
 use hm_schema::events::{
     Authority, ConnectorState, EventEnvelope, EventPayload, ProviderFrame, Retention, Sensitivity,
-    SourceDeliveryAccepted, SourceDeliverySettled, SourceDeliveryState, SourceSignatureScheme,
+    SourceDeliveryAccepted, SourceDeliverySettled, SourceDeliveryState, SourceRevisionObserved,
+    SourceSignatureScheme,
 };
 use hm_serve::actor::{ActorEngine, IncomingEvent, SourceSignatureRequest};
 use rmcp::schemars;
 use serde::Deserialize;
-use serde_json::json;
-use std::time::{SystemTime, UNIX_EPOCH};
+use serde_json::{Value, json};
+use std::sync::Arc;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 const MAXIMUM_CONNECTOR_SCAN: usize = 256;
 const MAXIMUM_DELIVERY_SCAN: usize = 256;
+const MAXIMUM_REVISION_SCAN: usize = 256;
 const SIGNATURE_HEX_BYTES: usize = 64;
 const CONNECTOR_ID_HEX_BYTES: usize = 32;
 const DELIVERY_CONVERSATION: &str = "source-deliveries";
+const REVISION_CONVERSATION: &str = "source-revisions";
+const SOURCE_REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
 
 #[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
 pub struct SourceDeliveryInput {
@@ -50,6 +59,51 @@ pub struct SourceSettlementInput {
     pub outcome: SourceOutcome,
     #[serde(default)]
     pub detail: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
+pub struct SourceSyncInput {
+    pub connector_id: String,
+    pub base_url: String,
+    pub credential_version: u32,
+}
+
+#[derive(Clone)]
+pub struct SourceRuntime {
+    transport: Arc<dyn SourceTransport>,
+    access_token: Arc<str>,
+}
+
+impl SourceRuntime {
+    #[must_use]
+    pub fn new(transport: Arc<dyn SourceTransport>, access_token: &str) -> Self {
+        Self {
+            transport,
+            access_token: Arc::from(access_token),
+        }
+    }
+
+    #[must_use]
+    pub fn recorded(exchanges: Vec<(SourceRequest, SourceResponse)>, access_token: &str) -> Self {
+        Self::new(
+            Arc::new(RecordedSourceTransport::new(exchanges)),
+            access_token,
+        )
+    }
+
+    pub fn from_env() -> Result<Option<Self>, Error> {
+        match std::env::var("HM_SOURCE_TRANSPORT").as_deref() {
+            Err(_) | Ok("") => return Ok(None),
+            Ok("http") => {}
+            _ => return Err(invalid()),
+        }
+        let access_token = std::env::var("HM_SOURCE_TOKEN")
+            .ok()
+            .filter(|token| !token.is_empty())
+            .ok_or_else(invalid)?;
+        let transport = HttpSourceTransport::new(SOURCE_REQUEST_TIMEOUT)?;
+        Ok(Some(Self::new(Arc::new(transport), &access_token)))
+    }
 }
 
 pub async fn deliver(actor: &ActorEngine, input: SourceDeliveryInput) -> Result<Envelope, Error> {
@@ -224,6 +278,100 @@ pub async fn settle(actor: &ActorEngine, input: SourceSettlementInput) -> Result
     Ok(envelope)
 }
 
+pub async fn sync(
+    actor: &ActorEngine,
+    runtime: &SourceRuntime,
+    input: SourceSyncInput,
+) -> Result<Envelope, Error> {
+    let connector_id = parse_connector_id(&input.connector_id)?;
+    if !bounded_identifier(&input.base_url) || input.credential_version == 0 {
+        return Err(invalid());
+    }
+    let held = bound_connector(actor, &connector_id).await?;
+    if held.credential_version != input.credential_version {
+        return Err(invalid());
+    }
+    let heads = actor
+        .source_revisions(connector_id, MAXIMUM_REVISION_SCAN)
+        .await?;
+    let transport = Arc::clone(&runtime.transport);
+    let access_token = Arc::clone(&runtime.access_token);
+    let base_url = input.base_url;
+    let listings = tokio::task::spawn_blocking(move || {
+        list_revisions(transport.as_ref(), &base_url, access_token.as_ref())
+    })
+    .await
+    .map_err(|_| Error::new(ErrorCode::OperationUnavailable))??;
+    let observed_at_ns = wall_time_ns()?;
+    let conversation = ConversationId::derive(REVISION_CONVERSATION);
+    let mut items: Vec<Value> = Vec::with_capacity(listings.len());
+    let mut events = Vec::new();
+    let mut appended = Vec::new();
+    for listing in listings {
+        let stored = heads
+            .iter()
+            .find(|record| record.source_id == listing.source_id);
+        if let Some(stored) = stored.filter(|record| record.revision == listing.revision) {
+            items.push(json!({
+                "connector_id": hex(&connector_id),
+                "source_id": listing.source_id,
+                "revision": hex(&listing.revision),
+                "content_digest": hex(&stored.content_digest),
+                "observed_at_ns": stored.observed_at_ns,
+                "changed": false,
+                "lsn": stored.lsn,
+                "uri": format!("hm://{}/lsn/{}", actor.actor(), stored.lsn),
+            }));
+            continue;
+        }
+        items.push(json!({
+            "connector_id": hex(&connector_id),
+            "source_id": listing.source_id.clone(),
+            "revision": hex(&listing.revision),
+            "content_digest": hex(&listing.content_digest),
+            "observed_at_ns": observed_at_ns,
+            "changed": true,
+        }));
+        appended.push(items.len() - 1);
+        events.push(IncomingEvent {
+            kind: EventKind::SourceRevisionObserved,
+            conversation,
+            payload: external_payload(EventPayload::SourceRevisionObserved(Box::new(
+                SourceRevisionObserved {
+                    connector_id: connector_id.to_vec(),
+                    source_id: listing.source_id,
+                    revision: listing.revision,
+                    content_digest: listing.content_digest.to_vec(),
+                    observed_at_ns,
+                    delivery_lsn: 0,
+                },
+            ))),
+        });
+    }
+    let mut envelope = Envelope::empty();
+    if !events.is_empty() {
+        if events.len() > hm_schema::protocol::MAXIMUM_BATCH_EVENTS {
+            return Err(Error::new(ErrorCode::CapacityExceeded));
+        }
+        let outcome = actor.append(events).await?;
+        for (offset, index) in appended.into_iter().enumerate() {
+            let offset =
+                u64::try_from(offset).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+            let lsn = outcome
+                .first_lsn
+                .get()
+                .checked_add(offset)
+                .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))?;
+            let uri = format!("hm://{}/lsn/{lsn}", actor.actor());
+            items[index]["lsn"] = json!(lsn);
+            items[index]["uri"] = json!(uri.clone());
+            envelope.provenance.push(uri);
+        }
+    }
+    envelope.items = items;
+    Ok(envelope)
+}
+
 pub(crate) const fn delivery_state_name(state: u8) -> &'static str {
     match state {
         0 => "accepted",
@@ -236,6 +384,7 @@ pub(crate) const fn delivery_state_name(state: u8) -> &'static str {
 
 struct HeldConnector {
     provider: String,
+    credential_version: u32,
 }
 
 struct HeldDelivery {
@@ -261,6 +410,7 @@ async fn bound_connector(
         })
         .map(|record| HeldConnector {
             provider: record.provider,
+            credential_version: record.credential_version,
         })
         .ok_or_else(|| Error::new(ErrorCode::CapabilityDenied))
 }
@@ -307,7 +457,7 @@ fn duplicate_envelope(
     envelope
 }
 
-fn not_dispatched(error: Error) -> Envelope {
+pub(crate) fn not_dispatched(error: Error) -> Envelope {
     let mut envelope = Envelope::error(error, true);
     envelope.effect_state = Some("not_dispatched".to_owned());
     envelope

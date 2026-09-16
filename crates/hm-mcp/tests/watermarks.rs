@@ -63,6 +63,7 @@ async fn remember(server: &McpServer, content: &str) {
             source_delivery: None,
             source_settlement: None,
             document: None,
+            source_sync: None,
         })
         .await;
     assert!(envelope.ok, "{envelope:?}");

@@ -163,6 +163,7 @@ fn derive_input(media_lsn: u64) -> RememberInput {
         source_delivery: None,
         source_settlement: None,
         document: None,
+        source_sync: None,
     }
 }
 

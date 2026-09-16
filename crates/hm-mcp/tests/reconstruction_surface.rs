@@ -202,6 +202,7 @@ async fn reconstruction_uses_verified_anchors_and_cannot_be_remembered() {
                 source_delivery: None,
                 source_settlement: None,
                 document: None,
+                source_sync: None,
             })
             .await;
         assert!(!remembered.ok);

@@ -49,6 +49,7 @@ async fn anchored_remember_and_entity_near_recall_preserve_policy_fields() {
             source_delivery: None,
             source_settlement: None,
             document: None,
+            source_sync: None,
         })
         .await;
     assert!(remembered.ok);
@@ -108,6 +109,7 @@ async fn anchored_remember_and_entity_near_recall_preserve_policy_fields() {
             source_delivery: None,
             source_settlement: None,
             document: None,
+            source_sync: None,
         })
         .await;
     assert!(discarded.ok);

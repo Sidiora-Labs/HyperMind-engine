@@ -63,6 +63,7 @@ async fn intend_and_bind_append_real_continuity_events() {
             source_delivery: None,
             source_settlement: None,
             document: None,
+            source_sync: None,
         })
         .await;
     assert!(evidence.ok);
