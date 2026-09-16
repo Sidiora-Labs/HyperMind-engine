@@ -5531,6 +5531,27 @@ pub struct GradeSummary {
 }
 ```
 
+## hm-eval::ContractDaemon
+
+<a id="rust-crates-hm-eval-src-contract-daemon-rs-contractdaemon"></a>
+
+Source: [`crates/hm-eval/src/contract/daemon.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/daemon.rs).
+
+When to use: Use `ContractDaemon` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ContractDaemon {
+    child: Child,
+    root: PathBuf,
+    socket: PathBuf,
+    config: PathBuf,
+    executable: PathBuf,
+}
+```
+
 ## hm-eval::Phase
 
 <a id="rust-crates-hm-eval-src-contract-mod-rs-phase"></a>
@@ -5566,6 +5587,25 @@ pub struct ScenarioCall {
     pub verb: &'static str,
     pub arguments: Value,
     pub phase: Phase,
+}
+```
+
+## hm-eval::ScenarioDocument
+
+<a id="rust-crates-hm-eval-src-contract-mod-rs-scenariodocument"></a>
+
+Source: [`crates/hm-eval/src/contract/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/contract/mod.rs).
+
+When to use: Use `ScenarioDocument` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ScenarioDocument {
+    pub format: String,
+    pub conversation: String,
+    pub calls: Vec<ScenarioCall>,
 }
 ```
 

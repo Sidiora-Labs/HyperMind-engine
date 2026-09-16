@@ -1332,6 +1332,11 @@
       "file": "crates/hm-eval/src/bench/rubric.rs"
     },
     {
+      "id": "rust:crates/hm-eval/src/contract/daemon.rs:ContractDaemon",
+      "name": "hm-eval::ContractDaemon",
+      "file": "crates/hm-eval/src/contract/daemon.rs"
+    },
+    {
       "id": "rust:crates/hm-eval/src/contract/mod.rs:Phase",
       "name": "hm-eval::Phase",
       "file": "crates/hm-eval/src/contract/mod.rs"
@@ -1339,6 +1344,11 @@
     {
       "id": "rust:crates/hm-eval/src/contract/mod.rs:ScenarioCall",
       "name": "hm-eval::ScenarioCall",
+      "file": "crates/hm-eval/src/contract/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/contract/mod.rs:ScenarioDocument",
+      "name": "hm-eval::ScenarioDocument",
       "file": "crates/hm-eval/src/contract/mod.rs"
     },
     {

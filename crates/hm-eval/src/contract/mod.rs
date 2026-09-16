@@ -1,6 +1,9 @@
 #![allow(clippy::cast_precision_loss, clippy::missing_errors_doc)]
 
-use crate::bench::gateway::DynError;
+pub mod daemon;
+pub mod typescript;
+
+use crate::bench::gateway::{DynError, write_json};
 use hm_core::ActorId;
 use hm_mcp::dispatcher::McpToolDispatcher;
 use hm_serve::actor::{ActorConfig, ActorEngine};
@@ -12,6 +15,8 @@ use std::path::Path;
 
 pub const CONTRACT_FORMAT: &str = "hypermind.cross-sdk-contract.v1";
 pub const RAW_FORMAT: &str = "hypermind.cross-sdk-contract-raw.v1";
+pub const SCENARIO_FORMAT: &str = "hypermind.cross-sdk-contract-scenario.v1";
+pub const CONTRACT_CONVERSATION: &str = "cross-sdk-contract";
 pub const CONTRACT_ACTOR: u16 = 7;
 pub const REFERENCE_SDK: &str = "rust-embedded";
 pub const REFERENCE_TRANSPORT: &str = "in-process";
@@ -132,6 +137,24 @@ pub fn scenario(conversation: &str) -> Vec<ScenarioCall> {
             phase: Phase::AfterRestart,
         },
     ]
+}
+
+#[derive(Clone, Debug, Serialize)]
+pub struct ScenarioDocument {
+    pub format: String,
+    pub conversation: String,
+    pub calls: Vec<ScenarioCall>,
+}
+
+pub fn write_scenario(path: &Path, conversation: &str) -> Result<(), DynError> {
+    write_json(
+        path,
+        &ScenarioDocument {
+            format: SCENARIO_FORMAT.to_owned(),
+            conversation: conversation.to_owned(),
+            calls: scenario(conversation),
+        },
+    )
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
