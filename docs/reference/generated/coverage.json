@@ -187,6 +187,16 @@
       "file": "crates/hm-compose/src/lanes/graph.rs"
     },
     {
+      "id": "rust:crates/hm-compose/src/lanes/relation.rs:RelationHit",
+      "name": "hm-compose::RelationHit",
+      "file": "crates/hm-compose/src/lanes/relation.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/lanes/relation.rs:RelationRanking",
+      "name": "hm-compose::RelationRanking",
+      "file": "crates/hm-compose/src/lanes/relation.rs"
+    },
+    {
       "id": "rust:crates/hm-compose/src/lanes/temporal.rs:TemporalCandidate",
       "name": "hm-compose::TemporalCandidate",
       "file": "crates/hm-compose/src/lanes/temporal.rs"

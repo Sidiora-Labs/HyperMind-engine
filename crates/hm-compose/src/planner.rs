@@ -15,6 +15,7 @@ pub enum RecallMode {
     Timeline,
     Reconstruct,
     Near,
+    Relation,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -96,6 +97,7 @@ pub fn plan(
             weighted(RetrievalLane::Vector, 4),
             weighted(RetrievalLane::Temporal, 2),
         ],
+        RecallMode::Relation => vec![weighted(RetrievalLane::Relation, 1)],
     };
     let lanes = if mode == RecallMode::Semantic {
         match shape {

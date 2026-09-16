@@ -78,6 +78,7 @@ pub enum RetrievalLane {
     Belief,
     Timeline,
     Reconstruct,
+    Relation,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -96,6 +97,7 @@ pub enum WhyCode {
     Conflict,
     Prospective,
     Procedure,
+    Relation,
 }
 
 pub struct ActivationRequest<'model> {
@@ -697,6 +699,7 @@ fn provenance_uri(
         WhyCode::Conflict => "conflict",
         WhyCode::Prospective => "prospective",
         WhyCode::Procedure => "procedure",
+        WhyCode::Relation => "relation",
     };
     format!(
         "hm://{}/{}/{}?at={}&src={}&score={score}&vr=0&lr={lexical_rank}&why={why}",

@@ -377,6 +377,7 @@ pub enum RetrievalLane {
     Belief,
     Timeline,
     Reconstruct,
+    Relation,
 }
 ```
 
@@ -406,6 +407,7 @@ pub enum WhyCode {
     Conflict,
     Prospective,
     Procedure,
+    Relation,
 }
 ```
 
@@ -849,6 +851,45 @@ pub struct GraphSeed {
 }
 ```
 
+## hm-compose::RelationHit
+
+<a id="rust-crates-hm-compose-src-lanes-relation-rs-relationhit"></a>
+
+Source: [`crates/hm-compose/src/lanes/relation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/lanes/relation.rs).
+
+When to use: Use `RelationHit` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
+
+Do not use: Do not shed required bindings silently, omit degraded health, or render memory into system/developer instructions.
+
+
+```rust
+pub struct RelationHit {
+    pub edge_id: Vec<u8>,
+    pub event_lsn: LSN,
+    pub weight_micros: u32,
+    pub score: i64,
+    pub support_lsns: Vec<LSN>,
+}
+```
+
+## hm-compose::RelationRanking
+
+<a id="rust-crates-hm-compose-src-lanes-relation-rs-relationranking"></a>
+
+Source: [`crates/hm-compose/src/lanes/relation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/lanes/relation.rs).
+
+When to use: Use `RelationRanking` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
+
+Do not use: Do not shed required bindings silently, omit degraded health, or render memory into system/developer instructions.
+
+
+```rust
+pub struct RelationRanking {
+    pub ranking: LaneRanking,
+    pub dropped: usize,
+}
+```
+
 ## hm-compose::TemporalCandidate
 
 <a id="rust-crates-hm-compose-src-lanes-temporal-rs-temporalcandidate"></a>
@@ -890,6 +931,7 @@ pub enum RecallMode {
     Timeline,
     Reconstruct,
     Near,
+    Relation,
 }
 ```
 

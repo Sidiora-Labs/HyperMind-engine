@@ -872,6 +872,7 @@ const fn lane_name(lane: RetrievalLane) -> &'static str {
         RetrievalLane::Belief => "belief",
         RetrievalLane::Timeline => "timeline",
         RetrievalLane::Reconstruct => "reconstruct",
+        RetrievalLane::Relation => "relation",
     }
 }
 

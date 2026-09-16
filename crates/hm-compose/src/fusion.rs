@@ -159,6 +159,7 @@ fn why_code(ranks: &BTreeMap<RetrievalLane, u32>) -> WhyCode {
         Some(RetrievalLane::Vector) => WhyCode::Vector,
         Some(RetrievalLane::Entity) => WhyCode::Entity,
         Some(RetrievalLane::Temporal) => WhyCode::Temporal,
+        Some(RetrievalLane::Relation) => WhyCode::Relation,
         _ => WhyCode::Fused,
     }
 }
@@ -192,6 +193,7 @@ const fn lane_name(lane: RetrievalLane) -> &'static str {
         RetrievalLane::Belief => "belief",
         RetrievalLane::Timeline => "timeline",
         RetrievalLane::Reconstruct => "reconstruct",
+        RetrievalLane::Relation => "relation",
     }
 }
 
@@ -210,5 +212,6 @@ const fn why_name(why: WhyCode) -> &'static str {
         WhyCode::Conflict => "conflict",
         WhyCode::Prospective => "prospective",
         WhyCode::Procedure => "procedure",
+        WhyCode::Relation => "relation",
     }
 }
