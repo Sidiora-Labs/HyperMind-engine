@@ -23,15 +23,17 @@ impl ReconstructionRuntime {
             .ok()
             .filter(|key| !key.is_empty())
             .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+        let gateway_url = std::env::var("CENTRA_GATEWAY_URL")
+            .unwrap_or_else(|_| "https://gateway.centra.ag/v1".to_owned());
         let provider = OpenAiCompatible::new(
             ProviderConfig {
-                endpoint: "https://gateway.centra.ag/v1/chat/completions".to_owned(),
+                endpoint: format!("{}/chat/completions", gateway_url.trim_end_matches('/')),
                 api_key: Some(api_key),
-                model: "openrouter/openai/gpt-4o-mini".to_owned(),
+                model: "openrouter/openai/gpt-5.6-luna".to_owned(),
                 tier: ModelTier::Economy,
                 pricing: Pricing {
-                    input_microusd_per_million_tokens: 150_000,
-                    output_microusd_per_million_tokens: 600_000,
+                    input_microusd_per_million_tokens: 200_000,
+                    output_microusd_per_million_tokens: 1_200_000,
                 },
             },
             HttpTransport::default(),

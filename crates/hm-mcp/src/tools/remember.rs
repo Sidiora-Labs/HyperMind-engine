@@ -37,10 +37,12 @@ impl EmbeddingRuntime {
             .ok()
             .filter(|key| !key.is_empty())
             .ok_or("CENTRA_GATEWAY_API_KEY is required for the embedding provider")?;
+        let gateway_url = std::env::var("CENTRA_GATEWAY_URL")
+            .unwrap_or_else(|_| "https://gateway.centra.ag/v1".to_owned());
         let embedder = RemoteEmbedder::new(
             Provider::OpenAi,
             RemoteConfig {
-                endpoint: "https://gateway.centra.ag/v1/embeddings".to_owned(),
+                endpoint: format!("{}/embeddings", gateway_url.trim_end_matches('/')),
                 api_key: Some(api_key),
                 model: "openrouter/openai/text-embedding-3-large".to_owned(),
                 revision: "centra-openrouter-live".to_owned(),
