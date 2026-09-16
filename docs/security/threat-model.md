@@ -10,7 +10,9 @@ Remote model and embedding providers receive only data explicitly selected for t
 
 ## Capabilities
 
-Actor and admin tokens are separate capabilities. An actor connection can mutate or read only its selected actor. An admin connection can inspect health and statistics, verify integrity, rebuild projections, rotate wrapping keys, and crypto-shred. Actor requests on an admin connection and admin requests on an actor connection are rejected with `kCapabilityDenied`. Multi-actor sharing requires an explicit bridge that appends a new event with its origin actor.
+Actor and admin tokens are separate capabilities. An actor connection can mutate or read only its selected actor. Admin transport operations include health, statistics, integrity verification, projection rebuild, and crypto-shred. Key rotation uses its explicitly supported administration interface, not an invented wire request. Actor requests on an admin connection and admin requests on an actor connection are rejected with `kCapabilityDenied`. Multi-actor sharing requires an explicit bridge that appends a new event with its origin actor.
+
+Remote gRPC and REST listeners require mutual TLS with a trusted client CA as well as the appropriate capability. Certificates do not replace capability checks. Actor/admin listeners are separate, request bodies and output queues are bounded, and a saturated subscriber is disconnected. Secure transport does not make retrieved model-authored text trustworthy.
 
 Possession of a token grants its documented operations; it does not establish the truth of submitted content. Authority is assigned from the authenticated source and admission rules.
 

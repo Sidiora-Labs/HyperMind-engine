@@ -1,34 +1,25 @@
 # Schematics
 
-This reference is normative for the implemented wave-two surface. “MUST” and
-“MUST NOT” describe compatibility and integrity requirements.
+This reference describes the implemented schema-v2 ledger and protocol-v3
+boundaries. “MUST” and “MUST NOT” describe compatibility and integrity
+requirements. The [generated schema catalog](generated/schema-types.md) copies
+every current event, wire type, union, discriminator, and field from source.
+
+When to use: implement a compatible reader, writer, or verified adapter.
+
+Do not use: hand-maintained numeric lists or unvalidated generated buffers as a
+substitute for the canonical schema and admission rules.
 
 ## 1. Event taxonomy
 
 Every event MUST be an `NCEV` FlatBuffer envelope with a nonzero schema version
-no newer than version 2. Wave two admits these event kinds:
+no newer than version 2. Event families include observations and tool/effect
+chains; intent, loops and bindings; embeddings and beliefs; memory, graph and
+review records; consolidation generations; and intentions, attention,
+predictions and procedures. The schema catalog is the complete current list,
+including additive event discriminants that earlier slices did not admit.
 
-| Discriminant | Kind | Role |
-|---:|---|---|
-| 1 | `UserMsg` | user or externally observed input |
-| 2 | `DeliveredMsg` | assistant output |
-| 3 | `ToolCall` | dispatched tool operation |
-| 4 | `ToolResult` | observed tool return |
-| 5 | `Reasoning` | assistant-generated reasoning record |
-| 8 | `Effect` | external-effect state for a tool call |
-| 9 | `Approval` | approval decision for an effect |
-| 10 | `Outcome` | final or observed effect outcome |
-| 11 | `Checkpoint` | opaque turn-resume cursor |
-| 12 | `Supervisor` | supervisor decision |
-| 13 | `Recovery` | recovery action against an LSN |
-| 14 | `IntentSet` | current objective |
-| 15 | `LoopOpened` | open unit of work |
-| 16 | `LoopClosed` | terminal loop record |
-| 21 | `Attestation` | runtime record that a source was used or ignored |
-| 22 | `Binding` | task- or scope-bound external identity |
-
-Discriminants 6, 7, and 17 through 20 remain reserved at this wave and MUST be
-rejected at ingest. Authority is one of `user_asserted`, `external_observed`,
+Authority is one of `user_asserted`, `external_observed`,
 `tool_observed`, `runtime_fact`, `assistant_generated`, or
 `derived_inference`. A derived value MUST NOT acquire observed authority merely
 by being copied through another surface.
@@ -96,9 +87,10 @@ errors MUST also carry `effect_state` as `not_dispatched`, `unknown`, or
 
 Each actor owns one LMDB environment. Every projection mutation and its
 checkpoint MUST commit in the same write transaction. An apply is valid only
-when `applied_lsn = checkpoint + 1`. Timeline, lexical, intent, bindings, work
-ledger, and checkpoint projections MUST advance for every event, including
-events that do not affect their materialized values.
+when `applied_lsn = checkpoint + 1`. Every registered projection MUST advance
+for every event, including events that do not affect its materialized values.
+This includes retrieval, belief/time, generations, attention, predictions,
+procedures, continuity, and work-ledger projections.
 
 Rebuild MUST start from the minimum projection checkpoint and MUST produce the
 same canonical dump as continuous application of the same log prefix. Intent

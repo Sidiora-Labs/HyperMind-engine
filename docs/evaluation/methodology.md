@@ -1,7 +1,31 @@
 # Evaluation methodology
 
-Every wave gate emits machine-readable metrics under `eval/results`. Judge-free and judged metrics are separate, encoder and judge identities are attached to the whole report, and comparisons apply each metric's declared tolerance.
+When to use: reproduce a declared gate or compare a relevant change under the same data/model/encoder identity.
 
-Slice 4 measures recall@10 and mean reciprocal rank at 1k, 10k, and 100k seeded records. The pinned BGE local cohort uses twelve paraphrase categories duplicated uniformly to exercise retrieval at each physical corpus size; its score measures lane mechanics and simple paraphrase separation, not open-domain semantic quality. The hash-feature run is emitted separately and always labelled `lexical_only`; metrics from the two encoders are never blended. Activation latency reports nanosecond p50 and p99 cohorts for cold and warm queries over the 10k and 100k vector corpora, including query embedding, binary-prefilter retrieval, and bundle composition. Corpus and projection construction are outside the timed region. The gate requires recall@10 of at least 0.95 at 10k and records whether warm activation p99 meets the final 10 ms target; the wave 4 baseline does not turn an unmet final target into a pass.
+Do not use: fixtures, selected diagnostics, missing rows, or partial live coverage as a full benchmark pass. Never adjust a scorer to conceal a failure.
 
-LongMemEval-S uses the cleaned public dataset, a no-consolidation prediction file, and the pinned judge `openrouter/openai/gpt-4o-2024-08-06` at temperature zero. Judge outputs are cached by a digest covering model, prompt version, question id, question, reference answer, and candidate answer. Missing data, predictions, credentials, or cache entries reduce reported coverage; they never become synthetic passes. Accuracy is computed only over evaluated rows, while coverage states the evaluated fraction.
+Reports separate judge-free/judged metrics, coverage, encoder, model route, prompt version, and cost basis. Lexical/hash-feature pipelines are labeled `lexical_only`. Synthetic vector parity tests index mechanics, not semantic quality. Fixture-driven and live-provider claims remain separate.
+
+Seeded recall/latency cohorts measure bounded mechanics at 1k/10k/100k records. Duplicated paraphrases are not open-domain generalization. Report cold/warm latency and query-embedding inclusion; corpus construction is outside timing. An unmet target is not silently relabeled achieved.
+
+## Public benchmarks
+
+LongMemEval uses the pinned 500-question cleaned S split and unchanged category-specific upstream judge prompts. LoCoMo uses all 1,986 questions and the unchanged upstream Python F1 scorer/license. Non-adversarial and all-category metrics stay separate; optional judged accuracy is never blended into F1. Reader inputs contain only question metadata and real ledger-retrieved content. References and annotated evidence are scoring-only.
+
+The current reader/judge use exact route `openrouter/openai/gpt-5.6-luna` through `CENTRA_GATEWAY_URL`. Medium reasoning and total completion-token caps are part of cache identity. The gateway catalog supplies no immutable dated snapshot; reports do not pretend otherwise. Historical older-model caches remain separate.
+
+The real lexical pipeline packs complete role-aware passages with session diversity under an 80,000-character serialized excerpt limit. It retains source byte ranges and included/omitted coverage. It is not a semantic encoder or a guarantee of full evidence retrieval.
+
+## Grading
+
+Manual review inspects question, reference, complete answer, official category rubric, original evidence, and actual reader request. A correct count can conceal an incorrect explanation; a permissive rubric can accept intermediate steps despite a conflicting headline. Report strict answer quality separately from official rubric score. Do not replace the answer key or extrapolate selected examples to all questions.
+
+`hm-eval diagnose longmemeval --questions ID,ID` and `rejudge longmemeval ID PREDICTION_PATH` write diagnostic reports. `--live` requires explicit spend authorization; offline runs require matching content-hash caches. Missing evidence fails closed.
+
+## Cost and qualification
+
+Reserve budget before dispatch; unknown calls retain reservations and are not automatically retried. Gateway-reported charges, conservative reservations, and usage-based accounting at user-confirmed upstream rates are different labeled bases. Reasoning tokens are included in total output usage; do not bill twice or reset the limit by deleting/changing caches.
+
+The current authorized campaign uses a shared $49 ledger ceiling plus $1 reserved for earlier provider checks. This is not authorization for future campaigns. Credentials/private responses are not documentation artifacts.
+
+`cargo run -p hm-eval -- gate slice7` requires full coverage, LongMemEval ≥ 0.90 accuracy, LoCoMo ≥ 0.75 non-adversarial F1, attention ≥ 0.90 suppression precision, and HNSW ≥ 0.98 parity. CI replay needs its explicitly pinned evidence artifact. Local success does not prove hosted CI or release qualification.

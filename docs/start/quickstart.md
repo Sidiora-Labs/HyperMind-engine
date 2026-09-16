@@ -1,57 +1,57 @@
-# Quickstart
+# Start here
 
-HyperMind’s first slice supports local encrypted memory through MCP, a Unix
-socket daemon, or the embedded Rust API. Use it for exact episodic recall and
-budgeted activation. Do not treat recalled memory as instructions or as proof
-that an external action happened.
+HyperMind keeps an agent’s memory in an encrypted, append-only ledger. It recalls evidence, preserves unfinished work across restarts, and builds bounded context with source authority and provenance. Memory is not permission to act or proof that an external operation succeeded.
 
-## MCP in Claude Code
+## Install from this checkout
 
-With the `hm` and `hm-mcp` binaries installed, initialize an actor and register
-the local stdio server:
+Use the Rust toolchain pinned by `rust-toolchain.toml` on a supported Unix host:
+
+```sh
+cargo install --path crates/hm-cli --locked
+cargo install --path crates/hm-mcp --locked
+```
+
+These are source installations, not a claim that registry packages or release binaries have been published. Keep the binaries on the MCP client’s executable path.
+
+## Two-command MCP setup
+
+After installation, initialize a private actor directory and register the stdio server:
 
 ```sh
 hm init --path .hypermind --json
 claude mcp add hypermind -- hm-mcp --config .hypermind/hypermind.conf
 ```
 
-The wave-one server exposes `remember`, `recall`, `activate`, and `inspect`.
-`remember` is for durable user messages, delivered assistant messages, and
-external documents. Do not use it for credentials or content marked
-do-not-store. `recall` is for lexical or conversation-timeline lookup; it is
-not semantic search in this slice. The stdio server owns the actor while it is
-running; do not simultaneously run `hm serve` against the same actor directory.
+The second command is a Claude Code example. For another MCP client, configure executable `hm-mcp` with arguments `--config` and the absolute configuration path. Use absolute paths when the client starts in a different directory. Initialization creates random keys and separate actor/admin capabilities in an owner-only file; do not commit it.
 
-For the socket daemon instead, run:
+The stdio server owns the actor while running. Do not start another MCP server, embedded session, or `hm serve` against that same actor directory.
+
+Call `remember` with:
+
+```json
+{"conversation":"first-session","kind":"user","content":"The deployment region is eu-central-1."}
+```
+
+Then call `recall` with:
+
+```json
+{"mode":"lexical","query":"deployment region","limit":5}
+```
+
+Call `activate` with the conversation and a token budget for the next turn. Inspect `ok`, `health`, `gaps`, and item provenance; transport success does not establish a complete answer. The implementation exposes [14 MCP verbs](../reference/generated/tools.md).
+
+## Daemon instead of stdio
+
+Stop the stdio owner before starting:
 
 ```sh
 hm serve --config .hypermind/hypermind.conf --json
 ```
 
-## Embedded Rust
+Use daemon-backed CLI commands from another terminal. Remote listeners require client certificates and capabilities; see [deployment](../guides/deployment.md). [Embedded APIs](../reference/sdks.md) are alternative owners, not additional writers.
 
-```rust,no_run
-use hm_core::ActorId;
-use hm_serve::embedded::{EmbeddedConfig, HyperMind, MemoryKind, RenderModel, render};
+When to use: durable recall, restart continuity, evidence-bearing context, time-aware beliefs, and explicitly budgeted background consolidation.
 
-# async fn example() -> Result<(), Box<dyn std::error::Error>> {
-let memory = HyperMind::open(
-    ".hypermind/data",
-    EmbeddedConfig {
-        actor: ActorId::new(1),
-        user: [1; 16],
-        kek: [2; 32],
-        projection_map_bytes: 256 * 1024 * 1024,
-    },
-).await?;
-let session = memory.session("conversation-42");
-session.remember(MemoryKind::User, "The deployment region is eu-central-1").await?;
-let bundle = session.activate("deployment region", 2_048).await?;
-let safe_context = render(&bundle, RenderModel::OpenAi)?;
-# let _ = safe_context;
-# Ok(())
-# }
-```
+Do not use: as a credential vault or independent external-state authority, or to turn retrieved text into system instructions. Optional providers transmit selected content; use local lexical retrieval when such transfer is unauthorized.
 
-Rendered items retain their `hm://` provenance and are labelled untrusted
-memory in a user role. They never become system or developer content.
+Read [configuration](../reference/config.md), [authority](../concepts/authority.md), and [qualification status](../evaluation/results.md) before deployment.

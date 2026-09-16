@@ -6,6 +6,7 @@ use hm_eval::{bench, slice1, slice2, slice3, slice4, slice5, slice6, slice7, sui
 async fn main() {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
     let result = match arguments.as_slice() {
+        [command] if command == "docs-gate" => hm_eval::docs::gate(),
         [command, flag] if command == "budget" && flag == "--confirm-upstream-rates" => {
             (|| -> Result<(), Box<dyn std::error::Error>> {
                 let gateway = bench::gateway::Gateway::open(

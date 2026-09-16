@@ -1,0 +1,5430 @@
+{
+  "version": 1,
+  "inventory": [
+    {
+      "id": "rust:crates/hm-cli/src/actors.rs:Command",
+      "name": "hm-cli::Command",
+      "file": "crates/hm-cli/src/actors.rs"
+    },
+    {
+      "id": "rust:crates/hm-cli/src/consolidate.rs:Command",
+      "name": "hm-cli::Command",
+      "file": "crates/hm-cli/src/consolidate.rs"
+    },
+    {
+      "id": "rust:crates/hm-cli/src/consolidate.rs:Mode",
+      "name": "hm-cli::Mode",
+      "file": "crates/hm-cli/src/consolidate.rs"
+    },
+    {
+      "id": "rust:crates/hm-cli/src/models.rs:Choice",
+      "name": "hm-cli::Choice",
+      "file": "crates/hm-cli/src/models.rs"
+    },
+    {
+      "id": "rust:crates/hm-cli/src/models.rs:Command",
+      "name": "hm-cli::Command",
+      "file": "crates/hm-cli/src/models.rs"
+    },
+    {
+      "id": "rust:crates/hm-cli/src/operations.rs:TuiOptions",
+      "name": "hm-cli::TuiOptions",
+      "file": "crates/hm-cli/src/operations.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/budget.rs:BudgetProfile",
+      "name": "hm-compose::BudgetProfile",
+      "file": "crates/hm-compose/src/budget.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/budget.rs:BudgetAllocation",
+      "name": "hm-compose::BudgetAllocation",
+      "file": "crates/hm-compose/src/budget.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:Tier",
+      "name": "hm-compose::Tier",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:RetrievalLane",
+      "name": "hm-compose::RetrievalLane",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:WhyCode",
+      "name": "hm-compose::WhyCode",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:ActivationRequest",
+      "name": "hm-compose::ActivationRequest",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:ActivationContext",
+      "name": "hm-compose::ActivationContext",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:ActivationItem",
+      "name": "hm-compose::ActivationItem",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:ActivationSection",
+      "name": "hm-compose::ActivationSection",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:GapKind",
+      "name": "hm-compose::GapKind",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:Gap",
+      "name": "hm-compose::Gap",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:HealthStatus",
+      "name": "hm-compose::HealthStatus",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:BundleHealth",
+      "name": "hm-compose::BundleHealth",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:RetrievalManifest",
+      "name": "hm-compose::RetrievalManifest",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:ActivationBundle",
+      "name": "hm-compose::ActivationBundle",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/bundle.rs:AttestationRequest",
+      "name": "hm-compose::AttestationRequest",
+      "file": "crates/hm-compose/src/bundle.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/deadline.rs:DeadlineBundle",
+      "name": "hm-compose::DeadlineBundle",
+      "file": "crates/hm-compose/src/deadline.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/deadline.rs:DeadlineActivator",
+      "name": "hm-compose::DeadlineActivator",
+      "file": "crates/hm-compose/src/deadline.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/fusion.rs:RankedCandidate",
+      "name": "hm-compose::RankedCandidate",
+      "file": "crates/hm-compose/src/fusion.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/fusion.rs:LaneRanking",
+      "name": "hm-compose::LaneRanking",
+      "file": "crates/hm-compose/src/fusion.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/fusion.rs:FusedHit",
+      "name": "hm-compose::FusedHit",
+      "file": "crates/hm-compose/src/fusion.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/health.rs:EncoderState",
+      "name": "hm-compose::EncoderState",
+      "file": "crates/hm-compose/src/health.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/health.rs:HealthInput",
+      "name": "hm-compose::HealthInput",
+      "file": "crates/hm-compose/src/health.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/lanes/belief.rs:AsOfRecall",
+      "name": "hm-compose::AsOfRecall",
+      "file": "crates/hm-compose/src/lanes/belief.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/lanes/belief.rs:TimelineRecall",
+      "name": "hm-compose::TimelineRecall",
+      "file": "crates/hm-compose/src/lanes/belief.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/lanes/graph.rs:GraphSeed",
+      "name": "hm-compose::GraphSeed",
+      "file": "crates/hm-compose/src/lanes/graph.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/lanes/temporal.rs:TemporalCandidate",
+      "name": "hm-compose::TemporalCandidate",
+      "file": "crates/hm-compose/src/lanes/temporal.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/planner.rs:RecallMode",
+      "name": "hm-compose::RecallMode",
+      "file": "crates/hm-compose/src/planner.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/planner.rs:QueryShape",
+      "name": "hm-compose::QueryShape",
+      "file": "crates/hm-compose/src/planner.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/planner.rs:AnchorFacet",
+      "name": "hm-compose::AnchorFacet",
+      "file": "crates/hm-compose/src/planner.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/planner.rs:Anchor",
+      "name": "hm-compose::Anchor",
+      "file": "crates/hm-compose/src/planner.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/planner.rs:LanePlan",
+      "name": "hm-compose::LanePlan",
+      "file": "crates/hm-compose/src/planner.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/planner.rs:QueryPlan",
+      "name": "hm-compose::QueryPlan",
+      "file": "crates/hm-compose/src/planner.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/reconstruct.rs:ReconstructionAnchor",
+      "name": "hm-compose::ReconstructionAnchor",
+      "file": "crates/hm-compose/src/reconstruct.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/reconstruct.rs:Reconstruction",
+      "name": "hm-compose::Reconstruction",
+      "file": "crates/hm-compose/src/reconstruct.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/rerank.rs:DeploymentConfig",
+      "name": "hm-compose::DeploymentConfig",
+      "file": "crates/hm-compose/src/rerank.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/rerank.rs:EvaluationEvidence",
+      "name": "hm-compose::EvaluationEvidence",
+      "file": "crates/hm-compose/src/rerank.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/rerank.rs:RerankError",
+      "name": "hm-compose::RerankError",
+      "file": "crates/hm-compose/src/rerank.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/rerank.rs:DeploymentReranker",
+      "name": "hm-compose::DeploymentReranker",
+      "file": "crates/hm-compose/src/rerank.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/rerank.rs:CrossEncoder",
+      "name": "hm-compose::CrossEncoder",
+      "file": "crates/hm-compose/src/rerank.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/safety.rs:SafeContent",
+      "name": "hm-compose::SafeContent",
+      "file": "crates/hm-compose/src/safety.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/safety.rs:PromptItem",
+      "name": "hm-compose::PromptItem",
+      "file": "crates/hm-compose/src/safety.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/safety.rs:PromptSection",
+      "name": "hm-compose::PromptSection",
+      "file": "crates/hm-compose/src/safety.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/safety.rs:RenderedPrompt",
+      "name": "hm-compose::RenderedPrompt",
+      "file": "crates/hm-compose/src/safety.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/tiers/conflicts.rs:ConflictTier",
+      "name": "hm-compose::ConflictTier",
+      "file": "crates/hm-compose/src/tiers/conflicts.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/tokens.rs:FallbackWeights",
+      "name": "hm-compose::FallbackWeights",
+      "file": "crates/hm-compose/src/tokens.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/tokens.rs:TokenCounter",
+      "name": "hm-compose::TokenCounter",
+      "file": "crates/hm-compose/src/tokens.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/error.rs:ErrorCode",
+      "name": "hm-core::ErrorCode",
+      "file": "crates/hm-core/src/error.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/error.rs:Error",
+      "name": "hm-core::Error",
+      "file": "crates/hm-core/src/error.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/ids.rs:LSN",
+      "name": "hm-core::LSN",
+      "file": "crates/hm-core/src/ids.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/ids.rs:Lsn",
+      "name": "hm-core::Lsn",
+      "file": "crates/hm-core/src/ids.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/ids.rs:ActorId",
+      "name": "hm-core::ActorId",
+      "file": "crates/hm-core/src/ids.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/ids.rs:SchemaVersion",
+      "name": "hm-core::SchemaVersion",
+      "file": "crates/hm-core/src/ids.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/ids.rs:UtcNanos",
+      "name": "hm-core::UtcNanos",
+      "file": "crates/hm-core/src/ids.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/ids.rs:EntityId",
+      "name": "hm-core::EntityId",
+      "file": "crates/hm-core/src/ids.rs"
+    },
+    {
+      "id": "rust:crates/hm-core/src/ids.rs:ConversationId",
+      "name": "hm-core::ConversationId",
+      "file": "crates/hm-core/src/ids.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/adjudicate.rs:AdjudicationConflict",
+      "name": "hm-cortex::AdjudicationConflict",
+      "file": "crates/hm-cortex/src/adjudicate.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/adjudicate.rs:AdjudicationOutcome",
+      "name": "hm-cortex::AdjudicationOutcome",
+      "file": "crates/hm-cortex/src/adjudicate.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/adjudicate.rs:AdjudicationReport",
+      "name": "hm-cortex::AdjudicationReport",
+      "file": "crates/hm-cortex/src/adjudicate.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/adjudicate.rs:AdjudicationError",
+      "name": "hm-cortex::AdjudicationError",
+      "file": "crates/hm-cortex/src/adjudicate.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/attention.rs:AttentionFactors",
+      "name": "hm-cortex::AttentionFactors",
+      "file": "crates/hm-cortex/src/attention.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/authority.rs:CitedSource",
+      "name": "hm-cortex::CitedSource",
+      "file": "crates/hm-cortex/src/authority.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/budget.rs:BudgetUsage",
+      "name": "hm-cortex::BudgetUsage",
+      "file": "crates/hm-cortex/src/budget.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/budget.rs:BudgetDimension",
+      "name": "hm-cortex::BudgetDimension",
+      "file": "crates/hm-cortex/src/budget.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/budget.rs:BudgetExceeded",
+      "name": "hm-cortex::BudgetExceeded",
+      "file": "crates/hm-cortex/src/budget.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/budget.rs:BudgetTracker",
+      "name": "hm-cortex::BudgetTracker",
+      "file": "crates/hm-cortex/src/budget.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/citations.rs:SourceKind",
+      "name": "hm-cortex::SourceKind",
+      "file": "crates/hm-cortex/src/citations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/citations.rs:FrozenCandidate",
+      "name": "hm-cortex::FrozenCandidate",
+      "file": "crates/hm-cortex/src/citations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/citations.rs:CitationClaim",
+      "name": "hm-cortex::CitationClaim",
+      "file": "crates/hm-cortex/src/citations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/citations.rs:ValidatedCitations",
+      "name": "hm-cortex::ValidatedCitations",
+      "file": "crates/hm-cortex/src/citations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/citations.rs:CitationError",
+      "name": "hm-cortex::CitationError",
+      "file": "crates/hm-cortex/src/citations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/citations.rs:FrozenCandidateSet",
+      "name": "hm-cortex::FrozenCandidateSet",
+      "file": "crates/hm-cortex/src/citations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/fsrs.rs:FsrsState",
+      "name": "hm-cortex::FsrsState",
+      "file": "crates/hm-cortex/src/fsrs.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/fsrs.rs:FsrsData",
+      "name": "hm-cortex::FsrsData",
+      "file": "crates/hm-cortex/src/fsrs.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/fsrs.rs:ScheduleResult",
+      "name": "hm-cortex::ScheduleResult",
+      "file": "crates/hm-cortex/src/fsrs.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/ingest.rs:IngestSource",
+      "name": "hm-cortex::IngestSource",
+      "file": "crates/hm-cortex/src/ingest.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/ingest.rs:DoNotStoreReceipt",
+      "name": "hm-cortex::DoNotStoreReceipt",
+      "file": "crates/hm-cortex/src/ingest.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/ingest.rs:IngestResult",
+      "name": "hm-cortex::IngestResult",
+      "file": "crates/hm-cortex/src/ingest.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nli.rs:NliScores",
+      "name": "hm-cortex::NliScores",
+      "file": "crates/hm-cortex/src/nli.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nli.rs:NliVerdict",
+      "name": "hm-cortex::NliVerdict",
+      "file": "crates/hm-cortex/src/nli.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nli.rs:BidirectionalNli",
+      "name": "hm-cortex::BidirectionalNli",
+      "file": "crates/hm-cortex/src/nli.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nli.rs:NliError",
+      "name": "hm-cortex::NliError",
+      "file": "crates/hm-cortex/src/nli.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nli.rs:NliModel",
+      "name": "hm-cortex::NliModel",
+      "file": "crates/hm-cortex/src/nli.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/cluster.rs:PendingObservation",
+      "name": "hm-cortex::PendingObservation",
+      "file": "crates/hm-cortex/src/nrem/cluster.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/cluster.rs:ClusterOptions",
+      "name": "hm-cortex::ClusterOptions",
+      "file": "crates/hm-cortex/src/nrem/cluster.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/cluster.rs:ObservationCluster",
+      "name": "hm-cortex::ObservationCluster",
+      "file": "crates/hm-cortex/src/nrem/cluster.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:ExistingMemory",
+      "name": "hm-cortex::ExistingMemory",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:MergeAction",
+      "name": "hm-cortex::MergeAction",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:NremDecision",
+      "name": "hm-cortex::NremDecision",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:DropReason",
+      "name": "hm-cortex::DropReason",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:DroppedCandidate",
+      "name": "hm-cortex::DroppedCandidate",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:NremReport",
+      "name": "hm-cortex::NremReport",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:NremError",
+      "name": "hm-cortex::NremError",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/predict.rs:Observation",
+      "name": "hm-cortex::Observation",
+      "file": "crates/hm-cortex/src/predict.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/predict.rs:RevisionGap",
+      "name": "hm-cortex::RevisionGap",
+      "file": "crates/hm-cortex/src/predict.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/procedures.rs:Episode",
+      "name": "hm-cortex::Episode",
+      "file": "crates/hm-cortex/src/procedures.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/prospective.rs:WakeSignal",
+      "name": "hm-cortex::WakeSignal",
+      "file": "crates/hm-cortex/src/prospective.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/quality.rs:ThoughtQualityOptions",
+      "name": "hm-cortex::ThoughtQualityOptions",
+      "file": "crates/hm-cortex/src/quality.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/quality.rs:ThoughtQualityResult",
+      "name": "hm-cortex::ThoughtQualityResult",
+      "file": "crates/hm-cortex/src/quality.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/quality.rs:RewriteGuardResult",
+      "name": "hm-cortex::RewriteGuardResult",
+      "file": "crates/hm-cortex/src/quality.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/quality.rs:LabelledDecision",
+      "name": "hm-cortex::LabelledDecision",
+      "file": "crates/hm-cortex/src/quality.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/quality.rs:ClassifierMetrics",
+      "name": "hm-cortex::ClassifierMetrics",
+      "file": "crates/hm-cortex/src/quality.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/abstract.rs:ExistingAbstract",
+      "name": "hm-cortex::ExistingAbstract",
+      "file": "crates/hm-cortex/src/rem/abstract.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/abstract.rs:AbstractOptions",
+      "name": "hm-cortex::AbstractOptions",
+      "file": "crates/hm-cortex/src/rem/abstract.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/abstract.rs:AbstractDecision",
+      "name": "hm-cortex::AbstractDecision",
+      "file": "crates/hm-cortex/src/rem/abstract.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/abstract.rs:AbstractDrop",
+      "name": "hm-cortex::AbstractDrop",
+      "file": "crates/hm-cortex/src/rem/abstract.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/abstract.rs:AbstractError",
+      "name": "hm-cortex::AbstractError",
+      "file": "crates/hm-cortex/src/rem/abstract.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/connect.rs:ConnectMemory",
+      "name": "hm-cortex::ConnectMemory",
+      "file": "crates/hm-cortex/src/rem/connect.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/connect.rs:ConnectedEdge",
+      "name": "hm-cortex::ConnectedEdge",
+      "file": "crates/hm-cortex/src/rem/connect.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/connect.rs:ConnectReport",
+      "name": "hm-cortex::ConnectReport",
+      "file": "crates/hm-cortex/src/rem/connect.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/connect.rs:ConnectError",
+      "name": "hm-cortex::ConnectError",
+      "file": "crates/hm-cortex/src/rem/connect.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/hindsight.rs:ConcernSourceKind",
+      "name": "hm-cortex::ConcernSourceKind",
+      "file": "crates/hm-cortex/src/rem/hindsight.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/hindsight.rs:ConcernSource",
+      "name": "hm-cortex::ConcernSource",
+      "file": "crates/hm-cortex/src/rem/hindsight.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/hindsight.rs:HindsightMemory",
+      "name": "hm-cortex::HindsightMemory",
+      "file": "crates/hm-cortex/src/rem/hindsight.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/hindsight.rs:HindsightRevision",
+      "name": "hm-cortex::HindsightRevision",
+      "file": "crates/hm-cortex/src/rem/hindsight.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/hindsight.rs:HindsightDecision",
+      "name": "hm-cortex::HindsightDecision",
+      "file": "crates/hm-cortex/src/rem/hindsight.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/rem/hindsight.rs:HindsightError",
+      "name": "hm-cortex::HindsightError",
+      "file": "crates/hm-cortex/src/rem/hindsight.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/review.rs:AttestationSignal",
+      "name": "hm-cortex::AttestationSignal",
+      "file": "crates/hm-cortex/src/review.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/review.rs:ReviewCandidate",
+      "name": "hm-cortex::ReviewCandidate",
+      "file": "crates/hm-cortex/src/review.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/review.rs:ProtectionSet",
+      "name": "hm-cortex::ProtectionSet",
+      "file": "crates/hm-cortex/src/review.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/review.rs:ReviewDecision",
+      "name": "hm-cortex::ReviewDecision",
+      "file": "crates/hm-cortex/src/review.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/review.rs:FadePolicy",
+      "name": "hm-cortex::FadePolicy",
+      "file": "crates/hm-cortex/src/review.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/review.rs:ContradictedOutcome",
+      "name": "hm-cortex::ContradictedOutcome",
+      "file": "crates/hm-cortex/src/review.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/run.rs:PersistedPhase",
+      "name": "hm-cortex::PersistedPhase",
+      "file": "crates/hm-cortex/src/run.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/run.rs:PhaseWork",
+      "name": "hm-cortex::PhaseWork",
+      "file": "crates/hm-cortex/src/run.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/run.rs:PhaseMachine",
+      "name": "hm-cortex::PhaseMachine",
+      "file": "crates/hm-cortex/src/run.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/run.rs:Cadence",
+      "name": "hm-cortex::Cadence",
+      "file": "crates/hm-cortex/src/run.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/run.rs:CadenceError",
+      "name": "hm-cortex::CadenceError",
+      "file": "crates/hm-cortex/src/run.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/cache.rs:CachedEmbedder",
+      "name": "hm-embed::CachedEmbedder",
+      "file": "crates/hm-embed/src/cache.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/hash_feature.rs:HashFeatureEmbedder",
+      "name": "hm-embed::HashFeatureEmbedder",
+      "file": "crates/hm-embed/src/hash_feature.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/local.rs:OnnxEmbedder",
+      "name": "hm-embed::OnnxEmbedder",
+      "file": "crates/hm-embed/src/local.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/model.rs:ModelKind",
+      "name": "hm-embed::ModelKind",
+      "file": "crates/hm-embed/src/model.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/model.rs:Artifact",
+      "name": "hm-embed::Artifact",
+      "file": "crates/hm-embed/src/model.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/model.rs:ModelSpec",
+      "name": "hm-embed::ModelSpec",
+      "file": "crates/hm-embed/src/model.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/model.rs:ArtifactFetcher",
+      "name": "hm-embed::ArtifactFetcher",
+      "file": "crates/hm-embed/src/model.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/model.rs:HttpFetcher",
+      "name": "hm-embed::HttpFetcher",
+      "file": "crates/hm-embed/src/model.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/model.rs:ModelStore",
+      "name": "hm-embed::ModelStore",
+      "file": "crates/hm-embed/src/model.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/model.rs:ModelFiles",
+      "name": "hm-embed::ModelFiles",
+      "file": "crates/hm-embed/src/model.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/quantize.rs:QuantizedEmbedding",
+      "name": "hm-embed::QuantizedEmbedding",
+      "file": "crates/hm-embed/src/quantize.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:Provider",
+      "name": "hm-embed::Provider",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:RemoteConfig",
+      "name": "hm-embed::RemoteConfig",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:WireRequest",
+      "name": "hm-embed::WireRequest",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:WireResponse",
+      "name": "hm-embed::WireResponse",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:WireTransport",
+      "name": "hm-embed::WireTransport",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:WireFixture",
+      "name": "hm-embed::WireFixture",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:RecordedTransport",
+      "name": "hm-embed::RecordedTransport",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:HttpTransport",
+      "name": "hm-embed::HttpTransport",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/remote.rs:RemoteEmbedder",
+      "name": "hm-embed::RemoteEmbedder",
+      "file": "crates/hm-embed/src/remote.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/types.rs:Distance",
+      "name": "hm-embed::Distance",
+      "file": "crates/hm-embed/src/types.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/types.rs:Normalization",
+      "name": "hm-embed::Normalization",
+      "file": "crates/hm-embed/src/types.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/types.rs:InputRole",
+      "name": "hm-embed::InputRole",
+      "file": "crates/hm-embed/src/types.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/types.rs:SpaceIdentity",
+      "name": "hm-embed::SpaceIdentity",
+      "file": "crates/hm-embed/src/types.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/types.rs:Embedding",
+      "name": "hm-embed::Embedding",
+      "file": "crates/hm-embed/src/types.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/types.rs:Embedder",
+      "name": "hm-embed::Embedder",
+      "file": "crates/hm-embed/src/types.rs"
+    },
+    {
+      "id": "rust:crates/hm-embed/src/types.rs:EmbedError",
+      "name": "hm-embed::EmbedError",
+      "file": "crates/hm-embed/src/types.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/gateway.rs:DynError",
+      "name": "hm-eval::DynError",
+      "file": "crates/hm-eval/src/bench/gateway.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/gateway.rs:CompletionSettings",
+      "name": "hm-eval::CompletionSettings",
+      "file": "crates/hm-eval/src/bench/gateway.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/gateway.rs:Usage",
+      "name": "hm-eval::Usage",
+      "file": "crates/hm-eval/src/bench/gateway.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/gateway.rs:Completion",
+      "name": "hm-eval::Completion",
+      "file": "crates/hm-eval/src/bench/gateway.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/gateway.rs:BudgetSummary",
+      "name": "hm-eval::BudgetSummary",
+      "file": "crates/hm-eval/src/bench/gateway.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/gateway.rs:Gateway",
+      "name": "hm-eval::Gateway",
+      "file": "crates/hm-eval/src/bench/gateway.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/locomo.rs:Dataset",
+      "name": "hm-eval::Dataset",
+      "file": "crates/hm-eval/src/bench/locomo.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/locomo.rs:Conversation",
+      "name": "hm-eval::Conversation",
+      "file": "crates/hm-eval/src/bench/locomo.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/locomo.rs:Question",
+      "name": "hm-eval::Question",
+      "file": "crates/hm-eval/src/bench/locomo.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/locomo.rs:Prediction",
+      "name": "hm-eval::Prediction",
+      "file": "crates/hm-eval/src/bench/locomo.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/locomo.rs:CategoryResult",
+      "name": "hm-eval::CategoryResult",
+      "file": "crates/hm-eval/src/bench/locomo.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/locomo.rs:JudgeFreeMetrics",
+      "name": "hm-eval::JudgeFreeMetrics",
+      "file": "crates/hm-eval/src/bench/locomo.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/locomo.rs:JudgedMetrics",
+      "name": "hm-eval::JudgedMetrics",
+      "file": "crates/hm-eval/src/bench/locomo.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/locomo.rs:BenchmarkResult",
+      "name": "hm-eval::BenchmarkResult",
+      "file": "crates/hm-eval/src/bench/locomo.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/longmemeval.rs:Example",
+      "name": "hm-eval::Example",
+      "file": "crates/hm-eval/src/bench/longmemeval.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/longmemeval.rs:Prediction",
+      "name": "hm-eval::Prediction",
+      "file": "crates/hm-eval/src/bench/longmemeval.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/longmemeval.rs:BenchmarkResult",
+      "name": "hm-eval::BenchmarkResult",
+      "file": "crates/hm-eval/src/bench/longmemeval.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/longmemeval.rs:GatewayJudge",
+      "name": "hm-eval::GatewayJudge",
+      "file": "crates/hm-eval/src/bench/longmemeval.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/longmemeval.rs:HistoryTurn",
+      "name": "hm-eval::HistoryTurn",
+      "file": "crates/hm-eval/src/bench/longmemeval.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/longmemeval.rs:FullExample",
+      "name": "hm-eval::FullExample",
+      "file": "crates/hm-eval/src/bench/longmemeval.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/longmemeval.rs:CategoryResult",
+      "name": "hm-eval::CategoryResult",
+      "file": "crates/hm-eval/src/bench/longmemeval.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/longmemeval.rs:FullBenchmarkResult",
+      "name": "hm-eval::FullBenchmarkResult",
+      "file": "crates/hm-eval/src/bench/longmemeval.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/pipeline.rs:BenchRole",
+      "name": "hm-eval::BenchRole",
+      "file": "crates/hm-eval/src/bench/pipeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/pipeline.rs:BenchDocument",
+      "name": "hm-eval::BenchDocument",
+      "file": "crates/hm-eval/src/bench/pipeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/pipeline.rs:BenchQuestion",
+      "name": "hm-eval::BenchQuestion",
+      "file": "crates/hm-eval/src/bench/pipeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/pipeline.rs:BenchCitation",
+      "name": "hm-eval::BenchCitation",
+      "file": "crates/hm-eval/src/bench/pipeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/pipeline.rs:ContextCoverage",
+      "name": "hm-eval::ContextCoverage",
+      "file": "crates/hm-eval/src/bench/pipeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/pipeline.rs:RetrievedContext",
+      "name": "hm-eval::RetrievedContext",
+      "file": "crates/hm-eval/src/bench/pipeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/pipeline.rs:BenchAnswer",
+      "name": "hm-eval::BenchAnswer",
+      "file": "crates/hm-eval/src/bench/pipeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/pipeline.rs:MemoryPipeline",
+      "name": "hm-eval::MemoryPipeline",
+      "file": "crates/hm-eval/src/bench/pipeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/slice1.rs:Metric",
+      "name": "hm-eval::Metric",
+      "file": "crates/hm-eval/src/slice1.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/slice1.rs:GateResult",
+      "name": "hm-eval::GateResult",
+      "file": "crates/hm-eval/src/slice1.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/slice1.rs:SeedManifest",
+      "name": "hm-eval::SeedManifest",
+      "file": "crates/hm-eval/src/slice1.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/attention.rs:AttentionResult",
+      "name": "hm-eval::AttentionResult",
+      "file": "crates/hm-eval/src/suites/attention.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/calibration.rs:CalibrationRow",
+      "name": "hm-eval::CalibrationRow",
+      "file": "crates/hm-eval/src/suites/calibration.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/calibration.rs:CalibrationResult",
+      "name": "hm-eval::CalibrationResult",
+      "file": "crates/hm-eval/src/suites/calibration.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/citations.rs:CitationResult",
+      "name": "hm-eval::CitationResult",
+      "file": "crates/hm-eval/src/suites/citations.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/continuity.rs:ContinuityResult",
+      "name": "hm-eval::ContinuityResult",
+      "file": "crates/hm-eval/src/suites/continuity.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/degradation.rs:DegradationResult",
+      "name": "hm-eval::DegradationResult",
+      "file": "crates/hm-eval/src/suites/degradation.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/dream.rs:DreamResult",
+      "name": "hm-eval::DreamResult",
+      "file": "crates/hm-eval/src/suites/dream.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/generations.rs:GenerationResult",
+      "name": "hm-eval::GenerationResult",
+      "file": "crates/hm-eval/src/suites/generations.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/hnsw_parity.rs:ParityResult",
+      "name": "hm-eval::ParityResult",
+      "file": "crates/hm-eval/src/suites/hnsw_parity.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/laundering.rs:LaunderingResult",
+      "name": "hm-eval::LaunderingResult",
+      "file": "crates/hm-eval/src/suites/laundering.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/protected.rs:ProtectedResult",
+      "name": "hm-eval::ProtectedResult",
+      "file": "crates/hm-eval/src/suites/protected.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/recall.rs:EncoderRun",
+      "name": "hm-eval::EncoderRun",
+      "file": "crates/hm-eval/src/suites/recall.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/suites/temporal.rs:TemporalResult",
+      "name": "hm-eval::TemporalResult",
+      "file": "crates/hm-eval/src/suites/temporal.rs"
+    },
+    {
+      "id": "rust:crates/hm-index/src/entity_rules.rs:EntityKind",
+      "name": "hm-index::EntityKind",
+      "file": "crates/hm-index/src/entity_rules.rs"
+    },
+    {
+      "id": "rust:crates/hm-index/src/entity_rules.rs:Entity",
+      "name": "hm-index::Entity",
+      "file": "crates/hm-index/src/entity_rules.rs"
+    },
+    {
+      "id": "rust:crates/hm-index/src/hnsw.rs:HnswIndex",
+      "name": "hm-index::HnswIndex",
+      "file": "crates/hm-index/src/hnsw.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/apply.rs:Clock",
+      "name": "hm-ledger::Clock",
+      "file": "crates/hm-ledger/src/apply.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/apply.rs:StorageCommit",
+      "name": "hm-ledger::StorageCommit",
+      "file": "crates/hm-ledger/src/apply.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/apply.rs:Storage",
+      "name": "hm-ledger::Storage",
+      "file": "crates/hm-ledger/src/apply.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/apply.rs:ApplyRequest",
+      "name": "hm-ledger::ApplyRequest",
+      "file": "crates/hm-ledger/src/apply.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/apply.rs:ApplyAck",
+      "name": "hm-ledger::ApplyAck",
+      "file": "crates/hm-ledger/src/apply.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/apply.rs:AppliedState",
+      "name": "hm-ledger::AppliedState",
+      "file": "crates/hm-ledger/src/apply.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/apply.rs:ApplyLoop",
+      "name": "hm-ledger::ApplyLoop",
+      "file": "crates/hm-ledger/src/apply.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/checkpoint.rs:SigningSeed",
+      "name": "hm-ledger::SigningSeed",
+      "file": "crates/hm-ledger/src/checkpoint.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/checkpoint.rs:PublicKey",
+      "name": "hm-ledger::PublicKey",
+      "file": "crates/hm-ledger/src/checkpoint.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/checkpoint.rs:Signature",
+      "name": "hm-ledger::Signature",
+      "file": "crates/hm-ledger/src/checkpoint.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/checkpoint.rs:SigningKeyPair",
+      "name": "hm-ledger::SigningKeyPair",
+      "file": "crates/hm-ledger/src/checkpoint.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/checkpoint.rs:Checkpoint",
+      "name": "hm-ledger::Checkpoint",
+      "file": "crates/hm-ledger/src/checkpoint.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/frame.rs:EventKind",
+      "name": "hm-ledger::EventKind",
+      "file": "crates/hm-ledger/src/frame.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/frame.rs:FrameHeader",
+      "name": "hm-ledger::FrameHeader",
+      "file": "crates/hm-ledger/src/frame.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/frame.rs:Frame",
+      "name": "hm-ledger::Frame",
+      "file": "crates/hm-ledger/src/frame.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/gate.rs:BeliefEvidence",
+      "name": "hm-ledger::BeliefEvidence",
+      "file": "crates/hm-ledger/src/gate.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/gate.rs:LiveBelief",
+      "name": "hm-ledger::LiveBelief",
+      "file": "crates/hm-ledger/src/gate.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/gate.rs:BeliefConflict",
+      "name": "hm-ledger::BeliefConflict",
+      "file": "crates/hm-ledger/src/gate.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/gate.rs:GateRejection",
+      "name": "hm-ledger::GateRejection",
+      "file": "crates/hm-ledger/src/gate.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/gate.rs:BatchAdmission",
+      "name": "hm-ledger::BatchAdmission",
+      "file": "crates/hm-ledger/src/gate.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/gate.rs:ApplyAdmission",
+      "name": "hm-ledger::ApplyAdmission",
+      "file": "crates/hm-ledger/src/gate.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/idempotency.rs:ConnectionId",
+      "name": "hm-ledger::ConnectionId",
+      "file": "crates/hm-ledger/src/idempotency.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/idempotency.rs:BatchEvent",
+      "name": "hm-ledger::BatchEvent",
+      "file": "crates/hm-ledger/src/idempotency.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/idempotency.rs:BatchIdentity",
+      "name": "hm-ledger::BatchIdentity",
+      "file": "crates/hm-ledger/src/idempotency.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/idempotency.rs:DedupState",
+      "name": "hm-ledger::DedupState",
+      "file": "crates/hm-ledger/src/idempotency.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/idempotency.rs:Admission",
+      "name": "hm-ledger::Admission",
+      "file": "crates/hm-ledger/src/idempotency.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/idempotency.rs:DedupTable",
+      "name": "hm-ledger::DedupTable",
+      "file": "crates/hm-ledger/src/idempotency.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/keyring.rs:KeyEncryptionKey",
+      "name": "hm-ledger::KeyEncryptionKey",
+      "file": "crates/hm-ledger/src/keyring.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/keyring.rs:UserId",
+      "name": "hm-ledger::UserId",
+      "file": "crates/hm-ledger/src/keyring.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/keyring.rs:EntropySource",
+      "name": "hm-ledger::EntropySource",
+      "file": "crates/hm-ledger/src/keyring.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/keyring.rs:OsEntropy",
+      "name": "hm-ledger::OsEntropy",
+      "file": "crates/hm-ledger/src/keyring.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/keyring.rs:KeyHierarchy",
+      "name": "hm-ledger::KeyHierarchy",
+      "file": "crates/hm-ledger/src/keyring.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/mmr_store.rs:VerificationStatus",
+      "name": "hm-ledger::VerificationStatus",
+      "file": "crates/hm-ledger/src/mmr_store.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/mmr_store.rs:RepairStatus",
+      "name": "hm-ledger::RepairStatus",
+      "file": "crates/hm-ledger/src/mmr_store.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/mmr_store.rs:MmrStore",
+      "name": "hm-ledger::MmrStore",
+      "file": "crates/hm-ledger/src/mmr_store.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/mmr.rs:Hash",
+      "name": "hm-ledger::Hash",
+      "file": "crates/hm-ledger/src/mmr.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/mmr.rs:Node",
+      "name": "hm-ledger::Node",
+      "file": "crates/hm-ledger/src/mmr.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/mmr.rs:AppendResult",
+      "name": "hm-ledger::AppendResult",
+      "file": "crates/hm-ledger/src/mmr.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/mmr.rs:RangeProof",
+      "name": "hm-ledger::RangeProof",
+      "file": "crates/hm-ledger/src/mmr.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/mmr.rs:Mmr",
+      "name": "hm-ledger::Mmr",
+      "file": "crates/hm-ledger/src/mmr.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/segment.rs:WriteBackend",
+      "name": "hm-ledger::WriteBackend",
+      "file": "crates/hm-ledger/src/segment.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/segment.rs:SegmentLogOptions",
+      "name": "hm-ledger::SegmentLogOptions",
+      "file": "crates/hm-ledger/src/segment.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/segment.rs:AppendRequest",
+      "name": "hm-ledger::AppendRequest",
+      "file": "crates/hm-ledger/src/segment.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/segment.rs:CommitResult",
+      "name": "hm-ledger::CommitResult",
+      "file": "crates/hm-ledger/src/segment.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/segment.rs:RecoveryReport",
+      "name": "hm-ledger::RecoveryReport",
+      "file": "crates/hm-ledger/src/segment.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/segment.rs:SegmentLog",
+      "name": "hm-ledger::SegmentLog",
+      "file": "crates/hm-ledger/src/segment.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/shred.rs:DeletionReceipt",
+      "name": "hm-ledger::DeletionReceipt",
+      "file": "crates/hm-ledger/src/shred.rs"
+    },
+    {
+      "id": "rust:crates/hm-ledger/src/tripwire.rs:TripwireSet",
+      "name": "hm-ledger::TripwireSet",
+      "file": "crates/hm-ledger/src/tripwire.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/anthropic.rs:Anthropic",
+      "name": "hm-llm::Anthropic",
+      "file": "crates/hm-llm/src/anthropic.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/cost.rs:PriceEntry",
+      "name": "hm-llm::PriceEntry",
+      "file": "crates/hm-llm/src/cost.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/cost.rs:RunCost",
+      "name": "hm-llm::RunCost",
+      "file": "crates/hm-llm/src/cost.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/cost.rs:RunBudget",
+      "name": "hm-llm::RunBudget",
+      "file": "crates/hm-llm/src/cost.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/gemini.rs:Gemini",
+      "name": "hm-llm::Gemini",
+      "file": "crates/hm-llm/src/gemini.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:ModelTier",
+      "name": "hm-llm::ModelTier",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:Pricing",
+      "name": "hm-llm::Pricing",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:Usage",
+      "name": "hm-llm::Usage",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:StructuredRequest",
+      "name": "hm-llm::StructuredRequest",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:StructuredResponse",
+      "name": "hm-llm::StructuredResponse",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:LlmError",
+      "name": "hm-llm::LlmError",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:LlmProvider",
+      "name": "hm-llm::LlmProvider",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:ProviderConfig",
+      "name": "hm-llm::ProviderConfig",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:WireRequest",
+      "name": "hm-llm::WireRequest",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:WireResponse",
+      "name": "hm-llm::WireResponse",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:WireTransport",
+      "name": "hm-llm::WireTransport",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:WireFixture",
+      "name": "hm-llm::WireFixture",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:RecordedTransport",
+      "name": "hm-llm::RecordedTransport",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/lib.rs:HttpTransport",
+      "name": "hm-llm::HttpTransport",
+      "file": "crates/hm-llm/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/ollama.rs:Ollama",
+      "name": "hm-llm::Ollama",
+      "file": "crates/hm-llm/src/ollama.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/openai_compat.rs:OpenAiCompatible",
+      "name": "hm-llm::OpenAiCompatible",
+      "file": "crates/hm-llm/src/openai_compat.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/registry.rs:Prompt",
+      "name": "hm-llm::Prompt",
+      "file": "crates/hm-llm/src/registry.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/registry.rs:PromptRegistry",
+      "name": "hm-llm::PromptRegistry",
+      "file": "crates/hm-llm/src/registry.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/dispatcher.rs:McpToolDispatcher",
+      "name": "hm-mcp::McpToolDispatcher",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/lib.rs:Envelope",
+      "name": "hm-mcp::Envelope",
+      "file": "crates/hm-mcp/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/lib.rs:ActivateInput",
+      "name": "hm-mcp::ActivateInput",
+      "file": "crates/hm-mcp/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/lib.rs:McpServer",
+      "name": "hm-mcp::McpServer",
+      "file": "crates/hm-mcp/src/lib.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/attest.rs:AttestDisposition",
+      "name": "hm-mcp::AttestDisposition",
+      "file": "crates/hm-mcp/src/tools/attest.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/attest.rs:AttestInput",
+      "name": "hm-mcp::AttestInput",
+      "file": "crates/hm-mcp/src/tools/attest.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/believe.rs:BeliefTypeInput",
+      "name": "hm-mcp::BeliefTypeInput",
+      "file": "crates/hm-mcp/src/tools/believe.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/believe.rs:ClaimInput",
+      "name": "hm-mcp::ClaimInput",
+      "file": "crates/hm-mcp/src/tools/believe.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/believe.rs:ProvenanceInput",
+      "name": "hm-mcp::ProvenanceInput",
+      "file": "crates/hm-mcp/src/tools/believe.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/believe.rs:BeliefClaimInput",
+      "name": "hm-mcp::BeliefClaimInput",
+      "file": "crates/hm-mcp/src/tools/believe.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/believe.rs:BelieveInput",
+      "name": "hm-mcp::BelieveInput",
+      "file": "crates/hm-mcp/src/tools/believe.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/bind.rs:BindInput",
+      "name": "hm-mcp::BindInput",
+      "file": "crates/hm-mcp/src/tools/bind.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/consolidate.rs:ConsolidationRuntime",
+      "name": "hm-mcp::ConsolidationRuntime",
+      "file": "crates/hm-mcp/src/tools/consolidate.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/consolidate.rs:ConsolidateAction",
+      "name": "hm-mcp::ConsolidateAction",
+      "file": "crates/hm-mcp/src/tools/consolidate.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/consolidate.rs:ConsolidateMode",
+      "name": "hm-mcp::ConsolidateMode",
+      "file": "crates/hm-mcp/src/tools/consolidate.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/consolidate.rs:ConsolidateBudget",
+      "name": "hm-mcp::ConsolidateBudget",
+      "file": "crates/hm-mcp/src/tools/consolidate.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/consolidate.rs:ConsolidateInput",
+      "name": "hm-mcp::ConsolidateInput",
+      "file": "crates/hm-mcp/src/tools/consolidate.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/dispute.rs:DisputeRuntime",
+      "name": "hm-mcp::DisputeRuntime",
+      "file": "crates/hm-mcp/src/tools/dispute.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/dispute.rs:DisputeInput",
+      "name": "hm-mcp::DisputeInput",
+      "file": "crates/hm-mcp/src/tools/dispute.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/forget.rs:ForgetAction",
+      "name": "hm-mcp::ForgetAction",
+      "file": "crates/hm-mcp/src/tools/forget.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/forget.rs:ForgetInput",
+      "name": "hm-mcp::ForgetInput",
+      "file": "crates/hm-mcp/src/tools/forget.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/inspect.rs:InspectInput",
+      "name": "hm-mcp::InspectInput",
+      "file": "crates/hm-mcp/src/tools/inspect.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/intend.rs:IntendCloseReason",
+      "name": "hm-mcp::IntendCloseReason",
+      "file": "crates/hm-mcp/src/tools/intend.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/intend.rs:IntendAction",
+      "name": "hm-mcp::IntendAction",
+      "file": "crates/hm-mcp/src/tools/intend.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/intend.rs:WakeTriggerInput",
+      "name": "hm-mcp::WakeTriggerInput",
+      "file": "crates/hm-mcp/src/tools/intend.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/intend.rs:AttentionFactorsInput",
+      "name": "hm-mcp::AttentionFactorsInput",
+      "file": "crates/hm-mcp/src/tools/intend.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/intend.rs:IntendInput",
+      "name": "hm-mcp::IntendInput",
+      "file": "crates/hm-mcp/src/tools/intend.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/outcome.rs:OutcomeInput",
+      "name": "hm-mcp::OutcomeInput",
+      "file": "crates/hm-mcp/src/tools/outcome.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/predict.rs:PredicateKindInput",
+      "name": "hm-mcp::PredicateKindInput",
+      "file": "crates/hm-mcp/src/tools/predict.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/predict.rs:ExpectedPredicateInput",
+      "name": "hm-mcp::ExpectedPredicateInput",
+      "file": "crates/hm-mcp/src/tools/predict.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/predict.rs:PredictInput",
+      "name": "hm-mcp::PredictInput",
+      "file": "crates/hm-mcp/src/tools/predict.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/recall.rs:RecallMode",
+      "name": "hm-mcp::RecallMode",
+      "file": "crates/hm-mcp/src/tools/recall.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/recall.rs:RecallFilters",
+      "name": "hm-mcp::RecallFilters",
+      "file": "crates/hm-mcp/src/tools/recall.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/recall.rs:RecallInput",
+      "name": "hm-mcp::RecallInput",
+      "file": "crates/hm-mcp/src/tools/recall.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/reconstruct.rs:ReconstructionRuntime",
+      "name": "hm-mcp::ReconstructionRuntime",
+      "file": "crates/hm-mcp/src/tools/reconstruct.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:EmbeddingRuntime",
+      "name": "hm-mcp::EmbeddingRuntime",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:RememberKind",
+      "name": "hm-mcp::RememberKind",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:AnchorFacet",
+      "name": "hm-mcp::AnchorFacet",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:RememberAnchor",
+      "name": "hm-mcp::RememberAnchor",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:RetentionInput",
+      "name": "hm-mcp::RetentionInput",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:SensitivityInput",
+      "name": "hm-mcp::SensitivityInput",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/remember.rs:RememberInput",
+      "name": "hm-mcp::RememberInput",
+      "file": "crates/hm-mcp/src/tools/remember.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/retract.rs:RetractInput",
+      "name": "hm-mcp::RetractInput",
+      "file": "crates/hm-mcp/src/tools/retract.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/attention.rs:AttentionRecord",
+      "name": "hm-proj::AttentionRecord",
+      "file": "crates/hm-proj/src/attention.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/attention.rs:AttentionProjection",
+      "name": "hm-proj::AttentionProjection",
+      "file": "crates/hm-proj/src/attention.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/attestations.rs:AttestationRecord",
+      "name": "hm-proj::AttestationRecord",
+      "file": "crates/hm-proj/src/attestations.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/attestations.rs:AttestationsProjection",
+      "name": "hm-proj::AttestationsProjection",
+      "file": "crates/hm-proj/src/attestations.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:BeliefProvenance",
+      "name": "hm-proj::BeliefProvenance",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:BeliefConflictEdge",
+      "name": "hm-proj::BeliefConflictEdge",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:BeliefRecord",
+      "name": "hm-proj::BeliefRecord",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:PendingProposal",
+      "name": "hm-proj::PendingProposal",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:BeliefAsOf",
+      "name": "hm-proj::BeliefAsOf",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:BeliefAsOfAxis",
+      "name": "hm-proj::BeliefAsOfAxis",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:BeliefAsOfResult",
+      "name": "hm-proj::BeliefAsOfResult",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:BeliefRebuildProgress",
+      "name": "hm-proj::BeliefRebuildProgress",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/beliefs.rs:BeliefProjection",
+      "name": "hm-proj::BeliefProjection",
+      "file": "crates/hm-proj/src/beliefs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/bindings.rs:BindingTarget",
+      "name": "hm-proj::BindingTarget",
+      "file": "crates/hm-proj/src/bindings.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/bindings.rs:BindingRecord",
+      "name": "hm-proj::BindingRecord",
+      "file": "crates/hm-proj/src/bindings.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/bindings.rs:BindingRequirement",
+      "name": "hm-proj::BindingRequirement",
+      "file": "crates/hm-proj/src/bindings.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/bindings.rs:BindingStatus",
+      "name": "hm-proj::BindingStatus",
+      "file": "crates/hm-proj/src/bindings.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/bindings.rs:BindingResolution",
+      "name": "hm-proj::BindingResolution",
+      "file": "crates/hm-proj/src/bindings.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/bindings.rs:BindingsRebuildProgress",
+      "name": "hm-proj::BindingsRebuildProgress",
+      "file": "crates/hm-proj/src/bindings.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/bindings.rs:BindingsProjection",
+      "name": "hm-proj::BindingsProjection",
+      "file": "crates/hm-proj/src/bindings.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/checkpoint.rs:CheckpointRead",
+      "name": "hm-proj::CheckpointRead",
+      "file": "crates/hm-proj/src/checkpoint.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/entities.rs:EntityHit",
+      "name": "hm-proj::EntityHit",
+      "file": "crates/hm-proj/src/entities.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/entities.rs:EntityProjection",
+      "name": "hm-proj::EntityProjection",
+      "file": "crates/hm-proj/src/entities.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/fsrs.rs:FsrsState",
+      "name": "hm-proj::FsrsState",
+      "file": "crates/hm-proj/src/fsrs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/fsrs.rs:FsrsProjection",
+      "name": "hm-proj::FsrsProjection",
+      "file": "crates/hm-proj/src/fsrs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/generation.rs:GenerationProjection",
+      "name": "hm-proj::GenerationProjection",
+      "file": "crates/hm-proj/src/generation.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/graph.rs:EdgeCitation",
+      "name": "hm-proj::EdgeCitation",
+      "file": "crates/hm-proj/src/graph.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/graph.rs:EdgeRecord",
+      "name": "hm-proj::EdgeRecord",
+      "file": "crates/hm-proj/src/graph.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/graph.rs:GraphProjection",
+      "name": "hm-proj::GraphProjection",
+      "file": "crates/hm-proj/src/graph.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intent.rs:LoopClosure",
+      "name": "hm-proj::LoopClosure",
+      "file": "crates/hm-proj/src/intent.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intent.rs:IntentObjective",
+      "name": "hm-proj::IntentObjective",
+      "file": "crates/hm-proj/src/intent.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intent.rs:OpenLoop",
+      "name": "hm-proj::OpenLoop",
+      "file": "crates/hm-proj/src/intent.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intent.rs:ClosedLoop",
+      "name": "hm-proj::ClosedLoop",
+      "file": "crates/hm-proj/src/intent.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intent.rs:IntentFrameView",
+      "name": "hm-proj::IntentFrameView",
+      "file": "crates/hm-proj/src/intent.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intent.rs:IntentRebuildProgress",
+      "name": "hm-proj::IntentRebuildProgress",
+      "file": "crates/hm-proj/src/intent.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intent.rs:IntentFrameProjection",
+      "name": "hm-proj::IntentFrameProjection",
+      "file": "crates/hm-proj/src/intent.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intentions.rs:TriggerKind",
+      "name": "hm-proj::TriggerKind",
+      "file": "crates/hm-proj/src/intentions.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intentions.rs:IntentionStatus",
+      "name": "hm-proj::IntentionStatus",
+      "file": "crates/hm-proj/src/intentions.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intentions.rs:IntentionRecord",
+      "name": "hm-proj::IntentionRecord",
+      "file": "crates/hm-proj/src/intentions.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/intentions.rs:IntentionsProjection",
+      "name": "hm-proj::IntentionsProjection",
+      "file": "crates/hm-proj/src/intentions.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ladder.rs:TemporalLevel",
+      "name": "hm-proj::TemporalLevel",
+      "file": "crates/hm-proj/src/ladder.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ladder.rs:TemporalWindow",
+      "name": "hm-proj::TemporalWindow",
+      "file": "crates/hm-proj/src/ladder.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ladder.rs:TemporalRebuildProgress",
+      "name": "hm-proj::TemporalRebuildProgress",
+      "file": "crates/hm-proj/src/ladder.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ladder.rs:TemporalLadder",
+      "name": "hm-proj::TemporalLadder",
+      "file": "crates/hm-proj/src/ladder.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/lease.rs:GenerationLease",
+      "name": "hm-proj::GenerationLease",
+      "file": "crates/hm-proj/src/lease.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/lease.rs:LeaseManager",
+      "name": "hm-proj::LeaseManager",
+      "file": "crates/hm-proj/src/lease.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ledger.rs:WorkKind",
+      "name": "hm-proj::WorkKind",
+      "file": "crates/hm-proj/src/ledger.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ledger.rs:WorkState",
+      "name": "hm-proj::WorkState",
+      "file": "crates/hm-proj/src/ledger.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ledger.rs:WorkItem",
+      "name": "hm-proj::WorkItem",
+      "file": "crates/hm-proj/src/ledger.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ledger.rs:LedgerRebuildProgress",
+      "name": "hm-proj::LedgerRebuildProgress",
+      "file": "crates/hm-proj/src/ledger.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/ledger.rs:WorkLedgerProjection",
+      "name": "hm-proj::WorkLedgerProjection",
+      "file": "crates/hm-proj/src/ledger.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/lexical.rs:LexicalHit",
+      "name": "hm-proj::LexicalHit",
+      "file": "crates/hm-proj/src/lexical.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/lexical.rs:LexicalProjection",
+      "name": "hm-proj::LexicalProjection",
+      "file": "crates/hm-proj/src/lexical.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/memories.rs:MemoryCitation",
+      "name": "hm-proj::MemoryCitation",
+      "file": "crates/hm-proj/src/memories.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/memories.rs:MemoryModelProvenance",
+      "name": "hm-proj::MemoryModelProvenance",
+      "file": "crates/hm-proj/src/memories.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/memories.rs:MemoryRecord",
+      "name": "hm-proj::MemoryRecord",
+      "file": "crates/hm-proj/src/memories.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/memories.rs:MemoryProjection",
+      "name": "hm-proj::MemoryProjection",
+      "file": "crates/hm-proj/src/memories.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/predictions.rs:PredictionRecord",
+      "name": "hm-proj::PredictionRecord",
+      "file": "crates/hm-proj/src/predictions.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/predictions.rs:CalibrationCounters",
+      "name": "hm-proj::CalibrationCounters",
+      "file": "crates/hm-proj/src/predictions.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/predictions.rs:MechanismFailures",
+      "name": "hm-proj::MechanismFailures",
+      "file": "crates/hm-proj/src/predictions.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/predictions.rs:PredictionsProjection",
+      "name": "hm-proj::PredictionsProjection",
+      "file": "crates/hm-proj/src/predictions.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/procedures.rs:ProcedureState",
+      "name": "hm-proj::ProcedureState",
+      "file": "crates/hm-proj/src/procedures.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/procedures.rs:ProcedureRecord",
+      "name": "hm-proj::ProcedureRecord",
+      "file": "crates/hm-proj/src/procedures.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/procedures.rs:ProceduresProjection",
+      "name": "hm-proj::ProceduresProjection",
+      "file": "crates/hm-proj/src/procedures.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/protected.rs:SecurityEvent",
+      "name": "hm-proj::SecurityEvent",
+      "file": "crates/hm-proj/src/protected.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/rebuild.rs:RebuildProgress",
+      "name": "hm-proj::RebuildProgress",
+      "file": "crates/hm-proj/src/rebuild.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/runs.rs:RunStatus",
+      "name": "hm-proj::RunStatus",
+      "file": "crates/hm-proj/src/runs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/runs.rs:StagedProjection",
+      "name": "hm-proj::StagedProjection",
+      "file": "crates/hm-proj/src/runs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/runs.rs:PromptRecord",
+      "name": "hm-proj::PromptRecord",
+      "file": "crates/hm-proj/src/runs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/runs.rs:BudgetRecord",
+      "name": "hm-proj::BudgetRecord",
+      "file": "crates/hm-proj/src/runs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/runs.rs:PhaseRecord",
+      "name": "hm-proj::PhaseRecord",
+      "file": "crates/hm-proj/src/runs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/runs.rs:RunRecord",
+      "name": "hm-proj::RunRecord",
+      "file": "crates/hm-proj/src/runs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/runs.rs:RunsProjection",
+      "name": "hm-proj::RunsProjection",
+      "file": "crates/hm-proj/src/runs.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/spaces.rs:SpaceDefinition",
+      "name": "hm-proj::SpaceDefinition",
+      "file": "crates/hm-proj/src/spaces.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/spaces.rs:SpaceCatalog",
+      "name": "hm-proj::SpaceCatalog",
+      "file": "crates/hm-proj/src/spaces.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/store.rs:ProjectionId",
+      "name": "hm-proj::ProjectionId",
+      "file": "crates/hm-proj/src/store.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/store.rs:MutationKind",
+      "name": "hm-proj::MutationKind",
+      "file": "crates/hm-proj/src/store.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/store.rs:Mutation",
+      "name": "hm-proj::Mutation",
+      "file": "crates/hm-proj/src/store.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/store.rs:KeyValue",
+      "name": "hm-proj::KeyValue",
+      "file": "crates/hm-proj/src/store.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/store.rs:ProjectionStore",
+      "name": "hm-proj::ProjectionStore",
+      "file": "crates/hm-proj/src/store.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/store.rs:ReadSnapshot",
+      "name": "hm-proj::ReadSnapshot",
+      "file": "crates/hm-proj/src/store.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/timeline.rs:ConversationRecord",
+      "name": "hm-proj::ConversationRecord",
+      "file": "crates/hm-proj/src/timeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/timeline.rs:LatestRecordScan",
+      "name": "hm-proj::LatestRecordScan",
+      "file": "crates/hm-proj/src/timeline.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/vectors_hnsw.rs:HnswProjection",
+      "name": "hm-proj::HnswProjection",
+      "file": "crates/hm-proj/src/vectors_hnsw.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/vectors.rs:VectorHit",
+      "name": "hm-proj::VectorHit",
+      "file": "crates/hm-proj/src/vectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/vectors.rs:VectorEntry",
+      "name": "hm-proj::VectorEntry",
+      "file": "crates/hm-proj/src/vectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/vectors.rs:VectorLane",
+      "name": "hm-proj::VectorLane",
+      "file": "crates/hm-proj/src/vectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-schema/src/event.rs:Boundary",
+      "name": "hm-schema::Boundary",
+      "file": "crates/hm-schema/src/event.rs"
+    },
+    {
+      "id": "rust:crates/hm-schema/src/event.rs:EventKind",
+      "name": "hm-schema::EventKind",
+      "file": "crates/hm-schema/src/event.rs"
+    },
+    {
+      "id": "rust:crates/hm-schema/src/event.rs:HistorySource",
+      "name": "hm-schema::HistorySource",
+      "file": "crates/hm-schema/src/event.rs"
+    },
+    {
+      "id": "rust:crates/hm-schema/src/event.rs:EventHistory",
+      "name": "hm-schema::EventHistory",
+      "file": "crates/hm-schema/src/event.rs"
+    },
+    {
+      "id": "rust:crates/hm-schema/src/event.rs:VerifiedEvent",
+      "name": "hm-schema::VerifiedEvent",
+      "file": "crates/hm-schema/src/event.rs"
+    },
+    {
+      "id": "rust:crates/hm-schema/src/protocol.rs:VerifiedRequest",
+      "name": "hm-schema::VerifiedRequest",
+      "file": "crates/hm-schema/src/protocol.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:ActorConfig",
+      "name": "hm-serve::ActorConfig",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:IncomingEvent",
+      "name": "hm-serve::IncomingEvent",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:AppendOutcome",
+      "name": "hm-serve::AppendOutcome",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:CheckpointOutcome",
+      "name": "hm-serve::CheckpointOutcome",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:IntegrityReceipt",
+      "name": "hm-serve::IntegrityReceipt",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:RecallItem",
+      "name": "hm-serve::RecallItem",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:RecallRequest",
+      "name": "hm-serve::RecallRequest",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:ActivateRequest",
+      "name": "hm-serve::ActivateRequest",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:AppliedState",
+      "name": "hm-serve::AppliedState",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:ProjectionStat",
+      "name": "hm-serve::ProjectionStat",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:ActorStats",
+      "name": "hm-serve::ActorStats",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:ActorEngine",
+      "name": "hm-serve::ActorEngine",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/admin.rs:LatencyHistograms",
+      "name": "hm-serve::LatencyHistograms",
+      "file": "crates/hm-serve/src/admin.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/anticipation.rs:WakeEvaluation",
+      "name": "hm-serve::WakeEvaluation",
+      "file": "crates/hm-serve/src/anticipation.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/anticipation.rs:WakeDecision",
+      "name": "hm-serve::WakeDecision",
+      "file": "crates/hm-serve/src/anticipation.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/auth.rs:Principal",
+      "name": "hm-serve::Principal",
+      "file": "crates/hm-serve/src/auth.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/config.rs:CapabilityToken",
+      "name": "hm-serve::CapabilityToken",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/config.rs:ActorCapability",
+      "name": "hm-serve::ActorCapability",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/config.rs:ServerConfig",
+      "name": "hm-serve::ServerConfig",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:EmbeddedConfig",
+      "name": "hm-serve::EmbeddedConfig",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:HyperMind",
+      "name": "hm-serve::HyperMind",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:Actor",
+      "name": "hm-serve::Actor",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:Session",
+      "name": "hm-serve::Session",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:MemoryKind",
+      "name": "hm-serve::MemoryKind",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:RenderModel",
+      "name": "hm-serve::RenderModel",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:RenderAuthority",
+      "name": "hm-serve::RenderAuthority",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:RenderedItem",
+      "name": "hm-serve::RenderedItem",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:RenderedSection",
+      "name": "hm-serve::RenderedSection",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/embedded.rs:RenderedBundle",
+      "name": "hm-serve::RenderedBundle",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/errors.rs:MutationEffectState",
+      "name": "hm-serve::MutationEffectState",
+      "file": "crates/hm-serve/src/errors.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/grpc/bridge.rs:ListenerRole",
+      "name": "hm-serve::ListenerRole",
+      "file": "crates/hm-serve/src/grpc/bridge.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/grpc/bridge.rs:Gateway",
+      "name": "hm-serve::Gateway",
+      "file": "crates/hm-serve/src/grpc/bridge.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/grpc/mod.rs:GrpcServer",
+      "name": "hm-serve::GrpcServer",
+      "file": "crates/hm-serve/src/grpc/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/grpc/mod.rs:BoundedStream",
+      "name": "hm-serve::BoundedStream",
+      "file": "crates/hm-serve/src/grpc/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/grpc/tls.rs:TlsIdentity",
+      "name": "hm-serve::TlsIdentity",
+      "file": "crates/hm-serve/src/grpc/tls.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/protocol.rs:FrameParser",
+      "name": "hm-serve::FrameParser",
+      "file": "crates/hm-serve/src/protocol.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/requests/activate.rs:QueryEmbeddingSource",
+      "name": "hm-serve::QueryEmbeddingSource",
+      "file": "crates/hm-serve/src/requests/activate.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/requests/activate.rs:PreparedQueryEmbedding",
+      "name": "hm-serve::PreparedQueryEmbedding",
+      "file": "crates/hm-serve/src/requests/activate.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/requests/subscribe.rs:SubscriptionStart",
+      "name": "hm-serve::SubscriptionStart",
+      "file": "crates/hm-serve/src/requests/subscribe.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/rest/mod.rs:ToolCall",
+      "name": "hm-serve::ToolCall",
+      "file": "crates/hm-serve/src/rest/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/rest/mod.rs:AdminCall",
+      "name": "hm-serve::AdminCall",
+      "file": "crates/hm-serve/src/rest/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/rest/mod.rs:ToolEnvelope",
+      "name": "hm-serve::ToolEnvelope",
+      "file": "crates/hm-serve/src/rest/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/rest/mod.rs:RestServer",
+      "name": "hm-serve::RestServer",
+      "file": "crates/hm-serve/src/rest/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/uds.rs:ToolDispatcher",
+      "name": "hm-serve::ToolDispatcher",
+      "file": "crates/hm-serve/src/uds.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/uds.rs:UdsServer",
+      "name": "hm-serve::UdsServer",
+      "file": "crates/hm-serve/src/uds.rs"
+    },
+    {
+      "id": "rust:crates/hm-sim/src/env.rs:SimClock",
+      "name": "hm-sim::SimClock",
+      "file": "crates/hm-sim/src/env.rs"
+    },
+    {
+      "id": "rust:crates/hm-sim/src/env.rs:SimEntropy",
+      "name": "hm-sim::SimEntropy",
+      "file": "crates/hm-sim/src/env.rs"
+    },
+    {
+      "id": "rust:crates/hm-sim/src/env.rs:SimulatedStorage",
+      "name": "hm-sim::SimulatedStorage",
+      "file": "crates/hm-sim/src/env.rs"
+    },
+    {
+      "id": "rust:crates/hm-sim/src/fault.rs:FaultPlan",
+      "name": "hm-sim::FaultPlan",
+      "file": "crates/hm-sim/src/fault.rs"
+    },
+    {
+      "id": "rust:crates/hm-sim/src/harness.rs:HarnessResult",
+      "name": "hm-sim::HarnessResult",
+      "file": "crates/hm-sim/src/harness.rs"
+    },
+    {
+      "id": "rust:crates/hm-sim/src/harness.rs:JourneyHarness",
+      "name": "hm-sim::JourneyHarness",
+      "file": "crates/hm-sim/src/harness.rs"
+    },
+    {
+      "id": "rust:crates/hm-sim/src/harness.rs:McpClient",
+      "name": "hm-sim::McpClient",
+      "file": "crates/hm-sim/src/harness.rs"
+    },
+    {
+      "id": "rust:crates/hm-sim/src/harness.rs:UdsDaemon",
+      "name": "hm-sim::UdsDaemon",
+      "file": "crates/hm-sim/src/harness.rs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ResultStatus",
+      "name": "events.fbs::ResultStatus",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ApprovalDecision",
+      "name": "events.fbs::ApprovalDecision",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:EffectState",
+      "name": "events.fbs::EffectState",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:LoopCloseReason",
+      "name": "events.fbs::LoopCloseReason",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:BeliefType",
+      "name": "events.fbs::BeliefType",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:AssertionClaim",
+      "name": "events.fbs::AssertionClaim",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:AttestationDisposition",
+      "name": "events.fbs::AttestationDisposition",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:MemoryFadeReason",
+      "name": "events.fbs::MemoryFadeReason",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ReviewRating",
+      "name": "events.fbs::ReviewRating",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ConsolidationPhaseName",
+      "name": "events.fbs::ConsolidationPhaseName",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ConsolidationPhaseState",
+      "name": "events.fbs::ConsolidationPhaseState",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Authority",
+      "name": "events.fbs::Authority",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Retention",
+      "name": "events.fbs::Retention",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Sensitivity",
+      "name": "events.fbs::Sensitivity",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ProvenanceRange",
+      "name": "events.fbs::ProvenanceRange",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ModelProvenance",
+      "name": "events.fbs::ModelProvenance",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:UserMsg",
+      "name": "events.fbs::UserMsg",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:DeliveredMsg",
+      "name": "events.fbs::DeliveredMsg",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ToolCall",
+      "name": "events.fbs::ToolCall",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ToolResult",
+      "name": "events.fbs::ToolResult",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Reasoning",
+      "name": "events.fbs::Reasoning",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ProviderFrame",
+      "name": "events.fbs::ProviderFrame",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:MediaRef",
+      "name": "events.fbs::MediaRef",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Effect",
+      "name": "events.fbs::Effect",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Approval",
+      "name": "events.fbs::Approval",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Outcome",
+      "name": "events.fbs::Outcome",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Checkpoint",
+      "name": "events.fbs::Checkpoint",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Supervisor",
+      "name": "events.fbs::Supervisor",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Recovery",
+      "name": "events.fbs::Recovery",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:IntentSet",
+      "name": "events.fbs::IntentSet",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:LoopOpened",
+      "name": "events.fbs::LoopOpened",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:LoopClosed",
+      "name": "events.fbs::LoopClosed",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Binding",
+      "name": "events.fbs::Binding",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Assertion",
+      "name": "events.fbs::Assertion",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Consolidation",
+      "name": "events.fbs::Consolidation",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ProposedAssertion",
+      "name": "events.fbs::ProposedAssertion",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Embedding",
+      "name": "events.fbs::Embedding",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Retract",
+      "name": "events.fbs::Retract",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Attestation",
+      "name": "events.fbs::Attestation",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:MemoryMinted",
+      "name": "events.fbs::MemoryMinted",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:MemoryRevised",
+      "name": "events.fbs::MemoryRevised",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:MemoryId",
+      "name": "events.fbs::MemoryId",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:MemoryMerged",
+      "name": "events.fbs::MemoryMerged",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:MemoryFaded",
+      "name": "events.fbs::MemoryFaded",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:EdgeAsserted",
+      "name": "events.fbs::EdgeAsserted",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:EdgeRetracted",
+      "name": "events.fbs::EdgeRetracted",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ConsolidationBudget",
+      "name": "events.fbs::ConsolidationBudget",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:PromptVersion",
+      "name": "events.fbs::PromptVersion",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ConsolidationOpened",
+      "name": "events.fbs::ConsolidationOpened",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ConsolidationPhase",
+      "name": "events.fbs::ConsolidationPhase",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ConsolidationClosed",
+      "name": "events.fbs::ConsolidationClosed",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ConsolidationRetracted",
+      "name": "events.fbs::ConsolidationRetracted",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Reviewed",
+      "name": "events.fbs::Reviewed",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:AttentionDecision",
+      "name": "events.fbs::AttentionDecision",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:PredicateKind",
+      "name": "events.fbs::PredicateKind",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:OutcomeAssessment",
+      "name": "events.fbs::OutcomeAssessment",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeAt",
+      "name": "events.fbs::WakeAt",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeSchedule",
+      "name": "events.fbs::WakeSchedule",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeChildTerminal",
+      "name": "events.fbs::WakeChildTerminal",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeProcessExit",
+      "name": "events.fbs::WakeProcessExit",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeFileChanged",
+      "name": "events.fbs::WakeFileChanged",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeRepositoryChanged",
+      "name": "events.fbs::WakeRepositoryChanged",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeChannelMessage",
+      "name": "events.fbs::WakeChannelMessage",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeExternalCondition",
+      "name": "events.fbs::WakeExternalCondition",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeUserResponse",
+      "name": "events.fbs::WakeUserResponse",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeEntityMentioned",
+      "name": "events.fbs::WakeEntityMentioned",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeLoopClosed",
+      "name": "events.fbs::WakeLoopClosed",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakePredictionResolved",
+      "name": "events.fbs::WakePredictionResolved",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeBeliefChanged",
+      "name": "events.fbs::WakeBeliefChanged",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:WakeTrigger",
+      "name": "events.fbs::WakeTrigger",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:IntentionSet",
+      "name": "events.fbs::IntentionSet",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:IntentionFired",
+      "name": "events.fbs::IntentionFired",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:AttentionDecided",
+      "name": "events.fbs::AttentionDecided",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:IntentionCancelled",
+      "name": "events.fbs::IntentionCancelled",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ExpectedPredicate",
+      "name": "events.fbs::ExpectedPredicate",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:Predicted",
+      "name": "events.fbs::Predicted",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:OutcomeObserved",
+      "name": "events.fbs::OutcomeObserved",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ProcedureSupport",
+      "name": "events.fbs::ProcedureSupport",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ProcedureMined",
+      "name": "events.fbs::ProcedureMined",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ProcedureRevised",
+      "name": "events.fbs::ProcedureRevised",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ProcedureAdopted",
+      "name": "events.fbs::ProcedureAdopted",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:EventPayload",
+      "name": "events.fbs::EventPayload",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:EventEnvelope",
+      "name": "events.fbs::EventEnvelope",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:ResponseStatus",
+      "name": "protocol.fbs::ResponseStatus",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:MutationEffectState",
+      "name": "protocol.fbs::MutationEffectState",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Hello",
+      "name": "protocol.fbs::Hello",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Welcome",
+      "name": "protocol.fbs::Welcome",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:AppendEvent",
+      "name": "protocol.fbs::AppendEvent",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Append",
+      "name": "protocol.fbs::Append",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Activate",
+      "name": "protocol.fbs::Activate",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Transcript",
+      "name": "protocol.fbs::Transcript",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:RecallMode",
+      "name": "protocol.fbs::RecallMode",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Recall",
+      "name": "protocol.fbs::Recall",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:AsOf",
+      "name": "protocol.fbs::AsOf",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Checkpoint",
+      "name": "protocol.fbs::Checkpoint",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:LatestCheckpoint",
+      "name": "protocol.fbs::LatestCheckpoint",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Attest",
+      "name": "protocol.fbs::Attest",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Subscribe",
+      "name": "protocol.fbs::Subscribe",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Health",
+      "name": "protocol.fbs::Health",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Stats",
+      "name": "protocol.fbs::Stats",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:LatencyHistograms",
+      "name": "protocol.fbs::LatencyHistograms",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:VerifyStatus",
+      "name": "protocol.fbs::VerifyStatus",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:RebuildProjection",
+      "name": "protocol.fbs::RebuildProjection",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:CryptoDelete",
+      "name": "protocol.fbs::CryptoDelete",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:ToolRequest",
+      "name": "protocol.fbs::ToolRequest",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:RequestPayload",
+      "name": "protocol.fbs::RequestPayload",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Request",
+      "name": "protocol.fbs::Request",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:ErrorDetail",
+      "name": "protocol.fbs::ErrorDetail",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:AppendAck",
+      "name": "protocol.fbs::AppendAck",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:BytesResult",
+      "name": "protocol.fbs::BytesResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:SubscriptionAck",
+      "name": "protocol.fbs::SubscriptionAck",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:HealthResult",
+      "name": "protocol.fbs::HealthResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:ProjectionStat",
+      "name": "protocol.fbs::ProjectionStat",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:StatsResult",
+      "name": "protocol.fbs::StatsResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:LatencyBucket",
+      "name": "protocol.fbs::LatencyBucket",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:LatencyResult",
+      "name": "protocol.fbs::LatencyResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:VerifyResult",
+      "name": "protocol.fbs::VerifyResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:RebuildResult",
+      "name": "protocol.fbs::RebuildResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:DeleteResult",
+      "name": "protocol.fbs::DeleteResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:FrameRecord",
+      "name": "protocol.fbs::FrameRecord",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:TranscriptResult",
+      "name": "protocol.fbs::TranscriptResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:TemporalWindowRecord",
+      "name": "protocol.fbs::TemporalWindowRecord",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:RecallResult",
+      "name": "protocol.fbs::RecallResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:BeliefProvenanceRecord",
+      "name": "protocol.fbs::BeliefProvenanceRecord",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:BeliefConflictRecord",
+      "name": "protocol.fbs::BeliefConflictRecord",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:BeliefResult",
+      "name": "protocol.fbs::BeliefResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:CheckpointAck",
+      "name": "protocol.fbs::CheckpointAck",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:CheckpointResult",
+      "name": "protocol.fbs::CheckpointResult",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:AttestAck",
+      "name": "protocol.fbs::AttestAck",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:ResponsePayload",
+      "name": "protocol.fbs::ResponsePayload",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Response",
+      "name": "protocol.fbs::Response",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:Event",
+      "name": "protocol.fbs::Event",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:WirePayload",
+      "name": "protocol.fbs::WirePayload",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/protocol.fbs:WireEnvelope",
+      "name": "protocol.fbs::WireEnvelope",
+      "file": "schemas/protocol.fbs"
+    },
+    {
+      "id": "schema:schemas/hypermind.proto:HyperMind",
+      "name": "hypermind.proto::HyperMind",
+      "file": "schemas/hypermind.proto"
+    },
+    {
+      "id": "schema:schemas/hypermind.proto:Envelope",
+      "name": "hypermind.proto::Envelope",
+      "file": "schemas/hypermind.proto"
+    },
+    {
+      "id": "schema:schemas/hypermind.proto:ExchangeRequest",
+      "name": "hypermind.proto::ExchangeRequest",
+      "file": "schemas/hypermind.proto"
+    },
+    {
+      "id": "tool:activate",
+      "name": "activate",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:attest",
+      "name": "attest",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:believe",
+      "name": "believe",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:bind",
+      "name": "bind",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:consolidate",
+      "name": "consolidate",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:dispute",
+      "name": "dispute",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:forget",
+      "name": "forget",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:inspect",
+      "name": "inspect",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:intend",
+      "name": "intend",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:outcome",
+      "name": "outcome",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:predict",
+      "name": "predict",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:recall",
+      "name": "recall",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:remember",
+      "name": "remember",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "tool:retract",
+      "name": "retract",
+      "file": "crates/hm-mcp/src/dispatcher.rs"
+    },
+    {
+      "id": "prompt:abstract-synthesis@1",
+      "name": "abstract-synthesis@1",
+      "file": "prompts/abstract-synthesis@1.md"
+    },
+    {
+      "id": "prompt:abstract-synthesis@2",
+      "name": "abstract-synthesis@2",
+      "file": "prompts/abstract-synthesis@2.md"
+    },
+    {
+      "id": "prompt:connect-long-context@1",
+      "name": "connect-long-context@1",
+      "file": "prompts/connect-long-context@1.md"
+    },
+    {
+      "id": "prompt:edge-discover@1",
+      "name": "edge-discover@1",
+      "file": "prompts/edge-discover@1.md"
+    },
+    {
+      "id": "prompt:hindsight-review@1",
+      "name": "hindsight-review@1",
+      "file": "prompts/hindsight-review@1.md"
+    },
+    {
+      "id": "prompt:hindsight-review@3",
+      "name": "hindsight-review@3",
+      "file": "prompts/hindsight-review@3.md"
+    },
+    {
+      "id": "prompt:merge-cluster@1",
+      "name": "merge-cluster@1",
+      "file": "prompts/merge-cluster@1.md"
+    },
+    {
+      "id": "prompt:reconstruct@1",
+      "name": "reconstruct@1",
+      "file": "prompts/reconstruct@1.md"
+    },
+    {
+      "id": "prompt:refine-definition@1",
+      "name": "refine-definition@1",
+      "file": "prompts/refine-definition@1.md"
+    },
+    {
+      "id": "prompt:supersession@1",
+      "name": "supersession@1",
+      "file": "prompts/supersession@1.md"
+    },
+    {
+      "id": "sdk:sdk/go/admin.go:Health",
+      "name": "sdk/go/admin.go::Health",
+      "file": "sdk/go/admin.go"
+    },
+    {
+      "id": "sdk:sdk/go/admin.go:ProjectionStat",
+      "name": "sdk/go/admin.go::ProjectionStat",
+      "file": "sdk/go/admin.go"
+    },
+    {
+      "id": "sdk:sdk/go/admin.go:ActorStats",
+      "name": "sdk/go/admin.go::ActorStats",
+      "file": "sdk/go/admin.go"
+    },
+    {
+      "id": "sdk:sdk/go/admin.go:VerifyStatus",
+      "name": "sdk/go/admin.go::VerifyStatus",
+      "file": "sdk/go/admin.go"
+    },
+    {
+      "id": "sdk:sdk/go/admin.go:AdminHealth",
+      "name": "sdk/go/admin.go::AdminHealth",
+      "file": "sdk/go/admin.go"
+    },
+    {
+      "id": "sdk:sdk/go/admin.go:AdminStats",
+      "name": "sdk/go/admin.go::AdminStats",
+      "file": "sdk/go/admin.go"
+    },
+    {
+      "id": "sdk:sdk/go/admin.go:AdminVerifyStatus",
+      "name": "sdk/go/admin.go::AdminVerifyStatus",
+      "file": "sdk/go/admin.go"
+    },
+    {
+      "id": "sdk:sdk/go/admin.go:AdminRebuildProjection",
+      "name": "sdk/go/admin.go::AdminRebuildProjection",
+      "file": "sdk/go/admin.go"
+    },
+    {
+      "id": "sdk:sdk/go/bundle.go:Gap",
+      "name": "sdk/go/bundle.go::Gap",
+      "file": "sdk/go/bundle.go"
+    },
+    {
+      "id": "sdk:sdk/go/bundle.go:ModernItem",
+      "name": "sdk/go/bundle.go::ModernItem",
+      "file": "sdk/go/bundle.go"
+    },
+    {
+      "id": "sdk:sdk/go/bundle.go:ModernSection",
+      "name": "sdk/go/bundle.go::ModernSection",
+      "file": "sdk/go/bundle.go"
+    },
+    {
+      "id": "sdk:sdk/go/bundle.go:PromptItem",
+      "name": "sdk/go/bundle.go::PromptItem",
+      "file": "sdk/go/bundle.go"
+    },
+    {
+      "id": "sdk:sdk/go/bundle.go:PromptSection",
+      "name": "sdk/go/bundle.go::PromptSection",
+      "file": "sdk/go/bundle.go"
+    },
+    {
+      "id": "sdk:sdk/go/bundle.go:RenderedPrompt",
+      "name": "sdk/go/bundle.go::RenderedPrompt",
+      "file": "sdk/go/bundle.go"
+    },
+    {
+      "id": "sdk:sdk/go/bundle.go:RenderOptions",
+      "name": "sdk/go/bundle.go::RenderOptions",
+      "file": "sdk/go/bundle.go"
+    },
+    {
+      "id": "sdk:sdk/go/bundle.go:Render",
+      "name": "sdk/go/bundle.go::Render",
+      "file": "sdk/go/bundle.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:EventKind",
+      "name": "sdk/go/client.go::EventKind",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:PendingWriteError",
+      "name": "sdk/go/client.go::PendingWriteError",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Error",
+      "name": "sdk/go/client.go::Error",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Unwrap",
+      "name": "sdk/go/client.go::Unwrap",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Is",
+      "name": "sdk/go/client.go::Is",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:EngineError",
+      "name": "sdk/go/client.go::EngineError",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Error",
+      "name": "sdk/go/client.go::Error",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Config",
+      "name": "sdk/go/client.go::Config",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Welcome",
+      "name": "sdk/go/client.go::Welcome",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:AppendEvent",
+      "name": "sdk/go/client.go::AppendEvent",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:AppendAck",
+      "name": "sdk/go/client.go::AppendAck",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Error",
+      "name": "sdk/go/client.go::Error",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Unwrap",
+      "name": "sdk/go/client.go::Unwrap",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Client",
+      "name": "sdk/go/client.go::Client",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Dial",
+      "name": "sdk/go/client.go::Dial",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Welcome",
+      "name": "sdk/go/client.go::Welcome",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Close",
+      "name": "sdk/go/client.go::Close",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:PendingLen",
+      "name": "sdk/go/client.go::PendingLen",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:NextClientSeq",
+      "name": "sdk/go/client.go::NextClientSeq",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Append",
+      "name": "sdk/go/client.go::Append",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:QueueAppend",
+      "name": "sdk/go/client.go::QueueAppend",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Supervisor",
+      "name": "sdk/go/client.go::Supervisor",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Start",
+      "name": "sdk/go/client.go::Start",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Pid",
+      "name": "sdk/go/client.go::Pid",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/client.go:Stop",
+      "name": "sdk/go/client.go::Stop",
+      "file": "sdk/go/client.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:TransportError",
+      "name": "sdk/go/grpc.go::TransportError",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Error",
+      "name": "sdk/go/grpc.go::Error",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Unwrap",
+      "name": "sdk/go/grpc.go::Unwrap",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Name",
+      "name": "sdk/go/grpc.go::Name",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Marshal",
+      "name": "sdk/go/grpc.go::Marshal",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Unmarshal",
+      "name": "sdk/go/grpc.go::Unmarshal",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Write",
+      "name": "sdk/go/grpc.go::Write",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Read",
+      "name": "sdk/go/grpc.go::Read",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Close",
+      "name": "sdk/go/grpc.go::Close",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:Network",
+      "name": "sdk/go/grpc.go::Network",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:String",
+      "name": "sdk/go/grpc.go::String",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:LocalAddr",
+      "name": "sdk/go/grpc.go::LocalAddr",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:RemoteAddr",
+      "name": "sdk/go/grpc.go::RemoteAddr",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:SetDeadline",
+      "name": "sdk/go/grpc.go::SetDeadline",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:SetReadDeadline",
+      "name": "sdk/go/grpc.go::SetReadDeadline",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/grpc.go:SetWriteDeadline",
+      "name": "sdk/go/grpc.go::SetWriteDeadline",
+      "file": "sdk/go/grpc.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ConversationBytes",
+      "name": "sdk/go/loopseam.go::ConversationBytes",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:UserMsgEvent",
+      "name": "sdk/go/loopseam.go::UserMsgEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:DeliveredMsgEvent",
+      "name": "sdk/go/loopseam.go::DeliveredMsgEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ReasoningEvent",
+      "name": "sdk/go/loopseam.go::ReasoningEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ProviderFrameEvent",
+      "name": "sdk/go/loopseam.go::ProviderFrameEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ToolCallEvent",
+      "name": "sdk/go/loopseam.go::ToolCallEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ToolResultEvent",
+      "name": "sdk/go/loopseam.go::ToolResultEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:Assertion",
+      "name": "sdk/go/loopseam.go::Assertion",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:AssertionEvent",
+      "name": "sdk/go/loopseam.go::AssertionEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:Retraction",
+      "name": "sdk/go/loopseam.go::Retraction",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:RetractionEvent",
+      "name": "sdk/go/loopseam.go::RetractionEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ConsolidationEvent",
+      "name": "sdk/go/loopseam.go::ConsolidationEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:DefaultTokenWeights",
+      "name": "sdk/go/loopseam.go::DefaultTokenWeights",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:Bundle",
+      "name": "sdk/go/loopseam.go::Bundle",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:BundleSection",
+      "name": "sdk/go/loopseam.go::BundleSection",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:BundleItem",
+      "name": "sdk/go/loopseam.go::BundleItem",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:TrimmedItem",
+      "name": "sdk/go/loopseam.go::TrimmedItem",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ParseBundle",
+      "name": "sdk/go/loopseam.go::ParseBundle",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:DecodedEvent",
+      "name": "sdk/go/loopseam.go::DecodedEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:MemoryProjection",
+      "name": "sdk/go/loopseam.go::MemoryProjection",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ProjectionExclusions",
+      "name": "sdk/go/loopseam.go::ProjectionExclusions",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:DecodeEvent",
+      "name": "sdk/go/loopseam.go::DecodeEvent",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:RenderBundle",
+      "name": "sdk/go/loopseam.go::RenderBundle",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ProjectBundle",
+      "name": "sdk/go/loopseam.go::ProjectBundle",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ProjectBundleExcluding",
+      "name": "sdk/go/loopseam.go::ProjectBundleExcluding",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ToolExecution",
+      "name": "sdk/go/loopseam.go::ToolExecution",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ToolEventCitation",
+      "name": "sdk/go/loopseam.go::ToolEventCitation",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ToolEventPayload",
+      "name": "sdk/go/loopseam.go::ToolEventPayload",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ActivationQuery",
+      "name": "sdk/go/loopseam.go::ActivationQuery",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:LoopSeam",
+      "name": "sdk/go/loopseam.go::LoopSeam",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:SeamConfig",
+      "name": "sdk/go/loopseam.go::SeamConfig",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:NewLoopSeam",
+      "name": "sdk/go/loopseam.go::NewLoopSeam",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:Conversation",
+      "name": "sdk/go/loopseam.go::Conversation",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:Activate",
+      "name": "sdk/go/loopseam.go::Activate",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ActivateBundle",
+      "name": "sdk/go/loopseam.go::ActivateBundle",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:RecordUser",
+      "name": "sdk/go/loopseam.go::RecordUser",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:RecordAssistantWorking",
+      "name": "sdk/go/loopseam.go::RecordAssistantWorking",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:RecordDelivery",
+      "name": "sdk/go/loopseam.go::RecordDelivery",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:ProvenanceRange",
+      "name": "sdk/go/loopseam.go::ProvenanceRange",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:RecordError",
+      "name": "sdk/go/loopseam.go::RecordError",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:CommitToolExecution",
+      "name": "sdk/go/loopseam.go::CommitToolExecution",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:Consolidate",
+      "name": "sdk/go/loopseam.go::Consolidate",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:SaveTurnCheckpoint",
+      "name": "sdk/go/loopseam.go::SaveTurnCheckpoint",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:LatestTurnCheckpoint",
+      "name": "sdk/go/loopseam.go::LatestTurnCheckpoint",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:WriteCheckpoint",
+      "name": "sdk/go/loopseam.go::WriteCheckpoint",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:LatestCheckpoint",
+      "name": "sdk/go/loopseam.go::LatestCheckpoint",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:TranscriptRecord",
+      "name": "sdk/go/loopseam.go::TranscriptRecord",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:Transcript",
+      "name": "sdk/go/loopseam.go::Transcript",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/loopseam.go:Attest",
+      "name": "sdk/go/loopseam.go::Attest",
+      "file": "sdk/go/loopseam.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:ToolEnvelope",
+      "name": "sdk/go/session.go::ToolEnvelope",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:RecallOptions",
+      "name": "sdk/go/session.go::RecallOptions",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Recall",
+      "name": "sdk/go/session.go::Recall",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:AsOfOptions",
+      "name": "sdk/go/session.go::AsOfOptions",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:AsOf",
+      "name": "sdk/go/session.go::AsOf",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:CallTool",
+      "name": "sdk/go/session.go::CallTool",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:CryptoDelete",
+      "name": "sdk/go/session.go::CryptoDelete",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Subscription",
+      "name": "sdk/go/session.go::Subscription",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:SubscribedEvent",
+      "name": "sdk/go/session.go::SubscribedEvent",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Subscribe",
+      "name": "sdk/go/session.go::Subscribe",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Next",
+      "name": "sdk/go/session.go::Next",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Close",
+      "name": "sdk/go/session.go::Close",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Session",
+      "name": "sdk/go/session.go::Session",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Session",
+      "name": "sdk/go/session.go::Session",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Remember",
+      "name": "sdk/go/session.go::Remember",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Recall",
+      "name": "sdk/go/session.go::Recall",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Activate",
+      "name": "sdk/go/session.go::Activate",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Render",
+      "name": "sdk/go/session.go::Render",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Attest",
+      "name": "sdk/go/session.go::Attest",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:AsOf",
+      "name": "sdk/go/session.go::AsOf",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Believe",
+      "name": "sdk/go/session.go::Believe",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Intend",
+      "name": "sdk/go/session.go::Intend",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Bind",
+      "name": "sdk/go/session.go::Bind",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Predict",
+      "name": "sdk/go/session.go::Predict",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Outcome",
+      "name": "sdk/go/session.go::Outcome",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Consolidate",
+      "name": "sdk/go/session.go::Consolidate",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Retract",
+      "name": "sdk/go/session.go::Retract",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Dispute",
+      "name": "sdk/go/session.go::Dispute",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Forget",
+      "name": "sdk/go/session.go::Forget",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/go/session.go:Inspect",
+      "name": "sdk/go/session.go::Inspect",
+      "file": "sdk/go/session.go"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:Bundle",
+      "name": "sdk/python/hypermind/bundle.py::Bundle",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:ActivationSafetyError",
+      "name": "sdk/python/hypermind/bundle.py::ActivationSafetyError",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:is_reconstruction",
+      "name": "sdk/python/hypermind/bundle.py::is_reconstruction",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:assert_rememberable",
+      "name": "sdk/python/hypermind/bundle.py::assert_rememberable",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:raw",
+      "name": "sdk/python/hypermind/bundle.py::raw",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:u8",
+      "name": "sdk/python/hypermind/bundle.py::u8",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:u32",
+      "name": "sdk/python/hypermind/bundle.py::u32",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:u64",
+      "name": "sdk/python/hypermind/bundle.py::u64",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:count",
+      "name": "sdk/python/hypermind/bundle.py::count",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:blob",
+      "name": "sdk/python/hypermind/bundle.py::blob",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:text",
+      "name": "sdk/python/hypermind/bundle.py::text",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:lsns",
+      "name": "sdk/python/hypermind/bundle.py::lsns",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:parse_bundle",
+      "name": "sdk/python/hypermind/bundle.py::parse_bundle",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/bundle.py:render",
+      "name": "sdk/python/hypermind/bundle.py::render",
+      "file": "sdk/python/hypermind/bundle.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:HyperMindError",
+      "name": "sdk/python/hypermind/client.py::HyperMindError",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:conversation_id",
+      "name": "sdk/python/hypermind/client.py::conversation_id",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:Event",
+      "name": "sdk/python/hypermind/client.py::Event",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:Client",
+      "name": "sdk/python/hypermind/client.py::Client",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:connect",
+      "name": "sdk/python/hypermind/client.py::connect",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:close",
+      "name": "sdk/python/hypermind/client.py::close",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:session",
+      "name": "sdk/python/hypermind/client.py::session",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:request",
+      "name": "sdk/python/hypermind/client.py::request",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:recover",
+      "name": "sdk/python/hypermind/client.py::recover",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:tool",
+      "name": "sdk/python/hypermind/client.py::tool",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:activate",
+      "name": "sdk/python/hypermind/client.py::activate",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:checkpoint",
+      "name": "sdk/python/hypermind/client.py::checkpoint",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:latest_checkpoint",
+      "name": "sdk/python/hypermind/client.py::latest_checkpoint",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:as_of",
+      "name": "sdk/python/hypermind/client.py::as_of",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:crypto_delete",
+      "name": "sdk/python/hypermind/client.py::crypto_delete",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/client.py:subscribe",
+      "name": "sdk/python/hypermind/client.py::subscribe",
+      "file": "sdk/python/hypermind/client.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/engine.py:Engine",
+      "name": "sdk/python/hypermind/engine.py::Engine",
+      "file": "sdk/python/hypermind/engine.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/engine.py:open",
+      "name": "sdk/python/hypermind/engine.py::open",
+      "file": "sdk/python/hypermind/engine.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/engine.py:session",
+      "name": "sdk/python/hypermind/engine.py::session",
+      "file": "sdk/python/hypermind/engine.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/engine.py:tool",
+      "name": "sdk/python/hypermind/engine.py::tool",
+      "file": "sdk/python/hypermind/engine.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/engine.py:activate",
+      "name": "sdk/python/hypermind/engine.py::activate",
+      "file": "sdk/python/hypermind/engine.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/engine.py:close",
+      "name": "sdk/python/hypermind/engine.py::close",
+      "file": "sdk/python/hypermind/engine.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:Session",
+      "name": "sdk/python/hypermind/session.py::Session",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:remember",
+      "name": "sdk/python/hypermind/session.py::remember",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:recall",
+      "name": "sdk/python/hypermind/session.py::recall",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:activate",
+      "name": "sdk/python/hypermind/session.py::activate",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:attest",
+      "name": "sdk/python/hypermind/session.py::attest",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:believe",
+      "name": "sdk/python/hypermind/session.py::believe",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:intend",
+      "name": "sdk/python/hypermind/session.py::intend",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:bind",
+      "name": "sdk/python/hypermind/session.py::bind",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:predict",
+      "name": "sdk/python/hypermind/session.py::predict",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:outcome",
+      "name": "sdk/python/hypermind/session.py::outcome",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:consolidate",
+      "name": "sdk/python/hypermind/session.py::consolidate",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:inspect",
+      "name": "sdk/python/hypermind/session.py::inspect",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:retract",
+      "name": "sdk/python/hypermind/session.py::retract",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:dispute",
+      "name": "sdk/python/hypermind/session.py::dispute",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "sdk:sdk/python/hypermind/session.py:forget",
+      "name": "sdk/python/hypermind/session.py::forget",
+      "file": "sdk/python/hypermind/session.py"
+    },
+    {
+      "id": "python-native:sdk/python/native/src/lib.rs:NativeEngine",
+      "name": "sdk/python/native/src/lib.rs::NativeEngine (Python native class)",
+      "file": "sdk/python/native/src/lib.rs"
+    },
+    {
+      "id": "python-native-method:sdk/python/native/src/lib.rs:NativeEngine:new",
+      "name": "NativeEngine::new (Python native)",
+      "file": "sdk/python/native/src/lib.rs"
+    },
+    {
+      "id": "python-native-method:sdk/python/native/src/lib.rs:NativeEngine:call",
+      "name": "NativeEngine::call (Python native)",
+      "file": "sdk/python/native/src/lib.rs"
+    },
+    {
+      "id": "python-native-method:sdk/python/native/src/lib.rs:NativeEngine:activate",
+      "name": "NativeEngine::activate (Python native)",
+      "file": "sdk/python/native/src/lib.rs"
+    },
+    {
+      "id": "python-native-method:sdk/python/native/src/lib.rs:NativeEngine:close",
+      "name": "NativeEngine::close (Python native)",
+      "file": "sdk/python/native/src/lib.rs"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:JsonValue",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::JsonValue",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:LedgerInteger",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::LedgerInteger",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:ToolEnvelope",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::ToolEnvelope",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:PredicateKind",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::PredicateKind",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:ExpectedPredicateInput",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::ExpectedPredicateInput",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:PredictInput",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::PredictInput",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:OutcomeInput",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::OutcomeInput",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:InspectInput",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::InspectInput",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:WakeTrigger",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::WakeTrigger",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:AttentionFactors",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::AttentionFactors",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:IntendAction",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::IntendAction",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:ReconstructionRecallOptions",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::ReconstructionRecallOptions",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/anticipation.ts:encodeToolArguments",
+      "name": "sdk/typescript/packages/client/src/anticipation.ts::encodeToolArguments",
+      "file": "sdk/typescript/packages/client/src/anticipation.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/canonical.ts:parseBundle",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::parseBundle",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:614:constructor",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::constructor",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:668:u8",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::u8",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:819:u32",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::u32",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:933:u64",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::u64",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:1050:count",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::count",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:1222:raw",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::raw",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:1505:blob",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::blob",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:1568:lsns",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::lsns",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/canonical.ts:1661:done",
+      "name": "sdk/typescript/packages/client/src/canonical.ts::done",
+      "file": "sdk/typescript/packages/client/src/canonical.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:EffectState",
+      "name": "sdk/typescript/packages/client/src/client.ts::EffectState",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:MemoryKind",
+      "name": "sdk/typescript/packages/client/src/client.ts::MemoryKind",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:CloseReason",
+      "name": "sdk/typescript/packages/client/src/client.ts::CloseReason",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:RecallMode",
+      "name": "sdk/typescript/packages/client/src/client.ts::RecallMode",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:RetentionPolicy",
+      "name": "sdk/typescript/packages/client/src/client.ts::RetentionPolicy",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:SensitivityPolicy",
+      "name": "sdk/typescript/packages/client/src/client.ts::SensitivityPolicy",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:AnchorFacet",
+      "name": "sdk/typescript/packages/client/src/client.ts::AnchorFacet",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:BeliefType",
+      "name": "sdk/typescript/packages/client/src/client.ts::BeliefType",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:BeliefClaim",
+      "name": "sdk/typescript/packages/client/src/client.ts::BeliefClaim",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:BeliefProvenance",
+      "name": "sdk/typescript/packages/client/src/client.ts::BeliefProvenance",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:BelieveInput",
+      "name": "sdk/typescript/packages/client/src/client.ts::BelieveInput",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:AsOfOptions",
+      "name": "sdk/typescript/packages/client/src/client.ts::AsOfOptions",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:BeliefRecord",
+      "name": "sdk/typescript/packages/client/src/client.ts::BeliefRecord",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:RememberOptions",
+      "name": "sdk/typescript/packages/client/src/client.ts::RememberOptions",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:DoNotStoreReceipt",
+      "name": "sdk/typescript/packages/client/src/client.ts::DoNotStoreReceipt",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:RecallOptions",
+      "name": "sdk/typescript/packages/client/src/client.ts::RecallOptions",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:ActivateOptions",
+      "name": "sdk/typescript/packages/client/src/client.ts::ActivateOptions",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:ClientConfig",
+      "name": "sdk/typescript/packages/client/src/client.ts::ClientConfig",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:WelcomeInfo",
+      "name": "sdk/typescript/packages/client/src/client.ts::WelcomeInfo",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:EngineError",
+      "name": "sdk/typescript/packages/client/src/client.ts::EngineError",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:PendingWriteError",
+      "name": "sdk/typescript/packages/client/src/client.ts::PendingWriteError",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:ToolTransportError",
+      "name": "sdk/typescript/packages/client/src/client.ts::ToolTransportError",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:Client",
+      "name": "sdk/typescript/packages/client/src/client.ts::Client",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/client.ts:Session",
+      "name": "sdk/typescript/packages/client/src/client.ts::Session",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:6581:constructor",
+      "name": "sdk/typescript/packages/client/src/client.ts::constructor",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:6963:constructor",
+      "name": "sdk/typescript/packages/client/src/client.ts::constructor",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:7166:constructor",
+      "name": "sdk/typescript/packages/client/src/client.ts::constructor",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:7686:constructor",
+      "name": "sdk/typescript/packages/client/src/client.ts::constructor",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:7908:send",
+      "name": "sdk/typescript/packages/client/src/client.ts::send",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:8283:close",
+      "name": "sdk/typescript/packages/client/src/client.ts::close",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:8327:next",
+      "name": "sdk/typescript/packages/client/src/client.ts::next",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:11200:connect",
+      "name": "sdk/typescript/packages/client/src/client.ts::connect",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:11812:session",
+      "name": "sdk/typescript/packages/client/src/client.ts::session",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:12014:close",
+      "name": "sdk/typescript/packages/client/src/client.ts::close",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:12087:attest",
+      "name": "sdk/typescript/packages/client/src/client.ts::attest",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:15275:checkpoint",
+      "name": "sdk/typescript/packages/client/src/client.ts::checkpoint",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:15649:latestCheckpoint",
+      "name": "sdk/typescript/packages/client/src/client.ts::latestCheckpoint",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:16140:append",
+      "name": "sdk/typescript/packages/client/src/client.ts::append",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:16558:recall",
+      "name": "sdk/typescript/packages/client/src/client.ts::recall",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:16644:recall",
+      "name": "sdk/typescript/packages/client/src/client.ts::recall",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:16722:recall",
+      "name": "sdk/typescript/packages/client/src/client.ts::recall",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:18520:callTool",
+      "name": "sdk/typescript/packages/client/src/client.ts::callTool",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:19963:asOf",
+      "name": "sdk/typescript/packages/client/src/client.ts::asOf",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:20566:activate",
+      "name": "sdk/typescript/packages/client/src/client.ts::activate",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:29225:constructor",
+      "name": "sdk/typescript/packages/client/src/client.ts::constructor",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:29372:remember",
+      "name": "sdk/typescript/packages/client/src/client.ts::remember",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:29418:remember",
+      "name": "sdk/typescript/packages/client/src/client.ts::remember",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:29485:remember",
+      "name": "sdk/typescript/packages/client/src/client.ts::remember",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:29613:remember",
+      "name": "sdk/typescript/packages/client/src/client.ts::remember",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:29685:remember",
+      "name": "sdk/typescript/packages/client/src/client.ts::remember",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:30801:recall",
+      "name": "sdk/typescript/packages/client/src/client.ts::recall",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:30887:recall",
+      "name": "sdk/typescript/packages/client/src/client.ts::recall",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:30965:recall",
+      "name": "sdk/typescript/packages/client/src/client.ts::recall",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:31471:activate",
+      "name": "sdk/typescript/packages/client/src/client.ts::activate",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:31629:render",
+      "name": "sdk/typescript/packages/client/src/client.ts::render",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:31742:believe",
+      "name": "sdk/typescript/packages/client/src/client.ts::believe",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:32536:retract",
+      "name": "sdk/typescript/packages/client/src/client.ts::retract",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:33009:asOf",
+      "name": "sdk/typescript/packages/client/src/client.ts::asOf",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:33217:checkpoint",
+      "name": "sdk/typescript/packages/client/src/client.ts::checkpoint",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:33337:intend",
+      "name": "sdk/typescript/packages/client/src/client.ts::intend",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:33408:intend",
+      "name": "sdk/typescript/packages/client/src/client.ts::intend",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:33491:intend",
+      "name": "sdk/typescript/packages/client/src/client.ts::intend",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:33618:intend",
+      "name": "sdk/typescript/packages/client/src/client.ts::intend",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:33673:intend",
+      "name": "sdk/typescript/packages/client/src/client.ts::intend",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:34752:predict",
+      "name": "sdk/typescript/packages/client/src/client.ts::predict",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:34904:outcome",
+      "name": "sdk/typescript/packages/client/src/client.ts::outcome",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:35056:inspect",
+      "name": "sdk/typescript/packages/client/src/client.ts::inspect",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:35173:attest",
+      "name": "sdk/typescript/packages/client/src/client.ts::attest",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:35332:consolidate",
+      "name": "sdk/typescript/packages/client/src/client.ts::consolidate",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:35508:dispute",
+      "name": "sdk/typescript/packages/client/src/client.ts::dispute",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:35671:forget",
+      "name": "sdk/typescript/packages/client/src/client.ts::forget",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:35832:bind",
+      "name": "sdk/typescript/packages/client/src/client.ts::bind",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/client.ts:41625:return",
+      "name": "sdk/typescript/packages/client/src/client.ts::return",
+      "file": "sdk/typescript/packages/client/src/client.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/grpc.ts:GrpcConfig",
+      "name": "sdk/typescript/packages/client/src/grpc.ts::GrpcConfig",
+      "file": "sdk/typescript/packages/client/src/grpc.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/grpc.ts:GrpcTransportError",
+      "name": "sdk/typescript/packages/client/src/grpc.ts::GrpcTransportError",
+      "file": "sdk/typescript/packages/client/src/grpc.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/client/src/grpc.ts:GrpcFrames",
+      "name": "sdk/typescript/packages/client/src/grpc.ts::GrpcFrames",
+      "file": "sdk/typescript/packages/client/src/grpc.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/grpc.ts:264:constructor",
+      "name": "sdk/typescript/packages/client/src/grpc.ts::constructor",
+      "file": "sdk/typescript/packages/client/src/grpc.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/grpc.ts:1713:constructor",
+      "name": "sdk/typescript/packages/client/src/grpc.ts::constructor",
+      "file": "sdk/typescript/packages/client/src/grpc.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/grpc.ts:2270:send",
+      "name": "sdk/typescript/packages/client/src/grpc.ts::send",
+      "file": "sdk/typescript/packages/client/src/grpc.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/grpc.ts:2909:next",
+      "name": "sdk/typescript/packages/client/src/grpc.ts::next",
+      "file": "sdk/typescript/packages/client/src/grpc.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/client/src/grpc.ts:3921:close",
+      "name": "sdk/typescript/packages/client/src/grpc.ts::close",
+      "file": "sdk/typescript/packages/client/src/grpc.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/index.d.ts:NativeEngine",
+      "name": "sdk/typescript/packages/engine/index.d.ts::NativeEngine",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/index.d.ts:NativeSession",
+      "name": "sdk/typescript/packages/engine/index.d.ts::NativeSession",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:89:open",
+      "name": "sdk/typescript/packages/engine/index.d.ts::open",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:160:session",
+      "name": "sdk/typescript/packages/engine/index.d.ts::session",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:247:remember",
+      "name": "sdk/typescript/packages/engine/index.d.ts::remember",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:327:recall",
+      "name": "sdk/typescript/packages/engine/index.d.ts::recall",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:418:activate",
+      "name": "sdk/typescript/packages/engine/index.d.ts::activate",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:483:checkpoint",
+      "name": "sdk/typescript/packages/engine/index.d.ts::checkpoint",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:543:intend",
+      "name": "sdk/typescript/packages/engine/index.d.ts::intend",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:588:predict",
+      "name": "sdk/typescript/packages/engine/index.d.ts::predict",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:634:outcome",
+      "name": "sdk/typescript/packages/engine/index.d.ts::outcome",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:680:inspect",
+      "name": "sdk/typescript/packages/engine/index.d.ts::inspect",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:726:bind",
+      "name": "sdk/typescript/packages/engine/index.d.ts::bind",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:769:attest",
+      "name": "sdk/typescript/packages/engine/index.d.ts::attest",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:814:consolidate",
+      "name": "sdk/typescript/packages/engine/index.d.ts::consolidate",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:864:believe",
+      "name": "sdk/typescript/packages/engine/index.d.ts::believe",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:910:retract",
+      "name": "sdk/typescript/packages/engine/index.d.ts::retract",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/index.d.ts:979:asOf",
+      "name": "sdk/typescript/packages/engine/index.d.ts::asOf",
+      "file": "sdk/typescript/packages/engine/index.d.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/native/index.d.ts:NativeEngine",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::NativeEngine",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/native/index.d.ts:NativeSession",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::NativeSession",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:89:open",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::open",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:160:session",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::session",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:247:remember",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::remember",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:306:recall",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::recall",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:362:activate",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::activate",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:427:checkpoint",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::checkpoint",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:487:intend",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::intend",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:532:bind",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::bind",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:575:attest",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::attest",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/index.d.ts:620:consolidate",
+      "name": "sdk/typescript/packages/engine/native/index.d.ts::consolidate",
+      "file": "sdk/typescript/packages/engine/native/index.d.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/native/src/lib.rs:NativeEngine",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::NativeEngine",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/native/src/lib.rs:NativeSession",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::NativeSession",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:2071:open",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::open",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:2981:session",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::session",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:3727:remember",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::remember",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:4751:recall",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::recall",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:5870:activate",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::activate",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:6455:checkpoint",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::checkpoint",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7095:intend",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::intend",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7403:predict",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::predict",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:7714:outcome",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::outcome",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:8025:inspect",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::inspect",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:8273:bind",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::bind",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:8957:attest",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::attest",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9202:consolidate",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::consolidate",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:9462:believe",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::believe",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:10680:retract",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::retract",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/native/src/lib.rs:11248:as_of",
+      "name": "sdk/typescript/packages/engine/native/src/lib.rs::as_of",
+      "file": "sdk/typescript/packages/engine/native/src/lib.rs"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:EngineConfig",
+      "name": "sdk/typescript/packages/engine/src/index.ts::EngineConfig",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:HealthStatus",
+      "name": "sdk/typescript/packages/engine/src/index.ts::HealthStatus",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:RecallMode",
+      "name": "sdk/typescript/packages/engine/src/index.ts::RecallMode",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:Retention",
+      "name": "sdk/typescript/packages/engine/src/index.ts::Retention",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:Sensitivity",
+      "name": "sdk/typescript/packages/engine/src/index.ts::Sensitivity",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:AnchorFacet",
+      "name": "sdk/typescript/packages/engine/src/index.ts::AnchorFacet",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:Health",
+      "name": "sdk/typescript/packages/engine/src/index.ts::Health",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:Gap",
+      "name": "sdk/typescript/packages/engine/src/index.ts::Gap",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:Envelope",
+      "name": "sdk/typescript/packages/engine/src/index.ts::Envelope",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:RememberOptions",
+      "name": "sdk/typescript/packages/engine/src/index.ts::RememberOptions",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:RecallOptions",
+      "name": "sdk/typescript/packages/engine/src/index.ts::RecallOptions",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:BindInput",
+      "name": "sdk/typescript/packages/engine/src/index.ts::BindInput",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:AttestDisposition",
+      "name": "sdk/typescript/packages/engine/src/index.ts::AttestDisposition",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:AttestInput",
+      "name": "sdk/typescript/packages/engine/src/index.ts::AttestInput",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:ConsolidateBudget",
+      "name": "sdk/typescript/packages/engine/src/index.ts::ConsolidateBudget",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:ConsolidateInput",
+      "name": "sdk/typescript/packages/engine/src/index.ts::ConsolidateInput",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:HyperMind",
+      "name": "sdk/typescript/packages/engine/src/index.ts::HyperMind",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/engine/src/index.ts:Session",
+      "name": "sdk/typescript/packages/engine/src/index.ts::Session",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:621:session",
+      "name": "sdk/typescript/packages/engine/src/index.ts::session",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:710:remember",
+      "name": "sdk/typescript/packages/engine/src/index.ts::remember",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:791:recall",
+      "name": "sdk/typescript/packages/engine/src/index.ts::recall",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:883:activate",
+      "name": "sdk/typescript/packages/engine/src/index.ts::activate",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:953:checkpoint",
+      "name": "sdk/typescript/packages/engine/src/index.ts::checkpoint",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1018:intend",
+      "name": "sdk/typescript/packages/engine/src/index.ts::intend",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1060:predict",
+      "name": "sdk/typescript/packages/engine/src/index.ts::predict",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1103:outcome",
+      "name": "sdk/typescript/packages/engine/src/index.ts::outcome",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1146:inspect",
+      "name": "sdk/typescript/packages/engine/src/index.ts::inspect",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1189:bind",
+      "name": "sdk/typescript/packages/engine/src/index.ts::bind",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1229:attest",
+      "name": "sdk/typescript/packages/engine/src/index.ts::attest",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1271:consolidate",
+      "name": "sdk/typescript/packages/engine/src/index.ts::consolidate",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1318:believe",
+      "name": "sdk/typescript/packages/engine/src/index.ts::believe",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1361:retract",
+      "name": "sdk/typescript/packages/engine/src/index.ts::retract",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:1427:asOf",
+      "name": "sdk/typescript/packages/engine/src/index.ts::asOf",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:4067:open",
+      "name": "sdk/typescript/packages/engine/src/index.ts::open",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:4424:session",
+      "name": "sdk/typescript/packages/engine/src/index.ts::session",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:4570:constructor",
+      "name": "sdk/typescript/packages/engine/src/index.ts::constructor",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:4678:remember",
+      "name": "sdk/typescript/packages/engine/src/index.ts::remember",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:5213:recall",
+      "name": "sdk/typescript/packages/engine/src/index.ts::recall",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:5605:activate",
+      "name": "sdk/typescript/packages/engine/src/index.ts::activate",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:5756:checkpoint",
+      "name": "sdk/typescript/packages/engine/src/index.ts::checkpoint",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:5896:intend",
+      "name": "sdk/typescript/packages/engine/src/index.ts::intend",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:6091:predict",
+      "name": "sdk/typescript/packages/engine/src/index.ts::predict",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:6287:outcome",
+      "name": "sdk/typescript/packages/engine/src/index.ts::outcome",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:6483:inspect",
+      "name": "sdk/typescript/packages/engine/src/index.ts::inspect",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:6633:bind",
+      "name": "sdk/typescript/packages/engine/src/index.ts::bind",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:7155:attest",
+      "name": "sdk/typescript/packages/engine/src/index.ts::attest",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:7459:consolidate",
+      "name": "sdk/typescript/packages/engine/src/index.ts::consolidate",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:8191:believe",
+      "name": "sdk/typescript/packages/engine/src/index.ts::believe",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:8802:retract",
+      "name": "sdk/typescript/packages/engine/src/index.ts::retract",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/engine/src/index.ts:9017:asOf",
+      "name": "sdk/typescript/packages/engine/src/index.ts::asOf",
+      "file": "sdk/typescript/packages/engine/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/migrate/src/cli.ts:main",
+      "name": "sdk/typescript/packages/migrate/src/cli.ts::main",
+      "file": "sdk/typescript/packages/migrate/src/cli.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/migrate/src/index.ts:FORMAT",
+      "name": "sdk/typescript/packages/migrate/src/index.ts::FORMAT",
+      "file": "sdk/typescript/packages/migrate/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/migrate/src/index.ts:KINDS",
+      "name": "sdk/typescript/packages/migrate/src/index.ts::KINDS",
+      "file": "sdk/typescript/packages/migrate/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/migrate/src/index.ts:Kind",
+      "name": "sdk/typescript/packages/migrate/src/index.ts::Kind",
+      "file": "sdk/typescript/packages/migrate/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/migrate/src/index.ts:SourceRecord",
+      "name": "sdk/typescript/packages/migrate/src/index.ts::SourceRecord",
+      "file": "sdk/typescript/packages/migrate/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/migrate/src/index.ts:Manifest",
+      "name": "sdk/typescript/packages/migrate/src/index.ts::Manifest",
+      "file": "sdk/typescript/packages/migrate/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/migrate/src/index.ts:ExportOptions",
+      "name": "sdk/typescript/packages/migrate/src/index.ts::ExportOptions",
+      "file": "sdk/typescript/packages/migrate/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/migrate/src/index.ts:exportCortex",
+      "name": "sdk/typescript/packages/migrate/src/index.ts::exportCortex",
+      "file": "sdk/typescript/packages/migrate/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:TIERS",
+      "name": "sdk/typescript/packages/render/src/index.ts::TIERS",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:Tier",
+      "name": "sdk/typescript/packages/render/src/index.ts::Tier",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:Authority",
+      "name": "sdk/typescript/packages/render/src/index.ts::Authority",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:BundleItem",
+      "name": "sdk/typescript/packages/render/src/index.ts::BundleItem",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:BundleSection",
+      "name": "sdk/typescript/packages/render/src/index.ts::BundleSection",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:Bundle",
+      "name": "sdk/typescript/packages/render/src/index.ts::Bundle",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:PromptItem",
+      "name": "sdk/typescript/packages/render/src/index.ts::PromptItem",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:PromptSection",
+      "name": "sdk/typescript/packages/render/src/index.ts::PromptSection",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:RenderedPrompt",
+      "name": "sdk/typescript/packages/render/src/index.ts::RenderedPrompt",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:RenderOptions",
+      "name": "sdk/typescript/packages/render/src/index.ts::RenderOptions",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:ActivationSafetyError",
+      "name": "sdk/typescript/packages/render/src/index.ts::ActivationSafetyError",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:isReconstruction",
+      "name": "sdk/typescript/packages/render/src/index.ts::isReconstruction",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:assertRememberable",
+      "name": "sdk/typescript/packages/render/src/index.ts::assertRememberable",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/render/src/index.ts:render",
+      "name": "sdk/typescript/packages/render/src/index.ts::render",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/render/src/index.ts:1826:return",
+      "name": "sdk/typescript/packages/render/src/index.ts::return",
+      "file": "sdk/typescript/packages/render/src/index.ts"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:EmbeddedConfig",
+      "name": "crates/hm-serve/src/embedded.rs::EmbeddedConfig",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:HyperMind",
+      "name": "crates/hm-serve/src/embedded.rs::HyperMind",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:Actor",
+      "name": "crates/hm-serve/src/embedded.rs::Actor",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:Session",
+      "name": "crates/hm-serve/src/embedded.rs::Session",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:MemoryKind",
+      "name": "crates/hm-serve/src/embedded.rs::MemoryKind",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:RenderModel",
+      "name": "crates/hm-serve/src/embedded.rs::RenderModel",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:RenderAuthority",
+      "name": "crates/hm-serve/src/embedded.rs::RenderAuthority",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:RenderedItem",
+      "name": "crates/hm-serve/src/embedded.rs::RenderedItem",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:RenderedSection",
+      "name": "crates/hm-serve/src/embedded.rs::RenderedSection",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk:crates/hm-serve/src/embedded.rs:RenderedBundle",
+      "name": "crates/hm-serve/src/embedded.rs::RenderedBundle",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:1880:open",
+      "name": "crates/hm-serve/src/embedded.rs::open",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:2382:actor",
+      "name": "crates/hm-serve/src/embedded.rs::actor",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:2467:session",
+      "name": "crates/hm-serve/src/embedded.rs::session",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:2616:id",
+      "name": "crates/hm-serve/src/embedded.rs::id",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:2701:session",
+      "name": "crates/hm-serve/src/embedded.rs::session",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:2911:shutdown",
+      "name": "crates/hm-serve/src/embedded.rs::shutdown",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:3044:conversation",
+      "name": "crates/hm-serve/src/embedded.rs::conversation",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:3133:remember",
+      "name": "crates/hm-serve/src/embedded.rs::remember",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:4829:recall",
+      "name": "crates/hm-serve/src/embedded.rs::recall",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:5152:timeline",
+      "name": "crates/hm-serve/src/embedded.rs::timeline",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:5476:activate",
+      "name": "crates/hm-serve/src/embedded.rs::activate",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "sdk-method:crates/hm-serve/src/embedded.rs:5965:render",
+      "name": "crates/hm-serve/src/embedded.rs::render",
+      "file": "crates/hm-serve/src/embedded.rs"
+    },
+    {
+      "id": "config:socket",
+      "name": "socket",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:data",
+      "name": "data",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:user",
+      "name": "user",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:kek",
+      "name": "kek",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:admin_token",
+      "name": "admin_token",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:actor",
+      "name": "actor",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:maximum_connections",
+      "name": "maximum_connections",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:maximum_output_frames",
+      "name": "maximum_output_frames",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:maximum_output_bytes",
+      "name": "maximum_output_bytes",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:projection_map_bytes",
+      "name": "projection_map_bytes",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "cli:crates/hm-cli/src/actors.rs",
+      "name": "crates/hm-cli/src/actors.rs command/options",
+      "file": "crates/hm-cli/src/actors.rs"
+    },
+    {
+      "id": "cli:crates/hm-cli/src/consolidate.rs",
+      "name": "crates/hm-cli/src/consolidate.rs command/options",
+      "file": "crates/hm-cli/src/consolidate.rs"
+    },
+    {
+      "id": "cli:crates/hm-cli/src/lib.rs",
+      "name": "crates/hm-cli/src/lib.rs command/options",
+      "file": "crates/hm-cli/src/lib.rs"
+    },
+    {
+      "id": "cli:crates/hm-cli/src/models.rs",
+      "name": "crates/hm-cli/src/models.rs command/options",
+      "file": "crates/hm-cli/src/models.rs"
+    },
+    {
+      "id": "cli:crates/hm-cli/src/serve.rs",
+      "name": "crates/hm-cli/src/serve.rs command/options",
+      "file": "crates/hm-cli/src/serve.rs"
+    }
+  ]
+}

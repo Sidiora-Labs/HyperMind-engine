@@ -6,5 +6,17 @@ The Rust kernel is currently available through `hm-serve::embedded`. Open a
 `render`; rendered memory is always labelled `UntrustedMemory`, retains its
 `hm://` provenance URI, and is never emitted with a system or developer role.
 
-The TypeScript, Python, and Go packages are delivered in later dependency
-waves after the local protocol and continuity slice are closed.
+TypeScript, Python, and Go source packages now live in this directory.
+The TypeScript client supports the Unix socket and mutually authenticated gRPC;
+its focused client suite passed. Python provides a native embedded engine and
+an asynchronous gRPC client. Go provides Unix-socket and gRPC clients under the
+existing module name `centra/core/cortexclient`.
+
+These are source-level interfaces, not published npm/PyPI packages, wheels, or
+qualified cross-language releases. The Go donor compatibility limitation is
+recorded in [COMPATIBILITY.md](go/COMPATIBILITY.md); passing current focused tests
+does not erase that historical mismatch. See the
+[SDK guide](../docs/reference/sdks.md) and
+[source-derived API catalog](../docs/reference/generated/sdk-api.md) for actual
+entry points. Use an embedded owner or a daemon client for an actor, never
+concurrent owners of the same state directory.
