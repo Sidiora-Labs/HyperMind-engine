@@ -2138,9 +2138,9 @@ pub struct FrozenCandidateSet {
 
 ## hm-cortex::DeliveryEnvelope
 
-<a id="rust-crates-hm-cortex-src-connectors-rs-deliveryenvelope"></a>
+<a id="rust-crates-hm-cortex-src-connectors-mod-rs-deliveryenvelope"></a>
 
-Source: [`crates/hm-cortex/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors.rs).
+Source: [`crates/hm-cortex/src/connectors/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/mod.rs).
 
 When to use: Use `DeliveryEnvelope` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2160,9 +2160,9 @@ pub struct DeliveryEnvelope<'a> {
 
 ## hm-cortex::VerifiedDelivery
 
-<a id="rust-crates-hm-cortex-src-connectors-rs-verifieddelivery"></a>
+<a id="rust-crates-hm-cortex-src-connectors-mod-rs-verifieddelivery"></a>
 
-Source: [`crates/hm-cortex/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors.rs).
+Source: [`crates/hm-cortex/src/connectors/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/mod.rs).
 
 When to use: Use `VerifiedDelivery` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2178,9 +2178,9 @@ pub struct VerifiedDelivery {
 
 ## hm-cortex::ConsentState
 
-<a id="rust-crates-hm-cortex-src-connectors-rs-consentstate"></a>
+<a id="rust-crates-hm-cortex-src-connectors-mod-rs-consentstate"></a>
 
-Source: [`crates/hm-cortex/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors.rs).
+Source: [`crates/hm-cortex/src/connectors/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/mod.rs).
 
 When to use: Use `ConsentState` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2197,9 +2197,9 @@ pub struct ConsentState {
 
 ## hm-cortex::ConsentGrant
 
-<a id="rust-crates-hm-cortex-src-connectors-rs-consentgrant"></a>
+<a id="rust-crates-hm-cortex-src-connectors-mod-rs-consentgrant"></a>
 
-Source: [`crates/hm-cortex/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors.rs).
+Source: [`crates/hm-cortex/src/connectors/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/mod.rs).
 
 When to use: Use `ConsentGrant` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2210,6 +2210,112 @@ Do not use: Do not promote inferred claims to observed authority, adopt procedur
 pub struct ConsentGrant {
     pub nonce: [u8; 16],
     pub expires_at_ns: i64,
+}
+```
+
+## hm-cortex::SourceRequest
+
+<a id="rust-crates-hm-cortex-src-connectors-sync-rs-sourcerequest"></a>
+
+Source: [`crates/hm-cortex/src/connectors/sync.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/sync.rs).
+
+When to use: Use `SourceRequest` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation. Do not treat constructing or serializing a request as evidence that it was accepted or executed.
+
+
+```rust
+pub struct SourceRequest {
+    pub url: String,
+    pub headers: BTreeMap<String, String>,
+}
+```
+
+## hm-cortex::SourceResponse
+
+<a id="rust-crates-hm-cortex-src-connectors-sync-rs-sourceresponse"></a>
+
+Source: [`crates/hm-cortex/src/connectors/sync.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/sync.rs).
+
+When to use: Use `SourceResponse` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct SourceResponse {
+    pub status: u16,
+    pub body: Vec<u8>,
+}
+```
+
+## hm-cortex::SourceTransport
+
+<a id="rust-crates-hm-cortex-src-connectors-sync-rs-sourcetransport"></a>
+
+Source: [`crates/hm-cortex/src/connectors/sync.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/sync.rs).
+
+When to use: Use `SourceTransport` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub trait SourceTransport: Send + Sync {
+    fn fetch(&self, request: &SourceRequest) -> Result<SourceResponse, Error>;
+}
+```
+
+## hm-cortex::RecordedSourceTransport
+
+<a id="rust-crates-hm-cortex-src-connectors-sync-rs-recordedsourcetransport"></a>
+
+Source: [`crates/hm-cortex/src/connectors/sync.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/sync.rs).
+
+When to use: Use `RecordedSourceTransport` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RecordedSourceTransport {
+    exchanges: Mutex<Vec<(SourceRequest, SourceResponse)>>,
+}
+```
+
+## hm-cortex::HttpSourceTransport
+
+<a id="rust-crates-hm-cortex-src-connectors-sync-rs-httpsourcetransport"></a>
+
+Source: [`crates/hm-cortex/src/connectors/sync.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/sync.rs).
+
+When to use: Use `HttpSourceTransport` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct HttpSourceTransport {
+    client: reqwest::blocking::Client,
+}
+```
+
+## hm-cortex::SourceRevisionListing
+
+<a id="rust-crates-hm-cortex-src-connectors-sync-rs-sourcerevisionlisting"></a>
+
+Source: [`crates/hm-cortex/src/connectors/sync.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors/sync.rs).
+
+When to use: Use `SourceRevisionListing` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct SourceRevisionListing {
+    pub source_id: String,
+    pub revision: Vec<u8>,
+    pub content_digest: [u8; 32],
 }
 ```
 

@@ -502,24 +502,54 @@
       "file": "crates/hm-cortex/src/citations.rs"
     },
     {
-      "id": "rust:crates/hm-cortex/src/connectors.rs:DeliveryEnvelope",
+      "id": "rust:crates/hm-cortex/src/connectors/mod.rs:DeliveryEnvelope",
       "name": "hm-cortex::DeliveryEnvelope",
-      "file": "crates/hm-cortex/src/connectors.rs"
+      "file": "crates/hm-cortex/src/connectors/mod.rs"
     },
     {
-      "id": "rust:crates/hm-cortex/src/connectors.rs:VerifiedDelivery",
+      "id": "rust:crates/hm-cortex/src/connectors/mod.rs:VerifiedDelivery",
       "name": "hm-cortex::VerifiedDelivery",
-      "file": "crates/hm-cortex/src/connectors.rs"
+      "file": "crates/hm-cortex/src/connectors/mod.rs"
     },
     {
-      "id": "rust:crates/hm-cortex/src/connectors.rs:ConsentState",
+      "id": "rust:crates/hm-cortex/src/connectors/mod.rs:ConsentState",
       "name": "hm-cortex::ConsentState",
-      "file": "crates/hm-cortex/src/connectors.rs"
+      "file": "crates/hm-cortex/src/connectors/mod.rs"
     },
     {
-      "id": "rust:crates/hm-cortex/src/connectors.rs:ConsentGrant",
+      "id": "rust:crates/hm-cortex/src/connectors/mod.rs:ConsentGrant",
       "name": "hm-cortex::ConsentGrant",
-      "file": "crates/hm-cortex/src/connectors.rs"
+      "file": "crates/hm-cortex/src/connectors/mod.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors/sync.rs:SourceRequest",
+      "name": "hm-cortex::SourceRequest",
+      "file": "crates/hm-cortex/src/connectors/sync.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors/sync.rs:SourceResponse",
+      "name": "hm-cortex::SourceResponse",
+      "file": "crates/hm-cortex/src/connectors/sync.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors/sync.rs:SourceTransport",
+      "name": "hm-cortex::SourceTransport",
+      "file": "crates/hm-cortex/src/connectors/sync.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors/sync.rs:RecordedSourceTransport",
+      "name": "hm-cortex::RecordedSourceTransport",
+      "file": "crates/hm-cortex/src/connectors/sync.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors/sync.rs:HttpSourceTransport",
+      "name": "hm-cortex::HttpSourceTransport",
+      "file": "crates/hm-cortex/src/connectors/sync.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors/sync.rs:SourceRevisionListing",
+      "name": "hm-cortex::SourceRevisionListing",
+      "file": "crates/hm-cortex/src/connectors/sync.rs"
     },
     {
       "id": "rust:crates/hm-cortex/src/fsrs.rs:FsrsState",
