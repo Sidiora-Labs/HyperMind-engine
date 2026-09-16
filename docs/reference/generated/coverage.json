@@ -362,6 +362,21 @@
       "file": "crates/hm-cortex/src/budget.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/budget.rs:CallReservation",
+      "name": "hm-cortex::CallReservation",
+      "file": "crates/hm-cortex/src/budget.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/budget.rs:ReservationTicket",
+      "name": "hm-cortex::ReservationTicket",
+      "file": "crates/hm-cortex/src/budget.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/budget.rs:RunReservation",
+      "name": "hm-cortex::RunReservation",
+      "file": "crates/hm-cortex/src/budget.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/citations.rs:SourceKind",
       "name": "hm-cortex::SourceKind",
       "file": "crates/hm-cortex/src/citations.rs"

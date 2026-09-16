@@ -1561,6 +1561,60 @@ pub struct BudgetTracker {
 }
 ```
 
+## hm-cortex::CallReservation
+
+<a id="rust-crates-hm-cortex-src-budget-rs-callreservation"></a>
+
+Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/budget.rs).
+
+When to use: Use `CallReservation` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct CallReservation {
+    pub llm_calls: u64,
+    pub output_tokens: u64,
+}
+```
+
+## hm-cortex::ReservationTicket
+
+<a id="rust-crates-hm-cortex-src-budget-rs-reservationticket"></a>
+
+Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/budget.rs).
+
+When to use: Use `ReservationTicket` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct ReservationTicket {
+    reserved: CallReservation,
+}
+```
+
+## hm-cortex::RunReservation
+
+<a id="rust-crates-hm-cortex-src-budget-rs-runreservation"></a>
+
+Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/budget.rs).
+
+When to use: Use `RunReservation` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RunReservation {
+    limits: ConsolidationBudget,
+    settled: BudgetUsage,
+    outstanding: CallReservation,
+}
+```
+
 ## hm-cortex::SourceKind
 
 <a id="rust-crates-hm-cortex-src-citations-rs-sourcekind"></a>
