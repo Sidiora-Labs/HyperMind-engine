@@ -1,0 +1,61 @@
+[
+  {
+    "request": {
+      "method": "POST",
+      "url": "https://fixture.invalid/v1/chat/completions",
+      "headers": {
+        "authorization": "Bearer fixture-key",
+        "content-type": "application/json"
+      },
+      "body": {
+        "model": "fixture-model",
+        "messages": [
+          {"role": "system", "content": "Transcribe only what is audible."},
+          {
+            "role": "user",
+            "content": [
+              {"type": "text", "text": "Transcribe the attached recording."},
+              {
+                "type": "input_audio",
+                "input_audio": {
+                  "data": "Zml4dHVyZS1hdWRpby1ieXRlcw==",
+                  "format": "mp3"
+                }
+              }
+            ]
+          }
+        ],
+        "max_tokens": 256,
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "media_transcript_1",
+            "strict": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "transcript": {"type": "string"},
+                "language": {"type": ["string", "null"]},
+                "confidence_micros": {"type": "integer"},
+                "refusal": {"type": ["string", "null"]}
+              },
+              "required": ["transcript", "language", "confidence_micros", "refusal"],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "choices": [{"message": {"content": "{\"transcript\":\"the ledger seals every frame\",\"language\":\"en\",\"confidence_micros\":940000,\"refusal\":null}"}}],
+        "usage": {
+          "prompt_tokens": 12,
+          "completion_tokens": 5,
+          "prompt_tokens_details": {"cached_tokens": 3}
+        }
+      }
+    }
+  }
+]

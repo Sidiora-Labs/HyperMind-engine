@@ -1,9 +1,14 @@
+use crate::media::{
+    MediaAttachment, MediaModality, MediaProvider, MediaRequest, audio_format_token,
+    validate_media_request,
+};
 use crate::outcome::{ResponseFault, ResponseOutcome, decode_structured_text};
 use crate::{
     LlmError, LlmProvider, ModelTier, Pricing, ProviderConfig, StructuredRequest,
     StructuredResponse, Usage, WireRequest, WireTransport, headers, require_success,
     validate_request,
 };
+use base64::Engine as _;
 use serde_json::{Value, json};
 
 pub struct OpenAiCompatible<T> {
@@ -23,6 +28,22 @@ impl<T> OpenAiCompatible<T> {
     }
 }
 
+impl<T: WireTransport> OpenAiCompatible<T> {
+    fn complete(
+        &self,
+        body: Value,
+        maximum_output_tokens: u32,
+    ) -> Result<StructuredResponse, LlmError> {
+        let response = require_success(self.transport.send(&WireRequest {
+            method: "POST".to_owned(),
+            url: self.config.endpoint.clone(),
+            headers: headers(&self.config),
+            body,
+        })?)?;
+        parse_completion(&self.config, &response, maximum_output_tokens)
+    }
+}
+
 impl<T: WireTransport> LlmProvider for OpenAiCompatible<T> {
     fn model_id(&self) -> &str {
         &self.config.model
@@ -38,67 +59,85 @@ impl<T: WireTransport> LlmProvider for OpenAiCompatible<T> {
     ) -> Result<StructuredResponse, LlmError> {
         validate_request(request)?;
         let body = request_body(&self.config.model, request);
-        let response = require_success(self.transport.send(&WireRequest {
-            method: "POST".to_owned(),
-            url: self.config.endpoint.clone(),
-            headers: headers(&self.config),
-            body,
-        })?)?;
-        if refused(&response) {
-            return Err(ResponseFault::new(
-                ResponseOutcome::Refused,
-                &self.config.model,
-                "provider declined the structured request".to_owned(),
-                request.maximum_output_tokens,
-                observed_usage(&response, self.config.pricing),
-            )
-            .into());
-        }
-        if truncated(&response) {
-            return Err(ResponseFault::new(
-                ResponseOutcome::Truncated,
-                &self.config.model,
-                "provider stopped the generation at the output token ceiling".to_owned(),
-                request.maximum_output_tokens,
-                observed_usage(&response, self.config.pricing),
-            )
-            .into());
-        }
-        let value = decode_structured_text(
-            response
-                .pointer("/choices/0/message/content")
-                .and_then(Value::as_str),
-            &self.config.model,
-            request.maximum_output_tokens,
-            observed_usage(&response, self.config.pricing),
-        )?;
-        let usage = response
-            .get("usage")
-            .ok_or_else(|| LlmError::Wire("OpenAI response has no usage".to_owned()))?;
-        let usage = Usage {
-            input_tokens: usage
-                .get("prompt_tokens")
-                .and_then(Value::as_u64)
-                .ok_or_else(|| LlmError::Wire("OpenAI prompt usage is missing".to_owned()))?,
-            output_tokens: usage
-                .get("completion_tokens")
-                .and_then(Value::as_u64)
-                .ok_or_else(|| LlmError::Wire("OpenAI completion usage is missing".to_owned()))?,
-            cache_read_tokens: usage
-                .pointer("/prompt_tokens_details/cached_tokens")
-                .and_then(Value::as_u64)
-                .unwrap_or(0),
-            cache_write_tokens: 0,
-            cost_microusd: 0,
-        }
-        .with_cost(self.config.pricing)?;
-        Ok(StructuredResponse {
-            model_id: self.config.model.clone(),
-            tier: self.config.tier,
-            value,
-            usage,
-        })
+        self.complete(body, request.maximum_output_tokens)
     }
+}
+
+impl<T: WireTransport> MediaProvider for OpenAiCompatible<T> {
+    fn model_id(&self) -> &str {
+        &self.config.model
+    }
+
+    fn tier(&self) -> ModelTier {
+        self.config.tier
+    }
+
+    fn describe_media(&self, request: &MediaRequest) -> Result<StructuredResponse, LlmError> {
+        validate_media_request(request)?;
+        let body = media_request_body(&self.config.model, request);
+        self.complete(body, request.maximum_output_tokens)
+    }
+}
+
+fn parse_completion(
+    config: &ProviderConfig,
+    response: &Value,
+    maximum_output_tokens: u32,
+) -> Result<StructuredResponse, LlmError> {
+    if refused(response) {
+        return Err(ResponseFault::new(
+            ResponseOutcome::Refused,
+            &config.model,
+            "provider declined the structured request".to_owned(),
+            maximum_output_tokens,
+            observed_usage(response, config.pricing),
+        )
+        .into());
+    }
+    if truncated(response) {
+        return Err(ResponseFault::new(
+            ResponseOutcome::Truncated,
+            &config.model,
+            "provider stopped the generation at the output token ceiling".to_owned(),
+            maximum_output_tokens,
+            observed_usage(response, config.pricing),
+        )
+        .into());
+    }
+    let value = decode_structured_text(
+        response
+            .pointer("/choices/0/message/content")
+            .and_then(Value::as_str),
+        &config.model,
+        maximum_output_tokens,
+        observed_usage(response, config.pricing),
+    )?;
+    let usage = response
+        .get("usage")
+        .ok_or_else(|| LlmError::Wire("OpenAI response has no usage".to_owned()))?;
+    let usage = Usage {
+        input_tokens: usage
+            .get("prompt_tokens")
+            .and_then(Value::as_u64)
+            .ok_or_else(|| LlmError::Wire("OpenAI prompt usage is missing".to_owned()))?,
+        output_tokens: usage
+            .get("completion_tokens")
+            .and_then(Value::as_u64)
+            .ok_or_else(|| LlmError::Wire("OpenAI completion usage is missing".to_owned()))?,
+        cache_read_tokens: usage
+            .pointer("/prompt_tokens_details/cached_tokens")
+            .and_then(Value::as_u64)
+            .unwrap_or(0),
+        cache_write_tokens: 0,
+        cost_microusd: 0,
+    }
+    .with_cost(config.pricing)?;
+    Ok(StructuredResponse {
+        model_id: config.model.clone(),
+        tier: config.tier,
+        value,
+        usage,
+    })
 }
 
 fn refused(response: &Value) -> bool {
@@ -137,29 +176,78 @@ fn observed_usage(response: &Value, pricing: Pricing) -> Usage {
     observed.with_cost(pricing).unwrap_or(observed)
 }
 
-fn request_body(model: &str, request: &StructuredRequest) -> Value {
+fn completion_body(
+    model: &str,
+    system: &str,
+    user_content: &Value,
+    schema_name: &str,
+    json_schema: &Value,
+    maximum_output_tokens: u32,
+) -> Value {
     let mut body = json!({
         "model": model,
         "messages": [
-            {"role": "system", "content": request.system},
-            {"role": "user", "content": request.prompt}
+            {"role": "system", "content": system},
+            {"role": "user", "content": user_content}
         ],
         "response_format": {
             "type": "json_schema",
             "json_schema": {
-                "name": request.prompt_id,
+                "name": schema_name,
                 "strict": true,
-                "schema": request.json_schema
+                "schema": json_schema
             }
         }
     });
     if model.rsplit('/').next() == Some("gpt-5.6-luna") {
-        body["max_completion_tokens"] = json!(request.maximum_output_tokens);
+        body["max_completion_tokens"] = json!(maximum_output_tokens);
         body["reasoning_effort"] = json!("none");
     } else {
-        body["max_tokens"] = json!(request.maximum_output_tokens);
+        body["max_tokens"] = json!(maximum_output_tokens);
     }
     body
+}
+
+fn request_body(model: &str, request: &StructuredRequest) -> Value {
+    completion_body(
+        model,
+        &request.system,
+        &json!(request.prompt),
+        &request.prompt_id,
+        &request.json_schema,
+        request.maximum_output_tokens,
+    )
+}
+
+fn media_request_body(model: &str, request: &MediaRequest) -> Value {
+    completion_body(
+        model,
+        &request.system,
+        &media_content(&request.prompt, &request.attachment),
+        &request.prompt_id,
+        &request.json_schema,
+        request.maximum_output_tokens,
+    )
+}
+
+fn media_content(prompt: &str, attachment: &MediaAttachment) -> Value {
+    let encoded = base64::engine::general_purpose::STANDARD.encode(&attachment.bytes);
+    let attached = match attachment.modality {
+        MediaModality::Audio => json!({
+            "type": "input_audio",
+            "input_audio": {
+                "data": encoded,
+                "format": audio_format_token(&attachment.media_type).unwrap_or_default()
+            }
+        }),
+        MediaModality::Image => json!({
+            "type": "image_url",
+            "image_url": {
+                "url": format!("data:{};base64,{encoded}", attachment.media_type)
+            }
+        }),
+    };
+    json!([{"type": "text", "text": prompt}, attached])
 }
 
 #[cfg(test)]

@@ -5,6 +5,7 @@ pub mod admission;
 pub mod anthropic;
 pub mod cost;
 pub mod gemini;
+pub mod media;
 pub mod ollama;
 pub mod openai_compat;
 pub mod outcome;

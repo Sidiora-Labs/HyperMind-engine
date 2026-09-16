@@ -1,0 +1,60 @@
+[
+  {
+    "request": {
+      "method": "POST",
+      "url": "https://fixture.invalid/v1/chat/completions",
+      "headers": {
+        "authorization": "Bearer fixture-key",
+        "content-type": "application/json"
+      },
+      "body": {
+        "model": "fixture-model",
+        "messages": [
+          {"role": "system", "content": "Describe only what is visible."},
+          {
+            "role": "user",
+            "content": [
+              {"type": "text", "text": "Describe the attached frame."},
+              {
+                "type": "image_url",
+                "image_url": {
+                  "url": "data:image/png;base64,Zml4dHVyZS1pbWFnZS1ieXRlcw=="
+                }
+              }
+            ]
+          }
+        ],
+        "max_tokens": 256,
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "media_description_1",
+            "strict": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {"type": "string"},
+                "detected_text": {"type": ["string", "null"]},
+                "confidence_micros": {"type": "integer"},
+                "refusal": {"type": ["string", "null"]}
+              },
+              "required": ["description", "detected_text", "confidence_micros", "refusal"],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "choices": [{"message": {"content": "{\"description\":\"a sealed ledger page on a dark table\",\"detected_text\":null,\"confidence_micros\":820000,\"refusal\":null}"}}],
+        "usage": {
+          "prompt_tokens": 20,
+          "completion_tokens": 7,
+          "prompt_tokens_details": {"cached_tokens": 4}
+        }
+      }
+    }
+  }
+]

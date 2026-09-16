@@ -6336,6 +6336,84 @@ pub struct HttpTransport {
 }
 ```
 
+## hm-llm::MediaModality
+
+<a id="rust-crates-hm-llm-src-media-rs-mediamodality"></a>
+
+Source: [`crates/hm-llm/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/media.rs).
+
+When to use: Use `MediaModality` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub enum MediaModality {
+    Audio,
+    Image,
+}
+```
+
+## hm-llm::MediaAttachment
+
+<a id="rust-crates-hm-llm-src-media-rs-mediaattachment"></a>
+
+Source: [`crates/hm-llm/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/media.rs).
+
+When to use: Use `MediaAttachment` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub struct MediaAttachment {
+    pub modality: MediaModality,
+    pub media_type: String,
+    pub bytes: Vec<u8>,
+}
+```
+
+## hm-llm::MediaRequest
+
+<a id="rust-crates-hm-llm-src-media-rs-mediarequest"></a>
+
+Source: [`crates/hm-llm/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/media.rs).
+
+When to use: Use `MediaRequest` for budgeted provider requests, structured responses, prompt identities, and measured usage. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation. Do not treat constructing or serializing a request as evidence that it was accepted or executed.
+
+
+```rust
+pub struct MediaRequest {
+    pub prompt_id: String,
+    pub system: String,
+    pub prompt: String,
+    pub json_schema: Value,
+    pub maximum_output_tokens: u32,
+    pub attachment: MediaAttachment,
+}
+```
+
+## hm-llm::MediaProvider
+
+<a id="rust-crates-hm-llm-src-media-rs-mediaprovider"></a>
+
+Source: [`crates/hm-llm/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/media.rs).
+
+When to use: Use `MediaProvider` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub trait MediaProvider: Send + Sync {
+    fn model_id(&self) -> &str;
+    fn tier(&self) -> ModelTier;
+    fn describe_media(&self, request: &MediaRequest) -> Result<StructuredResponse, LlmError>;
+}
+```
+
 ## hm-llm::Ollama
 
 <a id="rust-crates-hm-llm-src-ollama-rs-ollama"></a>

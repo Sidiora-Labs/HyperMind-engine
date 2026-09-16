@@ -1552,6 +1552,26 @@
       "file": "crates/hm-llm/src/lib.rs"
     },
     {
+      "id": "rust:crates/hm-llm/src/media.rs:MediaModality",
+      "name": "hm-llm::MediaModality",
+      "file": "crates/hm-llm/src/media.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/media.rs:MediaAttachment",
+      "name": "hm-llm::MediaAttachment",
+      "file": "crates/hm-llm/src/media.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/media.rs:MediaRequest",
+      "name": "hm-llm::MediaRequest",
+      "file": "crates/hm-llm/src/media.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/media.rs:MediaProvider",
+      "name": "hm-llm::MediaProvider",
+      "file": "crates/hm-llm/src/media.rs"
+    },
+    {
       "id": "rust:crates/hm-llm/src/ollama.rs:Ollama",
       "name": "hm-llm::Ollama",
       "file": "crates/hm-llm/src/ollama.rs"
@@ -3390,6 +3410,16 @@
       "id": "prompt:hindsight-review@3",
       "name": "hindsight-review@3",
       "file": "prompts/hindsight-review@3.md"
+    },
+    {
+      "id": "prompt:media-description@1",
+      "name": "media-description@1",
+      "file": "prompts/media-description@1.md"
+    },
+    {
+      "id": "prompt:media-transcript@1",
+      "name": "media-transcript@1",
+      "file": "prompts/media-transcript@1.md"
     },
     {
       "id": "prompt:merge-cluster@1",
