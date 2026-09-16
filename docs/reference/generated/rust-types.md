@@ -7493,6 +7493,145 @@ pub struct RetractInput {
 }
 ```
 
+## hm-mcp::CrawlPolicy
+
+<a id="rust-crates-hm-mcp-src-tools-websource-rs-crawlpolicy"></a>
+
+Source: [`crates/hm-mcp/src/tools/websource.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/websource.rs).
+
+When to use: Use `CrawlPolicy` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct CrawlPolicy {
+    pub allowed_hosts: Vec<String>,
+    pub maximum_bytes: usize,
+    pub maximum_redirects: u8,
+    pub minimum_interval_ms: u64,
+    pub request_timeout_ms: u64,
+    pub allow_cross_host_redirect: bool,
+}
+```
+
+## hm-mcp::FetchResponse
+
+<a id="rust-crates-hm-mcp-src-tools-websource-rs-fetchresponse"></a>
+
+Source: [`crates/hm-mcp/src/tools/websource.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/websource.rs).
+
+When to use: Use `FetchResponse` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct FetchResponse {
+    pub status: u16,
+    pub content_type: Option<String>,
+    pub content_length: Option<u64>,
+    pub location: Option<String>,
+    pub body: Vec<u8>,
+}
+```
+
+## hm-mcp::FetchedSource
+
+<a id="rust-crates-hm-mcp-src-tools-websource-rs-fetchedsource"></a>
+
+Source: [`crates/hm-mcp/src/tools/websource.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/websource.rs).
+
+When to use: Use `FetchedSource` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct FetchedSource {
+    pub requested_url: String,
+    pub final_url: String,
+    pub media_type: String,
+    pub status: u16,
+    pub redirects: Vec<String>,
+    pub bytes: Vec<u8>,
+    pub digest: [u8; 32],
+}
+```
+
+## hm-mcp::FetchTransport
+
+<a id="rust-crates-hm-mcp-src-tools-websource-rs-fetchtransport"></a>
+
+Source: [`crates/hm-mcp/src/tools/websource.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/websource.rs).
+
+When to use: Use `FetchTransport` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub trait FetchTransport: Send + Sync {
+    fn fetch(
+        &self,
+        url: &str,
+        timeout_ms: u64,
+        maximum_bytes: usize,
+    ) -> Result<FetchResponse, Error>;
+}
+```
+
+## hm-mcp::HttpFetchTransport
+
+<a id="rust-crates-hm-mcp-src-tools-websource-rs-httpfetchtransport"></a>
+
+Source: [`crates/hm-mcp/src/tools/websource.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/websource.rs).
+
+When to use: Use `HttpFetchTransport` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct HttpFetchTransport;
+```
+
+## hm-mcp::RecordedFetchTransport
+
+<a id="rust-crates-hm-mcp-src-tools-websource-rs-recordedfetchtransport"></a>
+
+Source: [`crates/hm-mcp/src/tools/websource.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/websource.rs).
+
+When to use: Use `RecordedFetchTransport` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct RecordedFetchTransport {
+    responses: Mutex<VecDeque<(String, FetchResponse)>>,
+}
+```
+
+## hm-mcp::WebSourceRuntime
+
+<a id="rust-crates-hm-mcp-src-tools-websource-rs-websourceruntime"></a>
+
+Source: [`crates/hm-mcp/src/tools/websource.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/websource.rs).
+
+When to use: Use `WebSourceRuntime` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct WebSourceRuntime {
+    policy: CrawlPolicy,
+    transport: Arc<dyn FetchTransport>,
+    last_request: Mutex<HashMap<String, Instant>>,
+}
+```
+
 ## hm-proj::AttentionRecord
 
 <a id="rust-crates-hm-proj-src-attention-rs-attentionrecord"></a>

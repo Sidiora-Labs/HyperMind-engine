@@ -1498,11 +1498,13 @@ dependencies = [
  "hm-proj",
  "hm-schema",
  "hm-serve",
+ "reqwest",
  "rmcp",
  "serde",
  "serde_json",
  "tempfile",
  "tokio",
+ "url",
 ]
 
 [[package]]

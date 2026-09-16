@@ -24,10 +24,12 @@ hm-ledger = { path = "../hm-ledger" }
 hm-llm = { path = "../hm-llm" }
 hm-schema = { path = "../hm-schema" }
 hm-serve = { path = "../hm-serve" }
+reqwest = { version = "0.12.23", default-features = false, features = ["blocking", "rustls-tls"] }
 rmcp = { version = "3.3.0", features = ["server", "macros", "schemars", "transport-io"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
 tokio = { version = "1.48.0", features = ["io-std", "macros", "rt-multi-thread"] }
+url = "2.5.8"
 
 [dev-dependencies]
 hm-proj = { path = "../hm-proj" }

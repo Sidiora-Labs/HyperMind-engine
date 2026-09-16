@@ -1817,6 +1817,41 @@
       "file": "crates/hm-mcp/src/tools/retract.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/tools/websource.rs:CrawlPolicy",
+      "name": "hm-mcp::CrawlPolicy",
+      "file": "crates/hm-mcp/src/tools/websource.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/websource.rs:FetchResponse",
+      "name": "hm-mcp::FetchResponse",
+      "file": "crates/hm-mcp/src/tools/websource.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/websource.rs:FetchedSource",
+      "name": "hm-mcp::FetchedSource",
+      "file": "crates/hm-mcp/src/tools/websource.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/websource.rs:FetchTransport",
+      "name": "hm-mcp::FetchTransport",
+      "file": "crates/hm-mcp/src/tools/websource.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/websource.rs:HttpFetchTransport",
+      "name": "hm-mcp::HttpFetchTransport",
+      "file": "crates/hm-mcp/src/tools/websource.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/websource.rs:RecordedFetchTransport",
+      "name": "hm-mcp::RecordedFetchTransport",
+      "file": "crates/hm-mcp/src/tools/websource.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/websource.rs:WebSourceRuntime",
+      "name": "hm-mcp::WebSourceRuntime",
+      "file": "crates/hm-mcp/src/tools/websource.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/attention.rs:AttentionRecord",
       "name": "hm-proj::AttentionRecord",
       "file": "crates/hm-proj/src/attention.rs"
