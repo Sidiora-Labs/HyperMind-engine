@@ -453,6 +453,7 @@ pub enum WhyCode {
     Prospective,
     Procedure,
     Relation,
+    Evidence,
 }
 ```
 

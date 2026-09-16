@@ -8,6 +8,8 @@ Answer feedback adjusts a bounded actor-local ranking preference that is applied
 
 The ten activation tiers are resident, intent, bindings, work ledger, prospective, conversation, entity, conflicts, fused, and temporal. The first four are required. Optional context shrinks before required bindings. If required content exceeds budget, the engine narrows the subtask and reports a gap. Deadline fallback is explicitly degraded with staleness information.
 
+A minted memory is a summary, so each surviving summary hit in the fused tier is paired with the original observation it cites: broad topic matching is followed immediately by the precise evidence in its own item, carrying the original record's authority and the single cited LSN, and the pair is kept or dropped together.
+
 The core activation path performs index reads and no model calls. Optional query embedding is distinct from rebuilding document embeddings. Explicit reconstruction is a separately requested model-backed operation, not ordinary recall or observed evidence.
 
 An experimental geometric alignment boost can rescale already-fused scores: candidate vectors and the query are projected onto a basis taken from the highest-ranked candidates that have a stored vector, and each score is multiplied by the resulting alignment factor. It is off by default, it never runs in the core activation path, and candidates without a stored vector stay neutral rather than being dropped. Enabling it for a deployment requires an explicit deployment identifier, a declared geometry version, and evidence produced by hm-eval whose measured boosted MRR@10 exceeds its baseline; an unqualified deployment is refused, not silently ignored. This is the same rule the optional cross-encoder rerank already follows.

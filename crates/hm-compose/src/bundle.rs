@@ -28,6 +28,7 @@ pub use crate::trim::trim_to_budget;
 pub const MAXIMUM_CANDIDATES: usize = 4096;
 pub const MAXIMUM_CONVERSATION_RECORDS: usize = 16_384;
 pub const MAXIMUM_QUERY_BYTES: usize = 1024 * 1024;
+pub const MAXIMUM_PAIRED_EVIDENCE: usize = 64;
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 #[repr(u8)]
@@ -98,6 +99,7 @@ pub enum WhyCode {
     Prospective,
     Procedure,
     Relation,
+    Evidence,
 }
 
 pub struct ActivationRequest<'model> {
@@ -611,6 +613,8 @@ fn populate_memories(
     }
     let memories =
         MemoryProjection::list_visible(snapshot, generation, request.maximum_candidates)?;
+    let mut paired = 0_usize;
+    let mut capped = false;
     for (index, memory) in memories.into_iter().enumerate() {
         let mut searchable = memory.name.into_bytes();
         searchable.push(b' ');
@@ -630,6 +634,10 @@ fn populate_memories(
             .collect::<Vec<_>>();
         let lexical_rank =
             u32::try_from(index + 1).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+        let citation = provenance
+            .first()
+            .copied()
+            .filter(|lsn| !carries_record(bundle, *lsn));
         let item = ActivationItem {
             tier: Tier::Fused,
             uri: format!(
@@ -647,7 +655,30 @@ fn populate_memories(
             lexical_rank,
             why: WhyCode::Fused,
         };
-        add_item(bundle, item)?;
+        if !add_item(bundle, item)? {
+            continue;
+        }
+        let Some(citation) = citation else {
+            continue;
+        };
+        let Some(evidence) = paired_evidence(snapshot, request, citation, lexical_rank)? else {
+            continue;
+        };
+        if paired == MAXIMUM_PAIRED_EVIDENCE {
+            if !capped {
+                bundle.gaps.push(Gap {
+                    kind: GapKind::TruncatedLane,
+                    tier: Some(Tier::Fused),
+                    lane: None,
+                    detail: "paired evidence limit reached".to_owned(),
+                });
+                capped = true;
+            }
+            continue;
+        }
+        if add_item(bundle, evidence)? {
+            paired += 1;
+        }
     }
     Ok(())
 }
@@ -678,6 +709,46 @@ fn record_content(record: &ConversationRecord) -> Option<safety::SafeContent> {
     safety::decode_semantic_content(&record.payload, schema_kind)
 }
 
+fn carries_record(bundle: &ActivationBundle, lsn: LSN) -> bool {
+    bundle
+        .sections
+        .iter()
+        .flat_map(|section| section.items.iter())
+        .any(|item| item.provenance.as_slice() == [lsn])
+}
+
+fn paired_evidence(
+    snapshot: &ReadSnapshot<'_>,
+    request: &ActivationRequest<'_>,
+    citation_lsn: LSN,
+    summary_rank: u32,
+) -> Result<Option<ActivationItem>, Error> {
+    if citation_lsn.get() == 0 {
+        return Ok(None);
+    }
+    let Some(record) = read_conversation_record(snapshot, citation_lsn)? else {
+        return Ok(None);
+    };
+    if record.conversation == request.conversation {
+        return Ok(None);
+    }
+    let Some(content) = record_content(&record) else {
+        return Ok(None);
+    };
+    Ok(Some(ActivationItem {
+        tier: Tier::Fused,
+        uri: provenance_uri(request.actor, &record, 0, summary_rank, WhyCode::Evidence),
+        provenance: vec![record.lsn],
+        tokens: request.token_counter.count(&content.bytes)?,
+        content: content.bytes,
+        authority: content.authority,
+        coarsened: false,
+        vector_rank: 0,
+        lexical_rank: summary_rank,
+        why: WhyCode::Evidence,
+    }))
+}
+
 fn provenance_uri(
     actor: ActorId,
     record: &ConversationRecord,
@@ -700,6 +771,7 @@ fn provenance_uri(
         WhyCode::Prospective => "prospective",
         WhyCode::Procedure => "procedure",
         WhyCode::Relation => "relation",
+        WhyCode::Evidence => "evidence",
     };
     format!(
         "hm://{}/{}/{}?at={}&src={}&score={score}&vr=0&lr={lexical_rank}&why={why}",
@@ -707,9 +779,9 @@ fn provenance_uri(
     )
 }
 
-fn add_item(bundle: &mut ActivationBundle, item: ActivationItem) -> Result<(), Error> {
+fn add_item(bundle: &mut ActivationBundle, item: ActivationItem) -> Result<bool, Error> {
     if !safety::safe_item(&item, &BTreeSet::new()) {
-        return Ok(());
+        return Ok(false);
     }
     let section = &mut bundle.sections[item.tier as usize];
     section.tokens = section
@@ -717,7 +789,7 @@ fn add_item(bundle: &mut ActivationBundle, item: ActivationItem) -> Result<(), E
         .checked_add(item.tokens)
         .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))?;
     section.items.push(item);
-    Ok(())
+    Ok(true)
 }
 
 fn selected_digests(

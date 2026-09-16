@@ -1,7 +1,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::budget::BudgetProfile;
-use crate::bundle::{ActivationBundle, Gap, GapKind, Tier};
+use crate::bundle::{ActivationBundle, Gap, GapKind, Tier, WhyCode};
 use crate::tokens::TokenCounter;
 use hm_core::{Error, ErrorCode};
 
@@ -87,6 +87,17 @@ fn drop_section_tail(bundle: &mut ActivationBundle, tier: Tier, total: &mut usiz
         section.tokens -= item.tokens;
         *total -= item.tokens;
         section.trimmed_items += 1;
+        if item.why == WhyCode::Evidence
+            && section
+                .items
+                .last()
+                .is_some_and(|summary| summary.why == WhyCode::Fused)
+        {
+            let summary = section.items.pop().expect("paired summary");
+            section.tokens -= summary.tokens;
+            *total -= summary.tokens;
+            section.trimmed_items += 1;
+        }
     }
     if section.trimmed_items > 0
         && !bundle

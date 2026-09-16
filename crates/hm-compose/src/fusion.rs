@@ -249,5 +249,6 @@ const fn why_name(why: WhyCode) -> &'static str {
         WhyCode::Prospective => "prospective",
         WhyCode::Procedure => "procedure",
         WhyCode::Relation => "relation",
+        WhyCode::Evidence => "evidence",
     }
 }
