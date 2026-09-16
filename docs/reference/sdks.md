@@ -33,7 +33,7 @@ Repeated sample keys are documentation-only. Production must use securely provis
 
 ## TypeScript
 
-The workspace contains `engine` (native embedded), `client` (protocol and sequence recovery), `render` (safe rendering), and `migrate`. Use checked-in package scripts under `sdk/typescript`; generated wire bindings are not hand-edited. Prebuild publication is a separate release activity.
+The workspace contains `engine` (native embedded), `client` (protocol and sequence recovery), `render` (safe rendering), `migrate`, and `console`. `@hypermind/console` builds the read-only inspection views — overview, activity, sources and entities, evidence path, access, removal preview, domain profile and upload sessions — from daemon envelopes it obtains through `@hypermind/client` in Node or `fetch` in a browser; it is described in the [console guide](../guides/console.md). Use checked-in package scripts under `sdk/typescript`; generated wire bindings are not hand-edited. Prebuild publication is a separate release activity.
 
 ## Python and Go
 

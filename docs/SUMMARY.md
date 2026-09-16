@@ -10,6 +10,7 @@
   - [Documents](concepts/documents.md)
   - [Anticipation](concepts/anticipation.md)
 - [Operations and recovery](guides/operations.md)
+  - [Console](guides/console.md)
   - [Deployment](guides/deployment.md)
   - [Migration](guides/migration.md)
   - [Continuous integration](guides/ci.md)
