@@ -100,7 +100,9 @@ pub async fn run(
                     hm_llm::LlmError::Schema(_) | hm_llm::LlmError::Wire(_) => {
                         ErrorCode::SchemaInvalid
                     }
-                    hm_llm::LlmError::Capacity => ErrorCode::CapacityExceeded,
+                    hm_llm::LlmError::Admission(_) | hm_llm::LlmError::Capacity => {
+                        ErrorCode::CapacityExceeded
+                    }
                     hm_llm::LlmError::Network(_) => ErrorCode::OperationUnavailable,
                 })
             })?;
