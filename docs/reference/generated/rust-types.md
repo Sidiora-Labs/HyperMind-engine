@@ -2791,6 +2791,24 @@ pub struct NremDecision {
 }
 ```
 
+## hm-cortex::MergeOptions
+
+<a id="rust-crates-hm-cortex-src-nrem-merge-rs-mergeoptions"></a>
+
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
+
+When to use: Use `MergeOptions` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Set explicit deployment limits before opening the associated resource.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation. Do not log secret fields or substitute defaults for an explicitly authorized budget.
+
+
+```rust
+pub struct MergeOptions {
+    pub maximum_attempts_per_cluster: u32,
+    pub retry_output_tokens: u32,
+}
+```
+
 ## hm-cortex::DropReason
 
 <a id="rust-crates-hm-cortex-src-nrem-merge-rs-dropreason"></a>
@@ -2814,6 +2832,8 @@ pub enum DropReason {
     RewriteGuard(Vec<String>),
     MissingTarget,
     InvalidCandidateEncoding,
+    ProviderOutcome(ResponseOutcome),
+    RunReservationExhausted,
 }
 ```
 
@@ -2852,6 +2872,7 @@ pub struct NremReport {
     pub dropped: Vec<DroppedCandidate>,
     pub citation_invalid: u64,
     pub llm_calls: u64,
+    pub retries: u64,
     pub cost: RunCost,
 }
 ```

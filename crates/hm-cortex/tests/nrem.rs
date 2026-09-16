@@ -5,6 +5,7 @@
     clippy::too_many_lines
 )]
 
+use hm_cortex::budget::RunReservation;
 use hm_cortex::citations::{
     CitationClaim, CitationError, FrozenCandidate, FrozenCandidateSet, SourceKind,
 };
@@ -12,8 +13,9 @@ use hm_cortex::nrem::cluster::{
     ClusterOptions, ObservationCluster, PendingObservation, cluster_observations,
 };
 use hm_cortex::nrem::merge::{
-    ClusterOutcome, DropReason, ExistingMemory, MergeAction, consolidate_clusters, extract_cluster,
-    merge_contract, merge_request,
+    ClusterOutcome, DropReason, ExistingMemory, MERGE_OUTPUT_TOKENS, MergeAction, MergeOptions,
+    consolidate_clusters, consolidate_clusters_reserved, extract_cluster, merge_contract,
+    merge_request,
 };
 use hm_cortex::quality::{
     LabelledDecision, ThoughtQualityOptions, assess_thought, check_rewrite, grounding_score_micros,
@@ -21,10 +23,11 @@ use hm_cortex::quality::{
 };
 use hm_llm::contract::{ContractViolation, EXTRACTION_CONTRACT_VERSION, FieldShape};
 use hm_llm::openai_compat::OpenAiCompatible;
+use hm_llm::outcome::ResponseOutcome;
 use hm_llm::{
     ModelTier, Pricing, ProviderConfig, RecordedTransport, WireFixture, WireRequest, WireResponse,
 };
-use hm_schema::events::Authority;
+use hm_schema::events::{Authority, ConsolidationBudget};
 use serde_json::{Value, json};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -335,6 +338,14 @@ fn one_recorded_structured_call_per_cluster_enforces_grounding_and_independence(
 }
 
 fn fixture(request: &hm_llm::StructuredRequest, output: &Value) -> WireFixture {
+    recorded_at_ceiling(request, request.maximum_output_tokens, completed(output))
+}
+
+fn recorded_at_ceiling(
+    request: &hm_llm::StructuredRequest,
+    maximum_output_tokens: u32,
+    body: Value,
+) -> WireFixture {
     WireFixture {
         request: WireRequest {
             method: "POST".to_owned(),
@@ -349,7 +360,7 @@ fn fixture(request: &hm_llm::StructuredRequest, output: &Value) -> WireFixture {
                     {"role": "system", "content": request.system},
                     {"role": "user", "content": request.prompt}
                 ],
-                "max_tokens": request.maximum_output_tokens,
+                "max_tokens": maximum_output_tokens,
                 "response_format": {
                     "type": "json_schema",
                     "json_schema": {
@@ -360,18 +371,23 @@ fn fixture(request: &hm_llm::StructuredRequest, output: &Value) -> WireFixture {
                 }
             }),
         },
-        response: WireResponse {
-            status: 200,
-            body: json!({
-                "choices": [{"message": {"content": output.to_string()}}],
-                "usage": {
-                    "prompt_tokens": 100,
-                    "completion_tokens": 25,
-                    "prompt_tokens_details": {"cached_tokens": 0}
-                }
-            }),
-        },
+        response: WireResponse { status: 200, body },
     }
+}
+
+fn completed(output: &Value) -> Value {
+    answered(&json!({"message": {"content": output.to_string()}}))
+}
+
+fn answered(choice: &Value) -> Value {
+    json!({
+        "choices": [choice],
+        "usage": {
+            "prompt_tokens": 100,
+            "completion_tokens": 25,
+            "prompt_tokens_details": {"cached_tokens": 0}
+        }
+    })
 }
 
 #[test]
@@ -1065,4 +1081,168 @@ fn merge_contract_matches_the_wire_schema_required_set() {
         .map(|rule| rule.name.to_owned())
         .collect::<BTreeSet<_>>();
     assert_eq!(required, declared);
+}
+
+const REPAIRED_DEFINITION: &str = "The auth service rotates refresh tokens on every use and revokes the previous token immediately, keeps each refresh token stored hashed in SQLite where a nightly janitor job has pruned them, and rotation failures are logged to the ops collection with the caller identifier and a recorded retry count.";
+
+fn repair_budget(max_llm_calls: u64) -> ConsolidationBudget {
+    ConsolidationBudget {
+        max_llm_calls,
+        max_tokens: 100_000,
+        max_microusd: 1_000_000,
+        max_wall_ms: 60_000,
+    }
+}
+
+#[test]
+fn a_truncated_merge_is_re_asked_once_at_a_reserved_higher_ceiling() {
+    let cluster = rotation_cluster([9; 32]);
+    let request = merge_request(&cluster, &[]).unwrap();
+    assert_eq!(request.maximum_output_tokens, MERGE_OUTPUT_TOKENS);
+    let options = MergeOptions::default();
+    assert_eq!(options.maximum_attempts_per_cluster, 2);
+    assert_eq!(options.retry_output_tokens, 2_048);
+    let provider = recorded_provider(vec![
+        recorded_at_ceiling(
+            &request,
+            MERGE_OUTPUT_TOKENS,
+            answered(&json!({"finish_reason": "length", "message": {"content": "{\"action\":"}})),
+        ),
+        recorded_at_ceiling(
+            &request,
+            options.retry_output_tokens,
+            completed(&rotation_response(REPAIRED_DEFINITION)),
+        ),
+    ]);
+    let mut reservation = RunReservation::new(repair_budget(4));
+    let report = consolidate_clusters_reserved(
+        &provider,
+        b"run-repair",
+        std::slice::from_ref(&cluster),
+        &[],
+        &mut reservation,
+        options,
+    )
+    .unwrap();
+    assert_eq!(report.decisions.len(), 1);
+    assert_eq!(report.decisions[0].cluster_id, [9; 32]);
+    assert_eq!(report.decisions[0].action, MergeAction::Mint);
+    assert_eq!(report.llm_calls, 2);
+    assert_eq!(report.retries, 1);
+    assert!(report.dropped.is_empty());
+    assert_eq!(reservation.settled().llm_calls, 2);
+    assert_eq!(provider.transport().remaining(), 0);
+}
+
+#[test]
+fn a_refusal_is_never_re_asked() {
+    let cluster = rotation_cluster([10; 32]);
+    let request = merge_request(&cluster, &[]).unwrap();
+    let options = MergeOptions::default();
+    let provider = recorded_provider(vec![
+        recorded_at_ceiling(
+            &request,
+            MERGE_OUTPUT_TOKENS,
+            answered(&json!({"message": {"refusal": "I will not answer that."}})),
+        ),
+        recorded_at_ceiling(
+            &request,
+            options.retry_output_tokens,
+            completed(&rotation_response(REPAIRED_DEFINITION)),
+        ),
+    ]);
+    let mut reservation = RunReservation::new(repair_budget(4));
+    let report = consolidate_clusters_reserved(
+        &provider,
+        b"run-refusal",
+        std::slice::from_ref(&cluster),
+        &[],
+        &mut reservation,
+        options,
+    )
+    .unwrap();
+    assert!(report.decisions.is_empty());
+    assert_eq!(report.dropped.len(), 1);
+    assert_eq!(
+        report.dropped[0].reason,
+        DropReason::ProviderOutcome(ResponseOutcome::Refused)
+    );
+    assert_eq!(report.llm_calls, 1);
+    assert_eq!(report.retries, 0);
+    assert_eq!(reservation.settled().llm_calls, 1);
+    assert_eq!(provider.transport().remaining(), 1);
+}
+
+#[test]
+fn a_malformed_merge_is_re_asked_at_the_same_ceiling() {
+    let cluster = rotation_cluster([11; 32]);
+    let request = merge_request(&cluster, &[]).unwrap();
+    let first = recorded_at_ceiling(
+        &request,
+        MERGE_OUTPUT_TOKENS,
+        answered(&json!({"message": {"content": "{"}})),
+    );
+    let second = recorded_at_ceiling(
+        &request,
+        MERGE_OUTPUT_TOKENS,
+        completed(&rotation_response(REPAIRED_DEFINITION)),
+    );
+    assert_eq!(first.request, second.request);
+    let provider = recorded_provider(vec![first, second]);
+    let mut reservation = RunReservation::new(repair_budget(4));
+    let report = consolidate_clusters_reserved(
+        &provider,
+        b"run-malformed",
+        std::slice::from_ref(&cluster),
+        &[],
+        &mut reservation,
+        MergeOptions::default(),
+    )
+    .unwrap();
+    assert_eq!(report.decisions.len(), 1);
+    assert_eq!(report.decisions[0].action, MergeAction::Mint);
+    assert_eq!(report.llm_calls, 2);
+    assert_eq!(report.retries, 1);
+    assert!(report.dropped.is_empty());
+    assert_eq!(reservation.settled().llm_calls, 2);
+    assert_eq!(provider.transport().remaining(), 0);
+}
+
+#[test]
+fn a_retry_that_does_not_fit_the_reservation_is_not_attempted() {
+    let cluster = rotation_cluster([12; 32]);
+    let request = merge_request(&cluster, &[]).unwrap();
+    let options = MergeOptions::default();
+    let provider = recorded_provider(vec![
+        recorded_at_ceiling(
+            &request,
+            MERGE_OUTPUT_TOKENS,
+            answered(&json!({"finish_reason": "length", "message": {"content": "{\"action\":"}})),
+        ),
+        recorded_at_ceiling(
+            &request,
+            options.retry_output_tokens,
+            completed(&rotation_response(REPAIRED_DEFINITION)),
+        ),
+    ]);
+    let mut reservation = RunReservation::new(repair_budget(1));
+    let report = consolidate_clusters_reserved(
+        &provider,
+        b"run-exhausted",
+        std::slice::from_ref(&cluster),
+        &[],
+        &mut reservation,
+        options,
+    )
+    .unwrap();
+    assert!(report.decisions.is_empty());
+    assert_eq!(report.llm_calls, 1);
+    assert_eq!(report.retries, 0);
+    assert_eq!(report.dropped.len(), 1);
+    assert_eq!(
+        report.dropped[0].reason,
+        DropReason::RunReservationExhausted
+    );
+    assert_eq!(reservation.settled().llm_calls, 1);
+    assert_eq!(provider.transport().remaining(), 1);
 }

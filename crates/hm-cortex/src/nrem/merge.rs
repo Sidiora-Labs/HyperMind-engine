@@ -1,5 +1,6 @@
 #![allow(clippy::missing_errors_doc)]
 
+use crate::budget::{CallReservation, RunReservation};
 use crate::citations::{CitationClaim, CitationError, FrozenCandidateSet, SourceKind};
 use crate::nrem::cluster::ObservationCluster;
 use crate::quality::{
@@ -9,13 +10,16 @@ use hm_llm::contract::{
     ContractViolation, EXTRACTION_CONTRACT_VERSION, ExtractionContract, FieldRule, FieldShape,
 };
 use hm_llm::cost::RunCost;
-use hm_llm::{LlmError, LlmProvider, StructuredRequest};
+use hm_llm::outcome::ResponseOutcome;
+use hm_llm::{LlmError, LlmProvider, StructuredRequest, StructuredResponse};
 use hm_schema::events::{Authority, ModelProvenance, ProvenanceRange};
 use serde_json::{Value, json};
 use std::collections::BTreeSet;
 use std::fmt::Write;
 
 pub const MERGE_CLUSTER_PROMPT: &str = include_str!("../../../../prompts/merge-cluster@1.md");
+
+pub const MERGE_OUTPUT_TOKENS: u32 = 1_024;
 
 static MERGE_FIELDS: [FieldRule; 7] = [
     FieldRule {
@@ -88,6 +92,21 @@ pub struct NremDecision {
     pub rewrite_guard: Option<RewriteGuardResult>,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct MergeOptions {
+    pub maximum_attempts_per_cluster: u32,
+    pub retry_output_tokens: u32,
+}
+
+impl Default for MergeOptions {
+    fn default() -> Self {
+        Self {
+            maximum_attempts_per_cluster: 2,
+            retry_output_tokens: MERGE_OUTPUT_TOKENS.saturating_mul(2),
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DropReason {
     InvalidStructuredOutput,
@@ -100,6 +119,8 @@ pub enum DropReason {
     RewriteGuard(Vec<String>),
     MissingTarget,
     InvalidCandidateEncoding,
+    ProviderOutcome(ResponseOutcome),
+    RunReservationExhausted,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -114,6 +135,7 @@ pub struct NremReport {
     pub dropped: Vec<DroppedCandidate>,
     pub citation_invalid: u64,
     pub llm_calls: u64,
+    pub retries: u64,
     pub cost: RunCost,
 }
 
@@ -164,7 +186,171 @@ pub fn extract_cluster(
         }
     };
     let response = provider.generate_structured(&request)?;
-    let (outcome, citation_invalid) = match validate_response(
+    let (outcome, citation_invalid) = cluster_outcome(run_id, cluster, existing, &response);
+    Ok(ClusterExtraction {
+        outcome,
+        usage: response.usage,
+        llm_calls: 1,
+        citation_invalid,
+    })
+}
+
+pub fn consolidate_clusters(
+    provider: &dyn LlmProvider,
+    run_id: &[u8],
+    clusters: &[ObservationCluster],
+    existing: &[ExistingMemory],
+) -> Result<NremReport, NremError> {
+    let mut reservation = RunReservation::unbounded();
+    consolidate_clusters_reserved(
+        provider,
+        run_id,
+        clusters,
+        existing,
+        &mut reservation,
+        MergeOptions {
+            maximum_attempts_per_cluster: 1,
+            retry_output_tokens: MERGE_OUTPUT_TOKENS,
+        },
+    )
+}
+
+pub fn consolidate_clusters_reserved(
+    provider: &dyn LlmProvider,
+    run_id: &[u8],
+    clusters: &[ObservationCluster],
+    existing: &[ExistingMemory],
+    reservation: &mut RunReservation,
+    options: MergeOptions,
+) -> Result<NremReport, NremError> {
+    let mut report = NremReport::default();
+    for cluster in clusters {
+        consolidate_cluster(
+            provider,
+            run_id,
+            cluster,
+            existing,
+            reservation,
+            options,
+            &mut report,
+        )?;
+    }
+    Ok(report)
+}
+
+fn consolidate_cluster(
+    provider: &dyn LlmProvider,
+    run_id: &[u8],
+    cluster: &ObservationCluster,
+    existing: &[ExistingMemory],
+    reservation: &mut RunReservation,
+    options: MergeOptions,
+    report: &mut NremReport,
+) -> Result<(), NremError> {
+    let mut ceiling = MERGE_OUTPUT_TOKENS;
+    let mut request = match merge_request_at(cluster, existing, ceiling) {
+        Ok(request) => request,
+        Err(reason) => {
+            report.dropped.push(DroppedCandidate {
+                cluster_id: cluster.cluster_id,
+                reason,
+            });
+            return Ok(());
+        }
+    };
+    let attempts = options.maximum_attempts_per_cluster.max(1);
+    let mut affordable = true;
+    for attempt in 0..attempts {
+        if !affordable {
+            report.dropped.push(DroppedCandidate {
+                cluster_id: cluster.cluster_id,
+                reason: DropReason::RunReservationExhausted,
+            });
+            break;
+        }
+        let Ok(ticket) = reservation.reserve(CallReservation {
+            llm_calls: 1,
+            output_tokens: u64::from(ceiling),
+        }) else {
+            report.dropped.push(DroppedCandidate {
+                cluster_id: cluster.cluster_id,
+                reason: DropReason::RunReservationExhausted,
+            });
+            break;
+        };
+        let fault = match provider.generate_structured(&request) {
+            Ok(response) => {
+                let _ = reservation.settle(ticket, response.usage);
+                record_attempt(report, attempt, response.usage)?;
+                let (outcome, citation_invalid) =
+                    cluster_outcome(run_id, cluster, existing, &response);
+                if citation_invalid {
+                    report.citation_invalid = report.citation_invalid.saturating_add(1);
+                }
+                match outcome {
+                    ClusterOutcome::Decided(decision) => report.decisions.push(*decision),
+                    ClusterOutcome::Dropped(dropped) => report.dropped.push(dropped),
+                }
+                break;
+            }
+            Err(LlmError::Response(fault)) => fault,
+            Err(error) => {
+                reservation.release(ticket);
+                return Err(NremError::Llm(error));
+            }
+        };
+        affordable = reservation.settle(ticket, fault.usage).is_ok();
+        record_attempt(report, attempt, fault.usage)?;
+        let reask = match fault.outcome {
+            ResponseOutcome::Refused => None,
+            ResponseOutcome::Truncated => {
+                (options.retry_output_tokens > ceiling).then_some(options.retry_output_tokens)
+            }
+            ResponseOutcome::Malformed | ResponseOutcome::Incomplete => Some(ceiling),
+        };
+        let Some(reask) = reask.filter(|_| attempt.saturating_add(1) < attempts) else {
+            report.dropped.push(DroppedCandidate {
+                cluster_id: cluster.cluster_id,
+                reason: DropReason::ProviderOutcome(fault.outcome),
+            });
+            break;
+        };
+        if reask != ceiling {
+            ceiling = reask;
+            request = match merge_request_at(cluster, existing, ceiling) {
+                Ok(request) => request,
+                Err(reason) => {
+                    report.dropped.push(DroppedCandidate {
+                        cluster_id: cluster.cluster_id,
+                        reason,
+                    });
+                    break;
+                }
+            };
+        }
+    }
+    Ok(())
+}
+
+fn record_attempt(
+    report: &mut NremReport,
+    attempt: u32,
+    usage: hm_llm::Usage,
+) -> Result<(), NremError> {
+    report.llm_calls = report.llm_calls.saturating_add(1);
+    if attempt > 0 {
+        report.retries = report.retries.saturating_add(1);
+    }
+    report.cost.record(usage).map_err(NremError::Cost)
+}
+
+fn cluster_outcome(
+    run_id: &[u8],
+    cluster: &ObservationCluster,
+    existing: &[ExistingMemory],
+    response: &StructuredResponse,
+) -> (ClusterOutcome, bool) {
+    match validate_response(
         run_id,
         cluster,
         existing,
@@ -183,45 +369,20 @@ pub fn extract_cluster(
                 citation_invalid,
             )
         }
-    };
-    Ok(ClusterExtraction {
-        outcome,
-        usage: response.usage,
-        llm_calls: 1,
-        citation_invalid,
-    })
-}
-
-pub fn consolidate_clusters(
-    provider: &dyn LlmProvider,
-    run_id: &[u8],
-    clusters: &[ObservationCluster],
-    existing: &[ExistingMemory],
-) -> Result<NremReport, NremError> {
-    let mut report = NremReport::default();
-    for cluster in clusters {
-        let extraction = extract_cluster(provider, run_id, cluster, existing)?;
-        if extraction.llm_calls > 0 {
-            report.llm_calls = report.llm_calls.saturating_add(extraction.llm_calls);
-            report
-                .cost
-                .record(extraction.usage)
-                .map_err(NremError::Cost)?;
-        }
-        if extraction.citation_invalid {
-            report.citation_invalid = report.citation_invalid.saturating_add(1);
-        }
-        match extraction.outcome {
-            ClusterOutcome::Decided(decision) => report.decisions.push(*decision),
-            ClusterOutcome::Dropped(dropped) => report.dropped.push(dropped),
-        }
     }
-    Ok(report)
 }
 
 pub fn merge_request(
     cluster: &ObservationCluster,
     existing: &[ExistingMemory],
+) -> Result<StructuredRequest, DropReason> {
+    merge_request_at(cluster, existing, MERGE_OUTPUT_TOKENS)
+}
+
+fn merge_request_at(
+    cluster: &ObservationCluster,
+    existing: &[ExistingMemory],
+    maximum_output_tokens: u32,
 ) -> Result<StructuredRequest, DropReason> {
     let mut prompt = String::from("FROZEN OBSERVATIONS\n");
     for observation in &cluster.observations {
@@ -259,7 +420,7 @@ pub fn merge_request(
         system: MERGE_CLUSTER_PROMPT.to_owned(),
         prompt,
         json_schema: response_schema(),
-        maximum_output_tokens: 1_024,
+        maximum_output_tokens,
     })
 }
 

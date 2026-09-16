@@ -667,6 +667,11 @@
       "file": "crates/hm-cortex/src/nrem/merge.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/nrem/merge.rs:MergeOptions",
+      "name": "hm-cortex::MergeOptions",
+      "file": "crates/hm-cortex/src/nrem/merge.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/nrem/merge.rs:DropReason",
       "name": "hm-cortex::DropReason",
       "file": "crates/hm-cortex/src/nrem/merge.rs"
