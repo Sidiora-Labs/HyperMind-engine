@@ -2,6 +2,47 @@
 
 Generated from authored `pub struct`, `enum`, `trait`, and `type` declarations in every crate’s `src` directory, including macro-defined core identifiers. FlatBuffers-generated builders, offsets, and object wrappers are represented by their canonical definitions in the schema catalog rather than duplicated here. Public declarations in internal modules are included conservatively; this catalog does not promise every path is a stable external API.
 
+## hm-capi::HmEngine
+
+<a id="rust-crates-hm-capi-src-engine-rs-hmengine"></a>
+
+Source: [`crates/hm-capi/src/engine.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-capi/src/engine.rs).
+
+When to use: Use `HmEngine` for the C application binary interface over an embedded actor: opening a handle from sealed identity material, sharing it by reference count, and shutting it down deterministically.
+
+Do not use: Do not open one actor directory from a second owner, free a handle while a call is in flight, retain a borrowed callback string after the callback returns, or treat a returned envelope as proof of an external effect.
+
+
+```rust
+pub struct HmEngine {
+    pub(crate) inner: Arc<EngineState>,
+}
+```
+
+## hm-capi::HmStatus
+
+<a id="rust-crates-hm-capi-src-status-rs-hmstatus"></a>
+
+Source: [`crates/hm-capi/src/status.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-capi/src/status.rs).
+
+When to use: Use `HmStatus` for the C application binary interface over an embedded actor: opening a handle from sealed identity material, sharing it by reference count, and shutting it down deterministically.
+
+Do not use: Do not open one actor directory from a second owner, free a handle while a call is in flight, retain a borrowed callback string after the callback returns, or treat a returned envelope as proof of an external effect.
+
+
+```rust
+pub enum HmStatus {
+    Ok = 0,
+    NullPointer = 1,
+    InvalidUtf8 = 2,
+    InvalidArgument = 3,
+    HandleClosed = 4,
+    Runtime = 5,
+    Panic = 6,
+    Kernel = 7,
+}
+```
+
 ## hm-cli::Command
 
 <a id="rust-crates-hm-cli-src-actors-rs-command"></a>

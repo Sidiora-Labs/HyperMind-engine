@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
 members = [
+    "crates/hm-capi",
     "crates/hm-cli",
     "crates/hm-compose",
     "crates/hm-core",

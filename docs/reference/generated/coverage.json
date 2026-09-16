@@ -2,6 +2,16 @@
   "version": 1,
   "inventory": [
     {
+      "id": "rust:crates/hm-capi/src/engine.rs:HmEngine",
+      "name": "hm-capi::HmEngine",
+      "file": "crates/hm-capi/src/engine.rs"
+    },
+    {
+      "id": "rust:crates/hm-capi/src/status.rs:HmStatus",
+      "name": "hm-capi::HmStatus",
+      "file": "crates/hm-capi/src/status.rs"
+    },
+    {
       "id": "rust:crates/hm-cli/src/actors.rs:Command",
       "name": "hm-cli::Command",
       "file": "crates/hm-cli/src/actors.rs"

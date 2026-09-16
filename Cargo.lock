@@ -1326,6 +1326,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "hm-capi"
+version = "0.1.0"
+dependencies = [
+ "hm-core",
+ "hm-mcp",
+ "hm-serve",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+]
+
+[[package]]
 name = "hm-cli"
 version = "0.1.0"
 dependencies = [
