@@ -162,6 +162,31 @@
       "file": "crates/hm-compose/src/fusion.rs"
     },
     {
+      "id": "rust:crates/hm-compose/src/geometry.rs:GeometryConfig",
+      "name": "hm-compose::GeometryConfig",
+      "file": "crates/hm-compose/src/geometry.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/geometry.rs:GeometryEvidence",
+      "name": "hm-compose::GeometryEvidence",
+      "file": "crates/hm-compose/src/geometry.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/geometry.rs:GeometryError",
+      "name": "hm-compose::GeometryError",
+      "file": "crates/hm-compose/src/geometry.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/geometry.rs:AlignmentReport",
+      "name": "hm-compose::AlignmentReport",
+      "file": "crates/hm-compose/src/geometry.rs"
+    },
+    {
+      "id": "rust:crates/hm-compose/src/geometry.rs:AlignmentBoost",
+      "name": "hm-compose::AlignmentBoost",
+      "file": "crates/hm-compose/src/geometry.rs"
+    },
+    {
       "id": "rust:crates/hm-compose/src/health.rs:EncoderState",
       "name": "hm-compose::EncoderState",
       "file": "crates/hm-compose/src/health.rs"

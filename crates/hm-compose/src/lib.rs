@@ -5,6 +5,7 @@ pub mod bundle;
 pub mod canonical;
 pub mod deadline;
 pub mod fusion;
+pub mod geometry;
 pub mod health;
 pub mod lanes;
 pub mod manifest;

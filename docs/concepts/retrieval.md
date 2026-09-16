@@ -8,6 +8,8 @@ The ten activation tiers are resident, intent, bindings, work ledger, prospectiv
 
 The core activation path performs index reads and no model calls. Optional query embedding is distinct from rebuilding document embeddings. Explicit reconstruction is a separately requested model-backed operation, not ordinary recall or observed evidence.
 
+An experimental geometric alignment boost can rescale already-fused scores: candidate vectors and the query are projected onto a basis taken from the highest-ranked candidates that have a stored vector, and each score is multiplied by the resulting alignment factor. It is off by default, it never runs in the core activation path, and candidates without a stored vector stay neutral rather than being dropped. Enabling it for a deployment requires an explicit deployment identifier, a declared geometry version, and evidence produced by hm-eval whose measured boosted MRR@10 exceeds its baseline; an unqualified deployment is refused, not silently ignored. This is the same rule the optional cross-encoder rerank already follows.
+
 When to use: `recall` for bounded evidence lookup, `activate` for whole-turn continuity and token limits, and timeline/as-of access for history.
 
 Do not use: lexical-only output as proof of semantic retrieval, omit gaps from your client, or confuse ranking with evidence authority. Preserve actual encoder/retrieval identity in benchmarks.

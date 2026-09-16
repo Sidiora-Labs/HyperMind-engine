@@ -756,6 +756,106 @@ pub struct FusedHit {
 }
 ```
 
+## hm-compose::GeometryConfig
+
+<a id="rust-crates-hm-compose-src-geometry-rs-geometryconfig"></a>
+
+Source: [`crates/hm-compose/src/geometry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/geometry.rs).
+
+When to use: Use `GeometryConfig` for planning, combining, budgeting, and safely rendering provenance-bearing activation context. Set explicit deployment limits before opening the associated resource.
+
+Do not use: Do not shed required bindings silently, omit degraded health, or render memory into system/developer instructions. Do not log secret fields or substitute defaults for an explicitly authorized budget.
+
+
+```rust
+pub struct GeometryConfig {
+    pub enabled: bool,
+    pub deployment_id: String,
+    pub version: u16,
+    pub evidence: Option<GeometryEvidence>,
+}
+```
+
+## hm-compose::GeometryEvidence
+
+<a id="rust-crates-hm-compose-src-geometry-rs-geometryevidence"></a>
+
+Source: [`crates/hm-compose/src/geometry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/geometry.rs).
+
+When to use: Use `GeometryEvidence` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
+
+Do not use: Do not shed required bindings silently, omit degraded health, or render memory into system/developer instructions.
+
+
+```rust
+pub struct GeometryEvidence {
+    pub producer: String,
+    pub deployment_id: String,
+    pub version: u16,
+    pub evaluation_id: String,
+    pub evaluated_queries: u64,
+    pub baseline_mrr_at_10: f64,
+    pub boosted_mrr_at_10: f64,
+}
+```
+
+## hm-compose::GeometryError
+
+<a id="rust-crates-hm-compose-src-geometry-rs-geometryerror"></a>
+
+Source: [`crates/hm-compose/src/geometry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/geometry.rs).
+
+When to use: Use `GeometryError` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
+
+Do not use: Do not shed required bindings silently, omit degraded health, or render memory into system/developer instructions.
+
+
+```rust
+pub enum GeometryError {
+    UnqualifiedDeployment,
+    InvalidArgument,
+    DimensionMismatch,
+    CapacityExceeded,
+}
+```
+
+## hm-compose::AlignmentReport
+
+<a id="rust-crates-hm-compose-src-geometry-rs-alignmentreport"></a>
+
+Source: [`crates/hm-compose/src/geometry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/geometry.rs).
+
+When to use: Use `AlignmentReport` for planning, combining, budgeting, and safely rendering provenance-bearing activation context. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not shed required bindings silently, omit degraded health, or render memory into system/developer instructions. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct AlignmentReport {
+    pub applied: usize,
+    pub neutral: usize,
+    pub minimum_factor_q16: i64,
+    pub maximum_factor_q16: i64,
+}
+```
+
+## hm-compose::AlignmentBoost
+
+<a id="rust-crates-hm-compose-src-geometry-rs-alignmentboost"></a>
+
+Source: [`crates/hm-compose/src/geometry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/geometry.rs).
+
+When to use: Use `AlignmentBoost` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
+
+Do not use: Do not shed required bindings silently, omit degraded health, or render memory into system/developer instructions.
+
+
+```rust
+pub struct AlignmentBoost {
+    enabled: bool,
+}
+```
+
 ## hm-compose::EncoderState
 
 <a id="rust-crates-hm-compose-src-health-rs-encoderstate"></a>
