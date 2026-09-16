@@ -80,7 +80,7 @@ impl ToolDispatcher for McpToolDispatcher {
                 },
                 "forget" => match serde_json::from_slice(&arguments_json) {
                     Ok(input) => server.forget_envelope(input).await,
-                    Err(error) => Envelope::error(parse_error(error), true),
+                    Err(error) => return Err(parse_error(error)),
                 },
                 "intend" => match serde_json::from_slice(&arguments_json) {
                     Ok(input) => server.intend_envelope(input).await,
