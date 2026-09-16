@@ -37,6 +37,7 @@ function bundle(): Bundle {
       },
     ],
     gaps: [],
+    support: [],
     health: { projection: "ready" },
     hash: "ab".repeat(32),
   };

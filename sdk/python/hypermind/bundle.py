@@ -18,6 +18,7 @@ class Bundle:
     gaps: list[dict]
     health: dict[str, str]
     hash: str
+    support: list[int]
 
 
 class ActivationSafetyError(ValueError):
@@ -99,9 +100,10 @@ def parse_bundle(data: bytes) -> Bundle:
         state = reader.u8()
         if state >= len(HEALTH): raise ValueError("invalid activation health")
         health[name] = HEALTH[state]
+    support = reader.lsns()
     if reader.offset != len(reader.data) or sum(section["tokens"] for section in sections) != spent:
         raise ValueError("activation trailing bytes or invalid token total")
-    return Bundle(epoch, budget, spent, sections, gaps, health, blake3(data).hexdigest())
+    return Bundle(epoch, budget, spent, sections, gaps, health, blake3(data).hexdigest(), support)
 
 
 def render(bundle: Bundle, *, same_turn_lsns=()) -> dict:

@@ -21,7 +21,7 @@ use hm_schema::events::{
     Attestation, AttestationDisposition, Authority, EventEnvelope, EventPayload, Retention,
     Sensitivity,
 };
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 pub use crate::trim::trim_to_budget;
 
@@ -195,6 +195,7 @@ pub struct RetrievalManifest {
     pub selected: Vec<LSN>,
     pub included: Vec<LSN>,
     pub used: Vec<LSN>,
+    pub support: Vec<LSN>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -283,7 +284,7 @@ pub fn activate_with_context(
     }
     populate_conversation(&mut bundle, snapshot, request)?;
     populate_lexical(&mut bundle, snapshot, request)?;
-    populate_memories(&mut bundle, snapshot, request)?;
+    let memory_support = populate_memories(&mut bundle, snapshot, request)?;
     for item in prospective::read(
         snapshot,
         request.actor,
@@ -350,6 +351,18 @@ pub fn activate_with_context(
         .copied()
         .filter(|lsn| included.contains(lsn))
         .collect();
+    let support: BTreeSet<LSN> = bundle
+        .sections
+        .iter()
+        .flat_map(|section| section.items.iter())
+        .flat_map(|item| match memory_support.get(&item.uri) {
+            Some(citations) => citations.as_slice(),
+            None if item.why == WhyCode::Evidence => item.provenance.as_slice(),
+            None => &[][..],
+        })
+        .copied()
+        .collect();
+    bundle.manifest.support = support.into_iter().collect();
     let selected = selected_digests(snapshot, &bundle.manifest.selected)?;
     bundle.manifest.manifest_id = manifest::manifest_id(
         &bundle.manifest.query_digest,
@@ -389,6 +402,7 @@ fn empty_bundle(
             selected: Vec::new(),
             included: Vec::new(),
             used: Vec::new(),
+            support: Vec::new(),
         },
         gaps: Vec::new(),
         health: BundleHealth {
@@ -602,14 +616,15 @@ fn populate_memories(
     bundle: &mut ActivationBundle,
     snapshot: &ReadSnapshot<'_>,
     request: &ActivationRequest<'_>,
-) -> Result<(), Error> {
+) -> Result<BTreeMap<String, Vec<LSN>>, Error> {
+    let mut support = BTreeMap::new();
     if request.query.is_empty() {
-        return Ok(());
+        return Ok(support);
     }
     let generation = RunsProjection::active_generation(snapshot)?;
     let query_terms = terms(request.query.as_bytes());
     if query_terms.is_empty() {
-        return Ok(());
+        return Ok(support);
     }
     let memories =
         MemoryProjection::list_visible(snapshot, generation, request.maximum_candidates)?;
@@ -638,15 +653,16 @@ fn populate_memories(
             .first()
             .copied()
             .filter(|lsn| !carries_record(bundle, *lsn));
+        let uri = format!(
+            "hm://{}/memory/{}/{}?generation={generation}&why=fused",
+            request.actor,
+            hex(&memory.memory_id),
+            memory.version_lsn,
+        );
         let item = ActivationItem {
             tier: Tier::Fused,
-            uri: format!(
-                "hm://{}/memory/{}/{}?generation={generation}&why=fused",
-                request.actor,
-                hex(&memory.memory_id),
-                memory.version_lsn,
-            ),
-            provenance,
+            uri: uri.clone(),
+            provenance: provenance.clone(),
             tokens: request.token_counter.count(&memory.definition)?,
             content: memory.definition,
             authority: memory.authority,
@@ -658,6 +674,7 @@ fn populate_memories(
         if !add_item(bundle, item)? {
             continue;
         }
+        support.insert(uri, provenance);
         let Some(citation) = citation else {
             continue;
         };
@@ -680,7 +697,7 @@ fn populate_memories(
             paired += 1;
         }
     }
-    Ok(())
+    Ok(support)
 }
 
 fn terms(bytes: &[u8]) -> Vec<String> {

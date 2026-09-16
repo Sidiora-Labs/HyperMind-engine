@@ -142,6 +142,7 @@ export function parseBundle(bytes: Uint8Array): Bundle {
     projection: HEALTH[reader.u8()] ?? "unknown",
     inclusion: HEALTH[reader.u8()] ?? "unknown",
   };
+  const support = reader.lsns();
   if (!reader.done()) throw new Error("activation bundle trailing bytes");
   return {
     snapshotEpoch,
@@ -150,6 +151,7 @@ export function parseBundle(bytes: Uint8Array): Bundle {
     sections,
     gaps,
     health,
+    support,
     hash: Buffer.from(blake3(bytes)).toString("hex"),
   };
 }

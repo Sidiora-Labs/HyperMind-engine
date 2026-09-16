@@ -48,6 +48,7 @@ export interface Bundle {
   sections: BundleSection[];
   gaps: Array<{ kind: string; detail: string }>;
   health: Record<string, string>;
+  support: bigint[];
   hash: string;
 }
 

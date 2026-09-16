@@ -176,6 +176,7 @@ func parseModernBundle(encoded []byte) (*Bundle, error) {
 		}
 		b.Health[key] = name
 	}
+	b.Support = r.lsns()
 	if r.err != nil {
 		return nil, r.err
 	}

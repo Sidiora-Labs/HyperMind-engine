@@ -7455,7 +7455,7 @@ export function render(bundle: Bundle, options: RenderOptions = {}): RenderedPro
 
 ## sdk/typescript/packages/render/src/index.ts::return
 
-<a id="sdk-method-sdk-typescript-packages-render-src-index-ts-1826-return"></a>
+<a id="sdk-method-sdk-typescript-packages-render-src-index-ts-1847-return"></a>
 
 Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 

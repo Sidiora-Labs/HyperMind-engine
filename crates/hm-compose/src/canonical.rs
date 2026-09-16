@@ -83,6 +83,7 @@ pub fn canonical_bytes(bundle: &ActivationBundle) -> Result<Vec<u8>, Error> {
     output.push(bundle.health.backlog as u8);
     output.push(bundle.health.projection as u8);
     output.push(bundle.health.inclusion as u8);
+    append_lsns(&mut output, &bundle.manifest.support)?;
     Ok(output)
 }
 

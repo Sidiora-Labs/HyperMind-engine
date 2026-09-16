@@ -153,6 +153,7 @@ fn bundle() -> ActivationBundle {
             selected: vec![LSN::new(7)],
             included: vec![LSN::new(7)],
             used: Vec::new(),
+            support: Vec::new(),
         },
         gaps: Vec::new(),
         health: BundleHealth {

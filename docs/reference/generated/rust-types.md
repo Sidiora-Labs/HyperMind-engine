@@ -656,6 +656,7 @@ pub struct RetrievalManifest {
     pub selected: Vec<LSN>,
     pub included: Vec<LSN>,
     pub used: Vec<LSN>,
+    pub support: Vec<LSN>,
 }
 ```
 

@@ -282,6 +282,7 @@ type Bundle struct {
 	Canonical      []byte
 	ModernSections []ModernSection
 	Gaps           []Gap
+	Support        []uint64
 	Health         map[string]string
 	SnapshotEpoch  uint64
 	BudgetTokens   uint64
