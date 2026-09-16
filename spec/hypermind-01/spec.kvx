@@ -795,7 +795,7 @@ do_2 = "Projections: intentions with a condition index by trigger kind; attentio
 
 [task.7.2]
 title = "Wake evaluation, attention scorer, prediction assessment, procedural mining and ladder"
-status = "pending"
+status = "done"
 wave = 7
 owner_lane = "cognition"
 requires = ["7.1"]

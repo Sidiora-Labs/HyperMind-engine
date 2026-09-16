@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 
 pub mod adjudicate;
+pub mod attention;
 pub mod authority;
 pub mod budget;
 pub mod citations;
@@ -8,6 +9,9 @@ pub mod fsrs;
 pub mod ingest;
 pub mod nli;
 pub mod nrem;
+pub mod predict;
+pub mod procedures;
+pub mod prospective;
 pub mod quality;
 pub mod rem;
 pub mod review;

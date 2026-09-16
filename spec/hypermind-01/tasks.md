@@ -199,7 +199,7 @@
     - Add IntentionSet with the WakeTrigger union, IntentionFired with wake id, AttentionDecided, IntentionCancelled, Predicted with bounded predicates and deadline, OutcomeObserved with five assessment states, ProcedureMined, ProcedureRevised, ProcedureAdopted.
     - Projections: intentions with a condition index by trigger kind; attention history bounded per actor with reasons; predictions with calibration counters per predicate kind; procedures with state, independent source roots, counterexamples.
     - _Requirements: 11.1, 12.1, 12.2, 5.3_
-  - [ ] 7.2 Wake evaluation, attention scorer, prediction assessment, procedural mining and ladder
+  - [x] 7.2 Wake evaluation, attention scorer, prediction assessment, procedural mining and ladder
     - Evaluate wake triggers against new events and external condition feeds; emit IntentionFired with a stable wake id; score with urgency, expected value, confidence, interruption cost, resource cost and duplication penalty, apply quiet hours, notification budget and workload, record AttentionDecided with a reason.
     - Assess predictions against observation LSNs only into the five states; update calibration per predicate kind; emit a revision_required gap after three same-mechanism failures with the bounded revision and probe counts; the model cannot redefine success after results.
     - Mine procedures from ToolCall to ToolResult to Effect to Outcome chains per closed loop; advance tentative to supported at three independent source roots from two conversations; adopted only by a user-authority event.
