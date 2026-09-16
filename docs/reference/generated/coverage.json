@@ -2317,6 +2317,16 @@
       "file": "crates/hm-serve/src/actor.rs"
     },
     {
+      "id": "rust:crates/hm-serve/src/actor.rs:GraphNeighbour",
+      "name": "hm-serve::GraphNeighbour",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:GraphNeighbourhood",
+      "name": "hm-serve::GraphNeighbourhood",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
       "id": "rust:crates/hm-serve/src/actor.rs:RecallRequest",
       "name": "hm-serve::RecallRequest",
       "file": "crates/hm-serve/src/actor.rs"

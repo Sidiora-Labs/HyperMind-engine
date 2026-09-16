@@ -23,14 +23,17 @@ use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
 };
 use hm_proj::entities::EntityProjection;
+use hm_proj::graph::{EdgeRecord, GraphProjection};
 use hm_proj::intentions::{IntentionRecord, IntentionStatus, IntentionsProjection};
 use hm_proj::lexical::LexicalProjection;
+use hm_proj::memories::{MemoryProjection, MemoryRecord};
 use hm_proj::predictions::{
     CalibrationCounters, MechanismFailures, PredictionRecord, PredictionsProjection,
 };
 use hm_proj::procedures::{ProcedureRecord, ProcedureState, ProceduresProjection};
 use hm_proj::rebuild::rebuild_projection_stream;
-use hm_proj::store::{ProjectionId, ProjectionStore};
+use hm_proj::runs::RunsProjection;
+use hm_proj::store::{ProjectionId, ProjectionStore, ReadSnapshot};
 use hm_proj::timeline::{ConversationRecord, read_conversation_record, read_conversation_records};
 use hm_proj::vectors::{VectorEntry, VectorLane};
 use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
@@ -45,6 +48,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use tokio::sync::{broadcast, mpsc, oneshot};
 
 const COMMAND_QUEUE: usize = 256;
+
+pub const MAXIMUM_GRAPH_NEIGHBOURS: usize = 256;
 
 #[derive(Clone, Debug)]
 pub struct ActorConfig {
@@ -94,6 +99,20 @@ pub struct RecallItem {
     pub wall_timestamp_ns: UtcNanos,
     pub payload: Vec<u8>,
     pub score_q32: u64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GraphNeighbour {
+    pub edge: EdgeRecord,
+    pub outgoing: bool,
+    pub endpoint: Option<MemoryRecord>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GraphNeighbourhood {
+    pub generation: u64,
+    pub node: Option<MemoryRecord>,
+    pub neighbours: Vec<GraphNeighbour>,
 }
 
 #[derive(Clone, Debug)]
@@ -231,6 +250,13 @@ enum Command {
         oneshot::Sender<Result<Option<ProcedureRecord>, Error>>,
     ),
     Procedures(usize, oneshot::Sender<Result<Vec<ProcedureRecord>, Error>>),
+    GraphNeighbourhood(
+        Vec<u8>,
+        i64,
+        usize,
+        oneshot::Sender<Result<GraphNeighbourhood, Error>>,
+    ),
+    Memories(usize, oneshot::Sender<Result<Vec<MemoryRecord>, Error>>),
     Append(
         Vec<IncomingEvent>,
         oneshot::Sender<Result<AppendOutcome, Error>>,
@@ -504,6 +530,22 @@ impl ActorEngine {
         request(&self.commands, |reply| Command::Procedures(limit, reply)).await
     }
 
+    pub async fn graph_neighbourhood(
+        &self,
+        node_id: Vec<u8>,
+        valid_at_ns: i64,
+        limit: usize,
+    ) -> Result<GraphNeighbourhood, Error> {
+        request(&self.commands, |reply| {
+            Command::GraphNeighbourhood(node_id, valid_at_ns, limit, reply)
+        })
+        .await
+    }
+
+    pub async fn memories(&self, limit: usize) -> Result<Vec<MemoryRecord>, Error> {
+        request(&self.commands, |reply| Command::Memories(limit, reply)).await
+    }
+
     pub async fn verification_status(&self) -> Result<VerificationStatus, Error> {
         request(&self.commands, Command::VerificationStatus).await
     }
@@ -555,6 +597,37 @@ async fn request<T>(
     response
         .await
         .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
+}
+
+fn neighbourhood(
+    snapshot: &ReadSnapshot<'_>,
+    node_id: &[u8],
+    valid_at_ns: i64,
+    limit: usize,
+) -> Result<GraphNeighbourhood, Error> {
+    let generation = RunsProjection::active_generation(snapshot)?;
+    let node = MemoryProjection::get_visible(snapshot, generation, node_id)?;
+    let edges = GraphProjection::neighbours(snapshot, generation, node_id, valid_at_ns, limit)?;
+    let mut neighbours = Vec::with_capacity(edges.len());
+    for edge in edges {
+        let outgoing = edge.source_id == node_id;
+        let endpoint = if outgoing {
+            &edge.target_id
+        } else {
+            &edge.source_id
+        };
+        let endpoint = MemoryProjection::get_visible(snapshot, generation, endpoint)?;
+        neighbours.push(GraphNeighbour {
+            edge,
+            outgoing,
+            endpoint,
+        });
+    }
+    Ok(GraphNeighbourhood {
+        generation,
+        node,
+        neighbours,
+    })
 }
 
 #[allow(clippy::too_many_lines)]
@@ -630,6 +703,28 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
                     .projections
                     .begin_snapshot()
                     .and_then(|snapshot| ProceduresProjection::list(&snapshot, limit));
+                let _ = reply.send(result);
+            }
+            Command::GraphNeighbourhood(node_id, valid_at_ns, limit, reply) => {
+                let result =
+                    if node_id.is_empty() || limit == 0 || limit > MAXIMUM_GRAPH_NEIGHBOURS {
+                        Err(Error::new(ErrorCode::InvalidArgument))
+                    } else {
+                        state.projections.begin_snapshot().and_then(|snapshot| {
+                            neighbourhood(&snapshot, &node_id, valid_at_ns, limit)
+                        })
+                    };
+                let _ = reply.send(result);
+            }
+            Command::Memories(limit, reply) => {
+                let result = if limit == 0 || limit > MAXIMUM_GRAPH_NEIGHBOURS {
+                    Err(Error::new(ErrorCode::InvalidArgument))
+                } else {
+                    state.projections.begin_snapshot().and_then(|snapshot| {
+                        let generation = RunsProjection::active_generation(&snapshot)?;
+                        MemoryProjection::list_visible(&snapshot, generation, limit)
+                    })
+                };
                 let _ = reply.send(result);
             }
             Command::Append(events, reply) => {

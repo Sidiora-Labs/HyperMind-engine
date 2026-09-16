@@ -9560,6 +9560,44 @@ pub struct RecallItem {
 }
 ```
 
+## hm-serve::GraphNeighbour
+
+<a id="rust-crates-hm-serve-src-actor-rs-graphneighbour"></a>
+
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
+
+When to use: Use `GraphNeighbour` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct GraphNeighbour {
+    pub edge: EdgeRecord,
+    pub outgoing: bool,
+    pub endpoint: Option<MemoryRecord>,
+}
+```
+
+## hm-serve::GraphNeighbourhood
+
+<a id="rust-crates-hm-serve-src-actor-rs-graphneighbourhood"></a>
+
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
+
+When to use: Use `GraphNeighbourhood` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct GraphNeighbourhood {
+    pub generation: u64,
+    pub node: Option<MemoryRecord>,
+    pub neighbours: Vec<GraphNeighbour>,
+}
+```
+
 ## hm-serve::RecallRequest
 
 <a id="rust-crates-hm-serve-src-actor-rs-recallrequest"></a>
