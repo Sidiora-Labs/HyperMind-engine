@@ -120,6 +120,7 @@ pub(crate) fn trigger_kind(signal: &WakeSignal) -> TriggerKind {
     }
 }
 
+#[allow(clippy::too_many_lines)]
 pub(crate) fn mined_procedures(
     frames: &[(FrameHeader, EventEnvelope)],
 ) -> Result<Vec<ProcedureMined>, Error> {

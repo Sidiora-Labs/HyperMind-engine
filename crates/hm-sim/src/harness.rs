@@ -69,6 +69,7 @@ impl JourneyHarness {
         self.start_mcp_mode("mcp").await
     }
 
+    #[allow(dead_code)]
     #[must_use]
     pub fn config_path(&self) -> &Path {
         &self.config_path

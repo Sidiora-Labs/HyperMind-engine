@@ -24,6 +24,7 @@ pub async fn gate(compare: Option<&str>) -> Result<(), Box<dyn std::error::Error
     Ok(())
 }
 
+#[allow(clippy::too_many_lines)]
 pub async fn run() -> Result<GateResult, Box<dyn std::error::Error>> {
     let dream = dream::run()?;
     let citations = citations::run()?;

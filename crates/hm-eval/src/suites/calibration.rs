@@ -32,6 +32,7 @@ pub struct CalibrationResult {
     pub per_kind: Vec<CalibrationRow>,
 }
 
+#[allow(clippy::too_many_lines)]
 pub async fn run() -> Result<CalibrationResult, EvaluationError> {
     let temporary = tempfile::tempdir()?;
     let config = ActorConfig {

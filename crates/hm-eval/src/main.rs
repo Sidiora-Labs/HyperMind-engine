@@ -2,6 +2,7 @@
 
 use hm_eval::{bench, slice1, slice2, slice3, slice4, slice5, slice6, slice7, suites};
 
+#[allow(clippy::too_many_lines)]
 #[tokio::main]
 async fn main() {
     let arguments: Vec<String> = std::env::args().skip(1).collect();

@@ -81,7 +81,11 @@ pub enum WakeTriggerInput {
 
 impl From<WakeTriggerInput> for hm_schema::events::WakeTrigger {
     fn from(value: WakeTriggerInput) -> Self {
-        use hm_schema::events::*;
+        use hm_schema::events::{
+            WakeAt, WakeBeliefChanged, WakeChannelMessage, WakeChildTerminal, WakeEntityMentioned,
+            WakeExternalCondition, WakeFileChanged, WakeLoopClosed, WakePredictionResolved,
+            WakeProcessExit, WakeRepositoryChanged, WakeSchedule, WakeUserResponse,
+        };
         match value {
             WakeTriggerInput::At { at_ns } => Self::WakeAt(Box::new(WakeAt { at_ns })),
             WakeTriggerInput::Schedule { schedule } => {
@@ -171,6 +175,7 @@ pub struct IntendInput {
     pub action: IntendAction,
 }
 
+#[allow(clippy::too_many_lines)]
 pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Error> {
     if input.conversation.is_empty() {
         return Err(Error::new(ErrorCode::InvalidArgument));

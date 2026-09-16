@@ -1,4 +1,4 @@
-#![allow(clippy::missing_errors_doc)]
+#![allow(clippy::missing_errors_doc, clippy::missing_panics_doc)]
 
 use crate::grpc::{Gateway, ListenerRole, TlsIdentity};
 use axum::extract::{DefaultBodyLimit, Path, State, rejection::JsonRejection};
@@ -87,8 +87,8 @@ struct Api;
 pub fn openapi() -> utoipa::openapi::OpenApi {
     use utoipa::openapi::security::{Http, HttpAuthScheme, SecurityRequirement, SecurityScheme};
     let mut document = Api::openapi();
-    document.info.title = "HyperMind remote API".to_owned();
-    document.info.version = "3.0.0".to_owned();
+    "HyperMind remote API".clone_into(&mut document.info.title);
+    "3.0.0".clone_into(&mut document.info.version);
     document.info.description = Some("Frozen NCPR v3. Mandatory mutual TLS plus capability bearer token. Actor and admin listeners are separate. Existing fourteen MCP verb names are preserved.".to_owned());
     let components = document
         .components
@@ -253,16 +253,13 @@ async fn tool(
         Ok(value) => value,
         Err(response) => return *response,
     };
-    let arguments_json = match serde_json::to_vec(&body.arguments) {
-        Ok(value) => value,
-        Err(_) => {
-            return failure(
-                StatusCode::BAD_REQUEST,
-                "invalid arguments",
-                mutation,
-                "not_dispatched",
-            );
-        }
+    let Ok(arguments_json) = serde_json::to_vec(&body.arguments) else {
+        return failure(
+            StatusCode::BAD_REQUEST,
+            "invalid arguments",
+            mutation,
+            "not_dispatched",
+        );
     };
     let request = request_bytes(
         body.request_id,

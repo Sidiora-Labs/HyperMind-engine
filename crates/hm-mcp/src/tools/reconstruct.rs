@@ -53,7 +53,7 @@ pub async fn run(
     let runtime = runtime.ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
     let lsns = input.filters.anchor_lsns;
     if !(2..=hm_compose::reconstruct::MAXIMUM_ANCHORS).contains(&lsns.len())
-        || lsns.iter().any(|lsn| *lsn == 0)
+        || lsns.contains(&0)
         || lsns.windows(2).any(|pair| pair[0] >= pair[1])
     {
         return Err(Error::new(ErrorCode::InvalidArgument));

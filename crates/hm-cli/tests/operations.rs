@@ -1,3 +1,5 @@
+#![allow(clippy::too_many_lines)]
+
 use hm_core::ActorId;
 use hm_ledger::keyring::{KeyHierarchy, OsEntropy};
 use hm_serve::config::load;

@@ -155,7 +155,7 @@ fn mint_independence_counts() -> Result<(usize, usize), Box<dyn std::error::Erro
             "name": "Audited token rotation",
             "definition": "Refresh tokens rotate after every use, are stored hashed in SQLite, and rotation failures are recorded in the ops log.",
             "tags": ["auth"],
-            "salience_micros": 800000,
+            "salience_micros": 800_000,
             "citations": [
                 {"lsn": 1, "byte_start": 0, "byte_end": 38, "quote": "tokens rotate"},
                 {"lsn": 2, "byte_start": 0, "byte_end": 46, "quote": "Rotation failures"},
@@ -168,7 +168,7 @@ fn mint_independence_counts() -> Result<(usize, usize), Box<dyn std::error::Erro
             "name": "Deployment region",
             "definition": "The deployment targets eu-central as its primary region.",
             "tags": ["deployment"],
-            "salience_micros": 700000,
+            "salience_micros": 700_000,
             "citations": [
                 {"lsn": 4, "byte_start": 0, "byte_end": 33, "quote": "primary region"},
                 {"lsn": 5, "byte_start": 0, "byte_end": 34, "quote": "targets eu-central"}

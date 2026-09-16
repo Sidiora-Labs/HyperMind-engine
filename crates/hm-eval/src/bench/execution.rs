@@ -4,6 +4,7 @@ use super::gateway::{DynError, Gateway, JUDGE_MODEL, MAXIMUM_BUDGET_MICROUSD, RE
 use super::{judge_diagnostic, locomo, longmemeval};
 use std::path::{Path, PathBuf};
 
+#[must_use]
 pub fn repository_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }

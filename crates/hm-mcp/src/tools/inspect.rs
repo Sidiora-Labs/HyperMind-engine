@@ -16,6 +16,7 @@ pub struct InspectInput {
     pub uri: Option<String>,
 }
 
+#[allow(clippy::too_many_lines)]
 pub async fn run(actor: &ActorEngine, input: InspectInput) -> Result<Envelope, Error> {
     let stats = actor.stats().await?;
     let verification = actor.verification_status().await?;

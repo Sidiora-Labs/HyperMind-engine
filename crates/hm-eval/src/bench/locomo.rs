@@ -104,6 +104,7 @@ impl BenchmarkResult {
     }
 }
 
+#[must_use]
 pub fn default_dataset_path() -> PathBuf {
     repository_root().join("eval/datasets/locomo/locomo10.json")
 }
@@ -347,6 +348,7 @@ fn score(
     })
 }
 
+#[allow(clippy::items_after_statements)]
 fn official_scores(rows: &[Value]) -> Result<Vec<f64>, DynError> {
     let interpreter = std::env::var_os("LOCOMO_SCORER_PYTHON").map_or_else(
         || repository_root().join("target/locomo-scorer-venv/bin/python"),
@@ -537,8 +539,8 @@ pub async fn run_live(
             return Err("LoCoMo judged coverage is incomplete".into());
         }
     }
-    result.reader_model = READER_MODEL.to_owned();
-    result.retrieval_mode = "lexical_only".to_owned();
+    READER_MODEL.clone_into(&mut result.reader_model);
+    "lexical_only".clone_into(&mut result.retrieval_mode);
     result.reader_cache_hits = reader_cache_hits;
     result.judged = judged;
     fs::write(
@@ -641,8 +643,8 @@ fn persist_failure(
     let mut result = score(dataset, predictions, false)?;
     result.complete = false;
     result.failure = Some(failure.to_owned());
-    result.reader_model = READER_MODEL.to_owned();
-    result.retrieval_mode = "lexical_only".to_owned();
+    READER_MODEL.clone_into(&mut result.reader_model);
+    "lexical_only".clone_into(&mut result.retrieval_mode);
     result.reader_cache_hits = reader_cache_hits;
     if let Some(report) = &mut judged {
         report.accuracy = ratio(report.correct, report.evaluated);

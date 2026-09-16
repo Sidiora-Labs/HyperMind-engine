@@ -26,6 +26,7 @@ pub struct AttentionResult {
 }
 
 impl AttentionResult {
+    #[must_use]
     pub fn precision(&self) -> f64 {
         ratio(
             self.true_suppression,
@@ -33,6 +34,7 @@ impl AttentionResult {
         )
     }
 
+    #[must_use]
     pub fn recall(&self) -> f64 {
         ratio(
             self.true_suppression,

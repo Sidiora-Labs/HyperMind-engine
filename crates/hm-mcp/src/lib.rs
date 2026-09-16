@@ -194,7 +194,7 @@ impl McpServer {
         }
     }
 
-    #[allow(clippy::too_many_lines)]
+    #[allow(clippy::too_many_lines, clippy::single_match_else)]
     async fn remember_inner(&self, input: RememberInput) -> Result<Envelope, Error> {
         if input.conversation.is_empty() || input.content.is_empty() {
             return Err(Error::new(ErrorCode::InvalidArgument));
@@ -406,6 +406,7 @@ impl McpServer {
         }
     }
 
+    #[allow(clippy::too_many_lines)]
     async fn recall_inner(&self, input: RecallInput) -> Result<Envelope, Error> {
         if matches!(input.mode, RecallMode::Reconstruct) {
             return tools::reconstruct::run(

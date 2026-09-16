@@ -1,3 +1,5 @@
+#![allow(clippy::cast_possible_truncation)]
+
 use hm_core::{ActorId, ConversationId, ErrorCode, LSN};
 use hm_ledger::frame::EventKind;
 use hm_schema::event::{CURRENT_SCHEMA_VERSION, encode_event_envelope};

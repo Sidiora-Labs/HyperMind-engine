@@ -1,3 +1,5 @@
+#![allow(clippy::too_many_lines)]
+
 use hm_core::{ActorId, ConversationId};
 use hm_mcp::{
     ExpectedPredicateInput, InspectInput, McpServer, OutcomeInput, PredicateKindInput, PredictInput,

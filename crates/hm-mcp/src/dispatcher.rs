@@ -20,11 +20,16 @@ impl McpToolDispatcher {
         })
     }
 
+    #[must_use]
     pub fn server(&self, actor: ActorEngine) -> McpServer {
         let mut server = McpServer::new(actor);
-        server.embedding_runtime = self.embedding_runtime.clone();
-        server.reconstruction_runtime = self.reconstruction_runtime.clone();
-        server.consolidation_runtime = self.consolidation_runtime.clone();
+        server.embedding_runtime.clone_from(&self.embedding_runtime);
+        server
+            .reconstruction_runtime
+            .clone_from(&self.reconstruction_runtime);
+        server
+            .consolidation_runtime
+            .clone_from(&self.consolidation_runtime);
         server
     }
 }

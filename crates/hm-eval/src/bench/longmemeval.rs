@@ -330,7 +330,7 @@ impl FullBenchmarkResult {
     }
 
     fn record(&mut self, completion: &Completion, judge: bool) {
-        self.cost_basis = COST_BASIS.to_owned();
+        COST_BASIS.clone_into(&mut self.cost_basis);
         self.input_tokens += completion.usage.input_tokens;
         self.output_tokens += completion.usage.output_tokens;
         self.reasoning_tokens += completion.usage.reasoning_tokens;
@@ -440,6 +440,7 @@ pub async fn run_selected(
     run_full_or_selected(gateway, Some(question_ids)).await
 }
 
+#[allow(clippy::too_many_lines)]
 async fn run_full_or_selected(
     gateway: &Gateway,
     question_ids: Option<&[String]>,

@@ -21,6 +21,7 @@ use std::time::{Duration, Instant};
 const CONNECTION: [u8; 16] = [9; 16];
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+#[allow(clippy::struct_excessive_bools)]
 pub struct GenerationResult {
     pub staged_hidden_after_kill: bool,
     pub publish_after_restart: bool,

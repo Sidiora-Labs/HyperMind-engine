@@ -1,4 +1,4 @@
-#![allow(clippy::missing_errors_doc)]
+#![allow(clippy::missing_errors_doc, clippy::missing_panics_doc)]
 
 pub mod bridge;
 mod tls;
@@ -6,6 +6,8 @@ pub use bridge::{Gateway, ListenerRole};
 pub use tls::TlsIdentity;
 
 pub mod wire {
+    #![allow(clippy::all, clippy::pedantic)]
+
     tonic::include_proto!("hypermind.v3");
 }
 

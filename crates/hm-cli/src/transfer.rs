@@ -1,3 +1,5 @@
+#![allow(clippy::cast_possible_truncation)]
+
 use anyhow::{Context, Result, ensure};
 use hm_core::{ConversationId, LSN};
 use hm_schema::event::{self, Boundary, EventHistory};

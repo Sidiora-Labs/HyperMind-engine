@@ -1,3 +1,5 @@
+#![allow(clippy::too_many_lines, clippy::unreadable_literal)]
+
 use hm_cli::import;
 use hm_core::{ActorId, LSN};
 use hm_proj::fsrs::FsrsProjection;

@@ -1,3 +1,5 @@
+#![allow(clippy::too_many_lines)]
+
 use hm_compose::{bundle::Tier, tokens::FallbackWeights};
 use hm_core::{ActorId, ConversationId, ErrorCode, LSN};
 use hm_cortex::attention::AttentionFactors;

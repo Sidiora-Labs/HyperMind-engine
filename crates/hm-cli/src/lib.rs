@@ -220,6 +220,7 @@ pub async fn run(arguments: impl IntoIterator<Item = impl Into<OsString> + Clone
     Ok(())
 }
 
+#[allow(clippy::too_many_lines)]
 async fn execute(command: Command) -> Result<Value> {
     match command {
         Command::Init {

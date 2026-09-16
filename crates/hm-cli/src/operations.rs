@@ -7,6 +7,7 @@ use std::io::{IsTerminal, Write};
 use std::path::Path;
 use std::time::{Duration, Instant};
 
+#[allow(clippy::single_match_else)]
 pub async fn doctor(path: &Path, models_directory: Option<&Path>) -> Result<Value> {
     let config = hm_serve::config::load(path)?;
     let socket_ready = tokio::time::timeout(
@@ -145,7 +146,7 @@ pub async fn tui(options: TuiOptions<'_>) -> Result<()> {
             anyhow::bail!("unexpected activation response")
         };
         let mut frame: Value = serde_json::from_slice(&reply.bytes)?;
-        ensure!(frame["ok"] == true, "live activation failed: {}", frame);
+        ensure!(frame["ok"] == true, "live activation failed: {frame}");
         if let Some(items) = frame["items"].as_array_mut() {
             for item in items {
                 if let Some(encoded) = item["content_base64"].as_str() {

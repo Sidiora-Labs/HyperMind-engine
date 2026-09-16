@@ -177,6 +177,7 @@ pub struct MemoryPipeline {
 }
 
 impl MemoryPipeline {
+    #[allow(clippy::too_many_lines)]
     pub async fn open(
         root: impl AsRef<Path>,
         dataset_hash: &str,
@@ -395,6 +396,7 @@ impl MemoryPipeline {
         Ok(answer)
     }
 
+    #[allow(clippy::too_many_lines)]
     pub async fn retrieve_context(
         &self,
         question: &BenchQuestion,
@@ -608,6 +610,7 @@ fn chunk_documents(documents: &[BenchDocument]) -> Result<Vec<Chunk>, DynError> 
     Ok(result)
 }
 
+#[allow(clippy::single_range_in_vec_init)]
 fn passage_ranges(text: &str) -> Vec<std::ops::Range<usize>> {
     if text.chars().count() <= PASSAGE_TARGET_CHARACTERS {
         return vec![0..text.len()];
@@ -708,7 +711,7 @@ fn rank_passages(candidates: &mut [CandidatePassage], query: &str) {
             .sum();
         candidate.score = 1
             + 1_000 / candidate.citation.rank as u64
-            + matched * 1_000 / (8 + (terms.len() as u64 + 1).ilog2() as u64);
+            + matched * 1_000 / (8 + u64::from((terms.len() as u64 + 1).ilog2()));
     }
     let source_support: Vec<_> = candidates
         .iter()
@@ -845,6 +848,12 @@ fn hex(bytes: &[u8]) -> String {
 
 #[cfg(test)]
 mod tests {
+    #![allow(
+        clippy::cast_possible_truncation,
+        clippy::similar_names,
+        clippy::too_many_lines
+    )]
+
     use super::*;
     use crate::bench::longmemeval::{DATASET_SHA256, history_documents, load_full_dataset};
     use hm_index::entity_rules::extract_entities;

@@ -1,3 +1,5 @@
+#![allow(clippy::too_many_lines)]
+
 use base64::Engine as _;
 use hm_core::ConversationId;
 use hm_schema::event::{CURRENT_SCHEMA_VERSION, encode_event_envelope};

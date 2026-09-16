@@ -11,6 +11,7 @@ pub async fn gate(compare: Option<&str>) -> Result<(), Box<dyn std::error::Error
         .map_err(|error| error as Box<dyn std::error::Error>)
 }
 
+#[allow(clippy::too_many_lines)]
 async fn run(compare: Option<&str>) -> Result<(), gateway::DynError> {
     let root = execution::repository_root();
     let attention = attention::run()?;

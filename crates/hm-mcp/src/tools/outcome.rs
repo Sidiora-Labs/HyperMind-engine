@@ -44,6 +44,7 @@ struct ObservedPredicate {
     resolvable: bool,
 }
 
+#[allow(clippy::too_many_lines)]
 pub async fn run(actor: &ActorEngine, input: OutcomeInput) -> Result<Envelope, Error> {
     if input.conversation.is_empty()
         || !bounded(&input.prediction_id)

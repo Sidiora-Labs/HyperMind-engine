@@ -1,5 +1,5 @@
 #![forbid(unsafe_code)]
-#![allow(clippy::too_many_lines)]
+#![allow(clippy::float_cmp, clippy::too_many_lines, clippy::unreadable_literal)]
 
 #[path = "../src/harness.rs"]
 #[allow(dead_code)]

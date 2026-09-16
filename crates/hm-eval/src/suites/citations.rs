@@ -1,4 +1,4 @@
-#![allow(clippy::missing_errors_doc)]
+#![allow(clippy::cast_precision_loss, clippy::missing_errors_doc)]
 
 use hm_cortex::citations::{
     CitationClaim, CitationError, FrozenCandidate, FrozenCandidateSet, SourceKind,
@@ -75,14 +75,14 @@ pub fn run() -> Result<CitationResult, Box<dyn std::error::Error>> {
                 }
                 result.accepted += 1;
             }
-            (Err(error), false)
-                if matches!(
-                    error,
+            (
+                Err(
                     CitationError::QuoteOutsideRange(_)
-                        | CitationError::UncitedDerivedQuote(_)
-                        | CitationError::InvalidRange(_)
-                ) =>
-            {
+                    | CitationError::UncitedDerivedQuote(_)
+                    | CitationError::InvalidRange(_),
+                ),
+                false,
+            ) => {
                 result.dropped += 1;
             }
             (Ok(_), false) => result.escaped_invalid += 1,

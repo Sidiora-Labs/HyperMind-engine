@@ -1,3 +1,5 @@
+#![allow(clippy::needless_pass_by_value, clippy::too_many_lines)]
+
 use base64::Engine as _;
 use hm_core::{ActorId, ConversationId, LSN};
 use hm_ledger::frame::EventKind;
@@ -91,7 +93,7 @@ async fn every_wake_trigger_is_persisted_and_observed_change_is_batched_across_r
         .await
         .unwrap();
     let wake = json!({"kind":"evaluate_wake","observation_lsn":change.first_lsn.get(),"factors":{
-        "urgency":900000,"expected_value":900000,"confidence":900000,"interruption_cost":0,
+        "urgency":900_000,"expected_value":900_000,"confidence":900_000,"interruption_cost":0,
         "resource_cost":0,"duplication_penalty":0,"quiet_hours":true,"notifications_remaining":10,"workload":0}});
     let result = server.intend_envelope(intend(wake.clone())).await;
     assert!(result.ok, "{result:?}");

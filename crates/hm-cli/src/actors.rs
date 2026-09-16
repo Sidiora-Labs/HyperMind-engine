@@ -1,3 +1,5 @@
+#![allow(clippy::verbose_bit_mask)]
+
 use anyhow::{Context, Result, ensure};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use clap::Subcommand;

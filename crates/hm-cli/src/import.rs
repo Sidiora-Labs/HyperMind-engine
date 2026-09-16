@@ -1,10 +1,21 @@
+#![allow(
+    clippy::cast_possible_truncation,
+    clippy::cast_precision_loss,
+    clippy::cast_sign_loss
+)]
+
 use anyhow::{Context, Result, ensure};
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use hm_core::{ActorId, ConversationId, LSN};
 use hm_ledger::frame::EventKind;
 use hm_ledger::idempotency::ConnectionId;
 use hm_schema::event::{self, Boundary};
-use hm_schema::events::*;
+use hm_schema::events::{
+    Assertion, AssertionClaim, Authority, BeliefType, ConsolidationBudget, ConsolidationClosed,
+    ConsolidationOpened, ConsolidationPhaseName, DeliveredMsg, EdgeAsserted, EventEnvelope,
+    EventPayload, MemoryMinted, ModelProvenance, PromptVersion, ProvenanceRange, ProviderFrame,
+    Retention, ReviewRating, Reviewed, Sensitivity, UserMsg,
+};
 use hm_serve::actor::{ActorConfig, ActorEngine, IncomingEvent};
 use hm_serve::config::ServerConfig;
 use serde::Deserialize;
@@ -181,7 +192,7 @@ impl Plan {
             .archives
             .get(&(kind.into(), id.into()))
             .context("missing source record")?;
-        Ok(citation(*lsn, bytes.len())?)
+        citation(*lsn, bytes.len())
     }
 }
 
@@ -204,6 +215,7 @@ fn micros(value: &Value, divisor: f64) -> Result<u32> {
     Ok((number * 1_000_000.0).round() as u32)
 }
 
+#[allow(clippy::too_many_lines)]
 fn plan(bytes: &[u8]) -> Result<(Plan, Manifest, String)> {
     let input = std::str::from_utf8(bytes)?;
     let mut lines = input.lines();

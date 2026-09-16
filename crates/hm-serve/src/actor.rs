@@ -557,6 +557,7 @@ async fn request<T>(
         .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
 }
 
+#[allow(clippy::too_many_lines)]
 async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Command>) {
     while let Some(command) = commands.recv().await {
         match command {
@@ -784,6 +785,7 @@ impl WriterState {
         Ok(())
     }
 
+    #[allow(clippy::too_many_lines, clippy::cast_possible_truncation)]
     fn evaluate_wake(
         &mut self,
         observation_lsn: LSN,
@@ -925,7 +927,7 @@ impl WriterState {
                     Boundary::Disk,
                     &history,
                 )
-                .map(|event| (frame.header.clone(), event.envelope))
+                .map(|event| (frame.header, event.envelope))
             })
             .collect::<Result<Vec<_>, _>>()?;
         let mined = anticipation::mined_procedures(&decoded)?;
@@ -1078,6 +1080,7 @@ impl WriterState {
         Ok(state)
     }
 
+    #[allow(clippy::too_many_lines)]
     fn append(&mut self, events: Vec<IncomingEvent>) -> Result<AppendOutcome, Error> {
         if events.is_empty() || events.len() > hm_schema::protocol::MAXIMUM_BATCH_EVENTS {
             return Err(Error::new(ErrorCode::InvalidArgument));
@@ -1383,6 +1386,7 @@ impl WriterState {
             .apply(ProjectionId::VectorLane, frame.header.lsn, &[])
     }
 
+    #[allow(clippy::too_many_lines)]
     fn recall(&self, request: RecallRequest) -> Result<Vec<RecallItem>, Error> {
         let snapshot = self.projections.begin_snapshot()?;
         match request {

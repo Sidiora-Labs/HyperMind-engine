@@ -76,6 +76,7 @@ impl ArtifactFetcher for BoundedFetcher {
     }
 }
 
+#[allow(clippy::unnecessary_wraps)]
 pub fn status(directory: &Path) -> Result<Value> {
     let mut models = Vec::new();
     for kind in [ModelKind::BgeSmallEnV15, ModelKind::NomicEmbedTextV15] {
@@ -104,6 +105,7 @@ pub fn status(directory: &Path) -> Result<Value> {
     )
 }
 
+#[allow(clippy::large_stack_arrays)]
 fn digest(path: &Path) -> Result<String> {
     let mut file = File::open(path)?;
     ensure!(

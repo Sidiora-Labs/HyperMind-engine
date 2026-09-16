@@ -1,3 +1,5 @@
+#![allow(clippy::missing_errors_doc)]
+
 use std::error::Error;
 use std::path::Path;
 use std::process::Command;
