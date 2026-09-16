@@ -9,3 +9,4 @@ export * from "./domain-profile.js";
 export * from "./activity.js";
 export * from "./upload-session.js";
 export * from "./access.js";
+export * from "./removal.js";

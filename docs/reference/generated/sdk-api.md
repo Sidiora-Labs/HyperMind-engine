@@ -4575,7 +4575,7 @@ recordSubscribeFailure(error: unknown): "reset" | "retry" {
 
 ## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-8659-paintdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10013-paintdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4590,7 +4590,7 @@ paintDomainProfile();
 
 ## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10929-paintdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-12283-paintdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4605,7 +4605,7 @@ paintDomainProfile();
 
 ## sdk/typescript/packages/console/src/app.ts::showActivity
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-11854-showactivity"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-13208-showactivity"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4618,9 +4618,24 @@ Do not use: Do not substitute unchecked request objects, discard provenance, or 
 showActivity(mount);
 ```
 
+## sdk/typescript/packages/console/src/app.ts::showRemoval
+
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-13323-showremoval"></a>
+
+Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
+
+When to use: Use this showRemoval method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+showRemoval(mount);
+```
+
 ## sdk/typescript/packages/console/src/app.ts::showDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-11969-showdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-13345-showdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -5171,6 +5186,66 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 ```typescript
 export function renderOverview(view: OverviewView): string {
+```
+
+## sdk/typescript/packages/console/src/removal.ts::RemovalAttestationCounts
+
+<a id="sdk-sdk-typescript-packages-console-src-removal-ts-removalattestationcounts"></a>
+
+Source: [`sdk/typescript/packages/console/src/removal.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/removal.ts).
+
+When to use: Use Removal Attestation Counts through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface RemovalAttestationCounts {
+```
+
+## sdk/typescript/packages/console/src/removal.ts::RemovalPreviewView
+
+<a id="sdk-sdk-typescript-packages-console-src-removal-ts-removalpreviewview"></a>
+
+Source: [`sdk/typescript/packages/console/src/removal.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/removal.ts).
+
+When to use: Use Removal Preview View through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface RemovalPreviewView {
+```
+
+## sdk/typescript/packages/console/src/removal.ts::buildRemovalPreview
+
+<a id="sdk-sdk-typescript-packages-console-src-removal-ts-buildremovalpreview"></a>
+
+Source: [`sdk/typescript/packages/console/src/removal.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/removal.ts).
+
+When to use: Use build Removal Preview through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function buildRemovalPreview(envelope: ConsoleEnvelope): RemovalPreviewView {
+```
+
+## sdk/typescript/packages/console/src/removal.ts::renderRemovalPreview
+
+<a id="sdk-sdk-typescript-packages-console-src-removal-ts-renderremovalpreview"></a>
+
+Source: [`sdk/typescript/packages/console/src/removal.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/removal.ts).
+
+When to use: Use render Removal Preview through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderRemovalPreview(view: RemovalPreviewView): string {
 ```
 
 ## sdk/typescript/packages/console/src/sources.ts::SourceSummary

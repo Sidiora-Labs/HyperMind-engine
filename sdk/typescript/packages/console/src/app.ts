@@ -21,6 +21,7 @@ import {
 } from "./evidence.js";
 import { escapeText, section } from "./html.js";
 import { buildOverview, OverviewView, renderOverview } from "./overview.js";
+import { buildRemovalPreview, renderRemovalPreview } from "./removal.js";
 import { buildSourceDetail, buildSourceIndex, renderSourceDetail, renderSourceIndex } from "./sources.js";
 import { ConsoleTransport, restTransport } from "./transport.js";
 import {
@@ -147,6 +148,43 @@ async function showAccess(mount: HTMLElement): Promise<void> {
   } catch (error) {
     panel.textContent = failure(error);
   }
+}
+
+async function previewRemoval(output: HTMLElement, lsn: number): Promise<void> {
+  if (session === undefined) return;
+  try {
+    const envelope = await session.transport.callTool("inspect", {
+      uri: `hm://${session.actor}/removal/${lsn}`,
+    });
+    output.innerHTML = renderRemovalPreview(buildRemovalPreview(envelope));
+  } catch (error) {
+    output.textContent = failure(error);
+  }
+}
+
+function showRemoval(mount: HTMLElement): void {
+  if (session === undefined) return;
+  const panel = document.createElement("div");
+  panel.id = "console-removal";
+  mount.append(panel);
+  const lsn = selectedLsn(session.actor);
+  if (lsn === undefined) {
+    panel.innerHTML = section(
+      "Diagnostic removal preview",
+      "<p>Select a record to see what its removal would strand. The preview is a diagnostic and removes nothing.</p>",
+    );
+    return;
+  }
+  const action = document.createElement("button");
+  action.type = "button";
+  action.id = "console-removal-preview";
+  action.textContent = `Preview the removal of lsn ${lsn} (diagnostic, removes nothing)`;
+  const output = document.createElement("div");
+  output.id = "console-removal-output";
+  action.addEventListener("click", () => {
+    void previewRemoval(output, lsn);
+  });
+  panel.append(action, output);
 }
 
 function editor(): string {
@@ -319,6 +357,7 @@ async function render(): Promise<void> {
   await showSources(mount);
   await showEvidence(mount, values);
   await showAccess(mount);
+  showRemoval(mount);
   showDomainProfile(mount);
   await showUploadSession(mount, transport);
 }

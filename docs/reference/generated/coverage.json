@@ -5812,22 +5812,27 @@
       "file": "sdk/typescript/packages/console/src/activity.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:8659:paintDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10013:paintDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10929:paintDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:12283:paintDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:11854:showActivity",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:13208:showActivity",
       "name": "sdk/typescript/packages/console/src/app.ts::showActivity",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:11969:showDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:13323:showRemoval",
+      "name": "sdk/typescript/packages/console/src/app.ts::showRemoval",
+      "file": "sdk/typescript/packages/console/src/app.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:13345:showDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::showDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
@@ -6010,6 +6015,26 @@
       "id": "sdk:sdk/typescript/packages/console/src/overview.ts:renderOverview",
       "name": "sdk/typescript/packages/console/src/overview.ts::renderOverview",
       "file": "sdk/typescript/packages/console/src/overview.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/removal.ts:RemovalAttestationCounts",
+      "name": "sdk/typescript/packages/console/src/removal.ts::RemovalAttestationCounts",
+      "file": "sdk/typescript/packages/console/src/removal.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/removal.ts:RemovalPreviewView",
+      "name": "sdk/typescript/packages/console/src/removal.ts::RemovalPreviewView",
+      "file": "sdk/typescript/packages/console/src/removal.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/removal.ts:buildRemovalPreview",
+      "name": "sdk/typescript/packages/console/src/removal.ts::buildRemovalPreview",
+      "file": "sdk/typescript/packages/console/src/removal.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/removal.ts:renderRemovalPreview",
+      "name": "sdk/typescript/packages/console/src/removal.ts::renderRemovalPreview",
+      "file": "sdk/typescript/packages/console/src/removal.ts"
     },
     {
       "id": "sdk:sdk/typescript/packages/console/src/sources.ts:SourceSummary",
