@@ -151,3 +151,48 @@ Do not use: Do not add unrecognized keys, expose key/capability values, or use r
 ```rust
 "projection_map_bytes" => {
 ```
+
+## maximum_active_actors
+
+<a id="config-maximum-active-actors"></a>
+
+Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/config.rs).
+
+When to use: Use the maximum_active_actors key to configure the corresponding ServerConfig field before starting the actor owner. The loader expression below is authoritative.
+
+Do not use: Do not add unrecognized keys, expose key/capability values, or use relative paths without controlling the process working directory.
+
+
+```rust
+"maximum_active_actors" => maximum_active_actors = parse_size(value, 1, 4096)?,
+```
+
+## maximum_heavy_jobs
+
+<a id="config-maximum-heavy-jobs"></a>
+
+Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/config.rs).
+
+When to use: Use the maximum_heavy_jobs key to configure the corresponding ServerConfig field before starting the actor owner. The loader expression below is authoritative.
+
+Do not use: Do not add unrecognized keys, expose key/capability values, or use relative paths without controlling the process working directory.
+
+
+```rust
+"maximum_heavy_jobs" => maximum_heavy_jobs = parse_size(value, 1, 256)?,
+```
+
+## lease_wait_ms
+
+<a id="config-lease-wait-ms"></a>
+
+Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/config.rs).
+
+When to use: Use the lease_wait_ms key to configure the corresponding ServerConfig field before starting the actor owner. The loader expression below is authoritative.
+
+Do not use: Do not add unrecognized keys, expose key/capability values, or use relative paths without controlling the process working directory.
+
+
+```rust
+"lease_wait_ms" => {
+```

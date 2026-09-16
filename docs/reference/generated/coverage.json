@@ -6017,6 +6017,21 @@
       "file": "crates/hm-serve/src/config.rs"
     },
     {
+      "id": "config:maximum_active_actors",
+      "name": "maximum_active_actors",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:maximum_heavy_jobs",
+      "name": "maximum_heavy_jobs",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
+      "id": "config:lease_wait_ms",
+      "name": "lease_wait_ms",
+      "file": "crates/hm-serve/src/config.rs"
+    },
+    {
       "id": "cli:crates/hm-cli/src/actors.rs",
       "name": "crates/hm-cli/src/actors.rs command/options",
       "file": "crates/hm-cli/src/actors.rs"

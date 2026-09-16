@@ -11033,6 +11033,9 @@ pub struct ServerConfig {
     pub maximum_output_frames: usize,
     pub maximum_output_bytes: usize,
     pub projection_map_bytes: usize,
+    pub maximum_active_actors: usize,
+    pub maximum_heavy_jobs: usize,
+    pub lease_wait_ms: u64,
 }
 ```
 
@@ -11675,6 +11678,7 @@ pub struct UdsServer {
     active_connections: Arc<AtomicUsize>,
     latencies: LatencyHistograms,
     tool_dispatcher: Option<Arc<dyn ToolDispatcher>>,
+    leases: LeaseRegistry,
 }
 ```
 

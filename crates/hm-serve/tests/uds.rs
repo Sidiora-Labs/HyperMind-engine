@@ -29,6 +29,9 @@ fn config(path: &std::path::Path) -> ServerConfig {
         maximum_output_frames: 8,
         maximum_output_bytes: 1024 * 1024,
         projection_map_bytes: 16 * 1024 * 1024,
+        maximum_active_actors: 1,
+        maximum_heavy_jobs: 1,
+        lease_wait_ms: 250,
     }
 }
 
@@ -175,6 +178,162 @@ async fn real_socket_accepts_v2_append_and_lexical_recall() {
     };
     assert_eq!(detail.code, ErrorCode::OperationUnavailable as u8);
     drop(stream);
+    shutdown_tx.send(()).unwrap();
+    task.await.unwrap().unwrap();
+}
+
+#[tokio::test]
+#[allow(clippy::too_many_lines)]
+async fn daemon_requests_hold_and_release_resource_leases() {
+    let temporary = tempfile::tempdir().unwrap();
+    let mut config = config(temporary.path());
+    config.actors.push(ActorCapability {
+        actor: 8,
+        token: [5; 32],
+    });
+    let socket = config.socket_path.clone();
+    let server = UdsServer::bind(config).await.unwrap();
+    let leases = server.leases();
+    assert_eq!(leases.limits().maximum_active_actors, 1);
+    assert_eq!(leases.limits().maximum_heavy_jobs, 1);
+    assert_eq!(leases.limits().wait_ms, 250);
+    let (shutdown_tx, shutdown_rx) = tokio::sync::oneshot::channel();
+    let task = tokio::spawn(server.serve_until(async {
+        let _ = shutdown_rx.await;
+    }));
+
+    let mut first = UnixStream::connect(&socket).await.unwrap();
+    let welcome = exchange(
+        &mut first,
+        WireEnvelope {
+            proto_version: 2,
+            payload: WirePayload::Hello(Box::new(Hello {
+                proto_version: 2,
+                connection_id: vec![9; 16],
+                capability_token: vec![4; 32],
+            })),
+        },
+    )
+    .await;
+    assert!(matches!(welcome.payload, WirePayload::Welcome(_)));
+
+    let conversation = ConversationId::derive("lease-test");
+    let payload = encode_event_envelope(&EventEnvelope {
+        schema_version: CURRENT_SCHEMA_VERSION,
+        payload: EventPayload::UserMsg(Box::new(UserMsg {
+            content: b"lease marjoram".to_vec(),
+        })),
+        connection_id: None,
+        client_seq: 0,
+        client_event_index: 0,
+        client_event_count: 0,
+        origin_actor: 0,
+        run_id: None,
+        model_provenance: None,
+        authority: Authority::UserAsserted,
+        retention: Retention::Durable,
+        sensitivity: Sensitivity::Personal,
+        event_time_ns: 0,
+    });
+    let appended = exchange(
+        &mut first,
+        WireEnvelope {
+            proto_version: 2,
+            payload: WirePayload::Request(Box::new(Request {
+                request_id: 1,
+                payload: RequestPayload::Append(Box::new(Append {
+                    client_seq: 1,
+                    events: vec![AppendEvent {
+                        kind: 1,
+                        conversation: conversation.into_bytes().to_vec(),
+                        payload,
+                    }],
+                })),
+            })),
+        },
+    )
+    .await;
+    let WirePayload::Response(response) = appended.payload else {
+        panic!("expected response");
+    };
+    let Some(ResponsePayload::AppendAck(ack)) = response.payload else {
+        panic!("expected append ack");
+    };
+    assert_eq!(ack.leaf_count, 1);
+
+    let recalled = exchange(
+        &mut first,
+        WireEnvelope {
+            proto_version: 2,
+            payload: WirePayload::Request(Box::new(Request {
+                request_id: 2,
+                payload: RequestPayload::Recall(Box::new(Recall {
+                    query: b"marjoram".to_vec(),
+                    limit: 10,
+                    mode: RecallMode::ListWindows,
+                    level: 1,
+                    start_ns: 0,
+                    end_ns: 0,
+                })),
+            })),
+        },
+    )
+    .await;
+    let WirePayload::Response(response) = recalled.payload else {
+        panic!("expected response");
+    };
+    let Some(ResponsePayload::RecallResult(result)) = response.payload else {
+        panic!("expected recall result");
+    };
+    assert_eq!(result.members.unwrap(), vec![1]);
+    drop(first);
+
+    let mut second = UnixStream::connect(&socket).await.unwrap();
+    let welcome = exchange(
+        &mut second,
+        WireEnvelope {
+            proto_version: 2,
+            payload: WirePayload::Hello(Box::new(Hello {
+                proto_version: 2,
+                connection_id: vec![10; 16],
+                capability_token: vec![5; 32],
+            })),
+        },
+    )
+    .await;
+    assert!(matches!(welcome.payload, WirePayload::Welcome(_)));
+    let recalled = exchange(
+        &mut second,
+        WireEnvelope {
+            proto_version: 2,
+            payload: WirePayload::Request(Box::new(Request {
+                request_id: 3,
+                payload: RequestPayload::Recall(Box::new(Recall {
+                    query: b"marjoram".to_vec(),
+                    limit: 10,
+                    mode: RecallMode::ListWindows,
+                    level: 1,
+                    start_ns: 0,
+                    end_ns: 0,
+                })),
+            })),
+        },
+    )
+    .await;
+    let WirePayload::Response(response) = recalled.payload else {
+        panic!("expected response");
+    };
+    let Some(ResponsePayload::RecallResult(result)) = response.payload else {
+        panic!("expected recall result");
+    };
+    assert!(result.members.unwrap().is_empty());
+    drop(second);
+
+    let snapshot = leases.snapshot();
+    assert_eq!(snapshot.active_leases, 0);
+    assert_eq!(snapshot.active_actors, 0);
+    assert_eq!(snapshot.heavy_jobs, 0);
+    assert_eq!(snapshot.refusals, 0);
     shutdown_tx.send(()).unwrap();
     task.await.unwrap().unwrap();
 }

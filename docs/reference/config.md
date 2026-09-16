@@ -18,6 +18,11 @@ Do not use: checked-in credentials, admin tokens as actor tokens, unrestricted f
 | `maximum_output_frames` | Queued-frame cap | 256; range 1–4096 |
 | `maximum_output_bytes` | Queued-byte cap | 64 MiB; range 1 MiB–1 GiB |
 | `projection_map_bytes` | LMDB map capacity | 256 MiB; minimum 1 MiB |
+| `maximum_active_actors` | Simultaneously active actors | 64; range 1–4096 |
+| `maximum_heavy_jobs` | Simultaneous heavyweight jobs | 2; range 1–256 |
+| `lease_wait_ms` | Wait for a resource lease before refusal | 250 ms; range 0–60000 |
+
+`maximum_active_actors`, `maximum_heavy_jobs`, and `lease_wait_ms` bound how many actors and heavyweight jobs (projection rebuild, crypto-delete) the daemon holds at once; they are independent of `maximum_connections` and of every provider and spend limit. A request that cannot take a lease within the wait is refused with `CapacityExceeded`, which the mutation-effect table reports conservatively as unknown even though such a request never reached the ledger. `hm init` does not write these keys, so new deployments take the defaults.
 
 Remote listener/certificate paths are CLI options, not config-file keys. See [deployment](../guides/deployment.md).
 

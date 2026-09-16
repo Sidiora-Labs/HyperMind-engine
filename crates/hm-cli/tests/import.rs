@@ -33,6 +33,9 @@ fn config(directory: &Path) -> ServerConfig {
         maximum_output_frames: 64,
         maximum_output_bytes: 16 * 1024 * 1024,
         projection_map_bytes: 64 * 1024 * 1024,
+        maximum_active_actors: 64,
+        maximum_heavy_jobs: 2,
+        lease_wait_ms: 250,
     }
 }
 

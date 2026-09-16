@@ -5,6 +5,7 @@ use crate::admin::{self, LatencyHistograms};
 use crate::auth::{self, Principal};
 use crate::config::ServerConfig;
 use crate::errors::{MutationEffectState, mutation_effect_state};
+use crate::leases::{LeaseClass, LeaseLimits, LeaseRegistry};
 use crate::protocol::{FrameParser, encode_frame};
 use crate::requests::{asof, attest, checkpoint, subscribe};
 use hm_compose::canonical::canonical_bytes;
@@ -49,6 +50,7 @@ pub struct UdsServer {
     active_connections: Arc<AtomicUsize>,
     latencies: LatencyHistograms,
     tool_dispatcher: Option<Arc<dyn ToolDispatcher>>,
+    leases: LeaseRegistry,
 }
 
 impl UdsServer {
@@ -83,6 +85,11 @@ impl UdsServer {
             .map_err(|_| Error::new(ErrorCode::OpenFailed))?;
         std::fs::set_permissions(&config.socket_path, std::fs::Permissions::from_mode(0o600))
             .map_err(|_| Error::new(ErrorCode::OpenFailed))?;
+        let leases = LeaseRegistry::new(LeaseLimits {
+            maximum_active_actors: config.maximum_active_actors,
+            maximum_heavy_jobs: config.maximum_heavy_jobs,
+            wait_ms: config.lease_wait_ms,
+        });
         Ok(Self {
             config: Arc::new(config),
             actors: Arc::new(actors),
@@ -90,7 +97,13 @@ impl UdsServer {
             active_connections: Arc::new(AtomicUsize::new(0)),
             latencies: LatencyHistograms::default(),
             tool_dispatcher: None,
+            leases,
         })
+    }
+
+    #[must_use]
+    pub fn leases(&self) -> LeaseRegistry {
+        self.leases.clone()
     }
 
     #[must_use]
@@ -118,6 +131,7 @@ impl UdsServer {
                     let active = Arc::clone(&self.active_connections);
                     let latencies = self.latencies.clone();
                     let tool_dispatcher = self.tool_dispatcher.clone();
+                    let leases = self.leases.clone();
                     active.fetch_add(1, Ordering::Relaxed);
                     tokio::spawn(async move {
                         let _permit = permit;
@@ -128,6 +142,7 @@ impl UdsServer {
                             Arc::clone(&active),
                             latencies,
                             tool_dispatcher,
+                            leases,
                         )
                         .await;
                         active.fetch_sub(1, Ordering::Relaxed);
@@ -157,7 +172,7 @@ struct Session {
     subscriptions: usize,
 }
 
-#[allow(clippy::too_many_lines)]
+#[allow(clippy::too_many_lines, clippy::too_many_arguments)]
 async fn handle_connection(
     stream: UnixStream,
     config: Arc<ServerConfig>,
@@ -165,6 +180,7 @@ async fn handle_connection(
     active_connections: Arc<AtomicUsize>,
     latencies: LatencyHistograms,
     tool_dispatcher: Option<Arc<dyn ToolDispatcher>>,
+    leases: LeaseRegistry,
 ) -> Result<(), Error> {
     let (mut reader, mut writer) = stream.into_split();
     let (output, mut queued) = mpsc::channel::<Vec<u8>>(config.maximum_output_frames);
@@ -305,6 +321,7 @@ async fn handle_connection(
                 active_connections.load(Ordering::Relaxed),
                 &latencies,
                 tool_dispatcher.as_deref(),
+                &leases,
             )
             .await;
             latencies.observe(operation, started.elapsed());
@@ -360,7 +377,7 @@ fn authenticate(
     })
 }
 
-#[allow(clippy::too_many_lines)]
+#[allow(clippy::too_many_lines, clippy::too_many_arguments)]
 async fn handle_request(
     session: &Session,
     request_id: u64,
@@ -369,6 +386,7 @@ async fn handle_request(
     active_connections: usize,
     latencies: &LatencyHistograms,
     tool_dispatcher: Option<&dyn ToolDispatcher>,
+    leases: &LeaseRegistry,
 ) -> Result<(u64, ResponsePayload), (u64, Error)> {
     let request = Request {
         request_id,
@@ -406,6 +424,16 @@ async fn handle_request(
     let actor = actors
         .get(&actor_id)
         .ok_or((request_id, Error::new(ErrorCode::CapabilityDenied)))?;
+    let class = match &request.payload {
+        RequestPayload::RebuildProjection(_) | RequestPayload::CryptoDelete(_) => {
+            LeaseClass::HeavyJob
+        }
+        _ => LeaseClass::Actor,
+    };
+    let _lease = leases
+        .acquire(actor_id, class)
+        .await
+        .map_err(|error| (request_id, error))?;
     let payload = match request.payload {
         RequestPayload::ToolRequest(value) => {
             let dispatcher =

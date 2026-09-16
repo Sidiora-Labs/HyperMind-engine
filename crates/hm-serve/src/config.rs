@@ -28,6 +28,9 @@ pub struct ServerConfig {
     pub maximum_output_frames: usize,
     pub maximum_output_bytes: usize,
     pub projection_map_bytes: usize,
+    pub maximum_active_actors: usize,
+    pub maximum_heavy_jobs: usize,
+    pub lease_wait_ms: u64,
 }
 
 impl ServerConfig {
@@ -54,6 +57,9 @@ pub fn load(path: impl AsRef<Path>) -> Result<ServerConfig, Error> {
     let mut maximum_output_frames = 256;
     let mut maximum_output_bytes = 64 * 1024 * 1024;
     let mut projection_map_bytes = 256 * 1024 * 1024;
+    let mut maximum_active_actors = 64;
+    let mut maximum_heavy_jobs = 2;
+    let mut lease_wait_ms = 250;
     for line in text.lines() {
         if line.is_empty() {
             continue;
@@ -90,6 +96,12 @@ pub fn load(path: impl AsRef<Path>) -> Result<ServerConfig, Error> {
             "projection_map_bytes" => {
                 projection_map_bytes = parse_size(value, 1024 * 1024, usize::MAX)?;
             }
+            "maximum_active_actors" => maximum_active_actors = parse_size(value, 1, 4096)?,
+            "maximum_heavy_jobs" => maximum_heavy_jobs = parse_size(value, 1, 256)?,
+            "lease_wait_ms" => {
+                lease_wait_ms = u64::try_from(parse_size(value, 0, 60_000)?)
+                    .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+            }
             _ => return Err(Error::new(ErrorCode::InvalidArgument)),
         }
     }
@@ -122,6 +134,9 @@ pub fn load(path: impl AsRef<Path>) -> Result<ServerConfig, Error> {
         maximum_output_frames,
         maximum_output_bytes,
         projection_map_bytes,
+        maximum_active_actors,
+        maximum_heavy_jobs,
+        lease_wait_ms,
     })
 }
 
