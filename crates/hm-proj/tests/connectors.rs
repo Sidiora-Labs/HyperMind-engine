@@ -144,7 +144,7 @@ fn open_store(directory: &std::path::Path) -> ProjectionStore {
 
 #[test]
 fn connector_registry_projection_is_registered() {
-    assert_eq!(ProjectionId::COUNT, 21);
+    assert_eq!(ProjectionId::COUNT, 22);
     assert_eq!(ProjectionId::SourceConnectors as usize, 20);
     assert_eq!(ProjectionId::SourceConnectors.name(), "source_connectors");
 }

@@ -2602,6 +2602,16 @@
       "file": "crates/hm-proj/src/lexical.rs"
     },
     {
+      "id": "rust:crates/hm-proj/src/media.rs:MediaRecord",
+      "name": "hm-proj::MediaRecord",
+      "file": "crates/hm-proj/src/media.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/media.rs:MediaCatalogProjection",
+      "name": "hm-proj::MediaCatalogProjection",
+      "file": "crates/hm-proj/src/media.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/memories.rs:MemoryCitation",
       "name": "hm-proj::MemoryCitation",
       "file": "crates/hm-proj/src/memories.rs"

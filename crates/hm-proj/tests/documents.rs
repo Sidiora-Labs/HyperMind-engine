@@ -231,7 +231,7 @@ fn first_revision(run_id: &[u8]) -> Vec<Frame> {
 
 #[test]
 fn documents_projection_is_registered() {
-    assert_eq!(ProjectionId::COUNT, 21);
+    assert_eq!(ProjectionId::COUNT, 22);
     assert_eq!(ProjectionId::Documents.name(), "documents");
 }
 

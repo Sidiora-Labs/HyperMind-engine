@@ -17,6 +17,7 @@ pub mod ladder;
 pub mod lease;
 pub mod ledger;
 pub mod lexical;
+pub mod media;
 pub mod memories;
 pub mod predictions;
 pub mod procedures;

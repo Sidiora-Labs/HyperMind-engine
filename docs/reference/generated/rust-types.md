@@ -10700,6 +10700,44 @@ Do not use: Do not make projections a second source of truth or update data with
 pub struct LexicalProjection;
 ```
 
+## hm-proj::MediaRecord
+
+<a id="rust-crates-hm-proj-src-media-rs-mediarecord"></a>
+
+Source: [`crates/hm-proj/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/media.rs).
+
+When to use: Use `MediaRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct MediaRecord {
+    pub digest: Vec<u8>,
+    pub media_ref_lsn: u64,
+    pub retained_lsn: u64,
+    pub uri: String,
+    pub media_type: String,
+    pub derived_lsn: u64,
+    pub derived_prompt_id: String,
+}
+```
+
+## hm-proj::MediaCatalogProjection
+
+<a id="rust-crates-hm-proj-src-media-rs-mediacatalogprojection"></a>
+
+Source: [`crates/hm-proj/src/media.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/media.rs).
+
+When to use: Use `MediaCatalogProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct MediaCatalogProjection;
+```
+
 ## hm-proj::MemoryCitation
 
 <a id="rust-crates-hm-proj-src-memories-rs-memorycitation"></a>
@@ -11206,6 +11244,7 @@ pub enum ProjectionId {
     Vocabulary,
     Documents,
     SourceConnectors,
+    MediaCatalog,
 }
 ```
 

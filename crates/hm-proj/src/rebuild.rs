@@ -12,6 +12,7 @@ use crate::intentions::IntentionsProjection;
 use crate::ladder::TemporalLadder;
 use crate::ledger::WorkLedgerProjection;
 use crate::lexical::LexicalProjection;
+use crate::media::MediaCatalogProjection;
 use crate::predictions::PredictionsProjection;
 use crate::procedures::ProceduresProjection;
 use crate::store::{ProjectionId, ProjectionStore};
@@ -58,6 +59,7 @@ pub fn rebuild_projection_stream(
     let mut attestations_checkpoint = snapshot.checkpoint(ProjectionId::Attestations)?.get();
     let mut vocabulary_checkpoint = snapshot.checkpoint(ProjectionId::Vocabulary)?.get();
     let mut connectors_checkpoint = snapshot.checkpoint(ProjectionId::SourceConnectors)?.get();
+    let mut media_catalog_checkpoint = snapshot.checkpoint(ProjectionId::MediaCatalog)?.get();
     drop(snapshot);
     let checkpoints = [
         timeline_checkpoint,
@@ -80,6 +82,7 @@ pub fn rebuild_projection_stream(
         attestations_checkpoint,
         vocabulary_checkpoint,
         connectors_checkpoint,
+        media_catalog_checkpoint,
     ];
     let minimum = checkpoints.into_iter().min().unwrap_or(0);
     if checkpoints
@@ -175,6 +178,10 @@ pub fn rebuild_projection_stream(
             ConnectorRegistryProjection::apply_event(store, frame)?;
             connectors_checkpoint = expected_lsn;
         }
+        if media_catalog_checkpoint < expected_lsn {
+            MediaCatalogProjection::apply_event(store, frame)?;
+            media_catalog_checkpoint = expected_lsn;
+        }
         applied_frames += 1;
     }
     let checkpoints = [
@@ -198,6 +205,7 @@ pub fn rebuild_projection_stream(
         attestations_checkpoint,
         vocabulary_checkpoint,
         connectors_checkpoint,
+        media_catalog_checkpoint,
     ];
     let applied_lsn = checkpoints.into_iter().min().unwrap_or(0);
     Ok(RebuildProgress {
@@ -231,6 +239,7 @@ fn reset_all(store: &ProjectionStore) -> Result<(), Error> {
         ProjectionId::Attestations,
         ProjectionId::Vocabulary,
         ProjectionId::SourceConnectors,
+        ProjectionId::MediaCatalog,
     ] {
         store.reset(projection)?;
     }
