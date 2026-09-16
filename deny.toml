@@ -8,6 +8,16 @@ ignore = []
 [licenses]
 allow = ["Apache-2.0", "MIT", "Unicode-3.0"]
 confidence-threshold = 0.8
+# BSD-3-Clause is permitted for the three crates that lopdf, the PDF document loader's
+# parser, makes mandatory. encoding_rs is "(Apache-2.0 OR MIT) AND BSD-3-Clause", whose
+# BSD-3-Clause half covers the Unicode mapping tables and cannot be waived by choosing a
+# side of the OR; alloc-no-stdlib and alloc-stdlib are BSD-3-Clause outright and arrive
+# through brotli-decompressor, which lopdf uses to decode stream filters.
+exceptions = [
+    { name = "encoding_rs", allow = ["BSD-3-Clause"] },
+    { name = "alloc-no-stdlib", allow = ["BSD-3-Clause"] },
+    { name = "alloc-stdlib", allow = ["BSD-3-Clause"] },
+]
 
 [bans]
 multiple-versions = "warn"

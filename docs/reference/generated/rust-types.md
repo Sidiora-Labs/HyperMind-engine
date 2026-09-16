@@ -3481,6 +3481,36 @@ pub struct VocabularySource<'a> {
 }
 ```
 
+## hm-docs::MailLoader
+
+<a id="rust-crates-hm-docs-src-formats-mail-rs-mailloader"></a>
+
+Source: [`crates/hm-docs/src/formats/mail.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/formats/mail.rs).
+
+When to use: Use `MailLoader` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct MailLoader;
+```
+
+## hm-docs::PdfLoader
+
+<a id="rust-crates-hm-docs-src-formats-pdf-rs-pdfloader"></a>
+
+Source: [`crates/hm-docs/src/formats/pdf.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/formats/pdf.rs).
+
+When to use: Use `PdfLoader` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct PdfLoader;
+```
+
 ## hm-docs::TableLoader
 
 <a id="rust-crates-hm-docs-src-formats-table-rs-tableloader"></a>
@@ -3526,6 +3556,8 @@ Do not use: Do not use it to write to the ledger or a projection, and do not tre
 pub enum LoaderId {
     Text,
     Table,
+    Pdf,
+    Mail,
 }
 ```
 
@@ -3681,6 +3713,8 @@ Do not use: Do not use it to write to the ledger or a projection, and do not tre
 pub struct LoaderRegistry {
     text: TextLoader,
     table: TableLoader,
+    pdf: PdfLoader,
+    mail: MailLoader,
 }
 ```
 

@@ -2,6 +2,8 @@
 
 use hm_core::{Error, ErrorCode};
 
+use crate::formats::mail::MailLoader;
+use crate::formats::pdf::PdfLoader;
 use crate::formats::table::TableLoader;
 use crate::formats::text::TextLoader;
 
@@ -12,6 +14,8 @@ pub const MAXIMUM_EXTRACTED_BYTES: usize = 8 * 1024 * 1024;
 pub enum LoaderId {
     Text,
     Table,
+    Pdf,
+    Mail,
 }
 
 impl LoaderId {
@@ -20,6 +24,8 @@ impl LoaderId {
         match self {
             Self::Text => "text",
             Self::Table => "table",
+            Self::Pdf => "pdf",
+            Self::Mail => "mail",
         }
     }
 }
@@ -80,6 +86,8 @@ pub trait DocumentLoader {
 pub struct LoaderRegistry {
     text: TextLoader,
     table: TableLoader,
+    pdf: PdfLoader,
+    mail: MailLoader,
 }
 
 impl LoaderRegistry {
@@ -88,6 +96,8 @@ impl LoaderRegistry {
         Self {
             text: TextLoader,
             table: TableLoader,
+            pdf: PdfLoader,
+            mail: MailLoader,
         }
     }
 
@@ -96,6 +106,12 @@ impl LoaderRegistry {
         let extension = extension_of(name);
         if is_table_source(&media, &extension) {
             return Ok(self.table.loader_id());
+        }
+        if is_pdf_source(&media, &extension) {
+            return Ok(self.pdf.loader_id());
+        }
+        if is_mail_source(&media, &extension) {
+            return Ok(self.mail.loader_id());
         }
         if is_text_source(&media, &extension) {
             return Ok(self.text.loader_id());
@@ -107,6 +123,8 @@ impl LoaderRegistry {
         match loader {
             LoaderId::Text => self.text.extract(bytes),
             LoaderId::Table => self.table.extract(bytes),
+            LoaderId::Pdf => self.pdf.extract(bytes),
+            LoaderId::Mail => self.mail.extract(bytes),
         }
     }
 }
@@ -134,6 +152,20 @@ fn is_table_source(media: &str, extension: &str) -> bool {
         return true;
     }
     inherits_from_name(media) && matches!(extension, "csv" | "tsv" | "tab")
+}
+
+fn is_pdf_source(media: &str, extension: &str) -> bool {
+    if media == "application/pdf" {
+        return true;
+    }
+    inherits_from_name(media) && extension == "pdf"
+}
+
+fn is_mail_source(media: &str, extension: &str) -> bool {
+    if media == "message/rfc822" {
+        return true;
+    }
+    inherits_from_name(media) && extension == "eml"
 }
 
 fn is_text_source(media: &str, extension: &str) -> bool {

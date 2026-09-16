@@ -837,6 +837,16 @@
       "file": "crates/hm-cortex/src/vocabulary.rs"
     },
     {
+      "id": "rust:crates/hm-docs/src/formats/mail.rs:MailLoader",
+      "name": "hm-docs::MailLoader",
+      "file": "crates/hm-docs/src/formats/mail.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/formats/pdf.rs:PdfLoader",
+      "name": "hm-docs::PdfLoader",
+      "file": "crates/hm-docs/src/formats/pdf.rs"
+    },
+    {
       "id": "rust:crates/hm-docs/src/formats/table.rs:TableLoader",
       "name": "hm-docs::TableLoader",
       "file": "crates/hm-docs/src/formats/table.rs"
