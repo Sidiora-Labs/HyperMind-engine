@@ -6,6 +6,7 @@
   - [Recall and activation](concepts/retrieval.md)
   - [Time and beliefs](concepts/time.md)
   - [Consolidation](concepts/consolidation.md)
+  - [Repository graph](concepts/repository-graph.md)
   - [Anticipation](concepts/anticipation.md)
 - [Operations and recovery](guides/operations.md)
   - [Deployment](guides/deployment.md)

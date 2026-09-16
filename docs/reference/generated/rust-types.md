@@ -9344,6 +9344,7 @@ pub enum RecallMode {
     Timeline,
     Reconstruct,
     Relation,
+    Graph,
 }
 ```
 

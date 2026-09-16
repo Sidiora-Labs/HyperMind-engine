@@ -7,6 +7,7 @@ pub mod consolidate;
 pub mod dispute;
 pub(crate) mod evidence;
 pub mod forget;
+pub mod graph;
 pub mod inspect;
 pub mod intend;
 pub mod outcome;

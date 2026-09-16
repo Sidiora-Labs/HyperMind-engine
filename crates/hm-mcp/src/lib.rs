@@ -494,6 +494,9 @@ impl McpServer {
             )
             .await;
         }
+        if matches!(input.mode, RecallMode::Graph) {
+            return tools::graph::run(&self.actor, input).await;
+        }
         if matches!(input.mode, RecallMode::Relation) {
             return self.relation_recall_inner(input).await;
         }

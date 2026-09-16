@@ -285,9 +285,9 @@ Do not use: Do not rewrite the same revision after results, define success as fr
 
 Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/dispatcher.rs).
 
-When to use: Read bounded lexical, semantic, entity, temporal, timeline, relation, or anchored results. Use relation to retrieve relationships directly, and reconstruct only as an explicitly requested model-backed narration with reconstruction labeling.
+When to use: Read bounded lexical, semantic, entity, temporal, timeline, relation, graph, or anchored results. Use relation to retrieve relationships directly, graph to walk the repository graph from an anchor that is either a 64-character node id in hex or a repository name whose node name is the query, and reconstruct only as an explicitly requested model-backed narration with reconstruction labeling.
 
-Do not use: Do not interpret recall as current external-state verification or silently fall back from missing semantic coverage. Never read relationship support as included context: it names the sources that produced a relationship, not text that merely reached the bundle. Never remember reconstruction verbatim.
+Do not use: Do not interpret recall as current external-state verification or silently fall back from missing semantic coverage. Never read relationship support as included context: it names the sources that produced a relationship, not text that merely reached the bundle. Never read a graph answer as the current state of a repository, and never treat an unresolved graph anchor as an empty graph: it is reported as a gap. Never remember reconstruction verbatim.
 
 
 ```json
