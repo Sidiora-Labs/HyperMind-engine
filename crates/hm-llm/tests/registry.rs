@@ -3,6 +3,7 @@
 use hm_llm::cost::{PINNED_PRICE_TABLE_VERSION, RunBudget, RunCost, pricing_for};
 use hm_llm::registry::PromptRegistry;
 use hm_llm::{LlmError, Usage};
+use std::fmt::Write as _;
 use std::path::Path;
 
 #[test]
@@ -76,7 +77,11 @@ fn prompt_wording_is_frozen_per_version() {
 }
 
 fn encode_digest(value: [u8; 32]) -> String {
-    value.iter().map(|byte| format!("{byte:02x}")).collect()
+    let mut encoded = String::with_capacity(value.len() * 2);
+    for byte in value {
+        write!(encoded, "{byte:02x}").expect("writing to a String cannot fail");
+    }
+    encoded
 }
 
 #[test]

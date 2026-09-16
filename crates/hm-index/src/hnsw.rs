@@ -19,7 +19,7 @@ impl std::fmt::Debug for HnswIndex {
             .debug_struct("HnswIndex")
             .field("dimensions", &self.dimensions)
             .field("len", &self.len())
-            .finish()
+            .finish_non_exhaustive()
     }
 }
 

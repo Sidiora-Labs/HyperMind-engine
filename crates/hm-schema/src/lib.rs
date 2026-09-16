@@ -1,8 +1,10 @@
 #![deny(unsafe_code)]
 
 #[allow(clippy::all, clippy::pedantic, unsafe_code)]
+#[rustfmt::skip]
 mod events_generated;
 #[allow(clippy::all, clippy::pedantic, unsafe_code)]
+#[rustfmt::skip]
 mod protocol_generated;
 
 pub mod event;

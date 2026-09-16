@@ -11,6 +11,7 @@ use crate::events::{
 };
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
+use std::fmt::Write as _;
 
 use crate::validate::authority::{validate_observed_evidence, validate_optional_observed_evidence};
 
@@ -387,13 +388,11 @@ fn is_cortex_import(envelope: &EventEnvelope, kind: EventKind) -> bool {
     let Some(digest) = model.call_id.as_deref().filter(|digest| digest.len() == 32) else {
         return false;
     };
-    let expected_run = format!(
-        "cortex-store-import/{}",
-        digest
-            .iter()
-            .map(|byte| format!("{byte:02x}"))
-            .collect::<String>()
-    );
+    let mut expected_run = String::from("cortex-store-import/");
+    expected_run.reserve(digest.len() * 2);
+    for byte in digest {
+        write!(expected_run, "{byte:02x}").expect("writing to a String cannot fail");
+    }
     matches!(kind, EventKind::MemoryMinted | EventKind::EdgeAsserted)
         && envelope.authority == Authority::DerivedInference
         && envelope.run_id.as_deref() == Some(expected_run.as_bytes())
