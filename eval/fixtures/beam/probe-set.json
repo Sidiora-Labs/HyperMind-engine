@@ -1,0 +1,108 @@
+{
+  "format": "hypermind.beam-probe-set.v1",
+  "source_digest": "hypermind-authored-fixture",
+  "conversations": [
+    {
+      "id": "hm-lanternfish",
+      "sessions": [
+        {
+          "index": 0,
+          "label": "kickoff",
+          "messages": [
+            {"id":1,"role":"user","speaker":"maren","text":"We are starting Lanternfish, the rewrite of the tide gauge telemetry bridge for the Kestrel Sound buoy network.","occurred_at":"2031-02-03T09:05:00Z"},
+            {"id":2,"role":"assistant","speaker":"assistant","text":"Noted. Lanternfish replaces the Kestrel Sound telemetry bridge. Who else works on it?","occurred_at":"2031-02-03T09:06:00Z"},
+            {"id":3,"role":"user","speaker":"maren","text":"Ines Delacroix owns the ingest path and Ola Bergstrom owns the calibration service. I keep the release schedule.","occurred_at":"2031-02-03T09:08:00Z"},
+            {"id":4,"role":"assistant","speaker":"assistant","text":"Recorded for Lanternfish: Ines Delacroix on the ingest path, Ola Bergstrom on the calibration service, you on the release schedule.","occurred_at":"2031-02-03T09:09:00Z"},
+            {"id":5,"role":"user","speaker":"maren","text":"The first milestone is the harbour replay harness, due on 14 March 2031, with a budget of forty engineer days.","occurred_at":"2031-02-03T09:14:00Z"},
+            {"id":6,"role":"assistant","speaker":"assistant","text":"Milestone one for Lanternfish: the harbour replay harness, due 14 March 2031, budget forty engineer days.","occurred_at":"2031-02-03T09:15:00Z"},
+            {"id":7,"role":"user","speaker":"maren","text":"We sample the Kestrel Sound buoys every ninety seconds today, and anything slower loses the seiche signal.","occurred_at":"2031-02-03T09:21:00Z"}
+          ]
+        },
+        {
+          "index": 1,
+          "label": "instrumentation-review",
+          "messages": [
+            {"id":8,"role":"user","speaker":"maren","text":"Ines finished profiling the ingest path. The harbour replay harness now replays six weeks of buoy frames in eleven minutes.","occurred_at":"2031-02-24T13:02:00Z"},
+            {"id":9,"role":"assistant","speaker":"assistant","text":"Eleven minutes for six weeks of buoy frames is the new baseline for the harbour replay harness.","occurred_at":"2031-02-24T13:03:00Z"},
+            {"id":10,"role":"user","speaker":"maren","text":"Correction on the sampling interval: the Kestrel Sound buoys sample every sixty seconds, not ninety. I misread the gauge manifest earlier.","occurred_at":"2031-02-24T13:11:00Z"},
+            {"id":11,"role":"assistant","speaker":"assistant","text":"Updated: the Kestrel Sound buoys sample every sixty seconds, and the ninety second figure was a misreading of the gauge manifest.","occurred_at":"2031-02-24T13:12:00Z"},
+            {"id":12,"role":"user","speaker":"maren","text":"Ola moved calibration onto the drift corrected pressure model, so the calibration service no longer needs the legacy salinity table.","occurred_at":"2031-02-24T13:26:00Z"},
+            {"id":13,"role":"assistant","speaker":"assistant","text":"The calibration service now uses the drift corrected pressure model and the legacy salinity table is retired.","occurred_at":"2031-02-24T13:27:00Z"},
+            {"id":14,"role":"user","speaker":"maren","text":"Keep every Lanternfish answer under three sentences and always name the owner of a task when you mention that task.","occurred_at":"2031-02-24T13:33:00Z"}
+          ]
+        },
+        {
+          "index": 2,
+          "label": "rollout-planning",
+          "messages": [
+            {"id":15,"role":"user","speaker":"maren","text":"The harbour replay harness shipped on 12 March 2031, ahead of its milestone date.","occurred_at":"2031-03-20T08:41:00Z"},
+            {"id":16,"role":"assistant","speaker":"assistant","text":"The harbour replay harness shipped on 12 March 2031, two days before the 14 March 2031 milestone date.","occurred_at":"2031-03-20T08:42:00Z"},
+            {"id":17,"role":"user","speaker":"maren","text":"Next we cut over the Kestrel Sound gateway, then enable drift corrected calibration in production, and only afterwards retire the old telemetry bridge.","occurred_at":"2031-03-20T08:50:00Z"},
+            {"id":18,"role":"assistant","speaker":"assistant","text":"Lanternfish rollout order recorded: gateway cutover first, drift corrected calibration in production second, retirement of the old telemetry bridge last.","occurred_at":"2031-03-20T08:51:00Z"},
+            {"id":19,"role":"user","speaker":"maren","text":"I prefer written decision records over meetings, so send a one page record for every Lanternfish decision instead of booking a review call.","occurred_at":"2031-03-20T09:02:00Z"},
+            {"id":20,"role":"assistant","speaker":"assistant","text":"Understood. Lanternfish decisions go out as one page written records rather than review calls.","occurred_at":"2031-03-20T09:03:00Z"}
+          ]
+        }
+      ],
+      "probes": [
+        {"id":"lanternfish-01","kind":"information_extraction","question":"Who owns the Lanternfish calibration service?","reference_answer":"Ola Bergstrom owns the Lanternfish calibration service.","criteria":["Names Ola Bergstrom as the owner of the calibration service.","Does not assign the calibration service to Ines Delacroix or to Maren."],"difficulty":"easy","evidence_message_ids":[3,4]},
+        {"id":"lanternfish-02","kind":"temporal_reasoning","question":"The harbour replay harness milestone was due on 14 March 2031. How early did the harbour replay harness ship?","reference_answer":"Two days early: the harbour replay harness shipped on 12 March 2031 against a 14 March 2031 milestone.","criteria":["States that the harbour replay harness shipped two days early.","Gives 12 March 2031 as the ship date of the harbour replay harness."],"difficulty":"medium","evidence_message_ids":[5,15,16]},
+        {"id":"lanternfish-03","kind":"multi_session_reasoning","question":"Which Lanternfish milestone carried a budget of forty engineer days, and did that milestone meet its date?","reference_answer":"The harbour replay harness carried the forty engineer day budget and it met its date, shipping on 12 March 2031 before the 14 March 2031 deadline.","criteria":["Identifies the harbour replay harness as the milestone budgeted forty engineer days.","States that the milestone was met rather than missed.","Uses both the kickoff budget and the later ship date."],"difficulty":"hard","evidence_message_ids":[5,6,15]},
+        {"id":"lanternfish-04","kind":"contradiction_resolution","question":"How often do the Kestrel Sound buoys sample, and what happened to the earlier figure?","reference_answer":"The Kestrel Sound buoys sample every sixty seconds; the earlier ninety second figure was a misreading of the gauge manifest and was corrected.","criteria":["Gives sixty seconds as the Kestrel Sound sampling interval.","Identifies the ninety second figure as the corrected misreading of the gauge manifest."],"difficulty":"medium","evidence_message_ids":[7,10,11]},
+        {"id":"lanternfish-05","kind":"event_ordering","question":"In what order do the three Lanternfish rollout steps happen: retirement of the old telemetry bridge, drift corrected calibration in production, and the Kestrel Sound gateway cutover?","reference_answer":"The Kestrel Sound gateway cutover happens first, drift corrected calibration in production second, and retirement of the old telemetry bridge last.","criteria":["Places the Kestrel Sound gateway cutover first.","Places drift corrected calibration in production second.","Places retirement of the old telemetry bridge last."],"difficulty":"medium","evidence_message_ids":[17,18]},
+        {"id":"lanternfish-06","kind":"knowledge_update","question":"Does the Lanternfish calibration service still depend on the legacy salinity table?","reference_answer":"No. The calibration service moved onto the drift corrected pressure model and the legacy salinity table was retired.","criteria":["States that the legacy salinity table is no longer used.","Names the drift corrected pressure model as the replacement."],"difficulty":"easy","evidence_message_ids":[12,13]}
+      ]
+    },
+    {
+      "id": "hm-quillback",
+      "sessions": [
+        {
+          "index": 0,
+          "label": "intake",
+          "messages": [
+            {"id":1,"role":"user","speaker":"tobias","text":"Quillback is the seed library catalogue for the Marrow Hill community garden, and I am cataloguing the winter squash collection first.","occurred_at":"2031-05-06T17:10:00Z"},
+            {"id":2,"role":"assistant","speaker":"assistant","text":"Quillback will catalogue the Marrow Hill seed library, starting with the winter squash collection.","occurred_at":"2031-05-06T17:11:00Z"},
+            {"id":3,"role":"user","speaker":"tobias","text":"We hold three winter squash varieties: Blue Kuri, Marina di Chioggia and the Marrow Hill heirloom crookneck.","occurred_at":"2031-05-06T17:19:00Z"},
+            {"id":4,"role":"assistant","speaker":"assistant","text":"Recorded three winter squash varieties for Quillback: Blue Kuri, Marina di Chioggia and the Marrow Hill heirloom crookneck.","occurred_at":"2031-05-06T17:20:00Z"},
+            {"id":5,"role":"user","speaker":"tobias","text":"Always give me weights in grams and write every variety name exactly as it appears on the packet label.","occurred_at":"2031-05-06T17:28:00Z"},
+            {"id":6,"role":"assistant","speaker":"assistant","text":"Understood: weights in grams and packet label spelling for every variety name.","occurred_at":"2031-05-06T17:29:00Z"},
+            {"id":7,"role":"user","speaker":"tobias","text":"The heirloom crookneck packets weigh forty grams each and nine packets sit in the drawer.","occurred_at":"2031-05-06T17:35:00Z"}
+          ]
+        },
+        {
+          "index": 1,
+          "label": "germination-trial",
+          "messages": [
+            {"id":8,"role":"user","speaker":"tobias","text":"The germination trial finished: Blue Kuri germinated at eighty eight percent, Marina di Chioggia at seventy one percent and the crookneck at ninety four percent.","occurred_at":"2031-05-27T11:04:00Z"},
+            {"id":9,"role":"assistant","speaker":"assistant","text":"Germination results logged for Quillback: Blue Kuri eighty eight percent, Marina di Chioggia seventy one percent, crookneck ninety four percent.","occurred_at":"2031-05-27T11:05:00Z"},
+            {"id":10,"role":"user","speaker":"tobias","text":"I prefer open pollinated varieties over hybrids in every Quillback recommendation, even when a hybrid germinates better.","occurred_at":"2031-05-27T11:13:00Z"},
+            {"id":11,"role":"assistant","speaker":"assistant","text":"Noted. Quillback recommendations favour open pollinated varieties over hybrids.","occurred_at":"2031-05-27T11:14:00Z"},
+            {"id":12,"role":"user","speaker":"tobias","text":"We ran the germination trial in the Marrow Hill cold frame from 12 May 2031 to 26 May 2031.","occurred_at":"2031-05-27T11:20:00Z"},
+            {"id":13,"role":"assistant","speaker":"assistant","text":"Trial window recorded: 12 May 2031 to 26 May 2031 in the Marrow Hill cold frame.","occurred_at":"2031-05-27T11:21:00Z"},
+            {"id":14,"role":"user","speaker":"tobias","text":"Blue Kuri and Marina di Chioggia are open pollinated and our crookneck is an heirloom, so none of the three varieties is a hybrid.","occurred_at":"2031-05-27T11:31:00Z"}
+          ]
+        },
+        {
+          "index": 2,
+          "label": "catalogue-review",
+          "messages": [
+            {"id":15,"role":"user","speaker":"tobias","text":"Where does Quillback stand: we catalogued three winter squash varieties, ran one germination trial and set the crookneck packet weight.","occurred_at":"2031-06-10T19:02:00Z"},
+            {"id":16,"role":"assistant","speaker":"assistant","text":"Quillback so far: three winter squash varieties catalogued, one germination trial completed in the Marrow Hill cold frame, and the crookneck packet weight recorded at forty grams.","occurred_at":"2031-06-10T19:03:00Z"},
+            {"id":17,"role":"user","speaker":"tobias","text":"When you answer a Quillback question, list the varieties alphabetically and close with the date of the most recent trial.","occurred_at":"2031-06-10T19:12:00Z"},
+            {"id":18,"role":"assistant","speaker":"assistant","text":"Answers will list varieties alphabetically and close with the most recent trial date.","occurred_at":"2031-06-10T19:13:00Z"},
+            {"id":19,"role":"user","speaker":"tobias","text":"We have never tested tomato seed at Marrow Hill and Quillback holds no tomato entry at all.","occurred_at":"2031-06-10T19:20:00Z"},
+            {"id":20,"role":"assistant","speaker":"assistant","text":"Confirmed: no tomato seed has been tested at Marrow Hill and Quillback holds no tomato entry.","occurred_at":"2031-06-10T19:21:00Z"}
+          ]
+        }
+      ],
+      "probes": [
+        {"id":"quillback-01","kind":"summarization","question":"Summarise where the Quillback catalogue stands.","reference_answer":"Quillback has catalogued three winter squash varieties, completed one germination trial in the Marrow Hill cold frame, and recorded the crookneck packet weight at forty grams.","criteria":["Mentions the three catalogued winter squash varieties.","Mentions the completed germination trial in the Marrow Hill cold frame.","Mentions the recorded crookneck packet weight of forty grams."],"difficulty":"medium","evidence_message_ids":[15,16]},
+        {"id":"quillback-02","kind":"abstention","question":"What germination rate did the Quillback tomato seed reach at Marrow Hill?","reference_answer":"No tomato seed has been tested at Marrow Hill and Quillback holds no tomato entry, so no germination rate for tomato seed is available.","criteria":["States that Quillback holds no tomato entry.","Declines to give a germination rate for tomato seed.","Invents no tomato germination figure."],"difficulty":"medium","evidence_message_ids":[]},
+        {"id":"quillback-03","kind":"preference_following","question":"Which winter squash variety should Quillback recommend to a new Marrow Hill grower, and why?","reference_answer":"The Marrow Hill heirloom crookneck: it is an heirloom rather than a hybrid, which matches the stated preference for open pollinated seed, and it germinated best at ninety four percent.","criteria":["Applies the stated preference for open pollinated varieties over hybrids.","Recommends a variety that is open pollinated or heirloom.","Supports the recommendation with the germination trial result."],"difficulty":"hard","evidence_message_ids":[8,10,11,14]},
+        {"id":"quillback-04","kind":"instruction_following","question":"How much does one heirloom crookneck packet weigh, and how many such packets are in the drawer?","reference_answer":"Each heirloom crookneck packet weighs forty grams and nine packets are in the drawer.","criteria":["Gives the packet weight in grams.","Spells the variety as the heirloom crookneck, as the packet label does.","Gives nine as the number of packets in the drawer."],"difficulty":"easy","evidence_message_ids":[5,7]},
+        {"id":"quillback-05","kind":"information_extraction","question":"Which three winter squash varieties does the Quillback catalogue hold?","reference_answer":"Blue Kuri, Marina di Chioggia and the Marrow Hill heirloom crookneck.","criteria":["Names Blue Kuri.","Names Marina di Chioggia.","Names the Marrow Hill heirloom crookneck."],"difficulty":"easy","evidence_message_ids":[3,4]},
+        {"id":"quillback-06","kind":"multi_session_reasoning","question":"Which catalogued Quillback variety germinated best, and how many packets of that variety are in the drawer?","reference_answer":"The Marrow Hill heirloom crookneck germinated best at ninety four percent, and nine of its packets are in the drawer.","criteria":["Names the heirloom crookneck as the best germinating variety.","Gives ninety four percent as its germination rate.","Gives nine as the number of crookneck packets in the drawer."],"difficulty":"hard","evidence_message_ids":[7,8,9]}
+      ]
+    }
+  ]
+}

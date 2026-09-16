@@ -992,6 +992,36 @@
       "file": "crates/hm-embed/src/types.rs"
     },
     {
+      "id": "rust:crates/hm-eval/src/bench/beam.rs:ProbeKind",
+      "name": "hm-eval::ProbeKind",
+      "file": "crates/hm-eval/src/bench/beam.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/beam.rs:Message",
+      "name": "hm-eval::Message",
+      "file": "crates/hm-eval/src/bench/beam.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/beam.rs:Session",
+      "name": "hm-eval::Session",
+      "file": "crates/hm-eval/src/bench/beam.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/beam.rs:Probe",
+      "name": "hm-eval::Probe",
+      "file": "crates/hm-eval/src/bench/beam.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/beam.rs:Conversation",
+      "name": "hm-eval::Conversation",
+      "file": "crates/hm-eval/src/bench/beam.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/beam.rs:ProbeSet",
+      "name": "hm-eval::ProbeSet",
+      "file": "crates/hm-eval/src/bench/beam.rs"
+    },
+    {
       "id": "rust:crates/hm-eval/src/bench/gateway.rs:DynError",
       "name": "hm-eval::DynError",
       "file": "crates/hm-eval/src/bench/gateway.rs"

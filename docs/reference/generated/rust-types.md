@@ -4057,6 +4057,133 @@ pub enum EmbedError {
 }
 ```
 
+## hm-eval::ProbeKind
+
+<a id="rust-crates-hm-eval-src-bench-beam-rs-probekind"></a>
+
+Source: [`crates/hm-eval/src/bench/beam.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam.rs).
+
+When to use: Use `ProbeKind` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub enum ProbeKind {
+    InformationExtraction,
+    TemporalReasoning,
+    MultiSessionReasoning,
+    ContradictionResolution,
+    EventOrdering,
+    KnowledgeUpdate,
+    Summarization,
+    Abstention,
+    PreferenceFollowing,
+    InstructionFollowing,
+}
+```
+
+## hm-eval::Message
+
+<a id="rust-crates-hm-eval-src-bench-beam-rs-message"></a>
+
+Source: [`crates/hm-eval/src/bench/beam.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam.rs).
+
+When to use: Use `Message` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct Message {
+    pub id: u64,
+    pub role: BenchRole,
+    pub speaker: String,
+    pub text: String,
+    pub occurred_at: String,
+}
+```
+
+## hm-eval::Session
+
+<a id="rust-crates-hm-eval-src-bench-beam-rs-session"></a>
+
+Source: [`crates/hm-eval/src/bench/beam.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam.rs).
+
+When to use: Use `Session` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct Session {
+    pub index: usize,
+    pub label: String,
+    pub messages: Vec<Message>,
+}
+```
+
+## hm-eval::Probe
+
+<a id="rust-crates-hm-eval-src-bench-beam-rs-probe"></a>
+
+Source: [`crates/hm-eval/src/bench/beam.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam.rs).
+
+When to use: Use `Probe` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct Probe {
+    pub id: String,
+    pub kind: ProbeKind,
+    pub question: String,
+    pub reference_answer: String,
+    pub criteria: Vec<String>,
+    pub difficulty: String,
+    pub evidence_message_ids: Vec<u64>,
+}
+```
+
+## hm-eval::Conversation
+
+<a id="rust-crates-hm-eval-src-bench-beam-rs-conversation"></a>
+
+Source: [`crates/hm-eval/src/bench/beam.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam.rs).
+
+When to use: Use `Conversation` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct Conversation {
+    pub id: String,
+    pub sessions: Vec<Session>,
+    pub probes: Vec<Probe>,
+}
+```
+
+## hm-eval::ProbeSet
+
+<a id="rust-crates-hm-eval-src-bench-beam-rs-probeset"></a>
+
+Source: [`crates/hm-eval/src/bench/beam.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam.rs).
+
+When to use: Use `ProbeSet` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ProbeSet {
+    pub format: String,
+    pub source_digest: String,
+    pub conversations: Vec<Conversation>,
+}
+```
+
 ## hm-eval::DynError
 
 <a id="rust-crates-hm-eval-src-bench-gateway-rs-dynerror"></a>
