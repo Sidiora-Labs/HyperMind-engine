@@ -8906,6 +8906,7 @@ pub enum RecallMode {
     Near,
     Timeline,
     Reconstruct,
+    Relation,
 }
 ```
 
@@ -11800,6 +11801,30 @@ pub struct RecallItem {
 }
 ```
 
+## hm-serve::RelationResult
+
+<a id="rust-crates-hm-serve-src-actor-rs-relationresult"></a>
+
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
+
+When to use: Use `RelationResult` for actor ownership, embedded sessions, authenticated transports, and daemon request execution. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct RelationResult {
+    pub edge_id: Vec<u8>,
+    pub relation: String,
+    pub source_id: Vec<u8>,
+    pub target_id: Vec<u8>,
+    pub event_lsn: LSN,
+    pub weight_micros: u32,
+    pub support_lsns: Vec<LSN>,
+    pub score_q32: u64,
+}
+```
+
 ## hm-serve::GraphNeighbour
 
 <a id="rust-crates-hm-serve-src-actor-rs-graphneighbour"></a>
@@ -11904,6 +11929,12 @@ pub enum RecallRequest {
     Timeline {
         conversation: ConversationId,
         since_lsn: LSN,
+        limit: usize,
+    },
+    Relation {
+        space_id: String,
+        query: Vec<i8>,
+        binary_prefilter: Vec<u8>,
         limit: usize,
     },
 }

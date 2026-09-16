@@ -466,6 +466,9 @@ impl McpServer {
             )
             .await;
         }
+        if matches!(input.mode, RecallMode::Relation) {
+            return self.relation_recall_inner(input).await;
+        }
         if input.limit == 0 || input.limit > 4096 {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
@@ -568,6 +571,55 @@ impl McpServer {
                 "content": content,
                 "authority": authority_name(authority),
                 "score_q32": record.score_q32,
+                "uri": uri,
+            }));
+            envelope.provenance.push(uri);
+        }
+        Ok(envelope)
+    }
+
+    async fn relation_recall_inner(&self, input: RecallInput) -> Result<Envelope, Error> {
+        if input.limit == 0
+            || input.limit > hm_compose::bundle::MAXIMUM_CANDIDATES
+            || input.query.is_empty()
+        {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let runtime = self
+            .embedding_runtime
+            .as_ref()
+            .ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
+        let embedding = runtime.query(input.query.clone()).await?;
+        let relations = self
+            .actor
+            .relation_recall(RecallRequest::Relation {
+                space_id: tools::remember::relation_space_id(&embedding.space),
+                query: embedding.values,
+                binary_prefilter: embedding.binary_prefilter,
+                limit: input.limit,
+            })
+            .await?;
+        let mut envelope = Envelope::empty();
+        envelope.health["encoder"] = json!(runtime.health());
+        for relation in relations {
+            let uri = format!(
+                "hm://{}/lsn/{}",
+                self.actor.actor(),
+                relation.event_lsn.get()
+            );
+            envelope.items.push(json!({
+                "edge_id": hex(&relation.edge_id),
+                "relation": relation.relation,
+                "source": String::from_utf8_lossy(&relation.source_id),
+                "target": String::from_utf8_lossy(&relation.target_id),
+                "event_lsn": relation.event_lsn.get(),
+                "weight_micros": relation.weight_micros,
+                "support_lsns": relation
+                    .support_lsns
+                    .iter()
+                    .map(|lsn| lsn.get())
+                    .collect::<Vec<_>>(),
+                "score_q32": relation.score_q32,
                 "uri": uri,
             }));
             envelope.provenance.push(uri);

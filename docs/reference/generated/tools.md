@@ -285,9 +285,9 @@ Do not use: Do not rewrite the same revision after results, define success as fr
 
 Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/dispatcher.rs).
 
-When to use: Read bounded lexical, semantic, entity, temporal, timeline, or anchored results. Use reconstruct only as an explicitly requested model-backed narration with reconstruction labeling.
+When to use: Read bounded lexical, semantic, entity, temporal, timeline, relation, or anchored results. Use relation to retrieve relationships directly, and reconstruct only as an explicitly requested model-backed narration with reconstruction labeling.
 
-Do not use: Do not interpret recall as current external-state verification or silently fall back from missing semantic coverage. Never remember reconstruction verbatim.
+Do not use: Do not interpret recall as current external-state verification or silently fall back from missing semantic coverage. Never read relationship support as included context: it names the sources that produced a relationship, not text that merely reached the bundle. Never remember reconstruction verbatim.
 
 
 ```json

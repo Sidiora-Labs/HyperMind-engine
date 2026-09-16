@@ -2,6 +2,7 @@
 
 use crate::anticipation::{self, WakeDecision, WakeEvaluation};
 use hm_compose::bundle::{self, ActivationBundle, ActivationRequest};
+use hm_compose::lanes::relation::{self, RelationHit};
 use hm_compose::tokens::{FallbackWeights, TokenCounter};
 use hm_core::telemetry::{Attribute, SpanBuilder, SpanKind, SpanOutcome};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
@@ -44,7 +45,7 @@ use hm_schema::events::{
     Authority, BeliefType, Checkpoint, EventEnvelope, EventPayload, IntentionSet,
     OutcomeAssessment, PredicateKind, ProcedureRevised, Retention, Sensitivity,
 };
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -105,6 +106,18 @@ pub struct RecallItem {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub struct RelationResult {
+    pub edge_id: Vec<u8>,
+    pub relation: String,
+    pub source_id: Vec<u8>,
+    pub target_id: Vec<u8>,
+    pub event_lsn: LSN,
+    pub weight_micros: u32,
+    pub support_lsns: Vec<LSN>,
+    pub score_q32: u64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct GraphNeighbour {
     pub edge: EdgeRecord,
     pub outgoing: bool,
@@ -161,6 +174,12 @@ pub enum RecallRequest {
     Timeline {
         conversation: ConversationId,
         since_lsn: LSN,
+        limit: usize,
+    },
+    Relation {
+        space_id: String,
+        query: Vec<i8>,
+        binary_prefilter: Vec<u8>,
         limit: usize,
     },
 }
@@ -311,6 +330,10 @@ enum Command {
     Recall(
         RecallRequest,
         oneshot::Sender<Result<Vec<RecallItem>, Error>>,
+    ),
+    RelationRecall(
+        RecallRequest,
+        oneshot::Sender<Result<Vec<RelationResult>, Error>>,
     ),
     Activate(
         Box<ActivateRequest>,
@@ -479,6 +502,16 @@ impl ActorEngine {
     pub async fn recall(&self, request_value: RecallRequest) -> Result<Vec<RecallItem>, Error> {
         request(&self.commands, |reply| {
             Command::Recall(request_value, reply)
+        })
+        .await
+    }
+
+    pub async fn relation_recall(
+        &self,
+        request_value: RecallRequest,
+    ) -> Result<Vec<RelationResult>, Error> {
+        request(&self.commands, |reply| {
+            Command::RelationRecall(request_value, reply)
         })
         .await
     }
@@ -894,6 +927,9 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
             }
             Command::Recall(request, reply) => {
                 let _ = reply.send(state.recall(request));
+            }
+            Command::RelationRecall(request, reply) => {
+                let _ = reply.send(state.relation_recall(request));
             }
             Command::Activate(request, reply) => {
                 let _ = reply.send(state.activate(*request));
@@ -1744,6 +1780,7 @@ impl WriterState {
             .take(limit)
             .map(|record| recall_item(record, 0))
             .collect()),
+            RecallRequest::Relation { .. } => Err(Error::new(ErrorCode::InvalidArgument)),
         }
     }
 
@@ -1768,6 +1805,87 @@ impl WriterState {
         let snapshot = self.projections.begin_snapshot()?;
         let generation = RunsProjection::active_generation(&snapshot)?;
         GraphProjection::list_edges(&snapshot, generation, self.last_wall_timestamp_ns, limit)
+    }
+
+    fn relation_recall(&self, request: RecallRequest) -> Result<Vec<RelationResult>, Error> {
+        let RecallRequest::Relation {
+            space_id,
+            query,
+            binary_prefilter,
+            limit,
+        } = request
+        else {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        };
+        if limit == 0 || limit > bundle::MAXIMUM_CANDIDATES {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let lane = self
+            .vector_lanes
+            .get(&space_id)
+            .ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
+        let hits = lane.search(&query, &binary_prefilter, limit.saturating_mul(4), limit)?;
+        self.tripwires
+            .guard(hits.iter().map(|hit| hit.target_lsn))?;
+        let snapshot = self.projections.begin_snapshot()?;
+        let generation = RunsProjection::active_generation(&snapshot)?;
+        let visible = GraphProjection::list_edges(
+            &snapshot,
+            generation,
+            self.last_wall_timestamp_ns,
+            bundle::MAXIMUM_CANDIDATES,
+        )?
+        .into_iter()
+        .map(|record| record.event_lsn)
+        .collect::<BTreeSet<_>>();
+        let mut resolved = BTreeMap::new();
+        let mut lane_hits = Vec::with_capacity(hits.len());
+        for hit in hits {
+            let Some(record) = GraphProjection::edge_at(&snapshot, hit.target_lsn.get())? else {
+                continue;
+            };
+            if !visible.contains(&record.event_lsn) {
+                continue;
+            }
+            let support = support_lsns(&record);
+            lane_hits.push(RelationHit {
+                edge_id: record.edge_id.clone(),
+                event_lsn: hit.target_lsn,
+                weight_micros: record.weight_micros,
+                score: hit.score,
+                support_lsns: support.clone(),
+            });
+            resolved.insert(
+                (record.edge_id.clone(), hit.target_lsn.get()),
+                (
+                    record,
+                    support,
+                    u64::try_from(hit.score.max(0)).unwrap_or(0),
+                ),
+            );
+        }
+        if lane_hits.is_empty() {
+            return Ok(Vec::new());
+        }
+        let ranked = relation::rank(&lane_hits, limit.min(relation::MAXIMUM_RELATION_CANDIDATES))?;
+        let mut output = Vec::with_capacity(ranked.ranking.candidates.len());
+        for candidate in ranked.ranking.candidates {
+            let key = (candidate.canonical_id, candidate.lsn.get());
+            let Some((record, support, score_q32)) = resolved.remove(&key) else {
+                return Err(Error::new(ErrorCode::InvariantViolation));
+            };
+            output.push(RelationResult {
+                edge_id: record.edge_id,
+                relation: record.relation,
+                source_id: record.source_id,
+                target_id: record.target_id,
+                event_lsn: candidate.lsn,
+                weight_micros: record.weight_micros,
+                support_lsns: support,
+                score_q32,
+            });
+        }
+        Ok(output)
     }
 
     fn activate(&self, request: ActivateRequest) -> Result<ActivationBundle, Error> {
@@ -1991,6 +2109,18 @@ fn recall_item(record: ConversationRecord, score_q32: u64) -> RecallItem {
         payload: record.payload,
         score_q32,
     }
+}
+
+fn support_lsns(record: &EdgeRecord) -> Vec<LSN> {
+    let mut support = BTreeSet::new();
+    for citation in &record.citations {
+        for lsn in [citation.first_lsn, citation.last_lsn] {
+            if lsn != 0 {
+                support.insert(lsn);
+            }
+        }
+    }
+    support.into_iter().map(LSN::new).collect()
 }
 
 struct ActorHistory<'a> {

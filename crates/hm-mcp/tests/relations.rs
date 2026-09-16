@@ -3,26 +3,29 @@ use hm_embed::HashFeatureEmbedder;
 use hm_ledger::frame::EventKind as LedgerEventKind;
 use hm_mcp::{
     ConsolidateAction, ConsolidateBudget, ConsolidateInput, ConsolidateMode, EmbeddingRuntime,
-    McpServer, RememberInput, RememberKind,
+    McpServer, RecallFilters, RecallInput, RecallMode, RememberInput, RememberKind,
 };
 use hm_schema::event::{
     Boundary, CURRENT_SCHEMA_VERSION, EventKind, encode_event_envelope, verify_event,
 };
 use hm_schema::events::{
     Authority, ConsolidationBudget, ConsolidationClosed, ConsolidationOpened,
-    ConsolidationPhaseName, EdgeAsserted, EventEnvelope, EventPayload, ModelProvenance,
-    PromptVersion, ProvenanceRange, Retention, Sensitivity,
+    ConsolidationPhaseName, EdgeAsserted, EdgeRetracted, EventEnvelope, EventPayload,
+    ModelProvenance, PromptVersion, ProvenanceRange, Retention, Sensitivity,
 };
-use hm_serve::actor::{ActorConfig, ActorEngine, IncomingEvent};
+use hm_serve::actor::{ActorConfig, ActorEngine, IncomingEvent, RecallRequest};
+use std::collections::BTreeSet;
 use std::sync::Arc;
 
 const RUN: &[u8] = b"relations/seed";
+const RETRACTION_RUN: &[u8] = b"relations/retraction";
 const SCOPE: &str = "relations";
+const ACTOR: u16 = 11;
 
 fn actor_config(path: &std::path::Path) -> ActorConfig {
     ActorConfig {
         actor_directory: path.join("11"),
-        actor: ActorId::new(11),
+        actor: ActorId::new(ACTOR),
         user: [1; 16],
         kek: [2; 32],
         projection_map_bytes: 16 * 1024 * 1024,
@@ -84,6 +87,15 @@ fn seed_event(
     payload: EventPayload,
     model_provenance: Option<ModelProvenance>,
 ) -> IncomingEvent {
+    run_event(RUN, kind, payload, model_provenance)
+}
+
+fn run_event(
+    run: &[u8],
+    kind: LedgerEventKind,
+    payload: EventPayload,
+    model_provenance: Option<ModelProvenance>,
+) -> IncomingEvent {
     IncomingEvent {
         kind,
         conversation: ConversationId::derive("relations"),
@@ -95,7 +107,7 @@ fn seed_event(
             client_event_index: 0,
             client_event_count: 0,
             origin_actor: 0,
-            run_id: Some(RUN.to_vec()),
+            run_id: Some(run.to_vec()),
             model_provenance: model_provenance.map(Box::new),
             authority: Authority::DerivedInference,
             retention: Retention::Durable,
@@ -368,5 +380,236 @@ async fn an_empty_relationship_limit_is_rejected() {
     let rejection = actor.relations(0).await.unwrap_err();
     assert_eq!(rejection.code, hm_core::ErrorCode::InvalidArgument);
     assert!(actor.relations(16).await.unwrap().is_empty());
+    actor.shutdown().await.unwrap();
+}
+
+fn relation_recall(query: &str) -> RecallInput {
+    RecallInput {
+        mode: RecallMode::Relation,
+        query: query.to_owned(),
+        conversation: SCOPE.to_owned(),
+        limit: 32,
+        since_lsn: 0,
+        filters: RecallFilters::default(),
+    }
+}
+
+fn retraction_run(generation: u64, parent: u64, edge_id: &[u8]) -> Vec<IncomingEvent> {
+    vec![
+        run_event(
+            RETRACTION_RUN,
+            LedgerEventKind::ConsolidationOpened,
+            EventPayload::ConsolidationOpened(Box::new(ConsolidationOpened {
+                scope_digest: vec![6; 32],
+                cadence_key: "relations:retraction".to_owned(),
+                generation,
+                expected_active_generation: parent,
+                phases: vec![ConsolidationPhaseName::Publish],
+                prompts: vec![PromptVersion {
+                    prompt_id: "relation-seed/v1".to_owned(),
+                    version: 1,
+                    model_id: "relation-seed".to_owned(),
+                }],
+                budget: Box::new(ConsolidationBudget {
+                    max_llm_calls: 1,
+                    max_tokens: 1_000,
+                    max_microusd: 1_000,
+                    max_wall_ms: 1_000,
+                }),
+                source_first_lsn: 0,
+                source_last_lsn: 0,
+            })),
+            None,
+        ),
+        run_event(
+            RETRACTION_RUN,
+            LedgerEventKind::EdgeRetracted,
+            EventPayload::EdgeRetracted(Box::new(EdgeRetracted {
+                edge_id: edge_id.to_vec(),
+                citations: vec![ProvenanceRange {
+                    first_lsn: 1,
+                    last_lsn: 1,
+                    byte_start: 0,
+                    byte_end: 16,
+                }],
+            })),
+            Some(provenance()),
+        ),
+        run_event(
+            RETRACTION_RUN,
+            LedgerEventKind::ConsolidationClosed,
+            EventPayload::ConsolidationClosed(Box::new(ConsolidationClosed {
+                generation,
+                expected_active_generation: parent,
+                derived_records: 1,
+                dropped_candidates: 0,
+                llm_calls: 0,
+                input_tokens: 0,
+                output_tokens: 0,
+                cost_microusd: 0,
+            })),
+            None,
+        ),
+    ]
+}
+
+async fn seed_relation_lane(server: &McpServer, actor: &ActorEngine) -> (u64, u64, u64) {
+    let first = server
+        .remember_envelope(remember("The Berlin vault holds the atlas backup."))
+        .await;
+    assert!(first.ok, "{first:?}");
+    let second = server
+        .remember_envelope(remember("The atlas backup covers the atlas ledger."))
+        .await;
+    assert!(second.ok, "{second:?}");
+    let first_support = first.items[0]["first_lsn"].as_u64().unwrap();
+    let second_support = second.items[0]["first_lsn"].as_u64().unwrap();
+    actor
+        .append(seed_generation(first_support, second_support))
+        .await
+        .unwrap();
+    let built = server.consolidate_envelope(consolidate("first")).await;
+    assert!(built.ok, "{built:?}");
+    assert_eq!(built.items[0]["relations_embedded"], 2);
+    let generation = built.items[0]["generation"].as_u64().unwrap();
+    (first_support, second_support, generation)
+}
+
+#[tokio::test]
+async fn relation_recall_returns_relationships_with_support_separate_from_provenance() {
+    let temporary = tempfile::tempdir().unwrap();
+    let actor = ActorEngine::open(actor_config(temporary.path()))
+        .await
+        .unwrap();
+    let server = McpServer::new(actor.clone()).with_embedding_runtime(runtime());
+    let (first_support, second_support, _) = seed_relation_lane(&server, &actor).await;
+    let asserted = edge_lsns(&actor).await;
+    assert_eq!(asserted.len(), 2);
+
+    let envelope = server
+        .recall_envelope(relation_recall("berlin vault holds atlas backup"))
+        .await;
+    assert!(envelope.ok, "{envelope:?}");
+    assert_eq!(envelope.items.len(), 2, "{envelope:?}");
+    assert_eq!(envelope.health["encoder"], "lexical_only");
+
+    let holds = envelope
+        .items
+        .iter()
+        .find(|item| item["event_lsn"] == asserted[0])
+        .unwrap();
+    assert_eq!(holds["relation"], "holds");
+    assert_eq!(holds["source"], "berlin vault");
+    assert_eq!(holds["target"], "atlas backup");
+    assert_eq!(holds["support_lsns"].as_array().unwrap().len(), 1);
+    assert_eq!(holds["support_lsns"][0], first_support);
+
+    let covers = envelope
+        .items
+        .iter()
+        .find(|item| item["event_lsn"] == asserted[1])
+        .unwrap();
+    assert_eq!(covers["relation"], "covers");
+    assert_eq!(covers["support_lsns"][0], second_support);
+
+    let expected = asserted
+        .iter()
+        .map(|lsn| format!("hm://{ACTOR}/lsn/{lsn}"))
+        .collect::<BTreeSet<_>>();
+    assert_eq!(
+        envelope.provenance.iter().cloned().collect::<BTreeSet<_>>(),
+        expected
+    );
+    for support in [first_support, second_support] {
+        let leaked = format!("hm://{ACTOR}/lsn/{support}");
+        assert!(!envelope.provenance.contains(&leaked), "{envelope:?}");
+    }
+    actor.shutdown().await.unwrap();
+}
+
+#[tokio::test]
+async fn relation_recall_refuses_without_an_encoder_or_with_an_unknown_space() {
+    let temporary = tempfile::tempdir().unwrap();
+    let actor = ActorEngine::open(actor_config(temporary.path()))
+        .await
+        .unwrap();
+    let server = McpServer::new(actor.clone());
+    let envelope = server
+        .recall_envelope(relation_recall("berlin vault holds atlas backup"))
+        .await;
+    assert!(!envelope.ok, "{envelope:?}");
+    assert_eq!(envelope.items[0]["error"], "kOperationUnavailable");
+
+    let missing = actor
+        .relation_recall(RecallRequest::Relation {
+            space_id: "hm-space-v1:absent".to_owned(),
+            query: vec![0; 64],
+            binary_prefilter: vec![0; 8],
+            limit: 4,
+        })
+        .await
+        .unwrap_err();
+    assert_eq!(missing.code, hm_core::ErrorCode::OperationUnavailable);
+
+    let empty = actor
+        .relation_recall(RecallRequest::Relation {
+            space_id: "hm-space-v1:absent".to_owned(),
+            query: vec![0; 64],
+            binary_prefilter: vec![0; 8],
+            limit: 0,
+        })
+        .await
+        .unwrap_err();
+    assert_eq!(empty.code, hm_core::ErrorCode::InvalidArgument);
+    actor.shutdown().await.unwrap();
+}
+
+#[tokio::test]
+async fn retracted_relationships_disappear_from_relation_recall() {
+    let temporary = tempfile::tempdir().unwrap();
+    let actor = ActorEngine::open(actor_config(temporary.path()))
+        .await
+        .unwrap();
+    let server = McpServer::new(actor.clone()).with_embedding_runtime(runtime());
+    let (_, _, generation) = seed_relation_lane(&server, &actor).await;
+    let asserted = edge_lsns(&actor).await;
+    let before = server
+        .recall_envelope(relation_recall("berlin vault holds atlas backup"))
+        .await;
+    assert_eq!(before.items.len(), 2, "{before:?}");
+    let embedded = vectors(&actor)
+        .await
+        .into_iter()
+        .filter(|vector| vector.prompt_id == "embedding/relation")
+        .count();
+
+    actor
+        .append(retraction_run(
+            generation + 1,
+            generation,
+            b"edge-vault-holds-backup",
+        ))
+        .await
+        .unwrap();
+
+    let after = server
+        .recall_envelope(relation_recall("berlin vault holds atlas backup"))
+        .await;
+    assert!(after.ok, "{after:?}");
+    assert_eq!(after.items.len(), 1, "{after:?}");
+    assert_eq!(after.items[0]["event_lsn"], asserted[1]);
+    assert_eq!(after.items[0]["relation"], "covers");
+    assert_eq!(
+        after.provenance,
+        vec![format!("hm://{ACTOR}/lsn/{}", asserted[1])]
+    );
+    assert_eq!(
+        vectors(&actor)
+            .await
+            .into_iter()
+            .filter(|vector| vector.prompt_id == "embedding/relation")
+            .count(),
+        embedded
+    );
     actor.shutdown().await.unwrap();
 }

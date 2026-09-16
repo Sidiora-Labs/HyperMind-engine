@@ -11,6 +11,7 @@ pub enum RecallMode {
     Near,
     Timeline,
     Reconstruct,
+    Relation,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, schemars::JsonSchema)]

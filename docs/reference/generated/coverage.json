@@ -2852,6 +2852,11 @@
       "file": "crates/hm-serve/src/actor.rs"
     },
     {
+      "id": "rust:crates/hm-serve/src/actor.rs:RelationResult",
+      "name": "hm-serve::RelationResult",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
       "id": "rust:crates/hm-serve/src/actor.rs:GraphNeighbour",
       "name": "hm-serve::GraphNeighbour",
       "file": "crates/hm-serve/src/actor.rs"
