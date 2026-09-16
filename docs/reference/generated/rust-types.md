@@ -11838,6 +11838,26 @@ pub struct GraphNeighbourhood {
 }
 ```
 
+## hm-serve::DocumentState
+
+<a id="rust-crates-hm-serve-src-actor-rs-documentstate"></a>
+
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
+
+When to use: Use `DocumentState` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct DocumentState {
+    pub generation: u64,
+    pub document: DocumentRecord,
+    pub extraction: Option<ExtractionRecord>,
+    pub chunks: Vec<ChunkRecord>,
+}
+```
+
 ## hm-serve::RecallRequest
 
 <a id="rust-crates-hm-serve-src-actor-rs-recallrequest"></a>

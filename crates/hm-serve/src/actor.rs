@@ -23,6 +23,7 @@ use hm_proj::beliefs::{BeliefAsOf, BeliefAsOfResult, BeliefProjection};
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
 };
+use hm_proj::documents::{ChunkRecord, DocumentRecord, DocumentsProjection, ExtractionRecord};
 use hm_proj::entities::EntityProjection;
 use hm_proj::graph::{EdgeRecord, GraphProjection};
 use hm_proj::intentions::{IntentionRecord, IntentionStatus, IntentionsProjection};
@@ -115,6 +116,14 @@ pub struct GraphNeighbourhood {
     pub generation: u64,
     pub node: Option<MemoryRecord>,
     pub neighbours: Vec<GraphNeighbour>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DocumentState {
+    pub generation: u64,
+    pub document: DocumentRecord,
+    pub extraction: Option<ExtractionRecord>,
+    pub chunks: Vec<ChunkRecord>,
 }
 
 #[derive(Clone, Debug)]
@@ -266,6 +275,10 @@ enum Command {
         oneshot::Sender<Result<GraphNeighbourhood, Error>>,
     ),
     Memories(usize, oneshot::Sender<Result<Vec<MemoryRecord>, Error>>),
+    DocumentState(
+        Vec<u8>,
+        oneshot::Sender<Result<Option<DocumentState>, Error>>,
+    ),
     Relations(usize, oneshot::Sender<Result<Vec<EdgeRecord>, Error>>),
     Append(
         Vec<IncomingEvent>,
@@ -582,6 +595,16 @@ impl ActorEngine {
         request(&self.commands, |reply| Command::Memories(limit, reply)).await
     }
 
+    pub async fn document_state(
+        &self,
+        document_id: Vec<u8>,
+    ) -> Result<Option<DocumentState>, Error> {
+        request(&self.commands, |reply| {
+            Command::DocumentState(document_id, reply)
+        })
+        .await
+    }
+
     pub async fn verification_status(&self) -> Result<VerificationStatus, Error> {
         request(&self.commands, Command::VerificationStatus).await
     }
@@ -656,6 +679,32 @@ async fn request<T>(
     response
         .await
         .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
+}
+
+fn document_state(
+    snapshot: &ReadSnapshot<'_>,
+    document_id: &[u8],
+) -> Result<Option<DocumentState>, Error> {
+    let Some(document) = DocumentsProjection::document(snapshot, document_id)? else {
+        return Ok(None);
+    };
+    let generation = RunsProjection::active_generation(snapshot)?;
+    let extraction = match DocumentsProjection::extraction(snapshot, generation, document_id) {
+        Ok(record) => record,
+        Err(error) if error.code == ErrorCode::OperationUnavailable => None,
+        Err(error) => return Err(error),
+    };
+    let chunks = match DocumentsProjection::chunks(snapshot, generation, document_id) {
+        Ok(records) => records,
+        Err(error) if error.code == ErrorCode::OperationUnavailable => Vec::new(),
+        Err(error) => return Err(error),
+    };
+    Ok(Some(DocumentState {
+        generation,
+        document,
+        extraction,
+        chunks,
+    }))
 }
 
 fn neighbourhood(
@@ -796,6 +845,17 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
                         let generation = RunsProjection::active_generation(&snapshot)?;
                         MemoryProjection::list_visible(&snapshot, generation, limit)
                     })
+                };
+                let _ = reply.send(result);
+            }
+            Command::DocumentState(document_id, reply) => {
+                let result = if document_id.is_empty() {
+                    Err(Error::new(ErrorCode::InvalidArgument))
+                } else {
+                    state
+                        .projections
+                        .begin_snapshot()
+                        .and_then(|snapshot| document_state(&snapshot, &document_id))
                 };
                 let _ = reply.send(result);
             }

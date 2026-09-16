@@ -2862,6 +2862,11 @@
       "file": "crates/hm-serve/src/actor.rs"
     },
     {
+      "id": "rust:crates/hm-serve/src/actor.rs:DocumentState",
+      "name": "hm-serve::DocumentState",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
       "id": "rust:crates/hm-serve/src/actor.rs:RecallRequest",
       "name": "hm-serve::RecallRequest",
       "file": "crates/hm-serve/src/actor.rs"
