@@ -6671,6 +6671,102 @@ pub struct Anthropic<T> {
 }
 ```
 
+## hm-llm::FieldShape
+
+<a id="rust-crates-hm-llm-src-contract-rs-fieldshape"></a>
+
+Source: [`crates/hm-llm/src/contract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/contract.rs).
+
+When to use: Use `FieldShape` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub enum FieldShape {
+    Identifier,
+    NullableIdentifier,
+    Prose,
+    IdentifierList,
+    Count,
+    Flag,
+    Opaque,
+}
+```
+
+## hm-llm::FieldRule
+
+<a id="rust-crates-hm-llm-src-contract-rs-fieldrule"></a>
+
+Source: [`crates/hm-llm/src/contract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/contract.rs).
+
+When to use: Use `FieldRule` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub struct FieldRule {
+    pub name: &'static str,
+    pub shape: FieldShape,
+}
+```
+
+## hm-llm::ExtractionContract
+
+<a id="rust-crates-hm-llm-src-contract-rs-extractioncontract"></a>
+
+Source: [`crates/hm-llm/src/contract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/contract.rs).
+
+When to use: Use `ExtractionContract` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub struct ExtractionContract {
+    pub contract_id: &'static str,
+    pub version: u16,
+    pub fields: &'static [FieldRule],
+}
+```
+
+## hm-llm::ContractViolation
+
+<a id="rust-crates-hm-llm-src-contract-rs-contractviolation"></a>
+
+Source: [`crates/hm-llm/src/contract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/contract.rs).
+
+When to use: Use `ContractViolation` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub enum ContractViolation {
+    NotAnObject,
+    MissingField(String),
+    UnknownField(String),
+    WrongShape(String),
+    EmptyIdentifier(String),
+    IdentifierTooLong {
+        field: String,
+        characters: usize,
+        limit: usize,
+    },
+    ProseTooLong {
+        field: String,
+        characters: usize,
+        limit: usize,
+    },
+    ListTooLong {
+        field: String,
+        items: usize,
+        limit: usize,
+    },
+}
+```
+
 ## hm-llm::PriceEntry
 
 <a id="rust-crates-hm-llm-src-cost-rs-priceentry"></a>

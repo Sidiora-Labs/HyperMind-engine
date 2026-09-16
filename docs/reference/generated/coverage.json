@@ -1627,6 +1627,26 @@
       "file": "crates/hm-llm/src/anthropic.rs"
     },
     {
+      "id": "rust:crates/hm-llm/src/contract.rs:FieldShape",
+      "name": "hm-llm::FieldShape",
+      "file": "crates/hm-llm/src/contract.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/contract.rs:FieldRule",
+      "name": "hm-llm::FieldRule",
+      "file": "crates/hm-llm/src/contract.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/contract.rs:ExtractionContract",
+      "name": "hm-llm::ExtractionContract",
+      "file": "crates/hm-llm/src/contract.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/contract.rs:ContractViolation",
+      "name": "hm-llm::ContractViolation",
+      "file": "crates/hm-llm/src/contract.rs"
+    },
+    {
       "id": "rust:crates/hm-llm/src/cost.rs:PriceEntry",
       "name": "hm-llm::PriceEntry",
       "file": "crates/hm-llm/src/cost.rs"

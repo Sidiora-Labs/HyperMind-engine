@@ -3,6 +3,7 @@
 
 pub mod admission;
 pub mod anthropic;
+pub mod contract;
 pub mod cost;
 pub mod gemini;
 pub mod media;
