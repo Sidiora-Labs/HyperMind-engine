@@ -1,6 +1,8 @@
+use crate::outcome::{ResponseFault, ResponseOutcome, decode_structured_text};
 use crate::{
-    LlmError, LlmProvider, ModelTier, ProviderConfig, StructuredRequest, StructuredResponse, Usage,
-    WireRequest, WireTransport, headers, require_success, validate_request,
+    LlmError, LlmProvider, ModelTier, Pricing, ProviderConfig, StructuredRequest,
+    StructuredResponse, Usage, WireRequest, WireTransport, headers, require_success,
+    validate_request,
 };
 use serde_json::{Value, json};
 
@@ -51,26 +53,23 @@ impl<T: WireTransport> LlmProvider for Ollama<T> {
             headers: headers(&self.config),
             body,
         })?)?;
-        let content = response
-            .pointer("/message/content")
-            .and_then(Value::as_str)
-            .ok_or_else(|| LlmError::Wire("Ollama response has no content".to_owned()))?;
-        let value =
-            serde_json::from_str(content).map_err(|error| LlmError::Schema(error.to_string()))?;
-        let usage = Usage {
-            input_tokens: response
-                .get("prompt_eval_count")
-                .and_then(Value::as_u64)
-                .unwrap_or(0),
-            output_tokens: response
-                .get("eval_count")
-                .and_then(Value::as_u64)
-                .unwrap_or(0),
-            cache_read_tokens: 0,
-            cache_write_tokens: 0,
-            cost_microusd: 0,
+        if truncated(&response) {
+            return Err(ResponseFault::new(
+                ResponseOutcome::Truncated,
+                &self.config.model,
+                "provider stopped the generation at the output token ceiling".to_owned(),
+                request.maximum_output_tokens,
+                observed_usage(&response, self.config.pricing),
+            )
+            .into());
         }
-        .with_cost(self.config.pricing)?;
+        let value = decode_structured_text(
+            response.pointer("/message/content").and_then(Value::as_str),
+            &self.config.model,
+            request.maximum_output_tokens,
+            observed_usage(&response, self.config.pricing),
+        )?;
+        let usage = reported_usage(&response).with_cost(self.config.pricing)?;
         Ok(StructuredResponse {
             model_id: self.config.model.clone(),
             tier: self.config.tier,
@@ -78,4 +77,29 @@ impl<T: WireTransport> LlmProvider for Ollama<T> {
             usage,
         })
     }
+}
+
+fn truncated(response: &Value) -> bool {
+    response.get("done_reason").and_then(Value::as_str) == Some("length")
+}
+
+fn reported_usage(response: &Value) -> Usage {
+    Usage {
+        input_tokens: response
+            .get("prompt_eval_count")
+            .and_then(Value::as_u64)
+            .unwrap_or(0),
+        output_tokens: response
+            .get("eval_count")
+            .and_then(Value::as_u64)
+            .unwrap_or(0),
+        cache_read_tokens: 0,
+        cache_write_tokens: 0,
+        cost_microusd: 0,
+    }
+}
+
+fn observed_usage(response: &Value, pricing: Pricing) -> Usage {
+    let observed = reported_usage(response);
+    observed.with_cost(pricing).unwrap_or(observed)
 }

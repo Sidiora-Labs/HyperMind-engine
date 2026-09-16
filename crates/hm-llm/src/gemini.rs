@@ -1,9 +1,18 @@
+use crate::outcome::{ResponseFault, ResponseOutcome, decode_structured_text};
 use crate::{
-    LlmError, LlmProvider, ModelTier, ProviderConfig, StructuredRequest, StructuredResponse, Usage,
-    WireRequest, WireTransport, require_success, validate_request,
+    LlmError, LlmProvider, ModelTier, Pricing, ProviderConfig, StructuredRequest,
+    StructuredResponse, Usage, WireRequest, WireTransport, require_success, validate_request,
 };
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
+
+const REFUSAL_FINISH_REASONS: [&str; 5] = [
+    "SAFETY",
+    "RECITATION",
+    "PROHIBITED_CONTENT",
+    "BLOCKLIST",
+    "SPII",
+];
 
 pub struct Gemini<T> {
     config: ProviderConfig,
@@ -19,6 +28,22 @@ impl<T> Gemini<T> {
     #[must_use]
     pub const fn transport(&self) -> &T {
         &self.transport
+    }
+
+    fn fault(
+        &self,
+        outcome: ResponseOutcome,
+        detail: &str,
+        request: &StructuredRequest,
+        response: &Value,
+    ) -> ResponseFault {
+        ResponseFault::new(
+            outcome,
+            &self.config.model,
+            detail.to_owned(),
+            request.maximum_output_tokens,
+            observed_usage(response, self.config.pricing),
+        )
     }
 }
 
@@ -56,12 +81,34 @@ impl<T: WireTransport> LlmProvider for Gemini<T> {
             headers,
             body,
         })?)?;
-        let content = response
-            .pointer("/candidates/0/content/parts/0/text")
-            .and_then(Value::as_str)
-            .ok_or_else(|| LlmError::Wire("Gemini response has no content".to_owned()))?;
-        let value =
-            serde_json::from_str(content).map_err(|error| LlmError::Schema(error.to_string()))?;
+        if refused(&response) {
+            return Err(self
+                .fault(
+                    ResponseOutcome::Refused,
+                    "provider declined the structured request",
+                    request,
+                    &response,
+                )
+                .into());
+        }
+        if truncated(&response) {
+            return Err(self
+                .fault(
+                    ResponseOutcome::Truncated,
+                    "provider stopped the generation at the output token ceiling",
+                    request,
+                    &response,
+                )
+                .into());
+        }
+        let value = decode_structured_text(
+            response
+                .pointer("/candidates/0/content/parts/0/text")
+                .and_then(Value::as_str),
+            &self.config.model,
+            request.maximum_output_tokens,
+            observed_usage(&response, self.config.pricing),
+        )?;
         let usage = response
             .get("usageMetadata")
             .ok_or_else(|| LlmError::Wire("Gemini response has no usage metadata".to_owned()))?;
@@ -80,6 +127,42 @@ impl<T: WireTransport> LlmProvider for Gemini<T> {
             usage,
         })
     }
+}
+
+fn refused(response: &Value) -> bool {
+    response
+        .pointer("/promptFeedback/blockReason")
+        .and_then(Value::as_str)
+        .is_some_and(|reason| !reason.trim().is_empty())
+        || response
+            .pointer("/candidates/0/finishReason")
+            .and_then(Value::as_str)
+            .is_some_and(|reason| REFUSAL_FINISH_REASONS.contains(&reason))
+}
+
+fn truncated(response: &Value) -> bool {
+    response
+        .pointer("/candidates/0/finishReason")
+        .and_then(Value::as_str)
+        == Some("MAX_TOKENS")
+}
+
+fn observed_usage(response: &Value, pricing: Pricing) -> Usage {
+    let observed = Usage {
+        input_tokens: optional_pointer(response, "/usageMetadata/promptTokenCount"),
+        output_tokens: optional_pointer(response, "/usageMetadata/candidatesTokenCount"),
+        cache_read_tokens: optional_pointer(response, "/usageMetadata/cachedContentTokenCount"),
+        cache_write_tokens: 0,
+        cost_microusd: 0,
+    };
+    observed.with_cost(pricing).unwrap_or(observed)
+}
+
+fn optional_pointer(response: &Value, pointer: &str) -> u64 {
+    response
+        .pointer(pointer)
+        .and_then(Value::as_u64)
+        .unwrap_or(0)
 }
 
 fn required_u64(value: &Value, field: &str) -> Result<u64, LlmError> {

@@ -1,6 +1,7 @@
+use crate::outcome::{ResponseFault, ResponseOutcome};
 use crate::{
-    LlmError, LlmProvider, ModelTier, ProviderConfig, StructuredRequest, StructuredResponse, Usage,
-    WireRequest, WireTransport, require_success, validate_request,
+    LlmError, LlmProvider, ModelTier, Pricing, ProviderConfig, StructuredRequest,
+    StructuredResponse, Usage, WireRequest, WireTransport, require_success, validate_request,
 };
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
@@ -19,6 +20,22 @@ impl<T> Anthropic<T> {
     #[must_use]
     pub const fn transport(&self) -> &T {
         &self.transport
+    }
+
+    fn fault(
+        &self,
+        outcome: ResponseOutcome,
+        detail: &str,
+        request: &StructuredRequest,
+        response: &Value,
+    ) -> ResponseFault {
+        ResponseFault::new(
+            outcome,
+            &self.config.model,
+            detail.to_owned(),
+            request.maximum_output_tokens,
+            observed_usage(response, self.config.pricing),
+        )
     }
 }
 
@@ -65,6 +82,26 @@ impl<T: WireTransport> LlmProvider for Anthropic<T> {
             headers,
             body,
         })?)?;
+        if refused(&response) {
+            return Err(self
+                .fault(
+                    ResponseOutcome::Refused,
+                    "provider declined the structured request",
+                    request,
+                    &response,
+                )
+                .into());
+        }
+        if truncated(&response) {
+            return Err(self
+                .fault(
+                    ResponseOutcome::Truncated,
+                    "provider stopped the generation at the output token ceiling",
+                    request,
+                    &response,
+                )
+                .into());
+        }
         let value = response
             .get("content")
             .and_then(Value::as_array)
@@ -75,7 +112,14 @@ impl<T: WireTransport> LlmProvider for Anthropic<T> {
             })
             .and_then(|item| item.get("input"))
             .cloned()
-            .ok_or_else(|| LlmError::Wire("Anthropic response has no tool input".to_owned()))?;
+            .ok_or_else(|| {
+                LlmError::from(self.fault(
+                    ResponseOutcome::Incomplete,
+                    "structured response carried no tool result",
+                    request,
+                    &response,
+                ))
+            })?;
         let usage = response
             .get("usage")
             .ok_or_else(|| LlmError::Wire("Anthropic response has no usage".to_owned()))?;
@@ -94,6 +138,32 @@ impl<T: WireTransport> LlmProvider for Anthropic<T> {
             usage,
         })
     }
+}
+
+fn refused(response: &Value) -> bool {
+    response.get("stop_reason").and_then(Value::as_str) == Some("refusal")
+}
+
+fn truncated(response: &Value) -> bool {
+    response.get("stop_reason").and_then(Value::as_str) == Some("max_tokens")
+}
+
+fn observed_usage(response: &Value, pricing: Pricing) -> Usage {
+    let observed = Usage {
+        input_tokens: optional_pointer(response, "/usage/input_tokens"),
+        output_tokens: optional_pointer(response, "/usage/output_tokens"),
+        cache_read_tokens: optional_pointer(response, "/usage/cache_read_input_tokens"),
+        cache_write_tokens: optional_pointer(response, "/usage/cache_creation_input_tokens"),
+        cost_microusd: 0,
+    };
+    observed.with_cost(pricing).unwrap_or(observed)
+}
+
+fn optional_pointer(response: &Value, pointer: &str) -> u64 {
+    response
+        .pointer(pointer)
+        .and_then(Value::as_u64)
+        .unwrap_or(0)
 }
 
 fn u64_field(value: &Value, field: &str) -> Result<u64, LlmError> {

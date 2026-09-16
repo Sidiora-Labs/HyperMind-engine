@@ -1,5 +1,8 @@
 #![forbid(unsafe_code)]
 
+use hm_llm::anthropic::Anthropic;
+use hm_llm::gemini::Gemini;
+use hm_llm::ollama::Ollama;
 use hm_llm::openai_compat::OpenAiCompatible;
 use hm_llm::outcome::{RESPONSE_CONTRACT_VERSION, ResponseFault, ResponseOutcome};
 use hm_llm::{
@@ -39,6 +42,14 @@ fn config() -> ProviderConfig {
     }
 }
 
+fn config_at(endpoint: &str, api_key: Option<&str>) -> ProviderConfig {
+    ProviderConfig {
+        endpoint: endpoint.to_owned(),
+        api_key: api_key.map(str::to_owned),
+        ..config()
+    }
+}
+
 fn recorded() -> Vec<WireFixture> {
     serde_json::from_str(include_str!("fixtures/openai.json")).unwrap()
 }
@@ -55,18 +66,22 @@ fn build(fixtures: Vec<WireFixture>) -> OpenAiCompatible<RecordedTransport> {
     OpenAiCompatible::new(config(), RecordedTransport::new(fixtures)).unwrap()
 }
 
-fn classified(provider: &OpenAiCompatible<RecordedTransport>) -> ResponseFault {
+fn classified<P: LlmProvider>(provider: &P) -> ResponseFault {
     match provider.generate_structured(&request()) {
         Err(LlmError::Response(fault)) => fault,
         other => panic!("expected a classified response fault, got {other:?}"),
     }
 }
 
-fn assert_identity(fault: &ResponseFault, provider: &OpenAiCompatible<RecordedTransport>) {
+fn assert_fault_identity(fault: &ResponseFault) {
     assert_eq!(fault.version, RESPONSE_CONTRACT_VERSION);
     assert_eq!(fault.version, 1);
     assert_eq!(fault.model_id, "fixture-model");
     assert_eq!(fault.requested_output_tokens, 64);
+}
+
+fn assert_identity(fault: &ResponseFault, provider: &OpenAiCompatible<RecordedTransport>) {
+    assert_fault_identity(fault);
     assert_eq!(provider.transport().remaining(), 0);
 }
 
@@ -140,4 +155,172 @@ fn a_clean_recorded_response_is_never_classified_as_a_fault() {
         assert_eq!(response.usage.cost_microusd, 18);
         assert_eq!(provider.transport().remaining(), 0);
     }
+}
+
+fn anthropic_recorded() -> Vec<WireFixture> {
+    serde_json::from_str(include_str!("fixtures/anthropic.json")).unwrap()
+}
+
+fn anthropic(fixtures: Vec<WireFixture>) -> Anthropic<RecordedTransport> {
+    Anthropic::new(
+        config_at("https://fixture.invalid/v1/messages", Some("fixture-key")),
+        RecordedTransport::new(fixtures),
+    )
+    .unwrap()
+}
+
+fn gemini_recorded() -> Vec<WireFixture> {
+    serde_json::from_str(include_str!("fixtures/gemini.json")).unwrap()
+}
+
+fn gemini(fixtures: Vec<WireFixture>) -> Gemini<RecordedTransport> {
+    Gemini::new(
+        config_at(
+            "https://fixture.invalid/v1beta/models/gemini-2.5-flash:generateContent",
+            Some("fixture-key"),
+        ),
+        RecordedTransport::new(fixtures),
+    )
+    .unwrap()
+}
+
+fn ollama_recorded() -> Vec<WireFixture> {
+    serde_json::from_str(include_str!("fixtures/ollama.json")).unwrap()
+}
+
+fn ollama(fixtures: Vec<WireFixture>) -> Ollama<RecordedTransport> {
+    Ollama::new(
+        config_at("http://fixture.invalid/api/chat", None),
+        RecordedTransport::new(fixtures),
+    )
+    .unwrap()
+}
+
+#[test]
+fn anthropic_stop_reason_separates_refusal_from_truncation() {
+    let mut refusal = anthropic_recorded();
+    refusal[0].response.body["stop_reason"] = json!("refusal");
+    let provider = anthropic(refusal);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Refused);
+    assert_eq!(fault.usage.input_tokens, 10);
+    assert_eq!(fault.usage.cost_microusd, 18);
+    assert!(!fault.detail.contains("later interval"));
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+
+    let mut truncation = anthropic_recorded();
+    truncation[0].response.body["stop_reason"] = json!("max_tokens");
+    let provider = anthropic(truncation);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Truncated);
+    assert_eq!(fault.usage.input_tokens, 10);
+    assert_eq!(fault.usage.cost_microusd, 18);
+    assert!(!fault.detail.contains("later interval"));
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+
+    let mut incomplete = anthropic_recorded();
+    incomplete[0].response.body["content"] = json!([]);
+    let provider = anthropic(incomplete);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Incomplete);
+    assert_eq!(fault.usage.input_tokens, 10);
+    assert_eq!(fault.usage.cache_write_tokens, 3);
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+}
+
+#[test]
+fn gemini_finish_reason_and_block_reason_are_classified() {
+    let mut truncation = gemini_recorded();
+    truncation[0].response.body["candidates"][0]["finishReason"] = json!("MAX_TOKENS");
+    let provider = gemini(truncation);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Truncated);
+    assert_eq!(fault.usage.input_tokens, 10);
+    assert_eq!(fault.usage.cost_microusd, 18);
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+
+    let mut blocked_candidate = gemini_recorded();
+    blocked_candidate[0].response.body["candidates"][0]["finishReason"] = json!("SAFETY");
+    let provider = gemini(blocked_candidate);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Refused);
+    assert!(!fault.detail.contains("later interval"));
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+
+    let mut blocked_prompt = gemini_recorded();
+    blocked_prompt[0].response.body["promptFeedback"]["blockReason"] = json!("OTHER");
+    let provider = gemini(blocked_prompt);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Refused);
+    assert!(!fault.detail.contains("OTHER"));
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+
+    let mut malformed = gemini_recorded();
+    malformed[0].response.body["candidates"][0]["content"]["parts"][0]["text"] = json!("{");
+    let provider = gemini(malformed);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Malformed);
+    assert_eq!(
+        fault.detail,
+        serde_json::from_str::<Value>("{").unwrap_err().to_string()
+    );
+    assert_eq!(fault.usage.cache_read_tokens, 2);
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+
+    let mut incomplete = gemini_recorded();
+    incomplete[0].response.body["candidates"][0]["content"]["parts"] = json!([]);
+    let provider = gemini(incomplete);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Incomplete);
+    assert_eq!(fault.usage.input_tokens, 10);
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+}
+
+#[test]
+fn ollama_done_reason_and_body_shape_are_classified() {
+    let mut truncation = ollama_recorded();
+    truncation[0].response.body["done_reason"] = json!("length");
+    let provider = ollama(truncation);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Truncated);
+    assert_eq!(fault.usage.input_tokens, 10);
+    assert_eq!(fault.usage.output_tokens, 4);
+    assert_eq!(fault.usage.cost_microusd, 18);
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+
+    let mut malformed = ollama_recorded();
+    malformed[0].response.body["message"]["content"] = json!("not json");
+    let provider = ollama(malformed);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Malformed);
+    assert_eq!(
+        fault.detail,
+        serde_json::from_str::<Value>("not json")
+            .unwrap_err()
+            .to_string()
+    );
+    assert!(!fault.detail.contains("later interval"));
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
+
+    let mut incomplete = ollama_recorded();
+    incomplete[0].response.body["message"]
+        .as_object_mut()
+        .unwrap()
+        .remove("content");
+    let provider = ollama(incomplete);
+    let fault = classified(&provider);
+    assert_eq!(fault.outcome, ResponseOutcome::Incomplete);
+    assert_eq!(fault.usage.input_tokens, 10);
+    assert_fault_identity(&fault);
+    assert_eq!(provider.transport().remaining(), 0);
 }
