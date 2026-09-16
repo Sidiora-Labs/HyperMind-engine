@@ -9569,6 +9569,94 @@ pub struct CheckpointRead {
 }
 ```
 
+## hm-proj::ConnectorRecord
+
+<a id="rust-crates-hm-proj-src-connectors-rs-connectorrecord"></a>
+
+Source: [`crates/hm-proj/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/connectors.rs).
+
+When to use: Use `ConnectorRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct ConnectorRecord {
+    pub connector_id: Vec<u8>,
+    pub provider: String,
+    pub external_account: String,
+    pub credential_version: u32,
+    pub signature_scheme: u8,
+    pub scopes: Vec<String>,
+    pub state: u8,
+    pub bound_lsn: u64,
+}
+```
+
+## hm-proj::DeliveryRecord
+
+<a id="rust-crates-hm-proj-src-connectors-rs-deliveryrecord"></a>
+
+Source: [`crates/hm-proj/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/connectors.rs).
+
+When to use: Use `DeliveryRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct DeliveryRecord {
+    pub connector_id: Vec<u8>,
+    pub delivery_id: Vec<u8>,
+    pub accepted_lsn: u64,
+    pub body_digest: Vec<u8>,
+    pub body_bytes: u64,
+    pub event_name: String,
+    pub attempt: u32,
+    pub state: u8,
+    pub next_attempt_at_ns: i64,
+    pub detail: String,
+    pub settled_lsn: u64,
+}
+```
+
+## hm-proj::RevisionRecord
+
+<a id="rust-crates-hm-proj-src-connectors-rs-revisionrecord"></a>
+
+Source: [`crates/hm-proj/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/connectors.rs).
+
+When to use: Use `RevisionRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct RevisionRecord {
+    pub connector_id: Vec<u8>,
+    pub source_id: String,
+    pub revision: Vec<u8>,
+    pub content_digest: Vec<u8>,
+    pub observed_at_ns: i64,
+    pub lsn: u64,
+}
+```
+
+## hm-proj::ConnectorRegistryProjection
+
+<a id="rust-crates-hm-proj-src-connectors-rs-connectorregistryprojection"></a>
+
+Source: [`crates/hm-proj/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/connectors.rs).
+
+When to use: Use `ConnectorRegistryProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct ConnectorRegistryProjection;
+```
+
 ## hm-proj::DocumentRecord
 
 <a id="rust-crates-hm-proj-src-documents-rs-documentrecord"></a>
@@ -10793,6 +10881,7 @@ pub enum ProjectionId {
     Attestations,
     Vocabulary,
     Documents,
+    SourceConnectors,
 }
 ```
 

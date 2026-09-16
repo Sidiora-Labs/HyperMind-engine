@@ -4,6 +4,7 @@ use crate::attention::AttentionProjection;
 use crate::attestations::AttestationsProjection;
 use crate::beliefs::BeliefProjection;
 use crate::bindings::BindingsProjection;
+use crate::connectors::ConnectorRegistryProjection;
 use crate::entities::EntityProjection;
 use crate::generation::GenerationProjection;
 use crate::intent::IntentFrameProjection;
@@ -56,6 +57,7 @@ pub fn rebuild_projection_stream(
     let mut procedures_checkpoint = snapshot.checkpoint(ProjectionId::Procedures)?.get();
     let mut attestations_checkpoint = snapshot.checkpoint(ProjectionId::Attestations)?.get();
     let mut vocabulary_checkpoint = snapshot.checkpoint(ProjectionId::Vocabulary)?.get();
+    let mut connectors_checkpoint = snapshot.checkpoint(ProjectionId::SourceConnectors)?.get();
     drop(snapshot);
     let checkpoints = [
         timeline_checkpoint,
@@ -77,6 +79,7 @@ pub fn rebuild_projection_stream(
         procedures_checkpoint,
         attestations_checkpoint,
         vocabulary_checkpoint,
+        connectors_checkpoint,
     ];
     let minimum = checkpoints.into_iter().min().unwrap_or(0);
     if checkpoints
@@ -168,6 +171,10 @@ pub fn rebuild_projection_stream(
             VocabularyProjection::apply_event(store, frame)?;
             vocabulary_checkpoint = expected_lsn;
         }
+        if connectors_checkpoint < expected_lsn {
+            ConnectorRegistryProjection::apply_event(store, frame)?;
+            connectors_checkpoint = expected_lsn;
+        }
         applied_frames += 1;
     }
     let checkpoints = [
@@ -190,6 +197,7 @@ pub fn rebuild_projection_stream(
         procedures_checkpoint,
         attestations_checkpoint,
         vocabulary_checkpoint,
+        connectors_checkpoint,
     ];
     let applied_lsn = checkpoints.into_iter().min().unwrap_or(0);
     Ok(RebuildProgress {
@@ -222,6 +230,7 @@ fn reset_all(store: &ProjectionStore) -> Result<(), Error> {
         ProjectionId::Procedures,
         ProjectionId::Attestations,
         ProjectionId::Vocabulary,
+        ProjectionId::SourceConnectors,
     ] {
         store.reset(projection)?;
     }

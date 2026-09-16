@@ -2317,6 +2317,26 @@
       "file": "crates/hm-proj/src/checkpoint.rs"
     },
     {
+      "id": "rust:crates/hm-proj/src/connectors.rs:ConnectorRecord",
+      "name": "hm-proj::ConnectorRecord",
+      "file": "crates/hm-proj/src/connectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/connectors.rs:DeliveryRecord",
+      "name": "hm-proj::DeliveryRecord",
+      "file": "crates/hm-proj/src/connectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/connectors.rs:RevisionRecord",
+      "name": "hm-proj::RevisionRecord",
+      "file": "crates/hm-proj/src/connectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/connectors.rs:ConnectorRegistryProjection",
+      "name": "hm-proj::ConnectorRegistryProjection",
+      "file": "crates/hm-proj/src/connectors.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/documents.rs:DocumentRecord",
       "name": "hm-proj::DocumentRecord",
       "file": "crates/hm-proj/src/documents.rs"
