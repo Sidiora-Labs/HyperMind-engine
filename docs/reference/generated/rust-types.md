@@ -11992,6 +11992,49 @@ pub struct DocumentState {
 }
 ```
 
+## hm-serve::SourceSignatureRequest
+
+<a id="rust-crates-hm-serve-src-actor-rs-sourcesignaturerequest"></a>
+
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
+
+When to use: Use `SourceSignatureRequest` for actor ownership, embedded sessions, authenticated transports, and daemon request execution. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication. Do not treat constructing or serializing a request as evidence that it was accepted or executed.
+
+
+```rust
+pub struct SourceSignatureRequest {
+    pub connector_id: [u8; 16],
+    pub provider: String,
+    pub credential_version: u32,
+    pub delivery_id: Vec<u8>,
+    pub event_name: String,
+    pub signed_at_ns: i64,
+    pub body: Vec<u8>,
+    pub signature: Vec<u8>,
+}
+```
+
+## hm-serve::ConsentMint
+
+<a id="rust-crates-hm-serve-src-actor-rs-consentmint"></a>
+
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
+
+When to use: Use `ConsentMint` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct ConsentMint {
+    pub state: String,
+    pub nonce: [u8; 16],
+    pub expires_at_ns: i64,
+}
+```
+
 ## hm-serve::RecallRequest
 
 <a id="rust-crates-hm-serve-src-actor-rs-recallrequest"></a>

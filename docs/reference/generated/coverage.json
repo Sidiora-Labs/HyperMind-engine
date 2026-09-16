@@ -2897,6 +2897,16 @@
       "file": "crates/hm-serve/src/actor.rs"
     },
     {
+      "id": "rust:crates/hm-serve/src/actor.rs:SourceSignatureRequest",
+      "name": "hm-serve::SourceSignatureRequest",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/actor.rs:ConsentMint",
+      "name": "hm-serve::ConsentMint",
+      "file": "crates/hm-serve/src/actor.rs"
+    },
+    {
       "id": "rust:crates/hm-serve/src/actor.rs:RecallRequest",
       "name": "hm-serve::RecallRequest",
       "file": "crates/hm-serve/src/actor.rs"

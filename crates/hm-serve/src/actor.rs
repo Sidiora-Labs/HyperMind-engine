@@ -8,11 +8,17 @@ use hm_compose::tokens::{FallbackWeights, TokenCounter};
 use hm_core::telemetry::{Attribute, SpanBuilder, SpanKind, SpanOutcome};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
 use hm_cortex::attention::AttentionFactors;
+use hm_cortex::connectors::{
+    ConsentGrant, DEFAULT_FRESHNESS_WINDOW_NS, DeliveryEnvelope, VerifiedDelivery,
+    mint_consent_state, verify_consent_state, verify_delivery,
+};
 use hm_ledger::checkpoint::{SigningKeyPair, signing_key_pair_for};
+use hm_ledger::credentials::{CredentialVault, consent_key};
 use hm_ledger::frame::{EventKind, Frame, FrameHeader};
 use hm_ledger::idempotency::{
     Admission, BatchEvent, BatchIdentity, ConnectionId, DedupTable, rollback_torn_batch,
 };
+use hm_ledger::keyring::EntropySource;
 use hm_ledger::keyring::{KeyEncryptionKey, KeyHierarchy, OsEntropy, UserId};
 use hm_ledger::mmr::Hash as MmrHash;
 use hm_ledger::mmr_store::{MmrStore, VerificationStatus};
@@ -25,6 +31,9 @@ use hm_proj::attestations::{MAXIMUM_PREFERENCE_TARGETS, PREFERENCE_NEUTRAL_Q16};
 use hm_proj::beliefs::{BeliefAsOf, BeliefAsOfResult, BeliefProjection};
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
+};
+use hm_proj::connectors::{
+    ConnectorRecord, ConnectorRegistryProjection, DeliveryRecord, RevisionRecord,
 };
 use hm_proj::documents::{ChunkRecord, DocumentRecord, DocumentsProjection, ExtractionRecord};
 use hm_proj::entities::EntityProjection;
@@ -44,7 +53,7 @@ use hm_proj::vectors::{VectorEntry, VectorLane};
 use hm_proj::vocabulary::{AliasProposal, VocabularyProjection, VocabularyRecord};
 use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{
-    Authority, BeliefType, Checkpoint, EventEnvelope, EventPayload, IntentionSet,
+    Authority, BeliefType, Checkpoint, ConnectorState, EventEnvelope, EventPayload, IntentionSet,
     OutcomeAssessment, PredicateKind, ProcedureRevised, Retention, Sensitivity,
 };
 use std::collections::{BTreeMap, BTreeSet};
@@ -140,6 +149,25 @@ pub struct DocumentState {
     pub document: DocumentRecord,
     pub extraction: Option<ExtractionRecord>,
     pub chunks: Vec<ChunkRecord>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SourceSignatureRequest {
+    pub connector_id: [u8; 16],
+    pub provider: String,
+    pub credential_version: u32,
+    pub delivery_id: Vec<u8>,
+    pub event_name: String,
+    pub signed_at_ns: i64,
+    pub body: Vec<u8>,
+    pub signature: Vec<u8>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ConsentMint {
+    pub state: String,
+    pub nonce: [u8; 16],
+    pub expires_at_ns: i64,
 }
 
 #[derive(Clone, Debug)]
@@ -355,6 +383,40 @@ enum Command {
     GuardTripwires(Vec<LSN>, oneshot::Sender<Result<(), Error>>),
     CryptoDelete(oneshot::Sender<Result<Vec<u8>, Error>>),
     Stats(oneshot::Sender<Result<ActorStats, Error>>),
+    StoreConnectorCredential(
+        String,
+        [u8; 16],
+        u32,
+        Vec<u8>,
+        oneshot::Sender<Result<(), Error>>,
+    ),
+    VerifySourceDelivery(
+        Box<SourceSignatureRequest>,
+        oneshot::Sender<Result<VerifiedDelivery, Error>>,
+    ),
+    MintConsentState(
+        String,
+        [u8; 16],
+        i64,
+        oneshot::Sender<Result<ConsentMint, Error>>,
+    ),
+    RedeemConsentState(
+        String,
+        [u8; 16],
+        String,
+        oneshot::Sender<Result<ConsentGrant, Error>>,
+    ),
+    Connectors(usize, oneshot::Sender<Result<Vec<ConnectorRecord>, Error>>),
+    SourceDeliveries(
+        [u8; 16],
+        usize,
+        oneshot::Sender<Result<Vec<DeliveryRecord>, Error>>,
+    ),
+    SourceRevisions(
+        [u8; 16],
+        usize,
+        oneshot::Sender<Result<Vec<RevisionRecord>, Error>>,
+    ),
     Shutdown(oneshot::Sender<()>),
 }
 
@@ -362,6 +424,7 @@ struct WriterState {
     config: ActorConfig,
     log: SegmentLog,
     keys: KeyHierarchy,
+    credentials: CredentialVault,
     projections: ProjectionStore,
     plaintext_frames: Vec<Frame>,
     kinds: Vec<event::EventKind>,
@@ -668,6 +731,79 @@ impl ActorEngine {
         request(&self.commands, Command::CryptoDelete).await
     }
 
+    pub async fn store_connector_credential(
+        &self,
+        provider: String,
+        connector_id: [u8; 16],
+        version: u32,
+        secret: Vec<u8>,
+    ) -> Result<(), Error> {
+        request(&self.commands, |reply| {
+            Command::StoreConnectorCredential(provider, connector_id, version, secret, reply)
+        })
+        .await
+    }
+
+    pub async fn verify_source_delivery(
+        &self,
+        request_value: SourceSignatureRequest,
+    ) -> Result<VerifiedDelivery, Error> {
+        request(&self.commands, |reply| {
+            Command::VerifySourceDelivery(Box::new(request_value), reply)
+        })
+        .await
+    }
+
+    pub async fn mint_consent_state(
+        &self,
+        provider: String,
+        connector_id: [u8; 16],
+        ttl_ns: i64,
+    ) -> Result<ConsentMint, Error> {
+        request(&self.commands, |reply| {
+            Command::MintConsentState(provider, connector_id, ttl_ns, reply)
+        })
+        .await
+    }
+
+    pub async fn redeem_consent_state(
+        &self,
+        provider: String,
+        connector_id: [u8; 16],
+        state: String,
+    ) -> Result<ConsentGrant, Error> {
+        request(&self.commands, |reply| {
+            Command::RedeemConsentState(provider, connector_id, state, reply)
+        })
+        .await
+    }
+
+    pub async fn connectors(&self, limit: usize) -> Result<Vec<ConnectorRecord>, Error> {
+        request(&self.commands, |reply| Command::Connectors(limit, reply)).await
+    }
+
+    pub async fn source_deliveries(
+        &self,
+        connector_id: [u8; 16],
+        limit: usize,
+    ) -> Result<Vec<DeliveryRecord>, Error> {
+        request(&self.commands, |reply| {
+            Command::SourceDeliveries(connector_id, limit, reply)
+        })
+        .await
+    }
+
+    pub async fn source_revisions(
+        &self,
+        connector_id: [u8; 16],
+        limit: usize,
+    ) -> Result<Vec<RevisionRecord>, Error> {
+        request(&self.commands, |reply| {
+            Command::SourceRevisions(connector_id, limit, reply)
+        })
+        .await
+    }
+
     pub async fn shutdown(self) -> Result<(), Error> {
         let (reply, response) = oneshot::channel();
         self.commands
@@ -966,6 +1102,38 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
             Command::Stats(reply) => {
                 let _ = reply.send(state.stats());
             }
+            Command::StoreConnectorCredential(provider, connector_id, version, secret, reply) => {
+                let result =
+                    state.store_connector_credential(&provider, &connector_id, version, &secret);
+                let _ = reply.send(result);
+            }
+            Command::VerifySourceDelivery(request, reply) => {
+                let _ = reply.send(state.verify_source_delivery(&request));
+            }
+            Command::MintConsentState(provider, connector_id, ttl_ns, reply) => {
+                let _ = reply.send(state.mint_source_consent(&provider, &connector_id, ttl_ns));
+            }
+            Command::RedeemConsentState(provider, connector_id, encoded, reply) => {
+                let _ = reply.send(state.redeem_source_consent(&provider, &connector_id, &encoded));
+            }
+            Command::Connectors(limit, reply) => {
+                let result = state.projections.begin_snapshot().and_then(|snapshot| {
+                    ConnectorRegistryProjection::list_connectors(&snapshot, limit)
+                });
+                let _ = reply.send(result);
+            }
+            Command::SourceDeliveries(connector_id, limit, reply) => {
+                let result = state.projections.begin_snapshot().and_then(|snapshot| {
+                    ConnectorRegistryProjection::recent_deliveries(&snapshot, &connector_id, limit)
+                });
+                let _ = reply.send(result);
+            }
+            Command::SourceRevisions(connector_id, limit, reply) => {
+                let result = state.projections.begin_snapshot().and_then(|snapshot| {
+                    ConnectorRegistryProjection::recent_revisions(&snapshot, &connector_id, limit)
+                });
+                let _ = reply.send(result);
+            }
             Command::Shutdown(reply) => {
                 drop(state);
                 let _ = reply.send(());
@@ -1047,6 +1215,41 @@ impl WriterState {
                         || prior.state != ProcedureState::Supported
                 }) {
                     return Err(Error::new(ErrorCode::OrderingViolation));
+                }
+            }
+            EventPayload::SourceConnectorBound(value) => {
+                if ConnectorRegistryProjection::consent_redeemed(&snapshot, &value.consent_nonce)? {
+                    return Err(Error::new(ErrorCode::IdempotencyConflict));
+                }
+            }
+            EventPayload::SourceDeliveryAccepted(value) => {
+                if !connector_is_bound(&snapshot, &value.connector_id)? {
+                    return Err(Error::new(ErrorCode::CapabilityDenied));
+                }
+                if ConnectorRegistryProjection::delivery(
+                    &snapshot,
+                    &value.connector_id,
+                    &value.delivery_id,
+                )?
+                .is_some()
+                {
+                    return Err(Error::new(ErrorCode::IdempotencyConflict));
+                }
+            }
+            EventPayload::SourceDeliverySettled(value) => {
+                let prior = ConnectorRegistryProjection::delivery(
+                    &snapshot,
+                    &value.connector_id,
+                    &value.delivery_id,
+                )?
+                .ok_or_else(|| Error::new(ErrorCode::OrderingViolation))?;
+                if value.attempt <= prior.attempt {
+                    return Err(Error::new(ErrorCode::OrderingViolation));
+                }
+            }
+            EventPayload::SourceRevisionObserved(value) => {
+                if !connector_is_bound(&snapshot, &value.connector_id)? {
+                    return Err(Error::new(ErrorCode::CapabilityDenied));
                 }
             }
             _ => {}
@@ -1246,6 +1449,91 @@ impl WriterState {
         Ok(())
     }
 
+    fn store_connector_credential(
+        &self,
+        provider: &str,
+        connector_id: &[u8; 16],
+        version: u32,
+        secret: &[u8],
+    ) -> Result<(), Error> {
+        let mut entropy = OsEntropy;
+        self.credentials.store(
+            &self.keys,
+            provider,
+            connector_id,
+            version,
+            secret,
+            &mut entropy,
+        )
+    }
+
+    fn verify_source_delivery(
+        &self,
+        request: &SourceSignatureRequest,
+    ) -> Result<VerifiedDelivery, Error> {
+        let secret = self.credentials.secret(
+            &self.keys,
+            &request.provider,
+            &request.connector_id,
+            request.credential_version,
+        )?;
+        let envelope = DeliveryEnvelope {
+            connector_id: request.connector_id,
+            delivery_id: &request.delivery_id,
+            event_name: &request.event_name,
+            signed_at_ns: request.signed_at_ns,
+            body: &request.body,
+            signature: &request.signature,
+        };
+        verify_delivery(
+            secret.as_slice(),
+            &envelope,
+            wall_time_ns()?,
+            DEFAULT_FRESHNESS_WINDOW_NS,
+        )
+    }
+
+    fn mint_source_consent(
+        &self,
+        provider: &str,
+        connector_id: &[u8; 16],
+        ttl_ns: i64,
+    ) -> Result<ConsentMint, Error> {
+        if provider.is_empty() || ttl_ns <= 0 {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let expires_at_ns = wall_time_ns()?
+            .checked_add(ttl_ns)
+            .ok_or_else(|| Error::new(ErrorCode::CapacityExceeded))?;
+        let mut nonce = [0_u8; 16];
+        let mut entropy = OsEntropy;
+        entropy.fill(&mut nonce)?;
+        let key = consent_key(&self.keys);
+        let state =
+            mint_consent_state(key.as_slice(), provider, connector_id, nonce, expires_at_ns);
+        Ok(ConsentMint {
+            state: state.encoded,
+            nonce: state.nonce,
+            expires_at_ns: state.expires_at_ns,
+        })
+    }
+
+    fn redeem_source_consent(
+        &self,
+        provider: &str,
+        connector_id: &[u8; 16],
+        encoded: &str,
+    ) -> Result<ConsentGrant, Error> {
+        let key = consent_key(&self.keys);
+        verify_consent_state(
+            key.as_slice(),
+            provider,
+            connector_id,
+            encoded,
+            wall_time_ns()?,
+        )
+    }
+
     fn open(
         config: ActorConfig,
         events: broadcast::Sender<Frame>,
@@ -1262,6 +1550,7 @@ impl WriterState {
             &mut entropy,
             true,
         )?;
+        let credentials = CredentialVault::open(&config.actor_directory)?;
         let mut log = SegmentLog::open(
             &config.actor_directory,
             config.actor,
@@ -1331,6 +1620,7 @@ impl WriterState {
             config,
             log,
             keys,
+            credentials,
             projections,
             plaintext_frames,
             kinds,
@@ -1378,6 +1668,10 @@ impl WriterState {
                 EventPayload::ProcedureMined(value) => Some((2, value.procedure_id.clone())),
                 EventPayload::ProcedureRevised(value) => Some((2, value.procedure_id.clone())),
                 EventPayload::ProcedureAdopted(value) => Some((2, value.procedure_id.clone())),
+                EventPayload::SourceDeliveryAccepted(value) => Some((
+                    3,
+                    source_delivery_key(&value.connector_id, &value.delivery_id),
+                )),
                 _ => None,
             };
             if key.is_some_and(|key| !anticipation_ids.insert(key)) {
@@ -2179,6 +2473,21 @@ impl event::EventHistory for ActorHistory<'_> {
     fn authority_at(&self, lsn: LSN) -> Option<Authority> {
         Self::position(lsn).and_then(|position| self.authorities.get(position).copied())
     }
+}
+
+fn connector_is_bound(snapshot: &ReadSnapshot<'_>, connector_id: &[u8]) -> Result<bool, Error> {
+    Ok(
+        ConnectorRegistryProjection::connector(snapshot, connector_id)?
+            .is_some_and(|record| record.state == u8::from(ConnectorState::Bound)),
+    )
+}
+
+fn source_delivery_key(connector_id: &[u8], delivery_id: &[u8]) -> Vec<u8> {
+    let mut key = Vec::with_capacity(connector_id.len() + 1 + delivery_id.len());
+    key.extend_from_slice(connector_id);
+    key.push(0);
+    key.extend_from_slice(delivery_id);
+    key
 }
 
 fn schema_kind(kind: EventKind) -> Result<event::EventKind, Error> {
