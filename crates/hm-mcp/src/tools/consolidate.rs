@@ -3,19 +3,38 @@
 use crate::Envelope;
 use hm_core::{ConversationId, Error, ErrorCode, LSN};
 use hm_cortex::budget::BudgetUsage;
+use hm_cortex::citations::{FrozenCandidate, SourceKind};
+use hm_cortex::nrem::cluster::{
+    ClusterOptions, ObservationCluster, PendingObservation, cluster_observations,
+};
+use hm_cortex::nrem::merge::{MergeAction, NremReport, consolidate_clusters};
 use hm_cortex::run::{PhaseMachine, retraction_event, run_id};
 use hm_ledger::frame::EventKind;
+use hm_llm::LlmProvider;
 use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{
     Authority, ConsolidationBudget, ConsolidationClosed, ConsolidationOpened,
-    ConsolidationPhaseName, ConsolidationPhaseState, EventEnvelope, EventPayload, PromptVersion,
-    Retention, Sensitivity,
+    ConsolidationPhaseName, ConsolidationPhaseState, EventEnvelope, EventPayload, MemoryMinted,
+    PromptVersion, Retention, Sensitivity,
 };
 use hm_serve::actor::{ActorEngine, IncomingEvent};
 use rmcp::schemars;
 use serde::Deserialize;
 use serde_json::json;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
+use std::sync::Arc;
+
+#[derive(Clone)]
+pub struct ConsolidationRuntime {
+    provider: Arc<dyn LlmProvider>,
+}
+
+impl ConsolidationRuntime {
+    #[must_use]
+    pub fn new(provider: Arc<dyn LlmProvider>) -> Self {
+        Self { provider }
+    }
+}
 
 #[derive(Clone, Copy, Debug, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -69,17 +88,23 @@ pub struct ConsolidateInput {
     pub reason: Option<String>,
 }
 
-pub async fn run(actor: &ActorEngine, input: ConsolidateInput) -> Result<Envelope, Error> {
+pub async fn run(
+    actor: &ActorEngine,
+    runtime: Option<&ConsolidationRuntime>,
+    input: ConsolidateInput,
+) -> Result<Envelope, Error> {
     let history = read_history(actor).await?;
     match input.action {
-        ConsolidateAction::List => list(history),
-        ConsolidateAction::Run => start(actor, history, input).await,
+        ConsolidateAction::List => Ok(list(history)),
+        ConsolidateAction::Run => start(actor, runtime, history, input).await,
         ConsolidateAction::Retract => retract(actor, history, input).await,
     }
 }
 
+#[allow(clippy::too_many_lines)]
 async fn start(
     actor: &ActorEngine,
+    runtime: Option<&ConsolidationRuntime>,
     history: RunHistory,
     input: ConsolidateInput,
 ) -> Result<Envelope, Error> {
@@ -134,13 +159,25 @@ async fn start(
         EventPayload::ConsolidationOpened(Box::new(opened.clone())),
     )];
     let mut machine = PhaseMachine::resume(id.to_vec(), phases, []);
+    let mut derived = Vec::new();
+    let mut dropped_candidates = 0_u64;
+    let mut llm_calls = 0_u64;
+    let mut input_tokens = 0_u64;
+    let mut output_tokens = 0_u64;
+    let mut cost_microusd = 0_u64;
     while let Some(work) = machine.next() {
         let started = machine.event(
             &work,
             ConsolidationPhaseState::Started,
             None,
-            BudgetUsage::default(),
-            0,
+            BudgetUsage {
+                llm_calls,
+                input_tokens,
+                output_tokens,
+                cost_microusd,
+                wall_ms: 0,
+            },
+            dropped_candidates,
         );
         events.push(incoming(
             actor,
@@ -149,12 +186,71 @@ async fn start(
             EventPayload::ConsolidationPhase(Box::new(started.clone())),
         ));
         machine.record(&work, &started);
+        if work.phase == ConsolidationPhaseName::Nrem {
+            let mut clusters = nrem_clusters(actor).await?;
+            let cluster_count = clusters.len();
+            clusters.retain(mint_eligible);
+            dropped_candidates = dropped_candidates.saturating_add(
+                u64::try_from(cluster_count.saturating_sub(clusters.len()))
+                    .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?,
+            );
+            clusters.truncate(usize::try_from(budget.max_llm_calls).unwrap_or(usize::MAX));
+            let report = if clusters.is_empty() {
+                NremReport::default()
+            } else {
+                let runtime = runtime.ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
+                consolidate_clusters(runtime.provider.as_ref(), &id, &clusters, &[])
+                    .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
+            };
+            if report.llm_calls > budget.max_llm_calls
+                || report.cost.tokens() > budget.max_tokens
+                || report.cost.cost_microusd > budget.max_microusd
+            {
+                return Err(Error::new(ErrorCode::CapacityExceeded));
+            }
+            dropped_candidates = dropped_candidates.saturating_add(
+                u64::try_from(report.dropped.len())
+                    .map_err(|_| Error::new(ErrorCode::CapacityExceeded))?,
+            );
+            llm_calls = llm_calls.saturating_add(report.llm_calls);
+            input_tokens = input_tokens.saturating_add(report.cost.input_tokens);
+            output_tokens = output_tokens.saturating_add(report.cost.output_tokens);
+            cost_microusd = cost_microusd.saturating_add(report.cost.cost_microusd);
+            for decision in report.decisions {
+                if decision.action != MergeAction::Mint {
+                    dropped_candidates = dropped_candidates.saturating_add(1);
+                    continue;
+                }
+                let memory_id = memory_id(&id, &decision.cluster_id);
+                derived.push(derived_incoming(
+                    actor,
+                    &id,
+                    EventKind::MemoryMinted,
+                    EventPayload::MemoryMinted(Box::new(MemoryMinted {
+                        memory_id,
+                        name: decision.name,
+                        definition: decision.definition,
+                        tags: decision.tags,
+                        salience_micros: decision.salience_micros,
+                        citations: decision.citations,
+                    })),
+                    decision.authority,
+                    decision.model_provenance,
+                ));
+            }
+        }
         let completed = machine.event(
             &work,
             ConsolidationPhaseState::Completed,
             None,
-            BudgetUsage::default(),
-            0,
+            BudgetUsage {
+                llm_calls,
+                input_tokens,
+                output_tokens,
+                cost_microusd,
+                wall_ms: 0,
+            },
+            dropped_candidates,
         );
         events.push(incoming(
             actor,
@@ -164,6 +260,8 @@ async fn start(
         ));
         machine.record(&work, &completed);
     }
+    let derived_records = derived.len() as u64;
+    events.extend(derived);
     events.push(incoming(
         actor,
         &id,
@@ -171,12 +269,12 @@ async fn start(
         EventPayload::ConsolidationClosed(Box::new(ConsolidationClosed {
             generation,
             expected_active_generation: parent,
-            derived_records: 0,
-            dropped_candidates: 0,
-            llm_calls: 0,
-            input_tokens: 0,
-            output_tokens: 0,
-            cost_microusd: 0,
+            derived_records,
+            dropped_candidates,
+            llm_calls,
+            input_tokens,
+            output_tokens,
+            cost_microusd,
         })),
     ));
     let outcome = actor.append(events).await?;
@@ -190,12 +288,12 @@ async fn start(
         budget,
         first_lsn: outcome.first_lsn.get(),
         last_lsn: outcome.last_lsn.get(),
-        derived_records: 0,
-        dropped_candidates: 0,
-        llm_calls: 0,
-        input_tokens: 0,
-        output_tokens: 0,
-        cost_microusd: 0,
+        derived_records,
+        dropped_candidates,
+        llm_calls,
+        input_tokens,
+        output_tokens,
+        cost_microusd,
     };
     let mut envelope = run_envelope(actor, &id, &summary, false);
     envelope.provenance.push(format!(
@@ -204,6 +302,84 @@ async fn start(
         outcome.last_lsn.get()
     ));
     Ok(envelope)
+}
+
+fn mint_eligible(cluster: &ObservationCluster) -> bool {
+    let roots = cluster
+        .observations
+        .iter()
+        .map(|observation| observation.source.source_root)
+        .collect::<BTreeSet<_>>();
+    let conversations = cluster
+        .observations
+        .iter()
+        .map(|observation| observation.source.conversation)
+        .collect::<BTreeSet<_>>();
+    roots.len() >= 3 && conversations.len() >= 2
+}
+
+pub async fn nrem_clusters(actor: &ActorEngine) -> Result<Vec<ObservationCluster>, Error> {
+    let mut observations = Vec::new();
+    for frame in actor.frames_since(LSN::new(0), None, usize::MAX).await? {
+        if !matches!(
+            frame.header.kind,
+            EventKind::UserMsg | EventKind::DeliveredMsg
+        ) {
+            continue;
+        }
+        let kind = event::EventKind::try_from(frame.header.kind as u8)
+            .map_err(|()| Error::new(ErrorCode::InvalidKind))?;
+        let verified = event::verify_event(&frame.sealed_payload, kind, Boundary::Disk)?;
+        let content = match verified.envelope.payload {
+            EventPayload::UserMsg(message) => message.content,
+            EventPayload::DeliveredMsg(message) => message.content,
+            _ => return Err(Error::new(ErrorCode::InvalidKind)),
+        };
+        let mut root = blake3::Hasher::new();
+        root.update(b"hypermind.observation-root.v1\0");
+        root.update(&frame.header.lsn.get().to_le_bytes());
+        root.update(frame.header.conversation.as_bytes());
+        root.update(&content);
+        let entities = entities(&content);
+        observations.push(PendingObservation {
+            source: FrozenCandidate {
+                lsn: frame.header.lsn.get(),
+                conversation: frame.header.conversation.into_bytes(),
+                source_root: *root.finalize().as_bytes(),
+                content,
+                kind: SourceKind::Declarative,
+                authority: verified.envelope.authority,
+            },
+            salience_micros: 800_000,
+            event_time_ns: frame.header.wall_timestamp_ns.get(),
+            embedding: Vec::new(),
+            entities,
+        });
+    }
+    cluster_observations(
+        &observations,
+        ClusterOptions {
+            maximum_observations: 4_096,
+            cosine_threshold_micros: 900_000,
+            entity_overlap_threshold_micros: 1_000_000,
+        },
+    )
+}
+
+fn entities(content: &[u8]) -> Vec<String> {
+    let text = String::from_utf8_lossy(content);
+    text.split(|character: char| !character.is_alphanumeric())
+        .filter(|word| word.chars().next().is_some_and(char::is_uppercase))
+        .map(str::to_owned)
+        .collect()
+}
+
+fn memory_id(run_id: &[u8], cluster_id: &[u8; 32]) -> Vec<u8> {
+    let mut hasher = blake3::Hasher::new();
+    hasher.update(b"hypermind.memory.v1\0");
+    hasher.update(run_id);
+    hasher.update(cluster_id);
+    hasher.finalize().as_bytes().to_vec()
 }
 
 async fn retract(
@@ -243,7 +419,7 @@ async fn retract(
     Ok(envelope)
 }
 
-fn list(history: RunHistory) -> Result<Envelope, Error> {
+fn list(history: RunHistory) -> Envelope {
     let mut envelope = Envelope::empty();
     envelope.items = history
         .runs
@@ -261,7 +437,7 @@ fn list(history: RunHistory) -> Result<Envelope, Error> {
         .collect();
     envelope.health =
         json!({"projection": "ready", "active_generation": history.active_generation});
-    Ok(envelope)
+    envelope
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -478,8 +654,42 @@ fn incoming(
     }
 }
 
+fn derived_incoming(
+    actor: &ActorEngine,
+    run_id: &[u8],
+    kind: EventKind,
+    payload: EventPayload,
+    authority: Authority,
+    model_provenance: hm_schema::events::ModelProvenance,
+) -> IncomingEvent {
+    IncomingEvent {
+        kind,
+        conversation: ConversationId::derive("hypermind.consolidation"),
+        payload: encode_event_envelope(&EventEnvelope {
+            schema_version: CURRENT_SCHEMA_VERSION,
+            payload,
+            connection_id: None,
+            client_seq: 0,
+            client_event_index: 0,
+            client_event_count: 0,
+            origin_actor: actor.actor().get(),
+            run_id: Some(run_id.to_vec()),
+            model_provenance: Some(Box::new(model_provenance)),
+            authority,
+            retention: Retention::Durable,
+            sensitivity: Sensitivity::Personal,
+            event_time_ns: 0,
+        }),
+    }
+}
+
 fn hex(bytes: &[u8]) -> String {
-    bytes.iter().map(|byte| format!("{byte:02x}")).collect()
+    let mut output = String::with_capacity(bytes.len().saturating_mul(2));
+    for byte in bytes {
+        use std::fmt::Write as _;
+        let _ = write!(output, "{byte:02x}");
+    }
+    output
 }
 
 fn decode_hex(value: &str) -> Option<Vec<u8>> {

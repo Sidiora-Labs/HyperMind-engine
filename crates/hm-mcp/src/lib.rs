@@ -24,7 +24,7 @@ pub use tools::believe::{
 };
 pub use tools::bind::BindInput;
 pub use tools::consolidate::{
-    ConsolidateAction, ConsolidateBudget, ConsolidateInput, ConsolidateMode,
+    ConsolidateAction, ConsolidateBudget, ConsolidateInput, ConsolidateMode, ConsolidationRuntime,
 };
 pub use tools::dispute::{DisputeInput, DisputeRuntime};
 pub use tools::forget::{ForgetAction, ForgetInput};
@@ -111,6 +111,7 @@ pub struct McpServer {
     actor: ActorEngine,
     admin_token: Option<hm_serve::config::CapabilityToken>,
     dispute_runtime: Option<DisputeRuntime>,
+    consolidation_runtime: Option<ConsolidationRuntime>,
 }
 
 impl McpServer {
@@ -120,6 +121,7 @@ impl McpServer {
             actor,
             admin_token: None,
             dispute_runtime: None,
+            consolidation_runtime: None,
         }
     }
 
@@ -132,12 +134,19 @@ impl McpServer {
             actor,
             admin_token: Some(admin_token),
             dispute_runtime: None,
+            consolidation_runtime: None,
         }
     }
 
     #[must_use]
     pub fn with_dispute_runtime(mut self, runtime: DisputeRuntime) -> Self {
         self.dispute_runtime = Some(runtime);
+        self
+    }
+
+    #[must_use]
+    pub fn with_consolidation_runtime(mut self, runtime: ConsolidationRuntime) -> Self {
+        self.consolidation_runtime = Some(runtime);
         self
     }
 
@@ -416,7 +425,8 @@ impl McpServer {
 
     pub async fn consolidate_envelope(&self, input: ConsolidateInput) -> Envelope {
         let mutation = !matches!(input.action, ConsolidateAction::List);
-        match tools::consolidate::run(&self.actor, input).await {
+        match tools::consolidate::run(&self.actor, self.consolidation_runtime.as_ref(), input).await
+        {
             Ok(value) => value,
             Err(error) => Envelope::error(error, mutation),
         }

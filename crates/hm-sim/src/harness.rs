@@ -66,8 +66,17 @@ impl JourneyHarness {
     }
 
     pub async fn start_mcp(&self) -> HarnessResult<McpClient> {
+        self.start_mcp_mode("mcp").await
+    }
+
+    #[must_use]
+    pub fn config_path(&self) -> &Path {
+        &self.config_path
+    }
+
+    pub async fn start_mcp_mode(&self, mode: &str) -> HarnessResult<McpClient> {
         let mut command = tokio::process::Command::new(&self.executable);
-        command.arg("mcp").arg(&self.config_path);
+        command.arg(mode).arg(&self.config_path);
         let transport = TokioChildProcess::new(command)?;
         let process_id = transport.id().ok_or("MCP child has no process id")?;
         let service = ().serve(transport).await?;

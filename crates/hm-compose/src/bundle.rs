@@ -10,6 +10,8 @@ use crate::tokens::TokenCounter;
 use crate::trim::trim_to_budget_with_profile;
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
 use hm_ledger::frame::{EventKind, Frame, FrameHeader};
+use hm_proj::memories::MemoryProjection;
+use hm_proj::runs::RunsProjection;
 use hm_proj::store::{ProjectionId, ReadSnapshot};
 use hm_proj::timeline::{ConversationRecord, read_conversation_record, read_conversation_records};
 use hm_schema::event::{self, Boundary, encode_event_envelope};
@@ -272,6 +274,7 @@ pub fn activate_with_context(
     }
     populate_conversation(&mut bundle, snapshot, request)?;
     populate_lexical(&mut bundle, snapshot, request)?;
+    populate_memories(&mut bundle, snapshot, request)?;
     let conflict_tier = conflicts::read(
         snapshot,
         request.actor,
@@ -552,6 +555,79 @@ fn populate_lexical(
         add_item(bundle, item)?;
     }
     Ok(())
+}
+
+fn populate_memories(
+    bundle: &mut ActivationBundle,
+    snapshot: &ReadSnapshot<'_>,
+    request: &ActivationRequest<'_>,
+) -> Result<(), Error> {
+    if request.query.is_empty() {
+        return Ok(());
+    }
+    let generation = RunsProjection::active_generation(snapshot)?;
+    let query_terms = terms(request.query.as_bytes());
+    if query_terms.is_empty() {
+        return Ok(());
+    }
+    let memories =
+        MemoryProjection::list_visible(snapshot, generation, request.maximum_candidates)?;
+    for (index, memory) in memories.into_iter().enumerate() {
+        let mut searchable = memory.name.into_bytes();
+        searchable.push(b' ');
+        searchable.extend_from_slice(&memory.definition);
+        for tag in memory.tags {
+            searchable.push(b' ');
+            searchable.extend_from_slice(tag.as_bytes());
+        }
+        let searchable = String::from_utf8_lossy(&searchable).to_lowercase();
+        if !query_terms.iter().all(|term| searchable.contains(term)) {
+            continue;
+        }
+        let provenance = memory
+            .citations
+            .iter()
+            .map(|citation| LSN::new(citation.first_lsn))
+            .collect::<Vec<_>>();
+        let lexical_rank =
+            u32::try_from(index + 1).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+        let item = ActivationItem {
+            tier: Tier::Fused,
+            uri: format!(
+                "hm://{}/memory/{}/{}?generation={generation}&why=fused",
+                request.actor,
+                hex(&memory.memory_id),
+                memory.version_lsn,
+            ),
+            provenance,
+            tokens: request.token_counter.count(&memory.definition)?,
+            content: memory.definition,
+            authority: memory.authority,
+            coarsened: false,
+            vector_rank: 0,
+            lexical_rank,
+            why: WhyCode::Fused,
+        };
+        add_item(bundle, item)?;
+    }
+    Ok(())
+}
+
+fn terms(bytes: &[u8]) -> Vec<String> {
+    String::from_utf8_lossy(bytes)
+        .split(|character: char| !character.is_alphanumeric())
+        .filter(|term| term.len() > 2)
+        .map(str::to_lowercase)
+        .collect()
+}
+
+fn hex(bytes: &[u8]) -> String {
+    let mut output = String::with_capacity(bytes.len().saturating_mul(2));
+    for byte in bytes {
+        use std::fmt::Write as _;
+        let _ = write!(output, "{byte:02x}");
+    }
+    output
 }
 
 fn record_content(record: &ConversationRecord) -> Option<safety::SafeContent> {

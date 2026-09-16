@@ -771,7 +771,7 @@ do_2 = "Citation validity reports drop rate; the generations suite kills the dae
 
 [task.6.8]
 title = "Slice 6 journey: consolidate as a generation, cited mint, retract, instant switch back, idempotent rerun"
-status = "pending"
+status = "done"
 wave = 6
 owner_lane = "integration"
 requires = ["6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7"]

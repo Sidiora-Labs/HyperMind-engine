@@ -21,6 +21,11 @@ name = "slice5_journey"
 path = "tests/slice5_journey.rs"
 harness = false
 
+[[test]]
+name = "slice6_journey"
+path = "tests/slice6_journey.rs"
+harness = false
+
 [dependencies]
 hm-core = { path = "../hm-core" }
 hm-ledger = { path = "../hm-ledger" }
@@ -29,8 +34,10 @@ hm-ledger = { path = "../hm-ledger" }
 base64 = "0.22.1"
 blake3 = "1.8.2"
 hm-compose = { path = "../hm-compose" }
+hm-cortex = { path = "../hm-cortex" }
 hm-embed = { path = "../hm-embed" }
 hm-eval = { path = "../hm-eval" }
+hm-llm = { path = "../hm-llm" }
 hm-mcp = { path = "../hm-mcp" }
 hm-proj = { path = "../hm-proj" }
 hm-schema = { path = "../hm-schema" }

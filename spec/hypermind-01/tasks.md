@@ -192,7 +192,7 @@
     - Dream regression fixture built from the cortex-engine changelog incidents: numbers, quotations, first person, named entities and hedges; a consolidation run must preserve all of them, produce no duplicate abstractions above the measured threshold, and mint nothing without three roots; zero lossy rewrites is the gate.
     - Citation validity reports drop rate; the generations suite kills the daemon between stage and publish and after a lost ack and asserts exactly one published generation; LongMemEval with consolidation enabled at least 80 percent.
     - _Requirements: 15.1, 9.2, 9.3, 5.2_
-  - [ ] 6.8 Slice 6 journey: consolidate as a generation, cited mint, retract, instant switch back, idempotent rerun
+  - [x] 6.8 Slice 6 journey: consolidate as a generation, cited mint, retract, instant switch back, idempotent rerun
     - Journey: remember twenty observations across two conversations, run consolidate with a budget against a fixture provider, observe a minted memory whose citations resolve to byte ranges, activate and see it in fused, retract the run and observe activation without it on the next call, rerun and receive the identical run id and result, gate slice6 green.
     - _Requirements: 1.1, 9.1, 9.2, 9.3, 5.2_
   - [ ] 7.1 Intention, attention, prediction and procedure events and projections
