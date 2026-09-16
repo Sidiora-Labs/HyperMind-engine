@@ -452,6 +452,26 @@
       "file": "crates/hm-cortex/src/citations.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/connectors.rs:DeliveryEnvelope",
+      "name": "hm-cortex::DeliveryEnvelope",
+      "file": "crates/hm-cortex/src/connectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors.rs:VerifiedDelivery",
+      "name": "hm-cortex::VerifiedDelivery",
+      "file": "crates/hm-cortex/src/connectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors.rs:ConsentState",
+      "name": "hm-cortex::ConsentState",
+      "file": "crates/hm-cortex/src/connectors.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/connectors.rs:ConsentGrant",
+      "name": "hm-cortex::ConsentGrant",
+      "file": "crates/hm-cortex/src/connectors.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/fsrs.rs:FsrsState",
       "name": "hm-cortex::FsrsState",
       "file": "crates/hm-cortex/src/fsrs.rs"

@@ -1929,6 +1929,83 @@ pub struct FrozenCandidateSet {
 }
 ```
 
+## hm-cortex::DeliveryEnvelope
+
+<a id="rust-crates-hm-cortex-src-connectors-rs-deliveryenvelope"></a>
+
+Source: [`crates/hm-cortex/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors.rs).
+
+When to use: Use `DeliveryEnvelope` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct DeliveryEnvelope<'a> {
+    pub connector_id: [u8; 16],
+    pub delivery_id: &'a [u8],
+    pub event_name: &'a str,
+    pub signed_at_ns: i64,
+    pub body: &'a [u8],
+    pub signature: &'a [u8],
+}
+```
+
+## hm-cortex::VerifiedDelivery
+
+<a id="rust-crates-hm-cortex-src-connectors-rs-verifieddelivery"></a>
+
+Source: [`crates/hm-cortex/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors.rs).
+
+When to use: Use `VerifiedDelivery` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct VerifiedDelivery {
+    pub body_digest: [u8; 32],
+    pub body_bytes: u64,
+}
+```
+
+## hm-cortex::ConsentState
+
+<a id="rust-crates-hm-cortex-src-connectors-rs-consentstate"></a>
+
+Source: [`crates/hm-cortex/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors.rs).
+
+When to use: Use `ConsentState` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct ConsentState {
+    pub encoded: String,
+    pub nonce: [u8; 16],
+    pub expires_at_ns: i64,
+}
+```
+
+## hm-cortex::ConsentGrant
+
+<a id="rust-crates-hm-cortex-src-connectors-rs-consentgrant"></a>
+
+Source: [`crates/hm-cortex/src/connectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/connectors.rs).
+
+When to use: Use `ConsentGrant` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct ConsentGrant {
+    pub nonce: [u8; 16],
+    pub expires_at_ns: i64,
+}
+```
+
 ## hm-cortex::FsrsState
 
 <a id="rust-crates-hm-cortex-src-fsrs-rs-fsrsstate"></a>
