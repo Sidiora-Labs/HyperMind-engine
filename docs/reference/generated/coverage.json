@@ -2782,6 +2782,11 @@
       "file": "crates/hm-proj/src/vocabulary.rs"
     },
     {
+      "id": "rust:crates/hm-proj/src/vocabulary.rs:AliasProposal",
+      "name": "hm-proj::AliasProposal",
+      "file": "crates/hm-proj/src/vocabulary.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/vocabulary.rs:VocabularyProjection",
       "name": "hm-proj::VocabularyProjection",
       "file": "crates/hm-proj/src/vocabulary.rs"

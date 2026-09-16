@@ -11470,6 +11470,29 @@ pub struct AliasEntry {
 }
 ```
 
+## hm-proj::AliasProposal
+
+<a id="rust-crates-hm-proj-src-vocabulary-rs-aliasproposal"></a>
+
+Source: [`crates/hm-proj/src/vocabulary.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vocabulary.rs).
+
+When to use: Use `AliasProposal` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct AliasProposal {
+    pub vocabulary_id: Vec<u8>,
+    pub version: u16,
+    pub term_id: String,
+    pub canonical_name: String,
+    pub category: VocabularyCategory,
+    pub matched_candidate: String,
+    pub similarity_q16: u32,
+}
+```
+
 ## hm-proj::VocabularyProjection
 
 <a id="rust-crates-hm-proj-src-vocabulary-rs-vocabularyprojection"></a>

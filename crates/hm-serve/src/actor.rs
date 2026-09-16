@@ -37,6 +37,7 @@ use hm_proj::runs::RunsProjection;
 use hm_proj::store::{ProjectionId, ProjectionStore, ReadSnapshot};
 use hm_proj::timeline::{ConversationRecord, read_conversation_record, read_conversation_records};
 use hm_proj::vectors::{VectorEntry, VectorLane};
+use hm_proj::vocabulary::{AliasProposal, VocabularyProjection, VocabularyRecord};
 use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{
     Authority, BeliefType, Checkpoint, EventEnvelope, EventPayload, IntentionSet,
@@ -245,6 +246,13 @@ enum Command {
     ),
     AttentionHistory(usize, oneshot::Sender<Result<Vec<AttentionRecord>, Error>>),
     Calibration(oneshot::Sender<Result<Vec<(PredicateKind, CalibrationCounters)>, Error>>),
+    Vocabularies(usize, oneshot::Sender<Result<Vec<VocabularyRecord>, Error>>),
+    AliasProposals(
+        String,
+        u32,
+        usize,
+        oneshot::Sender<Result<Vec<AliasProposal>, Error>>,
+    ),
     MechanismFailures(String, oneshot::Sender<Result<MechanismFailures, Error>>),
     Procedure(
         Vec<u8>,
@@ -527,6 +535,22 @@ impl ActorEngine {
         request(&self.commands, Command::Calibration).await
     }
 
+    pub async fn vocabularies(&self, limit: usize) -> Result<Vec<VocabularyRecord>, Error> {
+        request(&self.commands, |reply| Command::Vocabularies(limit, reply)).await
+    }
+
+    pub async fn alias_proposals(
+        &self,
+        observed_name: String,
+        threshold_q16: u32,
+        limit: usize,
+    ) -> Result<Vec<AliasProposal>, Error> {
+        request(&self.commands, |reply| {
+            Command::AliasProposals(observed_name, threshold_q16, limit, reply)
+        })
+        .await
+    }
+
     pub async fn mechanism_failures(&self, mechanism: String) -> Result<MechanismFailures, Error> {
         request(&self.commands, |reply| {
             Command::MechanismFailures(mechanism, reply)
@@ -717,6 +741,19 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
                             .map(|counters| (kind, counters))
                     })
                     .collect()
+                });
+                let _ = reply.send(result);
+            }
+            Command::Vocabularies(limit, reply) => {
+                let result = state
+                    .projections
+                    .begin_snapshot()
+                    .and_then(|snapshot| VocabularyProjection::list(&snapshot, limit));
+                let _ = reply.send(result);
+            }
+            Command::AliasProposals(observed_name, threshold_q16, limit, reply) => {
+                let result = state.projections.begin_snapshot().and_then(|snapshot| {
+                    VocabularyProjection::suggest(&snapshot, &observed_name, threshold_q16, limit)
                 });
                 let _ = reply.send(result);
             }

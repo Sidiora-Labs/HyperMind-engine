@@ -4,7 +4,7 @@ use crate::checkpoint::verify_frame;
 use crate::generation::{decode, encode};
 use crate::store::{Mutation, ProjectionId, ProjectionStore, ReadSnapshot};
 use hm_core::{Error, ErrorCode};
-use hm_index::vocabulary::normalize_name;
+use hm_index::vocabulary::{MAXIMUM_CANDIDATES, Q16_ONE, normalize_name, suggest_aliases};
 use hm_ledger::frame::{EventKind, Frame};
 use hm_schema::events::{EventPayload, VocabularyCategory};
 use serde::{Deserialize, Serialize};
@@ -46,6 +46,17 @@ pub struct AliasEntry {
     pub vocabulary_id: Vec<u8>,
     pub version: u16,
     pub term_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+pub struct AliasProposal {
+    pub vocabulary_id: Vec<u8>,
+    pub version: u16,
+    pub term_id: String,
+    pub canonical_name: String,
+    pub category: VocabularyCategory,
+    pub matched_candidate: String,
+    pub similarity_q16: u32,
 }
 
 pub struct VocabularyProjection;
@@ -217,6 +228,66 @@ impl VocabularyProjection {
         });
         records.truncate(limit);
         Ok(records)
+    }
+
+    pub fn suggest(
+        snapshot: &ReadSnapshot<'_>,
+        observed_name: &str,
+        threshold_q16: u32,
+        limit: usize,
+    ) -> Result<Vec<AliasProposal>, Error> {
+        if limit == 0 || threshold_q16 == 0 || threshold_q16 > Q16_ONE {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let terms = Self::terms(snapshot, MAXIMUM_TERM_SCAN)?;
+        let mut candidates: Vec<Vec<String>> = Vec::with_capacity(terms.len());
+        let mut total = 0;
+        for term in &terms {
+            let mut names: Vec<String> = std::iter::once(&term.canonical_name)
+                .chain(term.aliases.iter())
+                .map(String::as_str)
+                .map(normalize_name)
+                .filter(|name| !name.is_empty())
+                .collect();
+            names.sort();
+            names.dedup();
+            total += names.len();
+            candidates.push(names);
+        }
+        if total > MAXIMUM_CANDIDATES {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let mut proposals = Vec::new();
+        for (term, names) in terms.iter().zip(candidates.iter()) {
+            let names: Vec<&str> = names.iter().map(String::as_str).collect();
+            if names.is_empty() {
+                continue;
+            }
+            let Some(best) = suggest_aliases(observed_name, &names, threshold_q16, 1)?
+                .into_iter()
+                .next()
+            else {
+                continue;
+            };
+            proposals.push(AliasProposal {
+                vocabulary_id: term.vocabulary_id.clone(),
+                version: term.version,
+                term_id: term.term_id.clone(),
+                canonical_name: term.canonical_name.clone(),
+                category: term.category,
+                matched_candidate: best.candidate,
+                similarity_q16: best.similarity_q16,
+            });
+        }
+        proposals.sort_by(|left, right| {
+            right
+                .similarity_q16
+                .cmp(&left.similarity_q16)
+                .then_with(|| left.vocabulary_id.cmp(&right.vocabulary_id))
+                .then_with(|| left.term_id.cmp(&right.term_id))
+        });
+        proposals.truncate(limit);
+        Ok(proposals)
     }
 }
 
