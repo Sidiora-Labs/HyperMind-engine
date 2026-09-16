@@ -130,9 +130,8 @@ async fn reconstruction_uses_verified_anchors_and_cannot_be_remembered() {
     let actor = ActorEngine::open(config(directory.path())).await.unwrap();
     seed(&actor, directory.path()).await;
     let recorded = provider();
-    let server = McpServer::new(actor.clone()).with_reconstruction_runtime(ReconstructionRuntime {
-        provider: recorded.clone(),
-    });
+    let server = McpServer::new(actor.clone())
+        .with_reconstruction_runtime(ReconstructionRuntime::new(recorded.clone()));
     let initial_frames = actor.frames_since(LSN::new(0), None, 32).await.unwrap();
     for anchors in [vec![0, 3], vec![3, 1], vec![1, 999], vec![1, 2]] {
         assert!(!server.recall_envelope(recall(anchors)).await.ok);
@@ -220,9 +219,8 @@ async fn reconstruction_tripwire_fails_before_the_provider_call() {
         .unwrap();
     seed(&actor, directory.path()).await;
     let recorded = provider();
-    let server = McpServer::new(actor.clone()).with_reconstruction_runtime(ReconstructionRuntime {
-        provider: recorded.clone(),
-    });
+    let server = McpServer::new(actor.clone())
+        .with_reconstruction_runtime(ReconstructionRuntime::new(recorded.clone()));
     let denied = server.recall_envelope(recall(vec![1, 3])).await;
     assert!(!denied.ok);
     assert_eq!(denied.items[0]["error"], ErrorCode::Tripwire.as_str());

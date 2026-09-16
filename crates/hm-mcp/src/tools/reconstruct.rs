@@ -1,6 +1,8 @@
+use crate::admission::admission_from_env;
 use crate::{Envelope, RecallInput};
 use hm_compose::reconstruct::{ReconstructionAnchor, reconstruct};
 use hm_core::{Error, ErrorCode, LSN};
+use hm_llm::admission::{AdmittedProvider, CallAdmission};
 use hm_llm::openai_compat::OpenAiCompatible;
 use hm_llm::{HttpTransport, LlmProvider, ModelTier, Pricing, ProviderConfig};
 use hm_serve::actor::ActorEngine;
@@ -10,9 +12,27 @@ use std::sync::Arc;
 #[derive(Clone)]
 pub struct ReconstructionRuntime {
     pub provider: Arc<dyn LlmProvider>,
+    pub admission: Arc<CallAdmission>,
 }
 
 impl ReconstructionRuntime {
+    #[must_use]
+    pub fn new(provider: Arc<dyn LlmProvider>) -> Self {
+        Self {
+            provider,
+            admission: admission_from_env(),
+        }
+    }
+
+    #[must_use]
+    pub fn provider_for(&self, actor: u16) -> Arc<dyn LlmProvider> {
+        Arc::new(AdmittedProvider::new(
+            Arc::clone(&self.admission),
+            actor,
+            Arc::clone(&self.provider),
+        ))
+    }
+
     pub fn from_env() -> Result<Option<Self>, Error> {
         match std::env::var("HM_RECONSTRUCTION_PROVIDER").as_deref() {
             Err(_) | Ok("") => return Ok(None),
@@ -39,9 +59,7 @@ impl ReconstructionRuntime {
             HttpTransport::default(),
         )
         .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
-        Ok(Some(Self {
-            provider: Arc::new(provider),
-        }))
+        Ok(Some(Self::new(Arc::new(provider))))
     }
 }
 
@@ -87,7 +105,7 @@ pub async fn run(
             authority,
         });
     }
-    let provider = runtime.provider.clone();
+    let provider = runtime.provider_for(actor.actor().get());
     let maximum = input.filters.maximum_output_tokens.unwrap_or(256);
     let provenance = anchors.iter().map(|anchor| anchor.uri.clone()).collect();
     let result =

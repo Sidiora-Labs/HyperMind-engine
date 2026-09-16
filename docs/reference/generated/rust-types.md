@@ -7493,6 +7493,7 @@ Do not use: Do not ignore ok/effect_state, manufacture observed evidence through
 ```rust
 pub struct ConsolidationRuntime {
     provider: Arc<dyn LlmProvider>,
+    pub admission: Arc<CallAdmission>,
 }
 ```
 
@@ -8042,6 +8043,7 @@ Do not use: Do not ignore ok/effect_state, manufacture observed evidence through
 ```rust
 pub struct ReconstructionRuntime {
     pub provider: Arc<dyn LlmProvider>,
+    pub admission: Arc<CallAdmission>,
 }
 ```
 

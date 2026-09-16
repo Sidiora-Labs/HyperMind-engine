@@ -17,6 +17,7 @@ use rmcp::{Json, ServiceExt, schemars, tool, tool_router, transport::stdio};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 
+pub mod admission;
 pub mod dispatcher;
 pub mod tools;
 pub use tools::attest::{AttestDisposition, AttestInput};

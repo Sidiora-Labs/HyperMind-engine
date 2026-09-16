@@ -1,6 +1,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use crate::Envelope;
+use crate::admission::admission_from_env;
 use hm_core::{ConversationId, Error, ErrorCode, LSN};
 use hm_cortex::budget::BudgetUsage;
 use hm_cortex::citations::{FrozenCandidate, SourceKind};
@@ -11,6 +12,7 @@ use hm_cortex::nrem::merge::{MergeAction, NremReport, consolidate_clusters};
 use hm_cortex::run::{PhaseMachine, retraction_event, run_id};
 use hm_ledger::frame::EventKind;
 use hm_llm::LlmProvider;
+use hm_llm::admission::{AdmissionLimits, AdmittedProvider, CallAdmission};
 use hm_schema::event::{self, Boundary, CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{
     Authority, ConsolidationBudget, ConsolidationClosed, ConsolidationOpened,
@@ -27,6 +29,7 @@ use std::sync::Arc;
 #[derive(Clone)]
 pub struct ConsolidationRuntime {
     provider: Arc<dyn LlmProvider>,
+    pub admission: Arc<CallAdmission>,
 }
 
 impl ConsolidationRuntime {
@@ -56,12 +59,27 @@ impl ConsolidationRuntime {
             hm_llm::HttpTransport::default(),
         )
         .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
-        Ok(Some(Self::new(Arc::new(provider))))
+        Ok(Some(Self {
+            provider: Arc::new(provider),
+            admission: admission_from_env(),
+        }))
     }
 
     #[must_use]
     pub fn new(provider: Arc<dyn LlmProvider>) -> Self {
-        Self { provider }
+        Self {
+            provider,
+            admission: Arc::new(CallAdmission::new(AdmissionLimits::default())),
+        }
+    }
+
+    #[must_use]
+    pub fn provider_for(&self, actor: u16) -> Arc<dyn LlmProvider> {
+        Arc::new(AdmittedProvider::new(
+            Arc::clone(&self.admission),
+            actor,
+            Arc::clone(&self.provider),
+        ))
     }
 }
 
@@ -230,7 +248,8 @@ async fn start(
                 NremReport::default()
             } else {
                 let runtime = runtime.ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
-                consolidate_clusters(runtime.provider.as_ref(), &id, &clusters, &[])
+                let provider = runtime.provider_for(actor.actor().get());
+                consolidate_clusters(provider.as_ref(), &id, &clusters, &[])
                     .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
             };
             if report.llm_calls > budget.max_llm_calls
