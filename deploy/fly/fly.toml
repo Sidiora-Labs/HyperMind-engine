@@ -1,0 +1,47 @@
+primary_region = "fra"
+kill_signal = "SIGINT"
+kill_timeout = 30
+
+[build]
+  dockerfile = "deploy/Dockerfile"
+  [build.args]
+    HM_RUNTIME_UID = "0"
+    HM_RUNTIME_GID = "0"
+
+[experimental]
+  cmd = ["serve", "--config", "/var/lib/hypermind/hypermind.conf", "--init-if-missing", "--tls-from-env", "--grpc-bind", "0.0.0.0:8443", "--rest-bind", "0.0.0.0:8444", "--json"]
+
+[deploy]
+  strategy = "rolling"
+  max_unavailable = 1
+
+[[mounts]]
+  source = "hypermind_data"
+  destination = "/var/lib/hypermind"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8443
+  auto_stop_machines = "off"
+  auto_start_machines = false
+  [[services.ports]]
+    port = 443
+    handlers = []
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "30s"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8444
+  auto_stop_machines = "off"
+  auto_start_machines = false
+  [[services.ports]]
+    port = 8444
+    handlers = []
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 2
+  memory = "2gb"

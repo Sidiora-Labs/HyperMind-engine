@@ -1,0 +1,6 @@
+apiVersion: v2
+name: hypermind
+description: Single-writer HyperMind daemon with persistent actor storage and mutual TLS
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

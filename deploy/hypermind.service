@@ -1,0 +1,30 @@
+[Unit]
+Description=HyperMind memory engine
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hypermind
+Group=hypermind
+StateDirectory=hypermind
+StateDirectoryMode=0700
+UMask=0077
+ExecStart=/usr/local/bin/hm serve --config /var/lib/hypermind/hypermind.conf
+EnvironmentFile=-/etc/hypermind/providers.env
+Restart=on-failure
+RestartSec=3
+KillSignal=SIGINT
+TimeoutStopSec=30
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/hypermind
+
+[Install]
+WantedBy=multi-user.target

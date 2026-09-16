@@ -1,0 +1,23 @@
+image:
+  repository: hypermind
+  tag: "0.1.0"
+  digest: ""
+  pullPolicy: IfNotPresent
+existingTlsSecret: hypermind-tls
+existingProviderSecret: ""
+persistence:
+  size: 10Gi
+  storageClass: ""
+service:
+  type: ClusterIP
+  annotations: {}
+  grpcPort: 8443
+  restPort: 8444
+nodeSelector:
+  kubernetes.io/arch: amd64
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 2Gi

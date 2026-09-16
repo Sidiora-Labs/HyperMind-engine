@@ -1,0 +1,6 @@
+{
+  "name": "hypermind-railway-deployment",
+  "private": true,
+  "type": "module",
+  "dependencies": { "railway": "3.11.0" }
+}

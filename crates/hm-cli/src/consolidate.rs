@@ -132,9 +132,12 @@ async fn run(config: &ServerConfig, input: ConsolidateInput) -> Result<Value> {
         projection_map_bytes: config.projection_map_bytes,
     })
     .await?;
-    let envelope = McpServer::new(actor.clone())
-        .consolidate_envelope(input)
-        .await;
+    let runtime = tokio::task::spawn_blocking(hm_mcp::ConsolidationRuntime::from_env).await??;
+    let mut server = McpServer::new(actor.clone());
+    if let Some(runtime) = runtime {
+        server = server.with_consolidation_runtime(runtime);
+    }
+    let envelope = server.consolidate_envelope(input).await;
     actor.shutdown().await?;
     if !envelope.ok {
         return Err(anyhow!(

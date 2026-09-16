@@ -1,4 +1,5 @@
 /target/
+/.venv/
 /fuzz/target/
 /.cargo/
 /.codegraph/
@@ -6,5 +7,11 @@
 *.tmp
 .DS_Store
 /eval/results/*.json
+/eval/datasets/
+/eval/cache/
 /docs/book/
 .env
+/deploy/**/*.key
+/deploy/**/*.pem
+/deploy/**/*.csr
+/deploy/**/*.srl

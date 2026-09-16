@@ -18,17 +18,22 @@ use hm_schema::wire::{
 use hm_serve::config::{ActorCapability, ServerConfig, load};
 use hm_serve::embedded::{EmbeddedConfig, HyperMind, MemoryKind, RenderModel, render};
 use hm_serve::protocol::{FrameParser, encode_frame};
-use hm_serve::uds::UdsServer;
 use serde_json::{Value, json};
 use std::ffi::OsString;
 use std::fs::{self, OpenOptions};
 use std::io::Write as _;
-use std::os::unix::fs::{FileTypeExt, OpenOptionsExt};
+use std::os::unix::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::UnixStream;
 
+mod actors;
 mod consolidate;
+pub mod import;
+mod models;
+mod operations;
+mod serve;
+mod transfer;
 mod verify;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -49,14 +54,64 @@ enum Command {
         path: PathBuf,
         #[arg(long, default_value_t = 1)]
         actor: u16,
+        #[arg(long)]
+        if_missing: bool,
     },
     Serve {
         #[arg(long)]
         config: PathBuf,
+        #[arg(long)]
+        init_if_missing: bool,
+        #[command(flatten)]
+        remote: serve::RemoteOptions,
+        #[arg(long, value_enum)]
+        model: Option<models::Choice>,
+        #[arg(long)]
+        models_directory: Option<PathBuf>,
     },
     Doctor {
         #[arg(long)]
         config: PathBuf,
+        #[arg(long)]
+        models_directory: Option<PathBuf>,
+        #[arg(long)]
+        require_healthy: bool,
+    },
+    Actor {
+        #[command(subcommand)]
+        command: actors::Command,
+    },
+    Models {
+        #[command(subcommand)]
+        command: models::Command,
+    },
+    Bench {
+        #[arg(long)]
+        config: PathBuf,
+        #[arg(long)]
+        query: String,
+        #[arg(long, default_value_t = 100)]
+        iterations: usize,
+    },
+    Export {
+        #[arg(long)]
+        config: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    Tui {
+        #[arg(long)]
+        config: PathBuf,
+        #[arg(long)]
+        conversation: String,
+        #[arg(long, default_value = "")]
+        query: String,
+        #[arg(long, default_value_t = 4096)]
+        budget_tokens: usize,
+        #[arg(long, default_value_t = 1000)]
+        interval_ms: u64,
+        #[arg(long)]
+        frames: Option<usize>,
     },
     Remember {
         #[arg(long)]
@@ -96,6 +151,12 @@ enum Command {
         #[command(subcommand)]
         command: consolidate::Command,
     },
+    Import {
+        #[arg(long)]
+        config: PathBuf,
+        #[arg(long)]
+        input: PathBuf,
+    },
     Verify {
         actor_directory: PathBuf,
         actor: u16,
@@ -111,7 +172,39 @@ enum MessageKind {
 }
 
 pub async fn run(arguments: impl IntoIterator<Item = impl Into<OsString> + Clone>) -> Result<()> {
-    let cli = Cli::try_parse_from(arguments)?;
+    let cli = match Cli::try_parse_from(arguments) {
+        Ok(cli) => cli,
+        Err(error)
+            if matches!(
+                error.kind(),
+                clap::error::ErrorKind::DisplayHelp | clap::error::ErrorKind::DisplayVersion
+            ) =>
+        {
+            error.print()?;
+            return Ok(());
+        }
+        Err(error) => return Err(error.into()),
+    };
+    if let Command::Tui {
+        config,
+        conversation,
+        query,
+        budget_tokens,
+        interval_ms,
+        frames,
+    } = &cli.command
+    {
+        return operations::tui(operations::TuiOptions {
+            config,
+            conversation,
+            query,
+            budget_tokens: *budget_tokens,
+            interval_ms: *interval_ms,
+            frames: *frames,
+            json: cli.json,
+        })
+        .await;
+    }
     let value = execute(cli.command).await?;
     if !cli.json
         && let Some(display) = value.get("display").and_then(Value::as_str)
@@ -129,22 +222,78 @@ pub async fn run(arguments: impl IntoIterator<Item = impl Into<OsString> + Clone
 
 async fn execute(command: Command) -> Result<Value> {
     match command {
-        Command::Init { path, actor } => initialize(&path, actor).await,
-        Command::Serve { config } => {
-            let dispatcher =
-                tokio::task::spawn_blocking(hm_mcp::dispatcher::McpToolDispatcher::from_env)
-                    .await??;
-            let server = UdsServer::bind(load(&config)?)
-                .await?
-                .with_tool_dispatcher(std::sync::Arc::new(dispatcher));
-            server
-                .serve_until(async {
-                    let _ = tokio::signal::ctrl_c().await;
-                })
-                .await?;
-            Ok(json!({"ok": true, "stopped": true}))
+        Command::Init {
+            path,
+            actor,
+            if_missing,
+        } => {
+            if if_missing && path.join("hypermind.conf").exists() {
+                load(path.join("hypermind.conf"))?;
+                Ok(json!({"ok":true,"existing":true,"config":path.join("hypermind.conf")}))
+            } else {
+                initialize(&path, actor).await
+            }
         }
-        Command::Doctor { config } => doctor(&config),
+        Command::Serve {
+            config,
+            init_if_missing,
+            remote,
+            model,
+            models_directory,
+        } => {
+            let tls = remote.load_tls()?;
+            if init_if_missing && !config.try_exists()? {
+                anyhow::ensure!(
+                    config
+                        .file_name()
+                        .is_some_and(|name| name == "hypermind.conf"),
+                    "first-run initialization requires a hypermind.conf filename"
+                );
+                let directory = config.parent().context("configuration directory missing")?;
+                let data = directory.join("data");
+                anyhow::ensure!(
+                    !data.try_exists()? || std::fs::read_dir(&data)?.next().is_none(),
+                    "existing data requires its original configuration; refusing new keys"
+                );
+                initialize(directory, 1).await?;
+            }
+            let _lock = actors::operation_lock(&config)?;
+            anyhow::ensure!(
+                !config.with_extension("rotation.json").exists(),
+                "resume the pending key rotation before starting the daemon"
+            );
+            if let Some(model) = model {
+                models::ensure_model(
+                    models_directory.unwrap_or_else(|| {
+                        config.parent().unwrap_or(Path::new(".")).join("models")
+                    }),
+                    model,
+                )
+                .await?;
+            }
+            serve::run(load(&config)?, remote, tls).await
+        }
+        Command::Doctor {
+            config,
+            models_directory,
+            require_healthy,
+        } => {
+            let report = operations::doctor(&config, models_directory.as_deref()).await?;
+            anyhow::ensure!(
+                !require_healthy || report["healthy"] == true,
+                "daemon/key/index health is not verified: {report}"
+            );
+            Ok(report)
+        }
+        Command::Actor { command } => actors::execute(command).await,
+        Command::Models { command } => models::execute(command).await,
+        Command::Bench {
+            config,
+            query,
+            iterations,
+        } => operations::bench(&config, &query, iterations).await,
+        Command::Export { config, output } => transfer::export(&config, &output).await,
+        Command::Tui { .. } => unreachable!("TUI runs as an output stream"),
         Command::Remember {
             config,
             conversation,
@@ -166,6 +315,7 @@ async fn execute(command: Command) -> Result<Value> {
             embedded,
         } => activate(&config, &conversation, &query, budget_tokens, embedded).await,
         Command::Consolidate { command } => consolidate::execute(command).await,
+        Command::Import { config, input } => transfer::import(&config, &input).await,
         Command::Verify {
             actor_directory,
             actor,
@@ -228,33 +378,6 @@ async fn initialize(path: &Path, actor: u16) -> Result<Value> {
         "config": config_path,
         "actor": actor,
         "socket": socket,
-    }))
-}
-
-fn doctor(path: &Path) -> Result<Value> {
-    let config = load(path)?;
-    let rustc = std::process::Command::new("rustc")
-        .arg("--version")
-        .output()
-        .ok()
-        .filter(|output| output.status.success())
-        .map(|output| String::from_utf8_lossy(&output.stdout).trim().to_owned());
-    let actor_directories: Vec<Value> = config
-        .actors
-        .iter()
-        .map(|actor| {
-            let path = config.actor_directory(actor.actor);
-            json!({"actor": actor.actor, "path": path, "present": path.is_dir()})
-        })
-        .collect();
-    let socket_ready = fs::symlink_metadata(&config.socket_path)
-        .is_ok_and(|metadata| metadata.file_type().is_socket());
-    Ok(json!({
-        "ok": rustc.is_some() && actor_directories.iter().all(|actor| actor["present"] == true),
-        "toolchain": rustc,
-        "actor_directories": actor_directories,
-        "socket_ready": socket_ready,
-        "missing_models": [],
     }))
 }
 
@@ -465,6 +588,14 @@ struct DaemonClient {
 
 impl DaemonClient {
     async fn connect(config: &ServerConfig, capability: &ActorCapability) -> Result<Self> {
+        Self::connect_token(config, &capability.token).await
+    }
+
+    async fn connect_admin(config: &ServerConfig) -> Result<Self> {
+        Self::connect_token(config, &config.admin_token).await
+    }
+
+    async fn connect_token(config: &ServerConfig, token: &[u8]) -> Result<Self> {
         let mut stream = UnixStream::connect(&config.socket_path).await?;
         let mut connection_id = [0; 16];
         getrandom::fill(&mut connection_id)?;
@@ -473,7 +604,7 @@ impl DaemonClient {
             payload: WirePayload::Hello(Box::new(Hello {
                 proto_version: CURRENT_PROTOCOL_VERSION,
                 connection_id: connection_id.to_vec(),
-                capability_token: capability.token.to_vec(),
+                capability_token: token.to_vec(),
             })),
         };
         exchange(&mut stream, hello).await?;

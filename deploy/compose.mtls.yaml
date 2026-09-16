@@ -1,0 +1,26 @@
+services:
+  hypermind:
+    command:
+      - serve
+      - --config
+      - /var/lib/hypermind/hypermind.conf
+      - --grpc-bind
+      - 0.0.0.0:8443
+      - --rest-bind
+      - 0.0.0.0:8444
+      - --tls-cert
+      - /etc/hypermind/tls/server.pem
+      - --tls-key
+      - /etc/hypermind/tls/server.key
+      - --tls-client-ca
+      - /etc/hypermind/tls/client-ca.pem
+    ports:
+      - "127.0.0.1:8443:8443"
+      - "127.0.0.1:8444:8444"
+    volumes:
+      - type: bind
+        source: ${HM_TLS_DIRECTORY:?Set HM_TLS_DIRECTORY to your absolute TLS directory}
+        target: /etc/hypermind/tls
+        read_only: true
+        bind:
+          create_host_path: false

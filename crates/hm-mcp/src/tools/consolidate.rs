@@ -30,6 +30,35 @@ pub struct ConsolidationRuntime {
 }
 
 impl ConsolidationRuntime {
+    pub fn from_env() -> Result<Option<Self>, Error> {
+        match std::env::var("HM_CONSOLIDATION_PROVIDER").as_deref() {
+            Err(_) | Ok("") => return Ok(None),
+            Ok("centra") => {}
+            _ => return Err(Error::new(ErrorCode::InvalidArgument)),
+        }
+        let api_key = std::env::var("CENTRA_GATEWAY_API_KEY")
+            .ok()
+            .filter(|key| !key.is_empty())
+            .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+        let base = std::env::var("CENTRA_GATEWAY_URL")
+            .unwrap_or_else(|_| "https://gateway.centra.ag/v1".into());
+        let provider = hm_llm::openai_compat::OpenAiCompatible::new(
+            hm_llm::ProviderConfig {
+                endpoint: format!("{}/chat/completions", base.trim_end_matches('/')),
+                api_key: Some(api_key),
+                model: "openrouter/openai/gpt-5.6-luna".into(),
+                tier: hm_llm::ModelTier::Economy,
+                pricing: hm_llm::Pricing {
+                    input_microusd_per_million_tokens: 200_000,
+                    output_microusd_per_million_tokens: 1_200_000,
+                },
+            },
+            hm_llm::HttpTransport::default(),
+        )
+        .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+        Ok(Some(Self::new(Arc::new(provider))))
+    }
+
     #[must_use]
     pub fn new(provider: Arc<dyn LlmProvider>) -> Self {
         Self { provider }

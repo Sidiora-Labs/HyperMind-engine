@@ -1,0 +1,245 @@
+name: deployment
+
+on:
+  push:
+    paths:
+      - .github/workflows/deployment.yml
+      - .dockerignore
+      - Cargo.toml
+      - Cargo.lock
+      - rust-toolchain.toml
+      - crates/**
+      - schemas/**
+      - prompts/**
+      - models/manifest.toml
+      - deploy/**
+  pull_request:
+    paths:
+      - .github/workflows/deployment.yml
+      - .dockerignore
+      - Cargo.toml
+      - Cargo.lock
+      - rust-toolchain.toml
+      - crates/**
+      - schemas/**
+      - prompts/**
+      - models/manifest.toml
+      - deploy/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deployment-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  manifests:
+    name: Offline deployment manifests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.13.11'
+      - name: Install pinned YAML parser
+        run: python -m pip install --disable-pip-version-check -r deploy/requirements.txt
+      - uses: docker/setup-compose-action@364cc21a5de5b1ee4a7f5f9d3fa374ce0ccde746 # v1.2.0
+        with:
+          version: v5.1.4
+          cache-binary: false
+      - name: Install checksum-pinned Helm
+        shell: bash
+        run: |
+          set -euo pipefail
+          helm_dir="$(mktemp -d "$RUNNER_TEMP/hypermind-helm.XXXXXX")"
+          curl --fail --silent --show-error --location \
+            https://get.helm.sh/helm-v4.3.0-linux-amd64.tar.gz \
+            --output "$helm_dir/helm.tar.gz"
+          (cd "$helm_dir" && echo '86584a54def73570558f66f5111cc53dfed56689637ae32c1201205d494f54fb  helm.tar.gz' | sha256sum --check --strict)
+          tar -xzf "$helm_dir/helm.tar.gz" -C "$helm_dir" linux-amd64/helm
+          echo "$helm_dir/linux-amd64" >> "$GITHUB_PATH"
+      - name: Render and verify without provisioning
+        run: python3 deploy/verify.py --require-tools
+
+  native:
+    name: Native startup and desktop scripts (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.13.11'
+      - name: Validate desktop scripts and private-state behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n deploy/linux/install.sh
+          bash -n deploy/tls/create-dev-certs.sh
+          python3 -m unittest discover -s deploy/macos -p test_launcher.py -v
+      - name: Validate launchd XML with the native parser
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 deploy/macos/hypermind.py render \
+            --state "$RUNNER_TEMP/Memory & <facts> 'quoted'" \
+            --binary "$GITHUB_WORKSPACE/target/debug/hm" | plutil -lint -
+      - name: Install the repository Rust toolchain
+        run: rustup toolchain install 1.93.0 --profile minimal
+      - name: Test real daemon TLS bootstrap, identity preservation, and shutdown
+        run: cargo +1.93.0 test --locked -p hm-cli --features portable --test cloud_start
+
+  windows:
+    name: Windows Docker launcher syntax and plans
+    runs-on: windows-2025
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Check using checksum-pinned portable PowerShell
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $toolDirectory = Join-Path $env:RUNNER_TEMP ('hypermind-pwsh-' + [guid]::NewGuid().ToString('N'))
+          New-Item -ItemType Directory -Path $toolDirectory | Out-Null
+          $archive = Join-Path $toolDirectory 'powershell.zip'
+          Invoke-WebRequest -Uri 'https://github.com/PowerShell/PowerShell/releases/download/v7.6.6/PowerShell-7.6.6-win-x64.zip' -OutFile $archive
+          $expected = '02fe458be20493fbdf43f61ea20610b811ee6c738ab1676c61b9cfcd1a33c860'
+          if ((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected) {
+              throw 'PowerShell release checksum mismatch.'
+          }
+          Expand-Archive -LiteralPath $archive -DestinationPath $toolDirectory
+          $executable = Join-Path $toolDirectory 'pwsh.exe'
+          & $executable -NoLogo -NoProfile -File deploy/windows/Test-Launcher.ps1
+          if ($LASTEXITCODE -ne 0) { throw 'Windows launcher checks failed.' }
+
+  container:
+    name: Real Docker remember, restart, and recall
+    runs-on: ubuntu-24.04
+    needs: manifests
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Build the actual non-root static image without publishing
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_RUN_ID" =~ ^[0-9]+$ && "$GITHUB_RUN_ATTEMPT" =~ ^[0-9]+$ ]]
+          image="hypermind-ci:${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          docker build --platform linux/amd64 --file deploy/Dockerfile --tag "$image" .
+          test "$(docker image inspect --format '{{.Config.User}}' "$image")" = '65532:65532'
+          test "$(docker image inspect --format '{{.Config.StopSignal}}' "$image")" = 'SIGINT'
+      - name: Exercise one writer and persistent memory over its real socket
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_RUN_ID" =~ ^[0-9]+$ && "$GITHUB_RUN_ATTEMPT" =~ ^[0-9]+$ ]]
+          run_key="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          image="hypermind-ci:$run_key"
+          container="hypermind-ci-$run_key"
+          volume="hypermind-ci-$run_key-state"
+          config='/var/lib/hypermind/hypermind.conf'
+          marker="hyperminddeploymentcobalt${GITHUB_RUN_ID}"
+          for name in "$container" "$container-init"; do
+            if docker container inspect "$name" >/dev/null 2>&1; then
+              echo "Refusing to reuse an existing container: $name" >&2
+              exit 1
+            fi
+          done
+          if docker volume inspect "$volume" >/dev/null 2>&1; then
+            echo "Refusing to reuse an existing volume: $volume" >&2
+            exit 1
+          fi
+          docker volume create --label "io.hypermind.ci.run=$run_key" "$volume"
+          common=(--label "io.hypermind.ci.run=$run_key" --network none --read-only
+            --tmpfs /tmp:rw,nosuid,nodev,mode=1777 --cap-drop ALL --security-opt no-new-privileges
+            --mount "type=volume,source=$volume,target=/var/lib/hypermind")
+          docker run --rm --name "$container-init" "${common[@]}" "$image" \
+            init --path /var/lib/hypermind --if-missing --json
+          docker run --detach --name "$container" "${common[@]}" \
+            --stop-signal SIGINT --stop-timeout 30 "$image" serve --config "$config"
+          wait_ready() {
+            for attempt in $(seq 1 90); do
+              if docker exec "$container" /usr/local/bin/hm doctor \
+                --config "$config" --require-healthy --json >/dev/null 2>&1; then
+                return 0
+              fi
+              if [[ "$(docker inspect --format '{{.State.Running}}' "$container")" != true ]]; then
+                docker logs "$container"
+                return 1
+              fi
+              sleep 1
+            done
+            docker logs "$container"
+            echo 'Daemon never became healthy.' >&2
+            return 1
+          }
+          wait_ready
+          docker exec "$container" /usr/local/bin/hm remember --config "$config" \
+            --conversation deployment-smoke --content "$marker" --json > "$RUNNER_TEMP/hm-remember.json"
+          docker exec "$container" /usr/local/bin/hm recall --config "$config" \
+            --query "$marker" --json > "$RUNNER_TEMP/hm-recall-before.json"
+          docker restart --time 30 "$container"
+          wait_ready
+          docker exec "$container" /usr/local/bin/hm recall --config "$config" \
+            --query "$marker" --json > "$RUNNER_TEMP/hm-recall-after.json"
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          directory = Path(os.environ['RUNNER_TEMP'])
+          remember = json.loads((directory / 'hm-remember.json').read_text())
+          before = json.loads((directory / 'hm-recall-before.json').read_text())
+          after = json.loads((directory / 'hm-recall-after.json').read_text())
+          assert remember['ok'] and before['ok'] and after['ok'], (remember, before, after)
+          assert 0 < remember['first_lsn'] <= remember['last_lsn'], remember
+          assert remember['first_lsn'] in before['lsns'], (remember, before)
+          assert after['lsns'] == before['lsns'], (before, after)
+          print('Real daemon append and socket recall survived a graceful container restart.')
+          PY
+      - name: Clean up only this job's labeled containers and state volume
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_RUN_ID" =~ ^[0-9]+$ && "$GITHUB_RUN_ATTEMPT" =~ ^[0-9]+$ ]]
+          run_key="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          for name in "hypermind-ci-$run_key" "hypermind-ci-$run_key-init"; do
+            if docker container inspect "$name" >/dev/null 2>&1; then
+              owner="$(docker container inspect --format '{{index .Config.Labels "io.hypermind.ci.run"}}' "$name")"
+              if [[ "$owner" != "$run_key" ]]; then
+                echo "Refusing to remove a container owned by another job: $name" >&2
+                exit 1
+              fi
+              docker logs "$name"
+              docker stop --time 30 "$name" >/dev/null
+              docker container rm "$name"
+            fi
+          done
+          volume="hypermind-ci-$run_key-state"
+          if docker volume inspect "$volume" >/dev/null 2>&1; then
+            owner="$(docker volume inspect --format '{{index .Labels "io.hypermind.ci.run"}}' "$volume")"
+            if [[ "$owner" != "$run_key" ]]; then
+              echo "Refusing to remove a volume owned by another job: $volume" >&2
+              exit 1
+            fi
+            docker volume rm "$volume"
+          fi

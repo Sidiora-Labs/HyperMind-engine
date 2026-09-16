@@ -1,0 +1,25 @@
+services:
+  hypermind:
+    platform: linux/amd64
+    image: hypermind:local
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    command: [serve, --config, /var/lib/hypermind/hypermind.conf]
+    user: "65532:65532"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    stop_signal: SIGINT
+    stop_grace_period: 30s
+    restart: unless-stopped
+    volumes:
+      - hypermind-state:/var/lib/hypermind
+    tmpfs: [/tmp]
+    healthcheck:
+      test: [CMD, /usr/local/bin/hm, doctor, --config, /var/lib/hypermind/hypermind.conf, --require-healthy, --json]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+volumes:
+  hypermind-state:

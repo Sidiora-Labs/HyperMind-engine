@@ -1,0 +1,27 @@
+services:
+  - type: pserv
+    name: hypermind
+    runtime: docker
+    plan: 1c-2g
+    region: frankfurt
+    numInstances: 1
+    dockerfilePath: ./deploy/Dockerfile
+    dockerContext: .
+    dockerCommand: serve --config /var/lib/hypermind/hypermind.conf --init-if-missing --tls-from-env --grpc-bind 0.0.0.0:8443 --rest-bind 0.0.0.0:8444 --json
+    autoDeployTrigger: "off"
+    maxShutdownDelaySeconds: 60
+    disk:
+      name: hypermind-data
+      mountPath: /var/lib/hypermind
+      sizeGB: 10
+    envVars:
+      - key: HM_RUNTIME_UID
+        value: "0"
+      - key: HM_RUNTIME_GID
+        value: "0"
+      - key: HM_TLS_CERT_PEM
+        sync: false
+      - key: HM_TLS_KEY_PEM
+        sync: false
+      - key: HM_TLS_CLIENT_CA_PEM
+        sync: false
