@@ -49,6 +49,7 @@ pub fn rebuild_projection_stream(
     let mut graph_checkpoint = snapshot.checkpoint(ProjectionId::Graph)?.get();
     let mut fsrs_checkpoint = snapshot.checkpoint(ProjectionId::Fsrs)?.get();
     let mut runs_checkpoint = snapshot.checkpoint(ProjectionId::Runs)?.get();
+    let mut documents_checkpoint = snapshot.checkpoint(ProjectionId::Documents)?.get();
     let mut intentions_checkpoint = snapshot.checkpoint(ProjectionId::Intentions)?.get();
     let mut attention_checkpoint = snapshot.checkpoint(ProjectionId::AttentionHistory)?.get();
     let mut predictions_checkpoint = snapshot.checkpoint(ProjectionId::Predictions)?.get();
@@ -69,6 +70,7 @@ pub fn rebuild_projection_stream(
         graph_checkpoint,
         fsrs_checkpoint,
         runs_checkpoint,
+        documents_checkpoint,
         intentions_checkpoint,
         attention_checkpoint,
         predictions_checkpoint,
@@ -129,6 +131,7 @@ pub fn rebuild_projection_stream(
             memories_checkpoint,
             graph_checkpoint,
             fsrs_checkpoint,
+            documents_checkpoint,
             runs_checkpoint,
         ]
         .into_iter()
@@ -138,6 +141,7 @@ pub fn rebuild_projection_stream(
             memories_checkpoint = expected_lsn;
             graph_checkpoint = expected_lsn;
             fsrs_checkpoint = expected_lsn;
+            documents_checkpoint = expected_lsn;
             runs_checkpoint = expected_lsn;
         }
         if intentions_checkpoint < expected_lsn {
@@ -179,6 +183,7 @@ pub fn rebuild_projection_stream(
         graph_checkpoint,
         fsrs_checkpoint,
         runs_checkpoint,
+        documents_checkpoint,
         intentions_checkpoint,
         attention_checkpoint,
         predictions_checkpoint,
@@ -210,6 +215,7 @@ fn reset_all(store: &ProjectionStore) -> Result<(), Error> {
         ProjectionId::Graph,
         ProjectionId::Fsrs,
         ProjectionId::Runs,
+        ProjectionId::Documents,
         ProjectionId::Intentions,
         ProjectionId::AttentionHistory,
         ProjectionId::Predictions,

@@ -26,6 +26,7 @@ pub enum StagedProjection {
     Memories,
     Graph,
     Fsrs,
+    Documents,
 }
 
 impl StagedProjection {
@@ -34,6 +35,7 @@ impl StagedProjection {
             Self::Memories => ProjectionId::Memories,
             Self::Graph => ProjectionId::Graph,
             Self::Fsrs => ProjectionId::Fsrs,
+            Self::Documents => ProjectionId::Documents,
         }
     }
 }
@@ -441,6 +443,9 @@ const fn staged_projection(kind: LedgerEventKind) -> Option<StagedProjection> {
             Some(StagedProjection::Graph)
         }
         LedgerEventKind::Reviewed => Some(StagedProjection::Fsrs),
+        LedgerEventKind::DocumentExtracted | LedgerEventKind::DocumentChunked => {
+            Some(StagedProjection::Documents)
+        }
         _ => None,
     }
 }

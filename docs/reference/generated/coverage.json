@@ -2192,6 +2192,26 @@
       "file": "crates/hm-proj/src/checkpoint.rs"
     },
     {
+      "id": "rust:crates/hm-proj/src/documents.rs:DocumentRecord",
+      "name": "hm-proj::DocumentRecord",
+      "file": "crates/hm-proj/src/documents.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/documents.rs:ExtractionRecord",
+      "name": "hm-proj::ExtractionRecord",
+      "file": "crates/hm-proj/src/documents.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/documents.rs:ChunkRecord",
+      "name": "hm-proj::ChunkRecord",
+      "file": "crates/hm-proj/src/documents.rs"
+    },
+    {
+      "id": "rust:crates/hm-proj/src/documents.rs:DocumentsProjection",
+      "name": "hm-proj::DocumentsProjection",
+      "file": "crates/hm-proj/src/documents.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/entities.rs:EntityHit",
       "name": "hm-proj::EntityHit",
       "file": "crates/hm-proj/src/entities.rs"

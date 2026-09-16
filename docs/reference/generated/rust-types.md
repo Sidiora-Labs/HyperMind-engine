@@ -9040,6 +9040,103 @@ pub struct CheckpointRead {
 }
 ```
 
+## hm-proj::DocumentRecord
+
+<a id="rust-crates-hm-proj-src-documents-rs-documentrecord"></a>
+
+Source: [`crates/hm-proj/src/documents.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/documents.rs).
+
+When to use: Use `DocumentRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct DocumentRecord {
+    pub document_id: Vec<u8>,
+    pub name: String,
+    pub media_type: String,
+    pub content_digest: Vec<u8>,
+    pub byte_length: u64,
+    pub ingest_lsn: u64,
+}
+```
+
+## hm-proj::ExtractionRecord
+
+<a id="rust-crates-hm-proj-src-documents-rs-extractionrecord"></a>
+
+Source: [`crates/hm-proj/src/documents.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/documents.rs).
+
+When to use: Use `ExtractionRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct ExtractionRecord {
+    pub document_id: Vec<u8>,
+    pub source_lsn: u64,
+    pub loader_id: String,
+    pub extraction_version: u16,
+    pub text: Vec<u8>,
+    pub text_digest: Vec<u8>,
+    pub partial_reason: String,
+    pub failed_units: Vec<u32>,
+    pub run_id: Vec<u8>,
+    pub generation: u64,
+    pub event_lsn: u64,
+}
+```
+
+## hm-proj::ChunkRecord
+
+<a id="rust-crates-hm-proj-src-documents-rs-chunkrecord"></a>
+
+Source: [`crates/hm-proj/src/documents.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/documents.rs).
+
+When to use: Use `ChunkRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct ChunkRecord {
+    pub document_id: Vec<u8>,
+    pub chunk_id: Vec<u8>,
+    pub content_hash: Vec<u8>,
+    pub occurrence: u32,
+    pub ordinal: u32,
+    pub byte_start: u32,
+    pub byte_end: u32,
+    pub cut: u8,
+    pub change: u8,
+    pub page_number: u32,
+    pub row_index: u32,
+    pub column_start: u32,
+    pub column_end: u32,
+    pub token_estimate: u32,
+    pub run_id: Vec<u8>,
+    pub generation: u64,
+    pub event_lsn: u64,
+}
+```
+
+## hm-proj::DocumentsProjection
+
+<a id="rust-crates-hm-proj-src-documents-rs-documentsprojection"></a>
+
+Source: [`crates/hm-proj/src/documents.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/documents.rs).
+
+When to use: Use `DocumentsProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct DocumentsProjection;
+```
+
 ## hm-proj::EntityHit
 
 <a id="rust-crates-hm-proj-src-entities-rs-entityhit"></a>
@@ -9972,6 +10069,7 @@ pub enum StagedProjection {
     Memories,
     Graph,
     Fsrs,
+    Documents,
 }
 ```
 
@@ -10165,6 +10263,7 @@ pub enum ProjectionId {
     Procedures,
     Attestations,
     Vocabulary,
+    Documents,
 }
 ```
 

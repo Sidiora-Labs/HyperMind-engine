@@ -1,6 +1,6 @@
 # Generations
 
-Each consolidation run owns a monotonically numbered generation and records the generation it expects to replace. Memory, graph, and review records are written with the run ID while the run is open. Their projections record staging markers at the same ledger positions.
+Each consolidation run owns a monotonically numbered generation and records the generation it expects to replace. Memory, graph, review, and document records are written with the run ID while the run is open. Their projections — memories, graph, fsrs, and documents — record staging markers at the same ledger positions, and the publish compare-and-swap verifies every one of them.
 
 `ConsolidationClosed` publishes only when:
 

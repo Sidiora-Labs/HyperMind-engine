@@ -5,6 +5,7 @@ pub mod attestations;
 pub mod beliefs;
 pub mod bindings;
 pub mod checkpoint;
+pub mod documents;
 pub mod entities;
 pub mod fsrs;
 pub mod generation;

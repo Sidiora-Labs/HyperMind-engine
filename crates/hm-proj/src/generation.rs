@@ -1,5 +1,6 @@
 #![allow(clippy::missing_errors_doc)]
 
+use crate::documents::DocumentsProjection;
 use crate::fsrs::FsrsProjection;
 use crate::graph::GraphProjection;
 use crate::memories::MemoryProjection;
@@ -18,6 +19,7 @@ impl GenerationProjection {
         MemoryProjection::apply_event(store, frame)?;
         GraphProjection::apply_event(store, frame)?;
         FsrsProjection::apply_event(store, frame)?;
+        DocumentsProjection::apply_event(store, frame)?;
         RunsProjection::apply_event(store, frame)
     }
 
