@@ -5,6 +5,7 @@ members = [
     "crates/hm-compose",
     "crates/hm-core",
     "crates/hm-cortex",
+    "crates/hm-docs",
     "crates/hm-embed",
     "crates/hm-eval",
     "crates/hm-index",

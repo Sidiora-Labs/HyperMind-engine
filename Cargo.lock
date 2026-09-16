@@ -1398,6 +1398,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "hm-docs"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "hm-core",
+]
+
+[[package]]
 name = "hm-embed"
 version = "0.1.0"
 dependencies = [

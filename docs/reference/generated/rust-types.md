@@ -2905,6 +2905,209 @@ pub enum CadenceError {
 }
 ```
 
+## hm-docs::TableLoader
+
+<a id="rust-crates-hm-docs-src-formats-table-rs-tableloader"></a>
+
+Source: [`crates/hm-docs/src/formats/table.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/formats/table.rs).
+
+When to use: Use `TableLoader` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct TableLoader;
+```
+
+## hm-docs::TextLoader
+
+<a id="rust-crates-hm-docs-src-formats-text-rs-textloader"></a>
+
+Source: [`crates/hm-docs/src/formats/text.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/formats/text.rs).
+
+When to use: Use `TextLoader` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct TextLoader;
+```
+
+## hm-docs::LoaderId
+
+<a id="rust-crates-hm-docs-src-loader-rs-loaderid"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `LoaderId` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub enum LoaderId {
+    Text,
+    Table,
+}
+```
+
+## hm-docs::PageSpan
+
+<a id="rust-crates-hm-docs-src-loader-rs-pagespan"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `PageSpan` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct PageSpan {
+    pub page_number: u32,
+    pub byte_start: usize,
+    pub byte_end: usize,
+}
+```
+
+## hm-docs::FieldSpan
+
+<a id="rust-crates-hm-docs-src-loader-rs-fieldspan"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `FieldSpan` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct FieldSpan {
+    pub column_index: u32,
+    pub byte_start: usize,
+    pub byte_end: usize,
+}
+```
+
+## hm-docs::RowSpan
+
+<a id="rust-crates-hm-docs-src-loader-rs-rowspan"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `RowSpan` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct RowSpan {
+    pub row_index: u32,
+    pub byte_start: usize,
+    pub byte_end: usize,
+    pub fields: Vec<FieldSpan>,
+}
+```
+
+## hm-docs::TableLayout
+
+<a id="rust-crates-hm-docs-src-loader-rs-tablelayout"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `TableLayout` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct TableLayout {
+    pub header: Vec<String>,
+    pub rows: Vec<RowSpan>,
+}
+```
+
+## hm-docs::PartialExtraction
+
+<a id="rust-crates-hm-docs-src-loader-rs-partialextraction"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `PartialExtraction` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct PartialExtraction {
+    pub reason: String,
+    pub failed_units: Vec<u32>,
+}
+```
+
+## hm-docs::Extraction
+
+<a id="rust-crates-hm-docs-src-loader-rs-extraction"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `Extraction` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct Extraction {
+    pub loader: LoaderId,
+    pub extraction_version: u16,
+    pub text: String,
+    pub page_spans: Vec<PageSpan>,
+    pub table: Option<TableLayout>,
+    pub partial: Option<PartialExtraction>,
+}
+```
+
+## hm-docs::DocumentLoader
+
+<a id="rust-crates-hm-docs-src-loader-rs-documentloader"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `DocumentLoader` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub trait DocumentLoader {
+    fn loader_id(&self) -> LoaderId;
+
+    fn extraction_version(&self) -> u16;
+
+    fn extract(&self, bytes: &[u8]) -> Result<Extraction, Error>;
+}
+```
+
+## hm-docs::LoaderRegistry
+
+<a id="rust-crates-hm-docs-src-loader-rs-loaderregistry"></a>
+
+Source: [`crates/hm-docs/src/loader.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/loader.rs).
+
+When to use: Use `LoaderRegistry` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct LoaderRegistry {
+    text: TextLoader,
+    table: TableLoader,
+}
+```
+
 ## hm-embed::CachedEmbedder
 
 <a id="rust-crates-hm-embed-src-cache-rs-cachedembedder"></a>

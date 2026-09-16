@@ -697,6 +697,61 @@
       "file": "crates/hm-cortex/src/run.rs"
     },
     {
+      "id": "rust:crates/hm-docs/src/formats/table.rs:TableLoader",
+      "name": "hm-docs::TableLoader",
+      "file": "crates/hm-docs/src/formats/table.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/formats/text.rs:TextLoader",
+      "name": "hm-docs::TextLoader",
+      "file": "crates/hm-docs/src/formats/text.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:LoaderId",
+      "name": "hm-docs::LoaderId",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:PageSpan",
+      "name": "hm-docs::PageSpan",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:FieldSpan",
+      "name": "hm-docs::FieldSpan",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:RowSpan",
+      "name": "hm-docs::RowSpan",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:TableLayout",
+      "name": "hm-docs::TableLayout",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:PartialExtraction",
+      "name": "hm-docs::PartialExtraction",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:Extraction",
+      "name": "hm-docs::Extraction",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:DocumentLoader",
+      "name": "hm-docs::DocumentLoader",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/loader.rs:LoaderRegistry",
+      "name": "hm-docs::LoaderRegistry",
+      "file": "crates/hm-docs/src/loader.rs"
+    },
+    {
       "id": "rust:crates/hm-embed/src/cache.rs:CachedEmbedder",
       "name": "hm-embed::CachedEmbedder",
       "file": "crates/hm-embed/src/cache.rs"
