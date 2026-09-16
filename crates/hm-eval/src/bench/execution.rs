@@ -1,7 +1,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 use super::gateway::{DynError, Gateway, JUDGE_MODEL, MAXIMUM_BUDGET_MICROUSD, READER_MODEL};
-use super::{judge_diagnostic, locomo, longmemeval};
+use super::{beam, beam_run, judge_diagnostic, locomo, longmemeval};
 use std::path::{Path, PathBuf};
 
 #[must_use]
@@ -70,7 +70,14 @@ pub async fn benchmark(name: &str, live: bool) -> Result<(), DynError> {
             let complete = result.complete;
             (serde_json::to_value(result)?, complete)
         }
-        _ => return Err("benchmark must be longmemeval or locomo".into()),
+        "beam" => {
+            let (set, _) = beam_run::load_or_fixture()?;
+            let result =
+                beam_run::run(&gateway, &set, &root.join("eval/datasets/beam/run")).await?;
+            let complete = result.complete;
+            (serde_json::to_value(result)?, complete)
+        }
+        _ => return Err("benchmark must be longmemeval, locomo or beam".into()),
     };
     let output = root.join(format!("eval/results/slice7-{name}.json"));
     super::gateway::write_json(&output, &report)?;
@@ -79,6 +86,34 @@ pub async fn benchmark(name: &str, live: bool) -> Result<(), DynError> {
     if !complete {
         return Err("public benchmark incomplete; see the recorded failure and coverage".into());
     }
+    Ok(())
+}
+
+pub async fn adapt_beam(artifact: Option<&str>) -> Result<(), DynError> {
+    let source = artifact.map_or_else(
+        || repository_root().join("eval/datasets/beam/conversations.json"),
+        PathBuf::from,
+    );
+    let read = source.clone();
+    let bytes = tokio::task::spawn_blocking(move || {
+        std::fs::read(&read)
+            .map_err(|error| format!("probe set artifact {}: {error}", read.display()))
+    })
+    .await??;
+    let set = beam::adapt_published_artifact(&bytes)?;
+    let output = beam_run::default_probe_set_path();
+    super::gateway::write_json(&output, &set)?;
+    println!(
+        "{}",
+        serde_json::to_string(&serde_json::json!({
+            "artifact": source.display().to_string(),
+            "probe_set": output.display().to_string(),
+            "probe_set_digest": beam::probe_set_digest(&set)?,
+            "source_digest": set.source_digest,
+            "conversations": set.conversations.len(),
+            "probes": set.conversations.iter().map(|conversation| conversation.probes.len()).sum::<usize>(),
+        }))?
+    );
     Ok(())
 }
 

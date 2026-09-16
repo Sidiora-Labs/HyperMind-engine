@@ -1197,6 +1197,21 @@
       "file": "crates/hm-embed/src/types.rs"
     },
     {
+      "id": "rust:crates/hm-eval/src/bench/beam_run.rs:ProbeRetrieval",
+      "name": "hm-eval::ProbeRetrieval",
+      "file": "crates/hm-eval/src/bench/beam_run.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/beam_run.rs:RetrievalSummary",
+      "name": "hm-eval::RetrievalSummary",
+      "file": "crates/hm-eval/src/bench/beam_run.rs"
+    },
+    {
+      "id": "rust:crates/hm-eval/src/bench/beam_run.rs:BeamResult",
+      "name": "hm-eval::BeamResult",
+      "file": "crates/hm-eval/src/bench/beam_run.rs"
+    },
+    {
       "id": "rust:crates/hm-eval/src/bench/beam.rs:ProbeKind",
       "name": "hm-eval::ProbeKind",
       "file": "crates/hm-eval/src/bench/beam.rs"

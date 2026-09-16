@@ -32,6 +32,16 @@ The current authorized campaign uses a shared $49 ledger ceiling plus $1 reserve
 
 `cargo run -p hm-eval -- gate slice7` requires full coverage, LongMemEval ≥ 0.90 accuracy, LoCoMo ≥ 0.75 non-adversarial F1, attention ≥ 0.90 suppression precision, and HNSW ≥ 0.98 parity. CI replay needs its explicitly pinned evidence artifact. Local success does not prove hosted CI or release qualification.
 
+## Probe-set benchmark
+
+`hm-eval adapt beam [ARTIFACT_PATH]` normalizes an operator-supplied long-context artifact into a probe set at `eval/datasets/beam/probe-set.json`; `hm-eval bench beam` runs it and writes `eval/results/slice7-beam.json`. `HM_BEAM_PROBE_SET` overrides the probe-set path. Reports name the encoder `lexical_only`, because no embedding runtime is configured for this pipeline.
+
+The judge-free block is always present and never involves a provider. It reports, per probe, how many of the annotated evidence messages the ledger returned, the lexical recall rank of the first returned evidence citation, the number of citations packed into the reader context and the characters that context occupied. Summed over the probe set it publishes evidence recall, mean reciprocal rank of the first evidence citation, the count of evidence-bearing probes for which nothing annotated was retrieved, and probe counts per kind. Abstention probes carry no annotated evidence and are counted but excluded from recall and rank means.
+
+The judged block is optional and appears only when a gateway pass actually answered and graded. Grading is criterion by criterion: each criterion of a probe is judged on its own and the grade keeps the criterion text, the judge's evidence quote and a digest of the raw judge response. A criterion the judge failed to grade records the failure and leaves compliance unset; it is never read as a zero, and a probe with any judge failure is reported as unscored rather than folded into a mean. Event-ordering probes are scored without a judge at all, by aligning the observed events to the reference events by term overlap and combining coverage with a rank correlation; those probes are counted separately from judge-scored probes inside the judged summary.
+
+A run over the in-repo fixture at `eval/fixtures/beam/probe-set.json` is never a benchmark claim. Such a run reports `complete: false` and records a failure saying the probe set is the in-repo fixture and not a published benchmark artifact, so a wiring check cannot be read as a score. A judge-free run over a real artifact is likewise incomplete: it records that no judged pass ran.
+
 ## Cross-SDK behavioural contract
 
 `hm-eval contract` runs one fixed scenario through every SDK leg the machine can actually run and writes `eval/results/cross-sdk-contract.json`. The scenario remembers a user turn and an assistant turn, recalls them lexically, submits one rejected argument and one rejected mutation, inspects the first ledger event, then crosses a SIGKILL restart of the daemon to recall again and fade the first record. The in-process Rust leg is always run; the TypeScript leg runs over the Unix socket; the Python leg runs over mutual-TLS gRPC.

@@ -4868,6 +4868,81 @@ pub enum EmbedError {
 }
 ```
 
+## hm-eval::ProbeRetrieval
+
+<a id="rust-crates-hm-eval-src-bench-beam-run-rs-proberetrieval"></a>
+
+Source: [`crates/hm-eval/src/bench/beam_run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam_run.rs).
+
+When to use: Use `ProbeRetrieval` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct ProbeRetrieval {
+    pub probe_id: String,
+    pub kind: ProbeKind,
+    pub evidence_expected: usize,
+    pub evidence_retrieved: usize,
+    pub first_evidence_rank: Option<usize>,
+    pub citations: usize,
+    pub context_characters: usize,
+}
+```
+
+## hm-eval::RetrievalSummary
+
+<a id="rust-crates-hm-eval-src-bench-beam-run-rs-retrievalsummary"></a>
+
+Source: [`crates/hm-eval/src/bench/beam_run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam_run.rs).
+
+When to use: Use `RetrievalSummary` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass.
+
+
+```rust
+pub struct RetrievalSummary {
+    pub probes: usize,
+    pub evidence_recall: f64,
+    pub mean_reciprocal_rank: f64,
+    pub probes_without_evidence: usize,
+    pub per_kind_probes: Vec<(ProbeKind, usize)>,
+    pub rows: Vec<ProbeRetrieval>,
+}
+```
+
+## hm-eval::BeamResult
+
+<a id="rust-crates-hm-eval-src-bench-beam-run-rs-beamresult"></a>
+
+Source: [`crates/hm-eval/src/bench/beam_run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/beam_run.rs).
+
+When to use: Use `BeamResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not present selected diagnostics, fixture responses, missing rows, or incomplete coverage as a full live benchmark pass. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct BeamResult {
+    pub format: String,
+    pub probe_set_digest: String,
+    pub source_digest: String,
+    pub conversations: usize,
+    pub total: usize,
+    pub answered: usize,
+    pub encoder: String,
+    pub reader_model: String,
+    pub judge_model: String,
+    pub prompt_id: String,
+    pub judge_free: RetrievalSummary,
+    pub judged: Option<GradeSummary>,
+    pub failure: Option<String>,
+    pub complete: bool,
+}
+```
+
 ## hm-eval::ProbeKind
 
 <a id="rust-crates-hm-eval-src-bench-beam-rs-probekind"></a>

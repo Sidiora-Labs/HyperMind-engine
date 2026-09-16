@@ -1,4 +1,5 @@
 pub mod beam;
+pub mod beam_run;
 pub mod execution;
 pub mod gateway;
 pub mod judge_diagnostic;
