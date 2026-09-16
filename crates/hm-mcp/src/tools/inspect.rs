@@ -237,6 +237,12 @@ pub async fn run(
         envelope.provenance.extend(evidence.provenance);
         return Ok(envelope);
     }
+    if uri.starts_with(&format!("hm://{}/removal/", actor.actor())) {
+        let preview = super::removal::run(actor, parse_lsn(&uri)?).await?;
+        envelope.items.extend(preview.items);
+        envelope.provenance.extend(preview.provenance);
+        return Ok(envelope);
+    }
     let all_frames = actor.frames_since(LSN::new(0), None, usize::MAX).await?;
     let mut history = InspectHistory::default();
     for frame in &all_frames {
@@ -499,7 +505,7 @@ fn parse_lsn(uri: &str) -> Result<LSN, Error> {
     Ok(LSN::new(raw))
 }
 
-fn references(payload: &EventPayload) -> Vec<(LSN, &'static str)> {
+pub(crate) fn references(payload: &EventPayload) -> Vec<(LSN, &'static str)> {
     let (raw, relation) = match payload {
         EventPayload::ToolResult(value) => (vec![value.tool_call_lsn], "tool_call_lsn"),
         EventPayload::Effect(value) => (vec![value.tool_call_lsn], "tool_call_lsn"),
