@@ -1292,6 +1292,26 @@
       "file": "crates/hm-ledger/src/tripwire.rs"
     },
     {
+      "id": "rust:crates/hm-llm/src/admission.rs:AdmissionLimits",
+      "name": "hm-llm::AdmissionLimits",
+      "file": "crates/hm-llm/src/admission.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/admission.rs:CallAdmission",
+      "name": "hm-llm::CallAdmission",
+      "file": "crates/hm-llm/src/admission.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/admission.rs:AdmissionPermit",
+      "name": "hm-llm::AdmissionPermit",
+      "file": "crates/hm-llm/src/admission.rs"
+    },
+    {
+      "id": "rust:crates/hm-llm/src/admission.rs:AdmittedProvider",
+      "name": "hm-llm::AdmittedProvider",
+      "file": "crates/hm-llm/src/admission.rs"
+    },
+    {
       "id": "rust:crates/hm-llm/src/anthropic.rs:Anthropic",
       "name": "hm-llm::Anthropic",
       "file": "crates/hm-llm/src/anthropic.rs"

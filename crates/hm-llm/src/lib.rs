@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 #![allow(clippy::missing_errors_doc)]
 
+pub mod admission;
 pub mod anthropic;
 pub mod cost;
 pub mod gemini;
@@ -77,6 +78,7 @@ pub enum LlmError {
     Wire(String),
     Schema(String),
     Capacity,
+    Admission(&'static str),
 }
 
 pub trait LlmProvider: Send + Sync {
@@ -86,6 +88,23 @@ pub trait LlmProvider: Send + Sync {
         &self,
         request: &StructuredRequest,
     ) -> Result<StructuredResponse, LlmError>;
+}
+
+impl<P: LlmProvider + ?Sized> LlmProvider for std::sync::Arc<P> {
+    fn model_id(&self) -> &str {
+        (**self).model_id()
+    }
+
+    fn tier(&self) -> ModelTier {
+        (**self).tier()
+    }
+
+    fn generate_structured(
+        &self,
+        request: &StructuredRequest,
+    ) -> Result<StructuredResponse, LlmError> {
+        (**self).generate_structured(request)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

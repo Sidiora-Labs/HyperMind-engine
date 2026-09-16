@@ -5334,6 +5334,81 @@ pub struct TripwireSet {
 }
 ```
 
+## hm-llm::AdmissionLimits
+
+<a id="rust-crates-hm-llm-src-admission-rs-admissionlimits"></a>
+
+Source: [`crates/hm-llm/src/admission.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/admission.rs).
+
+When to use: Use `AdmissionLimits` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub struct AdmissionLimits {
+    pub maximum_in_flight: usize,
+    pub maximum_in_flight_per_actor: usize,
+    pub maximum_wait_ms: u64,
+}
+```
+
+## hm-llm::CallAdmission
+
+<a id="rust-crates-hm-llm-src-admission-rs-calladmission"></a>
+
+Source: [`crates/hm-llm/src/admission.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/admission.rs).
+
+When to use: Use `CallAdmission` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub struct CallAdmission {
+    limits: AdmissionLimits,
+    state: Mutex<AdmissionState>,
+    released: Condvar,
+}
+```
+
+## hm-llm::AdmissionPermit
+
+<a id="rust-crates-hm-llm-src-admission-rs-admissionpermit"></a>
+
+Source: [`crates/hm-llm/src/admission.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/admission.rs).
+
+When to use: Use `AdmissionPermit` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub struct AdmissionPermit {
+    admission: Arc<CallAdmission>,
+    actor: u16,
+}
+```
+
+## hm-llm::AdmittedProvider
+
+<a id="rust-crates-hm-llm-src-admission-rs-admittedprovider"></a>
+
+Source: [`crates/hm-llm/src/admission.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/admission.rs).
+
+When to use: Use `AdmittedProvider` for budgeted provider requests, structured responses, prompt identities, and measured usage.
+
+Do not use: Do not treat model text as observed evidence or make unbounded provider calls from foreground recall/activation.
+
+
+```rust
+pub struct AdmittedProvider<P> {
+    admission: Arc<CallAdmission>,
+    actor: u16,
+    inner: P,
+}
+```
+
 ## hm-llm::Anthropic
 
 <a id="rust-crates-hm-llm-src-anthropic-rs-anthropic"></a>
@@ -5546,6 +5621,7 @@ pub enum LlmError {
     Wire(String),
     Schema(String),
     Capacity,
+    Admission(&'static str),
 }
 ```
 
