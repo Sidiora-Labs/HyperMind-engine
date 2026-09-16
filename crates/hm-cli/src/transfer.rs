@@ -14,6 +14,8 @@ use std::path::Path;
 
 pub const FORMAT: &str = "hypermind.events.v1";
 
+const EVENTS_MEMBER: &str = "events.jsonl";
+
 #[derive(Serialize, Deserialize)]
 struct ExportEvent {
     lsn: u64,
@@ -92,14 +94,33 @@ impl EventHistory for History<'_> {
 pub async fn import(path: &Path, input: &Path) -> Result<Value> {
     let bytes = std::fs::read(input)?;
     let source = std::str::from_utf8(&bytes)?;
-    let mut lines = source.lines();
-    let manifest: Value = serde_json::from_str(lines.next().context("empty import")?)?;
+    let manifest: Value = serde_json::from_str(source.lines().next().context("empty import")?)?;
+    if manifest["format"] == crate::archive::FORMAT {
+        let (_, members) = crate::archive::verify_archive(input, None)?;
+        let events = members
+            .into_iter()
+            .find(|(name, _)| name == EVENTS_MEMBER)
+            .context("archive carries no event stream")?
+            .1;
+        return import_events(path, &events).await;
+    }
     if manifest["format"] != FORMAT {
         let _lock = crate::actors::operation_lock(path)?;
         let config = hm_serve::config::load(path)?;
         crate::actors::require_offline(&config)?;
         return crate::import::run(&config, input).await;
     }
+    import_events(path, &bytes).await
+}
+
+async fn import_events(path: &Path, bytes: &[u8]) -> Result<Value> {
+    let source = std::str::from_utf8(bytes)?;
+    let mut lines = source.lines();
+    let manifest: Value = serde_json::from_str(lines.next().context("empty import")?)?;
+    ensure!(
+        manifest["format"] == FORMAT,
+        "archive carries an unrecognized event stream format"
+    );
     let count = manifest["events"]
         .as_u64()
         .context("export count missing")?;
@@ -131,7 +152,7 @@ pub async fn import(path: &Path, input: &Path) -> Result<Value> {
         let existing = actor.stats().await?.log_events;
         ensure!(existing == 0 || existing == count,"native import requires empty destination or complete identical import");
         if existing == 0 && count != 0 {
-            let digest = blake3::hash(&bytes);
+            let digest = blake3::hash(bytes);
             actor.append_idempotent(digest.as_bytes()[..16].try_into()?,1,incoming).await?;
         }
         ensure!(actor.stats().await?.log_events == count,"imported event count differs; no success claimed");

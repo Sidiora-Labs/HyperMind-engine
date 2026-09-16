@@ -61,6 +61,12 @@ pub enum Command {
         #[arg(long)]
         output: PathBuf,
     },
+    Unpack {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+    },
     Verify {
         #[arg(long)]
         input: PathBuf,

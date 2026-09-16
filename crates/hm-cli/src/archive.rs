@@ -61,6 +61,12 @@ pub enum Command {
         #[arg(long)]
         output: PathBuf,
     },
+    Unpack {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+    },
     Verify {
         #[arg(long)]
         input: PathBuf,
@@ -72,6 +78,7 @@ pub enum Command {
 pub async fn execute(command: Command) -> Result<Value> {
     match command {
         Command::Pack { config, output } => pack(&config, &output).await,
+        Command::Unpack { input, output } => unpack(&input, &output),
         Command::Verify { input, public_key } => {
             let (manifest, members) = verify_archive(&input, public_key.as_deref())?;
             Ok(json!({
@@ -233,6 +240,76 @@ pub fn verify_archive(
         "archive is missing a member the manifest declares"
     );
     Ok((manifest, members))
+}
+
+pub fn validate_member_name(name: &str) -> Result<&'static str> {
+    ensure!(!name.is_empty(), "archive member name is empty");
+    ensure!(
+        !name.contains('/')
+            && !name.contains('\\')
+            && !name.contains(':')
+            && !name.contains('\0')
+            && !name.contains(".."),
+        "archive member name carries a path component"
+    );
+    ensure!(
+        name.bytes().all(|byte| byte.is_ascii_lowercase()
+            || byte.is_ascii_digit()
+            || matches!(byte, b'.' | b'_' | b'-')),
+        "archive member name carries a character outside the permitted set"
+    );
+    OWNED_MEMBERS
+        .into_iter()
+        .find(|owned| *owned == name)
+        .context("archive member name is outside the owned-member allowlist")
+}
+
+pub fn unpack(input: &Path, output: &Path) -> Result<Value> {
+    let (manifest, members) = verify_archive(input, None)?;
+    ensure!(
+        std::fs::metadata(output)?.is_dir(),
+        "archive output must be an existing directory"
+    );
+    let mut targets = Vec::with_capacity(members.len());
+    for (index, (name, content)) in members.iter().enumerate() {
+        let owned = validate_member_name(name)?;
+        ensure!(
+            !members[..index]
+                .iter()
+                .any(|(earlier, _)| earlier.as_str() == owned),
+            "archive names the same member twice"
+        );
+        let path = output.join(owned);
+        ensure!(
+            path.parent() == Some(output),
+            "archive member does not land directly in the output directory"
+        );
+        targets.push((owned, path, content));
+    }
+    let mut written = Vec::with_capacity(targets.len());
+    for (name, path, content) in targets {
+        let mut file = OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o600)
+            .open(&path)?;
+        file.write_all(content)?;
+        file.sync_all()?;
+        written.push(json!({"name": name, "bytes": content.len(), "path": path}));
+    }
+    File::open(output)?.sync_all()?;
+    let count = written.len();
+    Ok(json!({
+        "ok": true,
+        "verified": true,
+        "format": manifest.format,
+        "actor": manifest.actor,
+        "members": written,
+        "display": format!(
+            "ARCHIVE UNPACKED actor={} members={count}",
+            manifest.actor
+        ),
+    }))
 }
 
 async fn collect_members(

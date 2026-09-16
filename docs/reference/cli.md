@@ -15,8 +15,8 @@ Do not use: embedded commands against a live owner, destructive operations witho
 | `recall --config PATH --query TEXT` | Retrieve using the selected CLI mode; MCP exposes richer filters. |
 | `activate --config PATH --conversation ID --budget-tokens N` | Produce bounded context; retain health and provenance. |
 | `consolidate run/list/retract` | Budget, inspect, or retract generations; CLI opens the actor directly. |
-| `import --config PATH --input PATH` | Migrate a supported source; stop other destination writers. |
-| `archive pack/verify` | Package the native transfer stream with a signed manifest over an owned-member allowlist; verification needs no decryption key and accepts a pinned public key. |
+| `import --config PATH --input PATH` | Migrate a supported source; stop other destination writers. The input may be a native archive as well as a raw event stream. |
+| `archive pack/unpack/verify` | Package the native transfer stream with a signed manifest over an owned-member allowlist; verification needs no decryption key and accepts a pinned public key. `unpack --input FILE --output DIR` verifies the whole archive first, writes only owned members into an existing directory, and never overwrites a file that is already there. |
 | `verify ACTOR_DIRECTORY ACTOR CHECKPOINT PUBLIC_KEY` | Offline sealed-log proof; pin the public key independently. |
 
 `serve --telemetry-file PATH` is the only way to turn span export on; there is no environment variable, no configuration key, and no default that enables it. When the flag is present the daemon appends one OpenTelemetry OTLP/JSON record per line to that owner-only file, optionally labelled by `--telemetry-service NAME`, and flushes it before the listeners stop. Span attributes are metadata only by construction: keys and string values are fixed compile-time constants, so no memory content, query text, conversation identifier, capability token, model name, or filesystem path can appear in an exported span.
