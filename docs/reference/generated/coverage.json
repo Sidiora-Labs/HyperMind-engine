@@ -1062,6 +1062,11 @@
       "file": "crates/hm-index/src/hnsw.rs"
     },
     {
+      "id": "rust:crates/hm-index/src/vocabulary.rs:AliasSuggestion",
+      "name": "hm-index::AliasSuggestion",
+      "file": "crates/hm-index/src/vocabulary.rs"
+    },
+    {
       "id": "rust:crates/hm-ledger/src/apply.rs:Clock",
       "name": "hm-ledger::Clock",
       "file": "crates/hm-ledger/src/apply.rs"

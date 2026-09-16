@@ -6,5 +6,6 @@ pub mod entity_rules;
 pub mod hnsw;
 pub mod simd;
 pub mod tokenize;
+pub mod vocabulary;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

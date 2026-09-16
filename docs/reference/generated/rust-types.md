@@ -4431,6 +4431,24 @@ pub struct HnswIndex {
 }
 ```
 
+## hm-index::AliasSuggestion
+
+<a id="rust-crates-hm-index-src-vocabulary-rs-aliassuggestion"></a>
+
+Source: [`crates/hm-index/src/vocabulary.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-index/src/vocabulary.rs).
+
+When to use: Use `AliasSuggestion` for bounded lexical, entity, or vector candidate retrieval and reproducible index scoring.
+
+Do not use: Do not compare raw scores across embedding spaces or represent lexical-only results as semantic retrieval.
+
+
+```rust
+pub struct AliasSuggestion {
+    pub candidate: String,
+    pub similarity_q16: u32,
+}
+```
+
 ## hm-ledger::Clock
 
 <a id="rust-crates-hm-ledger-src-apply-rs-clock"></a>
