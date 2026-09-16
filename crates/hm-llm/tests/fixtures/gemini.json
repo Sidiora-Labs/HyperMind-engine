@@ -1,0 +1,40 @@
+[
+{
+  "request": {
+    "method": "POST",
+    "url": "https://fixture.invalid/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "fixture-key"
+    },
+    "body": {
+      "systemInstruction": {"parts": [{"text": "Decide temporal supersession."}]},
+      "contents": [{"role": "user", "parts": [{"text": "old: Europe\nnew: America"}]}],
+      "generationConfig": {
+        "responseMimeType": "application/json",
+        "responseJsonSchema": {
+          "type": "object",
+          "properties": {
+            "supersedes": {"type": "boolean"},
+            "reason": {"type": "string"}
+          },
+          "required": ["supersedes", "reason"],
+          "additionalProperties": false
+        },
+        "maxOutputTokens": 64
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [{"content": {"parts": [{"text": "{\"supersedes\":true,\"reason\":\"later interval\"}"}]}}],
+      "usageMetadata": {
+        "promptTokenCount": 10,
+        "candidatesTokenCount": 4,
+        "cachedContentTokenCount": 2
+      }
+    }
+  }
+}
+]

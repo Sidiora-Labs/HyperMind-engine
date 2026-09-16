@@ -2,8 +2,11 @@
 #![allow(clippy::missing_errors_doc)]
 
 pub mod anthropic;
+pub mod cost;
+pub mod gemini;
 pub mod ollama;
 pub mod openai_compat;
+pub mod registry;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

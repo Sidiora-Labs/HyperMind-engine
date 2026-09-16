@@ -1218,6 +1218,7 @@ dependencies = [
 name = "hm-llm"
 version = "0.1.0"
 dependencies = [
+ "blake3",
  "reqwest",
  "serde",
  "serde_json",

@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 
 use hm_llm::anthropic::Anthropic;
+use hm_llm::gemini::Gemini;
 use hm_llm::ollama::Ollama;
 use hm_llm::openai_compat::OpenAiCompatible;
 use hm_llm::{
@@ -82,5 +83,23 @@ fn ollama_native_schema_matches_recorded_wire() {
     let response = provider.generate_structured(&request()).unwrap();
     assert_eq!(response.value["supersedes"], true);
     assert_eq!(response.usage.cost_microusd, 18);
+    assert_eq!(provider.transport().remaining(), 0);
+}
+
+#[test]
+fn gemini_native_schema_matches_recorded_wire() {
+    let transport = RecordedTransport::from_json(include_str!("fixtures/gemini.json")).unwrap();
+    let provider = Gemini::new(
+        config(
+            "https://fixture.invalid/v1beta/models/gemini-2.5-flash:generateContent",
+            Some("fixture-key"),
+        ),
+        transport,
+    )
+    .unwrap();
+    let response = provider.generate_structured(&request()).unwrap();
+    assert_eq!(response.value["reason"], "later interval");
+    assert_eq!(response.usage.cost_microusd, 18);
+    assert_eq!(response.usage.cache_read_tokens, 2);
     assert_eq!(provider.transport().remaining(), 0);
 }

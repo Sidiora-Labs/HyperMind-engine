@@ -162,7 +162,7 @@
   - [x] 5.7 Slice 5 journey: assert, supersede, asof both axes, dispute, protected write becomes proposal
     - Journey: believe a fact, believe its replacement with a later valid_from, recall asof by valid_at and by known_at and receive different answers, dispute two claims through the in-process NLI, attempt an identity write with run authority and observe rejection plus a proposal in the conflicts tier, gate slice5 green.
     - _Requirements: 1.1, 8.1, 8.2, 8.3_
-  - [ ] 6.1 Full provider set, prompt registry with snapshot tests, structured outputs, cost accounting
+  - [x] 6.1 Full provider set, prompt registry with snapshot tests, structured outputs, cost accounting
     - Gemini provider; prompt registry loading prompts/<id>@<version>.md with snapshot tests that fail on wording changes without a version bump; ported cortex-engine prompts refine-definition, edge-discover, abstract-synthesis, hindsight-review rewritten for citations and structured output.
     - Cost accounting per call and per run in calls, tokens and USD from a pinned price table; usage recorded on every LLM-derived event's model_provenance.
     - _Requirements: 9.3, 17.2_

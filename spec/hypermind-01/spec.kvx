@@ -684,7 +684,7 @@ do_1 = "Journey: believe a fact, believe its replacement with a later valid_from
 
 [task.6.1]
 title = "Full provider set, prompt registry with snapshot tests, structured outputs, cost accounting"
-status = "pending"
+status = "done"
 wave = 6
 section = "Wave 6 — Sleep: consolidation as retractable generations with byte-range citations"
 owner_lane = "cognition"
