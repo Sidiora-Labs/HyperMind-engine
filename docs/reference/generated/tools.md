@@ -101,9 +101,9 @@ Do not use: Do not specify both task and scope, invent a revision, or treat an e
 
 Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/dispatcher.rs).
 
-When to use: Run bounded NREM/REM consolidation, inspect recorded runs, or retract a published generation while retaining its ledger history.
+When to use: Run bounded NREM/REM consolidation, derive a repository graph from an already ingested repository snapshot with the model-free repository mode, inspect recorded runs, or retract a published generation while retaining its ledger history.
 
-Do not use: Do not run without explicit call/token/cost/wall budgets, accept uncited model spans, or mistake fixture-driven qualification for live provider evidence.
+Do not use: Do not run without explicit call/token/cost/wall budgets, accept uncited model spans, mistake fixture-driven qualification for live provider evidence, or expect the repository mode to launch, install or download a snapshot producer: it reads only the snapshot already handed to remember, declares a budget it never spends, and retracts nothing a newer snapshot stopped declaring.
 
 
 ```json

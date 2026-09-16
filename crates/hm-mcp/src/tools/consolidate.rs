@@ -137,6 +137,7 @@ pub enum ConsolidateMode {
     Nrem,
     Rem,
     Both,
+    Repository,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, schemars::JsonSchema)]
@@ -221,6 +222,7 @@ const fn mode_label(mode: ConsolidateMode) -> &'static str {
         ConsolidateMode::Nrem => "nrem",
         ConsolidateMode::Rem => "rem",
         ConsolidateMode::Both => "both",
+        ConsolidateMode::Repository => "repository",
     }
 }
 
@@ -261,6 +263,9 @@ async fn start(
     history: RunHistory,
     input: ConsolidateInput,
 ) -> Result<Envelope, Error> {
+    if matches!(input.mode, Some(ConsolidateMode::Repository)) {
+        return super::repository::run(actor, history, input).await;
+    }
     let mode = input
         .mode
         .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
@@ -743,14 +748,14 @@ fn list(history: RunHistory) -> Envelope {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum RunStatus {
+pub(crate) enum RunStatus {
     Open,
     Published,
     Retracted,
 }
 
 impl RunStatus {
-    const fn name(self) -> &'static str {
+    pub(crate) const fn name(self) -> &'static str {
         match self {
             Self::Open => "open",
             Self::Published => "published",
@@ -760,35 +765,35 @@ impl RunStatus {
 }
 
 #[derive(Clone, Debug)]
-struct RunSummary {
-    generation: u64,
-    parent_generation: u64,
-    status: RunStatus,
-    scope_digest: [u8; 32],
-    cadence_key: String,
-    phases: Vec<ConsolidationPhaseName>,
-    budget: ConsolidateBudget,
-    first_lsn: u64,
-    last_lsn: u64,
-    source_first_lsn: u64,
-    source_last_lsn: u64,
-    derived_records: u64,
-    dropped_candidates: u64,
-    llm_calls: u64,
-    input_tokens: u64,
-    output_tokens: u64,
-    cost_microusd: u64,
+pub(crate) struct RunSummary {
+    pub(crate) generation: u64,
+    pub(crate) parent_generation: u64,
+    pub(crate) status: RunStatus,
+    pub(crate) scope_digest: [u8; 32],
+    pub(crate) cadence_key: String,
+    pub(crate) phases: Vec<ConsolidationPhaseName>,
+    pub(crate) budget: ConsolidateBudget,
+    pub(crate) first_lsn: u64,
+    pub(crate) last_lsn: u64,
+    pub(crate) source_first_lsn: u64,
+    pub(crate) source_last_lsn: u64,
+    pub(crate) derived_records: u64,
+    pub(crate) dropped_candidates: u64,
+    pub(crate) llm_calls: u64,
+    pub(crate) input_tokens: u64,
+    pub(crate) output_tokens: u64,
+    pub(crate) cost_microusd: u64,
 }
 
 #[derive(Default)]
-struct RunHistory {
-    runs: BTreeMap<Vec<u8>, RunSummary>,
-    watermarks: BTreeMap<[u8; 32], u64>,
-    maximum_generation: u64,
-    active_generation: u64,
+pub(crate) struct RunHistory {
+    pub(crate) runs: BTreeMap<Vec<u8>, RunSummary>,
+    pub(crate) watermarks: BTreeMap<[u8; 32], u64>,
+    pub(crate) maximum_generation: u64,
+    pub(crate) active_generation: u64,
 }
 
-async fn read_history(actor: &ActorEngine) -> Result<RunHistory, Error> {
+pub(crate) async fn read_history(actor: &ActorEngine) -> Result<RunHistory, Error> {
     let mut history = RunHistory::default();
     for frame in actor.frames_since(LSN::new(0), None, usize::MAX).await? {
         if !matches!(
@@ -882,7 +887,7 @@ async fn read_history(actor: &ActorEngine) -> Result<RunHistory, Error> {
     Ok(history)
 }
 
-fn run_envelope(
+pub(crate) fn run_envelope(
     actor: &ActorEngine,
     id: &[u8],
     run: &RunSummary,
@@ -912,7 +917,7 @@ fn run_envelope(
     envelope
 }
 
-fn phases(mode: ConsolidateMode) -> Vec<ConsolidationPhaseName> {
+pub(crate) fn phases(mode: ConsolidateMode) -> Vec<ConsolidationPhaseName> {
     match mode {
         ConsolidateMode::Nrem => vec![ConsolidationPhaseName::Nrem],
         ConsolidateMode::Rem => vec![
@@ -928,10 +933,18 @@ fn phases(mode: ConsolidateMode) -> Vec<ConsolidationPhaseName> {
             ConsolidationPhaseName::Hindsight,
             ConsolidationPhaseName::Review,
         ],
+        ConsolidateMode::Repository => vec![ConsolidationPhaseName::Publish],
     }
 }
 
-fn prompts(mode: ConsolidateMode) -> Vec<PromptVersion> {
+pub(crate) fn prompts(mode: ConsolidateMode) -> Vec<PromptVersion> {
+    if matches!(mode, ConsolidateMode::Repository) {
+        return vec![PromptVersion {
+            prompt_id: hm_schema::event::REPOSITORY_EXTRACT_MODEL_ID.to_owned(),
+            version: hm_schema::event::REPOSITORY_EXTRACT_PROMPT_VERSION,
+            model_id: hm_schema::event::REPOSITORY_EXTRACT_MODEL_ID.to_owned(),
+        }];
+    }
     let mut prompts = Vec::new();
     if matches!(mode, ConsolidateMode::Nrem | ConsolidateMode::Both) {
         prompts.push(prompt("merge-cluster", 1));
@@ -954,7 +967,7 @@ fn prompt(id: &str, version: u16) -> PromptVersion {
     }
 }
 
-fn incoming(
+pub(crate) fn incoming(
     actor: &ActorEngine,
     run_id: &[u8],
     kind: EventKind,
@@ -981,7 +994,7 @@ fn incoming(
     }
 }
 
-fn derived_incoming(
+pub(crate) fn derived_incoming(
     actor: &ActorEngine,
     run_id: &[u8],
     kind: EventKind,
@@ -1010,7 +1023,7 @@ fn derived_incoming(
     }
 }
 
-fn hex(bytes: &[u8]) -> String {
+pub(crate) fn hex(bytes: &[u8]) -> String {
     let mut output = String::with_capacity(bytes.len().saturating_mul(2));
     for byte in bytes {
         use std::fmt::Write as _;

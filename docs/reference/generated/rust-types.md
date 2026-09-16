@@ -8640,6 +8640,7 @@ pub enum ConsolidateMode {
     Nrem,
     Rem,
     Both,
+    Repository,
 }
 ```
 
