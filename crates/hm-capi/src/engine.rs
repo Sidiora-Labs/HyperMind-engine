@@ -40,13 +40,11 @@ fn hex<const N: usize>(value: &str) -> Result<[u8; N], HmStatus> {
 
 pub(crate) struct EngineState {
     runtime: Runtime,
-    #[allow(dead_code)]
     dispatcher: McpToolDispatcher,
     actor: Mutex<Option<ActorEngine>>,
 }
 
 impl EngineState {
-    #[allow(dead_code)]
     pub(crate) fn actor(&self) -> Option<ActorEngine> {
         self.actor
             .lock()
@@ -56,6 +54,10 @@ impl EngineState {
 
     pub(crate) fn runtime(&self) -> &Runtime {
         &self.runtime
+    }
+
+    pub(crate) fn dispatcher(&self) -> &McpToolDispatcher {
+        &self.dispatcher
     }
 
     fn take_actor(&self) -> Option<ActorEngine> {

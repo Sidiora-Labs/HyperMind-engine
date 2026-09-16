@@ -139,8 +139,8 @@ fn null_frees_are_noops() {
 }
 
 #[test]
-fn abi_version_is_one_zero() {
-    assert_eq!(hm_abi_version(), 1 << 16);
+fn abi_version_packs_the_major_and_minor_components() {
+    assert_eq!(hm_abi_version(), (1 << 16) | 1);
 }
 
 #[test]

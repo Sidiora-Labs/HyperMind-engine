@@ -4,7 +4,13 @@ use hypermind::{
 };
 use std::path::PathBuf;
 
-const SOURCES: [&str; 3] = ["src/lib.rs", "src/status.rs", "src/engine.rs"];
+const SOURCES: [&str; 5] = [
+    "src/lib.rs",
+    "src/status.rs",
+    "src/engine.rs",
+    "src/call.rs",
+    "src/waiter.rs",
+];
 const HEADER: &str = "include/hypermind.h";
 const VARIANTS: [(HmStatus, &str); 8] = [
     (HmStatus::Ok, "HM_STATUS_OK"),

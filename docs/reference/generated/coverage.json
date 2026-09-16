@@ -2,6 +2,11 @@
   "version": 1,
   "inventory": [
     {
+      "id": "rust:crates/hm-capi/src/call.rs:HmResultCallback",
+      "name": "hm-capi::HmResultCallback",
+      "file": "crates/hm-capi/src/call.rs"
+    },
+    {
       "id": "rust:crates/hm-capi/src/engine.rs:HmEngine",
       "name": "hm-capi::HmEngine",
       "file": "crates/hm-capi/src/engine.rs"
@@ -10,6 +15,11 @@
       "id": "rust:crates/hm-capi/src/status.rs:HmStatus",
       "name": "hm-capi::HmStatus",
       "file": "crates/hm-capi/src/status.rs"
+    },
+    {
+      "id": "rust:crates/hm-capi/src/waiter.rs:HmWaiter",
+      "name": "hm-capi::HmWaiter",
+      "file": "crates/hm-capi/src/waiter.rs"
     },
     {
       "id": "rust:crates/hm-cli/src/actors.rs:Command",

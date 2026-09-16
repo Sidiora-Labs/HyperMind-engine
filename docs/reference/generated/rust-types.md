@@ -2,6 +2,27 @@
 
 Generated from authored `pub struct`, `enum`, `trait`, and `type` declarations in every crate’s `src` directory, including macro-defined core identifiers. FlatBuffers-generated builders, offsets, and object wrappers are represented by their canonical definitions in the schema catalog rather than duplicated here. Public declarations in internal modules are included conservatively; this catalog does not promise every path is a stable external API.
 
+## hm-capi::HmResultCallback
+
+<a id="rust-crates-hm-capi-src-call-rs-hmresultcallback"></a>
+
+Source: [`crates/hm-capi/src/call.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-capi/src/call.rs).
+
+When to use: Use `HmResultCallback` for the C application binary interface over an embedded actor: opening a handle from sealed identity material, sharing it by reference count, and shutting it down deterministically.
+
+Do not use: Do not open one actor directory from a second owner, free a handle while a call is in flight, retain a borrowed callback string after the callback returns, or treat a returned envelope as proof of an external effect.
+
+
+```rust
+pub type HmResultCallback = unsafe extern "C" fn(
+    status: HmStatus,
+    kernel_code: i32,
+    result_json: *const c_char,
+    error_message: *const c_char,
+    user_data: *mut c_void,
+);
+```
+
 ## hm-capi::HmEngine
 
 <a id="rust-crates-hm-capi-src-engine-rs-hmengine"></a>
@@ -40,6 +61,24 @@ pub enum HmStatus {
     Runtime = 5,
     Panic = 6,
     Kernel = 7,
+}
+```
+
+## hm-capi::HmWaiter
+
+<a id="rust-crates-hm-capi-src-waiter-rs-hmwaiter"></a>
+
+Source: [`crates/hm-capi/src/waiter.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-capi/src/waiter.rs).
+
+When to use: Use `HmWaiter` for the C application binary interface over an embedded actor: opening a handle from sealed identity material, sharing it by reference count, and shutting it down deterministically.
+
+Do not use: Do not open one actor directory from a second owner, free a handle while a call is in flight, retain a borrowed callback string after the callback returns, or treat a returned envelope as proof of an external effect.
+
+
+```rust
+pub struct HmWaiter {
+    slot: Mutex<WaiterSlot>,
+    ready: Condvar,
 }
 ```
 
