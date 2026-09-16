@@ -33191,10 +33191,2950 @@ mod root {
                 }
             }
 
+            /// The enum `SourceSignatureScheme` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `SourceSignatureScheme` in the file `schemas/events.fbs:543`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum SourceSignatureScheme {
+                /// The variant `hmac_sha256_v0` in the enum `SourceSignatureScheme`
+                HmacSha256V0 = 0,
+            }
+
+            impl SourceSignatureScheme {
+                /// Array containing all valid variants of SourceSignatureScheme
+                pub const ENUM_VALUES: [Self; 1] = [Self::HmacSha256V0];
+            }
+
+            impl ::core::convert::TryFrom<u8> for SourceSignatureScheme {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(SourceSignatureScheme::HmacSha256V0),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<SourceSignatureScheme> for u8 {
+                #[inline]
+                fn from(value: SourceSignatureScheme) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for SourceSignatureScheme {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<SourceSignatureScheme> for SourceSignatureScheme {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<SourceSignatureScheme> for SourceSignatureScheme {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> SourceSignatureScheme {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<SourceSignatureScheme, SourceSignatureScheme>
+                for SourceSignatureScheme
+            {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &SourceSignatureScheme,
+                ) -> ::core::option::Option<SourceSignatureScheme> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<SourceSignatureScheme> for SourceSignatureScheme {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<SourceSignatureScheme> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for SourceSignatureScheme {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for SourceSignatureScheme {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "SourceSignatureScheme",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<SourceSignatureScheme> for SourceSignatureScheme {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
+            /// The enum `SourceDeliveryState` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `SourceDeliveryState` in the file `schemas/events.fbs:544`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum SourceDeliveryState {
+                /// The variant `accepted` in the enum `SourceDeliveryState`
+                Accepted = 0,
+
+                /// The variant `applied` in the enum `SourceDeliveryState`
+                Applied = 1,
+
+                /// The variant `failed` in the enum `SourceDeliveryState`
+                Failed = 2,
+
+                /// The variant `abandoned` in the enum `SourceDeliveryState`
+                Abandoned = 3,
+            }
+
+            impl SourceDeliveryState {
+                /// Array containing all valid variants of SourceDeliveryState
+                pub const ENUM_VALUES: [Self; 4] =
+                    [Self::Accepted, Self::Applied, Self::Failed, Self::Abandoned];
+            }
+
+            impl ::core::convert::TryFrom<u8> for SourceDeliveryState {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(SourceDeliveryState::Accepted),
+                        1 => ::core::result::Result::Ok(SourceDeliveryState::Applied),
+                        2 => ::core::result::Result::Ok(SourceDeliveryState::Failed),
+                        3 => ::core::result::Result::Ok(SourceDeliveryState::Abandoned),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<SourceDeliveryState> for u8 {
+                #[inline]
+                fn from(value: SourceDeliveryState) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for SourceDeliveryState {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<SourceDeliveryState> for SourceDeliveryState {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<SourceDeliveryState> for SourceDeliveryState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> SourceDeliveryState {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<SourceDeliveryState, SourceDeliveryState> for SourceDeliveryState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &SourceDeliveryState,
+                ) -> ::core::option::Option<SourceDeliveryState> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<SourceDeliveryState> for SourceDeliveryState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<SourceDeliveryState> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for SourceDeliveryState {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for SourceDeliveryState {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "SourceDeliveryState",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<SourceDeliveryState> for SourceDeliveryState {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
+            /// The enum `ConnectorState` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Enum `ConnectorState` in the file `schemas/events.fbs:545`
+            #[derive(
+                Copy,
+                Clone,
+                Debug,
+                PartialEq,
+                Eq,
+                PartialOrd,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            #[repr(u8)]
+            pub enum ConnectorState {
+                /// The variant `bound` in the enum `ConnectorState`
+                Bound = 0,
+
+                /// The variant `revoked` in the enum `ConnectorState`
+                Revoked = 1,
+            }
+
+            impl ConnectorState {
+                /// Array containing all valid variants of ConnectorState
+                pub const ENUM_VALUES: [Self; 2] = [Self::Bound, Self::Revoked];
+            }
+
+            impl ::core::convert::TryFrom<u8> for ConnectorState {
+                type Error = ::planus::errors::UnknownEnumTagKind;
+                #[inline]
+                fn try_from(
+                    value: u8,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind>
+                {
+                    #[allow(clippy::match_single_binding)]
+                    match value {
+                        0 => ::core::result::Result::Ok(ConnectorState::Bound),
+                        1 => ::core::result::Result::Ok(ConnectorState::Revoked),
+
+                        _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                            tag: value as i128,
+                        }),
+                    }
+                }
+            }
+
+            impl ::core::convert::From<ConnectorState> for u8 {
+                #[inline]
+                fn from(value: ConnectorState) -> Self {
+                    value as u8
+                }
+            }
+
+            /// # Safety
+            /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+            unsafe impl ::planus::Primitive for ConnectorState {
+                const ALIGNMENT: usize = 1;
+                const SIZE: usize = 1;
+            }
+
+            impl ::planus::WriteAsPrimitive<ConnectorState> for ConnectorState {
+                #[inline]
+                fn write<const N: usize>(
+                    &self,
+                    cursor: ::planus::Cursor<'_, N>,
+                    buffer_position: u32,
+                ) {
+                    (*self as u8).write(cursor, buffer_position);
+                }
+            }
+
+            impl ::planus::WriteAs<ConnectorState> for ConnectorState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> ConnectorState {
+                    *self
+                }
+            }
+
+            impl ::planus::WriteAsDefault<ConnectorState, ConnectorState> for ConnectorState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                    default: &ConnectorState,
+                ) -> ::core::option::Option<ConnectorState> {
+                    if self == default {
+                        ::core::option::Option::None
+                    } else {
+                        ::core::option::Option::Some(*self)
+                    }
+                }
+            }
+
+            impl ::planus::WriteAsOptional<ConnectorState> for ConnectorState {
+                type Prepared = Self;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    _builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<ConnectorState> {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+
+            impl<'buf> ::planus::TableRead<'buf> for ConnectorState {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                    ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+                }
+            }
+
+            impl<'buf> ::planus::VectorReadInner<'buf> for ConnectorState {
+                type Error = ::planus::errors::UnknownEnumTag;
+                const STRIDE: usize = 1;
+                #[inline]
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'buf>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag>
+                {
+                    let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                    let value: ::core::result::Result<Self, _> =
+                        ::core::convert::TryInto::try_into(value);
+                    value.map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "ConnectorState",
+                            "VectorRead::from_buffer",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<ConnectorState> for ConnectorState {
+                const STRIDE: usize = 1;
+
+                type Value = Self;
+
+                #[inline]
+                fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                    *self
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[Self],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - i as u32,
+                        );
+                    }
+                }
+            }
+
+            /// The table `SourceConnectorBound` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `SourceConnectorBound` in the file `schemas/events.fbs:547`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct SourceConnectorBound {
+                /// The field `connector_id` in the table `SourceConnectorBound`
+                pub connector_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `provider` in the table `SourceConnectorBound`
+                pub provider: ::planus::alloc::string::String,
+                /// The field `external_account` in the table `SourceConnectorBound`
+                pub external_account: ::planus::alloc::string::String,
+                /// The field `consent_nonce` in the table `SourceConnectorBound`
+                pub consent_nonce: ::planus::alloc::vec::Vec<u8>,
+                /// The field `consent_expires_at_ns` in the table `SourceConnectorBound`
+                pub consent_expires_at_ns: i64,
+                /// The field `credential_version` in the table `SourceConnectorBound`
+                pub credential_version: u32,
+                /// The field `signature_scheme` in the table `SourceConnectorBound`
+                pub signature_scheme: self::SourceSignatureScheme,
+                /// The field `scopes` in the table `SourceConnectorBound`
+                pub scopes: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `state` in the table `SourceConnectorBound`
+                pub state: self::ConnectorState,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for SourceConnectorBound {
+                fn default() -> Self {
+                    Self {
+                        connector_id: ::core::default::Default::default(),
+                        provider: ::core::default::Default::default(),
+                        external_account: ::core::default::Default::default(),
+                        consent_nonce: ::core::default::Default::default(),
+                        consent_expires_at_ns: 0,
+                        credential_version: 0,
+                        signature_scheme: self::SourceSignatureScheme::HmacSha256V0,
+                        scopes: ::core::default::Default::default(),
+                        state: self::ConnectorState::Bound,
+                    }
+                }
+            }
+
+            impl SourceConnectorBound {
+                /// Creates a [SourceConnectorBoundBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> SourceConnectorBoundBuilder<()> {
+                    SourceConnectorBoundBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_connector_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_provider: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_external_account: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_consent_nonce: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_consent_expires_at_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                    field_credential_version: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_signature_scheme: impl ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                    field_scopes: impl ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    field_state: impl ::planus::WriteAsDefault<
+                        self::ConnectorState,
+                        self::ConnectorState,
+                    >,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_connector_id = field_connector_id.prepare(builder);
+                    let prepared_provider = field_provider.prepare(builder);
+                    let prepared_external_account = field_external_account.prepare(builder);
+                    let prepared_consent_nonce = field_consent_nonce.prepare(builder);
+                    let prepared_consent_expires_at_ns =
+                        field_consent_expires_at_ns.prepare(builder, &0);
+                    let prepared_credential_version = field_credential_version.prepare(builder, &0);
+                    let prepared_signature_scheme = field_signature_scheme
+                        .prepare(builder, &self::SourceSignatureScheme::HmacSha256V0);
+                    let prepared_scopes = field_scopes.prepare(builder);
+                    let prepared_state = field_state.prepare(builder, &self::ConnectorState::Bound);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<22> =
+                        ::core::default::Default::default();
+                    if prepared_consent_expires_at_ns.is_some() {
+                        table_writer.write_entry::<i64>(4);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(1);
+                    table_writer.write_entry::<::planus::Offset<str>>(2);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(3);
+                    if prepared_credential_version.is_some() {
+                        table_writer.write_entry::<u32>(5);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(7);
+                    if prepared_signature_scheme.is_some() {
+                        table_writer.write_entry::<self::SourceSignatureScheme>(6);
+                    }
+                    if prepared_state.is_some() {
+                        table_writer.write_entry::<self::ConnectorState>(8);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_consent_expires_at_ns) =
+                                prepared_consent_expires_at_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_consent_expires_at_ns);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_connector_id);
+                            object_writer.write::<_, _, 4>(&prepared_provider);
+                            object_writer.write::<_, _, 4>(&prepared_external_account);
+                            object_writer.write::<_, _, 4>(&prepared_consent_nonce);
+                            if let ::core::option::Option::Some(prepared_credential_version) =
+                                prepared_credential_version
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_credential_version);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_scopes);
+                            if let ::core::option::Option::Some(prepared_signature_scheme) =
+                                prepared_signature_scheme
+                            {
+                                object_writer.write::<_, _, 1>(&prepared_signature_scheme);
+                            }
+                            if let ::core::option::Option::Some(prepared_state) = prepared_state {
+                                object_writer.write::<_, _, 1>(&prepared_state);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<SourceConnectorBound>> for SourceConnectorBound {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceConnectorBound> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<SourceConnectorBound>> for SourceConnectorBound {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<SourceConnectorBound>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<SourceConnectorBound> for SourceConnectorBound {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceConnectorBound> {
+                    SourceConnectorBound::create(
+                        builder,
+                        &self.connector_id,
+                        &self.provider,
+                        &self.external_account,
+                        &self.consent_nonce,
+                        self.consent_expires_at_ns,
+                        self.credential_version,
+                        self.signature_scheme,
+                        &self.scopes,
+                        self.state,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [SourceConnectorBound] type.
+            ///
+            /// Can be created using the [SourceConnectorBound::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct SourceConnectorBoundBuilder<State>(State);
+
+            impl SourceConnectorBoundBuilder<()> {
+                /// Setter for the [`connector_id` field](SourceConnectorBound#structfield.connector_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn connector_id<T0>(self, value: T0) -> SourceConnectorBoundBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    SourceConnectorBoundBuilder((value,))
+                }
+            }
+
+            impl<T0> SourceConnectorBoundBuilder<(T0,)> {
+                /// Setter for the [`provider` field](SourceConnectorBound#structfield.provider).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn provider<T1>(self, value: T1) -> SourceConnectorBoundBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0,) = self.0;
+                    SourceConnectorBoundBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> SourceConnectorBoundBuilder<(T0, T1)> {
+                /// Setter for the [`external_account` field](SourceConnectorBound#structfield.external_account).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn external_account<T2>(
+                    self,
+                    value: T2,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1) = self.0;
+                    SourceConnectorBoundBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> SourceConnectorBoundBuilder<(T0, T1, T2)> {
+                /// Setter for the [`consent_nonce` field](SourceConnectorBound#structfield.consent_nonce).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn consent_nonce<T3>(
+                    self,
+                    value: T3,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    SourceConnectorBoundBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> SourceConnectorBoundBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`consent_expires_at_ns` field](SourceConnectorBound#structfield.consent_expires_at_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn consent_expires_at_ns<T4>(
+                    self,
+                    value: T4,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    SourceConnectorBoundBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`consent_expires_at_ns` field](SourceConnectorBound#structfield.consent_expires_at_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn consent_expires_at_ns_as_default(
+                    self,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)>
+                {
+                    self.consent_expires_at_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`credential_version` field](SourceConnectorBound#structfield.credential_version).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn credential_version<T5>(
+                    self,
+                    value: T5,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    SourceConnectorBoundBuilder((v0, v1, v2, v3, v4, value))
+                }
+
+                /// Sets the [`credential_version` field](SourceConnectorBound#structfield.credential_version) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn credential_version_as_default(
+                    self,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, ::planus::DefaultValue)>
+                {
+                    self.credential_version(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`signature_scheme` field](SourceConnectorBound#structfield.signature_scheme).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn signature_scheme<T6>(
+                    self,
+                    value: T6,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    SourceConnectorBoundBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+
+                /// Sets the [`signature_scheme` field](SourceConnectorBound#structfield.signature_scheme) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn signature_scheme_as_default(
+                    self,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, ::planus::DefaultValue)>
+                {
+                    self.signature_scheme(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`scopes` field](SourceConnectorBound#structfield.scopes).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn scopes<T7>(
+                    self,
+                    value: T7,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    SourceConnectorBoundBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
+                /// Setter for the [`state` field](SourceConnectorBound#structfield.state).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn state<T8>(
+                    self,
+                    value: T8,
+                ) -> SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+                where
+                    T8: ::planus::WriteAsDefault<self::ConnectorState, self::ConnectorState>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = self.0;
+                    SourceConnectorBoundBuilder((v0, v1, v2, v3, v4, v5, v6, v7, value))
+                }
+
+                /// Sets the [`state` field](SourceConnectorBound#structfield.state) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn state_as_default(
+                    self,
+                ) -> SourceConnectorBoundBuilder<(
+                    T0,
+                    T1,
+                    T2,
+                    T3,
+                    T4,
+                    T5,
+                    T6,
+                    T7,
+                    ::planus::DefaultValue,
+                )> {
+                    self.state(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+                SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [SourceConnectorBound].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceConnectorBound>
+                where
+                    Self: ::planus::WriteAsOffset<SourceConnectorBound>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                    T7: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T8: ::planus::WriteAsDefault<self::ConnectorState, self::ConnectorState>,
+                > ::planus::WriteAs<::planus::Offset<SourceConnectorBound>>
+                for SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                type Prepared = ::planus::Offset<SourceConnectorBound>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceConnectorBound> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                    T7: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T8: ::planus::WriteAsDefault<self::ConnectorState, self::ConnectorState>,
+                > ::planus::WriteAsOptional<::planus::Offset<SourceConnectorBound>>
+                for SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                type Prepared = ::planus::Offset<SourceConnectorBound>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<SourceConnectorBound>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<u32, u32>,
+                    T6: ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                    T7: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T8: ::planus::WriteAsDefault<self::ConnectorState, self::ConnectorState>,
+                > ::planus::WriteAsOffset<SourceConnectorBound>
+                for SourceConnectorBoundBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceConnectorBound> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8) = &self.0;
+                    SourceConnectorBound::create(builder, v0, v1, v2, v3, v4, v5, v6, v7, v8)
+                }
+            }
+
+            /// Reference to a deserialized [SourceConnectorBound].
+            #[derive(Copy, Clone)]
+            pub struct SourceConnectorBoundRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> SourceConnectorBoundRef<'a> {
+                /// Getter for the [`connector_id` field](SourceConnectorBound#structfield.connector_id).
+                #[inline]
+                pub fn connector_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "SourceConnectorBound", "connector_id")
+                }
+
+                /// Getter for the [`provider` field](SourceConnectorBound#structfield.provider).
+                #[inline]
+                pub fn provider(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(1, "SourceConnectorBound", "provider")
+                }
+
+                /// Getter for the [`external_account` field](SourceConnectorBound#structfield.external_account).
+                #[inline]
+                pub fn external_account(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(2, "SourceConnectorBound", "external_account")
+                }
+
+                /// Getter for the [`consent_nonce` field](SourceConnectorBound#structfield.consent_nonce).
+                #[inline]
+                pub fn consent_nonce(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(3, "SourceConnectorBound", "consent_nonce")
+                }
+
+                /// Getter for the [`consent_expires_at_ns` field](SourceConnectorBound#structfield.consent_expires_at_ns).
+                #[inline]
+                pub fn consent_expires_at_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "SourceConnectorBound", "consent_expires_at_ns")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`credential_version` field](SourceConnectorBound#structfield.credential_version).
+                #[inline]
+                pub fn credential_version(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(5, "SourceConnectorBound", "credential_version")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`signature_scheme` field](SourceConnectorBound#structfield.signature_scheme).
+                #[inline]
+                pub fn signature_scheme(&self) -> ::planus::Result<self::SourceSignatureScheme> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(6, "SourceConnectorBound", "signature_scheme")?
+                            .unwrap_or(self::SourceSignatureScheme::HmacSha256V0),
+                    )
+                }
+
+                /// Getter for the [`scopes` field](SourceConnectorBound#structfield.scopes).
+                #[inline]
+                pub fn scopes(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0.access_required(7, "SourceConnectorBound", "scopes")
+                }
+
+                /// Getter for the [`state` field](SourceConnectorBound#structfield.state).
+                #[inline]
+                pub fn state(&self) -> ::planus::Result<self::ConnectorState> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(8, "SourceConnectorBound", "state")?
+                            .unwrap_or(self::ConnectorState::Bound),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for SourceConnectorBoundRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("SourceConnectorBoundRef");
+                    f.field("connector_id", &self.connector_id());
+                    f.field("provider", &self.provider());
+                    f.field("external_account", &self.external_account());
+                    f.field("consent_nonce", &self.consent_nonce());
+                    f.field("consent_expires_at_ns", &self.consent_expires_at_ns());
+                    f.field("credential_version", &self.credential_version());
+                    f.field("signature_scheme", &self.signature_scheme());
+                    f.field("scopes", &self.scopes());
+                    f.field("state", &self.state());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<SourceConnectorBoundRef<'a>> for SourceConnectorBound {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: SourceConnectorBoundRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        connector_id: value.connector_id()?.to_vec(),
+                        provider: ::core::convert::Into::into(value.provider()?),
+                        external_account: ::core::convert::Into::into(value.external_account()?),
+                        consent_nonce: value.consent_nonce()?.to_vec(),
+                        consent_expires_at_ns: ::core::convert::TryInto::try_into(
+                            value.consent_expires_at_ns()?,
+                        )?,
+                        credential_version: ::core::convert::TryInto::try_into(
+                            value.credential_version()?,
+                        )?,
+                        signature_scheme: ::core::convert::TryInto::try_into(
+                            value.signature_scheme()?,
+                        )?,
+                        scopes: value.scopes()?.to_vec_result()?,
+                        state: ::core::convert::TryInto::try_into(value.state()?)?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for SourceConnectorBoundRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for SourceConnectorBoundRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[SourceConnectorBoundRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<SourceConnectorBound>> for SourceConnectorBound {
+                type Value = ::planus::Offset<SourceConnectorBound>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<SourceConnectorBound>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for SourceConnectorBoundRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[SourceConnectorBoundRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
+            /// The table `SourceDeliveryAccepted` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `SourceDeliveryAccepted` in the file `schemas/events.fbs:559`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct SourceDeliveryAccepted {
+                /// The field `connector_id` in the table `SourceDeliveryAccepted`
+                pub connector_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `delivery_id` in the table `SourceDeliveryAccepted`
+                pub delivery_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `signature_scheme` in the table `SourceDeliveryAccepted`
+                pub signature_scheme: self::SourceSignatureScheme,
+                /// The field `credential_version` in the table `SourceDeliveryAccepted`
+                pub credential_version: u32,
+                /// The field `signed_at_ns` in the table `SourceDeliveryAccepted`
+                pub signed_at_ns: i64,
+                /// The field `body_digest` in the table `SourceDeliveryAccepted`
+                pub body_digest: ::planus::alloc::vec::Vec<u8>,
+                /// The field `body_bytes` in the table `SourceDeliveryAccepted`
+                pub body_bytes: u64,
+                /// The field `event_name` in the table `SourceDeliveryAccepted`
+                pub event_name: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for SourceDeliveryAccepted {
+                fn default() -> Self {
+                    Self {
+                        connector_id: ::core::default::Default::default(),
+                        delivery_id: ::core::default::Default::default(),
+                        signature_scheme: self::SourceSignatureScheme::HmacSha256V0,
+                        credential_version: 0,
+                        signed_at_ns: 0,
+                        body_digest: ::core::default::Default::default(),
+                        body_bytes: 0,
+                        event_name: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl SourceDeliveryAccepted {
+                /// Creates a [SourceDeliveryAcceptedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> SourceDeliveryAcceptedBuilder<()> {
+                    SourceDeliveryAcceptedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_connector_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_delivery_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_signature_scheme: impl ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                    field_credential_version: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_signed_at_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                    field_body_digest: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_body_bytes: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_event_name: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_connector_id = field_connector_id.prepare(builder);
+                    let prepared_delivery_id = field_delivery_id.prepare(builder);
+                    let prepared_signature_scheme = field_signature_scheme
+                        .prepare(builder, &self::SourceSignatureScheme::HmacSha256V0);
+                    let prepared_credential_version = field_credential_version.prepare(builder, &0);
+                    let prepared_signed_at_ns = field_signed_at_ns.prepare(builder, &0);
+                    let prepared_body_digest = field_body_digest.prepare(builder);
+                    let prepared_body_bytes = field_body_bytes.prepare(builder, &0);
+                    let prepared_event_name = field_event_name.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<20> =
+                        ::core::default::Default::default();
+                    if prepared_signed_at_ns.is_some() {
+                        table_writer.write_entry::<i64>(4);
+                    }
+                    if prepared_body_bytes.is_some() {
+                        table_writer.write_entry::<u64>(6);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+                    if prepared_credential_version.is_some() {
+                        table_writer.write_entry::<u32>(3);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(5);
+                    table_writer.write_entry::<::planus::Offset<str>>(7);
+                    if prepared_signature_scheme.is_some() {
+                        table_writer.write_entry::<self::SourceSignatureScheme>(2);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_signed_at_ns) =
+                                prepared_signed_at_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_signed_at_ns);
+                            }
+                            if let ::core::option::Option::Some(prepared_body_bytes) =
+                                prepared_body_bytes
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_body_bytes);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_connector_id);
+                            object_writer.write::<_, _, 4>(&prepared_delivery_id);
+                            if let ::core::option::Option::Some(prepared_credential_version) =
+                                prepared_credential_version
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_credential_version);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_body_digest);
+                            object_writer.write::<_, _, 4>(&prepared_event_name);
+                            if let ::core::option::Option::Some(prepared_signature_scheme) =
+                                prepared_signature_scheme
+                            {
+                                object_writer.write::<_, _, 1>(&prepared_signature_scheme);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<SourceDeliveryAccepted>> for SourceDeliveryAccepted {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliveryAccepted> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<SourceDeliveryAccepted>>
+                for SourceDeliveryAccepted
+            {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<SourceDeliveryAccepted>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<SourceDeliveryAccepted> for SourceDeliveryAccepted {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliveryAccepted> {
+                    SourceDeliveryAccepted::create(
+                        builder,
+                        &self.connector_id,
+                        &self.delivery_id,
+                        self.signature_scheme,
+                        self.credential_version,
+                        self.signed_at_ns,
+                        &self.body_digest,
+                        self.body_bytes,
+                        &self.event_name,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [SourceDeliveryAccepted] type.
+            ///
+            /// Can be created using the [SourceDeliveryAccepted::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct SourceDeliveryAcceptedBuilder<State>(State);
+
+            impl SourceDeliveryAcceptedBuilder<()> {
+                /// Setter for the [`connector_id` field](SourceDeliveryAccepted#structfield.connector_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn connector_id<T0>(self, value: T0) -> SourceDeliveryAcceptedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    SourceDeliveryAcceptedBuilder((value,))
+                }
+            }
+
+            impl<T0> SourceDeliveryAcceptedBuilder<(T0,)> {
+                /// Setter for the [`delivery_id` field](SourceDeliveryAccepted#structfield.delivery_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn delivery_id<T1>(self, value: T1) -> SourceDeliveryAcceptedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    SourceDeliveryAcceptedBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> SourceDeliveryAcceptedBuilder<(T0, T1)> {
+                /// Setter for the [`signature_scheme` field](SourceDeliveryAccepted#structfield.signature_scheme).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn signature_scheme<T2>(
+                    self,
+                    value: T2,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                {
+                    let (v0, v1) = self.0;
+                    SourceDeliveryAcceptedBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`signature_scheme` field](SourceDeliveryAccepted#structfield.signature_scheme) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn signature_scheme_as_default(
+                    self,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, ::planus::DefaultValue)>
+                {
+                    self.signature_scheme(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> SourceDeliveryAcceptedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`credential_version` field](SourceDeliveryAccepted#structfield.credential_version).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn credential_version<T3>(
+                    self,
+                    value: T3,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    SourceDeliveryAcceptedBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`credential_version` field](SourceDeliveryAccepted#structfield.credential_version) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn credential_version_as_default(
+                    self,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2, ::planus::DefaultValue)>
+                {
+                    self.credential_version(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`signed_at_ns` field](SourceDeliveryAccepted#structfield.signed_at_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn signed_at_ns<T4>(
+                    self,
+                    value: T4,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    SourceDeliveryAcceptedBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`signed_at_ns` field](SourceDeliveryAccepted#structfield.signed_at_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn signed_at_ns_as_default(
+                    self,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)>
+                {
+                    self.signed_at_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`body_digest` field](SourceDeliveryAccepted#structfield.body_digest).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn body_digest<T5>(
+                    self,
+                    value: T5,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    SourceDeliveryAcceptedBuilder((v0, v1, v2, v3, v4, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`body_bytes` field](SourceDeliveryAccepted#structfield.body_bytes).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn body_bytes<T6>(
+                    self,
+                    value: T6,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    SourceDeliveryAcceptedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+
+                /// Sets the [`body_bytes` field](SourceDeliveryAccepted#structfield.body_bytes) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn body_bytes_as_default(
+                    self,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5, ::planus::DefaultValue)>
+                {
+                    self.body_bytes(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`event_name` field](SourceDeliveryAccepted#structfield.event_name).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn event_name<T7>(
+                    self,
+                    value: T7,
+                ) -> SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    SourceDeliveryAcceptedBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7>
+                SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [SourceDeliveryAccepted].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliveryAccepted>
+                where
+                    Self: ::planus::WriteAsOffset<SourceDeliveryAccepted>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<SourceDeliveryAccepted>>
+                for SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                type Prepared = ::planus::Offset<SourceDeliveryAccepted>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliveryAccepted> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<SourceDeliveryAccepted>>
+                for SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                type Prepared = ::planus::Offset<SourceDeliveryAccepted>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<SourceDeliveryAccepted>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<
+                        self::SourceSignatureScheme,
+                        self::SourceSignatureScheme,
+                    >,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAsDefault<u64, u64>,
+                    T7: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<SourceDeliveryAccepted>
+                for SourceDeliveryAcceptedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliveryAccepted> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = &self.0;
+                    SourceDeliveryAccepted::create(builder, v0, v1, v2, v3, v4, v5, v6, v7)
+                }
+            }
+
+            /// Reference to a deserialized [SourceDeliveryAccepted].
+            #[derive(Copy, Clone)]
+            pub struct SourceDeliveryAcceptedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> SourceDeliveryAcceptedRef<'a> {
+                /// Getter for the [`connector_id` field](SourceDeliveryAccepted#structfield.connector_id).
+                #[inline]
+                pub fn connector_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "SourceDeliveryAccepted", "connector_id")
+                }
+
+                /// Getter for the [`delivery_id` field](SourceDeliveryAccepted#structfield.delivery_id).
+                #[inline]
+                pub fn delivery_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(1, "SourceDeliveryAccepted", "delivery_id")
+                }
+
+                /// Getter for the [`signature_scheme` field](SourceDeliveryAccepted#structfield.signature_scheme).
+                #[inline]
+                pub fn signature_scheme(&self) -> ::planus::Result<self::SourceSignatureScheme> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "SourceDeliveryAccepted", "signature_scheme")?
+                            .unwrap_or(self::SourceSignatureScheme::HmacSha256V0),
+                    )
+                }
+
+                /// Getter for the [`credential_version` field](SourceDeliveryAccepted#structfield.credential_version).
+                #[inline]
+                pub fn credential_version(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(3, "SourceDeliveryAccepted", "credential_version")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`signed_at_ns` field](SourceDeliveryAccepted#structfield.signed_at_ns).
+                #[inline]
+                pub fn signed_at_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "SourceDeliveryAccepted", "signed_at_ns")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`body_digest` field](SourceDeliveryAccepted#structfield.body_digest).
+                #[inline]
+                pub fn body_digest(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(5, "SourceDeliveryAccepted", "body_digest")
+                }
+
+                /// Getter for the [`body_bytes` field](SourceDeliveryAccepted#structfield.body_bytes).
+                #[inline]
+                pub fn body_bytes(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(6, "SourceDeliveryAccepted", "body_bytes")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`event_name` field](SourceDeliveryAccepted#structfield.event_name).
+                #[inline]
+                pub fn event_name(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(7, "SourceDeliveryAccepted", "event_name")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for SourceDeliveryAcceptedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("SourceDeliveryAcceptedRef");
+                    f.field("connector_id", &self.connector_id());
+                    f.field("delivery_id", &self.delivery_id());
+                    f.field("signature_scheme", &self.signature_scheme());
+                    f.field("credential_version", &self.credential_version());
+                    f.field("signed_at_ns", &self.signed_at_ns());
+                    f.field("body_digest", &self.body_digest());
+                    f.field("body_bytes", &self.body_bytes());
+                    f.field("event_name", &self.event_name());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<SourceDeliveryAcceptedRef<'a>> for SourceDeliveryAccepted {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: SourceDeliveryAcceptedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        connector_id: value.connector_id()?.to_vec(),
+                        delivery_id: value.delivery_id()?.to_vec(),
+                        signature_scheme: ::core::convert::TryInto::try_into(
+                            value.signature_scheme()?,
+                        )?,
+                        credential_version: ::core::convert::TryInto::try_into(
+                            value.credential_version()?,
+                        )?,
+                        signed_at_ns: ::core::convert::TryInto::try_into(value.signed_at_ns()?)?,
+                        body_digest: value.body_digest()?.to_vec(),
+                        body_bytes: ::core::convert::TryInto::try_into(value.body_bytes()?)?,
+                        event_name: ::core::convert::Into::into(value.event_name()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for SourceDeliveryAcceptedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for SourceDeliveryAcceptedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[SourceDeliveryAcceptedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<SourceDeliveryAccepted>>
+                for SourceDeliveryAccepted
+            {
+                type Value = ::planus::Offset<SourceDeliveryAccepted>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<SourceDeliveryAccepted>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for SourceDeliveryAcceptedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[SourceDeliveryAcceptedRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
+            /// The table `SourceDeliverySettled` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `SourceDeliverySettled` in the file `schemas/events.fbs:570`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct SourceDeliverySettled {
+                /// The field `connector_id` in the table `SourceDeliverySettled`
+                pub connector_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `delivery_id` in the table `SourceDeliverySettled`
+                pub delivery_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `accepted_lsn` in the table `SourceDeliverySettled`
+                pub accepted_lsn: u64,
+                /// The field `attempt` in the table `SourceDeliverySettled`
+                pub attempt: u32,
+                /// The field `state` in the table `SourceDeliverySettled`
+                pub state: self::SourceDeliveryState,
+                /// The field `next_attempt_at_ns` in the table `SourceDeliverySettled`
+                pub next_attempt_at_ns: i64,
+                /// The field `detail` in the table `SourceDeliverySettled`
+                pub detail: ::planus::alloc::string::String,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for SourceDeliverySettled {
+                fn default() -> Self {
+                    Self {
+                        connector_id: ::core::default::Default::default(),
+                        delivery_id: ::core::default::Default::default(),
+                        accepted_lsn: 0,
+                        attempt: 0,
+                        state: self::SourceDeliveryState::Accepted,
+                        next_attempt_at_ns: 0,
+                        detail: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl SourceDeliverySettled {
+                /// Creates a [SourceDeliverySettledBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> SourceDeliverySettledBuilder<()> {
+                    SourceDeliverySettledBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_connector_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_delivery_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_accepted_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_attempt: impl ::planus::WriteAsDefault<u32, u32>,
+                    field_state: impl ::planus::WriteAsDefault<
+                        self::SourceDeliveryState,
+                        self::SourceDeliveryState,
+                    >,
+                    field_next_attempt_at_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                    field_detail: impl ::planus::WriteAs<::planus::Offset<str>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_connector_id = field_connector_id.prepare(builder);
+                    let prepared_delivery_id = field_delivery_id.prepare(builder);
+                    let prepared_accepted_lsn = field_accepted_lsn.prepare(builder, &0);
+                    let prepared_attempt = field_attempt.prepare(builder, &0);
+                    let prepared_state =
+                        field_state.prepare(builder, &self::SourceDeliveryState::Accepted);
+                    let prepared_next_attempt_at_ns = field_next_attempt_at_ns.prepare(builder, &0);
+                    let prepared_detail = field_detail.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<18> =
+                        ::core::default::Default::default();
+                    if prepared_accepted_lsn.is_some() {
+                        table_writer.write_entry::<u64>(2);
+                    }
+                    if prepared_next_attempt_at_ns.is_some() {
+                        table_writer.write_entry::<i64>(5);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+                    if prepared_attempt.is_some() {
+                        table_writer.write_entry::<u32>(3);
+                    }
+                    table_writer.write_entry::<::planus::Offset<str>>(6);
+                    if prepared_state.is_some() {
+                        table_writer.write_entry::<self::SourceDeliveryState>(4);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_accepted_lsn) =
+                                prepared_accepted_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_accepted_lsn);
+                            }
+                            if let ::core::option::Option::Some(prepared_next_attempt_at_ns) =
+                                prepared_next_attempt_at_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_next_attempt_at_ns);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_connector_id);
+                            object_writer.write::<_, _, 4>(&prepared_delivery_id);
+                            if let ::core::option::Option::Some(prepared_attempt) = prepared_attempt
+                            {
+                                object_writer.write::<_, _, 4>(&prepared_attempt);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_detail);
+                            if let ::core::option::Option::Some(prepared_state) = prepared_state {
+                                object_writer.write::<_, _, 1>(&prepared_state);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<SourceDeliverySettled>> for SourceDeliverySettled {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliverySettled> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<SourceDeliverySettled>> for SourceDeliverySettled {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<SourceDeliverySettled>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<SourceDeliverySettled> for SourceDeliverySettled {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliverySettled> {
+                    SourceDeliverySettled::create(
+                        builder,
+                        &self.connector_id,
+                        &self.delivery_id,
+                        self.accepted_lsn,
+                        self.attempt,
+                        self.state,
+                        self.next_attempt_at_ns,
+                        &self.detail,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [SourceDeliverySettled] type.
+            ///
+            /// Can be created using the [SourceDeliverySettled::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct SourceDeliverySettledBuilder<State>(State);
+
+            impl SourceDeliverySettledBuilder<()> {
+                /// Setter for the [`connector_id` field](SourceDeliverySettled#structfield.connector_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn connector_id<T0>(self, value: T0) -> SourceDeliverySettledBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    SourceDeliverySettledBuilder((value,))
+                }
+            }
+
+            impl<T0> SourceDeliverySettledBuilder<(T0,)> {
+                /// Setter for the [`delivery_id` field](SourceDeliverySettled#structfield.delivery_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn delivery_id<T1>(self, value: T1) -> SourceDeliverySettledBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    SourceDeliverySettledBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> SourceDeliverySettledBuilder<(T0, T1)> {
+                /// Setter for the [`accepted_lsn` field](SourceDeliverySettled#structfield.accepted_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn accepted_lsn<T2>(
+                    self,
+                    value: T2,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1) = self.0;
+                    SourceDeliverySettledBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`accepted_lsn` field](SourceDeliverySettled#structfield.accepted_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn accepted_lsn_as_default(
+                    self,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, ::planus::DefaultValue)>
+                {
+                    self.accepted_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> SourceDeliverySettledBuilder<(T0, T1, T2)> {
+                /// Setter for the [`attempt` field](SourceDeliverySettled#structfield.attempt).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn attempt<T3>(
+                    self,
+                    value: T3,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    SourceDeliverySettledBuilder((v0, v1, v2, value))
+                }
+
+                /// Sets the [`attempt` field](SourceDeliverySettled#structfield.attempt) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn attempt_as_default(
+                    self,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, T2, ::planus::DefaultValue)>
+                {
+                    self.attempt(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3> SourceDeliverySettledBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`state` field](SourceDeliverySettled#structfield.state).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn state<T4>(
+                    self,
+                    value: T4,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<
+                        self::SourceDeliveryState,
+                        self::SourceDeliveryState,
+                    >,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    SourceDeliverySettledBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`state` field](SourceDeliverySettled#structfield.state) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn state_as_default(
+                    self,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)>
+                {
+                    self.state(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`next_attempt_at_ns` field](SourceDeliverySettled#structfield.next_attempt_at_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn next_attempt_at_ns<T5>(
+                    self,
+                    value: T5,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    SourceDeliverySettledBuilder((v0, v1, v2, v3, v4, value))
+                }
+
+                /// Sets the [`next_attempt_at_ns` field](SourceDeliverySettled#structfield.next_attempt_at_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn next_attempt_at_ns_as_default(
+                    self,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4, ::planus::DefaultValue)>
+                {
+                    self.next_attempt_at_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`detail` field](SourceDeliverySettled#structfield.detail).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn detail<T6>(
+                    self,
+                    value: T6,
+                ) -> SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    SourceDeliverySettledBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [SourceDeliverySettled].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliverySettled>
+                where
+                    Self: ::planus::WriteAsOffset<SourceDeliverySettled>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<self::SourceDeliveryState, self::SourceDeliveryState>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAs<::planus::Offset<SourceDeliverySettled>>
+                for SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<SourceDeliverySettled>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliverySettled> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<self::SourceDeliveryState, self::SourceDeliveryState>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOptional<::planus::Offset<SourceDeliverySettled>>
+                for SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                type Prepared = ::planus::Offset<SourceDeliverySettled>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<SourceDeliverySettled>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAsDefault<u32, u32>,
+                    T4: ::planus::WriteAsDefault<self::SourceDeliveryState, self::SourceDeliveryState>,
+                    T5: ::planus::WriteAsDefault<i64, i64>,
+                    T6: ::planus::WriteAs<::planus::Offset<str>>,
+                > ::planus::WriteAsOffset<SourceDeliverySettled>
+                for SourceDeliverySettledBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceDeliverySettled> {
+                    let (v0, v1, v2, v3, v4, v5, v6) = &self.0;
+                    SourceDeliverySettled::create(builder, v0, v1, v2, v3, v4, v5, v6)
+                }
+            }
+
+            /// Reference to a deserialized [SourceDeliverySettled].
+            #[derive(Copy, Clone)]
+            pub struct SourceDeliverySettledRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> SourceDeliverySettledRef<'a> {
+                /// Getter for the [`connector_id` field](SourceDeliverySettled#structfield.connector_id).
+                #[inline]
+                pub fn connector_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "SourceDeliverySettled", "connector_id")
+                }
+
+                /// Getter for the [`delivery_id` field](SourceDeliverySettled#structfield.delivery_id).
+                #[inline]
+                pub fn delivery_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(1, "SourceDeliverySettled", "delivery_id")
+                }
+
+                /// Getter for the [`accepted_lsn` field](SourceDeliverySettled#structfield.accepted_lsn).
+                #[inline]
+                pub fn accepted_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "SourceDeliverySettled", "accepted_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`attempt` field](SourceDeliverySettled#structfield.attempt).
+                #[inline]
+                pub fn attempt(&self) -> ::planus::Result<u32> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(3, "SourceDeliverySettled", "attempt")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`state` field](SourceDeliverySettled#structfield.state).
+                #[inline]
+                pub fn state(&self) -> ::planus::Result<self::SourceDeliveryState> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "SourceDeliverySettled", "state")?
+                            .unwrap_or(self::SourceDeliveryState::Accepted),
+                    )
+                }
+
+                /// Getter for the [`next_attempt_at_ns` field](SourceDeliverySettled#structfield.next_attempt_at_ns).
+                #[inline]
+                pub fn next_attempt_at_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(5, "SourceDeliverySettled", "next_attempt_at_ns")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`detail` field](SourceDeliverySettled#structfield.detail).
+                #[inline]
+                pub fn detail(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(6, "SourceDeliverySettled", "detail")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for SourceDeliverySettledRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("SourceDeliverySettledRef");
+                    f.field("connector_id", &self.connector_id());
+                    f.field("delivery_id", &self.delivery_id());
+                    f.field("accepted_lsn", &self.accepted_lsn());
+                    f.field("attempt", &self.attempt());
+                    f.field("state", &self.state());
+                    f.field("next_attempt_at_ns", &self.next_attempt_at_ns());
+                    f.field("detail", &self.detail());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<SourceDeliverySettledRef<'a>> for SourceDeliverySettled {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: SourceDeliverySettledRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        connector_id: value.connector_id()?.to_vec(),
+                        delivery_id: value.delivery_id()?.to_vec(),
+                        accepted_lsn: ::core::convert::TryInto::try_into(value.accepted_lsn()?)?,
+                        attempt: ::core::convert::TryInto::try_into(value.attempt()?)?,
+                        state: ::core::convert::TryInto::try_into(value.state()?)?,
+                        next_attempt_at_ns: ::core::convert::TryInto::try_into(
+                            value.next_attempt_at_ns()?,
+                        )?,
+                        detail: ::core::convert::Into::into(value.detail()?),
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for SourceDeliverySettledRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for SourceDeliverySettledRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[SourceDeliverySettledRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<SourceDeliverySettled>>
+                for SourceDeliverySettled
+            {
+                type Value = ::planus::Offset<SourceDeliverySettled>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<SourceDeliverySettled>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for SourceDeliverySettledRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[SourceDeliverySettledRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
+            /// The table `SourceRevisionObserved` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `SourceRevisionObserved` in the file `schemas/events.fbs:580`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct SourceRevisionObserved {
+                /// The field `connector_id` in the table `SourceRevisionObserved`
+                pub connector_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `source_id` in the table `SourceRevisionObserved`
+                pub source_id: ::planus::alloc::string::String,
+                /// The field `revision` in the table `SourceRevisionObserved`
+                pub revision: ::planus::alloc::vec::Vec<u8>,
+                /// The field `content_digest` in the table `SourceRevisionObserved`
+                pub content_digest: ::planus::alloc::vec::Vec<u8>,
+                /// The field `observed_at_ns` in the table `SourceRevisionObserved`
+                pub observed_at_ns: i64,
+                /// The field `delivery_lsn` in the table `SourceRevisionObserved`
+                pub delivery_lsn: u64,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for SourceRevisionObserved {
+                fn default() -> Self {
+                    Self {
+                        connector_id: ::core::default::Default::default(),
+                        source_id: ::core::default::Default::default(),
+                        revision: ::core::default::Default::default(),
+                        content_digest: ::core::default::Default::default(),
+                        observed_at_ns: 0,
+                        delivery_lsn: 0,
+                    }
+                }
+            }
+
+            impl SourceRevisionObserved {
+                /// Creates a [SourceRevisionObservedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> SourceRevisionObservedBuilder<()> {
+                    SourceRevisionObservedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_connector_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_source_id: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_revision: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_content_digest: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_observed_at_ns: impl ::planus::WriteAsDefault<i64, i64>,
+                    field_delivery_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_connector_id = field_connector_id.prepare(builder);
+                    let prepared_source_id = field_source_id.prepare(builder);
+                    let prepared_revision = field_revision.prepare(builder);
+                    let prepared_content_digest = field_content_digest.prepare(builder);
+                    let prepared_observed_at_ns = field_observed_at_ns.prepare(builder, &0);
+                    let prepared_delivery_lsn = field_delivery_lsn.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<16> =
+                        ::core::default::Default::default();
+                    if prepared_observed_at_ns.is_some() {
+                        table_writer.write_entry::<i64>(4);
+                    }
+                    if prepared_delivery_lsn.is_some() {
+                        table_writer.write_entry::<u64>(5);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(1);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(2);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(3);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_observed_at_ns) =
+                                prepared_observed_at_ns
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_observed_at_ns);
+                            }
+                            if let ::core::option::Option::Some(prepared_delivery_lsn) =
+                                prepared_delivery_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_delivery_lsn);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_connector_id);
+                            object_writer.write::<_, _, 4>(&prepared_source_id);
+                            object_writer.write::<_, _, 4>(&prepared_revision);
+                            object_writer.write::<_, _, 4>(&prepared_content_digest);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<SourceRevisionObserved>> for SourceRevisionObserved {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceRevisionObserved> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<SourceRevisionObserved>>
+                for SourceRevisionObserved
+            {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<SourceRevisionObserved>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<SourceRevisionObserved> for SourceRevisionObserved {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceRevisionObserved> {
+                    SourceRevisionObserved::create(
+                        builder,
+                        &self.connector_id,
+                        &self.source_id,
+                        &self.revision,
+                        &self.content_digest,
+                        self.observed_at_ns,
+                        self.delivery_lsn,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [SourceRevisionObserved] type.
+            ///
+            /// Can be created using the [SourceRevisionObserved::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct SourceRevisionObservedBuilder<State>(State);
+
+            impl SourceRevisionObservedBuilder<()> {
+                /// Setter for the [`connector_id` field](SourceRevisionObserved#structfield.connector_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn connector_id<T0>(self, value: T0) -> SourceRevisionObservedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    SourceRevisionObservedBuilder((value,))
+                }
+            }
+
+            impl<T0> SourceRevisionObservedBuilder<(T0,)> {
+                /// Setter for the [`source_id` field](SourceRevisionObserved#structfield.source_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_id<T1>(self, value: T1) -> SourceRevisionObservedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0,) = self.0;
+                    SourceRevisionObservedBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> SourceRevisionObservedBuilder<(T0, T1)> {
+                /// Setter for the [`revision` field](SourceRevisionObserved#structfield.revision).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn revision<T2>(self, value: T2) -> SourceRevisionObservedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1) = self.0;
+                    SourceRevisionObservedBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> SourceRevisionObservedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`content_digest` field](SourceRevisionObserved#structfield.content_digest).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn content_digest<T3>(
+                    self,
+                    value: T3,
+                ) -> SourceRevisionObservedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    SourceRevisionObservedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> SourceRevisionObservedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`observed_at_ns` field](SourceRevisionObserved#structfield.observed_at_ns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn observed_at_ns<T4>(
+                    self,
+                    value: T4,
+                ) -> SourceRevisionObservedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    SourceRevisionObservedBuilder((v0, v1, v2, v3, value))
+                }
+
+                /// Sets the [`observed_at_ns` field](SourceRevisionObserved#structfield.observed_at_ns) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn observed_at_ns_as_default(
+                    self,
+                ) -> SourceRevisionObservedBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)>
+                {
+                    self.observed_at_ns(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> SourceRevisionObservedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`delivery_lsn` field](SourceRevisionObserved#structfield.delivery_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn delivery_lsn<T5>(
+                    self,
+                    value: T5,
+                ) -> SourceRevisionObservedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    SourceRevisionObservedBuilder((v0, v1, v2, v3, v4, value))
+                }
+
+                /// Sets the [`delivery_lsn` field](SourceRevisionObserved#structfield.delivery_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn delivery_lsn_as_default(
+                    self,
+                ) -> SourceRevisionObservedBuilder<(T0, T1, T2, T3, T4, ::planus::DefaultValue)>
+                {
+                    self.delivery_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> SourceRevisionObservedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [SourceRevisionObserved].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceRevisionObserved>
+                where
+                    Self: ::planus::WriteAsOffset<SourceRevisionObserved>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAs<::planus::Offset<SourceRevisionObserved>>
+                for SourceRevisionObservedBuilder<(T0, T1, T2, T3, T4, T5)>
+            {
+                type Prepared = ::planus::Offset<SourceRevisionObserved>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceRevisionObserved> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOptional<::planus::Offset<SourceRevisionObserved>>
+                for SourceRevisionObservedBuilder<(T0, T1, T2, T3, T4, T5)>
+            {
+                type Prepared = ::planus::Offset<SourceRevisionObserved>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<SourceRevisionObserved>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T4: ::planus::WriteAsDefault<i64, i64>,
+                    T5: ::planus::WriteAsDefault<u64, u64>,
+                > ::planus::WriteAsOffset<SourceRevisionObserved>
+                for SourceRevisionObservedBuilder<(T0, T1, T2, T3, T4, T5)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<SourceRevisionObserved> {
+                    let (v0, v1, v2, v3, v4, v5) = &self.0;
+                    SourceRevisionObserved::create(builder, v0, v1, v2, v3, v4, v5)
+                }
+            }
+
+            /// Reference to a deserialized [SourceRevisionObserved].
+            #[derive(Copy, Clone)]
+            pub struct SourceRevisionObservedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> SourceRevisionObservedRef<'a> {
+                /// Getter for the [`connector_id` field](SourceRevisionObserved#structfield.connector_id).
+                #[inline]
+                pub fn connector_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "SourceRevisionObserved", "connector_id")
+                }
+
+                /// Getter for the [`source_id` field](SourceRevisionObserved#structfield.source_id).
+                #[inline]
+                pub fn source_id(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(1, "SourceRevisionObserved", "source_id")
+                }
+
+                /// Getter for the [`revision` field](SourceRevisionObserved#structfield.revision).
+                #[inline]
+                pub fn revision(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(2, "SourceRevisionObserved", "revision")
+                }
+
+                /// Getter for the [`content_digest` field](SourceRevisionObserved#structfield.content_digest).
+                #[inline]
+                pub fn content_digest(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(3, "SourceRevisionObserved", "content_digest")
+                }
+
+                /// Getter for the [`observed_at_ns` field](SourceRevisionObserved#structfield.observed_at_ns).
+                #[inline]
+                pub fn observed_at_ns(&self) -> ::planus::Result<i64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(4, "SourceRevisionObserved", "observed_at_ns")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`delivery_lsn` field](SourceRevisionObserved#structfield.delivery_lsn).
+                #[inline]
+                pub fn delivery_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(5, "SourceRevisionObserved", "delivery_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for SourceRevisionObservedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("SourceRevisionObservedRef");
+                    f.field("connector_id", &self.connector_id());
+                    f.field("source_id", &self.source_id());
+                    f.field("revision", &self.revision());
+                    f.field("content_digest", &self.content_digest());
+                    f.field("observed_at_ns", &self.observed_at_ns());
+                    f.field("delivery_lsn", &self.delivery_lsn());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<SourceRevisionObservedRef<'a>> for SourceRevisionObserved {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: SourceRevisionObservedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        connector_id: value.connector_id()?.to_vec(),
+                        source_id: ::core::convert::Into::into(value.source_id()?),
+                        revision: value.revision()?.to_vec(),
+                        content_digest: value.content_digest()?.to_vec(),
+                        observed_at_ns: ::core::convert::TryInto::try_into(
+                            value.observed_at_ns()?,
+                        )?,
+                        delivery_lsn: ::core::convert::TryInto::try_into(value.delivery_lsn()?)?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for SourceRevisionObservedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for SourceRevisionObservedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[SourceRevisionObservedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<SourceRevisionObserved>>
+                for SourceRevisionObserved
+            {
+                type Value = ::planus::Offset<SourceRevisionObserved>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<SourceRevisionObserved>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for SourceRevisionObservedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[SourceRevisionObservedRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:543`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:589`
             #[derive(
                 Clone,
                 Debug,
@@ -33347,6 +36287,18 @@ mod root {
 
                 /// The variant of type `DocumentChunked` in the union `EventPayload`
                 DocumentChunked(::planus::alloc::boxed::Box<self::DocumentChunked>),
+
+                /// The variant of type `SourceConnectorBound` in the union `EventPayload`
+                SourceConnectorBound(::planus::alloc::boxed::Box<self::SourceConnectorBound>),
+
+                /// The variant of type `SourceDeliveryAccepted` in the union `EventPayload`
+                SourceDeliveryAccepted(::planus::alloc::boxed::Box<self::SourceDeliveryAccepted>),
+
+                /// The variant of type `SourceDeliverySettled` in the union `EventPayload`
+                SourceDeliverySettled(::planus::alloc::boxed::Box<self::SourceDeliverySettled>),
+
+                /// The variant of type `SourceRevisionObserved` in the union `EventPayload`
+                SourceRevisionObserved(::planus::alloc::boxed::Box<self::SourceRevisionObserved>),
             }
 
             impl EventPayload {
@@ -33731,6 +36683,38 @@ mod root {
                 ) -> ::planus::UnionOffset<Self> {
                     ::planus::UnionOffset::new(47, value.prepare(builder).downcast())
                 }
+
+                #[inline]
+                pub fn create_source_connector_bound(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::SourceConnectorBound>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(48, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_source_delivery_accepted(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::SourceDeliveryAccepted>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(49, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_source_delivery_settled(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::SourceDeliverySettled>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(50, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_source_revision_observed(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::SourceRevisionObserved>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(51, value.prepare(builder).downcast())
+                }
             }
 
             impl ::planus::WriteAsUnion<EventPayload> for EventPayload {
@@ -33811,6 +36795,18 @@ mod root {
                         }
                         Self::DocumentChunked(value) => {
                             Self::create_document_chunked(builder, value)
+                        }
+                        Self::SourceConnectorBound(value) => {
+                            Self::create_source_connector_bound(builder, value)
+                        }
+                        Self::SourceDeliveryAccepted(value) => {
+                            Self::create_source_delivery_accepted(builder, value)
+                        }
+                        Self::SourceDeliverySettled(value) => {
+                            Self::create_source_delivery_settled(builder, value)
+                        }
+                        Self::SourceRevisionObserved(value) => {
+                            Self::create_source_revision_observed(builder, value)
                         }
                     }
                 }
@@ -34391,6 +37387,54 @@ mod root {
                 ) -> EventPayloadBuilder<::planus::Initialized<47, T>>
                 where
                     T: ::planus::WriteAsOffset<self::DocumentChunked>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`SourceConnectorBound` variant](EventPayload#variant.SourceConnectorBound).
+                #[inline]
+                pub fn source_connector_bound<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<48, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::SourceConnectorBound>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`SourceDeliveryAccepted` variant](EventPayload#variant.SourceDeliveryAccepted).
+                #[inline]
+                pub fn source_delivery_accepted<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<49, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::SourceDeliveryAccepted>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`SourceDeliverySettled` variant](EventPayload#variant.SourceDeliverySettled).
+                #[inline]
+                pub fn source_delivery_settled<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<50, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::SourceDeliverySettled>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`SourceRevisionObserved` variant](EventPayload#variant.SourceRevisionObserved).
+                #[inline]
+                pub fn source_revision_observed<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<51, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::SourceRevisionObserved>,
                 {
                     EventPayloadBuilder(::planus::Initialized(value))
                 }
@@ -35632,6 +38676,110 @@ mod root {
                     ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
                 }
             }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<48, T>>
+            where
+                T: ::planus::WriteAsOffset<self::SourceConnectorBound>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(48, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<48, T>>
+            where
+                T: ::planus::WriteAsOffset<self::SourceConnectorBound>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<49, T>>
+            where
+                T: ::planus::WriteAsOffset<self::SourceDeliveryAccepted>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(49, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<49, T>>
+            where
+                T: ::planus::WriteAsOffset<self::SourceDeliveryAccepted>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<50, T>>
+            where
+                T: ::planus::WriteAsOffset<self::SourceDeliverySettled>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(50, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<50, T>>
+            where
+                T: ::planus::WriteAsOffset<self::SourceDeliverySettled>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<51, T>>
+            where
+                T: ::planus::WriteAsOffset<self::SourceRevisionObserved>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(51, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<51, T>>
+            where
+                T: ::planus::WriteAsOffset<self::SourceRevisionObserved>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
 
             /// Reference to a deserialized [EventPayload].
             #[derive(Copy, Clone, Debug)]
@@ -35683,6 +38831,10 @@ mod root {
                 DocumentIngested(self::DocumentIngestedRef<'a>),
                 DocumentExtracted(self::DocumentExtractedRef<'a>),
                 DocumentChunked(self::DocumentChunkedRef<'a>),
+                SourceConnectorBound(self::SourceConnectorBoundRef<'a>),
+                SourceDeliveryAccepted(self::SourceDeliveryAcceptedRef<'a>),
+                SourceDeliverySettled(self::SourceDeliverySettledRef<'a>),
+                SourceRevisionObserved(self::SourceRevisionObservedRef<'a>),
             }
 
             impl<'a> ::core::convert::TryFrom<EventPayloadRef<'a>> for EventPayload {
@@ -35971,6 +39123,30 @@ mod root {
                                 ::core::convert::TryFrom::try_from(value)?,
                             ))
                         }
+
+                        EventPayloadRef::SourceConnectorBound(value) => {
+                            Self::SourceConnectorBound(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::SourceDeliveryAccepted(value) => {
+                            Self::SourceDeliveryAccepted(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::SourceDeliverySettled(value) => {
+                            Self::SourceDeliverySettled(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::SourceRevisionObserved(value) => {
+                            Self::SourceRevisionObserved(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
                     })
                 }
             }
@@ -36123,6 +39299,18 @@ mod root {
                         47 => ::core::result::Result::Ok(Self::DocumentChunked(
                             ::planus::TableRead::from_buffer(buffer, field_offset)?,
                         )),
+                        48 => ::core::result::Result::Ok(Self::SourceConnectorBound(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        49 => ::core::result::Result::Ok(Self::SourceDeliveryAccepted(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        50 => ::core::result::Result::Ok(Self::SourceDeliverySettled(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        51 => ::core::result::Result::Ok(Self::SourceRevisionObserved(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
                         _ => ::core::result::Result::Err(
                             ::planus::errors::ErrorKind::UnknownUnionTag { tag },
                         ),
@@ -36137,7 +39325,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:593`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:643`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]

@@ -8,8 +8,9 @@ use crate::events::{
     ExpectedPredicate, IntentionCancelled, IntentionFired, IntentionSet, LoopCloseReason,
     LoopClosed, MemoryFaded, MemoryMerged, MemoryMinted, MemoryRevised, Outcome, OutcomeObserved,
     Predicted, ProcedureAdopted, ProcedureMined, ProcedureRevised, ProcedureSupport,
-    ProposedAssertion, ProvenanceRange, Retract, Reviewed, ToolResult, VocabularyImported,
-    VocabularyTerm, WakeTrigger,
+    ProposedAssertion, ProvenanceRange, Retract, Reviewed, SourceConnectorBound,
+    SourceDeliveryAccepted, SourceDeliverySettled, SourceDeliveryState, SourceRevisionObserved,
+    ToolResult, VocabularyImported, VocabularyTerm, WakeTrigger,
 };
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
@@ -86,6 +87,10 @@ pub enum EventKind {
     DocumentIngested = 45,
     DocumentExtracted = 46,
     DocumentChunked = 47,
+    SourceConnectorBound = 48,
+    SourceDeliveryAccepted = 49,
+    SourceDeliverySettled = 50,
+    SourceRevisionObserved = 51,
 }
 
 impl EventKind {
@@ -176,6 +181,10 @@ impl EventKind {
                     | Self::DocumentIngested
                     | Self::DocumentExtracted
                     | Self::DocumentChunked
+                    | Self::SourceConnectorBound
+                    | Self::SourceDeliveryAccepted
+                    | Self::SourceDeliverySettled
+                    | Self::SourceRevisionObserved
             )
     }
 
@@ -264,6 +273,10 @@ impl TryFrom<u8> for EventKind {
             45 => Ok(Self::DocumentIngested),
             46 => Ok(Self::DocumentExtracted),
             47 => Ok(Self::DocumentChunked),
+            48 => Ok(Self::SourceConnectorBound),
+            49 => Ok(Self::SourceDeliveryAccepted),
+            50 => Ok(Self::SourceDeliverySettled),
+            51 => Ok(Self::SourceRevisionObserved),
             _ => Err(()),
         }
     }
@@ -404,6 +417,19 @@ fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Er
         return Err(Error::new(ErrorCode::ProtectedTypeWrite));
     }
     if kind == EventKind::VocabularyImported && envelope.authority != Authority::UserAsserted {
+        return Err(Error::new(ErrorCode::ProtectedTypeWrite));
+    }
+    if kind == EventKind::SourceConnectorBound && envelope.authority != Authority::UserAsserted {
+        return Err(Error::new(ErrorCode::ProtectedTypeWrite));
+    }
+    if matches!(
+        kind,
+        EventKind::SourceDeliveryAccepted | EventKind::SourceRevisionObserved
+    ) && envelope.authority != Authority::ExternalObserved
+    {
+        return Err(Error::new(ErrorCode::ProtectedTypeWrite));
+    }
+    if kind == EventKind::SourceDeliverySettled && envelope.authority != Authority::RuntimeFact {
         return Err(Error::new(ErrorCode::ProtectedTypeWrite));
     }
     Ok(())
@@ -579,7 +605,59 @@ fn validate_payload(
         EventPayload::DocumentIngested(value) => validate_document_ingested(value),
         EventPayload::DocumentExtracted(value) => validate_document_extracted(value),
         EventPayload::DocumentChunked(value) => validate_document_chunked(value),
+        EventPayload::SourceConnectorBound(value) => validate_source_connector_bound(value),
+        EventPayload::SourceDeliveryAccepted(value) => validate_source_delivery_accepted(value),
+        EventPayload::SourceDeliverySettled(value) => validate_source_delivery_settled(value),
+        EventPayload::SourceRevisionObserved(value) => validate_source_revision_observed(value),
     }
+}
+
+fn validate_source_connector_bound(value: &SourceConnectorBound) -> Result<(), Error> {
+    if value.connector_id.len() != 16
+        || value.consent_nonce.len() != 16
+        || value.provider.is_empty()
+        || value.external_account.is_empty()
+        || value.credential_version == 0
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    Ok(())
+}
+
+fn validate_source_delivery_accepted(value: &SourceDeliveryAccepted) -> Result<(), Error> {
+    if value.connector_id.len() != 16
+        || !bounded_identifier(&value.delivery_id)
+        || value.credential_version == 0
+        || value.signed_at_ns == 0
+        || value.body_digest.len() != 32
+        || value.event_name.is_empty()
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    Ok(())
+}
+
+fn validate_source_delivery_settled(value: &SourceDeliverySettled) -> Result<(), Error> {
+    if value.connector_id.len() != 16
+        || !bounded_identifier(&value.delivery_id)
+        || value.state == SourceDeliveryState::Accepted
+        || value.detail.is_empty()
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    Ok(())
+}
+
+fn validate_source_revision_observed(value: &SourceRevisionObserved) -> Result<(), Error> {
+    if value.connector_id.len() != 16
+        || value.source_id.is_empty()
+        || !bounded_identifier(&value.revision)
+        || value.content_digest.len() != 32
+        || value.observed_at_ns == 0
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    Ok(())
 }
 
 fn validate_intention_set(value: &IntentionSet) -> Result<(), Error> {
@@ -1308,5 +1386,9 @@ fn payload_kind(payload: &EventPayload) -> EventKind {
         EventPayload::DocumentIngested(_) => EventKind::DocumentIngested,
         EventPayload::DocumentExtracted(_) => EventKind::DocumentExtracted,
         EventPayload::DocumentChunked(_) => EventKind::DocumentChunked,
+        EventPayload::SourceConnectorBound(_) => EventKind::SourceConnectorBound,
+        EventPayload::SourceDeliveryAccepted(_) => EventKind::SourceDeliveryAccepted,
+        EventPayload::SourceDeliverySettled(_) => EventKind::SourceDeliverySettled,
+        EventPayload::SourceRevisionObserved(_) => EventKind::SourceRevisionObserved,
     }
 }

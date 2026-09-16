@@ -193,6 +193,10 @@ pub(crate) const fn schema_kind(kind: EventKind) -> Option<event::EventKind> {
         EventKind::DocumentIngested => event::EventKind::DocumentIngested,
         EventKind::DocumentExtracted => event::EventKind::DocumentExtracted,
         EventKind::DocumentChunked => event::EventKind::DocumentChunked,
+        EventKind::SourceConnectorBound => event::EventKind::SourceConnectorBound,
+        EventKind::SourceDeliveryAccepted => event::EventKind::SourceDeliveryAccepted,
+        EventKind::SourceDeliverySettled => event::EventKind::SourceDeliverySettled,
+        EventKind::SourceRevisionObserved => event::EventKind::SourceRevisionObserved,
         EventKind::Assertion
         | EventKind::Consolidation
         | EventKind::Embedding

@@ -37,7 +37,11 @@ pub fn ingest(
     automatic_sensitivity: bool,
 ) -> Result<IngestResult, Error> {
     envelope.authority = match source {
-        IngestSource::User if kind == EventKind::UserMsg => authority_for_event(kind),
+        IngestSource::User
+            if matches!(kind, EventKind::UserMsg | EventKind::SourceConnectorBound) =>
+        {
+            authority_for_event(kind)
+        }
         IngestSource::Assistant
             if matches!(kind, EventKind::DeliveredMsg | EventKind::Reasoning) =>
         {
@@ -46,7 +50,13 @@ pub fn ingest(
         IngestSource::ToolRuntime if kind == EventKind::ToolResult => authority_for_event(kind),
         IngestSource::Kernel if runtime_event(kind) => authority_for_event(kind),
         IngestSource::ExternalFeed
-            if matches!(kind, EventKind::ProviderFrame | EventKind::MediaRef) =>
+            if matches!(
+                kind,
+                EventKind::ProviderFrame
+                    | EventKind::MediaRef
+                    | EventKind::SourceDeliveryAccepted
+                    | EventKind::SourceRevisionObserved
+            ) =>
         {
             Authority::ExternalObserved
         }
@@ -120,5 +130,6 @@ const fn runtime_event(kind: EventKind) -> bool {
             | EventKind::ConsolidationClosed
             | EventKind::ConsolidationRetracted
             | EventKind::Reviewed
+            | EventKind::SourceDeliverySettled
     )
 }

@@ -12,14 +12,17 @@ pub struct CitedSource<'a> {
 #[must_use]
 pub const fn authority_for_event(kind: EventKind) -> Authority {
     match kind {
-        EventKind::UserMsg | EventKind::ProcedureAdopted | EventKind::VocabularyImported => {
-            Authority::UserAsserted
-        }
+        EventKind::UserMsg
+        | EventKind::ProcedureAdopted
+        | EventKind::VocabularyImported
+        | EventKind::SourceConnectorBound => Authority::UserAsserted,
         EventKind::DeliveredMsg | EventKind::Reasoning => Authority::AssistantGenerated,
         EventKind::ToolResult => Authority::ToolObserved,
-        EventKind::ProviderFrame | EventKind::MediaRef | EventKind::DocumentIngested => {
-            Authority::ExternalObserved
-        }
+        EventKind::ProviderFrame
+        | EventKind::MediaRef
+        | EventKind::DocumentIngested
+        | EventKind::SourceDeliveryAccepted
+        | EventKind::SourceRevisionObserved => Authority::ExternalObserved,
         EventKind::Assertion
         | EventKind::Consolidation
         | EventKind::Embedding
@@ -57,7 +60,8 @@ pub const fn authority_for_event(kind: EventKind) -> Authority {
         | EventKind::IntentionFired
         | EventKind::AttentionDecided
         | EventKind::IntentionCancelled
-        | EventKind::OutcomeObserved => Authority::RuntimeFact,
+        | EventKind::OutcomeObserved
+        | EventKind::SourceDeliverySettled => Authority::RuntimeFact,
     }
 }
 

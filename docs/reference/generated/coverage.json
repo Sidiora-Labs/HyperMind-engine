@@ -3242,6 +3242,41 @@
       "file": "schemas/events.fbs"
     },
     {
+      "id": "schema:schemas/events.fbs:SourceSignatureScheme",
+      "name": "events.fbs::SourceSignatureScheme",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:SourceDeliveryState",
+      "name": "events.fbs::SourceDeliveryState",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:ConnectorState",
+      "name": "events.fbs::ConnectorState",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:SourceConnectorBound",
+      "name": "events.fbs::SourceConnectorBound",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:SourceDeliveryAccepted",
+      "name": "events.fbs::SourceDeliveryAccepted",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:SourceDeliverySettled",
+      "name": "events.fbs::SourceDeliverySettled",
+      "file": "schemas/events.fbs"
+    },
+    {
+      "id": "schema:schemas/events.fbs:SourceRevisionObserved",
+      "name": "events.fbs::SourceRevisionObserved",
+      "file": "schemas/events.fbs"
+    },
+    {
       "id": "schema:schemas/events.fbs:EventPayload",
       "name": "events.fbs::EventPayload",
       "file": "schemas/events.fbs"

@@ -5767,6 +5767,10 @@ pub enum EventKind {
     DocumentIngested = 45,
     DocumentExtracted = 46,
     DocumentChunked = 47,
+    SourceConnectorBound = 48,
+    SourceDeliveryAccepted = 49,
+    SourceDeliverySettled = 50,
+    SourceRevisionObserved = 51,
 }
 ```
 
@@ -10142,6 +10146,10 @@ pub enum EventKind {
     DocumentIngested = 45,
     DocumentExtracted = 46,
     DocumentChunked = 47,
+    SourceConnectorBound = 48,
+    SourceDeliveryAccepted = 49,
+    SourceDeliverySettled = 50,
+    SourceRevisionObserved = 51,
 }
 ```
 

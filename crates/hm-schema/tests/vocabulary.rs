@@ -86,7 +86,7 @@ fn ledger_frames_carry_the_vocabulary_kind() {
         hm_ledger::frame::EventKind::VocabularyImported
     );
     assert_eq!(
-        hm_ledger::frame::EventKind::try_from(45u8)
+        hm_ledger::frame::EventKind::try_from(52u8)
             .unwrap_err()
             .code,
         ErrorCode::InvalidKind
@@ -95,7 +95,7 @@ fn ledger_frames_carry_the_vocabulary_kind() {
         EventKind::try_from(44u8).unwrap(),
         EventKind::VocabularyImported
     );
-    assert!(EventKind::try_from(45u8).is_err());
+    assert!(EventKind::try_from(52u8).is_err());
     assert!(EventKind::VocabularyImported.is_wave_seven());
     assert_eq!(
         hm_cortex::authority::authority_for_event(EventKind::VocabularyImported),

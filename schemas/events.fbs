@@ -540,6 +540,52 @@ table DocumentChunked {
   chunks:[DocumentChunk] (required);
 }
 
+enum SourceSignatureScheme : ubyte { hmac_sha256_v0 }
+enum SourceDeliveryState : ubyte { accepted, applied, failed, abandoned }
+enum ConnectorState : ubyte { bound, revoked }
+
+table SourceConnectorBound {
+  connector_id:[ubyte] (required);
+  provider:string (required);
+  external_account:string (required);
+  consent_nonce:[ubyte] (required);
+  consent_expires_at_ns:long;
+  credential_version:uint;
+  signature_scheme:SourceSignatureScheme;
+  scopes:[string] (required);
+  state:ConnectorState;
+}
+
+table SourceDeliveryAccepted {
+  connector_id:[ubyte] (required);
+  delivery_id:[ubyte] (required);
+  signature_scheme:SourceSignatureScheme;
+  credential_version:uint;
+  signed_at_ns:long;
+  body_digest:[ubyte] (required);
+  body_bytes:ulong;
+  event_name:string (required);
+}
+
+table SourceDeliverySettled {
+  connector_id:[ubyte] (required);
+  delivery_id:[ubyte] (required);
+  accepted_lsn:ulong;
+  attempt:uint;
+  state:SourceDeliveryState;
+  next_attempt_at_ns:long;
+  detail:string (required);
+}
+
+table SourceRevisionObserved {
+  connector_id:[ubyte] (required);
+  source_id:string (required);
+  revision:[ubyte] (required);
+  content_digest:[ubyte] (required);
+  observed_at_ns:long;
+  delivery_lsn:ulong;
+}
+
 union EventPayload {
   UserMsg,
   DeliveredMsg,
@@ -587,7 +633,11 @@ union EventPayload {
   VocabularyImported,
   DocumentIngested,
   DocumentExtracted,
-  DocumentChunked
+  DocumentChunked,
+  SourceConnectorBound,
+  SourceDeliveryAccepted,
+  SourceDeliverySettled,
+  SourceRevisionObserved
 }
 
 table EventEnvelope {

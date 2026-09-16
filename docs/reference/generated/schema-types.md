@@ -1742,6 +1742,145 @@ table DocumentChunked {
 }
 ```
 
+## events.fbs::SourceSignatureScheme
+
+<a id="schema-schemas-events-fbs-sourcesignaturescheme"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Source Signature Scheme when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+enum SourceSignatureScheme : ubyte { hmac_sha256_v0 }
+```
+
+## events.fbs::SourceDeliveryState
+
+<a id="schema-schemas-events-fbs-sourcedeliverystate"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Source Delivery State when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+enum SourceDeliveryState : ubyte { accepted, applied, failed, abandoned }
+```
+
+## events.fbs::ConnectorState
+
+<a id="schema-schemas-events-fbs-connectorstate"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Connector State when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+enum ConnectorState : ubyte { bound, revoked }
+```
+
+## events.fbs::SourceConnectorBound
+
+<a id="schema-schemas-events-fbs-sourceconnectorbound"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Source Connector Bound when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table SourceConnectorBound {
+  connector_id:[ubyte] (required);
+  provider:string (required);
+  external_account:string (required);
+  consent_nonce:[ubyte] (required);
+  consent_expires_at_ns:long;
+  credential_version:uint;
+  signature_scheme:SourceSignatureScheme;
+  scopes:[string] (required);
+  state:ConnectorState;
+}
+```
+
+## events.fbs::SourceDeliveryAccepted
+
+<a id="schema-schemas-events-fbs-sourcedeliveryaccepted"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Source Delivery Accepted when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table SourceDeliveryAccepted {
+  connector_id:[ubyte] (required);
+  delivery_id:[ubyte] (required);
+  signature_scheme:SourceSignatureScheme;
+  credential_version:uint;
+  signed_at_ns:long;
+  body_digest:[ubyte] (required);
+  body_bytes:ulong;
+  event_name:string (required);
+}
+```
+
+## events.fbs::SourceDeliverySettled
+
+<a id="schema-schemas-events-fbs-sourcedeliverysettled"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Source Delivery Settled when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table SourceDeliverySettled {
+  connector_id:[ubyte] (required);
+  delivery_id:[ubyte] (required);
+  accepted_lsn:ulong;
+  attempt:uint;
+  state:SourceDeliveryState;
+  next_attempt_at_ns:long;
+  detail:string (required);
+}
+```
+
+## events.fbs::SourceRevisionObserved
+
+<a id="schema-schemas-events-fbs-sourcerevisionobserved"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Source Revision Observed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table SourceRevisionObserved {
+  connector_id:[ubyte] (required);
+  source_id:string (required);
+  revision:[ubyte] (required);
+  content_digest:[ubyte] (required);
+  observed_at_ns:long;
+  delivery_lsn:ulong;
+}
+```
+
 ## events.fbs::EventPayload
 
 <a id="schema-schemas-events-fbs-eventpayload"></a>
@@ -1801,7 +1940,11 @@ union EventPayload {
   VocabularyImported,
   DocumentIngested,
   DocumentExtracted,
-  DocumentChunked
+  DocumentChunked,
+  SourceConnectorBound,
+  SourceDeliveryAccepted,
+  SourceDeliverySettled,
+  SourceRevisionObserved
 }
 ```
 
