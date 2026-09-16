@@ -9547,6 +9547,101 @@ pub struct TlsIdentity {
 }
 ```
 
+## hm-serve::LeaseLimits
+
+<a id="rust-crates-hm-serve-src-leases-rs-leaselimits"></a>
+
+Source: [`crates/hm-serve/src/leases.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/leases.rs).
+
+When to use: Use `LeaseLimits` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct LeaseLimits {
+    pub maximum_active_actors: usize,
+    pub maximum_heavy_jobs: usize,
+    pub wait_ms: u64,
+}
+```
+
+## hm-serve::LeaseClass
+
+<a id="rust-crates-hm-serve-src-leases-rs-leaseclass"></a>
+
+Source: [`crates/hm-serve/src/leases.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/leases.rs).
+
+When to use: Use `LeaseClass` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub enum LeaseClass {
+    Actor,
+    HeavyJob,
+}
+```
+
+## hm-serve::LeaseSnapshot
+
+<a id="rust-crates-hm-serve-src-leases-rs-leasesnapshot"></a>
+
+Source: [`crates/hm-serve/src/leases.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/leases.rs).
+
+When to use: Use `LeaseSnapshot` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct LeaseSnapshot {
+    pub active_actors: usize,
+    pub active_leases: usize,
+    pub heavy_jobs: usize,
+    pub refusals: u64,
+}
+```
+
+## hm-serve::LeaseRegistry
+
+<a id="rust-crates-hm-serve-src-leases-rs-leaseregistry"></a>
+
+Source: [`crates/hm-serve/src/leases.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/leases.rs).
+
+When to use: Use `LeaseRegistry` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct LeaseRegistry {
+    limits: LeaseLimits,
+    shared: Arc<Shared>,
+}
+```
+
+## hm-serve::ActorLease
+
+<a id="rust-crates-hm-serve-src-leases-rs-actorlease"></a>
+
+Source: [`crates/hm-serve/src/leases.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/leases.rs).
+
+When to use: Use `ActorLease` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
+
+Do not use: Do not open one actor directory in competing processes, mix admin and actor capabilities, or weaken remote TLS authentication.
+
+
+```rust
+pub struct ActorLease {
+    shared: Arc<Shared>,
+    actor: u16,
+    class: LeaseClass,
+    _heavy: Option<OwnedSemaphorePermit>,
+}
+```
+
 ## hm-serve::FrameParser
 
 <a id="rust-crates-hm-serve-src-protocol-rs-frameparser"></a>

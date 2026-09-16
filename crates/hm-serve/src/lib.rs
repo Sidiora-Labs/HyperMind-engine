@@ -8,6 +8,7 @@ pub mod config;
 pub mod embedded;
 pub mod errors;
 pub mod grpc;
+pub mod leases;
 pub mod protocol;
 pub mod requests;
 pub mod rest;

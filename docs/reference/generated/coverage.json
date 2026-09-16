@@ -2307,6 +2307,31 @@
       "file": "crates/hm-serve/src/grpc/tls.rs"
     },
     {
+      "id": "rust:crates/hm-serve/src/leases.rs:LeaseLimits",
+      "name": "hm-serve::LeaseLimits",
+      "file": "crates/hm-serve/src/leases.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/leases.rs:LeaseClass",
+      "name": "hm-serve::LeaseClass",
+      "file": "crates/hm-serve/src/leases.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/leases.rs:LeaseSnapshot",
+      "name": "hm-serve::LeaseSnapshot",
+      "file": "crates/hm-serve/src/leases.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/leases.rs:LeaseRegistry",
+      "name": "hm-serve::LeaseRegistry",
+      "file": "crates/hm-serve/src/leases.rs"
+    },
+    {
+      "id": "rust:crates/hm-serve/src/leases.rs:ActorLease",
+      "name": "hm-serve::ActorLease",
+      "file": "crates/hm-serve/src/leases.rs"
+    },
+    {
       "id": "rust:crates/hm-serve/src/protocol.rs:FrameParser",
       "name": "hm-serve::FrameParser",
       "file": "crates/hm-serve/src/protocol.rs"
