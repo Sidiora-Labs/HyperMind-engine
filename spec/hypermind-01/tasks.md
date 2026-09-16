@@ -188,7 +188,7 @@
     - Attest accepts used, ignored, helpful and harmful on provenance URIs and writes Attestation events that the review phase reads; the RetrievalManifest used stage is populated from them.
     - MCP consolidate runs NREM or REM or both with a budget, lists runs with cost and stats, retracts a run; hm consolidate run, list, retract; the TypeScript engine exposes the same.
     - _Requirements: 6.1, 13.2, 13.3, 10.1_
-  - [ ] 6.7 Dream regression, citation validity, publish and rollback suites; LongMemEval at 80
+  - [x] 6.7 Dream regression, citation validity, publish and rollback suites; LongMemEval at 80
     - Dream regression fixture built from the cortex-engine changelog incidents: numbers, quotations, first person, named entities and hedges; a consolidation run must preserve all of them, produce no duplicate abstractions above the measured threshold, and mint nothing without three roots; zero lossy rewrites is the gate.
     - Citation validity reports drop rate; the generations suite kills the daemon between stage and publish and after a lost ack and asserts exactly one published generation; LongMemEval with consolidation enabled at least 80 percent.
     - _Requirements: 15.1, 9.2, 9.3, 5.2_

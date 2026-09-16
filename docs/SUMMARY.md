@@ -5,3 +5,5 @@
 - [Threat model](security/threat-model.md)
 - [Sealing and key lifecycle](internals/sealing.md)
 - [Merkle Mountain Range](internals/mmr.md)
+- [Consolidation](concepts/consolidation.md)
+- [Generations](internals/generations.md)

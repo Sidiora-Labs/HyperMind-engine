@@ -605,6 +605,27 @@ fn cortex_engine_quality_regression_vectors_are_preserved() {
     );
     assert!(
         check_rewrite(
+            "Deployment",
+            "Alice Chen deployed OpenClaw to Berlin.",
+            "An engineer deployed a service.",
+            &[],
+        )
+        .reasons
+        .iter()
+        .any(|reason| reason.contains("dropped entities"))
+    );
+    assert!(
+        check_rewrite(
+            "Cache expiry",
+            "The cache may invalidate an entry after expiry.",
+            "The cache invalidates an entry after expiry.",
+            &[],
+        )
+        .reasons
+        .contains(&"dropped hedges: may".to_owned())
+    );
+    assert!(
+        check_rewrite(
             "Interrogation: Gemini Asks Hard Questions",
             GEMINI_OLD,
             &format!("{GEMINI_OLD} Answering them honestly is a practice I keep."),

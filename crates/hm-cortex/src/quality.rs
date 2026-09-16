@@ -556,8 +556,18 @@ pub fn check_rewrite(name: &str, old: &str, next: &str, evidence: &[&str]) -> Re
     {
         reasons.push("first person became third person".to_owned());
     }
+    let old_entities = entities(old);
+    let next_entities = entities(next);
+    let lost_entities = old_entities
+        .difference(&next_entities)
+        .take(8)
+        .cloned()
+        .collect::<Vec<_>>();
+    if !lost_entities.is_empty() {
+        reasons.push(format!("dropped entities: {}", lost_entities.join(", ")));
+    }
     let known = entities(&format!("{old} {evidence}"));
-    let foreign = entities(next)
+    let foreign = next_entities
         .difference(&known)
         .take(8)
         .cloned()
@@ -565,8 +575,18 @@ pub fn check_rewrite(name: &str, old: &str, next: &str, evidence: &[&str]) -> Re
     if !foreign.is_empty() {
         reasons.push(format!("new entities: {}", foreign.join(", ")));
     }
+    let old_hedges = hedges(old);
+    let next_hedges = hedges(next);
+    let dropped_hedges = old_hedges
+        .difference(&next_hedges)
+        .take(5)
+        .cloned()
+        .collect::<Vec<_>>();
+    if !dropped_hedges.is_empty() {
+        reasons.push(format!("dropped hedges: {}", dropped_hedges.join(", ")));
+    }
     let allowed = hedges(&format!("{old} {evidence}"));
-    let added = hedges(next)
+    let added = next_hedges
         .difference(&allowed)
         .take(5)
         .cloned()
@@ -736,5 +756,5 @@ fn capitalized_regex() -> &'static Regex {
 
 fn hedge_regex() -> &'static Regex {
     static VALUE: OnceLock<Regex> = OnceLock::new();
-    VALUE.get_or_init(|| Regex::new(r"(?i)\b(?:may|might|could)\s+(?:not|only|vary|depend|differ)\b|\bbut only\b|\bin\s+(?:some|certain|specific|particular)\s+(?:cases|contexts|configurations|situations|environments|circumstances)\b|\bdepending on\b|\bnot necessarily\b|\bpotentially\b|\backnowledg(?:e|es|ed|ing)\b|\b(?:it is|it's)\s+(?:important|worth)\s+(?:to note|noting)\b|\bgenerally\b|\btypically\b|\bin general\b|\bwhere\s+(?:supported|applicable|available)\b|\bsubject to\b|\bto some extent\b|\bas a construct\b").expect("constant regex"))
+    VALUE.get_or_init(|| Regex::new(r"(?i)\b(?:may|might|could)\b|\bbut only\b|\bin\s+(?:some|certain|specific|particular)\s+(?:cases|contexts|configurations|situations|environments|circumstances)\b|\bdepending on\b|\bnot necessarily\b|\bpotentially\b|\backnowledg(?:e|es|ed|ing)\b|\b(?:it is|it's)\s+(?:important|worth)\s+(?:to note|noting)\b|\bgenerally\b|\btypically\b|\bin general\b|\bwhere\s+(?:supported|applicable|available)\b|\bsubject to\b|\bto some extent\b|\bas a construct\b").expect("constant regex"))
 }

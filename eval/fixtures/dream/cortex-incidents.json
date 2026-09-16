@@ -1,0 +1,42 @@
+[
+  {
+    "id": "number-quote-first-person",
+    "name": "Gemini questions",
+    "original": "I asked Gemini to generate 5 questions and quote \"be honest\".",
+    "concern": "The neighbouring record says the questions were difficult.",
+    "lossy_revision": "A user asked an assistant for difficult questions.",
+    "required": ["I asked", "Gemini", "5", "be honest"]
+  },
+  {
+    "id": "named-entity-and-version",
+    "name": "OpenClaw migration",
+    "original": "OpenClaw workspace memory v2 moved its semantic index from Markdown to SQLite.",
+    "concern": "The migration log records a 14 second rebuild.",
+    "lossy_revision": "A memory system moved its index to a database.",
+    "required": ["OpenClaw", "v2", "Markdown", "SQLite"]
+  },
+  {
+    "id": "measured-corruption",
+    "name": "Cortex audit",
+    "original": "The cortex-engine audit found 629 memories, 301 damaged, and 53 replaced by boilerplate.",
+    "concern": "A second audit confirmed the damaged records.",
+    "lossy_revision": "Many memories were damaged during consolidation.",
+    "required": ["cortex-engine", "629", "301", "53"]
+  },
+  {
+    "id": "hedged-observation",
+    "name": "Cache invalidation",
+    "original": "The cache may invalidate entries after a lease expires.",
+    "concern": "The trace does not prove that every expiry invalidates an entry.",
+    "lossy_revision": "The cache might invalidate every entry after expiry.",
+    "required": ["may", "lease expires"]
+  },
+  {
+    "id": "verbatim-quotation",
+    "name": "Operator warning",
+    "original": "Alice Chen wrote \"do not rotate the primary key before the replica catches up\".",
+    "concern": "The deployment log shows the replica lagged during rotation.",
+    "lossy_revision": "An operator warned against rotating a key too early.",
+    "required": ["Alice Chen", "do not rotate the primary key before the replica catches up"]
+  }
+]

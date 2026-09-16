@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "slice": "slice6",
+  "encoder": "lexical_only",
+  "judge_model": "openrouter/openai/gpt-4o-2024-08-06",
+  "suites": [
+    "dream_regression",
+    "citation_validity",
+    "generation_publish_rollback",
+    "longmemeval_s_consolidation"
+  ],
+  "judge_free": [
+    {
+      "name": "dream_lossy_rewrites",
+      "value": 0.0,
+      "unit": "count",
+      "tolerance": 0.0,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "dream_preservation_rate",
+      "value": 1.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "duplicate_abstraction_rate",
+      "value": 0.0,
+      "unit": "count",
+      "tolerance": 0.0,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "ungrounded_mint_rate",
+      "value": 0.0,
+      "unit": "count",
+      "tolerance": 0.0,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "citation_invalid_drop_rate",
+      "value": 0.75,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "citation_escape_rate",
+      "value": 0.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": false,
+      "judged": false
+    },
+    {
+      "name": "generation_crash_recovery",
+      "value": 1.0,
+      "unit": "boolean",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "generation_rollback_override",
+      "value": 1.0,
+      "unit": "boolean",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "longmemeval_consolidation_coverage",
+      "value": 0.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    },
+    {
+      "name": "longmemeval_judge_cache_hit_rate",
+      "value": 0.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": false
+    }
+  ],
+  "judged": [
+    {
+      "name": "longmemeval_accuracy_consolidation",
+      "value": 0.0,
+      "unit": "ratio",
+      "tolerance": 0.0,
+      "higher_is_better": true,
+      "judged": true
+    }
+  ]
+}

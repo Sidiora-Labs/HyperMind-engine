@@ -52,11 +52,25 @@ struct CachedResponse {
 }
 
 pub fn run_baseline() -> Result<BenchmarkResult, Box<dyn std::error::Error>> {
+    run_named_predictions("LONGMEMEVAL_PREDICTIONS", "wave4-no-consolidation.jsonl")
+}
+
+pub fn run_consolidation() -> Result<BenchmarkResult, Box<dyn std::error::Error>> {
+    run_named_predictions(
+        "LONGMEMEVAL_CONSOLIDATED_PREDICTIONS",
+        "wave6-consolidation.jsonl",
+    )
+}
+
+fn run_named_predictions(
+    environment_name: &str,
+    default_name: &str,
+) -> Result<BenchmarkResult, Box<dyn std::error::Error>> {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../eval/datasets/longmemeval");
     let dataset = std::env::var_os("LONGMEMEVAL_DATASET")
         .map_or_else(|| root.join("longmemeval_s_cleaned.json"), PathBuf::from);
-    let predictions = std::env::var_os("LONGMEMEVAL_PREDICTIONS")
-        .map_or_else(|| root.join("wave4-no-consolidation.jsonl"), PathBuf::from);
+    let predictions =
+        std::env::var_os(environment_name).map_or_else(|| root.join(default_name), PathBuf::from);
     if !dataset.exists() || !predictions.exists() {
         return Ok(BenchmarkResult::default());
     }

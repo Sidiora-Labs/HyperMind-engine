@@ -759,7 +759,7 @@ do_3 = "MCP consolidate runs NREM or REM or both with a budget, lists runs with 
 
 [task.6.7]
 title = "Dream regression, citation validity, publish and rollback suites; LongMemEval at 80"
-status = "pending"
+status = "done"
 wave = 6
 owner_lane = "eval"
 requires = ["6.6"]
