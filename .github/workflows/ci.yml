@@ -33,7 +33,7 @@ jobs:
       - uses: ./.github/actions/rust-setup
         with:
           cache-scope: quality
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.13.11'
       - run: python -m pip install -r deploy/requirements.txt
@@ -99,7 +99,7 @@ jobs:
         run: |
           npm ci --prefix sdk/typescript
           npm --prefix sdk/typescript test
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         if: matrix.language == 'python'
         with:
           python-version: '3.12.12'
@@ -237,7 +237,7 @@ jobs:
           github-token: ${{ github.token }}
           run-id: ${{ vars.SLICE7_EVIDENCE_RUN_ID }}
           digest-mismatch: error
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.11.14'
       - name: Install unchanged pinned official LoCoMo scorer
