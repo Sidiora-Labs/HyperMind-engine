@@ -808,7 +808,7 @@ do_3 = "Mine procedures from ToolCall to ToolResult to Effect to Outcome chains 
 
 [task.7.3]
 title = "Prospective tier, procedure rendering by state, reconstruct mode, optional reranker"
-status = "pending"
+status = "in_progress"
 wave = 7
 owner_lane = "compose"
 requires = ["7.2"]

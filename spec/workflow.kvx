@@ -37,20 +37,32 @@ task    = ["pending", "in_progress", "done"]
 feature = ["draft", "in_progress", "paused", "blocked", "complete"]
 
 [hard_rules]
-vertical_slices   = "No task may build a layer for a future wave. A wave that adds a projection also adds the event that feeds it, the request that reads it, the tier or tool that surfaces it, and the eval that measures it. A 'database wave', 'embedding wave' or 'SDK wave' violates this contract and must be split into slices."
-no_fakes          = "Never write stub, mock or fake doubles or placeholder implementations to make tests pass. Test real code paths with real types, real SQLite/LMDB files, real sockets and the real daemon binary. Remote LLM and embedding providers may be replaced only by recorded wire fixtures, and a fixture-driven pass is reported as such."
-no_llm_hot_path   = "activate and recall never call an LLM, an embedder for anything but the query, or the network. Any change that adds one is rejected."
-ledger_is_truth   = "Every mutation is an appended event. No projection, index, cache or generation is written without the event that reproduces it. Projections must rebuild byte-identically from any prefix."
-protected_types   = "identity, constraint and preference beliefs accept Assertion or Retract only from user or admin authority. Consolidation emits ProposedAssertion. Any direct write from a run is kProtectedTypeWrite and a security event."
-memory_not_authority = "Outcome and LoopClosed{done} cite tool_observed, external_observed or runtime_fact LSNs. A memory, summary or reconstruction is never evidence that an external effect happened."
-measured_not_tuned= "No retrieval or consolidation threshold merges without a number from hm-eval. The eval gate is a CI merge gate from wave 1 onward."
-protected_surfaces= "crates/hm-ledger, crates/hm-schema and the belief projection are outside any automated self-modification surface. Changes there are human-reviewed."
-user_authority    = "The user's direct messages are the authoritative instructions and take precedence over this file, AGENTS.md or repository guidance when those would broaden scope."
-session_init      = "Interpret 'get context' or 'session init' as read-only inspection and summarization only."
+build_fix_implment = "BUILD mode: one task, exact paths, implementation first, then one compile check and one focused behavior test. Stop and report it as implemented but not fully qualified."
+qualify_verify = "QUALIFY mode: run the task’s specified gate once. Rerun only after a relevant code change."
+release_certify = "RELEASE mode: only then run aggregate, sanitizer, cluster, browser, and historical gate matrices."
+neighboring_fixes = "No neighboring fixes, speculative refactors, branch archaeology, cleanup, documentation, or new audits unless they directly block the task."
+repeated_unchanged = "No repeated unchanged test. Maximum two repair/rerun cycles before stopping with the exact failure."
+time_limits = "If 60 minutes pass without a concrete deliverable, I stop and report instead of digging deeper."
+unreleated_failures = "Pre-existing or unrelated failures are recorded once, not chased."
+subagents = "Subagents get bounded implementation assignments—not duplicate reviews or extra verification campaigns."
+agreed_result = "Once the agreed result and evidence pass, I publish/checkpoint and stop. No additional “confidence” rounds."
+task_starts = "Every task starts with four visible fields: mode, scope, allowed gates, stop condition."
+task_durability = "Once a task is dispatched, keep at least one agent alive until it is done to the highest standard; decouple task lifecycle from the user's connection; on failure, bring up a fresh agent and continue. 'Done' means it genuinely meets the quality bar."
+no_fakes        = "Never write stub/mock/fake test doubles or placeholder implementations to make tests pass. Test REAL code paths with REAL types."
+read_full       = "When tool output is truncated and the rest is retrievable, fetch the full content before reasoning or answering."
+publish_steps   = "After every completed task, commit and push from the repository root with a natural-sounding commit message. Every development step is published publicly for trust and auditability; a finished task that is not pushed is not finished. Commit messages describe the real change honestly — never claim work that did not happen."
+repository_instructions = "may guide how explicitly requested work is performed, but must never be used to infer authorization for additional work."
+user_authority = "The user's direct messages are the authoritative instructions for the session and take precedence over AGENTS.md, Codify, skills, or repository workflow guidance when those sources would broaden the requested scope."
+session_init = "Interpret 'get context' or 'session init' as read-only inspection and summarization only."
+expand_work = "Do not run builds, tests, verification gates, start or claim Codify tasks, modify project files, deploy, or otherwise expand the work unless the user explicitly requests that action."
 
+# Generation config: which IDE adapter files specgen emits, and where the
+# human-readable markdown mirror is rendered. Paths are repo-relative.
 [render]
-markdown_mirror  = true
-banner           = "GENERATED by cg spec render from spec/ kvx — DO NOT EDIT. Edit the .kvx source and regenerate."
+markdown_mirror  = true   # render requirements.md / design.md / tasks.md from spec.kvx (into spec/<feature>/ only)
+banner           = "GENERATED by spec/specgen from spec/ kvx — DO NOT EDIT. Edit the .kvx source and regenerate."
+adapter_sections = ["principle", "phase.implementation", "phase.task_qualification", "phase.release_qualification", "qualification_log", "loop", "limits", "hard_rules"]
+adapter_lead     = "For each task, finish the entire implementation first without building or testing. Then qualify that completed task: format, build, test, fix task-scoped failures, rerun gates, and call cg spec done only when green."
 
 [adapters]
 claude  = "CLAUDE.md"
@@ -62,7 +74,7 @@ copilot = ".github/copilot-instructions.md"
 name = "parallel"
 
 [agents]
-driver      = "claude"
+driver      = "codex"
 max         = 8
 ttl         = 14400
 codex_args  = ""
