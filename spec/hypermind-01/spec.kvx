@@ -746,7 +746,7 @@ do_3 = "Run phase machine persisted as ConsolidationPhase events with a per-atte
 
 [task.6.6]
 title = "Graph lane; attest closes the loop; MCP consolidate and attest; CLI consolidate"
-status = "pending"
+status = "done"
 wave = 6
 owner_lane = "surface"
 requires = ["6.5"]

@@ -28,6 +28,7 @@ use std::path::{Path, PathBuf};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::UnixStream;
 
+mod consolidate;
 mod verify;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -90,6 +91,10 @@ enum Command {
         budget_tokens: usize,
         #[arg(long)]
         embedded: bool,
+    },
+    Consolidate {
+        #[command(subcommand)]
+        command: consolidate::Command,
     },
     Verify {
         actor_directory: PathBuf,
@@ -155,6 +160,7 @@ async fn execute(command: Command) -> Result<Value> {
             budget_tokens,
             embedded,
         } => activate(&config, &conversation, &query, budget_tokens, embedded).await,
+        Command::Consolidate { command } => consolidate::execute(command).await,
         Command::Verify {
             actor_directory,
             actor,
@@ -319,7 +325,7 @@ async fn recall(path: &Path, query: &str, limit: usize, embedded: bool) -> Resul
             query: query.as_bytes().to_vec(),
             limit: u32::try_from(limit)?,
             mode: RecallMode::ListWindows,
-            level: 0,
+            level: 1,
             start_ns: 0,
             end_ns: 0,
         })))

@@ -1,5 +1,7 @@
+pub mod attest;
 pub mod believe;
 pub mod bind;
+pub mod consolidate;
 pub mod dispute;
 pub mod forget;
 pub mod inspect;

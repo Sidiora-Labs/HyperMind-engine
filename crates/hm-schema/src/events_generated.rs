@@ -1140,11 +1140,18 @@ mod root {
 
                 /// The variant `ignored` in the enum `AttestationDisposition`
                 Ignored = 1,
+
+                /// The variant `helpful` in the enum `AttestationDisposition`
+                Helpful = 2,
+
+                /// The variant `harmful` in the enum `AttestationDisposition`
+                Harmful = 3,
             }
 
             impl AttestationDisposition {
                 /// Array containing all valid variants of AttestationDisposition
-                pub const ENUM_VALUES: [Self; 2] = [Self::Used, Self::Ignored];
+                pub const ENUM_VALUES: [Self; 4] =
+                    [Self::Used, Self::Ignored, Self::Helpful, Self::Harmful];
             }
 
             impl ::core::convert::TryFrom<u8> for AttestationDisposition {
@@ -1158,6 +1165,8 @@ mod root {
                     match value {
                         0 => ::core::result::Result::Ok(AttestationDisposition::Used),
                         1 => ::core::result::Result::Ok(AttestationDisposition::Ignored),
+                        2 => ::core::result::Result::Ok(AttestationDisposition::Helpful),
+                        3 => ::core::result::Result::Ok(AttestationDisposition::Harmful),
 
                         _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
                             tag: value as i128,

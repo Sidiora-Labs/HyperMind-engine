@@ -19,6 +19,17 @@ pub enum AttestationSignal {
     Harmful,
 }
 
+impl From<hm_schema::events::AttestationDisposition> for AttestationSignal {
+    fn from(value: hm_schema::events::AttestationDisposition) -> Self {
+        match value {
+            hm_schema::events::AttestationDisposition::Used => Self::Used,
+            hm_schema::events::AttestationDisposition::Ignored => Self::Ignored,
+            hm_schema::events::AttestationDisposition::Helpful => Self::Helpful,
+            hm_schema::events::AttestationDisposition::Harmful => Self::Harmful,
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct ReviewCandidate {
     pub memory_id: Vec<u8>,

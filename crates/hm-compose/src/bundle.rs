@@ -416,7 +416,10 @@ pub fn build_attestations(
             sealed_payload: encode_event_envelope(&envelope),
         });
     }
-    if request.disposition == AttestationDisposition::Used {
+    if matches!(
+        request.disposition,
+        AttestationDisposition::Used | AttestationDisposition::Helpful
+    ) {
         bundle.manifest.used = frames
             .iter()
             .filter_map(|frame| {

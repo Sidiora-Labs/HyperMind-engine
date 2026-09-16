@@ -5,9 +5,10 @@ use hm_compose::tokens::FallbackWeights;
 use hm_core::{ActorId, ConversationId};
 use hm_ledger::idempotency::ConnectionId;
 use hm_mcp::{
-    BeliefClaimInput, BeliefTypeInput, BelieveInput, BindInput, ClaimInput, IntendInput, McpServer,
-    ProvenanceInput, RecallFilters, RecallInput, RecallMode, RememberAnchor, RememberInput,
-    RememberKind, RetentionInput, RetractInput, SensitivityInput,
+    AttestInput, BeliefClaimInput, BeliefTypeInput, BelieveInput, BindInput, ClaimInput,
+    ConsolidateInput, IntendInput, McpServer, ProvenanceInput, RecallFilters, RecallInput,
+    RecallMode, RememberAnchor, RememberInput, RememberKind, RetentionInput, RetractInput,
+    SensitivityInput,
 };
 use hm_proj::beliefs::BeliefAsOf;
 use hm_schema::events::BeliefType;
@@ -247,6 +248,18 @@ impl NativeSession {
     }
 
     #[napi]
+    pub async fn attest(&self, input_json: String) -> napi::Result<String> {
+        let input: AttestInput = serde_json::from_str(&input_json).map_err(napi_error)?;
+        encode_json(&self.mcp.attest_envelope(input).await)
+    }
+
+    #[napi]
+    pub async fn consolidate(&self, input_json: String) -> napi::Result<String> {
+        let input: ConsolidateInput = serde_json::from_str(&input_json).map_err(napi_error)?;
+        encode_json(&self.mcp.consolidate_envelope(input).await)
+    }
+
+    #[napi]
     pub async fn believe(&self, input_json: String) -> napi::Result<String> {
         let raw: BelieveJson = serde_json::from_str(&input_json).map_err(napi_error)?;
         let input = BelieveInput {
@@ -304,15 +317,15 @@ impl NativeSession {
             (None, Some(value)) => {
                 BeliefAsOf::KnownAt(hm_core::LSN::new(value.parse().map_err(napi_error)?))
             }
-            _ => return Err(napi::Error::from_reason("exactly one as-of axis is required")),
+            _ => {
+                return Err(napi::Error::from_reason(
+                    "exactly one as-of axis is required",
+                ));
+            }
         };
         let result = self
             .actor
-            .as_of(
-                belief_type_value(&belief_type)?,
-                canonical_identity,
-                as_of,
-            )
+            .as_of(belief_type_value(&belief_type)?, canonical_identity, as_of)
             .await
             .map_err(napi_error)?;
         let Some(record) = result.record else {

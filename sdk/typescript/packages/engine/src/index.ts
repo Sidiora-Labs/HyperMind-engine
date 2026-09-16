@@ -22,6 +22,8 @@ interface NativeSessionHandle {
   checkpoint(turnId: string, blob: Uint8Array): Promise<string>;
   intend(input: string): Promise<string>;
   bind(input: string): Promise<string>;
+  attest(input: string): Promise<string>;
+  consolidate(input: string): Promise<string>;
   believe(input: string): Promise<string>;
   retract(beliefId: string, provenance: string): Promise<string>;
   asOf(
@@ -104,6 +106,32 @@ export interface BindInput {
   revision: string;
   freshnessRequirementNs: bigint;
 }
+
+export type AttestDisposition = "used" | "ignored" | "helpful" | "harmful";
+
+export interface AttestInput {
+  provenance: string[];
+  disposition: AttestDisposition;
+  idempotencyKey: string;
+}
+
+export interface ConsolidateBudget {
+  maxLlmCalls: number;
+  maxTokens: number;
+  maxMicrousd: number;
+  maxWallMs: number;
+}
+
+export type ConsolidateInput =
+  | {
+      action: "run";
+      mode: "nrem" | "rem" | "both";
+      scope?: string;
+      cadenceKey: string;
+      budget: ConsolidateBudget;
+    }
+  | { action: "list" }
+  | { action: "retract"; runId: string; reason: string };
 
 export class HyperMind {
   private constructor(private readonly native: NativeEngineHandle) {}
@@ -190,6 +218,38 @@ export class Session {
         }),
       ),
     );
+  }
+
+  async attest(input: AttestInput): Promise<Envelope> {
+    return decodeEnvelope(
+      await this.native.attest(
+        JSON.stringify({
+          provenance: input.provenance,
+          disposition: input.disposition,
+          idempotency_key: input.idempotencyKey,
+        }),
+      ),
+    );
+  }
+
+  async consolidate(input: ConsolidateInput): Promise<Envelope> {
+    const encoded = input.action === "run"
+      ? {
+          action: input.action,
+          mode: input.mode,
+          scope: input.scope,
+          cadence_key: input.cadenceKey,
+          budget: {
+            max_llm_calls: input.budget.maxLlmCalls,
+            max_tokens: input.budget.maxTokens,
+            max_microusd: input.budget.maxMicrousd,
+            max_wall_ms: input.budget.maxWallMs,
+          },
+        }
+      : input.action === "retract"
+        ? { action: input.action, run_id: input.runId, reason: input.reason }
+        : { action: input.action };
+    return decodeEnvelope(await this.native.consolidate(JSON.stringify(encoded)));
   }
 
   async believe(input: BelieveInput & { runId?: string }): Promise<Envelope> {

@@ -56,6 +56,37 @@ test("napi engine exposes one embedded continuity session", async (context) => {
   const prompt = render(bundle);
   assert.equal(prompt.sections.flatMap((section) => section.items).every((item) => item.role === "user"), true);
 
+  const attested = await session.attest({
+    provenance: remembered.provenance,
+    disposition: "helpful",
+    idempotencyKey: "native-helpful-1",
+  });
+  assert.equal(attested.ok, true);
+  assert.deepEqual((attested.items[0] as { manifest_used: number[] }).manifest_used, [1]);
+
+  const consolidated = await session.consolidate({
+    action: "run",
+    mode: "both",
+    cadenceKey: "native-night-1",
+    budget: {
+      maxLlmCalls: 8,
+      maxTokens: 16_000,
+      maxMicrousd: 50_000,
+      maxWallMs: 30_000,
+    },
+  });
+  assert.equal(consolidated.ok, true);
+  const consolidationRun = (consolidated.items[0] as { run_id: string }).run_id;
+  const runs = await session.consolidate({ action: "list" });
+  assert.equal(runs.items.length, 1);
+  assert.equal((runs.items[0] as { run_id: string }).run_id, consolidationRun);
+  const consolidationRetracted = await session.consolidate({
+    action: "retract",
+    runId: consolidationRun,
+    reason: "native rollback",
+  });
+  assert.equal(consolidationRetracted.ok, true);
+
   const provenance = [{
     firstLsn: evidenceLsn,
     lastLsn: evidenceLsn,

@@ -11,7 +11,7 @@ fn hm(arguments: &[&str]) -> Value {
         .unwrap();
     assert!(
         output.status.success(),
-        "stderr: {}",
+        "hm {arguments:?} failed: {}",
         String::from_utf8_lossy(&output.stderr)
     );
     serde_json::from_slice(&output.stdout).unwrap()
@@ -65,6 +65,42 @@ fn init_doctor_and_embedded_commands_are_json_capable() {
     ]);
     assert!(activated["bundle_hash"].as_str().unwrap().len() == 64);
     assert!(activated["sections"].is_array());
+
+    let consolidated = hm(&[
+        "consolidate",
+        "run",
+        "--config",
+        config,
+        "--mode",
+        "both",
+        "--cadence-key",
+        "cli-night-1",
+        "--max-llm-calls",
+        "8",
+        "--max-tokens",
+        "16000",
+        "--max-microusd",
+        "50000",
+        "--max-wall-ms",
+        "30000",
+        "--json",
+    ]);
+    assert_eq!(consolidated["ok"], true);
+    let run_id = consolidated["items"][0]["run_id"].as_str().unwrap();
+    let listed = hm(&["consolidate", "list", "--config", config, "--json"]);
+    assert_eq!(listed["items"].as_array().unwrap().len(), 1);
+    let retracted = hm(&[
+        "consolidate",
+        "retract",
+        "--config",
+        config,
+        "--run-id",
+        run_id,
+        "--reason",
+        "cli rollback",
+        "--json",
+    ]);
+    assert_eq!(retracted["items"][0]["status"], "retracted");
 
     let diagnosed = hm(&["doctor", "--config", config, "--json"]);
     assert_eq!(diagnosed["ok"], true);

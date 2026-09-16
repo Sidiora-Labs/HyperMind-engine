@@ -18,10 +18,14 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 
 pub mod tools;
+pub use tools::attest::{AttestDisposition, AttestInput};
 pub use tools::believe::{
     BeliefClaimInput, BeliefTypeInput, BelieveInput, ClaimInput, ProvenanceInput,
 };
 pub use tools::bind::BindInput;
+pub use tools::consolidate::{
+    ConsolidateAction, ConsolidateBudget, ConsolidateInput, ConsolidateMode,
+};
 pub use tools::dispute::{DisputeInput, DisputeRuntime};
 pub use tools::forget::{ForgetAction, ForgetInput};
 pub use tools::inspect::InspectInput;
@@ -403,6 +407,21 @@ impl McpServer {
         }
     }
 
+    pub async fn attest_envelope(&self, input: AttestInput) -> Envelope {
+        match tools::attest::run(&self.actor, input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, true),
+        }
+    }
+
+    pub async fn consolidate_envelope(&self, input: ConsolidateInput) -> Envelope {
+        let mutation = !matches!(input.action, ConsolidateAction::List);
+        match tools::consolidate::run(&self.actor, input).await {
+            Ok(value) => value,
+            Err(error) => Envelope::error(error, mutation),
+        }
+    }
+
     pub async fn believe_envelope(&self, input: BelieveInput) -> Envelope {
         match tools::believe::run(&self.actor, input).await {
             Ok(value) => value,
@@ -464,6 +483,16 @@ impl McpServer {
     #[tool(description = "Bind a task or scope to a canonical entity revision")]
     async fn bind(&self, Parameters(input): Parameters<BindInput>) -> Json<Envelope> {
         Json(self.bind_envelope(input).await)
+    }
+
+    #[tool(description = "Record used, ignored, helpful, or harmful provenance feedback")]
+    async fn attest(&self, Parameters(input): Parameters<AttestInput>) -> Json<Envelope> {
+        Json(self.attest_envelope(input).await)
+    }
+
+    #[tool(description = "Run, list, or retract budgeted consolidation generations")]
+    async fn consolidate(&self, Parameters(input): Parameters<ConsolidateInput>) -> Json<Envelope> {
+        Json(self.consolidate_envelope(input).await)
     }
 
     #[tool(description = "Write a typed bitemporal belief assertion")]
@@ -605,8 +634,18 @@ mod tests {
         assert_eq!(
             names,
             [
-                "activate", "believe", "bind", "dispute", "forget", "inspect", "intend", "recall",
-                "remember", "retract"
+                "activate",
+                "attest",
+                "believe",
+                "bind",
+                "consolidate",
+                "dispute",
+                "forget",
+                "inspect",
+                "intend",
+                "recall",
+                "remember",
+                "retract"
             ]
             .map(str::to_owned)
             .into()

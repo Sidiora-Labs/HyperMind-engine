@@ -84,6 +84,8 @@ table Attest {
   used:[ulong];
   ignored:[ulong];
   client_seq:ulong;
+  helpful:[ulong];
+  harmful:[ulong];
 }
 
 /// Streams committed events after an optional conversation and LSN cursor.

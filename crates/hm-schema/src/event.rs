@@ -410,7 +410,10 @@ fn validate_payload(
             if value.target_lsn != 0
                 && matches!(
                     value.disposition,
-                    AttestationDisposition::Used | AttestationDisposition::Ignored
+                    AttestationDisposition::Used
+                        | AttestationDisposition::Ignored
+                        | AttestationDisposition::Helpful
+                        | AttestationDisposition::Harmful
                 )
             {
                 Ok(())

@@ -6,7 +6,7 @@ use crate::auth::{self, Principal};
 use crate::config::ServerConfig;
 use crate::errors::{MutationEffectState, mutation_effect_state};
 use crate::protocol::{FrameParser, encode_frame};
-use crate::requests::{asof, checkpoint, subscribe};
+use crate::requests::{asof, attest, checkpoint, subscribe};
 use hm_compose::canonical::canonical_bytes;
 use hm_compose::tokens::FallbackWeights;
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN};
@@ -15,8 +15,8 @@ use hm_schema::protocol::{
     MAXIMUM_BATCH_EVENTS, MAXIMUM_PROTOCOL_PAYLOAD_BYTES, verify_wire_envelope,
 };
 use hm_schema::wire::{
-    AppendAck, BytesResult, CheckpointAck, CheckpointResult, ErrorDetail, Event, FrameRecord,
-    HealthResult, MutationEffectState as WireMutationEffectState, ProjectionStat,
+    AppendAck, AttestAck, BytesResult, CheckpointAck, CheckpointResult, ErrorDetail, Event,
+    FrameRecord, HealthResult, MutationEffectState as WireMutationEffectState, ProjectionStat,
     RecallMode as WireRecallMode, RecallResult, Request, RequestPayload, Response, ResponsePayload,
     ResponseStatus, StatsResult, SubscriptionAck, TranscriptResult, Welcome, WireEnvelope,
     WirePayload,
@@ -516,6 +516,17 @@ async fn handle_request(
                     lsn: 0,
                     blob: None,
                 },
+            }))
+        }
+        RequestPayload::Attest(value) => {
+            let outcome = attest::write(actor, session.connection_id, *value)
+                .await
+                .map_err(|error| (request_id, error))?;
+            ResponsePayload::AttestAck(Box::new(AttestAck {
+                first_lsn: outcome.first_lsn.get(),
+                last_lsn: outcome.last_lsn.get(),
+                count: u32::try_from(outcome.last_lsn.get() - outcome.first_lsn.get() + 1)
+                    .map_err(|_| (request_id, Error::new(ErrorCode::CapacityExceeded)))?,
             }))
         }
         RequestPayload::Stats(_) => {

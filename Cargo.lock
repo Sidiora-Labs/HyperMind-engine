@@ -1118,6 +1118,7 @@ dependencies = [
  "hm-compose",
  "hm-core",
  "hm-ledger",
+ "hm-mcp",
  "hm-schema",
  "hm-serve",
  "serde_json",

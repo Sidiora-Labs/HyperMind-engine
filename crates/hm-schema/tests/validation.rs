@@ -137,6 +137,20 @@ fn verifies_every_wave_one_event_kind() {
                 disposition: AttestationDisposition::Used,
             })),
         ),
+        (
+            EventKind::Attestation,
+            EventPayload::Attestation(Box::new(Attestation {
+                target_lsn: 1,
+                disposition: AttestationDisposition::Helpful,
+            })),
+        ),
+        (
+            EventKind::Attestation,
+            EventPayload::Attestation(Box::new(Attestation {
+                target_lsn: 1,
+                disposition: AttestationDisposition::Harmful,
+            })),
+        ),
     ];
     for (kind, payload) in cases {
         let encoded = encode_event(&event_envelope(payload, 2));

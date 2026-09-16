@@ -6,7 +6,7 @@ enum EffectState : ubyte { dispatched, committed, returned, outcome_unknown }
 enum LoopCloseReason : ubyte { done, abandoned, handed_off, superseded }
 enum BeliefType : ubyte { fact, preference, constraint, goal, identity }
 enum AssertionClaim : ubyte { affirmative, negative_existence }
-enum AttestationDisposition : ubyte { used, ignored }
+enum AttestationDisposition : ubyte { used, ignored, helpful, harmful }
 enum MemoryFadeReason : ubyte { low_retrievability, superseded, explicit }
 enum ReviewRating : ubyte { again, hard, good, easy }
 enum ConsolidationPhaseName : ubyte { nrem, connect, abstract, hindsight, review, publish }

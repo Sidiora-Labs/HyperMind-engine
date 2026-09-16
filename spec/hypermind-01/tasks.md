@@ -183,7 +183,7 @@
     - FSRS-6 ported from cortex-engine with ratings from attestations, retrieval rank and contradiction involvement; dreams do not count as access; retention class and the protection set (open loops, active bindings, unfulfilled intentions, resident beliefs, last N bundles) decide eligibility; the last K contradicted outcomes per domain are kept; fading is a MemoryFaded event.
     - Run phase machine persisted as ConsolidationPhase events with a per-attempt idempotency prefix; a crashed run resumes; runs are keyed by hash of scope, cadence key and generation; budgets max_llm_calls, max_tokens, max_usd, max_wall_ms abort a phase cleanly; retract appends ConsolidationRetracted and switches the pointer; a read-only due() decides cadence by the actor's IANA time zone.
     - _Requirements: 9.1, 9.3, 10.1, 10.2, 10.3_
-  - [ ] 6.6 Graph lane; attest closes the loop; MCP consolidate and attest; CLI consolidate
+  - [x] 6.6 Graph lane; attest closes the loop; MCP consolidate and attest; CLI consolidate
     - Graph lane: one to two hops over validated edges with validity intervals, query-conditioned, at most 200 visited nodes; joins fusion.
     - Attest accepts used, ignored, helpful and harmful on provenance URIs and writes Attestation events that the review phase reads; the RetrievalManifest used stage is populated from them.
     - MCP consolidate runs NREM or REM or both with a budget, lists runs with cost and stats, retracts a run; hm consolidate run, list, retract; the TypeScript engine exposes the same.

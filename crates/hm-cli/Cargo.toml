@@ -18,6 +18,7 @@ getrandom = "0.3.4"
 hm-compose = { path = "../hm-compose" }
 hm-core = { path = "../hm-core" }
 hm-ledger = { path = "../hm-ledger" }
+hm-mcp = { path = "../hm-mcp" }
 hm-schema = { path = "../hm-schema" }
 hm-serve = { path = "../hm-serve" }
 serde_json = "1.0.145"
