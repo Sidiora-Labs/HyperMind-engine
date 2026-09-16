@@ -93,6 +93,7 @@ fn document_text(frame: &Frame) -> Result<Option<String>, Error> {
     let schema_kind = match frame.header.kind {
         EventKind::UserMsg => event::EventKind::UserMsg,
         EventKind::DeliveredMsg => event::EventKind::DeliveredMsg,
+        EventKind::ProviderFrame => event::EventKind::ProviderFrame,
         _ => return Ok(None),
     };
     let verified = event::verify_event(&frame.sealed_payload, schema_kind, Boundary::Disk)
@@ -100,6 +101,12 @@ fn document_text(frame: &Frame) -> Result<Option<String>, Error> {
     let bytes = match verified.envelope.payload {
         EventPayload::UserMsg(message) => message.content,
         EventPayload::DeliveredMsg(message) => message.content,
+        EventPayload::ProviderFrame(observed) => {
+            if observed.provider != event::REPOSITORY_SNAPSHOT_PROVIDER {
+                return Ok(None);
+            }
+            return Ok(String::from_utf8(observed.api_content).ok());
+        }
         _ => return Err(Error::new(ErrorCode::InvariantViolation).at_lsn(frame.header.lsn)),
     };
     String::from_utf8(bytes)
