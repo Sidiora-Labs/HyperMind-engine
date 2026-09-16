@@ -189,10 +189,45 @@ async fn start(
         if existing.phases != requested_phases || existing.budget != budget {
             return Err(Error::new(ErrorCode::IdempotencyConflict));
         }
-        return Ok(run_envelope(actor, id, existing, true));
+        let source_events =
+            window_source_events(actor, existing.source_first_lsn, existing.source_last_lsn)
+                .await?;
+        return Ok(run_envelope(
+            actor,
+            id,
+            existing,
+            true,
+            source_events,
+            false,
+        ));
     }
     let generation = history.maximum_generation.saturating_add(1).max(1);
     let parent = history.active_generation;
+    let watermark = history
+        .watermarks
+        .get(&scope_digest)
+        .copied()
+        .unwrap_or_default();
+    let head = actor.stats().await?.applied.last_lsn.get();
+    let source_first_lsn = watermark.saturating_add(1);
+    let source_last_lsn = head;
+    if head <= watermark {
+        let mut envelope = Envelope::empty();
+        envelope.items.push(json!({
+            "generation": generation,
+            "parent_generation": parent,
+            "status": "skipped",
+            "duplicate": false,
+            "extracted": false,
+            "source_first_lsn": source_first_lsn,
+            "source_last_lsn": source_last_lsn,
+            "source_events": 0,
+        }));
+        envelope
+            .warnings
+            .push("no source material above the extraction watermark".to_owned());
+        return Ok(envelope);
+    }
     let id = run_id(scope.as_bytes(), &cadence_key, generation);
     let phases = requested_phases;
     let prompts = prompts(mode);
@@ -204,8 +239,8 @@ async fn start(
         phases: phases.clone(),
         prompts,
         budget: Box::new(budget.into()),
-        source_first_lsn: 0,
-        source_last_lsn: 0,
+        source_first_lsn,
+        source_last_lsn,
     };
     let mut events = vec![incoming(
         actor,
@@ -220,6 +255,8 @@ async fn start(
     let mut input_tokens = 0_u64;
     let mut output_tokens = 0_u64;
     let mut cost_microusd = 0_u64;
+    let (mut window_clusters, source_events) =
+        nrem_clusters_in_window(actor, source_first_lsn, source_last_lsn).await?;
     while let Some(work) = machine.next() {
         let started = machine.event(
             &work,
@@ -242,7 +279,7 @@ async fn start(
         ));
         machine.record(&work, &started);
         if work.phase == ConsolidationPhaseName::Nrem {
-            let mut clusters = nrem_clusters(actor).await?;
+            let mut clusters = std::mem::take(&mut window_clusters);
             let cluster_count = clusters.len();
             clusters.retain(mint_eligible);
             dropped_candidates = dropped_candidates.saturating_add(
@@ -344,6 +381,8 @@ async fn start(
         budget,
         first_lsn: outcome.first_lsn.get(),
         last_lsn: outcome.last_lsn.get(),
+        source_first_lsn,
+        source_last_lsn,
         derived_records,
         dropped_candidates,
         llm_calls,
@@ -351,7 +390,7 @@ async fn start(
         output_tokens,
         cost_microusd,
     };
-    let mut envelope = run_envelope(actor, &id, &summary, false);
+    let mut envelope = run_envelope(actor, &id, &summary, false, source_events, true);
     envelope.provenance.push(format!(
         "hm://{}/lsn/{}",
         actor.actor(),
@@ -389,8 +428,50 @@ fn mint_eligible(cluster: &ObservationCluster) -> bool {
 }
 
 pub async fn nrem_clusters(actor: &ActorEngine) -> Result<Vec<ObservationCluster>, Error> {
+    Ok(nrem_clusters_in_window(actor, 1, u64::MAX).await?.0)
+}
+
+pub async fn nrem_clusters_in_window(
+    actor: &ActorEngine,
+    first_lsn: u64,
+    last_lsn: u64,
+) -> Result<(Vec<ObservationCluster>, u64), Error> {
+    let observations = window_observations(actor, first_lsn, last_lsn).await?;
+    let source_events =
+        u64::try_from(observations.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
+    let clusters = cluster_observations(
+        &observations,
+        ClusterOptions {
+            maximum_observations: 4_096,
+            cosine_threshold_micros: 900_000,
+            entity_overlap_threshold_micros: 1_000_000,
+        },
+    )?;
+    Ok((clusters, source_events))
+}
+
+async fn window_source_events(
+    actor: &ActorEngine,
+    first_lsn: u64,
+    last_lsn: u64,
+) -> Result<u64, Error> {
+    let observations = window_observations(actor, first_lsn, last_lsn).await?;
+    u64::try_from(observations.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))
+}
+
+async fn window_observations(
+    actor: &ActorEngine,
+    first_lsn: u64,
+    last_lsn: u64,
+) -> Result<Vec<PendingObservation>, Error> {
     let mut observations = Vec::new();
-    for frame in actor.frames_since(LSN::new(0), None, usize::MAX).await? {
+    for frame in actor
+        .frames_since(LSN::new(first_lsn.saturating_sub(1)), None, usize::MAX)
+        .await?
+    {
+        if frame.header.lsn.get() > last_lsn {
+            break;
+        }
         if !matches!(
             frame.header.kind,
             EventKind::UserMsg | EventKind::DeliveredMsg
@@ -426,14 +507,7 @@ pub async fn nrem_clusters(actor: &ActorEngine) -> Result<Vec<ObservationCluster
             entities,
         });
     }
-    cluster_observations(
-        &observations,
-        ClusterOptions {
-            maximum_observations: 4_096,
-            cosine_threshold_micros: 900_000,
-            entity_overlap_threshold_micros: 1_000_000,
-        },
-    )
+    Ok(observations)
 }
 
 fn entities(content: &[u8]) -> Vec<String> {
@@ -505,8 +579,17 @@ fn list(history: RunHistory) -> Envelope {
             })
         })
         .collect();
-    envelope.health =
-        json!({"projection": "ready", "active_generation": history.active_generation});
+    envelope.health = json!({
+        "projection": "ready",
+        "active_generation": history.active_generation,
+        "watermarks": history
+            .watermarks
+            .iter()
+            .map(|(scope_digest, through_lsn)| {
+                json!({"scope_digest": hex(scope_digest), "through_lsn": through_lsn})
+            })
+            .collect::<Vec<_>>(),
+    });
     envelope
 }
 
@@ -538,6 +621,8 @@ struct RunSummary {
     budget: ConsolidateBudget,
     first_lsn: u64,
     last_lsn: u64,
+    source_first_lsn: u64,
+    source_last_lsn: u64,
     derived_records: u64,
     dropped_candidates: u64,
     llm_calls: u64,
@@ -549,6 +634,7 @@ struct RunSummary {
 #[derive(Default)]
 struct RunHistory {
     runs: BTreeMap<Vec<u8>, RunSummary>,
+    watermarks: BTreeMap<[u8; 32], u64>,
     maximum_generation: u64,
     active_generation: u64,
 }
@@ -597,6 +683,8 @@ async fn read_history(actor: &ActorEngine) -> Result<RunHistory, Error> {
                         },
                         first_lsn: frame.header.lsn.get(),
                         last_lsn: frame.header.lsn.get(),
+                        source_first_lsn: opened.source_first_lsn,
+                        source_last_lsn: opened.source_last_lsn,
                         derived_records: 0,
                         dropped_candidates: 0,
                         llm_calls: 0,
@@ -633,10 +721,26 @@ async fn read_history(actor: &ActorEngine) -> Result<RunHistory, Error> {
             _ => return Err(Error::new(ErrorCode::InvalidKind)),
         }
     }
+    let mut watermarks: BTreeMap<[u8; 32], u64> = BTreeMap::new();
+    for run in history.runs.values() {
+        if run.status != RunStatus::Published {
+            continue;
+        }
+        let entry = watermarks.entry(run.scope_digest).or_default();
+        *entry = (*entry).max(run.source_last_lsn);
+    }
+    history.watermarks = watermarks;
     Ok(history)
 }
 
-fn run_envelope(actor: &ActorEngine, id: &[u8], run: &RunSummary, duplicate: bool) -> Envelope {
+fn run_envelope(
+    actor: &ActorEngine,
+    id: &[u8],
+    run: &RunSummary,
+    duplicate: bool,
+    source_events: u64,
+    extracted: bool,
+) -> Envelope {
     let mut envelope = Envelope::empty();
     envelope.items.push(json!({
         "run_id": hex(id),
@@ -645,6 +749,10 @@ fn run_envelope(actor: &ActorEngine, id: &[u8], run: &RunSummary, duplicate: boo
         "status": run.status.name(),
         "first_lsn": run.first_lsn,
         "last_lsn": run.last_lsn,
+        "source_first_lsn": run.source_first_lsn,
+        "source_last_lsn": run.source_last_lsn,
+        "source_events": source_events,
+        "extracted": extracted,
         "duplicate": duplicate,
         "cost": {"llm_calls": run.llm_calls, "input_tokens": run.input_tokens, "output_tokens": run.output_tokens, "microusd": run.cost_microusd},
         "stats": {"derived_records": run.derived_records, "dropped_candidates": run.dropped_candidates},
