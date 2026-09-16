@@ -2,6 +2,7 @@
 
 use crate::Envelope;
 use crate::admission::admission_from_env;
+use crate::extraction::{ExtractionLimits, extract_bounded};
 use crate::tools::relation;
 use crate::tools::remember::EmbeddingRuntime;
 use hm_core::telemetry::{Attribute, SpanBuilder, SpanKind, SpanOutcome};
@@ -11,7 +12,9 @@ use hm_cortex::citations::{FrozenCandidate, SourceKind};
 use hm_cortex::nrem::cluster::{
     ClusterOptions, ObservationCluster, PendingObservation, cluster_observations,
 };
-use hm_cortex::nrem::merge::{MergeAction, NremReport, consolidate_clusters};
+use hm_cortex::nrem::merge::{
+    ClusterExtraction, ClusterOutcome, MergeAction, NremReport, extract_cluster,
+};
 use hm_cortex::run::{PhaseMachine, retraction_event, run_id};
 use hm_ledger::frame::EventKind;
 use hm_llm::LlmProvider;
@@ -30,11 +33,14 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
 const MAXIMUM_RELATIONS: usize = 256;
+const DEFAULT_PARALLEL: usize = 4;
+const MAXIMUM_PARALLEL: usize = 64;
 
 #[derive(Clone)]
 pub struct ConsolidationRuntime {
     provider: Arc<dyn LlmProvider>,
     pub admission: Arc<CallAdmission>,
+    maximum_parallel: usize,
 }
 
 impl ConsolidationRuntime {
@@ -67,6 +73,7 @@ impl ConsolidationRuntime {
         Ok(Some(Self {
             provider: crate::telemetry::observed(Arc::new(provider)),
             admission: admission_from_env(),
+            maximum_parallel: parallelism_from_env(),
         }))
     }
 
@@ -75,7 +82,19 @@ impl ConsolidationRuntime {
         Self {
             provider: crate::telemetry::observed(provider),
             admission: Arc::new(CallAdmission::new(AdmissionLimits::default())),
+            maximum_parallel: DEFAULT_PARALLEL,
         }
+    }
+
+    #[must_use]
+    pub fn with_parallelism(mut self, maximum_parallel: usize) -> Self {
+        self.maximum_parallel = maximum_parallel.clamp(1, MAXIMUM_PARALLEL);
+        self
+    }
+
+    #[must_use]
+    pub const fn maximum_parallel(&self) -> usize {
+        self.maximum_parallel
     }
 
     #[must_use]
@@ -86,6 +105,22 @@ impl ConsolidationRuntime {
             Arc::clone(&self.provider),
         ))
     }
+}
+
+fn parallelism_from_env() -> usize {
+    std::env::var("HM_CONSOLIDATION_PARALLEL")
+        .ok()
+        .and_then(|value| value.trim().parse::<usize>().ok())
+        .filter(|value| *value > 0)
+        .map_or(DEFAULT_PARALLEL, |value| value.min(MAXIMUM_PARALLEL))
+}
+
+#[derive(Clone, Copy, Debug, Default)]
+struct ExtractionCounts {
+    extracted: u64,
+    failed: u64,
+    skipped: u64,
+    aborted: u64,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, schemars::JsonSchema)]
@@ -320,6 +355,7 @@ async fn start(
     let mut input_tokens = 0_u64;
     let mut output_tokens = 0_u64;
     let mut cost_microusd = 0_u64;
+    let mut counts = ExtractionCounts::default();
     let (mut window_clusters, source_events) =
         nrem_clusters_in_window(actor, source_first_lsn, source_last_lsn).await?;
     while let Some(work) = machine.next() {
@@ -357,8 +393,25 @@ async fn start(
             } else {
                 let runtime = runtime.ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?;
                 let provider = runtime.provider_for(actor.actor().get());
-                consolidate_clusters(provider.as_ref(), &id, &clusters, &[])
-                    .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?
+                let run = id.to_vec();
+                let outcomes = extract_bounded(
+                    clusters,
+                    ExtractionLimits::new(runtime.maximum_parallel(), true),
+                    move |cluster: ObservationCluster| {
+                        extract_cluster(provider.as_ref(), &run, &cluster, &[])
+                    },
+                )
+                .await;
+                counts = ExtractionCounts {
+                    extracted: candidate_count(outcomes.extracted.len())?,
+                    failed: candidate_count(outcomes.failed.len())?,
+                    skipped: candidate_count(outcomes.skipped.len())?,
+                    aborted: candidate_count(outcomes.aborted.len())?,
+                };
+                dropped_candidates = dropped_candidates
+                    .saturating_add(counts.skipped)
+                    .saturating_add(counts.aborted);
+                fold_extractions(outcomes.extracted)?
             };
             if report.llm_calls > budget.max_llm_calls
                 || report.cost.tokens() > budget.max_tokens
@@ -456,6 +509,12 @@ async fn start(
         cost_microusd,
     };
     let mut envelope = run_envelope(actor, &id, &summary, false, source_events, true);
+    envelope.items[0]["extraction"] = json!({
+        "extracted": counts.extracted,
+        "failed": counts.failed,
+        "skipped": counts.skipped,
+        "aborted": counts.aborted,
+    });
     envelope.provenance.push(format!(
         "hm://{}/lsn/{}",
         actor.actor(),
@@ -476,6 +535,31 @@ async fn start(
         }
     }
     Ok(envelope)
+}
+
+fn candidate_count(value: usize) -> Result<u64, Error> {
+    u64::try_from(value).map_err(|_| Error::new(ErrorCode::CapacityExceeded))
+}
+
+fn fold_extractions(extracted: Vec<(usize, ClusterExtraction)>) -> Result<NremReport, Error> {
+    let mut report = NremReport::default();
+    for (_, extraction) in extracted {
+        if extraction.llm_calls > 0 {
+            report.llm_calls = report.llm_calls.saturating_add(extraction.llm_calls);
+            report
+                .cost
+                .record(extraction.usage)
+                .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?;
+        }
+        if extraction.citation_invalid {
+            report.citation_invalid = report.citation_invalid.saturating_add(1);
+        }
+        match extraction.outcome {
+            ClusterOutcome::Decided(decision) => report.decisions.push(*decision),
+            ClusterOutcome::Dropped(dropped) => report.dropped.push(dropped),
+        }
+    }
+    Ok(report)
 }
 
 fn mint_eligible(cluster: &ObservationCluster) -> bool {
