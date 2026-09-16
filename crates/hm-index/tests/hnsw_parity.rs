@@ -1,4 +1,5 @@
 #![cfg(feature = "hnsw")]
+#![allow(clippy::cast_precision_loss)]
 #![forbid(unsafe_code)]
 
 use hm_core::{ErrorCode, LSN};
