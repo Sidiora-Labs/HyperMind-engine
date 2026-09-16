@@ -14,6 +14,13 @@ its focused client suite passed. Python provides a native embedded engine and
 an asynchronous gRPC client. Go provides Unix-socket and gRPC clients under the
 existing module name `centra/core/cortexclient`.
 
+The `hm-capi` crate publishes a C application binary interface over one
+embedded actor, and `swift/` holds a source-only SwiftPM package that wraps
+that header with an async/await surface. The Swift package is built and tested
+only on Apple platforms; this repository's Linux gate proves binding fidelity
+against the header, not a Swift test run. See
+[C ABI and Swift](../docs/reference/sdks.md#c-abi-and-swift).
+
 These are source-level interfaces, not published npm/PyPI packages, wheels, or
 qualified cross-language releases. The Go donor compatibility limitation is
 recorded in [COMPATIBILITY.md](go/COMPATIBILITY.md); passing current focused tests

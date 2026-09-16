@@ -39,4 +39,14 @@ The workspace contains `engine` (native embedded), `client` (protocol and sequen
 
 Reach-wave interfaces are being implemented and qualified separately; no wheels, registry publication, or cross-language release journey is claimed here. The [generated API catalog](generated/sdk-api.md) discovers authored declarations as sources are added. Use confirmed package instructions rather than inferred installation commands.
 
+## C ABI and Swift
+
+When to use: embed the kernel from a language that speaks C, or from Swift on an Apple platform, without running the daemon or reimplementing memory semantics.
+
+Do not use: a second owner of an actor directory, a handle freed while a call is in flight, a borrowed callback string retained after the callback returns, or a returned envelope treated as proof of an external effect.
+
+`crates/hm-capi` publishes [hypermind.h](../../crates/hm-capi/include/hypermind.h). A handle is opened from a strict JSON configuration object, may be cloned by reference count, and is freed exactly once per handle; shutting the actor down is the separate, idempotent close step. One call entry point forwards a verb and its JSON arguments to the same dispatcher the MCP transport uses and hands the serialized envelope back through a callback; the boundary reports success only when that callback will fire exactly once, and the callback's strings are borrowed for its duration. Boundary faults travel as a status enumerator, while a kernel refusal carries the numeric error discriminant and its stable name.
+
+The [Swift package](../../sdk/swift/README.md) wraps that header through a system-library target and bridges each call into `withCheckedThrowingContinuation`, mirroring the existing verb inventory rather than widening it. The Swift package is compiled and tested only on Apple platforms; no Swift toolchain exists in this repository's Linux CI, so the checked-in Linux gate proves only that the Swift sources bind symbols and status values that the C header actually declares. No Swift build or test run is claimed here.
+
 All SDKs must preserve envelope/error semantics, sequence recovery, authority, and safe rendering. Shared schema alone does not establish parity.

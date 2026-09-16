@@ -1,0 +1,5 @@
+module CHyperMind {
+    header "../../../../crates/hm-capi/include/hypermind.h"
+    link "hypermind"
+    export *
+}
