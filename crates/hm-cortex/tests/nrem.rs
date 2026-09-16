@@ -667,6 +667,7 @@ fn revision_targets_are_hex_stable() {
         memory_id: b"memory-1".to_vec(),
         name: "Memory".to_owned(),
         definition: b"A stable old definition.".to_vec(),
+        faded: false,
     };
     let cluster = ObservationCluster {
         cluster_id: [8; 32],
@@ -682,6 +683,13 @@ fn revision_targets_are_hex_stable() {
             1,
         )],
     };
-    let request = merge_request(&cluster, &[target]).unwrap();
+    let faded = ExistingMemory {
+        memory_id: b"faded-memory".to_vec(),
+        name: "Faded".to_owned(),
+        definition: b"This definition must not be refined.".to_vec(),
+        faded: true,
+    };
+    let request = merge_request(&cluster, &[target, faded]).unwrap();
     assert!(request.prompt.contains("target=6d656d6f72792d31"));
+    assert!(!request.prompt.contains("66616465642d6d656d6f7279"));
 }

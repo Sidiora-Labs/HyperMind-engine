@@ -9,12 +9,22 @@ use std::path::Path;
 fn prompt_wording_is_frozen_per_version() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../prompts");
     let registry = PromptRegistry::load(&root).unwrap();
-    assert_eq!(registry.len(), 6);
+    assert_eq!(registry.len(), 9);
     let snapshots = [
         (
             "abstract-synthesis",
             1,
             "e99a380afb2b9a12ee0ce293e9817ea9247208cb8658f512438c33e8b46dffae",
+        ),
+        (
+            "abstract-synthesis",
+            2,
+            "e601ec458a7701d106a107c53abfaea7ae689b39ee9c4d12b8bed22a83b24657",
+        ),
+        (
+            "connect-long-context",
+            1,
+            "85c003c86ff84d861d520a7d8f35583a41131f70c58c3e3c8984a4f2d2585ce7",
         ),
         (
             "edge-discover",
@@ -25,6 +35,11 @@ fn prompt_wording_is_frozen_per_version() {
             "hindsight-review",
             1,
             "851e8930b922217af99f05c7a4648a11e0621ede09c39b0e8b278bcf40eda42a",
+        ),
+        (
+            "hindsight-review",
+            3,
+            "3c5c6da7ef1c8ef6e4e6ea05b1261430f84c7d05a1dea290791b359c4d43f6a7",
         ),
         (
             "merge-cluster",
@@ -43,10 +58,20 @@ fn prompt_wording_is_frozen_per_version() {
         ),
     ];
     for (id, version, expected) in snapshots {
+        assert_eq!(
+            encode_digest(registry.get(id, version).unwrap().digest),
+            expected,
+            "snapshot for {id}@{version}"
+        );
         let expected = decode_digest(expected);
         registry.verify_snapshot(id, version, expected).unwrap();
-        assert_eq!(registry.latest(id).unwrap().version, version);
     }
+    assert_eq!(registry.latest("abstract-synthesis").unwrap().version, 2);
+    assert_eq!(registry.latest("hindsight-review").unwrap().version, 3);
+}
+
+fn encode_digest(value: [u8; 32]) -> String {
+    value.iter().map(|byte| format!("{byte:02x}")).collect()
 }
 
 #[test]

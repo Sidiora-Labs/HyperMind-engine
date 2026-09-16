@@ -733,7 +733,7 @@ do_3 = "Port thought-quality and rewrite-guard as classifiers with logged decisi
 
 [task.6.5]
 title = "REM: connect, abstract, hindsight, FSRS review with protection sets; phase machine, budgets, retract"
-status = "pending"
+status = "done"
 wave = 6
 owner_lane = "cognition"
 requires = ["6.4"]

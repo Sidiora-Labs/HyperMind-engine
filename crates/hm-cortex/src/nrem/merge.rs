@@ -19,6 +19,7 @@ pub struct ExistingMemory {
     pub memory_id: Vec<u8>,
     pub name: String,
     pub definition: Vec<u8>,
+    pub faded: bool,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -154,7 +155,7 @@ pub fn merge_request(
     if existing.is_empty() {
         prompt.push_str("none\n");
     } else {
-        for memory in existing {
+        for memory in existing.iter().filter(|memory| !memory.faded) {
             let definition = std::str::from_utf8(&memory.definition)
                 .map_err(|_| DropReason::InvalidCandidateEncoding)?;
             let _ = writeln!(
@@ -212,7 +213,7 @@ fn validate_response(
     let target = parsed.target.as_deref().and_then(|target| {
         existing
             .iter()
-            .find(|memory| hex(&memory.memory_id) == target)
+            .find(|memory| !memory.faded && hex(&memory.memory_id) == target)
     });
     let rewrite_guard = match parsed.action {
         MergeAction::Attach => {
