@@ -27,7 +27,9 @@ use hm_ledger::segment::{AppendRequest, SegmentLog, SegmentLogOptions};
 use hm_ledger::shred::{crypto_shred, encode_deletion_receipt};
 use hm_ledger::tripwire::TripwireSet;
 use hm_proj::attention::{AttentionProjection, AttentionRecord};
-use hm_proj::attestations::{MAXIMUM_PREFERENCE_TARGETS, PREFERENCE_NEUTRAL_Q16};
+use hm_proj::attestations::{
+    AttestationsProjection, MAXIMUM_PREFERENCE_TARGETS, PREFERENCE_NEUTRAL_Q16, PreferenceWeight,
+};
 use hm_proj::beliefs::{BeliefAsOf, BeliefAsOfResult, BeliefProjection};
 use hm_proj::checkpoint::{
     CheckpointRead, encode_checkpoint_cursor, latest_checkpoint, turn_conversation,
@@ -304,6 +306,7 @@ enum Command {
         oneshot::Sender<Result<Option<PredictionRecord>, Error>>,
     ),
     AttentionHistory(usize, oneshot::Sender<Result<Vec<AttentionRecord>, Error>>),
+    Preferences(usize, oneshot::Sender<Result<Vec<PreferenceWeight>, Error>>),
     Calibration(oneshot::Sender<Result<Vec<(PredicateKind, CalibrationCounters)>, Error>>),
     Vocabularies(usize, oneshot::Sender<Result<Vec<VocabularyRecord>, Error>>),
     AliasProposals(
@@ -643,6 +646,10 @@ impl ActorEngine {
         .await
     }
 
+    pub async fn preferences(&self, limit: usize) -> Result<Vec<PreferenceWeight>, Error> {
+        request(&self.commands, |reply| Command::Preferences(limit, reply)).await
+    }
+
     pub async fn calibration(&self) -> Result<Vec<(PredicateKind, CalibrationCounters)>, Error> {
         request(&self.commands, Command::Calibration).await
     }
@@ -943,6 +950,12 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
                     .projections
                     .begin_snapshot()
                     .and_then(|snapshot| AttentionProjection::recent(&snapshot, limit));
+                let _ = reply.send(result);
+            }
+            Command::Preferences(limit, reply) => {
+                let result = state.projections.begin_snapshot().and_then(|snapshot| {
+                    AttestationsProjection::recent_preferences(&snapshot, limit)
+                });
                 let _ = reply.send(result);
             }
             Command::Calibration(reply) => {

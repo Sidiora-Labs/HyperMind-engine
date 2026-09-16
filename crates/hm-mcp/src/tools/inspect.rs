@@ -15,6 +15,7 @@ use std::collections::BTreeSet;
 
 const MAXIMUM_VOCABULARY_ITEMS: usize = 256;
 const MAXIMUM_ALIAS_PROPOSALS: usize = 64;
+const MAXIMUM_PREFERENCE_ITEMS: usize = 256;
 const REVIEW_WARNING: &str = "An alias proposal changes nothing; it is accepted only by importing a new vocabulary version that declares the alias.";
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, schemars::JsonSchema)]
@@ -105,6 +106,26 @@ pub async fn run(
                     "not_executed": counts.not_executed,
                 }))
                 .collect::<Vec<_>>()
+        );
+        return Ok(envelope);
+    }
+    if uri == format!("hm://{}/preferences", actor.actor()) {
+        let weights = actor.preferences(MAXIMUM_PREFERENCE_ITEMS).await?;
+        envelope.items[0]["preferences"] = json!(
+            weights
+                .iter()
+                .map(|weight| json!({
+                    "target_lsn": weight.target_lsn,
+                    "weight_q16": weight.weight_q16,
+                    "observations": weight.observations,
+                    "last_attestation_lsn": weight.last_attestation_lsn,
+                }))
+                .collect::<Vec<_>>()
+        );
+        envelope.provenance.extend(
+            weights
+                .iter()
+                .map(|weight| format!("hm://{}/lsn/{}", actor.actor(), weight.target_lsn)),
         );
         return Ok(envelope);
     }
