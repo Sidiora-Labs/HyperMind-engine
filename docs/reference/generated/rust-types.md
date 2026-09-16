@@ -2393,6 +2393,105 @@ pub struct ClassifierMetrics {
 }
 ```
 
+## hm-cortex::RelationSource
+
+<a id="rust-crates-hm-cortex-src-relations-rs-relationsource"></a>
+
+Source: [`crates/hm-cortex/src/relations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/relations.rs).
+
+When to use: Use `RelationSource` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RelationSource {
+    pub edge_id: Vec<u8>,
+    pub edge_lsn: u64,
+    pub source_id: Vec<u8>,
+    pub target_id: Vec<u8>,
+    pub relation: String,
+    pub support_lsns: Vec<u64>,
+}
+```
+
+## hm-cortex::RelationRepresentation
+
+<a id="rust-crates-hm-cortex-src-relations-rs-relationrepresentation"></a>
+
+Source: [`crates/hm-cortex/src/relations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/relations.rs).
+
+When to use: Use `RelationRepresentation` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RelationRepresentation {
+    pub relation_key: [u8; 32],
+    pub edge_lsn: u64,
+    pub text: String,
+    pub support_lsns: Vec<u64>,
+}
+```
+
+## hm-cortex::RelationOptions
+
+<a id="rust-crates-hm-cortex-src-relations-rs-relationoptions"></a>
+
+Source: [`crates/hm-cortex/src/relations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/relations.rs).
+
+When to use: Use `RelationOptions` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Set explicit deployment limits before opening the associated resource.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation. Do not log secret fields or substitute defaults for an explicitly authorized budget.
+
+
+```rust
+pub struct RelationOptions {
+    pub maximum_relations: usize,
+    pub maximum_text_bytes: usize,
+}
+```
+
+## hm-cortex::RelationDrop
+
+<a id="rust-crates-hm-cortex-src-relations-rs-relationdrop"></a>
+
+Source: [`crates/hm-cortex/src/relations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/relations.rs).
+
+When to use: Use `RelationDrop` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub enum RelationDrop {
+    ZeroLsn,
+    EmptyRelation,
+    EmptyEndpoint,
+    NoSupport,
+    TextTooLong,
+}
+```
+
+## hm-cortex::RelationPlan
+
+<a id="rust-crates-hm-cortex-src-relations-rs-relationplan"></a>
+
+Source: [`crates/hm-cortex/src/relations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/relations.rs).
+
+When to use: Use `RelationPlan` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RelationPlan {
+    pub representations: Vec<RelationRepresentation>,
+    pub dropped: Vec<(u64, RelationDrop)>,
+}
+```
+
 ## hm-cortex::ExistingAbstract
 
 <a id="rust-crates-hm-cortex-src-rem-abstract-rs-existingabstract"></a>

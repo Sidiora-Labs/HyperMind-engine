@@ -567,6 +567,31 @@
       "file": "crates/hm-cortex/src/quality.rs"
     },
     {
+      "id": "rust:crates/hm-cortex/src/relations.rs:RelationSource",
+      "name": "hm-cortex::RelationSource",
+      "file": "crates/hm-cortex/src/relations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/relations.rs:RelationRepresentation",
+      "name": "hm-cortex::RelationRepresentation",
+      "file": "crates/hm-cortex/src/relations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/relations.rs:RelationOptions",
+      "name": "hm-cortex::RelationOptions",
+      "file": "crates/hm-cortex/src/relations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/relations.rs:RelationDrop",
+      "name": "hm-cortex::RelationDrop",
+      "file": "crates/hm-cortex/src/relations.rs"
+    },
+    {
+      "id": "rust:crates/hm-cortex/src/relations.rs:RelationPlan",
+      "name": "hm-cortex::RelationPlan",
+      "file": "crates/hm-cortex/src/relations.rs"
+    },
+    {
       "id": "rust:crates/hm-cortex/src/rem/abstract.rs:ExistingAbstract",
       "name": "hm-cortex::ExistingAbstract",
       "file": "crates/hm-cortex/src/rem/abstract.rs"
