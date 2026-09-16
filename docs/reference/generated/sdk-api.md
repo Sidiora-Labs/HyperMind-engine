@@ -4515,7 +4515,7 @@ recordSubscribeFailure(error: unknown): "reset" | "retry" {
 
 ## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-6850-paintdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-8152-paintdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4530,7 +4530,7 @@ paintDomainProfile();
 
 ## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-9120-paintdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10422-paintdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4545,7 +4545,7 @@ paintDomainProfile();
 
 ## sdk/typescript/packages/console/src/app.ts::showActivity
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10045-showactivity"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-11347-showactivity"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4560,7 +4560,7 @@ showActivity(mount);
 
 ## sdk/typescript/packages/console/src/app.ts::showDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10133-showdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-11435-showdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -5321,6 +5321,336 @@ Do not use: Do not substitute unchecked request objects, discard provenance, or 
 
 ```typescript
 callTool(verb: string, args: unknown): Promise<ConsoleEnvelope>;
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::MAXIMUM_SESSION_AGE_MS
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-maximum-session-age-ms"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use MAXIMUM_SESSION_AGE_MS through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export const MAXIMUM_SESSION_AGE_MS = 24 * 60 * 60 * 1000;
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::MAXIMUM_STALL_MS
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-maximum-stall-ms"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use MAXIMUM_STALL_MS through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export const MAXIMUM_STALL_MS = 30 * 60 * 1000;
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::UploadDocument
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-uploaddocument"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use Upload Document through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface UploadDocument {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::UploadBatch
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-uploadbatch"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use Upload Batch through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface UploadBatch {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::UploadSession
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-uploadsession"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use Upload Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface UploadSession {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::UploadStatus
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-uploadstatus"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use Upload Status through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export type UploadStatus = "in_progress" | "incomplete_degraded" | "complete";
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::SessionStore
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-sessionstore"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use Session Store through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface SessionStore {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::webStorageSessionStore
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-webstoragesessionstore"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use web Storage Session Store through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function webStorageSessionStore(storage: Storage): SessionStore {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::newSessionId
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-newsessionid"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use new Session Id through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function newSessionId(): string {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::saveSession
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-savesession"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use save Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function saveSession(store: SessionStore, session: UploadSession): Promise<UploadSession> {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::updateSession
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-updatesession"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use update Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function updateSession(store: SessionStore, session: UploadSession): Promise<UploadSession | null> {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::deleteSession
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-deletesession"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use delete Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function deleteSession(store: SessionStore, id: string): Promise<void> {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::listSessions
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-listsessions"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use list Sessions through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function listSessions(store: SessionStore): Promise<UploadSession[]> {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::purgeExpiredSessions
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-purgeexpiredsessions"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use purge Expired Sessions through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function purgeExpiredSessions(store: SessionStore): Promise<void> {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::findResumableSession
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-findresumablesession"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use find Resumable Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function findResumableSession(
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::resumeUpload
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-resumeupload"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use resume Upload through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function resumeUpload(
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::uploadStatus
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-uploadstatus"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use upload Status through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function uploadStatus(session: UploadSession): UploadStatus {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::renderUploadSession
+
+<a id="sdk-sdk-typescript-packages-console-src-upload-session-ts-renderuploadsession"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use render Upload Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderUploadSession(session: UploadSession): string {
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::read
+
+<a id="sdk-method-sdk-typescript-packages-console-src-upload-session-ts-1087-read"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use this read method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+read(id: string): Promise<UploadSession | undefined>;
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::write
+
+<a id="sdk-method-sdk-typescript-packages-console-src-upload-session-ts-1143-write"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use this write method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+write(session: UploadSession): Promise<void>;
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::remove
+
+<a id="sdk-method-sdk-typescript-packages-console-src-upload-session-ts-1191-remove"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use this remove method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+remove(id: string): Promise<void>;
+```
+
+## sdk/typescript/packages/console/src/upload-session.ts::list
+
+<a id="sdk-method-sdk-typescript-packages-console-src-upload-session-ts-1228-list"></a>
+
+Source: [`sdk/typescript/packages/console/src/upload-session.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/upload-session.ts).
+
+When to use: Use this list method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+list(): Promise<UploadSession[]>;
 ```
 
 ## sdk/typescript/packages/engine/index.d.ts::NativeEngine

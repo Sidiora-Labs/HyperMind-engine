@@ -7,3 +7,4 @@ export * from "./sources.js";
 export * from "./evidence.js";
 export * from "./domain-profile.js";
 export * from "./activity.js";
+export * from "./upload-session.js";

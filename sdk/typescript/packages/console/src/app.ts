@@ -22,6 +22,13 @@ import { escapeText, section } from "./html.js";
 import { buildOverview, OverviewView, renderOverview } from "./overview.js";
 import { buildSourceDetail, buildSourceIndex, renderSourceDetail, renderSourceIndex } from "./sources.js";
 import { ConsoleTransport, restTransport } from "./transport.js";
+import {
+  findResumableSession,
+  purgeExpiredSessions,
+  renderUploadSession,
+  resumeUpload,
+  webStorageSessionStore,
+} from "./upload-session.js";
 
 interface Session {
   transport: ConsoleTransport;
@@ -169,6 +176,30 @@ function showActivity(mount: HTMLElement): void {
   mount.append(panel);
 }
 
+async function showUploadSession(mount: HTMLElement, transport: ConsoleTransport): Promise<void> {
+  const panel = document.createElement("div");
+  panel.id = "console-upload-session";
+  panel.innerHTML = await uploadSection(transport);
+  mount.append(panel);
+}
+
+async function uploadSection(transport: ConsoleTransport): Promise<string> {
+  const store = webStorageSessionStore(window.localStorage);
+  await purgeExpiredSessions(store);
+  const waiting = await findResumableSession(store);
+  if (waiting === null) {
+    return section("Upload session", "<p>No upload session is waiting to be resumed.</p>");
+  }
+  const resumed = await resumeUpload(transport, store, waiting);
+  if (!resumed.persisted) {
+    return `${renderUploadSession(resumed)}<p>Nothing reached storage: this upload session was written nowhere and will not survive a reload.</p>`;
+  }
+  if (resumed.degraded) {
+    return `${renderUploadSession(resumed)}<p>This upload session is degraded: its record was written but the documents still waiting to be sent were not, so they must be chosen again before the upload can finish.</p>`;
+  }
+  return renderUploadSession(resumed);
+}
+
 function showDomainProfile(mount: HTMLElement): void {
   const panel = document.createElement("div");
   panel.id = "console-domain-profile";
@@ -274,6 +305,7 @@ async function render(): Promise<void> {
   await showSources(mount);
   await showEvidence(mount, values);
   showDomainProfile(mount);
+  await showUploadSession(mount, transport);
 }
 
 async function load(event: Event): Promise<void> {

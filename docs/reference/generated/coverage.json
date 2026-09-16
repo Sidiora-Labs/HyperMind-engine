@@ -5677,22 +5677,22 @@
       "file": "sdk/typescript/packages/console/src/activity.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:6850:paintDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:8152:paintDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:9120:paintDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10422:paintDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10045:showActivity",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:11347:showActivity",
       "name": "sdk/typescript/packages/console/src/app.ts::showActivity",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10133:showDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:11435:showDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::showDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
@@ -5945,6 +5945,116 @@
       "id": "sdk-method:sdk/typescript/packages/console/src/transport.ts:609:callTool",
       "name": "sdk/typescript/packages/console/src/transport.ts::callTool",
       "file": "sdk/typescript/packages/console/src/transport.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:MAXIMUM_SESSION_AGE_MS",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::MAXIMUM_SESSION_AGE_MS",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:MAXIMUM_STALL_MS",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::MAXIMUM_STALL_MS",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:UploadDocument",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::UploadDocument",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:UploadBatch",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::UploadBatch",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:UploadSession",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::UploadSession",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:UploadStatus",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::UploadStatus",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:SessionStore",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::SessionStore",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:webStorageSessionStore",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::webStorageSessionStore",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:newSessionId",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::newSessionId",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:saveSession",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::saveSession",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:updateSession",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::updateSession",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:deleteSession",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::deleteSession",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:listSessions",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::listSessions",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:purgeExpiredSessions",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::purgeExpiredSessions",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:findResumableSession",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::findResumableSession",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:resumeUpload",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::resumeUpload",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:uploadStatus",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::uploadStatus",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/upload-session.ts:renderUploadSession",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::renderUploadSession",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/upload-session.ts:1087:read",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::read",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/upload-session.ts:1143:write",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::write",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/upload-session.ts:1191:remove",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::remove",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/upload-session.ts:1228:list",
+      "name": "sdk/typescript/packages/console/src/upload-session.ts::list",
+      "file": "sdk/typescript/packages/console/src/upload-session.ts"
     },
     {
       "id": "sdk:sdk/typescript/packages/engine/index.d.ts:NativeEngine",
