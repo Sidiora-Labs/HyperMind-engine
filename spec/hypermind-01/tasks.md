@@ -217,22 +217,22 @@
   - [-] 7.6 Attention precision, calibration, HNSW parity; LongMemEval at 90 and LoCoMo at 75
     - Labelled interruption set with quiet-hour and duplicate cases; suppression precision at least 0.9; calibration report per predicate kind; LoCoMo runner with pinned judge; LongMemEval at least 90 percent and LoCoMo at least 75 percent F1 recorded.
     - _Requirements: 15.1, 15.2, 11.3, 12.1_
-  - [-] 7.7 Slice 7 journey: intention on repository change, batched under quiet hours, contradicted prediction, procedure earns support
+  - [ ] 7.7 Slice 7 journey: intention on repository change, batched under quiet hours, contradicted prediction, procedure earns support — **Implemented - qualification pending**
     - Journey: intend with a repository_changed trigger, feed the change during quiet hours and observe AttentionDecided batch with a reason and a digest item in the next bundle, predict a revision-equals predicate and record a contradicted outcome, close three loops in two conversations with the same tool chain and observe the procedure move to supported and render as an observation, gate slice7 green.
     - _Requirements: 1.1, 11.1, 11.2, 12.1, 12.2_
-  - [-] 8.1 gRPC over mTLS with streaming Subscribe; REST with OpenAPI; protocol v3 frozen
+  - [ ] 8.1 gRPC over mTLS with streaming Subscribe; REST with OpenAPI; protocol v3 frozen — **Implemented - qualification pending**
     - tonic service carrying the NCPR envelope bytes with mTLS and capability tokens, streaming Subscribe; axum REST mirror of the thirteen verbs with utoipa OpenAPI, admin token gating destructive verbs; protocol v3 frozen and documented.
     - _Requirements: 13.1, 13.2, 17.1_
-  - [-] 8.2 Python SDK, Go client extension, TypeScript client over gRPC
+  - [ ] 8.2 Python SDK, Go client extension, TypeScript client over gRPC — **Implemented - qualification pending**
     - hypermind Python package through PyO3 and maturin wheels with the embedded API, plus hypermind-client over gRPC, async-first; Go client imported from cortexclient with Recall, AsOf, Subscribe, CryptoDelete and Attest builders added and its sequence tests run against the new daemon; TypeScript client gains the gRPC transport.
     - _Requirements: 14.1, 14.2_
-  - [-] 8.3 migrate-from-cortex importer with verification
+  - [ ] 8.3 migrate-from-cortex importer with verification — **Implemented - qualification pending**
     - Read a cortex-engine SQLite or JSON store; emit events preserving ids: observations as UserMsg or DeliveredMsg with user_asserted or assistant_generated, memories as MemoryMinted with derived_inference and provenance to their observations, edges as EdgeAsserted, beliefs as Assertion with validity, FSRS state as Reviewed; verify counts and a sample of embeddings at float32 precision; hm import consumes JSON lines.
     - _Requirements: 14.3_
-  - [-] 8.4 CLI completion, TUI, packaging, model download, doctor
+  - [ ] 8.4 CLI completion, TUI, packaging, model download, doctor — **Implemented - qualification pending**
     - hm actor add, list, rotate-keys, shred; bench; export and import; tui with a live activation viewer; distroless static image, compose, systemd unit, Helm chart; model download with pinned digests on first run; doctor reports models, sockets, keys and index health.
     - _Requirements: 13.3, 16.2_
-  - [-] 8.5 Docs site: start, concepts, guides, reference, internals, evaluation, security, ADRs
+  - [ ] 8.5 Docs site: start, concepts, guides, reference, internals, evaluation, security, ADRs — **Implemented - qualification pending**
     - Complete the mdBook: start here with two-command MCP setup, concepts, guides including migration and deployment, reference with schematics finished from the frozen schema, protocol v3, MCP, CLI, config, prompts and SDK APIs generated, internals, evaluation methodology and numbers, threat model, ADR-001 to ADR-010; every public type and tool carries when-to-use and do-not-use; the docs gate checks every tool and type is documented.
     - _Requirements: 16.1_
   - [ ] 8.6 Full benchmark run, determinism across architectures, cost report, release qualification

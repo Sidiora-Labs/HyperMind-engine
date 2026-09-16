@@ -33,7 +33,7 @@ step_6 = "Commit from the repository root with a natural commit message describi
 step_7 = "A wave closes only when its integration task is done: the slice journey test passes through MCP, daemon, ledger, restart and recall, and the eval gate for that slice is green in CI."
 
 [status_values]
-task    = ["pending", "in_progress", "done"]
+task    = ["pending", "in_progress", "implemented", "done"]
 feature = ["draft", "in_progress", "paused", "blocked", "complete"]
 
 [hard_rules]

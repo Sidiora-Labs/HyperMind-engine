@@ -5,7 +5,7 @@
 [meta]
 feature = "hypermind-01"
 title = "HyperMind 01 — Elite memory engine for agents, built vertically"
-status = "draft"
+status = "in_progress"
 spec_version = "1.0.0"
 date = "2026-09-15"
 intro = "Build HyperMind: a Rust memory kernel that fuses the neocortex ledger discipline (encrypted, tamper-evident, deterministic, bitemporal) with the cortex-engine cognitive loop (ingest, consolidate, forget, believe, adjudicate) and the harness lessons (evidence authority, required bindings, attention-gated anticipation, generations, byte-range citations, protected self). The system is a stack of eight layers and is built as eight vertical slices, each adding to every layer and ending in a runnable end-to-end journey. No wave builds one layer alone. Every wave ships an eval gate. The agent that uses HyperMind resumes where it left off, knows when things were true, notices when it is wrong, anticipates without interrupting, learns procedures from independent episodes, and proves where every recalled fact came from, on every turn, in under 10 ms, with no LLM on the hot path."
@@ -853,7 +853,7 @@ do_1 = "Labelled interruption set with quiet-hour and duplicate cases; suppressi
 
 [task.7.7]
 title = "Slice 7 journey: intention on repository change, batched under quiet hours, contradicted prediction, procedure earns support"
-status = "in_progress"
+status = "implemented"
 wave = 7
 owner_lane = "integration"
 requires = ["7.1", "7.2", "7.3", "7.4", "7.5", "7.6"]
@@ -864,7 +864,7 @@ do_1 = "Journey: intend with a repository_changed trigger, feed the change durin
 
 [task.8.1]
 title = "gRPC over mTLS with streaming Subscribe; REST with OpenAPI; protocol v3 frozen"
-status = "in_progress"
+status = "implemented"
 wave = 8
 section = "Wave 8 — Reach: gRPC, REST, Python, Go, migration, docs, benchmarks, release"
 owner_lane = "surface"
@@ -876,7 +876,7 @@ do_1 = "tonic service carrying the NCPR envelope bytes with mTLS and capability 
 
 [task.8.2]
 title = "Python SDK, Go client extension, TypeScript client over gRPC"
-status = "in_progress"
+status = "implemented"
 wave = 8
 owner_lane = "sdk"
 requires = ["8.1"]
@@ -887,7 +887,7 @@ do_1 = "hypermind Python package through PyO3 and maturin wheels with the embedd
 
 [task.8.3]
 title = "migrate-from-cortex importer with verification"
-status = "in_progress"
+status = "implemented"
 wave = 8
 owner_lane = "sdk"
 requires = ["8.1"]
@@ -898,7 +898,7 @@ do_1 = "Read a cortex-engine SQLite or JSON store; emit events preserving ids: o
 
 [task.8.4]
 title = "CLI completion, TUI, packaging, model download, doctor"
-status = "in_progress"
+status = "implemented"
 wave = 8
 owner_lane = "surface"
 requires = ["8.1"]
@@ -909,7 +909,7 @@ do_1 = "hm actor add, list, rotate-keys, shred; bench; export and import; tui wi
 
 [task.8.5]
 title = "Docs site: start, concepts, guides, reference, internals, evaluation, security, ADRs"
-status = "in_progress"
+status = "implemented"
 wave = 8
 owner_lane = "docs"
 requires = ["8.2", "8.3", "8.4"]
