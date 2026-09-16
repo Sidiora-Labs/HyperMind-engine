@@ -2752,6 +2752,11 @@
       "file": "crates/hm-proj/src/procedures.rs"
     },
     {
+      "id": "rust:crates/hm-proj/src/procedures.rs:ImprovementProposal",
+      "name": "hm-proj::ImprovementProposal",
+      "file": "crates/hm-proj/src/procedures.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/procedures.rs:PlaybookMetadata",
       "name": "hm-proj::PlaybookMetadata",
       "file": "crates/hm-proj/src/procedures.rs"

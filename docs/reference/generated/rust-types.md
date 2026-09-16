@@ -11373,6 +11373,32 @@ pub struct ProcedureRecord {
 }
 ```
 
+## hm-proj::ImprovementProposal
+
+<a id="rust-crates-hm-proj-src-procedures-rs-improvementproposal"></a>
+
+Source: [`crates/hm-proj/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/procedures.rs).
+
+When to use: Use `ImprovementProposal` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct ImprovementProposal {
+    pub proposal_id: Vec<u8>,
+    pub procedure_id: Vec<u8>,
+    pub base_lsn: u64,
+    pub strategy: String,
+    pub expected_outcomes: Vec<String>,
+    pub preconditions: Vec<String>,
+    pub rationale: String,
+    pub failure_lsns: Vec<u64>,
+    pub proposed_lsn: u64,
+    pub adopted_lsn: u64,
+}
+```
+
 ## hm-proj::PlaybookMetadata
 
 <a id="rust-crates-hm-proj-src-procedures-rs-playbookmetadata"></a>
