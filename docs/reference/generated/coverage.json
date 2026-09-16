@@ -5587,6 +5587,86 @@
       "file": "sdk/typescript/packages/client/src/grpc.ts"
     },
     {
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:6496:paintDomainProfile",
+      "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
+      "file": "sdk/typescript/packages/console/src/app.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:8766:paintDomainProfile",
+      "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
+      "file": "sdk/typescript/packages/console/src/app.ts"
+    },
+    {
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:9756:showDomainProfile",
+      "name": "sdk/typescript/packages/console/src/app.ts::showDomainProfile",
+      "file": "sdk/typescript/packages/console/src/app.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:RESERVED_FIELD_NAMES",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::RESERVED_FIELD_NAMES",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:DomainField",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::DomainField",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:DomainRelation",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::DomainRelation",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:DomainType",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::DomainType",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:DomainProfile",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::DomainProfile",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:DomainAction",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::DomainAction",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:CompiledDomainProfile",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::CompiledDomainProfile",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:emptyDomainProfile",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::emptyDomainProfile",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:applyDomainAction",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::applyDomainAction",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:compileDomainProfile",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::compileDomainProfile",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:persistDomainProfile",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::persistDomainProfile",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:loadDomainProfile",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::loadDomainProfile",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/domain-profile.ts:renderDomainProfile",
+      "name": "sdk/typescript/packages/console/src/domain-profile.ts::renderDomainProfile",
+      "file": "sdk/typescript/packages/console/src/domain-profile.ts"
+    },
+    {
       "id": "sdk:sdk/typescript/packages/console/src/errors.ts:ConsoleDataError",
       "name": "sdk/typescript/packages/console/src/errors.ts::ConsoleDataError",
       "file": "sdk/typescript/packages/console/src/errors.ts"

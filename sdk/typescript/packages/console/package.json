@@ -9,6 +9,7 @@
     "test": "cargo build --manifest-path ../../../../Cargo.toml -p hm-cli && npm run build --prefix ../render && npm run build --prefix ../client && npm run build && node --test dist/*.test.js"
   },
   "dependencies": {
-    "@hypermind/client": "0.1.0"
+    "@hypermind/client": "0.1.0",
+    "@noble/hashes": "1.8.0"
   }
 }

@@ -4273,6 +4273,246 @@ Do not use: Do not substitute unchecked request objects, discard provenance, or 
 close(): void { this.client.close(); }
 ```
 
+## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
+
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-6496-paintdomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
+
+When to use: Use this paintDomainProfile method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+paintDomainProfile();
+```
+
+## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
+
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-8766-paintdomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
+
+When to use: Use this paintDomainProfile method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+paintDomainProfile();
+```
+
+## sdk/typescript/packages/console/src/app.ts::showDomainProfile
+
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-9756-showdomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
+
+When to use: Use this showDomainProfile method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
+
+Do not use: Do not substitute unchecked request objects, discard provenance, or assume this method independently establishes external success.
+
+
+```typescript
+showDomainProfile(mount);
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::RESERVED_FIELD_NAMES
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-reserved-field-names"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use RESERVED_FIELD_NAMES through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export const RESERVED_FIELD_NAMES: readonly string[] = [
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::DomainField
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-domainfield"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use Domain Field through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface DomainField {
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::DomainRelation
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-domainrelation"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use Domain Relation through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface DomainRelation {
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::DomainType
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-domaintype"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use Domain Type through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface DomainType {
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::DomainProfile
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-domainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use Domain Profile through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface DomainProfile {
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::DomainAction
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-domainaction"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use Domain Action through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export type DomainAction =
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::CompiledDomainProfile
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-compileddomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use Compiled Domain Profile through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface CompiledDomainProfile {
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::emptyDomainProfile
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-emptydomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use empty Domain Profile through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function emptyDomainProfile(): DomainProfile {
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::applyDomainAction
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-applydomainaction"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use apply Domain Action through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function applyDomainAction(profile: DomainProfile, action: DomainAction): DomainProfile {
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::compileDomainProfile
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-compiledomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use compile Domain Profile through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function compileDomainProfile(profile: DomainProfile): CompiledDomainProfile {
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::persistDomainProfile
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-persistdomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use persist Domain Profile through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function persistDomainProfile(
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::loadDomainProfile
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-loaddomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use load Domain Profile through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export async function loadDomainProfile(
+```
+
+## sdk/typescript/packages/console/src/domain-profile.ts::renderDomainProfile
+
+<a id="sdk-sdk-typescript-packages-console-src-domain-profile-ts-renderdomainprofile"></a>
+
+Source: [`sdk/typescript/packages/console/src/domain-profile.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/domain-profile.ts).
+
+When to use: Use render Domain Profile through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderDomainProfile(
+```
+
 ## sdk/typescript/packages/console/src/errors.ts::ConsoleDataError
 
 <a id="sdk-sdk-typescript-packages-console-src-errors-ts-consoledataerror"></a>
