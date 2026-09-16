@@ -9237,6 +9237,19 @@ pub enum IntendAction {
         procedure_id: String,
         procedure_lsn: u64,
     },
+    ImportPlaybook {
+        source_uri: String,
+        document: String,
+    },
+    ProposeProcedureImprovement {
+        proposal_id: String,
+        procedure_id: String,
+        strategy: String,
+        expected_outcomes: Vec<String>,
+        preconditions: Vec<String>,
+        rationale: String,
+        failure_lsns: Vec<u64>,
+    },
     SetObjective {
         objective: String,
     },

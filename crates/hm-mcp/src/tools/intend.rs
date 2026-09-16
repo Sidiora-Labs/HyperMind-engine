@@ -1,5 +1,6 @@
 use crate::Envelope;
 use hm_core::{ConversationId, Error, ErrorCode, LSN};
+use hm_cortex::procedures::{ImprovementDraft, ProcedureHead};
 use hm_ledger::frame::EventKind;
 use hm_schema::event::{CURRENT_SCHEMA_VERSION, encode_event_envelope};
 use hm_schema::events::{
@@ -43,6 +44,19 @@ pub enum IntendAction {
     AdoptProcedure {
         procedure_id: String,
         procedure_lsn: u64,
+    },
+    ImportPlaybook {
+        source_uri: String,
+        document: String,
+    },
+    ProposeProcedureImprovement {
+        proposal_id: String,
+        procedure_id: String,
+        strategy: String,
+        expected_outcomes: Vec<String>,
+        preconditions: Vec<String>,
+        rationale: String,
+        failure_lsns: Vec<u64>,
     },
     SetObjective {
         objective: String,
@@ -206,7 +220,7 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
         }
         return Ok(envelope);
     }
-    let (kind, payload, action, loop_id) = match input.action {
+    let (kind, payload, action, loop_id, proposal_id, authority) = match input.action {
         IntendAction::SetIntention {
             intention_id,
             objective,
@@ -224,6 +238,8 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
             })),
             "set_intention",
             Some(intention_id),
+            None,
+            Authority::UserAsserted,
         ),
         IntendAction::CancelIntention {
             intention_id,
@@ -236,6 +252,8 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
             })),
             "cancel_intention",
             Some(intention_id),
+            None,
+            Authority::UserAsserted,
         ),
         IntendAction::AdoptProcedure {
             procedure_id,
@@ -243,13 +261,73 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
         } => (
             EventKind::ProcedureAdopted,
             EventPayload::ProcedureAdopted(Box::new(hm_schema::events::ProcedureAdopted {
-                procedure_id: procedure_id.clone().into_bytes(),
+                procedure_id: identifier(&procedure_id),
                 procedure_lsn,
             })),
             "adopt_procedure",
             Some(procedure_id),
+            None,
+            Authority::UserAsserted,
         ),
         IntendAction::EvaluateWake { .. } => unreachable!("handled above"),
+        IntendAction::ImportPlaybook {
+            source_uri,
+            document,
+        } => {
+            let imported = hm_cortex::playbook::parse(&source_uri, document.as_bytes())?;
+            let procedure_id = hex(&imported.procedure_id);
+            (
+                EventKind::ProcedureImported,
+                EventPayload::ProcedureImported(Box::new(imported)),
+                "import_playbook",
+                Some(procedure_id),
+                None,
+                Authority::ExternalObserved,
+            )
+        }
+        IntendAction::ProposeProcedureImprovement {
+            proposal_id,
+            procedure_id,
+            strategy,
+            expected_outcomes,
+            preconditions,
+            rationale,
+            failure_lsns,
+        } => {
+            if proposal_id.is_empty() || procedure_id.is_empty() {
+                return Err(Error::new(ErrorCode::InvalidArgument));
+            }
+            let record = actor
+                .procedure(identifier(&procedure_id))
+                .await?
+                .ok_or_else(|| Error::new(ErrorCode::OrderingViolation))?;
+            let head = ProcedureHead {
+                procedure_id: record.procedure_id,
+                version_lsn: record.version_lsn,
+                strategy: record.strategy,
+                expected_outcomes: record.expected_outcomes,
+                preconditions: record.preconditions,
+            };
+            let proposed = hm_cortex::procedures::propose_improvement(
+                &identifier(&proposal_id),
+                &head,
+                ImprovementDraft {
+                    strategy,
+                    expected_outcomes,
+                    preconditions,
+                    rationale,
+                },
+                &failure_lsns,
+            )?;
+            (
+                EventKind::ProcedureImprovementProposed,
+                EventPayload::ProcedureImprovementProposed(Box::new(proposed)),
+                "propose_procedure_improvement",
+                Some(procedure_id),
+                Some(proposal_id),
+                Authority::DerivedInference,
+            )
+        }
         IntendAction::SetObjective { objective } => {
             if objective.is_empty() {
                 return Err(Error::new(ErrorCode::InvalidArgument));
@@ -261,6 +339,8 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
                 })),
                 "set_objective",
                 None,
+                None,
+                Authority::UserAsserted,
             )
         }
         IntendAction::OpenLoop { loop_id, objective } => {
@@ -276,6 +356,8 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
                 })),
                 "open_loop",
                 Some(item_loop_id),
+                None,
+                Authority::UserAsserted,
             )
         }
         IntendAction::CloseLoop {
@@ -306,6 +388,8 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
                 })),
                 "close_loop",
                 Some(item_loop_id),
+                None,
+                Authority::UserAsserted,
             )
         }
     };
@@ -324,7 +408,7 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
                 origin_actor: 0,
                 run_id: None,
                 model_provenance: None,
-                authority: Authority::UserAsserted,
+                authority,
                 retention: Retention::Durable,
                 sensitivity: Sensitivity::Personal,
                 event_time_ns: 0,
@@ -337,9 +421,35 @@ pub async fn run(actor: &ActorEngine, input: IntendInput) -> Result<Envelope, Er
         "action": action,
         "loop_id": if matches!(action, "open_loop" | "close_loop") { loop_id.as_deref() } else { None },
         "intention_id": if matches!(action, "set_intention" | "cancel_intention") { loop_id.as_deref() } else { None },
-        "procedure_id": if action == "adopt_procedure" { loop_id.as_deref() } else { None },
+        "procedure_id": if matches!(
+            action,
+            "adopt_procedure" | "import_playbook" | "propose_procedure_improvement"
+        ) { loop_id.as_deref() } else { None },
+        "proposal_id": proposal_id.as_deref(),
         "lsn": outcome.first_lsn.get(),
     }));
     envelope.provenance.push(uri);
     Ok(envelope)
+}
+
+const PROCEDURE_DIGEST_HEX: usize = 64;
+
+fn identifier(value: &str) -> Vec<u8> {
+    if value.len() != PROCEDURE_DIGEST_HEX || !value.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+        return value.as_bytes().to_vec();
+    }
+    (0..value.len() / 2)
+        .filter_map(|index| u8::from_str_radix(&value[index * 2..index * 2 + 2], 16).ok())
+        .collect()
+}
+
+fn hex(bytes: &[u8]) -> String {
+    use std::fmt::Write as _;
+    bytes.iter().fold(
+        String::with_capacity(bytes.len() * 2),
+        |mut output, byte| {
+            let _ = write!(output, "{byte:02x}");
+            output
+        },
+    )
 }

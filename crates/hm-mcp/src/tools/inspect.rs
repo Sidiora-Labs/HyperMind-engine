@@ -2,8 +2,9 @@
 
 use super::surfaces::{self, Availability, Surface};
 use crate::Envelope;
-use hm_core::{Error, ErrorCode, LSN};
+use hm_core::{ActorId, Error, ErrorCode, LSN};
 use hm_index::vocabulary::{DEFAULT_SIMILARITY_THRESHOLD_Q16, Q16_ONE};
+use hm_proj::procedures::{ImprovementProposal, PlaybookMetadata, ProcedureRecord, ProcedureState};
 use hm_schema::event::{self, Boundary, EventHistory};
 use hm_schema::events::{AttentionDecision, Authority, EventPayload, VocabularyCategory};
 use hm_serve::actor::ActorEngine;
@@ -20,6 +21,8 @@ const MAXIMUM_MEDIA_ITEMS: usize = 256;
 const MAXIMUM_CONNECTOR_ITEMS: usize = 256;
 const MAXIMUM_DELIVERY_ITEMS: usize = 256;
 const MAXIMUM_REVISION_ITEMS: usize = 256;
+const MAXIMUM_PROCEDURE_ITEMS: usize = 256;
+const MAXIMUM_PROPOSAL_ITEMS: usize = 64;
 const REVIEW_WARNING: &str = "An alias proposal changes nothing; it is accepted only by importing a new vocabulary version that declares the alias.";
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, schemars::JsonSchema)]
@@ -318,6 +321,52 @@ pub async fn run(
     if uri == format!("hm://{}/media/pending", actor.actor()) {
         return media(actor, envelope, true).await;
     }
+    if uri == format!("hm://{}/procedures", actor.actor()) {
+        let records = actor.procedures(MAXIMUM_PROCEDURE_ITEMS).await?;
+        let mut listing = Vec::with_capacity(records.len());
+        for record in &records {
+            let playbook = actor.playbook(record.procedure_id.clone()).await?;
+            listing.push(procedure_item(record, playbook.as_ref(), actor.actor()));
+            envelope
+                .provenance
+                .push(format!("hm://{}/lsn/{}", actor.actor(), record.version_lsn));
+        }
+        envelope.items[0]["procedures"] = json!(listing);
+        return Ok(envelope);
+    }
+    if let Some(identifier) = uri.strip_prefix(&format!("hm://{}/procedures/", actor.actor())) {
+        let procedure_id = parse_procedure_id(identifier)?;
+        let record = actor
+            .procedure(procedure_id.clone())
+            .await?
+            .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+        let playbook = actor.playbook(procedure_id.clone()).await?;
+        let instructions = actor.playbook_instructions(procedure_id.clone()).await?;
+        let proposals = actor
+            .procedure_proposals(procedure_id, MAXIMUM_PROPOSAL_ITEMS)
+            .await?;
+        let mut item = procedure_item(&record, playbook.as_ref(), actor.actor());
+        item["instructions"] = match &instructions {
+            Some(bytes) => json!(String::from_utf8_lossy(bytes)),
+            None => Value::Null,
+        };
+        item["proposals"] = json!(
+            proposals
+                .iter()
+                .map(|proposal| proposal_item(proposal, actor.actor()))
+                .collect::<Vec<_>>()
+        );
+        envelope
+            .provenance
+            .push(format!("hm://{}/lsn/{}", actor.actor(), record.version_lsn));
+        envelope.provenance.extend(
+            proposals
+                .iter()
+                .map(|proposal| format!("hm://{}/lsn/{}", actor.actor(), proposal.proposed_lsn)),
+        );
+        envelope.items[0]["procedure"] = item;
+        return Ok(envelope);
+    }
     if uri.starts_with(&format!("hm://{}/evidence/", actor.actor())) {
         let evidence = super::evidence::run(actor, parse_lsn(&uri)?).await?;
         envelope.items.extend(evidence.items);
@@ -576,6 +625,76 @@ const fn category_name(category: VocabularyCategory) -> &'static str {
         VocabularyCategory::EntityInstance => "entity_instance",
         VocabularyCategory::Relation => "relation",
     }
+}
+
+fn procedure_item(
+    record: &ProcedureRecord,
+    playbook: Option<&PlaybookMetadata>,
+    actor: ActorId,
+) -> Value {
+    let mut item = json!({
+        "procedure_id": hex(&record.procedure_id),
+        "uri": format!("hm://{actor}/procedures/{}", hex(&record.procedure_id)),
+        "state": procedure_state_name(record.state),
+        "strategy": record.strategy,
+        "expected_outcomes": record.expected_outcomes,
+        "preconditions": record.preconditions,
+        "supports": record.supports.len(),
+        "failures": record.failures,
+        "counterexamples": record.counterexamples,
+        "version_lsn": record.version_lsn,
+        "previous_lsn": record.previous_lsn,
+        "adopted_lsn": record.adopted_lsn,
+    });
+    if let Some(playbook) = playbook {
+        item["name"] = json!(playbook.name);
+        item["source_uri"] = json!(playbook.source_uri);
+        item["source_digest"] = json!(hex(&playbook.source_digest));
+        item["declared_tools"] = json!(playbook.declared_tools);
+        item["playbook_version"] = json!(playbook.playbook_version);
+        item["instruction_bytes"] = json!(playbook.instruction_bytes);
+        item["imported_lsn"] = json!(playbook.imported_lsn);
+    }
+    item
+}
+
+fn proposal_item(proposal: &ImprovementProposal, actor: ActorId) -> Value {
+    json!({
+        "proposal_id": hex(&proposal.proposal_id),
+        "uri": format!("hm://{actor}/lsn/{}", proposal.proposed_lsn),
+        "base_lsn": proposal.base_lsn,
+        "strategy": proposal.strategy,
+        "expected_outcomes": proposal.expected_outcomes,
+        "preconditions": proposal.preconditions,
+        "rationale": proposal.rationale,
+        "failure_lsns": proposal.failure_lsns,
+        "proposed_lsn": proposal.proposed_lsn,
+        "adopted_lsn": proposal.adopted_lsn,
+    })
+}
+
+const fn procedure_state_name(state: ProcedureState) -> &'static str {
+    match state {
+        ProcedureState::Tentative => "tentative",
+        ProcedureState::Supported => "supported",
+        ProcedureState::Adopted => "adopted",
+        ProcedureState::Imported => "imported",
+    }
+}
+
+fn parse_procedure_id(value: &str) -> Result<Vec<u8>, Error> {
+    if value.is_empty()
+        || !value.len().is_multiple_of(2)
+        || !value.bytes().all(|byte| byte.is_ascii_hexdigit())
+    {
+        return Err(Error::new(ErrorCode::InvalidArgument));
+    }
+    (0..value.len() / 2)
+        .map(|index| {
+            u8::from_str_radix(&value[index * 2..index * 2 + 2], 16)
+                .map_err(|_| Error::new(ErrorCode::InvalidArgument))
+        })
+        .collect()
 }
 
 fn parse_lsn(uri: &str) -> Result<LSN, Error> {
