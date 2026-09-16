@@ -13,19 +13,20 @@ use hm_cortex::nrem::cluster::{
 };
 use hm_cortex::nrem::merge::{
     ClusterOutcome, DropReason, ExistingMemory, MergeAction, consolidate_clusters, extract_cluster,
-    merge_request,
+    merge_contract, merge_request,
 };
 use hm_cortex::quality::{
     LabelledDecision, ThoughtQualityOptions, assess_thought, check_rewrite, grounding_score_micros,
     measure_classifier,
 };
+use hm_llm::contract::{ContractViolation, EXTRACTION_CONTRACT_VERSION, FieldShape};
 use hm_llm::openai_compat::OpenAiCompatible;
 use hm_llm::{
     ModelTier, Pricing, ProviderConfig, RecordedTransport, WireFixture, WireRequest, WireResponse,
 };
 use hm_schema::events::Authority;
 use serde_json::{Value, json};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 fn source(
     lsn: u64,
@@ -847,4 +848,221 @@ fn cluster_extraction_reports_one_outcome_per_candidate() {
     assert_eq!(speculative.cluster_id, [3; 32]);
     assert_eq!(speculative.reason, DropReason::SpeculationPoisoned);
     assert!(!extractions[2].citation_invalid);
+}
+
+fn recorded_provider(fixtures: Vec<WireFixture>) -> OpenAiCompatible<RecordedTransport> {
+    OpenAiCompatible::new(
+        ProviderConfig {
+            endpoint: "https://fixture.invalid/v1/chat/completions".to_owned(),
+            api_key: Some("fixture-key".to_owned()),
+            model: "fixture-model".to_owned(),
+            tier: ModelTier::Capable,
+            pricing: Pricing {
+                input_microusd_per_million_tokens: 1_000_000,
+                output_microusd_per_million_tokens: 2_000_000,
+            },
+        },
+        RecordedTransport::new(fixtures),
+    )
+    .unwrap()
+}
+
+fn rotation_cluster(cluster_id: [u8; 32]) -> ObservationCluster {
+    ObservationCluster {
+        cluster_id,
+        priority: 5,
+        observations: vec![
+            observation(
+                11,
+                1,
+                1,
+                "The auth service rotates refresh tokens on every use and revokes the previous token immediately.",
+                &[10, 1],
+                &["auth"],
+                1,
+                1,
+            ),
+            observation(
+                12,
+                2,
+                2,
+                "Rotation failures are logged to the ops collection with the caller identifier and a retry count.",
+                &[10, 1],
+                &["auth"],
+                1,
+                2,
+            ),
+            observation(
+                13,
+                2,
+                3,
+                "Refresh tokens are stored hashed in SQLite and pruned nightly by the rotation janitor job.",
+                &[10, 1],
+                &["auth"],
+                1,
+                3,
+            ),
+        ],
+    }
+}
+
+fn rotation_response(definition: &str) -> Value {
+    json!({
+        "action": "mint",
+        "target": null,
+        "name": "Refresh token rotation",
+        "definition": definition,
+        "tags": ["auth", "rotation"],
+        "salience_micros": 800_000,
+        "citations": [
+            {"lsn": 11, "byte_start": 0, "byte_end": 96, "quote": "rotates refresh tokens"},
+            {"lsn": 12, "byte_start": 0, "byte_end": 96, "quote": "Rotation failures"},
+            {"lsn": 13, "byte_start": 0, "byte_end": 90, "quote": "stored hashed in SQLite"}
+        ]
+    })
+}
+
+#[test]
+fn oversized_extracted_identifier_never_becomes_a_derived_record() {
+    let cluster = ObservationCluster {
+        cluster_id: [4; 32],
+        priority: 10,
+        observations: vec![
+            observation(
+                1,
+                1,
+                1,
+                "The auth service rotates refresh tokens on every use.",
+                &[10, 1],
+                &["auth"],
+                1,
+                1,
+            ),
+            observation(
+                2,
+                2,
+                2,
+                "Rotation failures are logged to the ops collection.",
+                &[10, 1],
+                &["auth"],
+                1,
+                2,
+            ),
+            observation(
+                3,
+                2,
+                3,
+                "Refresh tokens are stored hashed in SQLite.",
+                &[10, 1],
+                &["auth"],
+                1,
+                3,
+            ),
+        ],
+    };
+    let output = json!({
+        "action": "mint",
+        "target": null,
+        "name": "a".repeat(600),
+        "definition": "The auth service rotates refresh tokens on every use, stores them hashed in SQLite, and logs rotation failures to ops.",
+        "tags": ["auth", "tokens"],
+        "salience_micros": 800_000,
+        "citations": [
+            {"lsn": 1, "byte_start": 0, "byte_end": 53, "quote": "rotates refresh tokens"},
+            {"lsn": 2, "byte_start": 0, "byte_end": 51, "quote": "Rotation failures"},
+            {"lsn": 3, "byte_start": 0, "byte_end": 43, "quote": "stored hashed in SQLite"}
+        ]
+    });
+    let request = merge_request(&cluster, &[]).unwrap();
+    let provider = recorded_provider(vec![fixture(&request, &output)]);
+    let report = consolidate_clusters(
+        &provider,
+        b"run-contract",
+        std::slice::from_ref(&cluster),
+        &[],
+    )
+    .unwrap();
+    assert!(report.decisions.is_empty());
+    assert_eq!(report.dropped.len(), 1);
+    assert!(matches!(
+        report.dropped[0].reason,
+        DropReason::ExtractionContract(ContractViolation::IdentifierTooLong {
+            ref field,
+            characters: 600,
+            limit: 512,
+        }) if field == "name"
+    ));
+    assert_eq!(report.llm_calls, 1);
+    assert_eq!(provider.transport().remaining(), 0);
+}
+
+#[test]
+fn an_invented_response_field_is_refused_and_a_long_definition_is_not() {
+    const SHORT: &str = "The auth service rotates refresh tokens on every use, keeps them stored hashed in SQLite, and logs rotation failures to the ops collection.";
+    const LONG: &str = "The auth service rotates refresh tokens on every use and revokes the previous token immediately, keeps each refresh token stored hashed in SQLite where a nightly janitor job has pruned them, and rotation failures are logged to the ops collection with the caller identifier and a recorded retry count.";
+    assert_eq!(LONG.chars().count(), 300);
+    let invented = rotation_cluster([5; 32]);
+    let verbose = rotation_cluster([6; 32]);
+    let mut appended = rotation_response(SHORT);
+    appended["authority"] = json!("tool_observed");
+    let outputs = [appended, rotation_response(LONG)];
+    let clusters = [invented, verbose];
+    let fixtures = clusters
+        .iter()
+        .zip(&outputs)
+        .map(|(cluster, output)| fixture(&merge_request(cluster, &[]).unwrap(), output))
+        .collect();
+    let provider = recorded_provider(fixtures);
+    let report = consolidate_clusters(&provider, b"run-contract", &clusters, &[]).unwrap();
+    assert_eq!(report.llm_calls, 2);
+    assert_eq!(report.dropped.len(), 1);
+    assert_eq!(report.dropped[0].cluster_id, [5; 32]);
+    assert_eq!(
+        report.dropped[0].reason,
+        DropReason::ExtractionContract(ContractViolation::UnknownField("authority".to_owned()))
+    );
+    assert_eq!(report.decisions.len(), 1);
+    assert_eq!(report.decisions[0].cluster_id, [6; 32]);
+    assert_eq!(report.decisions[0].action, MergeAction::Mint);
+    assert_eq!(report.decisions[0].authority, Authority::DerivedInference);
+    assert_eq!(report.decisions[0].definition, LONG.as_bytes());
+    assert_eq!(provider.transport().remaining(), 0);
+}
+
+#[test]
+fn merge_contract_matches_the_wire_schema_required_set() {
+    let contract = merge_contract();
+    assert_eq!(contract.contract_id, "merge-cluster@1");
+    assert_eq!(contract.version, EXTRACTION_CONTRACT_VERSION);
+    assert_eq!(contract.fields.len(), 7);
+    assert_eq!(
+        contract
+            .fields
+            .iter()
+            .map(|rule| (rule.name, rule.shape))
+            .collect::<Vec<_>>(),
+        vec![
+            ("action", FieldShape::Identifier),
+            ("target", FieldShape::NullableIdentifier),
+            ("name", FieldShape::Identifier),
+            ("definition", FieldShape::Prose),
+            ("tags", FieldShape::IdentifierList),
+            ("salience_micros", FieldShape::Count),
+            ("citations", FieldShape::Opaque),
+        ]
+    );
+    let cluster = rotation_cluster([7; 32]);
+    let request = merge_request(&cluster, &[]).unwrap();
+    let required = request.json_schema["required"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|entry| entry.as_str().unwrap().to_owned())
+        .collect::<BTreeSet<_>>();
+    let declared = contract
+        .fields
+        .iter()
+        .map(|rule| rule.name.to_owned())
+        .collect::<BTreeSet<_>>();
+    assert_eq!(required, declared);
 }

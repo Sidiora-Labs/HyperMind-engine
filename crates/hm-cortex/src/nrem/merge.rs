@@ -5,6 +5,9 @@ use crate::nrem::cluster::ObservationCluster;
 use crate::quality::{
     RewriteGuardResult, ThoughtQualityOptions, ThoughtQualityResult, assess_thought, check_rewrite,
 };
+use hm_llm::contract::{
+    ContractViolation, EXTRACTION_CONTRACT_VERSION, ExtractionContract, FieldRule, FieldShape,
+};
 use hm_llm::cost::RunCost;
 use hm_llm::{LlmError, LlmProvider, StructuredRequest};
 use hm_schema::events::{Authority, ModelProvenance, ProvenanceRange};
@@ -13,6 +16,46 @@ use std::collections::BTreeSet;
 use std::fmt::Write;
 
 pub const MERGE_CLUSTER_PROMPT: &str = include_str!("../../../../prompts/merge-cluster@1.md");
+
+static MERGE_FIELDS: [FieldRule; 7] = [
+    FieldRule {
+        name: "action",
+        shape: FieldShape::Identifier,
+    },
+    FieldRule {
+        name: "target",
+        shape: FieldShape::NullableIdentifier,
+    },
+    FieldRule {
+        name: "name",
+        shape: FieldShape::Identifier,
+    },
+    FieldRule {
+        name: "definition",
+        shape: FieldShape::Prose,
+    },
+    FieldRule {
+        name: "tags",
+        shape: FieldShape::IdentifierList,
+    },
+    FieldRule {
+        name: "salience_micros",
+        shape: FieldShape::Count,
+    },
+    FieldRule {
+        name: "citations",
+        shape: FieldShape::Opaque,
+    },
+];
+
+#[must_use]
+pub const fn merge_contract() -> ExtractionContract {
+    ExtractionContract {
+        contract_id: "merge-cluster@1",
+        version: EXTRACTION_CONTRACT_VERSION,
+        fields: &MERGE_FIELDS,
+    }
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ExistingMemory {
@@ -48,6 +91,7 @@ pub struct NremDecision {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DropReason {
     InvalidStructuredOutput,
+    ExtractionContract(ContractViolation),
     Citation(CitationError),
     InsufficientIndependentRoots,
     InsufficientConversations,
@@ -227,6 +271,9 @@ fn validate_response(
     usage: hm_llm::Usage,
     value: &Value,
 ) -> Result<NremDecision, DropReason> {
+    merge_contract()
+        .validate(value)
+        .map_err(DropReason::ExtractionContract)?;
     let parsed = parse_response(value).ok_or(DropReason::InvalidStructuredOutput)?;
     let frozen = FrozenCandidateSet::new(
         cluster

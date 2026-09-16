@@ -2804,6 +2804,7 @@ Do not use: Do not promote inferred claims to observed authority, adopt procedur
 ```rust
 pub enum DropReason {
     InvalidStructuredOutput,
+    ExtractionContract(ContractViolation),
     Citation(CitationError),
     InsufficientIndependentRoots,
     InsufficientConversations,
