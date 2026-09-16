@@ -1,3 +1,4 @@
+import { buildAccessView, renderAccess } from "./access.js";
 import { createActivityFeed, renderActivity } from "./activity.js";
 import {
   applyDomainAction,
@@ -130,6 +131,19 @@ async function showEvidence(mount: HTMLElement, values: FormData): Promise<void>
       String(values.get("conversation") ?? ""),
       String(values.get("query") ?? ""),
     );
+  } catch (error) {
+    panel.textContent = failure(error);
+  }
+}
+
+async function showAccess(mount: HTMLElement): Promise<void> {
+  if (session === undefined) return;
+  const panel = document.createElement("div");
+  panel.id = "console-access";
+  mount.append(panel);
+  try {
+    const envelope = await session.transport.callTool("inspect", { uri: `hm://${session.actor}/access` });
+    panel.innerHTML = renderAccess(buildAccessView(envelope));
   } catch (error) {
     panel.textContent = failure(error);
   }
@@ -304,6 +318,7 @@ async function render(): Promise<void> {
   showActivity(mount);
   await showSources(mount);
   await showEvidence(mount, values);
+  await showAccess(mount);
   showDomainProfile(mount);
   await showUploadSession(mount, transport);
 }

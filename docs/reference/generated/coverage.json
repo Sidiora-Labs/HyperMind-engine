@@ -5657,6 +5657,26 @@
       "file": "sdk/typescript/packages/client/src/grpc.ts"
     },
     {
+      "id": "sdk:sdk/typescript/packages/console/src/access.ts:AccessVerbRow",
+      "name": "sdk/typescript/packages/console/src/access.ts::AccessVerbRow",
+      "file": "sdk/typescript/packages/console/src/access.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/access.ts:AccessView",
+      "name": "sdk/typescript/packages/console/src/access.ts::AccessView",
+      "file": "sdk/typescript/packages/console/src/access.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/access.ts:buildAccessView",
+      "name": "sdk/typescript/packages/console/src/access.ts::buildAccessView",
+      "file": "sdk/typescript/packages/console/src/access.ts"
+    },
+    {
+      "id": "sdk:sdk/typescript/packages/console/src/access.ts:renderAccess",
+      "name": "sdk/typescript/packages/console/src/access.ts::renderAccess",
+      "file": "sdk/typescript/packages/console/src/access.ts"
+    },
+    {
       "id": "sdk:sdk/typescript/packages/console/src/activity.ts:ActivityLane",
       "name": "sdk/typescript/packages/console/src/activity.ts::ActivityLane",
       "file": "sdk/typescript/packages/console/src/activity.ts"
@@ -5737,22 +5757,22 @@
       "file": "sdk/typescript/packages/console/src/activity.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:8152:paintDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:8659:paintDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10422:paintDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:10929:paintDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::paintDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:11347:showActivity",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:11854:showActivity",
       "name": "sdk/typescript/packages/console/src/app.ts::showActivity",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },
     {
-      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:11435:showDomainProfile",
+      "id": "sdk-method:sdk/typescript/packages/console/src/app.ts:11969:showDomainProfile",
       "name": "sdk/typescript/packages/console/src/app.ts::showDomainProfile",
       "file": "sdk/typescript/packages/console/src/app.ts"
     },

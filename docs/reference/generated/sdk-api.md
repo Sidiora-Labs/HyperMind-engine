@@ -4273,6 +4273,66 @@ Do not use: Do not substitute unchecked request objects, discard provenance, or 
 close(): void { this.client.close(); }
 ```
 
+## sdk/typescript/packages/console/src/access.ts::AccessVerbRow
+
+<a id="sdk-sdk-typescript-packages-console-src-access-ts-accessverbrow"></a>
+
+Source: [`sdk/typescript/packages/console/src/access.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/access.ts).
+
+When to use: Use Access Verb Row through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface AccessVerbRow {
+```
+
+## sdk/typescript/packages/console/src/access.ts::AccessView
+
+<a id="sdk-sdk-typescript-packages-console-src-access-ts-accessview"></a>
+
+Source: [`sdk/typescript/packages/console/src/access.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/access.ts).
+
+When to use: Use Access View through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export interface AccessView {
+```
+
+## sdk/typescript/packages/console/src/access.ts::buildAccessView
+
+<a id="sdk-sdk-typescript-packages-console-src-access-ts-buildaccessview"></a>
+
+Source: [`sdk/typescript/packages/console/src/access.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/access.ts).
+
+When to use: Use build Access View through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function buildAccessView(envelope: ConsoleEnvelope): AccessView {
+```
+
+## sdk/typescript/packages/console/src/access.ts::renderAccess
+
+<a id="sdk-sdk-typescript-packages-console-src-access-ts-renderaccess"></a>
+
+Source: [`sdk/typescript/packages/console/src/access.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/access.ts).
+
+When to use: Use render Access through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
+
+Do not use: Do not bypass safe rendering, feed reconstructed text back as observed memory, or assume a package is released merely because its source exists.
+
+
+```typescript
+export function renderAccess(view: AccessView): string {
+```
+
 ## sdk/typescript/packages/console/src/activity.ts::ActivityLane
 
 <a id="sdk-sdk-typescript-packages-console-src-activity-ts-activitylane"></a>
@@ -4515,7 +4575,7 @@ recordSubscribeFailure(error: unknown): "reset" | "retry" {
 
 ## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-8152-paintdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-8659-paintdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4530,7 +4590,7 @@ paintDomainProfile();
 
 ## sdk/typescript/packages/console/src/app.ts::paintDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10422-paintdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-10929-paintdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4545,7 +4605,7 @@ paintDomainProfile();
 
 ## sdk/typescript/packages/console/src/app.ts::showActivity
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-11347-showactivity"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-11854-showactivity"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
@@ -4560,7 +4620,7 @@ showActivity(mount);
 
 ## sdk/typescript/packages/console/src/app.ts::showDomainProfile
 
-<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-11435-showdomainprofile"></a>
+<a id="sdk-method-sdk-typescript-packages-console-src-app-ts-11969-showdomainprofile"></a>
 
 Source: [`sdk/typescript/packages/console/src/app.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/console/src/app.ts).
 
