@@ -7330,6 +7330,26 @@ pub struct AttestationRecord {
 }
 ```
 
+## hm-proj::PreferenceWeight
+
+<a id="rust-crates-hm-proj-src-attestations-rs-preferenceweight"></a>
+
+Source: [`crates/hm-proj/src/attestations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/attestations.rs).
+
+When to use: Use `PreferenceWeight` for snapshot reads and deterministic materialization of already-committed ledger events.
+
+Do not use: Do not make projections a second source of truth or update data without its checkpoint in the same transaction.
+
+
+```rust
+pub struct PreferenceWeight {
+    pub target_lsn: u64,
+    pub weight_q16: u32,
+    pub observations: u64,
+    pub last_attestation_lsn: u64,
+}
+```
+
 ## hm-proj::AttestationsProjection
 
 <a id="rust-crates-hm-proj-src-attestations-rs-attestationsprojection"></a>

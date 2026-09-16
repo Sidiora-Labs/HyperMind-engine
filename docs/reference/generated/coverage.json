@@ -1777,6 +1777,11 @@
       "file": "crates/hm-proj/src/attestations.rs"
     },
     {
+      "id": "rust:crates/hm-proj/src/attestations.rs:PreferenceWeight",
+      "name": "hm-proj::PreferenceWeight",
+      "file": "crates/hm-proj/src/attestations.rs"
+    },
+    {
       "id": "rust:crates/hm-proj/src/attestations.rs:AttestationsProjection",
       "name": "hm-proj::AttestationsProjection",
       "file": "crates/hm-proj/src/attestations.rs"
