@@ -157,7 +157,7 @@ export HM_CONSOLIDATION_PROVIDER=centra
 | Recall@10 | 1 万条数据时 ≥ 0.95 |
 | 预热后的激活 | 10 万条数据时 p99 < 10 ms |
 
-完整 LongMemEval 测试仍在运行，LoCoMo 资格验证尚未完成。真实的 slice-7 定向端到端测试已通过，但该测试或部分诊断均不能证明版本合格。请查看[实测状态](docs/evaluation/results.md)和[评估方法](docs/evaluation/methodology.md)，不要将阶段分数视为最终结果。
+完整的本地 LongMemEval 测试取得 **459/500（91.8%）**，通过 Centra 使用 Luna，检索仅采用词法方式。LoCoMo 正在运行，资格验证仍未完成。真实的 slice-7 定向端到端测试也已通过。这些结果不代表托管 CI 或发布资格验证已通过。请查看[实测状态与证据](docs/evaluation/results.md)和[评估方法](docs/evaluation/methodology.md)。
 
 ## 开发与文档检查
 

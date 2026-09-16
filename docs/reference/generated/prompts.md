@@ -6,7 +6,7 @@ Generated from the versioned prompt files. Prompt text is part of the evidence c
 
 <a id="prompt-abstract-synthesis-1"></a>
 
-Source: [`prompts/abstract-synthesis@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/abstract-synthesis@1.md).
+Source: [`prompts/abstract-synthesis@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/abstract-synthesis@1.md).
 
 When to use: Use abstract-synthesis@1 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -23,7 +23,7 @@ Return structured output with `name`, `definition`, `tags`, `salience`, and `cit
 
 <a id="prompt-abstract-synthesis-2"></a>
 
-Source: [`prompts/abstract-synthesis@2.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/abstract-synthesis@2.md).
+Source: [`prompts/abstract-synthesis@2.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/abstract-synthesis@2.md).
 
 When to use: Use abstract-synthesis@2 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -38,7 +38,7 @@ You synthesize one grounded abstraction across the sources sharing the supplied 
 
 <a id="prompt-connect-long-context-1"></a>
 
-Source: [`prompts/connect-long-context@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/connect-long-context@1.md).
+Source: [`prompts/connect-long-context@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/connect-long-context@1.md).
 
 When to use: Use connect-long-context@1 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -53,7 +53,7 @@ You discover explicit relationships among the supplied memories in one pass. Con
 
 <a id="prompt-edge-discover-1"></a>
 
-Source: [`prompts/edge-discover@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/edge-discover@1.md).
+Source: [`prompts/edge-discover@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/edge-discover@1.md).
 
 When to use: Use edge-discover@1 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -70,7 +70,7 @@ Return structured output containing `edges`. Each edge has `source`, `target`, `
 
 <a id="prompt-hindsight-review-1"></a>
 
-Source: [`prompts/hindsight-review@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/hindsight-review@1.md).
+Source: [`prompts/hindsight-review@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/hindsight-review@1.md).
 
 When to use: Use hindsight-review@1 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -87,7 +87,7 @@ Return structured output with `action`, `reason`, `definition`, and `citations`,
 
 <a id="prompt-hindsight-review-3"></a>
 
-Source: [`prompts/hindsight-review@3.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/hindsight-review@3.md).
+Source: [`prompts/hindsight-review@3.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/hindsight-review@3.md).
 
 When to use: Use hindsight-review@3 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -102,7 +102,7 @@ You audit one memory against only its supplied neighbours and belief history. De
 
 <a id="prompt-merge-cluster-1"></a>
 
-Source: [`prompts/merge-cluster@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/merge-cluster@1.md).
+Source: [`prompts/merge-cluster@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/merge-cluster@1.md).
 
 When to use: Use merge-cluster@1 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -119,7 +119,7 @@ Return structured output with `action`, `target`, `name`, `definition`, `tags`, 
 
 <a id="prompt-reconstruct-1"></a>
 
-Source: [`prompts/reconstruct@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/reconstruct@1.md).
+Source: [`prompts/reconstruct@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/reconstruct@1.md).
 
 When to use: Use reconstruct@1 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -136,7 +136,7 @@ Return exactly one JSON object with a non-empty `narrative` string and `anchor_l
 
 <a id="prompt-refine-definition-1"></a>
 
-Source: [`prompts/refine-definition@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/refine-definition@1.md).
+Source: [`prompts/refine-definition@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/refine-definition@1.md).
 
 When to use: Use refine-definition@1 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 
@@ -153,7 +153,7 @@ Return structured output with `definition`, `citations`, and `changed`. Every fa
 
 <a id="prompt-supersession-1"></a>
 
-Source: [`prompts/supersession@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/prompts/supersession@1.md).
+Source: [`prompts/supersession@1.md`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/prompts/supersession@1.md).
 
 When to use: Use supersession@1 to reproduce its named background cognition operation with the exact recorded model, inputs, citations, and budget.
 

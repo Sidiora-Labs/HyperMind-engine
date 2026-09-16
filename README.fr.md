@@ -157,7 +157,7 @@ La spécification fixe les critères d’acceptation suivants :
 | Recall@10 | ≥ 0,95 sur 10 000 éléments |
 | Activation à chaud | p99 < 10 ms sur 100 000 éléments |
 
-Le passage complet LongMemEval est en cours ; la qualification LoCoMo reste à faire. Le parcours réel ciblé slice-7 a réussi, mais ni ce test ni un diagnostic partiel ne qualifient une version. Consulter les [mesures](docs/evaluation/results.md) et la [méthodologie](docs/evaluation/methodology.md).
+Le passage local complet de LongMemEval a obtenu **459/500 (91,8 %)**, avec Luna via Centra et une recherche exclusivement lexicale. LoCoMo est en cours ; sa qualification reste en attente. Le parcours réel ciblé slice-7 a également réussi. Ces résultats ne prouvent ni la réussite de la CI hébergée ni la qualification d’une version. Consulter les [mesures et preuves](docs/evaluation/results.md) et la [méthodologie](docs/evaluation/methodology.md).
 
 ## Développer et vérifier la documentation
 

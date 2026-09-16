@@ -10,6 +10,7 @@
 - [Operations and recovery](guides/operations.md)
   - [Deployment](guides/deployment.md)
   - [Migration](guides/migration.md)
+  - [Continuous integration](guides/ci.md)
 - [Schematics](reference/schematics.md)
   - [Protocol and remote APIs](reference/protocol.md)
   - [MCP](reference/mcp.md)

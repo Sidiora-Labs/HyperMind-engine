@@ -157,7 +157,7 @@ The specification sets these acceptance targets:
 | Recall@10 | ≥ 0.95 at 10k items |
 | Warm activation | p99 < 10 ms at 100k items |
 
-The full LongMemEval run is in progress; LoCoMo qualification is pending. A focused real slice-7 journey passed, but neither that journey nor a selected diagnostic establishes release qualification. Consult [measured status](docs/evaluation/results.md) and [evaluation methodology](docs/evaluation/methodology.md), not partial scores.
+The complete local LongMemEval run scored **459/500 (91.8%)**, using Luna through Centra with lexical-only retrieval. LoCoMo is running; its qualification remains pending. The focused real slice-7 journey also passed. These results do not establish hosted CI or release qualification. See [measured status and evidence](docs/evaluation/results.md) and [evaluation methodology](docs/evaluation/methodology.md).
 
 ## Develop and check documentation
 
@@ -186,6 +186,8 @@ The catalog command regenerates documented public surfaces from actual source. `
 
 Start with the [documentation index](docs/SUMMARY.md).
 
+[Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Support](SUPPORT.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Contributors](CONTRIBUTORS.md)
+
 ## License
 
-Apache-2.0, as declared by the Rust workspace. See [LICENSE](LICENSE). Review upstream model and dataset licenses separately; the project license does not relicense those assets.
+Apache-2.0, as declared by the Rust workspace. See [LICENSE](LICENSE) and [NOTICE](NOTICE) for separately identified material. Review upstream model and dataset licenses separately; the project license does not relicense those assets.

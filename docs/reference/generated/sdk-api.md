@@ -6,7 +6,7 @@ Generated from authored Rust embedded, TypeScript, Python, and Go SDK sources cu
 
 <a id="sdk-sdk-go-admin-go-health"></a>
 
-Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/admin.go).
+Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/admin.go).
 
 When to use: Use Health through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -21,7 +21,7 @@ type Health struct {
 
 <a id="sdk-sdk-go-admin-go-projectionstat"></a>
 
-Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/admin.go).
+Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/admin.go).
 
 When to use: Use Projection Stat through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -36,7 +36,7 @@ type ProjectionStat struct {
 
 <a id="sdk-sdk-go-admin-go-actorstats"></a>
 
-Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/admin.go).
+Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/admin.go).
 
 When to use: Use Actor Stats through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -51,7 +51,7 @@ type ActorStats struct {
 
 <a id="sdk-sdk-go-admin-go-verifystatus"></a>
 
-Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/admin.go).
+Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/admin.go).
 
 When to use: Use Verify Status through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -66,7 +66,7 @@ type VerifyStatus struct {
 
 <a id="sdk-sdk-go-admin-go-adminhealth"></a>
 
-Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/admin.go).
+Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/admin.go).
 
 When to use: Use Admin Health through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -81,7 +81,7 @@ func (c *Client) AdminHealth(ctx context.Context) (Health, error) {
 
 <a id="sdk-sdk-go-admin-go-adminstats"></a>
 
-Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/admin.go).
+Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/admin.go).
 
 When to use: Use Admin Stats through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -96,7 +96,7 @@ func (c *Client) AdminStats(ctx context.Context, actor uint16) (ActorStats, erro
 
 <a id="sdk-sdk-go-admin-go-adminverifystatus"></a>
 
-Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/admin.go).
+Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/admin.go).
 
 When to use: Use Admin Verify Status through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -111,7 +111,7 @@ func (c *Client) AdminVerifyStatus(ctx context.Context, actor uint16) (VerifySta
 
 <a id="sdk-sdk-go-admin-go-adminrebuildprojection"></a>
 
-Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/admin.go).
+Source: [`sdk/go/admin.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/admin.go).
 
 When to use: Use Admin Rebuild Projection through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -126,7 +126,7 @@ func (c *Client) AdminRebuildProjection(ctx context.Context, actor uint16, name 
 
 <a id="sdk-sdk-go-bundle-go-gap"></a>
 
-Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/bundle.go).
+Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/bundle.go).
 
 When to use: Use Gap through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -141,7 +141,7 @@ type Gap struct{ Kind, Detail string }
 
 <a id="sdk-sdk-go-bundle-go-modernitem"></a>
 
-Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/bundle.go).
+Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/bundle.go).
 
 When to use: Use Modern Item through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -156,7 +156,7 @@ type ModernItem struct {
 
 <a id="sdk-sdk-go-bundle-go-modernsection"></a>
 
-Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/bundle.go).
+Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/bundle.go).
 
 When to use: Use Modern Section through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -171,7 +171,7 @@ type ModernSection struct {
 
 <a id="sdk-sdk-go-bundle-go-promptitem"></a>
 
-Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/bundle.go).
+Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/bundle.go).
 
 When to use: Use Prompt Item through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -186,7 +186,7 @@ type PromptItem struct {
 
 <a id="sdk-sdk-go-bundle-go-promptsection"></a>
 
-Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/bundle.go).
+Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/bundle.go).
 
 When to use: Use Prompt Section through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -201,7 +201,7 @@ type PromptSection struct {
 
 <a id="sdk-sdk-go-bundle-go-renderedprompt"></a>
 
-Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/bundle.go).
+Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/bundle.go).
 
 When to use: Use Rendered Prompt through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -216,7 +216,7 @@ type RenderedPrompt struct {
 
 <a id="sdk-sdk-go-bundle-go-renderoptions"></a>
 
-Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/bundle.go).
+Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/bundle.go).
 
 When to use: Use Render Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -231,7 +231,7 @@ type RenderOptions struct{ SameTurnLSNs []uint64 }
 
 <a id="sdk-sdk-go-bundle-go-render"></a>
 
-Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/bundle.go).
+Source: [`sdk/go/bundle.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/bundle.go).
 
 When to use: Use Render through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -246,7 +246,7 @@ func Render(bundle *Bundle, options RenderOptions) RenderedPrompt {
 
 <a id="sdk-sdk-go-client-go-eventkind"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Event Kind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -261,7 +261,7 @@ type EventKind uint8
 
 <a id="sdk-sdk-go-client-go-pendingwriteerror"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Pending Write Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -276,7 +276,7 @@ type PendingWriteError struct {
 
 <a id="sdk-sdk-go-client-go-error"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -291,7 +291,7 @@ func (e *PendingWriteError) Error() string {
 
 <a id="sdk-sdk-go-client-go-unwrap"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Unwrap through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -306,7 +306,7 @@ func (e *PendingWriteError) Unwrap() error { return e.Cause }
 
 <a id="sdk-sdk-go-client-go-is"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Is through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -321,7 +321,7 @@ func (e *PendingWriteError) Is(target error) bool {
 
 <a id="sdk-sdk-go-client-go-engineerror"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Engine Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -336,7 +336,7 @@ type EngineError struct {
 
 <a id="sdk-sdk-go-client-go-error"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -351,7 +351,7 @@ func (e *EngineError) Error() string {
 
 <a id="sdk-sdk-go-client-go-config"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Config through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -366,7 +366,7 @@ type Config struct {
 
 <a id="sdk-sdk-go-client-go-welcome"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Welcome through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -381,7 +381,7 @@ type Welcome struct {
 
 <a id="sdk-sdk-go-client-go-appendevent"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Append Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -396,7 +396,7 @@ type AppendEvent struct {
 
 <a id="sdk-sdk-go-client-go-appendack"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Append Ack through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -411,7 +411,7 @@ type AppendAck struct {
 
 <a id="sdk-sdk-go-client-go-error"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -426,7 +426,7 @@ func (e *rejectedWriteError) Error() string { return e.cause.Error() }
 
 <a id="sdk-sdk-go-client-go-unwrap"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Unwrap through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -441,7 +441,7 @@ func (e *rejectedWriteError) Unwrap() error { return e.cause }
 
 <a id="sdk-sdk-go-client-go-client"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Client through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -456,7 +456,7 @@ type Client struct {
 
 <a id="sdk-sdk-go-client-go-dial"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Dial through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -471,7 +471,7 @@ func Dial(cfg Config) (*Client, error) {
 
 <a id="sdk-sdk-go-client-go-welcome"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Welcome through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -486,7 +486,7 @@ func (c *Client) Welcome() Welcome {
 
 <a id="sdk-sdk-go-client-go-close"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Close through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -501,7 +501,7 @@ func (c *Client) Close() error {
 
 <a id="sdk-sdk-go-client-go-pendinglen"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Pending Len through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -516,7 +516,7 @@ func (c *Client) PendingLen() int {
 
 <a id="sdk-sdk-go-client-go-nextclientseq"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Next Client Seq through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -531,7 +531,7 @@ func (c *Client) NextClientSeq() uint64 {
 
 <a id="sdk-sdk-go-client-go-append"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Append through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -546,7 +546,7 @@ func (c *Client) Append(ctx context.Context, events []AppendEvent) (AppendAck, e
 
 <a id="sdk-sdk-go-client-go-queueappend"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Queue Append through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -561,7 +561,7 @@ func (c *Client) QueueAppend(ctx context.Context, events []AppendEvent) (AppendA
 
 <a id="sdk-sdk-go-client-go-supervisor"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Supervisor through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -576,7 +576,7 @@ type Supervisor struct {
 
 <a id="sdk-sdk-go-client-go-start"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Start through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -591,7 +591,7 @@ func (s *Supervisor) Start() error {
 
 <a id="sdk-sdk-go-client-go-pid"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Pid through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -606,7 +606,7 @@ func (s *Supervisor) Pid() int {
 
 <a id="sdk-sdk-go-client-go-stop"></a>
 
-Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/client.go).
+Source: [`sdk/go/client.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/client.go).
 
 When to use: Use Stop through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -621,7 +621,7 @@ func (s *Supervisor) Stop() {
 
 <a id="sdk-sdk-go-grpc-go-transporterror"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Transport Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -636,7 +636,7 @@ type TransportError struct {
 
 <a id="sdk-sdk-go-grpc-go-error"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -651,7 +651,7 @@ func (e *TransportError) Error() string {
 
 <a id="sdk-sdk-go-grpc-go-unwrap"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Unwrap through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -666,7 +666,7 @@ func (e *TransportError) Unwrap() error { return e.Cause }
 
 <a id="sdk-sdk-go-grpc-go-name"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Name through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -681,7 +681,7 @@ func (ncprCodec) Name() string { return "proto" }
 
 <a id="sdk-sdk-go-grpc-go-marshal"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Marshal through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -696,7 +696,7 @@ func (ncprCodec) Marshal(value any) ([]byte, error) {
 
 <a id="sdk-sdk-go-grpc-go-unmarshal"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Unmarshal through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -711,7 +711,7 @@ func (ncprCodec) Unmarshal(data []byte, value any) error {
 
 <a id="sdk-sdk-go-grpc-go-write"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Write through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -726,7 +726,7 @@ func (c *grpcConn) Write(frame []byte) (int, error) {
 
 <a id="sdk-sdk-go-grpc-go-read"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Read through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -741,7 +741,7 @@ func (c *grpcConn) Read(out []byte) (int, error) {
 
 <a id="sdk-sdk-go-grpc-go-close"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Close through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -756,7 +756,7 @@ func (c *grpcConn) Close() error { c.cancel(); return c.client.Close() }
 
 <a id="sdk-sdk-go-grpc-go-network"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Network through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -771,7 +771,7 @@ func (a grpcAddress) Network() string    { return "grpc" }
 
 <a id="sdk-sdk-go-grpc-go-string"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use String through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -786,7 +786,7 @@ func (a grpcAddress) String() string     { return string(a) }
 
 <a id="sdk-sdk-go-grpc-go-localaddr"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Local Addr through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -801,7 +801,7 @@ func (c *grpcConn) LocalAddr() net.Addr  { return grpcAddress("client") }
 
 <a id="sdk-sdk-go-grpc-go-remoteaddr"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Remote Addr through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -816,7 +816,7 @@ func (c *grpcConn) RemoteAddr() net.Addr { return grpcAddress(c.client.Target())
 
 <a id="sdk-sdk-go-grpc-go-setdeadline"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Set Deadline through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -831,7 +831,7 @@ func (c *grpcConn) SetDeadline(t time.Time) error {
 
 <a id="sdk-sdk-go-grpc-go-setreaddeadline"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Set Read Deadline through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -846,7 +846,7 @@ func (c *grpcConn) SetReadDeadline(t time.Time) error  { c.readDeadline = t; ret
 
 <a id="sdk-sdk-go-grpc-go-setwritedeadline"></a>
 
-Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/grpc.go).
+Source: [`sdk/go/grpc.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/grpc.go).
 
 When to use: Use Set Write Deadline through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -861,7 +861,7 @@ func (c *grpcConn) SetWriteDeadline(t time.Time) error { c.writeDeadline = t; re
 
 <a id="sdk-sdk-go-loopseam-go-conversationbytes"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Conversation Bytes through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -876,7 +876,7 @@ func ConversationBytes(conversationID string) [16]byte {
 
 <a id="sdk-sdk-go-loopseam-go-usermsgevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use User Msg Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -891,7 +891,7 @@ func UserMsgEvent(conversation [16]byte, content string) AppendEvent {
 
 <a id="sdk-sdk-go-loopseam-go-deliveredmsgevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Delivered Msg Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -906,7 +906,7 @@ func DeliveredMsgEvent(conversation [16]byte, content string) AppendEvent {
 
 <a id="sdk-sdk-go-loopseam-go-reasoningevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Reasoning Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -921,7 +921,7 @@ func ReasoningEvent(conversation [16]byte, content string) AppendEvent {
 
 <a id="sdk-sdk-go-loopseam-go-providerframeevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Provider Frame Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -936,7 +936,7 @@ func ProviderFrameEvent(conversation [16]byte, provider string, apiContent []byt
 
 <a id="sdk-sdk-go-loopseam-go-toolcallevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Tool Call Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -951,7 +951,7 @@ func ToolCallEvent(conversation [16]byte, callID, toolName string, arguments []b
 
 <a id="sdk-sdk-go-loopseam-go-toolresultevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Tool Result Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -966,7 +966,7 @@ func ToolResultEvent(conversation [16]byte, callID string, toolCallLsn uint64,
 
 <a id="sdk-sdk-go-loopseam-go-assertion"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Assertion through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -981,7 +981,7 @@ type Assertion struct {
 
 <a id="sdk-sdk-go-loopseam-go-assertionevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Assertion Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -996,7 +996,7 @@ func AssertionEvent(conversation [16]byte, assertion Assertion) AppendEvent {
 
 <a id="sdk-sdk-go-loopseam-go-retraction"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Retraction through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1011,7 +1011,7 @@ type Retraction struct {
 
 <a id="sdk-sdk-go-loopseam-go-retractionevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Retraction Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1026,7 +1026,7 @@ func RetractionEvent(conversation [16]byte, retraction Retraction) AppendEvent {
 
 <a id="sdk-sdk-go-loopseam-go-consolidationevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Consolidation Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1041,7 +1041,7 @@ func ConsolidationEvent(conversation [16]byte, assertions []Assertion) AppendEve
 
 <a id="sdk-sdk-go-loopseam-go-defaulttokenweights"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Default Token Weights through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1056,7 +1056,7 @@ func DefaultTokenWeights() []uint16 {
 
 <a id="sdk-sdk-go-loopseam-go-bundle"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1071,7 +1071,7 @@ type Bundle struct {
 
 <a id="sdk-sdk-go-loopseam-go-bundlesection"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Bundle Section through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1086,7 +1086,7 @@ type BundleSection struct {
 
 <a id="sdk-sdk-go-loopseam-go-bundleitem"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Bundle Item through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1101,7 +1101,7 @@ type BundleItem struct {
 
 <a id="sdk-sdk-go-loopseam-go-trimmeditem"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Trimmed Item through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1116,7 +1116,7 @@ type TrimmedItem struct {
 
 <a id="sdk-sdk-go-loopseam-go-parsebundle"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Parse Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1131,7 +1131,7 @@ func ParseBundle(encoded []byte) (*Bundle, error) {
 
 <a id="sdk-sdk-go-loopseam-go-decodedevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Decoded Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1146,7 +1146,7 @@ type DecodedEvent struct {
 
 <a id="sdk-sdk-go-loopseam-go-memoryprojection"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Memory Projection through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1161,7 +1161,7 @@ type MemoryProjection struct {
 
 <a id="sdk-sdk-go-loopseam-go-projectionexclusions"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Projection Exclusions through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1176,7 +1176,7 @@ type ProjectionExclusions struct {
 
 <a id="sdk-sdk-go-loopseam-go-decodeevent"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Decode Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1191,7 +1191,7 @@ func DecodeEvent(kind EventKind, payload []byte) (out DecodedEvent, err error) {
 
 <a id="sdk-sdk-go-loopseam-go-renderbundle"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Render Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1206,7 +1206,7 @@ func RenderBundle(bundle *Bundle, premises []string) string {
 
 <a id="sdk-sdk-go-loopseam-go-projectbundle"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Project Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1221,7 +1221,7 @@ func ProjectBundle(bundle *Bundle) []MemoryProjection {
 
 <a id="sdk-sdk-go-loopseam-go-projectbundleexcluding"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Project Bundle Excluding through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1236,7 +1236,7 @@ func ProjectBundleExcluding(bundle *Bundle, exclusions ProjectionExclusions) []M
 
 <a id="sdk-sdk-go-loopseam-go-toolexecution"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Tool Execution through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1251,7 +1251,7 @@ type ToolExecution struct {
 
 <a id="sdk-sdk-go-loopseam-go-tooleventcitation"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Tool Event Citation through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1266,7 +1266,7 @@ type ToolEventCitation struct {
 
 <a id="sdk-sdk-go-loopseam-go-tooleventpayload"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Tool Event Payload through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1281,7 +1281,7 @@ type ToolEventPayload struct {
 
 <a id="sdk-sdk-go-loopseam-go-activationquery"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Activation Query through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1296,7 +1296,7 @@ type ActivationQuery struct {
 
 <a id="sdk-sdk-go-loopseam-go-loopseam"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Loop Seam through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1311,7 +1311,7 @@ type LoopSeam struct {
 
 <a id="sdk-sdk-go-loopseam-go-seamconfig"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Seam Config through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1326,7 +1326,7 @@ type SeamConfig struct {
 
 <a id="sdk-sdk-go-loopseam-go-newloopseam"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use New Loop Seam through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1341,7 +1341,7 @@ func NewLoopSeam(client *Client, cfg SeamConfig) (*LoopSeam, error) {
 
 <a id="sdk-sdk-go-loopseam-go-conversation"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Conversation through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1356,7 +1356,7 @@ func (s *LoopSeam) Conversation() [16]byte { return s.conversation }
 
 <a id="sdk-sdk-go-loopseam-go-activate"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Activate through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1371,7 +1371,7 @@ func (s *LoopSeam) Activate(ctx context.Context, query ActivationQuery) (string,
 
 <a id="sdk-sdk-go-loopseam-go-activatebundle"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Activate Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1386,7 +1386,7 @@ func (s *LoopSeam) ActivateBundle(ctx context.Context, query ActivationQuery) (*
 
 <a id="sdk-sdk-go-loopseam-go-recorduser"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Record User through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1401,7 +1401,7 @@ func (s *LoopSeam) RecordUser(content string) {
 
 <a id="sdk-sdk-go-loopseam-go-recordassistantworking"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Record Assistant Working through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1416,7 +1416,7 @@ func (s *LoopSeam) RecordAssistantWorking(content string) {
 
 <a id="sdk-sdk-go-loopseam-go-recorddelivery"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Record Delivery through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1431,7 +1431,7 @@ func (s *LoopSeam) RecordDelivery(content string) {
 
 <a id="sdk-sdk-go-loopseam-go-provenancerange"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Provenance Range through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1446,7 +1446,7 @@ func (s *LoopSeam) ProvenanceRange() (string, uint64, uint64) {
 
 <a id="sdk-sdk-go-loopseam-go-recorderror"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Record Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1461,7 +1461,7 @@ func (s *LoopSeam) RecordError() error {
 
 <a id="sdk-sdk-go-loopseam-go-committoolexecution"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Commit Tool Execution through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1476,7 +1476,7 @@ func (s *LoopSeam) CommitToolExecution(ctx context.Context, execution ToolExecut
 
 <a id="sdk-sdk-go-loopseam-go-consolidate"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Consolidate through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1491,7 +1491,7 @@ func (s *LoopSeam) Consolidate(ctx context.Context, assertions []Assertion) (App
 
 <a id="sdk-sdk-go-loopseam-go-saveturncheckpoint"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Save Turn Checkpoint through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1506,7 +1506,7 @@ func (s *LoopSeam) SaveTurnCheckpoint(ctx context.Context, turnID string, blob [
 
 <a id="sdk-sdk-go-loopseam-go-latestturncheckpoint"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Latest Turn Checkpoint through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1521,7 +1521,7 @@ func (s *LoopSeam) LatestTurnCheckpoint(ctx context.Context, turnID string) ([]b
 
 <a id="sdk-sdk-go-loopseam-go-writecheckpoint"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Write Checkpoint through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1536,7 +1536,7 @@ func (c *Client) WriteCheckpoint(ctx context.Context, turnID string, blob []byte
 
 <a id="sdk-sdk-go-loopseam-go-latestcheckpoint"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Latest Checkpoint through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1551,7 +1551,7 @@ func (c *Client) LatestCheckpoint(ctx context.Context, turnID string) ([]byte, u
 
 <a id="sdk-sdk-go-loopseam-go-transcriptrecord"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Transcript Record through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1566,7 +1566,7 @@ type TranscriptRecord struct {
 
 <a id="sdk-sdk-go-loopseam-go-transcript"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Transcript through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1581,7 +1581,7 @@ func (c *Client) Transcript(ctx context.Context, conversation [16]byte,
 
 <a id="sdk-sdk-go-loopseam-go-attest"></a>
 
-Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/loopseam.go).
+Source: [`sdk/go/loopseam.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/loopseam.go).
 
 When to use: Use Attest through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1596,7 +1596,7 @@ func (c *Client) Attest(ctx context.Context, used, ignored []uint64) (uint32, er
 
 <a id="sdk-sdk-go-session-go-toolenvelope"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Tool Envelope through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1611,7 +1611,7 @@ type ToolEnvelope map[string]any
 
 <a id="sdk-sdk-go-session-go-recalloptions"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Recall Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1626,7 +1626,7 @@ type RecallOptions struct {
 
 <a id="sdk-sdk-go-session-go-recall"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Recall through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1641,7 +1641,7 @@ func (c *Client) Recall(ctx context.Context, query string, options RecallOptions
 
 <a id="sdk-sdk-go-session-go-asofoptions"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use As Of Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1656,7 +1656,7 @@ type AsOfOptions struct {
 
 <a id="sdk-sdk-go-session-go-asof"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use As Of through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1671,7 +1671,7 @@ func (c *Client) AsOf(ctx context.Context, beliefType uint8, identity string, op
 
 <a id="sdk-sdk-go-session-go-calltool"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Call Tool through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1686,7 +1686,7 @@ func (c *Client) CallTool(ctx context.Context, verb string, input any) (ToolEnve
 
 <a id="sdk-sdk-go-session-go-cryptodelete"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Crypto Delete through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1701,7 +1701,7 @@ func (c *Client) CryptoDelete(ctx context.Context, actor uint16) ([]byte, error)
 
 <a id="sdk-sdk-go-session-go-subscription"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Subscription through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1716,7 +1716,7 @@ type Subscription struct {
 
 <a id="sdk-sdk-go-session-go-subscribedevent"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Subscribed Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1731,7 +1731,7 @@ type SubscribedEvent struct {
 
 <a id="sdk-sdk-go-session-go-subscribe"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Subscribe through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1746,7 +1746,7 @@ func (c *Client) Subscribe(ctx context.Context, conversation *[16]byte, sinceLSN
 
 <a id="sdk-sdk-go-session-go-next"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Next through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1761,7 +1761,7 @@ func (s *Subscription) Next(ctx context.Context) (SubscribedEvent, error) {
 
 <a id="sdk-sdk-go-session-go-close"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Close through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1776,7 +1776,7 @@ func (s *Subscription) Close() error {
 
 <a id="sdk-sdk-go-session-go-session"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1791,7 +1791,7 @@ type Session struct {
 
 <a id="sdk-sdk-go-session-go-session"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1806,7 +1806,7 @@ func (c *Client) Session(conversation string) (*Session, error) {
 
 <a id="sdk-sdk-go-session-go-remember"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Remember through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1821,7 +1821,7 @@ func (s *Session) Remember(ctx context.Context, content string) (uint64, error) 
 
 <a id="sdk-sdk-go-session-go-recall"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Recall through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1836,7 +1836,7 @@ func (s *Session) Recall(ctx context.Context, query string, options RecallOption
 
 <a id="sdk-sdk-go-session-go-activate"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Activate through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1851,7 +1851,7 @@ func (s *Session) Activate(ctx context.Context, query string, budget uint64) (*B
 
 <a id="sdk-sdk-go-session-go-render"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Render through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1866,7 +1866,7 @@ func (s *Session) Render(bundle *Bundle, options RenderOptions) RenderedPrompt {
 
 <a id="sdk-sdk-go-session-go-attest"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Attest through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1881,7 +1881,7 @@ func (s *Session) Attest(ctx context.Context, used, ignored []uint64) (uint32, e
 
 <a id="sdk-sdk-go-session-go-asof"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use As Of through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1896,7 +1896,7 @@ func (s *Session) AsOf(ctx context.Context, kind uint8, identity string, options
 
 <a id="sdk-sdk-go-session-go-believe"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Believe through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1911,7 +1911,7 @@ func (s *Session) Believe(ctx context.Context, input map[string]any) (ToolEnvelo
 
 <a id="sdk-sdk-go-session-go-intend"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Intend through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1926,7 +1926,7 @@ func (s *Session) Intend(ctx context.Context, input map[string]any) (ToolEnvelop
 
 <a id="sdk-sdk-go-session-go-bind"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Bind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1941,7 +1941,7 @@ func (s *Session) Bind(ctx context.Context, input map[string]any) (ToolEnvelope,
 
 <a id="sdk-sdk-go-session-go-predict"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Predict through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1956,7 +1956,7 @@ func (s *Session) Predict(ctx context.Context, input map[string]any) (ToolEnvelo
 
 <a id="sdk-sdk-go-session-go-outcome"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Outcome through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1971,7 +1971,7 @@ func (s *Session) Outcome(ctx context.Context, input map[string]any) (ToolEnvelo
 
 <a id="sdk-sdk-go-session-go-consolidate"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Consolidate through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -1986,7 +1986,7 @@ func (s *Session) Consolidate(ctx context.Context, input map[string]any) (ToolEn
 
 <a id="sdk-sdk-go-session-go-retract"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Retract through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2001,7 +2001,7 @@ func (s *Session) Retract(ctx context.Context, input map[string]any) (ToolEnvelo
 
 <a id="sdk-sdk-go-session-go-dispute"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Dispute through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2016,7 +2016,7 @@ func (s *Session) Dispute(ctx context.Context, input map[string]any) (ToolEnvelo
 
 <a id="sdk-sdk-go-session-go-forget"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Forget through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2031,7 +2031,7 @@ func (s *Session) Forget(ctx context.Context, input map[string]any) (ToolEnvelop
 
 <a id="sdk-sdk-go-session-go-inspect"></a>
 
-Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/go/session.go).
+Source: [`sdk/go/session.go`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/go/session.go).
 
 When to use: Use Inspect through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2046,7 +2046,7 @@ func (s *Session) Inspect(ctx context.Context, input map[string]any) (ToolEnvelo
 
 <a id="sdk-sdk-python-hypermind-bundle-py-bundle"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2061,7 +2061,7 @@ class Bundle:
 
 <a id="sdk-sdk-python-hypermind-bundle-py-activationsafetyerror"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use Activation Safety Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2071,7 +2071,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-bundle-py-is-reconstruction"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use is_reconstruction through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2081,7 +2081,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-bundle-py-assert-rememberable"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use assert_rememberable through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2091,7 +2091,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-bundle-py-raw"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use raw through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2101,7 +2101,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-bundle-py-u8"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use u8 through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2111,7 +2111,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-bundle-py-u32"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use u32 through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2126,7 +2126,7 @@ def u32(self): return struct.unpack("<I", self.raw(4))[0]
 
 <a id="sdk-sdk-python-hypermind-bundle-py-u64"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use u64 through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2141,7 +2141,7 @@ def u64(self): return struct.unpack("<Q", self.raw(8))[0]
 
 <a id="sdk-sdk-python-hypermind-bundle-py-count"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use count through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2151,7 +2151,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-bundle-py-blob"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use blob through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2161,7 +2161,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-bundle-py-text"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use text through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2176,7 +2176,7 @@ def text(self): return self.blob().decode("utf-8", errors="strict")
 
 <a id="sdk-sdk-python-hypermind-bundle-py-lsns"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use lsns through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2191,7 +2191,7 @@ def lsns(self): return [self.u64() for _ in range(self.count())]
 
 <a id="sdk-sdk-python-hypermind-bundle-py-parse-bundle"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use parse_bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2201,7 +2201,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-bundle-py-render"></a>
 
-Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/bundle.py).
+Source: [`sdk/python/hypermind/bundle.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/bundle.py).
 
 When to use: Use render through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2211,7 +2211,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-hyperminderror"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use Hyper Mind Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2221,7 +2221,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-conversation-id"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use conversation_id through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2231,7 +2231,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-event"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use Event through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2246,7 +2246,7 @@ class Event:
 
 <a id="sdk-sdk-python-hypermind-client-py-client"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use Client through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2256,7 +2256,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-connect"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use connect through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2266,7 +2266,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-close"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use close through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2276,7 +2276,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-session"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2286,7 +2286,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-request"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use request through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2296,7 +2296,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-recover"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use recover through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2306,7 +2306,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-tool"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use tool through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2316,7 +2316,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-activate"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use activate through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2326,7 +2326,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-checkpoint"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use checkpoint through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2336,7 +2336,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-latest-checkpoint"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use latest_checkpoint through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2346,7 +2346,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-as-of"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use as_of through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2356,7 +2356,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-crypto-delete"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use crypto_delete through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2366,7 +2366,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-client-py-subscribe"></a>
 
-Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/client.py).
+Source: [`sdk/python/hypermind/client.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/client.py).
 
 When to use: Use subscribe through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2376,7 +2376,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-engine-py-engine"></a>
 
-Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/engine.py).
+Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/engine.py).
 
 When to use: Use Engine through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2386,7 +2386,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-engine-py-open"></a>
 
-Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/engine.py).
+Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/engine.py).
 
 When to use: Use open through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2401,7 +2401,7 @@ async def open(cls, path, *, actor: int, user_hex: str, kek_hex: str, projection
 
 <a id="sdk-sdk-python-hypermind-engine-py-session"></a>
 
-Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/engine.py).
+Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/engine.py).
 
 When to use: Use session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2411,7 +2411,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-engine-py-tool"></a>
 
-Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/engine.py).
+Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/engine.py).
 
 When to use: Use tool through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2421,7 +2421,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-engine-py-activate"></a>
 
-Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/engine.py).
+Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/engine.py).
 
 When to use: Use activate through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2431,7 +2431,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-engine-py-close"></a>
 
-Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/engine.py).
+Source: [`sdk/python/hypermind/engine.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/engine.py).
 
 When to use: Use close through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2441,7 +2441,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-session-py-session"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2451,7 +2451,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-session-py-remember"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use remember through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2461,7 +2461,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-session-py-recall"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use recall through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2471,7 +2471,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-session-py-activate"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use activate through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2481,7 +2481,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-session-py-attest"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use attest through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2491,7 +2491,7 @@ Do not use: Do not bypass safe rendering, feed reconstructed text back as observ
 
 <a id="sdk-sdk-python-hypermind-session-py-believe"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use believe through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2506,7 +2506,7 @@ async def believe(self, **arguments): return await self.backend.tool("believe", 
 
 <a id="sdk-sdk-python-hypermind-session-py-intend"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use intend through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2521,7 +2521,7 @@ async def intend(self, **arguments): return await self.backend.tool("intend", ar
 
 <a id="sdk-sdk-python-hypermind-session-py-bind"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use bind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2536,7 +2536,7 @@ async def bind(self, **arguments): return await self.backend.tool("bind", argume
 
 <a id="sdk-sdk-python-hypermind-session-py-predict"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use predict through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2551,7 +2551,7 @@ async def predict(self, **arguments): return await self.backend.tool("predict", 
 
 <a id="sdk-sdk-python-hypermind-session-py-outcome"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use outcome through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2566,7 +2566,7 @@ async def outcome(self, **arguments): return await self.backend.tool("outcome", 
 
 <a id="sdk-sdk-python-hypermind-session-py-consolidate"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use consolidate through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2581,7 +2581,7 @@ async def consolidate(self, **arguments): return await self.backend.tool("consol
 
 <a id="sdk-sdk-python-hypermind-session-py-inspect"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use inspect through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2596,7 +2596,7 @@ async def inspect(self, **arguments): return await self.backend.tool("inspect", 
 
 <a id="sdk-sdk-python-hypermind-session-py-retract"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use retract through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2611,7 +2611,7 @@ async def retract(self, **arguments): return await self.backend.tool("retract", 
 
 <a id="sdk-sdk-python-hypermind-session-py-dispute"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use dispute through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2626,7 +2626,7 @@ async def dispute(self, **arguments): return await self.backend.tool("dispute", 
 
 <a id="sdk-sdk-python-hypermind-session-py-forget"></a>
 
-Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/hypermind/session.py).
+Source: [`sdk/python/hypermind/session.py`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/hypermind/session.py).
 
 When to use: Use forget through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2641,7 +2641,7 @@ async def forget(self, **arguments): return await self.backend.tool("forget", ar
 
 <a id="python-native-sdk-python-native-src-lib-rs-nativeengine"></a>
 
-Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/native/src/lib.rs).
+Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/native/src/lib.rs).
 
 When to use: Use this PyO3-exported class through the Python extension for its documented embedded ownership contract.
 
@@ -2657,7 +2657,7 @@ struct NativeEngine
 
 <a id="python-native-method-sdk-python-native-src-lib-rs-nativeengine-new"></a>
 
-Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/native/src/lib.rs).
+Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/native/src/lib.rs).
 
 When to use: Use this exported PyO3 method through its owning Python class; its signature is taken from the native extension.
 
@@ -2672,7 +2672,7 @@ fn new(
 
 <a id="python-native-method-sdk-python-native-src-lib-rs-nativeengine-call"></a>
 
-Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/native/src/lib.rs).
+Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/native/src/lib.rs).
 
 When to use: Use this exported PyO3 method through its owning Python class; its signature is taken from the native extension.
 
@@ -2687,7 +2687,7 @@ fn call(&self, py: Python<'_>, verb: String, arguments_json: String) -> PyResult
 
 <a id="python-native-method-sdk-python-native-src-lib-rs-nativeengine-activate"></a>
 
-Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/native/src/lib.rs).
+Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/native/src/lib.rs).
 
 When to use: Use this exported PyO3 method through its owning Python class; its signature is taken from the native extension.
 
@@ -2702,7 +2702,7 @@ fn activate(
 
 <a id="python-native-method-sdk-python-native-src-lib-rs-nativeengine-close"></a>
 
-Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/python/native/src/lib.rs).
+Source: [`sdk/python/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/python/native/src/lib.rs).
 
 When to use: Use this exported PyO3 method through its owning Python class; its signature is taken from the native extension.
 
@@ -2717,7 +2717,7 @@ fn close(&mut self, py: Python<'_>) -> PyResult<()> {
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-jsonvalue"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Json Value through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2732,7 +2732,7 @@ export type JsonValue = null | boolean | number | string | JsonValue[] | { [key:
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-ledgerinteger"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Ledger Integer through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2747,7 +2747,7 @@ export type LedgerInteger = number | bigint;
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-toolenvelope"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Tool Envelope through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2762,7 +2762,7 @@ export interface ToolEnvelope {
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-predicatekind"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Predicate Kind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2777,7 +2777,7 @@ export type PredicateKind =
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-expectedpredicateinput"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Expected Predicate Input through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2792,7 +2792,7 @@ export interface ExpectedPredicateInput {
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-predictinput"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Predict Input through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2807,7 +2807,7 @@ export interface PredictInput {
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-outcomeinput"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Outcome Input through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2822,7 +2822,7 @@ export interface OutcomeInput {
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-inspectinput"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Inspect Input through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2837,7 +2837,7 @@ export interface InspectInput {
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-waketrigger"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Wake Trigger through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2852,7 +2852,7 @@ export type WakeTrigger =
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-attentionfactors"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Attention Factors through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2867,7 +2867,7 @@ export interface AttentionFactors {
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-intendaction"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Intend Action through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2882,7 +2882,7 @@ export type IntendAction =
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-reconstructionrecalloptions"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use Reconstruction Recall Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2897,7 +2897,7 @@ export interface ReconstructionRecallOptions {
 
 <a id="sdk-sdk-typescript-packages-client-src-anticipation-ts-encodetoolarguments"></a>
 
-Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/anticipation.ts).
+Source: [`sdk/typescript/packages/client/src/anticipation.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/anticipation.ts).
 
 When to use: Use encode Tool Arguments through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2912,7 +2912,7 @@ export function encodeToolArguments(value: unknown): string {
 
 <a id="sdk-sdk-typescript-packages-client-src-canonical-ts-parsebundle"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use parse Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -2927,7 +2927,7 @@ export function parseBundle(bytes: Uint8Array): Bundle {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-614-constructor"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -2942,7 +2942,7 @@ constructor(private readonly bytes: Uint8Array) {}
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-668-u8"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this u8 method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -2957,7 +2957,7 @@ u8(): number {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-819-u32"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this u32 method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -2972,7 +2972,7 @@ u32(): number {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-933-u64"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this u64 method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -2987,7 +2987,7 @@ u64(): bigint {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-1050-count"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this count method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3002,7 +3002,7 @@ count(): number {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-1222-raw"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this raw method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3017,7 +3017,7 @@ raw(length: number): Uint8Array {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-1505-blob"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this blob method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3032,7 +3032,7 @@ blob(): Uint8Array {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-1568-lsns"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this lsns method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3047,7 +3047,7 @@ lsns(): bigint[] {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-canonical-ts-1661-done"></a>
 
-Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/canonical.ts).
+Source: [`sdk/typescript/packages/client/src/canonical.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/canonical.ts).
 
 When to use: Use this done method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3062,7 +3062,7 @@ done(): boolean {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-effectstate"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Effect State through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3077,7 +3077,7 @@ export type EffectState = "not_dispatched" | "unknown" | "rejected";
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-memorykind"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Memory Kind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3092,7 +3092,7 @@ export type MemoryKind = "user" | "assistant" | "document";
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-closereason"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Close Reason through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3107,7 +3107,7 @@ export type CloseReason = "done" | "abandoned" | "handed_off" | "superseded";
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-recallmode"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Recall Mode through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3122,7 +3122,7 @@ export type RecallMode = "semantic" | "lexical" | "entity" | "temporal" | "near"
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-retentionpolicy"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Retention Policy through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3137,7 +3137,7 @@ export type RetentionPolicy = "current_state" | "daily" | "durable" | "do_not_st
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-sensitivitypolicy"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Sensitivity Policy through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3152,7 +3152,7 @@ export type SensitivityPolicy = "public" | "personal" | "secret";
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-anchorfacet"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Anchor Facet through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3167,7 +3167,7 @@ export type AnchorFacet = "path" | "symbol" | "url" | "entity";
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-belieftype"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Belief Type through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3182,7 +3182,7 @@ export type BeliefType = "fact" | "preference" | "constraint" | "goal" | "identi
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-beliefclaim"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Belief Claim through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3197,7 +3197,7 @@ export type BeliefClaim = "affirmative" | "negative_existence";
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-beliefprovenance"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Belief Provenance through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3212,7 +3212,7 @@ export interface BeliefProvenance {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-believeinput"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Believe Input through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3227,7 +3227,7 @@ export interface BelieveInput {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-asofoptions"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use As Of Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3242,7 +3242,7 @@ export type AsOfOptions =
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-beliefrecord"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Belief Record through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3257,7 +3257,7 @@ export interface BeliefRecord {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-rememberoptions"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Remember Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3272,7 +3272,7 @@ export interface RememberOptions {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-donotstorereceipt"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Do Not Store Receipt through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3287,7 +3287,7 @@ export interface DoNotStoreReceipt {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-recalloptions"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Recall Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3302,7 +3302,7 @@ export interface RecallOptions {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-activateoptions"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Activate Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3317,7 +3317,7 @@ export interface ActivateOptions {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-clientconfig"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Client Config through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3332,7 +3332,7 @@ export interface ClientConfig {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-welcomeinfo"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Welcome Info through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3347,7 +3347,7 @@ export interface WelcomeInfo {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-engineerror"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Engine Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3362,7 +3362,7 @@ export class EngineError extends Error {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-pendingwriteerror"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Pending Write Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3377,7 +3377,7 @@ export class PendingWriteError extends Error {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-tooltransporterror"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Tool Transport Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3392,7 +3392,7 @@ export class ToolTransportError extends Error {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-client"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Client through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3407,7 +3407,7 @@ export class Client {
 
 <a id="sdk-sdk-typescript-packages-client-src-client-ts-session"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -3422,7 +3422,7 @@ export class Session {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-6581-constructor"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3437,7 +3437,7 @@ constructor(
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-6963-constructor"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3452,7 +3452,7 @@ constructor(public readonly clientSeq: bigint, public readonly cause: unknown) {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-7166-constructor"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3467,7 +3467,7 @@ constructor(public readonly effectState: EffectState, public readonly cause: unk
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-7686-constructor"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3482,7 +3482,7 @@ constructor(readonly socket: net.Socket) {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-7908-send"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this send method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3497,7 +3497,7 @@ async send(encoded: Uint8Array): Promise<void> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-8283-close"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this close method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3512,7 +3512,7 @@ close(): void { this.socket.destroy(); }
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-8327-next"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this next method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3527,7 +3527,7 @@ next(timeoutMs: number): Promise<Uint8Array> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-11200-connect"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this connect method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3542,7 +3542,7 @@ static async connect(config: ClientConfig): Promise<Client> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-11812-session"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this session method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3557,7 +3557,7 @@ session(conversation: string): Session {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-12014-close"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this close method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3572,7 +3572,7 @@ close(): void {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-12087-attest"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this attest method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3587,7 +3587,7 @@ async attest(input: { used?: bigint[]; ignored?: bigint[]; helpful?: bigint[]; h
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-15275-checkpoint"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this checkpoint method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3602,7 +3602,7 @@ async checkpoint(turnId: string, blob: Uint8Array): Promise<bigint> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-15649-latestcheckpoint"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this latestCheckpoint method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3617,7 +3617,7 @@ async latestCheckpoint(turnId: string): Promise<{ lsn: bigint; blob: Uint8Array 
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-16140-append"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this append method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3632,7 +3632,7 @@ async append(kind: number, conversation: Uint8Array, payload: Uint8Array): Promi
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-16558-recall"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3647,7 +3647,7 @@ recall(query: string, options: ReconstructionRecallOptions): Promise<ToolEnvelop
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-16644-recall"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3662,7 +3662,7 @@ recall(query: string, options?: number | RecallOptions): Promise<bigint[]>;
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-16722-recall"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3677,7 +3677,7 @@ async recall(query: string, options: number | RecallOptions | ReconstructionReca
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-18520-calltool"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this callTool method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3692,7 +3692,7 @@ async callTool(
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-19963-asof"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this asOf method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3707,7 +3707,7 @@ async asOf(
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-20566-activate"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this activate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3722,7 +3722,7 @@ async activate(
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-29225-constructor"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3737,7 +3737,7 @@ constructor(
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-29372-remember"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3752,7 +3752,7 @@ remember(content: string): Promise<bigint>;
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-29418-remember"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3767,7 +3767,7 @@ remember(content: string, options: MemoryKind): Promise<bigint>;
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-29485-remember"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3782,7 +3782,7 @@ remember(
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-29613-remember"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3797,7 +3797,7 @@ remember(content: string, options: RememberOptions): Promise<bigint>;
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-29685-remember"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3812,7 +3812,7 @@ remember(
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-30801-recall"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3827,7 +3827,7 @@ recall(query: string, options: ReconstructionRecallOptions): Promise<ToolEnvelop
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-30887-recall"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3842,7 +3842,7 @@ recall(query: string, options?: number | RecallOptions): Promise<bigint[]>;
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-30965-recall"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3857,7 +3857,7 @@ recall(query: string, options: number | RecallOptions | ReconstructionRecallOpti
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-31471-activate"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this activate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3872,7 +3872,7 @@ activate(query: string, options: number | ActivateOptions): Promise<Bundle> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-31629-render"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this render method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3887,7 +3887,7 @@ render(bundle: Bundle, options: RenderOptions = {}): RenderedPrompt {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-31742-believe"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this believe method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3902,7 +3902,7 @@ believe(input: BelieveInput): Promise<bigint> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-32536-retract"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this retract method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3917,7 +3917,7 @@ retract(beliefId: string, provenance: BeliefProvenance[]): Promise<bigint> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-33009-asof"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this asOf method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3932,7 +3932,7 @@ asOf(
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-33217-checkpoint"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this checkpoint method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3947,7 +3947,7 @@ checkpoint(turnId: string, blob: Uint8Array): Promise<bigint> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-33337-intend"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3962,7 +3962,7 @@ intend(action: "set_objective", objective: string): Promise<bigint>;
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-33408-intend"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3977,7 +3977,7 @@ intend(action: "open_loop", loopId: string, objective: string): Promise<bigint>;
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-33491-intend"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -3992,7 +3992,7 @@ intend(action: "close_loop", loopId: string, reason: CloseReason, cause?: string
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-33618-intend"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4007,7 +4007,7 @@ intend(action: IntendAction): Promise<ToolEnvelope>;
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-33673-intend"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4022,7 +4022,7 @@ intend(action: string | IntendAction, first?: string, second?: string, cause = "
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-34752-predict"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this predict method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4037,7 +4037,7 @@ predict(input: PredictInput): Promise<ToolEnvelope> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-34904-outcome"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this outcome method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4052,7 +4052,7 @@ outcome(input: OutcomeInput): Promise<ToolEnvelope> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-35056-inspect"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this inspect method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4067,7 +4067,7 @@ inspect(input: InspectInput = {}): Promise<ToolEnvelope> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-35173-attest"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this attest method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4082,7 +4082,7 @@ attest(input: { used?: bigint[]; ignored?: bigint[]; helpful?: bigint[]; harmful
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-35332-consolidate"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this consolidate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4097,7 +4097,7 @@ consolidate(input: Record<string, unknown> = {}): Promise<ToolEnvelope> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-35508-dispute"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this dispute method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4112,7 +4112,7 @@ dispute(input: Record<string, unknown>): Promise<ToolEnvelope> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-35671-forget"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this forget method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4127,7 +4127,7 @@ forget(input: Record<string, unknown>): Promise<ToolEnvelope> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-35832-bind"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this bind method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4142,7 +4142,7 @@ bind(input: {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-client-ts-41625-return"></a>
 
-Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/client.ts).
+Source: [`sdk/typescript/packages/client/src/client.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/client.ts).
 
 When to use: Use this return method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4157,7 +4157,7 @@ return (crc ^ 0xffffffff) >>> 0;
 
 <a id="sdk-sdk-typescript-packages-client-src-grpc-ts-grpcconfig"></a>
 
-Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/grpc.ts).
+Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/grpc.ts).
 
 When to use: Use Grpc Config through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4172,7 +4172,7 @@ export interface GrpcConfig {
 
 <a id="sdk-sdk-typescript-packages-client-src-grpc-ts-grpctransporterror"></a>
 
-Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/grpc.ts).
+Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/grpc.ts).
 
 When to use: Use Grpc Transport Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4187,7 +4187,7 @@ export class GrpcTransportError extends Error {
 
 <a id="sdk-sdk-typescript-packages-client-src-grpc-ts-grpcframes"></a>
 
-Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/grpc.ts).
+Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/grpc.ts).
 
 When to use: Use Grpc Frames through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4202,7 +4202,7 @@ export class GrpcFrames {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-grpc-ts-264-constructor"></a>
 
-Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/grpc.ts).
+Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/grpc.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4217,7 +4217,7 @@ constructor(readonly cause: grpc.ServiceError) {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-grpc-ts-1713-constructor"></a>
 
-Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/grpc.ts).
+Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/grpc.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4232,7 +4232,7 @@ constructor(config: GrpcConfig, private readonly timeoutMs: number) {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-grpc-ts-2270-send"></a>
 
-Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/grpc.ts).
+Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/grpc.ts).
 
 When to use: Use this send method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4247,7 +4247,7 @@ async send(bytes: Uint8Array): Promise<void> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-grpc-ts-2909-next"></a>
 
-Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/grpc.ts).
+Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/grpc.ts).
 
 When to use: Use this next method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4262,7 +4262,7 @@ next(_timeoutMs: number): Promise<Uint8Array> {
 
 <a id="sdk-method-sdk-typescript-packages-client-src-grpc-ts-3921-close"></a>
 
-Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/client/src/grpc.ts).
+Source: [`sdk/typescript/packages/client/src/grpc.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/client/src/grpc.ts).
 
 When to use: Use this close method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4277,7 +4277,7 @@ close(): void { this.client.close(); }
 
 <a id="sdk-sdk-typescript-packages-engine-index-d-ts-nativeengine"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use Native Engine through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4292,7 +4292,7 @@ export declare class NativeEngine {
 
 <a id="sdk-sdk-typescript-packages-engine-index-d-ts-nativesession"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use Native Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4307,7 +4307,7 @@ export declare class NativeSession {
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-89-open"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this open method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4322,7 +4322,7 @@ static open(path: string, configJson: string): Promise<NativeEngine>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-160-session"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this session method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4337,7 +4337,7 @@ session(conversation: string): NativeSession
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-247-remember"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4352,7 +4352,7 @@ remember(content: string, kind: string, optionsJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-327-recall"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4367,7 +4367,7 @@ recall(query: string, limit: number, mode: string, filtersJson: string): Promise
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-418-activate"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this activate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4382,7 +4382,7 @@ activate(query: string, budgetTokens: number): Promise<Buffer>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-483-checkpoint"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this checkpoint method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4397,7 +4397,7 @@ checkpoint(turnId: string, blob: Buffer): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-543-intend"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4412,7 +4412,7 @@ intend(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-588-predict"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this predict method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4427,7 +4427,7 @@ predict(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-634-outcome"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this outcome method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4442,7 +4442,7 @@ outcome(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-680-inspect"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this inspect method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4457,7 +4457,7 @@ inspect(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-726-bind"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this bind method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4472,7 +4472,7 @@ bind(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-769-attest"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this attest method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4487,7 +4487,7 @@ attest(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-814-consolidate"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this consolidate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4502,7 +4502,7 @@ consolidate(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-864-believe"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this believe method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4517,7 +4517,7 @@ believe(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-910-retract"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this retract method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4532,7 +4532,7 @@ retract(beliefId: string, provenanceJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-index-d-ts-979-asof"></a>
 
-Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/index.d.ts).
+Source: [`sdk/typescript/packages/engine/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/index.d.ts).
 
 When to use: Use this asOf method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4547,7 +4547,7 @@ asOf(beliefType: string, canonicalIdentity: string, validAtNs?: string | undefin
 
 <a id="sdk-sdk-typescript-packages-engine-native-index-d-ts-nativeengine"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use Native Engine through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4562,7 +4562,7 @@ export declare class NativeEngine {
 
 <a id="sdk-sdk-typescript-packages-engine-native-index-d-ts-nativesession"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use Native Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4577,7 +4577,7 @@ export declare class NativeSession {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-89-open"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this open method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4592,7 +4592,7 @@ static open(path: string, configJson: string): Promise<NativeEngine>
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-160-session"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this session method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4607,7 +4607,7 @@ session(conversation: string): NativeSession
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-247-remember"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4622,7 +4622,7 @@ remember(content: string, kind: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-306-recall"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4637,7 +4637,7 @@ recall(query: string, limit: number): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-362-activate"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this activate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4652,7 +4652,7 @@ activate(query: string, budgetTokens: number): Promise<Buffer>
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-427-checkpoint"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this checkpoint method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4667,7 +4667,7 @@ checkpoint(turnId: string, blob: Buffer): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-487-intend"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4682,7 +4682,7 @@ intend(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-532-bind"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this bind method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4697,7 +4697,7 @@ bind(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-575-attest"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this attest method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4712,7 +4712,7 @@ attest(inputJson: string): Promise<string>
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-index-d-ts-620-consolidate"></a>
 
-Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/index.d.ts).
+Source: [`sdk/typescript/packages/engine/native/index.d.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/index.d.ts).
 
 When to use: Use this consolidate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4727,7 +4727,7 @@ consolidate(inputJson: string): Promise<string>
 
 <a id="sdk-sdk-typescript-packages-engine-native-src-lib-rs-nativeengine"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use Native Engine through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4742,7 +4742,7 @@ pub struct NativeEngine {
 
 <a id="sdk-sdk-typescript-packages-engine-native-src-lib-rs-nativesession"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use Native Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -4757,7 +4757,7 @@ pub struct NativeSession {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-2071-open"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this open method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4772,7 +4772,7 @@ pub async fn open(path: String, config_json: String) -> napi::Result<Self> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-2981-session"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this session method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4787,7 +4787,7 @@ pub fn session(&self, conversation: String) -> napi::Result<NativeSession> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-3727-remember"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4802,7 +4802,7 @@ pub async fn remember(
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-4751-recall"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4817,7 +4817,7 @@ pub async fn recall(
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-5870-activate"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this activate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4832,7 +4832,7 @@ pub async fn activate(&self, query: String, budget_tokens: u32) -> napi::Result<
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-6455-checkpoint"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this checkpoint method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4847,7 +4847,7 @@ pub async fn checkpoint(&self, turn_id: String, blob: Buffer) -> napi::Result<St
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7095-intend"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4862,7 +4862,7 @@ pub async fn intend(&self, input_json: String) -> napi::Result<String> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7403-predict"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this predict method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4877,7 +4877,7 @@ pub async fn predict(&self, input_json: String) -> napi::Result<String> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-7714-outcome"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this outcome method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4892,7 +4892,7 @@ pub async fn outcome(&self, input_json: String) -> napi::Result<String> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-8025-inspect"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this inspect method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4907,7 +4907,7 @@ pub async fn inspect(&self, input_json: String) -> napi::Result<String> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-8273-bind"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this bind method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4922,7 +4922,7 @@ pub async fn bind(&self, input_json: String) -> napi::Result<String> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-8957-attest"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this attest method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4937,7 +4937,7 @@ pub async fn attest(&self, input_json: String) -> napi::Result<String> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9202-consolidate"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this consolidate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4952,7 +4952,7 @@ pub async fn consolidate(&self, input_json: String) -> napi::Result<String> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-9462-believe"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this believe method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4967,7 +4967,7 @@ pub async fn believe(&self, input_json: String) -> napi::Result<String> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-10680-retract"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this retract method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4982,7 +4982,7 @@ pub async fn retract(
 
 <a id="sdk-method-sdk-typescript-packages-engine-native-src-lib-rs-11248-as-of"></a>
 
-Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/native/src/lib.rs).
+Source: [`sdk/typescript/packages/engine/native/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/native/src/lib.rs).
 
 When to use: Use this as_of method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -4997,7 +4997,7 @@ pub async fn as_of(
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-engineconfig"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Engine Config through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5012,7 +5012,7 @@ export interface EngineConfig {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-healthstatus"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Health Status through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5027,7 +5027,7 @@ export type HealthStatus = "semantic_ready" | "semantic_lagging" | "lexical_only
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-recallmode"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Recall Mode through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5042,7 +5042,7 @@ export type RecallMode = "semantic" | "lexical" | "entity" | "temporal" | "near"
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-retention"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Retention through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5057,7 +5057,7 @@ export type Retention = "current_state" | "daily" | "durable" | "do_not_store";
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-sensitivity"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Sensitivity through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5072,7 +5072,7 @@ export type Sensitivity = "public" | "personal" | "secret";
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-anchorfacet"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Anchor Facet through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5087,7 +5087,7 @@ export type AnchorFacet = "path" | "symbol" | "url" | "entity";
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-health"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Health through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5102,7 +5102,7 @@ export interface Health {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-gap"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Gap through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5117,7 +5117,7 @@ export interface Gap {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-envelope"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Envelope through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5132,7 +5132,7 @@ export interface Envelope {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-rememberoptions"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Remember Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5147,7 +5147,7 @@ export interface RememberOptions {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-recalloptions"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Recall Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5162,7 +5162,7 @@ export interface RecallOptions {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-bindinput"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Bind Input through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5177,7 +5177,7 @@ export interface BindInput {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-attestdisposition"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Attest Disposition through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5192,7 +5192,7 @@ export type AttestDisposition = "used" | "ignored" | "helpful" | "harmful";
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-attestinput"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Attest Input through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5207,7 +5207,7 @@ export interface AttestInput {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-consolidatebudget"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Consolidate Budget through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5222,7 +5222,7 @@ export interface ConsolidateBudget {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-consolidateinput"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Consolidate Input through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5237,7 +5237,7 @@ export type ConsolidateInput =
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-hypermind"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Hyper Mind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5252,7 +5252,7 @@ export class HyperMind {
 
 <a id="sdk-sdk-typescript-packages-engine-src-index-ts-session"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5267,7 +5267,7 @@ export class Session {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-621-session"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this session method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5282,7 +5282,7 @@ session(conversation: string): NativeSessionHandle;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-710-remember"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5297,7 +5297,7 @@ remember(content: string, kind: string, optionsJson: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-791-recall"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5312,7 +5312,7 @@ recall(query: string, limit: number, mode: string, filtersJson: string): Promise
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-883-activate"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this activate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5327,7 +5327,7 @@ activate(query: string, budgetTokens: number): Promise<Uint8Array>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-953-checkpoint"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this checkpoint method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5342,7 +5342,7 @@ checkpoint(turnId: string, blob: Uint8Array): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1018-intend"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5357,7 +5357,7 @@ intend(input: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1060-predict"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this predict method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5372,7 +5372,7 @@ predict(input: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1103-outcome"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this outcome method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5387,7 +5387,7 @@ outcome(input: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1146-inspect"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this inspect method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5402,7 +5402,7 @@ inspect(input: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1189-bind"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this bind method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5417,7 +5417,7 @@ bind(input: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1229-attest"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this attest method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5432,7 +5432,7 @@ attest(input: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1271-consolidate"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this consolidate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5447,7 +5447,7 @@ consolidate(input: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1318-believe"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this believe method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5462,7 +5462,7 @@ believe(input: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1361-retract"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this retract method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5477,7 +5477,7 @@ retract(beliefId: string, provenance: string): Promise<string>;
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-1427-asof"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this asOf method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5492,7 +5492,7 @@ asOf(
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-4067-open"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this open method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5507,7 +5507,7 @@ static async open(directory: string, config: EngineConfig): Promise<HyperMind> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-4424-session"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this session method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5522,7 +5522,7 @@ session(conversation: string): Session {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-4570-constructor"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this constructor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5537,7 +5537,7 @@ constructor(
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-4678-remember"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5552,7 +5552,7 @@ async remember(
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-5213-recall"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5567,7 +5567,7 @@ async recall(query: string, options: number | RecallOptions = {}): Promise<Envel
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-5605-activate"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this activate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5582,7 +5582,7 @@ async activate(query: string, budgetTokens: number): Promise<Bundle> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-5756-checkpoint"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this checkpoint method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5597,7 +5597,7 @@ async checkpoint(turnId: string, blob: Uint8Array): Promise<bigint> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-5896-intend"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this intend method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5612,7 +5612,7 @@ async intend(action: IntendAction): Promise<Envelope> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-6091-predict"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this predict method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5627,7 +5627,7 @@ async predict(input: PredictInput): Promise<Envelope> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-6287-outcome"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this outcome method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5642,7 +5642,7 @@ async outcome(input: OutcomeInput): Promise<Envelope> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-6483-inspect"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this inspect method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5657,7 +5657,7 @@ async inspect(input: InspectInput = {}): Promise<Envelope> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-6633-bind"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this bind method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5672,7 +5672,7 @@ async bind(input: BindInput): Promise<Envelope> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-7155-attest"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this attest method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5687,7 +5687,7 @@ async attest(input: AttestInput): Promise<Envelope> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-7459-consolidate"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this consolidate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5702,7 +5702,7 @@ async consolidate(input: ConsolidateInput): Promise<Envelope> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-8191-believe"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this believe method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5717,7 +5717,7 @@ async believe(input: BelieveInput & { runId?: string }): Promise<Envelope> {
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-8802-retract"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this retract method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5732,7 +5732,7 @@ async retract(beliefId: string, provenance: BeliefProvenance[]): Promise<Envelop
 
 <a id="sdk-method-sdk-typescript-packages-engine-src-index-ts-9017-asof"></a>
 
-Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/engine/src/index.ts).
+Source: [`sdk/typescript/packages/engine/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/engine/src/index.ts).
 
 When to use: Use this asOf method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -5747,7 +5747,7 @@ async asOf(
 
 <a id="sdk-sdk-typescript-packages-migrate-src-cli-ts-main"></a>
 
-Source: [`sdk/typescript/packages/migrate/src/cli.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/migrate/src/cli.ts).
+Source: [`sdk/typescript/packages/migrate/src/cli.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/migrate/src/cli.ts).
 
 When to use: Use main through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5762,7 +5762,7 @@ export function main(args: string[]): void {
 
 <a id="sdk-sdk-typescript-packages-migrate-src-index-ts-format"></a>
 
-Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/migrate/src/index.ts).
+Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/migrate/src/index.ts).
 
 When to use: Use FORMAT through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5777,7 +5777,7 @@ export const FORMAT = 'hypermind.cortex-import.v1';
 
 <a id="sdk-sdk-typescript-packages-migrate-src-index-ts-kinds"></a>
 
-Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/migrate/src/index.ts).
+Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/migrate/src/index.ts).
 
 When to use: Use KINDS through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5792,7 +5792,7 @@ export const KINDS = ['observations', 'memories', 'edges', 'beliefs', 'ops', 'si
 
 <a id="sdk-sdk-typescript-packages-migrate-src-index-ts-kind"></a>
 
-Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/migrate/src/index.ts).
+Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/migrate/src/index.ts).
 
 When to use: Use Kind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5807,7 +5807,7 @@ export type Kind = typeof KINDS[number];
 
 <a id="sdk-sdk-typescript-packages-migrate-src-index-ts-sourcerecord"></a>
 
-Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/migrate/src/index.ts).
+Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/migrate/src/index.ts).
 
 When to use: Use Source Record through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5822,7 +5822,7 @@ export interface SourceRecord {
 
 <a id="sdk-sdk-typescript-packages-migrate-src-index-ts-manifest"></a>
 
-Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/migrate/src/index.ts).
+Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/migrate/src/index.ts).
 
 When to use: Use Manifest through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5837,7 +5837,7 @@ export interface Manifest {
 
 <a id="sdk-sdk-typescript-packages-migrate-src-index-ts-exportoptions"></a>
 
-Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/migrate/src/index.ts).
+Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/migrate/src/index.ts).
 
 When to use: Use Export Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5852,7 +5852,7 @@ export interface ExportOptions {source: string; format: 'json' | 'sqlite'; names
 
 <a id="sdk-sdk-typescript-packages-migrate-src-index-ts-exportcortex"></a>
 
-Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/migrate/src/index.ts).
+Source: [`sdk/typescript/packages/migrate/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/migrate/src/index.ts).
 
 When to use: Use export Cortex through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5867,7 +5867,7 @@ export function exportCortex(options: ExportOptions): {manifest: Manifest; recor
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-tiers"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use TIERS through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5882,7 +5882,7 @@ export const TIERS = [
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-tier"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Tier through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5897,7 +5897,7 @@ export type Tier = (typeof TIERS)[number];
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-authority"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Authority through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5912,7 +5912,7 @@ export type Authority =
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-bundleitem"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Bundle Item through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5927,7 +5927,7 @@ export interface BundleItem {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-bundlesection"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Bundle Section through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5942,7 +5942,7 @@ export interface BundleSection {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-bundle"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5957,7 +5957,7 @@ export interface Bundle {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-promptitem"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Prompt Item through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5972,7 +5972,7 @@ export interface PromptItem {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-promptsection"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Prompt Section through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -5987,7 +5987,7 @@ export interface PromptSection {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-renderedprompt"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Rendered Prompt through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6002,7 +6002,7 @@ export interface RenderedPrompt {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-renderoptions"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Render Options through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6017,7 +6017,7 @@ export interface RenderOptions {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-activationsafetyerror"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use Activation Safety Error through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6032,7 +6032,7 @@ export class ActivationSafetyError extends Error {}
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-isreconstruction"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use is Reconstruction through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6047,7 +6047,7 @@ export function isReconstruction(content: string): boolean {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-assertrememberable"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use assert Rememberable through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6062,7 +6062,7 @@ export function assertRememberable(content: string): void {
 
 <a id="sdk-sdk-typescript-packages-render-src-index-ts-render"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use render through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6077,7 +6077,7 @@ export function render(bundle: Bundle, options: RenderOptions = {}): RenderedPro
 
 <a id="sdk-method-sdk-typescript-packages-render-src-index-ts-1826-return"></a>
 
-Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/sdk/typescript/packages/render/src/index.ts).
+Source: [`sdk/typescript/packages/render/src/index.ts`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/sdk/typescript/packages/render/src/index.ts).
 
 When to use: Use this return method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6092,7 +6092,7 @@ return (
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-embeddedconfig"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Embedded Config through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6107,7 +6107,7 @@ pub struct EmbeddedConfig {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-hypermind"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Hyper Mind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6122,7 +6122,7 @@ pub struct HyperMind {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-actor"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Actor through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6137,7 +6137,7 @@ pub struct Actor {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-session"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Session through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6152,7 +6152,7 @@ pub struct Session {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-memorykind"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Memory Kind through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6167,7 +6167,7 @@ pub enum MemoryKind {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-rendermodel"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Render Model through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6182,7 +6182,7 @@ pub enum RenderModel {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-renderauthority"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Render Authority through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6197,7 +6197,7 @@ pub enum RenderAuthority {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-rendereditem"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Rendered Item through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6212,7 +6212,7 @@ pub struct RenderedItem {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-renderedsection"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Rendered Section through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6227,7 +6227,7 @@ pub struct RenderedSection {
 
 <a id="sdk-crates-hm-serve-src-embedded-rs-renderedbundle"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use Rendered Bundle through this SDK’s owning module for the declaration shown below. Preserve the common envelope, source authority, provenance, and mutation effect state.
 
@@ -6242,7 +6242,7 @@ pub struct RenderedBundle {
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-1880-open"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this open method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6257,7 +6257,7 @@ pub async fn open(path: impl AsRef<Path>, config: EmbeddedConfig) -> Result<Self
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-2382-actor"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this actor method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6272,7 +6272,7 @@ pub fn actor(&self) -> Actor {
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-2467-session"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this session method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6287,7 +6287,7 @@ pub fn session(&self, conversation: impl AsRef<str>) -> Session {
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-2616-id"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this id method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6302,7 +6302,7 @@ pub fn id(&self) -> ActorId {
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-2701-session"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this session method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6317,7 +6317,7 @@ pub fn session(&self, conversation: impl AsRef<str>) -> Session {
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-2911-shutdown"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this shutdown method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6332,7 +6332,7 @@ pub async fn shutdown(self) -> Result<(), Error> {
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-3044-conversation"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this conversation method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6347,7 +6347,7 @@ pub const fn conversation(&self) -> ConversationId {
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-3133-remember"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this remember method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6362,7 +6362,7 @@ pub async fn remember(&self, kind: MemoryKind, content: impl AsRef<str>) -> Resu
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-4829-recall"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this recall method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6377,7 +6377,7 @@ pub async fn recall(
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-5152-timeline"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this timeline method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6392,7 +6392,7 @@ pub async fn timeline(&self, since_lsn: LSN, limit: usize) -> Result<Vec<RecallI
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-5476-activate"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this activate method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 
@@ -6407,7 +6407,7 @@ pub async fn activate(
 
 <a id="sdk-method-crates-hm-serve-src-embedded-rs-5965-render"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use this render method through its owning SDK type. Its declared parameters below are source-derived; preserve returned status, evidence, and mutation uncertainty.
 

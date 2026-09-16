@@ -157,7 +157,7 @@ export HM_CONSOLIDATION_PROVIDER=centra
 | Recall@10 | 1 万件で ≥ 0.95 |
 | ウォーム時のアクティベーション | 10 万件で p99 < 10 ms |
 
-LongMemEval の全件実行は進行中で、LoCoMo の適格性検証は未完了です。実コードの slice-7 集中シナリオは成功しましたが、それや部分診断はリリース適格性を証明しません。[測定状況](docs/evaluation/results.md)と[評価方法](docs/evaluation/methodology.md)を確認してください。
+LongMemEval のローカル全件実行は **459/500（91.8%）** でした。Centra 経由の Luna と語彙検索のみを使用しています。LoCoMo は実行中で、適格性検証は未完了です。実コードの slice-7 集中シナリオも成功しました。これらの結果は、ホスト型 CI の成功やリリース適格性を証明しません。[測定状況と証拠](docs/evaluation/results.md)および[評価方法](docs/evaluation/methodology.md)を確認してください。
 
 ## 開発と文書のチェック
 

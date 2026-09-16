@@ -6,7 +6,7 @@ Generated from the current command parser. The human CLI guide explains executio
 
 <a id="cli-crates-hm-cli-src-actors-rs"></a>
 
-Source: [`crates/hm-cli/src/actors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/actors.rs).
+Source: [`crates/hm-cli/src/actors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/actors.rs).
 
 When to use: Use these options when invoking the matching hm subcommand; select daemon or embedded access deliberately.
 
@@ -46,7 +46,7 @@ pub enum Command {
 
 <a id="cli-crates-hm-cli-src-consolidate-rs"></a>
 
-Source: [`crates/hm-cli/src/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/consolidate.rs).
+Source: [`crates/hm-cli/src/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/consolidate.rs).
 
 When to use: Use these options when invoking the matching hm subcommand; select daemon or embedded access deliberately.
 
@@ -92,7 +92,7 @@ pub enum Command {
 
 <a id="cli-crates-hm-cli-src-lib-rs"></a>
 
-Source: [`crates/hm-cli/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/lib.rs).
+Source: [`crates/hm-cli/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/lib.rs).
 
 When to use: Use these options when invoking the matching hm subcommand; select daemon or embedded access deliberately.
 
@@ -222,7 +222,7 @@ enum Command {
 
 <a id="cli-crates-hm-cli-src-models-rs"></a>
 
-Source: [`crates/hm-cli/src/models.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/models.rs).
+Source: [`crates/hm-cli/src/models.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/models.rs).
 
 When to use: Use these options when invoking the matching hm subcommand; select daemon or embedded access deliberately.
 
@@ -248,7 +248,7 @@ pub enum Command {
 
 <a id="cli-crates-hm-cli-src-serve-rs"></a>
 
-Source: [`crates/hm-cli/src/serve.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/serve.rs).
+Source: [`crates/hm-cli/src/serve.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/serve.rs).
 
 When to use: Use these options when invoking the matching hm subcommand; select daemon or embedded access deliberately.
 

@@ -6,18 +6,18 @@ Do not use: multiple processes writing the same actor directory, ephemeral-only 
 
 ## Choose a deployment route
 
-The [deployment suite](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/README.md) contains platform-specific installation and operations instructions. These are source-build artifacts, not a claim that public images, native installers, or managed services have been released.
+The [deployment suite](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/README.md) contains platform-specific installation and operations instructions. These are source-build artifacts, not a claim that public images, native installers, or managed services have been released.
 
 | Target | Guide | Operating boundary |
 | --- | --- | --- |
-| Docker / Compose | [Container guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/docker/README.md) | Non-root Linux amd64 container; named persistent volume; optional loopback mTLS ports. |
-| Linux | [Linux guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/linux/README.md) | Native source build and a dedicated systemd service account. |
-| macOS | [macOS guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/macos/README.md) | Native source build with a per-user launchd agent, or Docker; Apple Silicon containers use amd64 emulation. |
-| Windows | [Windows guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/windows/README.md) | WSL2 / Docker Desktop running Linux containers, not a native Windows daemon. |
-| Kubernetes | [Kubernetes guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/kubernetes/README.md) | One replica, one persistent claim, an existing TLS Secret, and an image you build and provide. |
-| Fly.io | [Fly.io guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/fly/README.md) | Persistent state and raw TCP forwarding so HyperMind terminates mutual TLS. |
-| Railway | [Railway guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/railway/README.md) | Persistent volume and private networking or a raw TCP proxy; follow the supplied current IaC setup. |
-| Render | [Render guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/render/README.md) | Private service with a persistent disk; no public web TLS-termination path. |
+| Docker / Compose | [Container guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/docker/README.md) | Non-root Linux amd64 container; named persistent volume; optional loopback mTLS ports. |
+| Linux | [Linux guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/linux/README.md) | Native source build and a dedicated systemd service account. |
+| macOS | [macOS guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/macos/README.md) | Native source build with a per-user launchd agent, or Docker; Apple Silicon containers use amd64 emulation. |
+| Windows | [Windows guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/windows/README.md) | WSL2 / Docker Desktop running Linux containers, not a native Windows daemon. |
+| Kubernetes | [Kubernetes guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/kubernetes/README.md) | One replica, one persistent claim, an existing TLS Secret, and an image you build and provide. |
+| Fly.io | [Fly.io guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/fly/README.md) | Persistent state and raw TCP forwarding so HyperMind terminates mutual TLS. |
+| Railway | [Railway guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/railway/README.md) | Persistent volume and private networking or a raw TCP proxy; follow the supplied current IaC setup. |
+| Render | [Render guide](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/render/README.md) | Private service with a persistent disk; no public web TLS-termination path. |
 
 The actor protocol uses Unix sockets locally; Windows support therefore means running the Linux implementation through the documented compatibility/container route. The portable container does not bundle an ONNX Runtime shared library. Downloaded model files alone do not enable local inference.
 
@@ -35,7 +35,7 @@ The generated configuration contains encryption keys and actor/admin capabilitie
 
 Four listeners are opt-in: `--grpc-bind`, `--grpc-admin-bind`, `--rest-bind`, and `--rest-admin-bind`. Every enabled listener requires a complete TLS identity, supplied either through all three file options (`--tls-cert`, `--tls-key`, `--tls-client-ca`) or through `--tls-from-env`. The environment route reads the complete PEM values in `HM_TLS_CERT_PEM`, `HM_TLS_KEY_PEM`, and `HM_TLS_CLIENT_CA_PEM` in memory. The two routes cannot be mixed. Provision trusted certificates with the names clients actually verify; do not reuse test keys.
 
-For local evaluation, the [development certificate helper](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/deploy/tls/README.md) creates separate CA, server, and client identities in a new private directory. It is not production PKI. Mount only the server identity on the daemon, never the CA signing key or client private key.
+For local evaluation, the [development certificate helper](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/deploy/tls/README.md) creates separate CA, server, and client identities in a new private directory. It is not production PKI. Mount only the server identity on the daemon, never the CA signing key or client private key.
 
 ```sh
 hm serve --config /srv/hypermind/hypermind.conf \

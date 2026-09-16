@@ -157,7 +157,7 @@ La especificación establece estos criterios de aceptación:
 | Recall@10 | ≥ 0,95 con 10 000 elementos |
 | Activación en caliente | p99 < 10 ms con 100 000 elementos |
 
-La ejecución completa LongMemEval sigue en curso; LoCoMo tiene la cualificación pendiente. Pasó el recorrido real y enfocado slice-7, pero ni esa prueba ni diagnósticos parciales cualifican una versión. Consulta el [estado medido](docs/evaluation/results.md) y la [metodología](docs/evaluation/methodology.md).
+La ejecución local completa de LongMemEval obtuvo **459/500 (91,8%)**, con Luna a través de Centra y recuperación exclusivamente léxica. LoCoMo está en ejecución; su cualificación sigue pendiente. También pasó el recorrido real y enfocado slice-7. Estos resultados no demuestran una CI alojada aprobada ni la cualificación de una versión. Consulta el [estado medido y las evidencias](docs/evaluation/results.md) y la [metodología](docs/evaluation/methodology.md).
 
 ## Desarrollar y comprobar la documentación
 

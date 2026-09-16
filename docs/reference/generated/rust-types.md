@@ -6,7 +6,7 @@ Generated from authored `pub struct`, `enum`, `trait`, and `type` declarations i
 
 <a id="rust-crates-hm-cli-src-actors-rs-command"></a>
 
-Source: [`crates/hm-cli/src/actors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/actors.rs).
+Source: [`crates/hm-cli/src/actors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/actors.rs).
 
 When to use: Use `Command` for command-line orchestration and validated migration into the actor ledger.
 
@@ -46,7 +46,7 @@ pub enum Command {
 
 <a id="rust-crates-hm-cli-src-consolidate-rs-command"></a>
 
-Source: [`crates/hm-cli/src/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/consolidate.rs).
+Source: [`crates/hm-cli/src/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/consolidate.rs).
 
 When to use: Use `Command` for command-line orchestration and validated migration into the actor ledger.
 
@@ -92,7 +92,7 @@ pub enum Command {
 
 <a id="rust-crates-hm-cli-src-consolidate-rs-mode"></a>
 
-Source: [`crates/hm-cli/src/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/consolidate.rs).
+Source: [`crates/hm-cli/src/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/consolidate.rs).
 
 When to use: Use `Mode` for command-line orchestration and validated migration into the actor ledger.
 
@@ -111,7 +111,7 @@ pub enum Mode {
 
 <a id="rust-crates-hm-cli-src-models-rs-choice"></a>
 
-Source: [`crates/hm-cli/src/models.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/models.rs).
+Source: [`crates/hm-cli/src/models.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/models.rs).
 
 When to use: Use `Choice` for command-line orchestration and validated migration into the actor ledger.
 
@@ -129,7 +129,7 @@ pub enum Choice {
 
 <a id="rust-crates-hm-cli-src-models-rs-command"></a>
 
-Source: [`crates/hm-cli/src/models.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/models.rs).
+Source: [`crates/hm-cli/src/models.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/models.rs).
 
 When to use: Use `Command` for command-line orchestration and validated migration into the actor ledger.
 
@@ -155,7 +155,7 @@ pub enum Command {
 
 <a id="rust-crates-hm-cli-src-operations-rs-tuioptions"></a>
 
-Source: [`crates/hm-cli/src/operations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cli/src/operations.rs).
+Source: [`crates/hm-cli/src/operations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cli/src/operations.rs).
 
 When to use: Use `TuiOptions` for command-line orchestration and validated migration into the actor ledger. Set explicit deployment limits before opening the associated resource.
 
@@ -178,7 +178,7 @@ pub struct TuiOptions<'a> {
 
 <a id="rust-crates-hm-compose-src-budget-rs-budgetprofile"></a>
 
-Source: [`crates/hm-compose/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/budget.rs).
+Source: [`crates/hm-compose/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/budget.rs).
 
 When to use: Use `BudgetProfile` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -200,7 +200,7 @@ pub struct BudgetProfile {
 
 <a id="rust-crates-hm-compose-src-budget-rs-budgetallocation"></a>
 
-Source: [`crates/hm-compose/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/budget.rs).
+Source: [`crates/hm-compose/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/budget.rs).
 
 When to use: Use `BudgetAllocation` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -222,7 +222,7 @@ pub struct BudgetAllocation {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-tier"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `Tier` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -248,7 +248,7 @@ pub enum Tier {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-retrievallane"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `RetrievalLane` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -272,7 +272,7 @@ pub enum RetrievalLane {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-whycode"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `WhyCode` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -301,7 +301,7 @@ pub enum WhyCode {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-activationrequest"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `ActivationRequest` for planning, combining, budgeting, and safely rendering provenance-bearing activation context. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -325,7 +325,7 @@ pub struct ActivationRequest<'model> {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-activationcontext"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `ActivationContext` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -345,7 +345,7 @@ pub struct ActivationContext {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-activationitem"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `ActivationItem` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -371,7 +371,7 @@ pub struct ActivationItem {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-activationsection"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `ActivationSection` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -393,7 +393,7 @@ pub struct ActivationSection {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-gapkind"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `GapKind` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -417,7 +417,7 @@ pub enum GapKind {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-gap"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `Gap` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -437,7 +437,7 @@ pub struct Gap {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-healthstatus"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `HealthStatus` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -457,7 +457,7 @@ pub enum HealthStatus {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-bundlehealth"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `BundleHealth` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -477,7 +477,7 @@ pub struct BundleHealth {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-retrievalmanifest"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `RetrievalManifest` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -503,7 +503,7 @@ pub struct RetrievalManifest {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-activationbundle"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `ActivationBundle` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -527,7 +527,7 @@ pub struct ActivationBundle {
 
 <a id="rust-crates-hm-compose-src-bundle-rs-attestationrequest"></a>
 
-Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/bundle.rs).
+Source: [`crates/hm-compose/src/bundle.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/bundle.rs).
 
 When to use: Use `AttestationRequest` for planning, combining, budgeting, and safely rendering provenance-bearing activation context. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -548,7 +548,7 @@ pub struct AttestationRequest {
 
 <a id="rust-crates-hm-compose-src-deadline-rs-deadlinebundle"></a>
 
-Source: [`crates/hm-compose/src/deadline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/deadline.rs).
+Source: [`crates/hm-compose/src/deadline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/deadline.rs).
 
 When to use: Use `DeadlineBundle` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -567,7 +567,7 @@ pub struct DeadlineBundle {
 
 <a id="rust-crates-hm-compose-src-deadline-rs-deadlineactivator"></a>
 
-Source: [`crates/hm-compose/src/deadline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/deadline.rs).
+Source: [`crates/hm-compose/src/deadline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/deadline.rs).
 
 When to use: Use `DeadlineActivator` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -584,7 +584,7 @@ pub struct DeadlineActivator {
 
 <a id="rust-crates-hm-compose-src-fusion-rs-rankedcandidate"></a>
 
-Source: [`crates/hm-compose/src/fusion.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/fusion.rs).
+Source: [`crates/hm-compose/src/fusion.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/fusion.rs).
 
 When to use: Use `RankedCandidate` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -605,7 +605,7 @@ pub struct RankedCandidate {
 
 <a id="rust-crates-hm-compose-src-fusion-rs-laneranking"></a>
 
-Source: [`crates/hm-compose/src/fusion.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/fusion.rs).
+Source: [`crates/hm-compose/src/fusion.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/fusion.rs).
 
 When to use: Use `LaneRanking` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -624,7 +624,7 @@ pub struct LaneRanking {
 
 <a id="rust-crates-hm-compose-src-fusion-rs-fusedhit"></a>
 
-Source: [`crates/hm-compose/src/fusion.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/fusion.rs).
+Source: [`crates/hm-compose/src/fusion.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/fusion.rs).
 
 When to use: Use `FusedHit` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -646,7 +646,7 @@ pub struct FusedHit {
 
 <a id="rust-crates-hm-compose-src-health-rs-encoderstate"></a>
 
-Source: [`crates/hm-compose/src/health.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/health.rs).
+Source: [`crates/hm-compose/src/health.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/health.rs).
 
 When to use: Use `EncoderState` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -665,7 +665,7 @@ pub enum EncoderState {
 
 <a id="rust-crates-hm-compose-src-health-rs-healthinput"></a>
 
-Source: [`crates/hm-compose/src/health.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/health.rs).
+Source: [`crates/hm-compose/src/health.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/health.rs).
 
 When to use: Use `HealthInput` for planning, combining, budgeting, and safely rendering provenance-bearing activation context. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -687,7 +687,7 @@ pub struct HealthInput {
 
 <a id="rust-crates-hm-compose-src-lanes-belief-rs-asofrecall"></a>
 
-Source: [`crates/hm-compose/src/lanes/belief.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/lanes/belief.rs).
+Source: [`crates/hm-compose/src/lanes/belief.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/lanes/belief.rs).
 
 When to use: Use `AsOfRecall` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -705,7 +705,7 @@ pub struct AsOfRecall {
 
 <a id="rust-crates-hm-compose-src-lanes-belief-rs-timelinerecall"></a>
 
-Source: [`crates/hm-compose/src/lanes/belief.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/lanes/belief.rs).
+Source: [`crates/hm-compose/src/lanes/belief.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/lanes/belief.rs).
 
 When to use: Use `TimelineRecall` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -723,7 +723,7 @@ pub struct TimelineRecall {
 
 <a id="rust-crates-hm-compose-src-lanes-graph-rs-graphseed"></a>
 
-Source: [`crates/hm-compose/src/lanes/graph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/lanes/graph.rs).
+Source: [`crates/hm-compose/src/lanes/graph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/lanes/graph.rs).
 
 When to use: Use `GraphSeed` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -741,7 +741,7 @@ pub struct GraphSeed {
 
 <a id="rust-crates-hm-compose-src-lanes-temporal-rs-temporalcandidate"></a>
 
-Source: [`crates/hm-compose/src/lanes/temporal.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/lanes/temporal.rs).
+Source: [`crates/hm-compose/src/lanes/temporal.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/lanes/temporal.rs).
 
 When to use: Use `TemporalCandidate` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -760,7 +760,7 @@ pub struct TemporalCandidate {
 
 <a id="rust-crates-hm-compose-src-planner-rs-recallmode"></a>
 
-Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/planner.rs).
+Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/planner.rs).
 
 When to use: Use `RecallMode` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -785,7 +785,7 @@ pub enum RecallMode {
 
 <a id="rust-crates-hm-compose-src-planner-rs-queryshape"></a>
 
-Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/planner.rs).
+Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/planner.rs).
 
 When to use: Use `QueryShape` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -806,7 +806,7 @@ pub enum QueryShape {
 
 <a id="rust-crates-hm-compose-src-planner-rs-anchorfacet"></a>
 
-Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/planner.rs).
+Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/planner.rs).
 
 When to use: Use `AnchorFacet` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -826,7 +826,7 @@ pub enum AnchorFacet {
 
 <a id="rust-crates-hm-compose-src-planner-rs-anchor"></a>
 
-Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/planner.rs).
+Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/planner.rs).
 
 When to use: Use `Anchor` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -844,7 +844,7 @@ pub struct Anchor {
 
 <a id="rust-crates-hm-compose-src-planner-rs-laneplan"></a>
 
-Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/planner.rs).
+Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/planner.rs).
 
 When to use: Use `LanePlan` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -862,7 +862,7 @@ pub struct LanePlan {
 
 <a id="rust-crates-hm-compose-src-planner-rs-queryplan"></a>
 
-Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/planner.rs).
+Source: [`crates/hm-compose/src/planner.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/planner.rs).
 
 When to use: Use `QueryPlan` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -880,7 +880,7 @@ pub struct QueryPlan {
 
 <a id="rust-crates-hm-compose-src-reconstruct-rs-reconstructionanchor"></a>
 
-Source: [`crates/hm-compose/src/reconstruct.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/reconstruct.rs).
+Source: [`crates/hm-compose/src/reconstruct.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/reconstruct.rs).
 
 When to use: Use `ReconstructionAnchor` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -900,7 +900,7 @@ pub struct ReconstructionAnchor {
 
 <a id="rust-crates-hm-compose-src-reconstruct-rs-reconstruction"></a>
 
-Source: [`crates/hm-compose/src/reconstruct.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/reconstruct.rs).
+Source: [`crates/hm-compose/src/reconstruct.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/reconstruct.rs).
 
 When to use: Use `Reconstruction` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -922,7 +922,7 @@ pub struct Reconstruction {
 
 <a id="rust-crates-hm-compose-src-rerank-rs-deploymentconfig"></a>
 
-Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/rerank.rs).
+Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/rerank.rs).
 
 When to use: Use `DeploymentConfig` for planning, combining, budgeting, and safely rendering provenance-bearing activation context. Set explicit deployment limits before opening the associated resource.
 
@@ -941,7 +941,7 @@ pub struct DeploymentConfig {
 
 <a id="rust-crates-hm-compose-src-rerank-rs-evaluationevidence"></a>
 
-Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/rerank.rs).
+Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/rerank.rs).
 
 When to use: Use `EvaluationEvidence` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -965,7 +965,7 @@ pub struct EvaluationEvidence {
 
 <a id="rust-crates-hm-compose-src-rerank-rs-rerankerror"></a>
 
-Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/rerank.rs).
+Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/rerank.rs).
 
 When to use: Use `RerankError` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -988,7 +988,7 @@ pub enum RerankError {
 
 <a id="rust-crates-hm-compose-src-rerank-rs-deploymentreranker"></a>
 
-Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/rerank.rs).
+Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/rerank.rs).
 
 When to use: Use `DeploymentReranker` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1005,7 +1005,7 @@ pub struct DeploymentReranker {
 
 <a id="rust-crates-hm-compose-src-rerank-rs-crossencoder"></a>
 
-Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/rerank.rs).
+Source: [`crates/hm-compose/src/rerank.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/rerank.rs).
 
 When to use: Use `CrossEncoder` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1023,7 +1023,7 @@ pub struct CrossEncoder {
 
 <a id="rust-crates-hm-compose-src-safety-rs-safecontent"></a>
 
-Source: [`crates/hm-compose/src/safety.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/safety.rs).
+Source: [`crates/hm-compose/src/safety.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/safety.rs).
 
 When to use: Use `SafeContent` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1041,7 +1041,7 @@ pub struct SafeContent {
 
 <a id="rust-crates-hm-compose-src-safety-rs-promptitem"></a>
 
-Source: [`crates/hm-compose/src/safety.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/safety.rs).
+Source: [`crates/hm-compose/src/safety.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/safety.rs).
 
 When to use: Use `PromptItem` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1063,7 +1063,7 @@ pub struct PromptItem {
 
 <a id="rust-crates-hm-compose-src-safety-rs-promptsection"></a>
 
-Source: [`crates/hm-compose/src/safety.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/safety.rs).
+Source: [`crates/hm-compose/src/safety.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/safety.rs).
 
 When to use: Use `PromptSection` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1081,7 +1081,7 @@ pub struct PromptSection {
 
 <a id="rust-crates-hm-compose-src-safety-rs-renderedprompt"></a>
 
-Source: [`crates/hm-compose/src/safety.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/safety.rs).
+Source: [`crates/hm-compose/src/safety.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/safety.rs).
 
 When to use: Use `RenderedPrompt` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1099,7 +1099,7 @@ pub struct RenderedPrompt {
 
 <a id="rust-crates-hm-compose-src-tiers-conflicts-rs-conflicttier"></a>
 
-Source: [`crates/hm-compose/src/tiers/conflicts.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/tiers/conflicts.rs).
+Source: [`crates/hm-compose/src/tiers/conflicts.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/tiers/conflicts.rs).
 
 When to use: Use `ConflictTier` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1117,7 +1117,7 @@ pub struct ConflictTier {
 
 <a id="rust-crates-hm-compose-src-tokens-rs-fallbackweights"></a>
 
-Source: [`crates/hm-compose/src/tokens.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/tokens.rs).
+Source: [`crates/hm-compose/src/tokens.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/tokens.rs).
 
 When to use: Use `FallbackWeights` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1135,7 +1135,7 @@ pub struct FallbackWeights {
 
 <a id="rust-crates-hm-compose-src-tokens-rs-tokencounter"></a>
 
-Source: [`crates/hm-compose/src/tokens.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-compose/src/tokens.rs).
+Source: [`crates/hm-compose/src/tokens.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-compose/src/tokens.rs).
 
 When to use: Use `TokenCounter` for planning, combining, budgeting, and safely rendering provenance-bearing activation context.
 
@@ -1162,7 +1162,7 @@ pub enum TokenCounter {
 
 <a id="rust-crates-hm-core-src-error-rs-errorcode"></a>
 
-Source: [`crates/hm-core/src/error.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/error.rs).
+Source: [`crates/hm-core/src/error.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/error.rs).
 
 When to use: Use `ErrorCode` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1233,7 +1233,7 @@ pub enum ErrorCode {
 
 <a id="rust-crates-hm-core-src-error-rs-error"></a>
 
-Source: [`crates/hm-core/src/error.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/error.rs).
+Source: [`crates/hm-core/src/error.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/error.rs).
 
 When to use: Use `Error` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1253,7 +1253,7 @@ pub struct Error {
 
 <a id="rust-crates-hm-core-src-ids-rs-lsn"></a>
 
-Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/ids.rs).
+Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/ids.rs).
 
 When to use: Use `LSN` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1268,7 +1268,7 @@ pub type LSN = Lsn;
 
 <a id="rust-crates-hm-core-src-ids-rs-lsn"></a>
 
-Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/ids.rs).
+Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/ids.rs).
 
 When to use: Use `Lsn` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1283,7 +1283,7 @@ pub struct Lsn(u64);
 
 <a id="rust-crates-hm-core-src-ids-rs-actorid"></a>
 
-Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/ids.rs).
+Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/ids.rs).
 
 When to use: Use `ActorId` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1298,7 +1298,7 @@ pub struct ActorId(u16);
 
 <a id="rust-crates-hm-core-src-ids-rs-schemaversion"></a>
 
-Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/ids.rs).
+Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/ids.rs).
 
 When to use: Use `SchemaVersion` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1313,7 +1313,7 @@ pub struct SchemaVersion(u16);
 
 <a id="rust-crates-hm-core-src-ids-rs-utcnanos"></a>
 
-Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/ids.rs).
+Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/ids.rs).
 
 When to use: Use `UtcNanos` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1328,7 +1328,7 @@ pub struct UtcNanos(i64);
 
 <a id="rust-crates-hm-core-src-ids-rs-entityid"></a>
 
-Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/ids.rs).
+Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/ids.rs).
 
 When to use: Use `EntityId` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1343,7 +1343,7 @@ pub struct EntityId([u8; 16]);
 
 <a id="rust-crates-hm-core-src-ids-rs-conversationid"></a>
 
-Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-core/src/ids.rs).
+Source: [`crates/hm-core/src/ids.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-core/src/ids.rs).
 
 When to use: Use `ConversationId` for typed identities, revisions, timestamps, and stable error handling across kernel boundaries.
 
@@ -1358,7 +1358,7 @@ pub struct ConversationId([u8; 16]);
 
 <a id="rust-crates-hm-cortex-src-adjudicate-rs-adjudicationconflict"></a>
 
-Source: [`crates/hm-cortex/src/adjudicate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/adjudicate.rs).
+Source: [`crates/hm-cortex/src/adjudicate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/adjudicate.rs).
 
 When to use: Use `AdjudicationConflict` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1378,7 +1378,7 @@ pub struct AdjudicationConflict {
 
 <a id="rust-crates-hm-cortex-src-adjudicate-rs-adjudicationoutcome"></a>
 
-Source: [`crates/hm-cortex/src/adjudicate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/adjudicate.rs).
+Source: [`crates/hm-cortex/src/adjudicate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/adjudicate.rs).
 
 When to use: Use `AdjudicationOutcome` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1401,7 +1401,7 @@ pub enum AdjudicationOutcome {
 
 <a id="rust-crates-hm-cortex-src-adjudicate-rs-adjudicationreport"></a>
 
-Source: [`crates/hm-cortex/src/adjudicate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/adjudicate.rs).
+Source: [`crates/hm-cortex/src/adjudicate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/adjudicate.rs).
 
 When to use: Use `AdjudicationReport` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -1421,7 +1421,7 @@ pub struct AdjudicationReport {
 
 <a id="rust-crates-hm-cortex-src-adjudicate-rs-adjudicationerror"></a>
 
-Source: [`crates/hm-cortex/src/adjudicate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/adjudicate.rs).
+Source: [`crates/hm-cortex/src/adjudicate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/adjudicate.rs).
 
 When to use: Use `AdjudicationError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1442,7 +1442,7 @@ pub enum AdjudicationError {
 
 <a id="rust-crates-hm-cortex-src-attention-rs-attentionfactors"></a>
 
-Source: [`crates/hm-cortex/src/attention.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/attention.rs).
+Source: [`crates/hm-cortex/src/attention.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/attention.rs).
 
 When to use: Use `AttentionFactors` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1467,7 +1467,7 @@ pub struct AttentionFactors {
 
 <a id="rust-crates-hm-cortex-src-authority-rs-citedsource"></a>
 
-Source: [`crates/hm-cortex/src/authority.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/authority.rs).
+Source: [`crates/hm-cortex/src/authority.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/authority.rs).
 
 When to use: Use `CitedSource` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1486,7 +1486,7 @@ pub struct CitedSource<'a> {
 
 <a id="rust-crates-hm-cortex-src-budget-rs-budgetusage"></a>
 
-Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/budget.rs).
+Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/budget.rs).
 
 When to use: Use `BudgetUsage` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1507,7 +1507,7 @@ pub struct BudgetUsage {
 
 <a id="rust-crates-hm-cortex-src-budget-rs-budgetdimension"></a>
 
-Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/budget.rs).
+Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/budget.rs).
 
 When to use: Use `BudgetDimension` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1527,7 +1527,7 @@ pub enum BudgetDimension {
 
 <a id="rust-crates-hm-cortex-src-budget-rs-budgetexceeded"></a>
 
-Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/budget.rs).
+Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/budget.rs).
 
 When to use: Use `BudgetExceeded` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1546,7 +1546,7 @@ pub struct BudgetExceeded {
 
 <a id="rust-crates-hm-cortex-src-budget-rs-budgettracker"></a>
 
-Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/budget.rs).
+Source: [`crates/hm-cortex/src/budget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/budget.rs).
 
 When to use: Use `BudgetTracker` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1565,7 +1565,7 @@ pub struct BudgetTracker {
 
 <a id="rust-crates-hm-cortex-src-citations-rs-sourcekind"></a>
 
-Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/citations.rs).
+Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/citations.rs).
 
 When to use: Use `SourceKind` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1585,7 +1585,7 @@ pub enum SourceKind {
 
 <a id="rust-crates-hm-cortex-src-citations-rs-frozencandidate"></a>
 
-Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/citations.rs).
+Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/citations.rs).
 
 When to use: Use `FrozenCandidate` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1607,7 +1607,7 @@ pub struct FrozenCandidate {
 
 <a id="rust-crates-hm-cortex-src-citations-rs-citationclaim"></a>
 
-Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/citations.rs).
+Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/citations.rs).
 
 When to use: Use `CitationClaim` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1627,7 +1627,7 @@ pub struct CitationClaim {
 
 <a id="rust-crates-hm-cortex-src-citations-rs-validatedcitations"></a>
 
-Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/citations.rs).
+Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/citations.rs).
 
 When to use: Use `ValidatedCitations` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1645,7 +1645,7 @@ pub struct ValidatedCitations {
 
 <a id="rust-crates-hm-cortex-src-citations-rs-citationerror"></a>
 
-Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/citations.rs).
+Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/citations.rs).
 
 When to use: Use `CitationError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1668,7 +1668,7 @@ pub enum CitationError {
 
 <a id="rust-crates-hm-cortex-src-citations-rs-frozencandidateset"></a>
 
-Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/citations.rs).
+Source: [`crates/hm-cortex/src/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/citations.rs).
 
 When to use: Use `FrozenCandidateSet` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1685,7 +1685,7 @@ pub struct FrozenCandidateSet {
 
 <a id="rust-crates-hm-cortex-src-fsrs-rs-fsrsstate"></a>
 
-Source: [`crates/hm-cortex/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/fsrs.rs).
+Source: [`crates/hm-cortex/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/fsrs.rs).
 
 When to use: Use `FsrsState` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1705,7 +1705,7 @@ pub enum FsrsState {
 
 <a id="rust-crates-hm-cortex-src-fsrs-rs-fsrsdata"></a>
 
-Source: [`crates/hm-cortex/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/fsrs.rs).
+Source: [`crates/hm-cortex/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/fsrs.rs).
 
 When to use: Use `FsrsData` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1727,7 +1727,7 @@ pub struct FsrsData {
 
 <a id="rust-crates-hm-cortex-src-fsrs-rs-scheduleresult"></a>
 
-Source: [`crates/hm-cortex/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/fsrs.rs).
+Source: [`crates/hm-cortex/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/fsrs.rs).
 
 When to use: Use `ScheduleResult` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -1749,7 +1749,7 @@ pub struct ScheduleResult {
 
 <a id="rust-crates-hm-cortex-src-ingest-rs-ingestsource"></a>
 
-Source: [`crates/hm-cortex/src/ingest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/ingest.rs).
+Source: [`crates/hm-cortex/src/ingest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/ingest.rs).
 
 When to use: Use `IngestSource` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1772,7 +1772,7 @@ pub enum IngestSource {
 
 <a id="rust-crates-hm-cortex-src-ingest-rs-donotstorereceipt"></a>
 
-Source: [`crates/hm-cortex/src/ingest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/ingest.rs).
+Source: [`crates/hm-cortex/src/ingest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/ingest.rs).
 
 When to use: Use `DoNotStoreReceipt` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -1791,7 +1791,7 @@ pub struct DoNotStoreReceipt {
 
 <a id="rust-crates-hm-cortex-src-ingest-rs-ingestresult"></a>
 
-Source: [`crates/hm-cortex/src/ingest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/ingest.rs).
+Source: [`crates/hm-cortex/src/ingest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/ingest.rs).
 
 When to use: Use `IngestResult` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -1809,7 +1809,7 @@ pub enum IngestResult {
 
 <a id="rust-crates-hm-cortex-src-nli-rs-nliscores"></a>
 
-Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nli.rs).
+Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nli.rs).
 
 When to use: Use `NliScores` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1828,7 +1828,7 @@ pub struct NliScores {
 
 <a id="rust-crates-hm-cortex-src-nli-rs-nliverdict"></a>
 
-Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nli.rs).
+Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nli.rs).
 
 When to use: Use `NliVerdict` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1848,7 +1848,7 @@ pub enum NliVerdict {
 
 <a id="rust-crates-hm-cortex-src-nli-rs-bidirectionalnli"></a>
 
-Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nli.rs).
+Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nli.rs).
 
 When to use: Use `BidirectionalNli` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1868,7 +1868,7 @@ pub struct BidirectionalNli {
 
 <a id="rust-crates-hm-cortex-src-nli-rs-nlierror"></a>
 
-Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nli.rs).
+Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nli.rs).
 
 When to use: Use `NliError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1890,7 +1890,7 @@ pub enum NliError {
 
 <a id="rust-crates-hm-cortex-src-nli-rs-nlimodel"></a>
 
-Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nli.rs).
+Source: [`crates/hm-cortex/src/nli.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nli.rs).
 
 When to use: Use `NliModel` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1908,7 +1908,7 @@ pub struct NliModel {
 
 <a id="rust-crates-hm-cortex-src-nrem-cluster-rs-pendingobservation"></a>
 
-Source: [`crates/hm-cortex/src/nrem/cluster.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/cluster.rs).
+Source: [`crates/hm-cortex/src/nrem/cluster.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/cluster.rs).
 
 When to use: Use `PendingObservation` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1929,7 +1929,7 @@ pub struct PendingObservation {
 
 <a id="rust-crates-hm-cortex-src-nrem-cluster-rs-clusteroptions"></a>
 
-Source: [`crates/hm-cortex/src/nrem/cluster.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/cluster.rs).
+Source: [`crates/hm-cortex/src/nrem/cluster.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/cluster.rs).
 
 When to use: Use `ClusterOptions` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Set explicit deployment limits before opening the associated resource.
 
@@ -1948,7 +1948,7 @@ pub struct ClusterOptions {
 
 <a id="rust-crates-hm-cortex-src-nrem-cluster-rs-observationcluster"></a>
 
-Source: [`crates/hm-cortex/src/nrem/cluster.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/cluster.rs).
+Source: [`crates/hm-cortex/src/nrem/cluster.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/cluster.rs).
 
 When to use: Use `ObservationCluster` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1967,7 +1967,7 @@ pub struct ObservationCluster {
 
 <a id="rust-crates-hm-cortex-src-nrem-merge-rs-existingmemory"></a>
 
-Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/merge.rs).
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
 
 When to use: Use `ExistingMemory` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -1987,7 +1987,7 @@ pub struct ExistingMemory {
 
 <a id="rust-crates-hm-cortex-src-nrem-merge-rs-mergeaction"></a>
 
-Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/merge.rs).
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
 
 When to use: Use `MergeAction` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2006,7 +2006,7 @@ pub enum MergeAction {
 
 <a id="rust-crates-hm-cortex-src-nrem-merge-rs-nremdecision"></a>
 
-Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/merge.rs).
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
 
 When to use: Use `NremDecision` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2034,7 +2034,7 @@ pub struct NremDecision {
 
 <a id="rust-crates-hm-cortex-src-nrem-merge-rs-dropreason"></a>
 
-Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/merge.rs).
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
 
 When to use: Use `DropReason` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2059,7 +2059,7 @@ pub enum DropReason {
 
 <a id="rust-crates-hm-cortex-src-nrem-merge-rs-droppedcandidate"></a>
 
-Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/merge.rs).
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
 
 When to use: Use `DroppedCandidate` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2077,7 +2077,7 @@ pub struct DroppedCandidate {
 
 <a id="rust-crates-hm-cortex-src-nrem-merge-rs-nremreport"></a>
 
-Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/merge.rs).
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
 
 When to use: Use `NremReport` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -2098,7 +2098,7 @@ pub struct NremReport {
 
 <a id="rust-crates-hm-cortex-src-nrem-merge-rs-nremerror"></a>
 
-Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/nrem/merge.rs).
+Source: [`crates/hm-cortex/src/nrem/merge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/nrem/merge.rs).
 
 When to use: Use `NremError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2116,7 +2116,7 @@ pub enum NremError {
 
 <a id="rust-crates-hm-cortex-src-predict-rs-observation"></a>
 
-Source: [`crates/hm-cortex/src/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/predict.rs).
+Source: [`crates/hm-cortex/src/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/predict.rs).
 
 When to use: Use `Observation` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2139,7 +2139,7 @@ pub struct Observation {
 
 <a id="rust-crates-hm-cortex-src-predict-rs-revisiongap"></a>
 
-Source: [`crates/hm-cortex/src/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/predict.rs).
+Source: [`crates/hm-cortex/src/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/predict.rs).
 
 When to use: Use `RevisionGap` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2158,7 +2158,7 @@ pub struct RevisionGap {
 
 <a id="rust-crates-hm-cortex-src-procedures-rs-episode"></a>
 
-Source: [`crates/hm-cortex/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/procedures.rs).
+Source: [`crates/hm-cortex/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/procedures.rs).
 
 When to use: Use `Episode` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2188,7 +2188,7 @@ pub struct Episode {
 
 <a id="rust-crates-hm-cortex-src-prospective-rs-wakesignal"></a>
 
-Source: [`crates/hm-cortex/src/prospective.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/prospective.rs).
+Source: [`crates/hm-cortex/src/prospective.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/prospective.rs).
 
 When to use: Use `WakeSignal` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2208,7 +2208,7 @@ pub struct WakeSignal {
 
 <a id="rust-crates-hm-cortex-src-quality-rs-thoughtqualityoptions"></a>
 
-Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/quality.rs).
+Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/quality.rs).
 
 When to use: Use `ThoughtQualityOptions` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Set explicit deployment limits before opening the associated resource.
 
@@ -2228,7 +2228,7 @@ pub struct ThoughtQualityOptions {
 
 <a id="rust-crates-hm-cortex-src-quality-rs-thoughtqualityresult"></a>
 
-Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/quality.rs).
+Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/quality.rs).
 
 When to use: Use `ThoughtQualityResult` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -2248,7 +2248,7 @@ pub struct ThoughtQualityResult {
 
 <a id="rust-crates-hm-cortex-src-quality-rs-rewriteguardresult"></a>
 
-Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/quality.rs).
+Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/quality.rs).
 
 When to use: Use `RewriteGuardResult` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -2266,7 +2266,7 @@ pub struct RewriteGuardResult {
 
 <a id="rust-crates-hm-cortex-src-quality-rs-labelleddecision"></a>
 
-Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/quality.rs).
+Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/quality.rs).
 
 When to use: Use `LabelledDecision` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2284,7 +2284,7 @@ pub struct LabelledDecision {
 
 <a id="rust-crates-hm-cortex-src-quality-rs-classifiermetrics"></a>
 
-Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/quality.rs).
+Source: [`crates/hm-cortex/src/quality.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/quality.rs).
 
 When to use: Use `ClassifierMetrics` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2304,7 +2304,7 @@ pub struct ClassifierMetrics {
 
 <a id="rust-crates-hm-cortex-src-rem-abstract-rs-existingabstract"></a>
 
-Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/abstract.rs).
+Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/abstract.rs).
 
 When to use: Use `ExistingAbstract` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2322,7 +2322,7 @@ pub struct ExistingAbstract {
 
 <a id="rust-crates-hm-cortex-src-rem-abstract-rs-abstractoptions"></a>
 
-Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/abstract.rs).
+Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/abstract.rs).
 
 When to use: Use `AbstractOptions` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Set explicit deployment limits before opening the associated resource.
 
@@ -2340,7 +2340,7 @@ pub struct AbstractOptions {
 
 <a id="rust-crates-hm-cortex-src-rem-abstract-rs-abstractdecision"></a>
 
-Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/abstract.rs).
+Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/abstract.rs).
 
 When to use: Use `AbstractDecision` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2365,7 +2365,7 @@ pub struct AbstractDecision {
 
 <a id="rust-crates-hm-cortex-src-rem-abstract-rs-abstractdrop"></a>
 
-Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/abstract.rs).
+Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/abstract.rs).
 
 When to use: Use `AbstractDrop` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2386,7 +2386,7 @@ pub enum AbstractDrop {
 
 <a id="rust-crates-hm-cortex-src-rem-abstract-rs-abstracterror"></a>
 
-Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/abstract.rs).
+Source: [`crates/hm-cortex/src/rem/abstract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/abstract.rs).
 
 When to use: Use `AbstractError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2404,7 +2404,7 @@ pub enum AbstractError {
 
 <a id="rust-crates-hm-cortex-src-rem-connect-rs-connectmemory"></a>
 
-Source: [`crates/hm-cortex/src/rem/connect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/connect.rs).
+Source: [`crates/hm-cortex/src/rem/connect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/connect.rs).
 
 When to use: Use `ConnectMemory` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2427,7 +2427,7 @@ pub struct ConnectMemory {
 
 <a id="rust-crates-hm-cortex-src-rem-connect-rs-connectededge"></a>
 
-Source: [`crates/hm-cortex/src/rem/connect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/connect.rs).
+Source: [`crates/hm-cortex/src/rem/connect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/connect.rs).
 
 When to use: Use `ConnectedEdge` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2446,7 +2446,7 @@ pub struct ConnectedEdge {
 
 <a id="rust-crates-hm-cortex-src-rem-connect-rs-connectreport"></a>
 
-Source: [`crates/hm-cortex/src/rem/connect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/connect.rs).
+Source: [`crates/hm-cortex/src/rem/connect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/connect.rs).
 
 When to use: Use `ConnectReport` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -2466,7 +2466,7 @@ pub struct ConnectReport {
 
 <a id="rust-crates-hm-cortex-src-rem-connect-rs-connecterror"></a>
 
-Source: [`crates/hm-cortex/src/rem/connect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/connect.rs).
+Source: [`crates/hm-cortex/src/rem/connect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/connect.rs).
 
 When to use: Use `ConnectError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2486,7 +2486,7 @@ pub enum ConnectError {
 
 <a id="rust-crates-hm-cortex-src-rem-hindsight-rs-concernsourcekind"></a>
 
-Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/hindsight.rs).
+Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/hindsight.rs).
 
 When to use: Use `ConcernSourceKind` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2504,7 +2504,7 @@ pub enum ConcernSourceKind {
 
 <a id="rust-crates-hm-cortex-src-rem-hindsight-rs-concernsource"></a>
 
-Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/hindsight.rs).
+Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/hindsight.rs).
 
 When to use: Use `ConcernSource` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2522,7 +2522,7 @@ pub struct ConcernSource {
 
 <a id="rust-crates-hm-cortex-src-rem-hindsight-rs-hindsightmemory"></a>
 
-Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/hindsight.rs).
+Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/hindsight.rs).
 
 When to use: Use `HindsightMemory` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2542,7 +2542,7 @@ pub struct HindsightMemory {
 
 <a id="rust-crates-hm-cortex-src-rem-hindsight-rs-hindsightrevision"></a>
 
-Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/hindsight.rs).
+Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/hindsight.rs).
 
 When to use: Use `HindsightRevision` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2565,7 +2565,7 @@ pub struct HindsightRevision {
 
 <a id="rust-crates-hm-cortex-src-rem-hindsight-rs-hindsightdecision"></a>
 
-Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/hindsight.rs).
+Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/hindsight.rs).
 
 When to use: Use `HindsightDecision` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2584,7 +2584,7 @@ pub enum HindsightDecision {
 
 <a id="rust-crates-hm-cortex-src-rem-hindsight-rs-hindsighterror"></a>
 
-Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/rem/hindsight.rs).
+Source: [`crates/hm-cortex/src/rem/hindsight.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/rem/hindsight.rs).
 
 When to use: Use `HindsightError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2602,7 +2602,7 @@ pub enum HindsightError {
 
 <a id="rust-crates-hm-cortex-src-review-rs-attestationsignal"></a>
 
-Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/review.rs).
+Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/review.rs).
 
 When to use: Use `AttestationSignal` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2622,7 +2622,7 @@ pub enum AttestationSignal {
 
 <a id="rust-crates-hm-cortex-src-review-rs-reviewcandidate"></a>
 
-Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/review.rs).
+Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/review.rs).
 
 When to use: Use `ReviewCandidate` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2648,7 +2648,7 @@ pub struct ReviewCandidate {
 
 <a id="rust-crates-hm-cortex-src-review-rs-protectionset"></a>
 
-Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/review.rs).
+Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/review.rs).
 
 When to use: Use `ProtectionSet` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2665,7 +2665,7 @@ pub struct ProtectionSet {
 
 <a id="rust-crates-hm-cortex-src-review-rs-reviewdecision"></a>
 
-Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/review.rs).
+Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/review.rs).
 
 When to use: Use `ReviewDecision` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2683,7 +2683,7 @@ pub struct ReviewDecision {
 
 <a id="rust-crates-hm-cortex-src-review-rs-fadepolicy"></a>
 
-Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/review.rs).
+Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/review.rs).
 
 When to use: Use `FadePolicy` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2700,7 +2700,7 @@ pub struct FadePolicy {
 
 <a id="rust-crates-hm-cortex-src-review-rs-contradictedoutcome"></a>
 
-Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/review.rs).
+Source: [`crates/hm-cortex/src/review.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/review.rs).
 
 When to use: Use `ContradictedOutcome` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2719,7 +2719,7 @@ pub struct ContradictedOutcome {
 
 <a id="rust-crates-hm-cortex-src-run-rs-persistedphase"></a>
 
-Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/run.rs).
+Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/run.rs).
 
 When to use: Use `PersistedPhase` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2739,7 +2739,7 @@ pub struct PersistedPhase {
 
 <a id="rust-crates-hm-cortex-src-run-rs-phasework"></a>
 
-Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/run.rs).
+Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/run.rs).
 
 When to use: Use `PhaseWork` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2759,7 +2759,7 @@ pub struct PhaseWork {
 
 <a id="rust-crates-hm-cortex-src-run-rs-phasemachine"></a>
 
-Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/run.rs).
+Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/run.rs).
 
 When to use: Use `PhaseMachine` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2778,7 +2778,7 @@ pub struct PhaseMachine {
 
 <a id="rust-crates-hm-cortex-src-run-rs-cadence"></a>
 
-Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/run.rs).
+Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/run.rs).
 
 When to use: Use `Cadence` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2797,7 +2797,7 @@ pub struct Cadence {
 
 <a id="rust-crates-hm-cortex-src-run-rs-cadenceerror"></a>
 
-Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-cortex/src/run.rs).
+Source: [`crates/hm-cortex/src/run.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/run.rs).
 
 When to use: Use `CadenceError` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
 
@@ -2816,7 +2816,7 @@ pub enum CadenceError {
 
 <a id="rust-crates-hm-embed-src-cache-rs-cachedembedder"></a>
 
-Source: [`crates/hm-embed/src/cache.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/cache.rs).
+Source: [`crates/hm-embed/src/cache.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/cache.rs).
 
 When to use: Use `CachedEmbedder` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2835,7 +2835,7 @@ pub struct CachedEmbedder<E> {
 
 <a id="rust-crates-hm-embed-src-hash-feature-rs-hashfeatureembedder"></a>
 
-Source: [`crates/hm-embed/src/hash_feature.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/hash_feature.rs).
+Source: [`crates/hm-embed/src/hash_feature.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/hash_feature.rs).
 
 When to use: Use `HashFeatureEmbedder` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2852,7 +2852,7 @@ pub struct HashFeatureEmbedder {
 
 <a id="rust-crates-hm-embed-src-local-rs-onnxembedder"></a>
 
-Source: [`crates/hm-embed/src/local.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/local.rs).
+Source: [`crates/hm-embed/src/local.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/local.rs).
 
 When to use: Use `OnnxEmbedder` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2871,7 +2871,7 @@ pub struct OnnxEmbedder {
 
 <a id="rust-crates-hm-embed-src-model-rs-modelkind"></a>
 
-Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/model.rs).
+Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/model.rs).
 
 When to use: Use `ModelKind` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2889,7 +2889,7 @@ pub enum ModelKind {
 
 <a id="rust-crates-hm-embed-src-model-rs-artifact"></a>
 
-Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/model.rs).
+Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/model.rs).
 
 When to use: Use `Artifact` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2908,7 +2908,7 @@ pub struct Artifact {
 
 <a id="rust-crates-hm-embed-src-model-rs-modelspec"></a>
 
-Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/model.rs).
+Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/model.rs).
 
 When to use: Use `ModelSpec` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2931,7 +2931,7 @@ pub struct ModelSpec {
 
 <a id="rust-crates-hm-embed-src-model-rs-artifactfetcher"></a>
 
-Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/model.rs).
+Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/model.rs).
 
 When to use: Use `ArtifactFetcher` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2948,7 +2948,7 @@ pub trait ArtifactFetcher: Send + Sync {
 
 <a id="rust-crates-hm-embed-src-model-rs-httpfetcher"></a>
 
-Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/model.rs).
+Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/model.rs).
 
 When to use: Use `HttpFetcher` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2963,7 +2963,7 @@ pub struct HttpFetcher;
 
 <a id="rust-crates-hm-embed-src-model-rs-modelstore"></a>
 
-Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/model.rs).
+Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/model.rs).
 
 When to use: Use `ModelStore` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2980,7 +2980,7 @@ pub struct ModelStore {
 
 <a id="rust-crates-hm-embed-src-model-rs-modelfiles"></a>
 
-Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/model.rs).
+Source: [`crates/hm-embed/src/model.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/model.rs).
 
 When to use: Use `ModelFiles` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -2998,7 +2998,7 @@ pub struct ModelFiles {
 
 <a id="rust-crates-hm-embed-src-quantize-rs-quantizedembedding"></a>
 
-Source: [`crates/hm-embed/src/quantize.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/quantize.rs).
+Source: [`crates/hm-embed/src/quantize.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/quantize.rs).
 
 When to use: Use `QuantizedEmbedding` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3018,7 +3018,7 @@ pub struct QuantizedEmbedding {
 
 <a id="rust-crates-hm-embed-src-remote-rs-provider"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `Provider` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3038,7 +3038,7 @@ pub enum Provider {
 
 <a id="rust-crates-hm-embed-src-remote-rs-remoteconfig"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `RemoteConfig` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity. Set explicit deployment limits before opening the associated resource.
 
@@ -3060,7 +3060,7 @@ pub struct RemoteConfig {
 
 <a id="rust-crates-hm-embed-src-remote-rs-wirerequest"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `WireRequest` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -3080,7 +3080,7 @@ pub struct WireRequest {
 
 <a id="rust-crates-hm-embed-src-remote-rs-wireresponse"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `WireResponse` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -3098,7 +3098,7 @@ pub struct WireResponse {
 
 <a id="rust-crates-hm-embed-src-remote-rs-wiretransport"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `WireTransport` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3115,7 +3115,7 @@ pub trait WireTransport: Send + Sync {
 
 <a id="rust-crates-hm-embed-src-remote-rs-wirefixture"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `WireFixture` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3133,7 +3133,7 @@ pub struct WireFixture {
 
 <a id="rust-crates-hm-embed-src-remote-rs-recordedtransport"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `RecordedTransport` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3150,7 +3150,7 @@ pub struct RecordedTransport {
 
 <a id="rust-crates-hm-embed-src-remote-rs-httptransport"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `HttpTransport` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3167,7 +3167,7 @@ pub struct HttpTransport {
 
 <a id="rust-crates-hm-embed-src-remote-rs-remoteembedder"></a>
 
-Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/remote.rs).
+Source: [`crates/hm-embed/src/remote.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/remote.rs).
 
 When to use: Use `RemoteEmbedder` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3186,7 +3186,7 @@ pub struct RemoteEmbedder<T> {
 
 <a id="rust-crates-hm-embed-src-types-rs-distance"></a>
 
-Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/types.rs).
+Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/types.rs).
 
 When to use: Use `Distance` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3204,7 +3204,7 @@ pub enum Distance {
 
 <a id="rust-crates-hm-embed-src-types-rs-normalization"></a>
 
-Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/types.rs).
+Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/types.rs).
 
 When to use: Use `Normalization` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3222,7 +3222,7 @@ pub enum Normalization {
 
 <a id="rust-crates-hm-embed-src-types-rs-inputrole"></a>
 
-Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/types.rs).
+Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/types.rs).
 
 When to use: Use `InputRole` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3240,7 +3240,7 @@ pub enum InputRole {
 
 <a id="rust-crates-hm-embed-src-types-rs-spaceidentity"></a>
 
-Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/types.rs).
+Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/types.rs).
 
 When to use: Use `SpaceIdentity` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3262,7 +3262,7 @@ pub struct SpaceIdentity {
 
 <a id="rust-crates-hm-embed-src-types-rs-embedding"></a>
 
-Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/types.rs).
+Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/types.rs).
 
 When to use: Use `Embedding` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3280,7 +3280,7 @@ pub struct Embedding {
 
 <a id="rust-crates-hm-embed-src-types-rs-embedder"></a>
 
-Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/types.rs).
+Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/types.rs).
 
 When to use: Use `Embedder` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3305,7 +3305,7 @@ pub trait Embedder: Send + Sync {
 
 <a id="rust-crates-hm-embed-src-types-rs-embederror"></a>
 
-Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-embed/src/types.rs).
+Source: [`crates/hm-embed/src/types.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-embed/src/types.rs).
 
 When to use: Use `EmbedError` for pre-append or query embedding with explicit model, dimension, space identity, and cache identity.
 
@@ -3329,7 +3329,7 @@ pub enum EmbedError {
 
 <a id="rust-crates-hm-eval-src-bench-gateway-rs-dynerror"></a>
 
-Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/gateway.rs).
+Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/gateway.rs).
 
 When to use: Use `DynError` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3344,7 +3344,7 @@ pub type DynError = Box<dyn std::error::Error + Send + Sync>;
 
 <a id="rust-crates-hm-eval-src-bench-gateway-rs-completionsettings"></a>
 
-Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/gateway.rs).
+Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/gateway.rs).
 
 When to use: Use `CompletionSettings` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3362,7 +3362,7 @@ pub struct CompletionSettings {
 
 <a id="rust-crates-hm-eval-src-bench-gateway-rs-usage"></a>
 
-Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/gateway.rs).
+Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/gateway.rs).
 
 When to use: Use `Usage` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3385,7 +3385,7 @@ pub struct Usage {
 
 <a id="rust-crates-hm-eval-src-bench-gateway-rs-completion"></a>
 
-Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/gateway.rs).
+Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/gateway.rs).
 
 When to use: Use `Completion` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3414,7 +3414,7 @@ pub struct Completion {
 
 <a id="rust-crates-hm-eval-src-bench-gateway-rs-budgetsummary"></a>
 
-Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/gateway.rs).
+Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/gateway.rs).
 
 When to use: Use `BudgetSummary` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3439,7 +3439,7 @@ pub struct BudgetSummary {
 
 <a id="rust-crates-hm-eval-src-bench-gateway-rs-gateway"></a>
 
-Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/gateway.rs).
+Source: [`crates/hm-eval/src/bench/gateway.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/gateway.rs).
 
 When to use: Use `Gateway` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3456,7 +3456,7 @@ pub struct Gateway {
 
 <a id="rust-crates-hm-eval-src-bench-locomo-rs-dataset"></a>
 
-Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/locomo.rs).
+Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/locomo.rs).
 
 When to use: Use `Dataset` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3474,7 +3474,7 @@ pub struct Dataset {
 
 <a id="rust-crates-hm-eval-src-bench-locomo-rs-conversation"></a>
 
-Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/locomo.rs).
+Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/locomo.rs).
 
 When to use: Use `Conversation` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3493,7 +3493,7 @@ pub struct Conversation {
 
 <a id="rust-crates-hm-eval-src-bench-locomo-rs-question"></a>
 
-Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/locomo.rs).
+Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/locomo.rs).
 
 When to use: Use `Question` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3513,7 +3513,7 @@ pub struct Question {
 
 <a id="rust-crates-hm-eval-src-bench-locomo-rs-prediction"></a>
 
-Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/locomo.rs).
+Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/locomo.rs).
 
 When to use: Use `Prediction` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3532,7 +3532,7 @@ pub struct Prediction {
 
 <a id="rust-crates-hm-eval-src-bench-locomo-rs-categoryresult"></a>
 
-Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/locomo.rs).
+Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/locomo.rs).
 
 When to use: Use `CategoryResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -3551,7 +3551,7 @@ pub struct CategoryResult {
 
 <a id="rust-crates-hm-eval-src-bench-locomo-rs-judgefreemetrics"></a>
 
-Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/locomo.rs).
+Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/locomo.rs).
 
 When to use: Use `JudgeFreeMetrics` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3573,7 +3573,7 @@ pub struct JudgeFreeMetrics {
 
 <a id="rust-crates-hm-eval-src-bench-locomo-rs-judgedmetrics"></a>
 
-Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/locomo.rs).
+Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/locomo.rs).
 
 When to use: Use `JudgedMetrics` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3596,7 +3596,7 @@ pub struct JudgedMetrics {
 
 <a id="rust-crates-hm-eval-src-bench-locomo-rs-benchmarkresult"></a>
 
-Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/locomo.rs).
+Source: [`crates/hm-eval/src/bench/locomo.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/locomo.rs).
 
 When to use: Use `BenchmarkResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -3626,7 +3626,7 @@ pub struct BenchmarkResult {
 
 <a id="rust-crates-hm-eval-src-bench-longmemeval-rs-example"></a>
 
-Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/longmemeval.rs).
+Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/longmemeval.rs).
 
 When to use: Use `Example` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3646,7 +3646,7 @@ pub struct Example {
 
 <a id="rust-crates-hm-eval-src-bench-longmemeval-rs-prediction"></a>
 
-Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/longmemeval.rs).
+Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/longmemeval.rs).
 
 When to use: Use `Prediction` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3665,7 +3665,7 @@ pub struct Prediction {
 
 <a id="rust-crates-hm-eval-src-bench-longmemeval-rs-benchmarkresult"></a>
 
-Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/longmemeval.rs).
+Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/longmemeval.rs).
 
 When to use: Use `BenchmarkResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -3685,7 +3685,7 @@ pub struct BenchmarkResult {
 
 <a id="rust-crates-hm-eval-src-bench-longmemeval-rs-gatewayjudge"></a>
 
-Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/longmemeval.rs).
+Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/longmemeval.rs).
 
 When to use: Use `GatewayJudge` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3704,7 +3704,7 @@ pub struct GatewayJudge {
 
 <a id="rust-crates-hm-eval-src-bench-longmemeval-rs-historyturn"></a>
 
-Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/longmemeval.rs).
+Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/longmemeval.rs).
 
 When to use: Use `HistoryTurn` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3722,7 +3722,7 @@ pub struct HistoryTurn {
 
 <a id="rust-crates-hm-eval-src-bench-longmemeval-rs-fullexample"></a>
 
-Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/longmemeval.rs).
+Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/longmemeval.rs).
 
 When to use: Use `FullExample` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3745,7 +3745,7 @@ pub struct FullExample {
 
 <a id="rust-crates-hm-eval-src-bench-longmemeval-rs-categoryresult"></a>
 
-Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/longmemeval.rs).
+Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/longmemeval.rs).
 
 When to use: Use `CategoryResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -3764,7 +3764,7 @@ pub struct CategoryResult {
 
 <a id="rust-crates-hm-eval-src-bench-longmemeval-rs-fullbenchmarkresult"></a>
 
-Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/longmemeval.rs).
+Source: [`crates/hm-eval/src/bench/longmemeval.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/longmemeval.rs).
 
 When to use: Use `FullBenchmarkResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -3815,7 +3815,7 @@ pub struct FullBenchmarkResult {
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-benchrole"></a>
 
-Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/pipeline.rs).
+Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/pipeline.rs).
 
 When to use: Use `BenchRole` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3834,7 +3834,7 @@ pub enum BenchRole {
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-benchdocument"></a>
 
-Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/pipeline.rs).
+Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/pipeline.rs).
 
 When to use: Use `BenchDocument` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3856,7 +3856,7 @@ pub struct BenchDocument {
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-benchquestion"></a>
 
-Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/pipeline.rs).
+Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/pipeline.rs).
 
 When to use: Use `BenchQuestion` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3875,7 +3875,7 @@ pub struct BenchQuestion {
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-benchcitation"></a>
 
-Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/pipeline.rs).
+Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/pipeline.rs).
 
 When to use: Use `BenchCitation` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3907,7 +3907,7 @@ pub struct BenchCitation {
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-contextcoverage"></a>
 
-Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/pipeline.rs).
+Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/pipeline.rs).
 
 When to use: Use `ContextCoverage` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3937,7 +3937,7 @@ pub struct ContextCoverage {
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-retrievedcontext"></a>
 
-Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/pipeline.rs).
+Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/pipeline.rs).
 
 When to use: Use `RetrievedContext` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3956,7 +3956,7 @@ pub struct RetrievedContext {
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-benchanswer"></a>
 
-Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/pipeline.rs).
+Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/pipeline.rs).
 
 When to use: Use `BenchAnswer` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -3987,7 +3987,7 @@ pub struct BenchAnswer {
 
 <a id="rust-crates-hm-eval-src-bench-pipeline-rs-memorypipeline"></a>
 
-Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/bench/pipeline.rs).
+Source: [`crates/hm-eval/src/bench/pipeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/bench/pipeline.rs).
 
 When to use: Use `MemoryPipeline` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -4012,7 +4012,7 @@ pub struct MemoryPipeline {
 
 <a id="rust-crates-hm-eval-src-slice1-rs-metric"></a>
 
-Source: [`crates/hm-eval/src/slice1.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/slice1.rs).
+Source: [`crates/hm-eval/src/slice1.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/slice1.rs).
 
 When to use: Use `Metric` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -4034,7 +4034,7 @@ pub struct Metric {
 
 <a id="rust-crates-hm-eval-src-slice1-rs-gateresult"></a>
 
-Source: [`crates/hm-eval/src/slice1.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/slice1.rs).
+Source: [`crates/hm-eval/src/slice1.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/slice1.rs).
 
 When to use: Use `GateResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4057,7 +4057,7 @@ pub struct GateResult {
 
 <a id="rust-crates-hm-eval-src-slice1-rs-seedmanifest"></a>
 
-Source: [`crates/hm-eval/src/slice1.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/slice1.rs).
+Source: [`crates/hm-eval/src/slice1.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/slice1.rs).
 
 When to use: Use `SeedManifest` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -4076,7 +4076,7 @@ pub struct SeedManifest {
 
 <a id="rust-crates-hm-eval-src-suites-attention-rs-attentionresult"></a>
 
-Source: [`crates/hm-eval/src/suites/attention.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/attention.rs).
+Source: [`crates/hm-eval/src/suites/attention.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/attention.rs).
 
 When to use: Use `AttentionResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4099,7 +4099,7 @@ pub struct AttentionResult {
 
 <a id="rust-crates-hm-eval-src-suites-calibration-rs-calibrationrow"></a>
 
-Source: [`crates/hm-eval/src/suites/calibration.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/calibration.rs).
+Source: [`crates/hm-eval/src/suites/calibration.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/calibration.rs).
 
 When to use: Use `CalibrationRow` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -4118,7 +4118,7 @@ pub struct CalibrationRow {
 
 <a id="rust-crates-hm-eval-src-suites-calibration-rs-calibrationresult"></a>
 
-Source: [`crates/hm-eval/src/suites/calibration.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/calibration.rs).
+Source: [`crates/hm-eval/src/suites/calibration.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/calibration.rs).
 
 When to use: Use `CalibrationResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4140,7 +4140,7 @@ pub struct CalibrationResult {
 
 <a id="rust-crates-hm-eval-src-suites-citations-rs-citationresult"></a>
 
-Source: [`crates/hm-eval/src/suites/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/citations.rs).
+Source: [`crates/hm-eval/src/suites/citations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/citations.rs).
 
 When to use: Use `CitationResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4160,7 +4160,7 @@ pub struct CitationResult {
 
 <a id="rust-crates-hm-eval-src-suites-continuity-rs-continuityresult"></a>
 
-Source: [`crates/hm-eval/src/suites/continuity.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/continuity.rs).
+Source: [`crates/hm-eval/src/suites/continuity.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/continuity.rs).
 
 When to use: Use `ContinuityResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4178,7 +4178,7 @@ pub struct ContinuityResult {
 
 <a id="rust-crates-hm-eval-src-suites-degradation-rs-degradationresult"></a>
 
-Source: [`crates/hm-eval/src/suites/degradation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/degradation.rs).
+Source: [`crates/hm-eval/src/suites/degradation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/degradation.rs).
 
 When to use: Use `DegradationResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4196,7 +4196,7 @@ pub struct DegradationResult {
 
 <a id="rust-crates-hm-eval-src-suites-dream-rs-dreamresult"></a>
 
-Source: [`crates/hm-eval/src/suites/dream.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/dream.rs).
+Source: [`crates/hm-eval/src/suites/dream.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/dream.rs).
 
 When to use: Use `DreamResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4218,7 +4218,7 @@ pub struct DreamResult {
 
 <a id="rust-crates-hm-eval-src-suites-generations-rs-generationresult"></a>
 
-Source: [`crates/hm-eval/src/suites/generations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/generations.rs).
+Source: [`crates/hm-eval/src/suites/generations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/generations.rs).
 
 When to use: Use `GenerationResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4240,7 +4240,7 @@ pub struct GenerationResult {
 
 <a id="rust-crates-hm-eval-src-suites-hnsw-parity-rs-parityresult"></a>
 
-Source: [`crates/hm-eval/src/suites/hnsw_parity.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/hnsw_parity.rs).
+Source: [`crates/hm-eval/src/suites/hnsw_parity.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/hnsw_parity.rs).
 
 When to use: Use `ParityResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4263,7 +4263,7 @@ pub struct ParityResult {
 
 <a id="rust-crates-hm-eval-src-suites-laundering-rs-launderingresult"></a>
 
-Source: [`crates/hm-eval/src/suites/laundering.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/laundering.rs).
+Source: [`crates/hm-eval/src/suites/laundering.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/laundering.rs).
 
 When to use: Use `LaunderingResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4281,7 +4281,7 @@ pub struct LaunderingResult {
 
 <a id="rust-crates-hm-eval-src-suites-protected-rs-protectedresult"></a>
 
-Source: [`crates/hm-eval/src/suites/protected.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/protected.rs).
+Source: [`crates/hm-eval/src/suites/protected.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/protected.rs).
 
 When to use: Use `ProtectedResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4300,7 +4300,7 @@ pub struct ProtectedResult {
 
 <a id="rust-crates-hm-eval-src-suites-recall-rs-encoderrun"></a>
 
-Source: [`crates/hm-eval/src/suites/recall.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/recall.rs).
+Source: [`crates/hm-eval/src/suites/recall.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/recall.rs).
 
 When to use: Use `EncoderRun` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates.
 
@@ -4318,7 +4318,7 @@ pub struct EncoderRun {
 
 <a id="rust-crates-hm-eval-src-suites-temporal-rs-temporalresult"></a>
 
-Source: [`crates/hm-eval/src/suites/temporal.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-eval/src/suites/temporal.rs).
+Source: [`crates/hm-eval/src/suites/temporal.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-eval/src/suites/temporal.rs).
 
 When to use: Use `TemporalResult` for reproducible benchmark inputs, metrics, coverage, budget accounting, and declared qualification gates. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4338,7 +4338,7 @@ pub struct TemporalResult {
 
 <a id="rust-crates-hm-index-src-entity-rules-rs-entitykind"></a>
 
-Source: [`crates/hm-index/src/entity_rules.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-index/src/entity_rules.rs).
+Source: [`crates/hm-index/src/entity_rules.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-index/src/entity_rules.rs).
 
 When to use: Use `EntityKind` for bounded lexical, entity, or vector candidate retrieval and reproducible index scoring.
 
@@ -4360,7 +4360,7 @@ pub enum EntityKind {
 
 <a id="rust-crates-hm-index-src-entity-rules-rs-entity"></a>
 
-Source: [`crates/hm-index/src/entity_rules.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-index/src/entity_rules.rs).
+Source: [`crates/hm-index/src/entity_rules.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-index/src/entity_rules.rs).
 
 When to use: Use `Entity` for bounded lexical, entity, or vector candidate retrieval and reproducible index scoring.
 
@@ -4379,7 +4379,7 @@ pub struct Entity {
 
 <a id="rust-crates-hm-index-src-hnsw-rs-hnswindex"></a>
 
-Source: [`crates/hm-index/src/hnsw.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-index/src/hnsw.rs).
+Source: [`crates/hm-index/src/hnsw.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-index/src/hnsw.rs).
 
 When to use: Use `HnswIndex` for bounded lexical, entity, or vector candidate retrieval and reproducible index scoring.
 
@@ -4397,7 +4397,7 @@ pub struct HnswIndex {
 
 <a id="rust-crates-hm-ledger-src-apply-rs-clock"></a>
 
-Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/apply.rs).
+Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/apply.rs).
 
 When to use: Use `Clock` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4414,7 +4414,7 @@ pub trait Clock: Send {
 
 <a id="rust-crates-hm-ledger-src-apply-rs-storagecommit"></a>
 
-Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/apply.rs).
+Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/apply.rs).
 
 When to use: Use `StorageCommit` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4432,7 +4432,7 @@ pub struct StorageCommit {
 
 <a id="rust-crates-hm-ledger-src-apply-rs-storage"></a>
 
-Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/apply.rs).
+Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/apply.rs).
 
 When to use: Use `Storage` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4451,7 +4451,7 @@ pub trait Storage: Send {
 
 <a id="rust-crates-hm-ledger-src-apply-rs-applyrequest"></a>
 
-Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/apply.rs).
+Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/apply.rs).
 
 When to use: Use `ApplyRequest` for durable encrypted append, recovery, key lifecycle, and integrity verification. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -4470,7 +4470,7 @@ pub struct ApplyRequest {
 
 <a id="rust-crates-hm-ledger-src-apply-rs-applyack"></a>
 
-Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/apply.rs).
+Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/apply.rs).
 
 When to use: Use `ApplyAck` for durable encrypted append, recovery, key lifecycle, and integrity verification. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -4488,7 +4488,7 @@ pub struct ApplyAck {
 
 <a id="rust-crates-hm-ledger-src-apply-rs-appliedstate"></a>
 
-Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/apply.rs).
+Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/apply.rs).
 
 When to use: Use `AppliedState` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4508,7 +4508,7 @@ pub struct AppliedState {
 
 <a id="rust-crates-hm-ledger-src-apply-rs-applyloop"></a>
 
-Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/apply.rs).
+Source: [`crates/hm-ledger/src/apply.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/apply.rs).
 
 When to use: Use `ApplyLoop` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4530,7 +4530,7 @@ pub struct ApplyLoop<'environment> {
 
 <a id="rust-crates-hm-ledger-src-checkpoint-rs-signingseed"></a>
 
-Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/checkpoint.rs).
+Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/checkpoint.rs).
 
 When to use: Use `SigningSeed` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4545,7 +4545,7 @@ pub type SigningSeed = [u8;
 
 <a id="rust-crates-hm-ledger-src-checkpoint-rs-publickey"></a>
 
-Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/checkpoint.rs).
+Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/checkpoint.rs).
 
 When to use: Use `PublicKey` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4560,7 +4560,7 @@ pub type PublicKey = [u8;
 
 <a id="rust-crates-hm-ledger-src-checkpoint-rs-signature"></a>
 
-Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/checkpoint.rs).
+Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/checkpoint.rs).
 
 When to use: Use `Signature` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4575,7 +4575,7 @@ pub type Signature = [u8;
 
 <a id="rust-crates-hm-ledger-src-checkpoint-rs-signingkeypair"></a>
 
-Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/checkpoint.rs).
+Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/checkpoint.rs).
 
 When to use: Use `SigningKeyPair` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4593,7 +4593,7 @@ pub struct SigningKeyPair {
 
 <a id="rust-crates-hm-ledger-src-checkpoint-rs-checkpoint"></a>
 
-Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/checkpoint.rs).
+Source: [`crates/hm-ledger/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/checkpoint.rs).
 
 When to use: Use `Checkpoint` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4615,7 +4615,7 @@ pub struct Checkpoint {
 
 <a id="rust-crates-hm-ledger-src-frame-rs-eventkind"></a>
 
-Source: [`crates/hm-ledger/src/frame.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/frame.rs).
+Source: [`crates/hm-ledger/src/frame.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/frame.rs).
 
 When to use: Use `EventKind` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4674,7 +4674,7 @@ pub enum EventKind {
 
 <a id="rust-crates-hm-ledger-src-frame-rs-frameheader"></a>
 
-Source: [`crates/hm-ledger/src/frame.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/frame.rs).
+Source: [`crates/hm-ledger/src/frame.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/frame.rs).
 
 When to use: Use `FrameHeader` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4695,7 +4695,7 @@ pub struct FrameHeader {
 
 <a id="rust-crates-hm-ledger-src-frame-rs-frame"></a>
 
-Source: [`crates/hm-ledger/src/frame.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/frame.rs).
+Source: [`crates/hm-ledger/src/frame.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/frame.rs).
 
 When to use: Use `Frame` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4713,7 +4713,7 @@ pub struct Frame {
 
 <a id="rust-crates-hm-ledger-src-gate-rs-beliefevidence"></a>
 
-Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/gate.rs).
+Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/gate.rs).
 
 When to use: Use `BeliefEvidence` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4730,7 +4730,7 @@ pub trait BeliefEvidence {
 
 <a id="rust-crates-hm-ledger-src-gate-rs-livebelief"></a>
 
-Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/gate.rs).
+Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/gate.rs).
 
 When to use: Use `LiveBelief` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4750,7 +4750,7 @@ pub struct LiveBelief {
 
 <a id="rust-crates-hm-ledger-src-gate-rs-beliefconflict"></a>
 
-Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/gate.rs).
+Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/gate.rs).
 
 When to use: Use `BeliefConflict` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4773,7 +4773,7 @@ pub struct BeliefConflict {
 
 <a id="rust-crates-hm-ledger-src-gate-rs-gaterejection"></a>
 
-Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/gate.rs).
+Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/gate.rs).
 
 When to use: Use `GateRejection` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4791,7 +4791,7 @@ pub struct GateRejection {
 
 <a id="rust-crates-hm-ledger-src-gate-rs-batchadmission"></a>
 
-Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/gate.rs).
+Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/gate.rs).
 
 When to use: Use `BatchAdmission` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4808,7 +4808,7 @@ pub struct BatchAdmission {
 
 <a id="rust-crates-hm-ledger-src-gate-rs-applyadmission"></a>
 
-Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/gate.rs).
+Source: [`crates/hm-ledger/src/gate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/gate.rs).
 
 When to use: Use `ApplyAdmission` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4827,7 +4827,7 @@ pub struct ApplyAdmission {
 
 <a id="rust-crates-hm-ledger-src-idempotency-rs-connectionid"></a>
 
-Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/idempotency.rs).
+Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/idempotency.rs).
 
 When to use: Use `ConnectionId` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4842,7 +4842,7 @@ pub type ConnectionId = [u8;
 
 <a id="rust-crates-hm-ledger-src-idempotency-rs-batchevent"></a>
 
-Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/idempotency.rs).
+Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/idempotency.rs).
 
 When to use: Use `BatchEvent` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4861,7 +4861,7 @@ pub struct BatchEvent<'payload> {
 
 <a id="rust-crates-hm-ledger-src-idempotency-rs-batchidentity"></a>
 
-Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/idempotency.rs).
+Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/idempotency.rs).
 
 When to use: Use `BatchIdentity` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4880,7 +4880,7 @@ pub struct BatchIdentity<'payload> {
 
 <a id="rust-crates-hm-ledger-src-idempotency-rs-dedupstate"></a>
 
-Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/idempotency.rs).
+Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/idempotency.rs).
 
 When to use: Use `DedupState` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4900,7 +4900,7 @@ pub struct DedupState {
 
 <a id="rust-crates-hm-ledger-src-idempotency-rs-admission"></a>
 
-Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/idempotency.rs).
+Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/idempotency.rs).
 
 When to use: Use `Admission` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4918,7 +4918,7 @@ pub enum Admission {
 
 <a id="rust-crates-hm-ledger-src-idempotency-rs-deduptable"></a>
 
-Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/idempotency.rs).
+Source: [`crates/hm-ledger/src/idempotency.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/idempotency.rs).
 
 When to use: Use `DedupTable` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4936,7 +4936,7 @@ pub struct DedupTable {
 
 <a id="rust-crates-hm-ledger-src-keyring-rs-keyencryptionkey"></a>
 
-Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/keyring.rs).
+Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/keyring.rs).
 
 When to use: Use `KeyEncryptionKey` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4951,7 +4951,7 @@ pub type KeyEncryptionKey = [u8;
 
 <a id="rust-crates-hm-ledger-src-keyring-rs-userid"></a>
 
-Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/keyring.rs).
+Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/keyring.rs).
 
 When to use: Use `UserId` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4966,7 +4966,7 @@ pub type UserId = [u8;
 
 <a id="rust-crates-hm-ledger-src-keyring-rs-entropysource"></a>
 
-Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/keyring.rs).
+Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/keyring.rs).
 
 When to use: Use `EntropySource` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4983,7 +4983,7 @@ pub trait EntropySource {
 
 <a id="rust-crates-hm-ledger-src-keyring-rs-osentropy"></a>
 
-Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/keyring.rs).
+Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/keyring.rs).
 
 When to use: Use `OsEntropy` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -4998,7 +4998,7 @@ pub struct OsEntropy;
 
 <a id="rust-crates-hm-ledger-src-keyring-rs-keyhierarchy"></a>
 
-Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/keyring.rs).
+Source: [`crates/hm-ledger/src/keyring.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/keyring.rs).
 
 When to use: Use `KeyHierarchy` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5019,7 +5019,7 @@ pub struct KeyHierarchy {
 
 <a id="rust-crates-hm-ledger-src-mmr-store-rs-verificationstatus"></a>
 
-Source: [`crates/hm-ledger/src/mmr_store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/mmr_store.rs).
+Source: [`crates/hm-ledger/src/mmr_store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/mmr_store.rs).
 
 When to use: Use `VerificationStatus` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5039,7 +5039,7 @@ pub struct VerificationStatus {
 
 <a id="rust-crates-hm-ledger-src-mmr-store-rs-repairstatus"></a>
 
-Source: [`crates/hm-ledger/src/mmr_store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/mmr_store.rs).
+Source: [`crates/hm-ledger/src/mmr_store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/mmr_store.rs).
 
 When to use: Use `RepairStatus` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5058,7 +5058,7 @@ pub struct RepairStatus {
 
 <a id="rust-crates-hm-ledger-src-mmr-store-rs-mmrstore"></a>
 
-Source: [`crates/hm-ledger/src/mmr_store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/mmr_store.rs).
+Source: [`crates/hm-ledger/src/mmr_store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/mmr_store.rs).
 
 When to use: Use `MmrStore` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5080,7 +5080,7 @@ pub struct MmrStore {
 
 <a id="rust-crates-hm-ledger-src-mmr-rs-hash"></a>
 
-Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/mmr.rs).
+Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/mmr.rs).
 
 When to use: Use `Hash` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5095,7 +5095,7 @@ pub type Hash = [u8;
 
 <a id="rust-crates-hm-ledger-src-mmr-rs-node"></a>
 
-Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/mmr.rs).
+Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/mmr.rs).
 
 When to use: Use `Node` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5115,7 +5115,7 @@ pub struct Node {
 
 <a id="rust-crates-hm-ledger-src-mmr-rs-appendresult"></a>
 
-Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/mmr.rs).
+Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/mmr.rs).
 
 When to use: Use `AppendResult` for durable encrypted append, recovery, key lifecycle, and integrity verification. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -5133,7 +5133,7 @@ pub struct AppendResult {
 
 <a id="rust-crates-hm-ledger-src-mmr-rs-rangeproof"></a>
 
-Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/mmr.rs).
+Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/mmr.rs).
 
 When to use: Use `RangeProof` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5154,7 +5154,7 @@ pub struct RangeProof {
 
 <a id="rust-crates-hm-ledger-src-mmr-rs-mmr"></a>
 
-Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/mmr.rs).
+Source: [`crates/hm-ledger/src/mmr.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/mmr.rs).
 
 When to use: Use `Mmr` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5175,7 +5175,7 @@ pub struct Mmr {
 
 <a id="rust-crates-hm-ledger-src-segment-rs-writebackend"></a>
 
-Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/segment.rs).
+Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/segment.rs).
 
 When to use: Use `WriteBackend` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5194,7 +5194,7 @@ pub enum WriteBackend {
 
 <a id="rust-crates-hm-ledger-src-segment-rs-segmentlogoptions"></a>
 
-Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/segment.rs).
+Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/segment.rs).
 
 When to use: Use `SegmentLogOptions` for durable encrypted append, recovery, key lifecycle, and integrity verification. Set explicit deployment limits before opening the associated resource.
 
@@ -5215,7 +5215,7 @@ pub struct SegmentLogOptions {
 
 <a id="rust-crates-hm-ledger-src-segment-rs-appendrequest"></a>
 
-Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/segment.rs).
+Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/segment.rs).
 
 When to use: Use `AppendRequest` for durable encrypted append, recovery, key lifecycle, and integrity verification. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5235,7 +5235,7 @@ pub struct AppendRequest {
 
 <a id="rust-crates-hm-ledger-src-segment-rs-commitresult"></a>
 
-Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/segment.rs).
+Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/segment.rs).
 
 When to use: Use `CommitResult` for durable encrypted append, recovery, key lifecycle, and integrity verification. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -5255,7 +5255,7 @@ pub struct CommitResult {
 
 <a id="rust-crates-hm-ledger-src-segment-rs-recoveryreport"></a>
 
-Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/segment.rs).
+Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/segment.rs).
 
 When to use: Use `RecoveryReport` for durable encrypted append, recovery, key lifecycle, and integrity verification. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -5276,7 +5276,7 @@ pub struct RecoveryReport {
 
 <a id="rust-crates-hm-ledger-src-segment-rs-segmentlog"></a>
 
-Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/segment.rs).
+Source: [`crates/hm-ledger/src/segment.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/segment.rs).
 
 When to use: Use `SegmentLog` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5298,7 +5298,7 @@ pub struct SegmentLog {
 
 <a id="rust-crates-hm-ledger-src-shred-rs-deletionreceipt"></a>
 
-Source: [`crates/hm-ledger/src/shred.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/shred.rs).
+Source: [`crates/hm-ledger/src/shred.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/shred.rs).
 
 When to use: Use `DeletionReceipt` for durable encrypted append, recovery, key lifecycle, and integrity verification. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -5321,7 +5321,7 @@ pub struct DeletionReceipt {
 
 <a id="rust-crates-hm-ledger-src-tripwire-rs-tripwireset"></a>
 
-Source: [`crates/hm-ledger/src/tripwire.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-ledger/src/tripwire.rs).
+Source: [`crates/hm-ledger/src/tripwire.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-ledger/src/tripwire.rs).
 
 When to use: Use `TripwireSet` for durable encrypted append, recovery, key lifecycle, and integrity verification.
 
@@ -5338,7 +5338,7 @@ pub struct TripwireSet {
 
 <a id="rust-crates-hm-llm-src-anthropic-rs-anthropic"></a>
 
-Source: [`crates/hm-llm/src/anthropic.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/anthropic.rs).
+Source: [`crates/hm-llm/src/anthropic.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/anthropic.rs).
 
 When to use: Use `Anthropic` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5356,7 +5356,7 @@ pub struct Anthropic<T> {
 
 <a id="rust-crates-hm-llm-src-cost-rs-priceentry"></a>
 
-Source: [`crates/hm-llm/src/cost.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/cost.rs).
+Source: [`crates/hm-llm/src/cost.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/cost.rs).
 
 When to use: Use `PriceEntry` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5374,7 +5374,7 @@ pub struct PriceEntry {
 
 <a id="rust-crates-hm-llm-src-cost-rs-runcost"></a>
 
-Source: [`crates/hm-llm/src/cost.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/cost.rs).
+Source: [`crates/hm-llm/src/cost.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/cost.rs).
 
 When to use: Use `RunCost` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5396,7 +5396,7 @@ pub struct RunCost {
 
 <a id="rust-crates-hm-llm-src-cost-rs-runbudget"></a>
 
-Source: [`crates/hm-llm/src/cost.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/cost.rs).
+Source: [`crates/hm-llm/src/cost.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/cost.rs).
 
 When to use: Use `RunBudget` for budgeted provider requests, structured responses, prompt identities, and measured usage. Set explicit deployment limits before opening the associated resource.
 
@@ -5415,7 +5415,7 @@ pub struct RunBudget {
 
 <a id="rust-crates-hm-llm-src-gemini-rs-gemini"></a>
 
-Source: [`crates/hm-llm/src/gemini.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/gemini.rs).
+Source: [`crates/hm-llm/src/gemini.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/gemini.rs).
 
 When to use: Use `Gemini` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5433,7 +5433,7 @@ pub struct Gemini<T> {
 
 <a id="rust-crates-hm-llm-src-lib-rs-modeltier"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `ModelTier` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5452,7 +5452,7 @@ pub enum ModelTier {
 
 <a id="rust-crates-hm-llm-src-lib-rs-pricing"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `Pricing` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5470,7 +5470,7 @@ pub struct Pricing {
 
 <a id="rust-crates-hm-llm-src-lib-rs-usage"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `Usage` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5491,7 +5491,7 @@ pub struct Usage {
 
 <a id="rust-crates-hm-llm-src-lib-rs-structuredrequest"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `StructuredRequest` for budgeted provider requests, structured responses, prompt identities, and measured usage. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5512,7 +5512,7 @@ pub struct StructuredRequest {
 
 <a id="rust-crates-hm-llm-src-lib-rs-structuredresponse"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `StructuredResponse` for budgeted provider requests, structured responses, prompt identities, and measured usage. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -5532,7 +5532,7 @@ pub struct StructuredResponse {
 
 <a id="rust-crates-hm-llm-src-lib-rs-llmerror"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `LlmError` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5553,7 +5553,7 @@ pub enum LlmError {
 
 <a id="rust-crates-hm-llm-src-lib-rs-llmprovider"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `LlmProvider` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5575,7 +5575,7 @@ pub trait LlmProvider: Send + Sync {
 
 <a id="rust-crates-hm-llm-src-lib-rs-providerconfig"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `ProviderConfig` for budgeted provider requests, structured responses, prompt identities, and measured usage. Set explicit deployment limits before opening the associated resource.
 
@@ -5596,7 +5596,7 @@ pub struct ProviderConfig {
 
 <a id="rust-crates-hm-llm-src-lib-rs-wirerequest"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `WireRequest` for budgeted provider requests, structured responses, prompt identities, and measured usage. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5616,7 +5616,7 @@ pub struct WireRequest {
 
 <a id="rust-crates-hm-llm-src-lib-rs-wireresponse"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `WireResponse` for budgeted provider requests, structured responses, prompt identities, and measured usage. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -5634,7 +5634,7 @@ pub struct WireResponse {
 
 <a id="rust-crates-hm-llm-src-lib-rs-wiretransport"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `WireTransport` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5651,7 +5651,7 @@ pub trait WireTransport: Send + Sync {
 
 <a id="rust-crates-hm-llm-src-lib-rs-wirefixture"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `WireFixture` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5669,7 +5669,7 @@ pub struct WireFixture {
 
 <a id="rust-crates-hm-llm-src-lib-rs-recordedtransport"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `RecordedTransport` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5686,7 +5686,7 @@ pub struct RecordedTransport {
 
 <a id="rust-crates-hm-llm-src-lib-rs-httptransport"></a>
 
-Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/lib.rs).
+Source: [`crates/hm-llm/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/lib.rs).
 
 When to use: Use `HttpTransport` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5703,7 +5703,7 @@ pub struct HttpTransport {
 
 <a id="rust-crates-hm-llm-src-ollama-rs-ollama"></a>
 
-Source: [`crates/hm-llm/src/ollama.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/ollama.rs).
+Source: [`crates/hm-llm/src/ollama.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/ollama.rs).
 
 When to use: Use `Ollama` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5721,7 +5721,7 @@ pub struct Ollama<T> {
 
 <a id="rust-crates-hm-llm-src-openai-compat-rs-openaicompatible"></a>
 
-Source: [`crates/hm-llm/src/openai_compat.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/openai_compat.rs).
+Source: [`crates/hm-llm/src/openai_compat.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/openai_compat.rs).
 
 When to use: Use `OpenAiCompatible` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5739,7 +5739,7 @@ pub struct OpenAiCompatible<T> {
 
 <a id="rust-crates-hm-llm-src-registry-rs-prompt"></a>
 
-Source: [`crates/hm-llm/src/registry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/registry.rs).
+Source: [`crates/hm-llm/src/registry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/registry.rs).
 
 When to use: Use `Prompt` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5759,7 +5759,7 @@ pub struct Prompt {
 
 <a id="rust-crates-hm-llm-src-registry-rs-promptregistry"></a>
 
-Source: [`crates/hm-llm/src/registry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-llm/src/registry.rs).
+Source: [`crates/hm-llm/src/registry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-llm/src/registry.rs).
 
 When to use: Use `PromptRegistry` for budgeted provider requests, structured responses, prompt identities, and measured usage.
 
@@ -5776,7 +5776,7 @@ pub struct PromptRegistry {
 
 <a id="rust-crates-hm-mcp-src-dispatcher-rs-mcptooldispatcher"></a>
 
-Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/dispatcher.rs).
+Source: [`crates/hm-mcp/src/dispatcher.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/dispatcher.rs).
 
 When to use: Use `McpToolDispatcher` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -5795,7 +5795,7 @@ pub struct McpToolDispatcher {
 
 <a id="rust-crates-hm-mcp-src-lib-rs-envelope"></a>
 
-Source: [`crates/hm-mcp/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/lib.rs).
+Source: [`crates/hm-mcp/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/lib.rs).
 
 When to use: Use `Envelope` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -5820,7 +5820,7 @@ pub struct Envelope {
 
 <a id="rust-crates-hm-mcp-src-lib-rs-activateinput"></a>
 
-Source: [`crates/hm-mcp/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/lib.rs).
+Source: [`crates/hm-mcp/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/lib.rs).
 
 When to use: Use `ActivateInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5842,7 +5842,7 @@ pub struct ActivateInput {
 
 <a id="rust-crates-hm-mcp-src-lib-rs-mcpserver"></a>
 
-Source: [`crates/hm-mcp/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/lib.rs).
+Source: [`crates/hm-mcp/src/lib.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/lib.rs).
 
 When to use: Use `McpServer` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -5864,7 +5864,7 @@ pub struct McpServer {
 
 <a id="rust-crates-hm-mcp-src-tools-attest-rs-attestdisposition"></a>
 
-Source: [`crates/hm-mcp/src/tools/attest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/attest.rs).
+Source: [`crates/hm-mcp/src/tools/attest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/attest.rs).
 
 When to use: Use `AttestDisposition` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -5884,7 +5884,7 @@ pub enum AttestDisposition {
 
 <a id="rust-crates-hm-mcp-src-tools-attest-rs-attestinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/attest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/attest.rs).
+Source: [`crates/hm-mcp/src/tools/attest.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/attest.rs).
 
 When to use: Use `AttestInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5903,7 +5903,7 @@ pub struct AttestInput {
 
 <a id="rust-crates-hm-mcp-src-tools-believe-rs-belieftypeinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/believe.rs).
+Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/believe.rs).
 
 When to use: Use `BeliefTypeInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5924,7 +5924,7 @@ pub enum BeliefTypeInput {
 
 <a id="rust-crates-hm-mcp-src-tools-believe-rs-claiminput"></a>
 
-Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/believe.rs).
+Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/believe.rs).
 
 When to use: Use `ClaimInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5943,7 +5943,7 @@ pub enum ClaimInput {
 
 <a id="rust-crates-hm-mcp-src-tools-believe-rs-provenanceinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/believe.rs).
+Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/believe.rs).
 
 When to use: Use `ProvenanceInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5964,7 +5964,7 @@ pub struct ProvenanceInput {
 
 <a id="rust-crates-hm-mcp-src-tools-believe-rs-beliefclaiminput"></a>
 
-Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/believe.rs).
+Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/believe.rs).
 
 When to use: Use `BeliefClaimInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -5993,7 +5993,7 @@ pub struct BeliefClaimInput {
 
 <a id="rust-crates-hm-mcp-src-tools-believe-rs-believeinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/believe.rs).
+Source: [`crates/hm-mcp/src/tools/believe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/believe.rs).
 
 When to use: Use `BelieveInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6014,7 +6014,7 @@ pub struct BelieveInput {
 
 <a id="rust-crates-hm-mcp-src-tools-bind-rs-bindinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/bind.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/bind.rs).
+Source: [`crates/hm-mcp/src/tools/bind.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/bind.rs).
 
 When to use: Use `BindInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6040,7 +6040,7 @@ pub struct BindInput {
 
 <a id="rust-crates-hm-mcp-src-tools-consolidate-rs-consolidationruntime"></a>
 
-Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/consolidate.rs).
+Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/consolidate.rs).
 
 When to use: Use `ConsolidationRuntime` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6057,7 +6057,7 @@ pub struct ConsolidationRuntime {
 
 <a id="rust-crates-hm-mcp-src-tools-consolidate-rs-consolidateaction"></a>
 
-Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/consolidate.rs).
+Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/consolidate.rs).
 
 When to use: Use `ConsolidateAction` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6076,7 +6076,7 @@ pub enum ConsolidateAction {
 
 <a id="rust-crates-hm-mcp-src-tools-consolidate-rs-consolidatemode"></a>
 
-Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/consolidate.rs).
+Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/consolidate.rs).
 
 When to use: Use `ConsolidateMode` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6095,7 +6095,7 @@ pub enum ConsolidateMode {
 
 <a id="rust-crates-hm-mcp-src-tools-consolidate-rs-consolidatebudget"></a>
 
-Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/consolidate.rs).
+Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/consolidate.rs).
 
 When to use: Use `ConsolidateBudget` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Set explicit deployment limits before opening the associated resource.
 
@@ -6115,7 +6115,7 @@ pub struct ConsolidateBudget {
 
 <a id="rust-crates-hm-mcp-src-tools-consolidate-rs-consolidateinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/consolidate.rs).
+Source: [`crates/hm-mcp/src/tools/consolidate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/consolidate.rs).
 
 When to use: Use `ConsolidateInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6144,7 +6144,7 @@ pub struct ConsolidateInput {
 
 <a id="rust-crates-hm-mcp-src-tools-dispute-rs-disputeruntime"></a>
 
-Source: [`crates/hm-mcp/src/tools/dispute.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/dispute.rs).
+Source: [`crates/hm-mcp/src/tools/dispute.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/dispute.rs).
 
 When to use: Use `DisputeRuntime` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6163,7 +6163,7 @@ pub struct DisputeRuntime {
 
 <a id="rust-crates-hm-mcp-src-tools-dispute-rs-disputeinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/dispute.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/dispute.rs).
+Source: [`crates/hm-mcp/src/tools/dispute.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/dispute.rs).
 
 When to use: Use `DisputeInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6182,7 +6182,7 @@ pub struct DisputeInput {
 
 <a id="rust-crates-hm-mcp-src-tools-forget-rs-forgetaction"></a>
 
-Source: [`crates/hm-mcp/src/tools/forget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/forget.rs).
+Source: [`crates/hm-mcp/src/tools/forget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/forget.rs).
 
 When to use: Use `ForgetAction` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6201,7 +6201,7 @@ pub enum ForgetAction {
 
 <a id="rust-crates-hm-mcp-src-tools-forget-rs-forgetinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/forget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/forget.rs).
+Source: [`crates/hm-mcp/src/tools/forget.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/forget.rs).
 
 When to use: Use `ForgetInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6224,7 +6224,7 @@ pub struct ForgetInput {
 
 <a id="rust-crates-hm-mcp-src-tools-inspect-rs-inspectinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/inspect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/inspect.rs).
+Source: [`crates/hm-mcp/src/tools/inspect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/inspect.rs).
 
 When to use: Use `InspectInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6242,7 +6242,7 @@ pub struct InspectInput {
 
 <a id="rust-crates-hm-mcp-src-tools-intend-rs-intendclosereason"></a>
 
-Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/intend.rs).
+Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/intend.rs).
 
 When to use: Use `IntendCloseReason` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6262,7 +6262,7 @@ pub enum IntendCloseReason {
 
 <a id="rust-crates-hm-mcp-src-tools-intend-rs-intendaction"></a>
 
-Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/intend.rs).
+Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/intend.rs).
 
 When to use: Use `IntendAction` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6314,7 +6314,7 @@ pub enum IntendAction {
 
 <a id="rust-crates-hm-mcp-src-tools-intend-rs-waketriggerinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/intend.rs).
+Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/intend.rs).
 
 When to use: Use `WakeTriggerInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6343,7 +6343,7 @@ pub enum WakeTriggerInput {
 
 <a id="rust-crates-hm-mcp-src-tools-intend-rs-attentionfactorsinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/intend.rs).
+Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/intend.rs).
 
 When to use: Use `AttentionFactorsInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6368,7 +6368,7 @@ pub struct AttentionFactorsInput {
 
 <a id="rust-crates-hm-mcp-src-tools-intend-rs-intendinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/intend.rs).
+Source: [`crates/hm-mcp/src/tools/intend.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/intend.rs).
 
 When to use: Use `IntendInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6386,7 +6386,7 @@ pub struct IntendInput {
 
 <a id="rust-crates-hm-mcp-src-tools-outcome-rs-outcomeinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/outcome.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/outcome.rs).
+Source: [`crates/hm-mcp/src/tools/outcome.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/outcome.rs).
 
 When to use: Use `OutcomeInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6406,7 +6406,7 @@ pub struct OutcomeInput {
 
 <a id="rust-crates-hm-mcp-src-tools-predict-rs-predicatekindinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/predict.rs).
+Source: [`crates/hm-mcp/src/tools/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/predict.rs).
 
 When to use: Use `PredicateKindInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6429,7 +6429,7 @@ pub enum PredicateKindInput {
 
 <a id="rust-crates-hm-mcp-src-tools-predict-rs-expectedpredicateinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/predict.rs).
+Source: [`crates/hm-mcp/src/tools/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/predict.rs).
 
 When to use: Use `ExpectedPredicateInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6451,7 +6451,7 @@ pub struct ExpectedPredicateInput {
 
 <a id="rust-crates-hm-mcp-src-tools-predict-rs-predictinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/predict.rs).
+Source: [`crates/hm-mcp/src/tools/predict.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/predict.rs).
 
 When to use: Use `PredictInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6480,7 +6480,7 @@ pub struct PredictInput {
 
 <a id="rust-crates-hm-mcp-src-tools-recall-rs-recallmode"></a>
 
-Source: [`crates/hm-mcp/src/tools/recall.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/recall.rs).
+Source: [`crates/hm-mcp/src/tools/recall.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/recall.rs).
 
 When to use: Use `RecallMode` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6503,7 +6503,7 @@ pub enum RecallMode {
 
 <a id="rust-crates-hm-mcp-src-tools-recall-rs-recallfilters"></a>
 
-Source: [`crates/hm-mcp/src/tools/recall.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/recall.rs).
+Source: [`crates/hm-mcp/src/tools/recall.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/recall.rs).
 
 When to use: Use `RecallFilters` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6537,7 +6537,7 @@ pub struct RecallFilters {
 
 <a id="rust-crates-hm-mcp-src-tools-recall-rs-recallinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/recall.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/recall.rs).
+Source: [`crates/hm-mcp/src/tools/recall.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/recall.rs).
 
 When to use: Use `RecallInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6564,7 +6564,7 @@ pub struct RecallInput {
 
 <a id="rust-crates-hm-mcp-src-tools-reconstruct-rs-reconstructionruntime"></a>
 
-Source: [`crates/hm-mcp/src/tools/reconstruct.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/reconstruct.rs).
+Source: [`crates/hm-mcp/src/tools/reconstruct.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/reconstruct.rs).
 
 When to use: Use `ReconstructionRuntime` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6581,7 +6581,7 @@ pub struct ReconstructionRuntime {
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-embeddingruntime"></a>
 
-Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/remember.rs).
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
 
 When to use: Use `EmbeddingRuntime` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6598,7 +6598,7 @@ pub struct EmbeddingRuntime {
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberkind"></a>
 
-Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/remember.rs).
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
 
 When to use: Use `RememberKind` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6617,7 +6617,7 @@ pub enum RememberKind {
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-anchorfacet"></a>
 
-Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/remember.rs).
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
 
 When to use: Use `AnchorFacet` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6637,7 +6637,7 @@ pub enum AnchorFacet {
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberanchor"></a>
 
-Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/remember.rs).
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
 
 When to use: Use `RememberAnchor` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
 
@@ -6655,7 +6655,7 @@ pub struct RememberAnchor {
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-retentioninput"></a>
 
-Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/remember.rs).
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
 
 When to use: Use `RetentionInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6675,7 +6675,7 @@ pub enum RetentionInput {
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-sensitivityinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/remember.rs).
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
 
 When to use: Use `SensitivityInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6694,7 +6694,7 @@ pub enum SensitivityInput {
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-rememberinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/remember.rs).
+Source: [`crates/hm-mcp/src/tools/remember.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/remember.rs).
 
 When to use: Use `RememberInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6721,7 +6721,7 @@ pub struct RememberInput {
 
 <a id="rust-crates-hm-mcp-src-tools-retract-rs-retractinput"></a>
 
-Source: [`crates/hm-mcp/src/tools/retract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-mcp/src/tools/retract.rs).
+Source: [`crates/hm-mcp/src/tools/retract.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/retract.rs).
 
 When to use: Use `RetractInput` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -6740,7 +6740,7 @@ pub struct RetractInput {
 
 <a id="rust-crates-hm-proj-src-attention-rs-attentionrecord"></a>
 
-Source: [`crates/hm-proj/src/attention.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/attention.rs).
+Source: [`crates/hm-proj/src/attention.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/attention.rs).
 
 When to use: Use `AttentionRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6761,7 +6761,7 @@ pub struct AttentionRecord {
 
 <a id="rust-crates-hm-proj-src-attention-rs-attentionprojection"></a>
 
-Source: [`crates/hm-proj/src/attention.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/attention.rs).
+Source: [`crates/hm-proj/src/attention.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/attention.rs).
 
 When to use: Use `AttentionProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6776,7 +6776,7 @@ pub struct AttentionProjection;
 
 <a id="rust-crates-hm-proj-src-attestations-rs-attestationrecord"></a>
 
-Source: [`crates/hm-proj/src/attestations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/attestations.rs).
+Source: [`crates/hm-proj/src/attestations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/attestations.rs).
 
 When to use: Use `AttestationRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6798,7 +6798,7 @@ pub struct AttestationRecord {
 
 <a id="rust-crates-hm-proj-src-attestations-rs-attestationsprojection"></a>
 
-Source: [`crates/hm-proj/src/attestations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/attestations.rs).
+Source: [`crates/hm-proj/src/attestations.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/attestations.rs).
 
 When to use: Use `AttestationsProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6813,7 +6813,7 @@ pub struct AttestationsProjection;
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-beliefprovenance"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `BeliefProvenance` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6833,7 +6833,7 @@ pub struct BeliefProvenance {
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-beliefconflictedge"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `BeliefConflictEdge` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6854,7 +6854,7 @@ pub struct BeliefConflictEdge {
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-beliefrecord"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `BeliefRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6886,7 +6886,7 @@ pub struct BeliefRecord {
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-pendingproposal"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `PendingProposal` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6915,7 +6915,7 @@ pub struct PendingProposal {
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-beliefasof"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `BeliefAsOf` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6933,7 +6933,7 @@ pub enum BeliefAsOf {
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-beliefasofaxis"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `BeliefAsOfAxis` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6951,7 +6951,7 @@ pub enum BeliefAsOfAxis {
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-beliefasofresult"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `BeliefAsOfResult` for snapshot reads and deterministic materialization of already-committed ledger events. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -6969,7 +6969,7 @@ pub struct BeliefAsOfResult {
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-beliefrebuildprogress"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `BeliefRebuildProgress` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -6988,7 +6988,7 @@ pub struct BeliefRebuildProgress {
 
 <a id="rust-crates-hm-proj-src-beliefs-rs-beliefprojection"></a>
 
-Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/beliefs.rs).
+Source: [`crates/hm-proj/src/beliefs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/beliefs.rs).
 
 When to use: Use `BeliefProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7003,7 +7003,7 @@ pub struct BeliefProjection;
 
 <a id="rust-crates-hm-proj-src-bindings-rs-bindingtarget"></a>
 
-Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/bindings.rs).
+Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/bindings.rs).
 
 When to use: Use `BindingTarget` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7021,7 +7021,7 @@ pub enum BindingTarget {
 
 <a id="rust-crates-hm-proj-src-bindings-rs-bindingrecord"></a>
 
-Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/bindings.rs).
+Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/bindings.rs).
 
 When to use: Use `BindingRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7045,7 +7045,7 @@ pub struct BindingRecord {
 
 <a id="rust-crates-hm-proj-src-bindings-rs-bindingrequirement"></a>
 
-Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/bindings.rs).
+Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/bindings.rs).
 
 When to use: Use `BindingRequirement` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7065,7 +7065,7 @@ pub struct BindingRequirement {
 
 <a id="rust-crates-hm-proj-src-bindings-rs-bindingstatus"></a>
 
-Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/bindings.rs).
+Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/bindings.rs).
 
 When to use: Use `BindingStatus` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7085,7 +7085,7 @@ pub enum BindingStatus {
 
 <a id="rust-crates-hm-proj-src-bindings-rs-bindingresolution"></a>
 
-Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/bindings.rs).
+Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/bindings.rs).
 
 When to use: Use `BindingResolution` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7104,7 +7104,7 @@ pub struct BindingResolution {
 
 <a id="rust-crates-hm-proj-src-bindings-rs-bindingsrebuildprogress"></a>
 
-Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/bindings.rs).
+Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/bindings.rs).
 
 When to use: Use `BindingsRebuildProgress` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7123,7 +7123,7 @@ pub struct BindingsRebuildProgress {
 
 <a id="rust-crates-hm-proj-src-bindings-rs-bindingsprojection"></a>
 
-Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/bindings.rs).
+Source: [`crates/hm-proj/src/bindings.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/bindings.rs).
 
 When to use: Use `BindingsProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7138,7 +7138,7 @@ pub struct BindingsProjection;
 
 <a id="rust-crates-hm-proj-src-checkpoint-rs-checkpointread"></a>
 
-Source: [`crates/hm-proj/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/checkpoint.rs).
+Source: [`crates/hm-proj/src/checkpoint.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/checkpoint.rs).
 
 When to use: Use `CheckpointRead` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7156,7 +7156,7 @@ pub struct CheckpointRead {
 
 <a id="rust-crates-hm-proj-src-entities-rs-entityhit"></a>
 
-Source: [`crates/hm-proj/src/entities.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/entities.rs).
+Source: [`crates/hm-proj/src/entities.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/entities.rs).
 
 When to use: Use `EntityHit` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7174,7 +7174,7 @@ pub struct EntityHit {
 
 <a id="rust-crates-hm-proj-src-entities-rs-entityprojection"></a>
 
-Source: [`crates/hm-proj/src/entities.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/entities.rs).
+Source: [`crates/hm-proj/src/entities.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/entities.rs).
 
 When to use: Use `EntityProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7189,7 +7189,7 @@ pub struct EntityProjection;
 
 <a id="rust-crates-hm-proj-src-fsrs-rs-fsrsstate"></a>
 
-Source: [`crates/hm-proj/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/fsrs.rs).
+Source: [`crates/hm-proj/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/fsrs.rs).
 
 When to use: Use `FsrsState` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7215,7 +7215,7 @@ pub struct FsrsState {
 
 <a id="rust-crates-hm-proj-src-fsrs-rs-fsrsprojection"></a>
 
-Source: [`crates/hm-proj/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/fsrs.rs).
+Source: [`crates/hm-proj/src/fsrs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/fsrs.rs).
 
 When to use: Use `FsrsProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7230,7 +7230,7 @@ pub struct FsrsProjection;
 
 <a id="rust-crates-hm-proj-src-generation-rs-generationprojection"></a>
 
-Source: [`crates/hm-proj/src/generation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/generation.rs).
+Source: [`crates/hm-proj/src/generation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/generation.rs).
 
 When to use: Use `GenerationProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7245,7 +7245,7 @@ pub struct GenerationProjection;
 
 <a id="rust-crates-hm-proj-src-graph-rs-edgecitation"></a>
 
-Source: [`crates/hm-proj/src/graph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/graph.rs).
+Source: [`crates/hm-proj/src/graph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/graph.rs).
 
 When to use: Use `EdgeCitation` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7265,7 +7265,7 @@ pub struct EdgeCitation {
 
 <a id="rust-crates-hm-proj-src-graph-rs-edgerecord"></a>
 
-Source: [`crates/hm-proj/src/graph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/graph.rs).
+Source: [`crates/hm-proj/src/graph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/graph.rs).
 
 When to use: Use `EdgeRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7299,7 +7299,7 @@ pub struct EdgeRecord {
 
 <a id="rust-crates-hm-proj-src-graph-rs-graphprojection"></a>
 
-Source: [`crates/hm-proj/src/graph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/graph.rs).
+Source: [`crates/hm-proj/src/graph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/graph.rs).
 
 When to use: Use `GraphProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7314,7 +7314,7 @@ pub struct GraphProjection;
 
 <a id="rust-crates-hm-proj-src-intent-rs-loopclosure"></a>
 
-Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intent.rs).
+Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intent.rs).
 
 When to use: Use `LoopClosure` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7334,7 +7334,7 @@ pub enum LoopClosure {
 
 <a id="rust-crates-hm-proj-src-intent-rs-intentobjective"></a>
 
-Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intent.rs).
+Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intent.rs).
 
 When to use: Use `IntentObjective` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7352,7 +7352,7 @@ pub struct IntentObjective {
 
 <a id="rust-crates-hm-proj-src-intent-rs-openloop"></a>
 
-Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intent.rs).
+Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intent.rs).
 
 When to use: Use `OpenLoop` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7371,7 +7371,7 @@ pub struct OpenLoop {
 
 <a id="rust-crates-hm-proj-src-intent-rs-closedloop"></a>
 
-Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intent.rs).
+Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intent.rs).
 
 When to use: Use `ClosedLoop` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7393,7 +7393,7 @@ pub struct ClosedLoop {
 
 <a id="rust-crates-hm-proj-src-intent-rs-intentframeview"></a>
 
-Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intent.rs).
+Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intent.rs).
 
 When to use: Use `IntentFrameView` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7411,7 +7411,7 @@ pub struct IntentFrameView {
 
 <a id="rust-crates-hm-proj-src-intent-rs-intentrebuildprogress"></a>
 
-Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intent.rs).
+Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intent.rs).
 
 When to use: Use `IntentRebuildProgress` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7430,7 +7430,7 @@ pub struct IntentRebuildProgress {
 
 <a id="rust-crates-hm-proj-src-intent-rs-intentframeprojection"></a>
 
-Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intent.rs).
+Source: [`crates/hm-proj/src/intent.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intent.rs).
 
 When to use: Use `IntentFrameProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7445,7 +7445,7 @@ pub struct IntentFrameProjection;
 
 <a id="rust-crates-hm-proj-src-intentions-rs-triggerkind"></a>
 
-Source: [`crates/hm-proj/src/intentions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intentions.rs).
+Source: [`crates/hm-proj/src/intentions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intentions.rs).
 
 When to use: Use `TriggerKind` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7474,7 +7474,7 @@ pub enum TriggerKind {
 
 <a id="rust-crates-hm-proj-src-intentions-rs-intentionstatus"></a>
 
-Source: [`crates/hm-proj/src/intentions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intentions.rs).
+Source: [`crates/hm-proj/src/intentions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intentions.rs).
 
 When to use: Use `IntentionStatus` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7493,7 +7493,7 @@ pub enum IntentionStatus {
 
 <a id="rust-crates-hm-proj-src-intentions-rs-intentionrecord"></a>
 
-Source: [`crates/hm-proj/src/intentions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intentions.rs).
+Source: [`crates/hm-proj/src/intentions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intentions.rs).
 
 When to use: Use `IntentionRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7521,7 +7521,7 @@ pub struct IntentionRecord {
 
 <a id="rust-crates-hm-proj-src-intentions-rs-intentionsprojection"></a>
 
-Source: [`crates/hm-proj/src/intentions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/intentions.rs).
+Source: [`crates/hm-proj/src/intentions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/intentions.rs).
 
 When to use: Use `IntentionsProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7536,7 +7536,7 @@ pub struct IntentionsProjection;
 
 <a id="rust-crates-hm-proj-src-ladder-rs-temporallevel"></a>
 
-Source: [`crates/hm-proj/src/ladder.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ladder.rs).
+Source: [`crates/hm-proj/src/ladder.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ladder.rs).
 
 When to use: Use `TemporalLevel` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7556,7 +7556,7 @@ pub enum TemporalLevel {
 
 <a id="rust-crates-hm-proj-src-ladder-rs-temporalwindow"></a>
 
-Source: [`crates/hm-proj/src/ladder.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ladder.rs).
+Source: [`crates/hm-proj/src/ladder.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ladder.rs).
 
 When to use: Use `TemporalWindow` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7576,7 +7576,7 @@ pub struct TemporalWindow {
 
 <a id="rust-crates-hm-proj-src-ladder-rs-temporalrebuildprogress"></a>
 
-Source: [`crates/hm-proj/src/ladder.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ladder.rs).
+Source: [`crates/hm-proj/src/ladder.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ladder.rs).
 
 When to use: Use `TemporalRebuildProgress` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7595,7 +7595,7 @@ pub struct TemporalRebuildProgress {
 
 <a id="rust-crates-hm-proj-src-ladder-rs-temporalladder"></a>
 
-Source: [`crates/hm-proj/src/ladder.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ladder.rs).
+Source: [`crates/hm-proj/src/ladder.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ladder.rs).
 
 When to use: Use `TemporalLadder` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7610,7 +7610,7 @@ pub struct TemporalLadder;
 
 <a id="rust-crates-hm-proj-src-lease-rs-generationlease"></a>
 
-Source: [`crates/hm-proj/src/lease.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/lease.rs).
+Source: [`crates/hm-proj/src/lease.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/lease.rs).
 
 When to use: Use `GenerationLease` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7629,7 +7629,7 @@ pub struct GenerationLease {
 
 <a id="rust-crates-hm-proj-src-lease-rs-leasemanager"></a>
 
-Source: [`crates/hm-proj/src/lease.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/lease.rs).
+Source: [`crates/hm-proj/src/lease.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/lease.rs).
 
 When to use: Use `LeaseManager` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7647,7 +7647,7 @@ pub struct LeaseManager {
 
 <a id="rust-crates-hm-proj-src-ledger-rs-workkind"></a>
 
-Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ledger.rs).
+Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ledger.rs).
 
 When to use: Use `WorkKind` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7665,7 +7665,7 @@ pub enum WorkKind {
 
 <a id="rust-crates-hm-proj-src-ledger-rs-workstate"></a>
 
-Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ledger.rs).
+Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ledger.rs).
 
 When to use: Use `WorkState` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7685,7 +7685,7 @@ pub enum WorkState {
 
 <a id="rust-crates-hm-proj-src-ledger-rs-workitem"></a>
 
-Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ledger.rs).
+Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ledger.rs).
 
 When to use: Use `WorkItem` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7711,7 +7711,7 @@ pub struct WorkItem {
 
 <a id="rust-crates-hm-proj-src-ledger-rs-ledgerrebuildprogress"></a>
 
-Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ledger.rs).
+Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ledger.rs).
 
 When to use: Use `LedgerRebuildProgress` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7730,7 +7730,7 @@ pub struct LedgerRebuildProgress {
 
 <a id="rust-crates-hm-proj-src-ledger-rs-workledgerprojection"></a>
 
-Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/ledger.rs).
+Source: [`crates/hm-proj/src/ledger.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/ledger.rs).
 
 When to use: Use `WorkLedgerProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7745,7 +7745,7 @@ pub struct WorkLedgerProjection;
 
 <a id="rust-crates-hm-proj-src-lexical-rs-lexicalhit"></a>
 
-Source: [`crates/hm-proj/src/lexical.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/lexical.rs).
+Source: [`crates/hm-proj/src/lexical.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/lexical.rs).
 
 When to use: Use `LexicalHit` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7763,7 +7763,7 @@ pub struct LexicalHit {
 
 <a id="rust-crates-hm-proj-src-lexical-rs-lexicalprojection"></a>
 
-Source: [`crates/hm-proj/src/lexical.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/lexical.rs).
+Source: [`crates/hm-proj/src/lexical.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/lexical.rs).
 
 When to use: Use `LexicalProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7778,7 +7778,7 @@ pub struct LexicalProjection;
 
 <a id="rust-crates-hm-proj-src-memories-rs-memorycitation"></a>
 
-Source: [`crates/hm-proj/src/memories.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/memories.rs).
+Source: [`crates/hm-proj/src/memories.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/memories.rs).
 
 When to use: Use `MemoryCitation` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7798,7 +7798,7 @@ pub struct MemoryCitation {
 
 <a id="rust-crates-hm-proj-src-memories-rs-memorymodelprovenance"></a>
 
-Source: [`crates/hm-proj/src/memories.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/memories.rs).
+Source: [`crates/hm-proj/src/memories.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/memories.rs).
 
 When to use: Use `MemoryModelProvenance` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7823,7 +7823,7 @@ pub struct MemoryModelProvenance {
 
 <a id="rust-crates-hm-proj-src-memories-rs-memoryrecord"></a>
 
-Source: [`crates/hm-proj/src/memories.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/memories.rs).
+Source: [`crates/hm-proj/src/memories.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/memories.rs).
 
 When to use: Use `MemoryRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7852,7 +7852,7 @@ pub struct MemoryRecord {
 
 <a id="rust-crates-hm-proj-src-memories-rs-memoryprojection"></a>
 
-Source: [`crates/hm-proj/src/memories.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/memories.rs).
+Source: [`crates/hm-proj/src/memories.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/memories.rs).
 
 When to use: Use `MemoryProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7867,7 +7867,7 @@ pub struct MemoryProjection;
 
 <a id="rust-crates-hm-proj-src-predictions-rs-predictionrecord"></a>
 
-Source: [`crates/hm-proj/src/predictions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/predictions.rs).
+Source: [`crates/hm-proj/src/predictions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/predictions.rs).
 
 When to use: Use `PredictionRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7897,7 +7897,7 @@ pub struct PredictionRecord {
 
 <a id="rust-crates-hm-proj-src-predictions-rs-calibrationcounters"></a>
 
-Source: [`crates/hm-proj/src/predictions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/predictions.rs).
+Source: [`crates/hm-proj/src/predictions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/predictions.rs).
 
 When to use: Use `CalibrationCounters` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7918,7 +7918,7 @@ pub struct CalibrationCounters {
 
 <a id="rust-crates-hm-proj-src-predictions-rs-mechanismfailures"></a>
 
-Source: [`crates/hm-proj/src/predictions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/predictions.rs).
+Source: [`crates/hm-proj/src/predictions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/predictions.rs).
 
 When to use: Use `MechanismFailures` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7936,7 +7936,7 @@ pub struct MechanismFailures {
 
 <a id="rust-crates-hm-proj-src-predictions-rs-predictionsprojection"></a>
 
-Source: [`crates/hm-proj/src/predictions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/predictions.rs).
+Source: [`crates/hm-proj/src/predictions.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/predictions.rs).
 
 When to use: Use `PredictionsProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7951,7 +7951,7 @@ pub struct PredictionsProjection;
 
 <a id="rust-crates-hm-proj-src-procedures-rs-procedurestate"></a>
 
-Source: [`crates/hm-proj/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/procedures.rs).
+Source: [`crates/hm-proj/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/procedures.rs).
 
 When to use: Use `ProcedureState` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7970,7 +7970,7 @@ pub enum ProcedureState {
 
 <a id="rust-crates-hm-proj-src-procedures-rs-procedurerecord"></a>
 
-Source: [`crates/hm-proj/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/procedures.rs).
+Source: [`crates/hm-proj/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/procedures.rs).
 
 When to use: Use `ProcedureRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -7997,7 +7997,7 @@ pub struct ProcedureRecord {
 
 <a id="rust-crates-hm-proj-src-procedures-rs-proceduresprojection"></a>
 
-Source: [`crates/hm-proj/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/procedures.rs).
+Source: [`crates/hm-proj/src/procedures.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/procedures.rs).
 
 When to use: Use `ProceduresProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8012,7 +8012,7 @@ pub struct ProceduresProjection;
 
 <a id="rust-crates-hm-proj-src-protected-rs-securityevent"></a>
 
-Source: [`crates/hm-proj/src/protected.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/protected.rs).
+Source: [`crates/hm-proj/src/protected.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/protected.rs).
 
 When to use: Use `SecurityEvent` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8034,7 +8034,7 @@ pub struct SecurityEvent {
 
 <a id="rust-crates-hm-proj-src-rebuild-rs-rebuildprogress"></a>
 
-Source: [`crates/hm-proj/src/rebuild.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/rebuild.rs).
+Source: [`crates/hm-proj/src/rebuild.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/rebuild.rs).
 
 When to use: Use `RebuildProgress` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8053,7 +8053,7 @@ pub struct RebuildProgress {
 
 <a id="rust-crates-hm-proj-src-runs-rs-runstatus"></a>
 
-Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/runs.rs).
+Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/runs.rs).
 
 When to use: Use `RunStatus` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8072,7 +8072,7 @@ pub enum RunStatus {
 
 <a id="rust-crates-hm-proj-src-runs-rs-stagedprojection"></a>
 
-Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/runs.rs).
+Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/runs.rs).
 
 When to use: Use `StagedProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8091,7 +8091,7 @@ pub enum StagedProjection {
 
 <a id="rust-crates-hm-proj-src-runs-rs-promptrecord"></a>
 
-Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/runs.rs).
+Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/runs.rs).
 
 When to use: Use `PromptRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8110,7 +8110,7 @@ pub struct PromptRecord {
 
 <a id="rust-crates-hm-proj-src-runs-rs-budgetrecord"></a>
 
-Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/runs.rs).
+Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/runs.rs).
 
 When to use: Use `BudgetRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8130,7 +8130,7 @@ pub struct BudgetRecord {
 
 <a id="rust-crates-hm-proj-src-runs-rs-phaserecord"></a>
 
-Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/runs.rs).
+Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/runs.rs).
 
 When to use: Use `PhaseRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8156,7 +8156,7 @@ pub struct PhaseRecord {
 
 <a id="rust-crates-hm-proj-src-runs-rs-runrecord"></a>
 
-Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/runs.rs).
+Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/runs.rs).
 
 When to use: Use `RunRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8193,7 +8193,7 @@ pub struct RunRecord {
 
 <a id="rust-crates-hm-proj-src-runs-rs-runsprojection"></a>
 
-Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/runs.rs).
+Source: [`crates/hm-proj/src/runs.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/runs.rs).
 
 When to use: Use `RunsProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8208,7 +8208,7 @@ pub struct RunsProjection;
 
 <a id="rust-crates-hm-proj-src-spaces-rs-spacedefinition"></a>
 
-Source: [`crates/hm-proj/src/spaces.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/spaces.rs).
+Source: [`crates/hm-proj/src/spaces.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/spaces.rs).
 
 When to use: Use `SpaceDefinition` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8232,7 +8232,7 @@ pub struct SpaceDefinition {
 
 <a id="rust-crates-hm-proj-src-spaces-rs-spacecatalog"></a>
 
-Source: [`crates/hm-proj/src/spaces.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/spaces.rs).
+Source: [`crates/hm-proj/src/spaces.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/spaces.rs).
 
 When to use: Use `SpaceCatalog` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8249,7 +8249,7 @@ pub struct SpaceCatalog {
 
 <a id="rust-crates-hm-proj-src-store-rs-projectionid"></a>
 
-Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/store.rs).
+Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/store.rs).
 
 When to use: Use `ProjectionId` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8283,7 +8283,7 @@ pub enum ProjectionId {
 
 <a id="rust-crates-hm-proj-src-store-rs-mutationkind"></a>
 
-Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/store.rs).
+Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/store.rs).
 
 When to use: Use `MutationKind` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8301,7 +8301,7 @@ pub enum MutationKind {
 
 <a id="rust-crates-hm-proj-src-store-rs-mutation"></a>
 
-Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/store.rs).
+Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/store.rs).
 
 When to use: Use `Mutation` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8320,7 +8320,7 @@ pub struct Mutation {
 
 <a id="rust-crates-hm-proj-src-store-rs-keyvalue"></a>
 
-Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/store.rs).
+Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/store.rs).
 
 When to use: Use `KeyValue` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8338,7 +8338,7 @@ pub struct KeyValue {
 
 <a id="rust-crates-hm-proj-src-store-rs-projectionstore"></a>
 
-Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/store.rs).
+Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/store.rs).
 
 When to use: Use `ProjectionStore` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8358,7 +8358,7 @@ pub struct ProjectionStore {
 
 <a id="rust-crates-hm-proj-src-store-rs-readsnapshot"></a>
 
-Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/store.rs).
+Source: [`crates/hm-proj/src/store.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/store.rs).
 
 When to use: Use `ReadSnapshot` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8378,7 +8378,7 @@ pub struct ReadSnapshot<'environment> {
 
 <a id="rust-crates-hm-proj-src-timeline-rs-conversationrecord"></a>
 
-Source: [`crates/hm-proj/src/timeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/timeline.rs).
+Source: [`crates/hm-proj/src/timeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/timeline.rs).
 
 When to use: Use `ConversationRecord` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8399,7 +8399,7 @@ pub struct ConversationRecord {
 
 <a id="rust-crates-hm-proj-src-timeline-rs-latestrecordscan"></a>
 
-Source: [`crates/hm-proj/src/timeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/timeline.rs).
+Source: [`crates/hm-proj/src/timeline.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/timeline.rs).
 
 When to use: Use `LatestRecordScan` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8418,7 +8418,7 @@ pub struct LatestRecordScan {
 
 <a id="rust-crates-hm-proj-src-vectors-hnsw-rs-hnswprojection"></a>
 
-Source: [`crates/hm-proj/src/vectors_hnsw.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/vectors_hnsw.rs).
+Source: [`crates/hm-proj/src/vectors_hnsw.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vectors_hnsw.rs).
 
 When to use: Use `HnswProjection` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8439,7 +8439,7 @@ pub struct HnswProjection {
 
 <a id="rust-crates-hm-proj-src-vectors-rs-vectorhit"></a>
 
-Source: [`crates/hm-proj/src/vectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/vectors.rs).
+Source: [`crates/hm-proj/src/vectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vectors.rs).
 
 When to use: Use `VectorHit` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8458,7 +8458,7 @@ pub struct VectorHit {
 
 <a id="rust-crates-hm-proj-src-vectors-rs-vectorentry"></a>
 
-Source: [`crates/hm-proj/src/vectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/vectors.rs).
+Source: [`crates/hm-proj/src/vectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vectors.rs).
 
 When to use: Use `VectorEntry` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8477,7 +8477,7 @@ pub struct VectorEntry {
 
 <a id="rust-crates-hm-proj-src-vectors-rs-vectorlane"></a>
 
-Source: [`crates/hm-proj/src/vectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-proj/src/vectors.rs).
+Source: [`crates/hm-proj/src/vectors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-proj/src/vectors.rs).
 
 When to use: Use `VectorLane` for snapshot reads and deterministic materialization of already-committed ledger events.
 
@@ -8501,7 +8501,7 @@ pub struct VectorLane {
 
 <a id="rust-crates-hm-schema-src-event-rs-boundary"></a>
 
-Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-schema/src/event.rs).
+Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-schema/src/event.rs).
 
 When to use: Use `Boundary` for validated encoding and decoding at the versioned event or protocol boundary.
 
@@ -8520,7 +8520,7 @@ pub enum Boundary {
 
 <a id="rust-crates-hm-schema-src-event-rs-eventkind"></a>
 
-Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-schema/src/event.rs).
+Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-schema/src/event.rs).
 
 When to use: Use `EventKind` for validated encoding and decoding at the versioned event or protocol boundary.
 
@@ -8579,7 +8579,7 @@ pub enum EventKind {
 
 <a id="rust-crates-hm-schema-src-event-rs-historysource"></a>
 
-Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-schema/src/event.rs).
+Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-schema/src/event.rs).
 
 When to use: Use `HistorySource` for validated encoding and decoding at the versioned event or protocol boundary.
 
@@ -8599,7 +8599,7 @@ pub enum HistorySource {
 
 <a id="rust-crates-hm-schema-src-event-rs-eventhistory"></a>
 
-Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-schema/src/event.rs).
+Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-schema/src/event.rs).
 
 When to use: Use `EventHistory` for validated encoding and decoding at the versioned event or protocol boundary.
 
@@ -8624,7 +8624,7 @@ pub trait EventHistory {
 
 <a id="rust-crates-hm-schema-src-event-rs-verifiedevent"></a>
 
-Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-schema/src/event.rs).
+Source: [`crates/hm-schema/src/event.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-schema/src/event.rs).
 
 When to use: Use `VerifiedEvent` for validated encoding and decoding at the versioned event or protocol boundary.
 
@@ -8643,7 +8643,7 @@ pub struct VerifiedEvent {
 
 <a id="rust-crates-hm-schema-src-protocol-rs-verifiedrequest"></a>
 
-Source: [`crates/hm-schema/src/protocol.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-schema/src/protocol.rs).
+Source: [`crates/hm-schema/src/protocol.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-schema/src/protocol.rs).
 
 When to use: Use `VerifiedRequest` for validated encoding and decoding at the versioned event or protocol boundary. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -8661,7 +8661,7 @@ pub struct VerifiedRequest {
 
 <a id="rust-crates-hm-serve-src-actor-rs-actorconfig"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `ActorConfig` for actor ownership, embedded sessions, authenticated transports, and daemon request execution. Set explicit deployment limits before opening the associated resource.
 
@@ -8682,7 +8682,7 @@ pub struct ActorConfig {
 
 <a id="rust-crates-hm-serve-src-actor-rs-incomingevent"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `IncomingEvent` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8701,7 +8701,7 @@ pub struct IncomingEvent {
 
 <a id="rust-crates-hm-serve-src-actor-rs-appendoutcome"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `AppendOutcome` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8723,7 +8723,7 @@ pub struct AppendOutcome {
 
 <a id="rust-crates-hm-serve-src-actor-rs-checkpointoutcome"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `CheckpointOutcome` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8741,7 +8741,7 @@ pub struct CheckpointOutcome {
 
 <a id="rust-crates-hm-serve-src-actor-rs-integrityreceipt"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `IntegrityReceipt` for actor ownership, embedded sessions, authenticated transports, and daemon request execution. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -8761,7 +8761,7 @@ pub struct IntegrityReceipt {
 
 <a id="rust-crates-hm-serve-src-actor-rs-recallitem"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `RecallItem` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8783,7 +8783,7 @@ pub struct RecallItem {
 
 <a id="rust-crates-hm-serve-src-actor-rs-recallrequest"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `RecallRequest` for actor ownership, embedded sessions, authenticated transports, and daemon request execution. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -8834,7 +8834,7 @@ pub enum RecallRequest {
 
 <a id="rust-crates-hm-serve-src-actor-rs-activaterequest"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `ActivateRequest` for actor ownership, embedded sessions, authenticated transports, and daemon request execution. Supply the fields below to the owning operation; request data remains subject to its admission and capability checks.
 
@@ -8855,7 +8855,7 @@ pub struct ActivateRequest {
 
 <a id="rust-crates-hm-serve-src-actor-rs-appliedstate"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `AppliedState` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8874,7 +8874,7 @@ pub struct AppliedState {
 
 <a id="rust-crates-hm-serve-src-actor-rs-projectionstat"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `ProjectionStat` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8892,7 +8892,7 @@ pub struct ProjectionStat {
 
 <a id="rust-crates-hm-serve-src-actor-rs-actorstats"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `ActorStats` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8913,7 +8913,7 @@ pub struct ActorStats {
 
 <a id="rust-crates-hm-serve-src-actor-rs-actorengine"></a>
 
-Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/actor.rs).
+Source: [`crates/hm-serve/src/actor.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/actor.rs).
 
 When to use: Use `ActorEngine` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8932,7 +8932,7 @@ pub struct ActorEngine {
 
 <a id="rust-crates-hm-serve-src-admin-rs-latencyhistograms"></a>
 
-Source: [`crates/hm-serve/src/admin.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/admin.rs).
+Source: [`crates/hm-serve/src/admin.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/admin.rs).
 
 When to use: Use `LatencyHistograms` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8949,7 +8949,7 @@ pub struct LatencyHistograms {
 
 <a id="rust-crates-hm-serve-src-anticipation-rs-wakeevaluation"></a>
 
-Source: [`crates/hm-serve/src/anticipation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/anticipation.rs).
+Source: [`crates/hm-serve/src/anticipation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/anticipation.rs).
 
 When to use: Use `WakeEvaluation` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8967,7 +8967,7 @@ pub struct WakeEvaluation {
 
 <a id="rust-crates-hm-serve-src-anticipation-rs-wakedecision"></a>
 
-Source: [`crates/hm-serve/src/anticipation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/anticipation.rs).
+Source: [`crates/hm-serve/src/anticipation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/anticipation.rs).
 
 When to use: Use `WakeDecision` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -8990,7 +8990,7 @@ pub struct WakeDecision {
 
 <a id="rust-crates-hm-serve-src-auth-rs-principal"></a>
 
-Source: [`crates/hm-serve/src/auth.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/auth.rs).
+Source: [`crates/hm-serve/src/auth.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/auth.rs).
 
 When to use: Use `Principal` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9008,7 +9008,7 @@ pub enum Principal {
 
 <a id="rust-crates-hm-serve-src-config-rs-capabilitytoken"></a>
 
-Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/config.rs).
+Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/config.rs).
 
 When to use: Use `CapabilityToken` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9023,7 +9023,7 @@ pub type CapabilityToken = [u8;
 
 <a id="rust-crates-hm-serve-src-config-rs-actorcapability"></a>
 
-Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/config.rs).
+Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/config.rs).
 
 When to use: Use `ActorCapability` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9041,7 +9041,7 @@ pub struct ActorCapability {
 
 <a id="rust-crates-hm-serve-src-config-rs-serverconfig"></a>
 
-Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/config.rs).
+Source: [`crates/hm-serve/src/config.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/config.rs).
 
 When to use: Use `ServerConfig` for actor ownership, embedded sessions, authenticated transports, and daemon request execution. Set explicit deployment limits before opening the associated resource.
 
@@ -9067,7 +9067,7 @@ pub struct ServerConfig {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-embeddedconfig"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `EmbeddedConfig` for actor ownership, embedded sessions, authenticated transports, and daemon request execution. Set explicit deployment limits before opening the associated resource.
 
@@ -9087,7 +9087,7 @@ pub struct EmbeddedConfig {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-hypermind"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `HyperMind` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9104,7 +9104,7 @@ pub struct HyperMind {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-actor"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `Actor` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9121,7 +9121,7 @@ pub struct Actor {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-session"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `Session` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9139,7 +9139,7 @@ pub struct Session {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-memorykind"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `MemoryKind` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9157,7 +9157,7 @@ pub enum MemoryKind {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-rendermodel"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `RenderModel` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9176,7 +9176,7 @@ pub enum RenderModel {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-renderauthority"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `RenderAuthority` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9193,7 +9193,7 @@ pub enum RenderAuthority {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-rendereditem"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `RenderedItem` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9216,7 +9216,7 @@ pub struct RenderedItem {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-renderedsection"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `RenderedSection` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9234,7 +9234,7 @@ pub struct RenderedSection {
 
 <a id="rust-crates-hm-serve-src-embedded-rs-renderedbundle"></a>
 
-Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/embedded.rs).
+Source: [`crates/hm-serve/src/embedded.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/embedded.rs).
 
 When to use: Use `RenderedBundle` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9253,7 +9253,7 @@ pub struct RenderedBundle {
 
 <a id="rust-crates-hm-serve-src-errors-rs-mutationeffectstate"></a>
 
-Source: [`crates/hm-serve/src/errors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/errors.rs).
+Source: [`crates/hm-serve/src/errors.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/errors.rs).
 
 When to use: Use `MutationEffectState` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9272,7 +9272,7 @@ pub enum MutationEffectState {
 
 <a id="rust-crates-hm-serve-src-grpc-bridge-rs-listenerrole"></a>
 
-Source: [`crates/hm-serve/src/grpc/bridge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/grpc/bridge.rs).
+Source: [`crates/hm-serve/src/grpc/bridge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/grpc/bridge.rs).
 
 When to use: Use `ListenerRole` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9290,7 +9290,7 @@ pub enum ListenerRole {
 
 <a id="rust-crates-hm-serve-src-grpc-bridge-rs-gateway"></a>
 
-Source: [`crates/hm-serve/src/grpc/bridge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/grpc/bridge.rs).
+Source: [`crates/hm-serve/src/grpc/bridge.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/grpc/bridge.rs).
 
 When to use: Use `Gateway` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9309,7 +9309,7 @@ pub struct Gateway {
 
 <a id="rust-crates-hm-serve-src-grpc-mod-rs-grpcserver"></a>
 
-Source: [`crates/hm-serve/src/grpc/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/grpc/mod.rs).
+Source: [`crates/hm-serve/src/grpc/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/grpc/mod.rs).
 
 When to use: Use `GrpcServer` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9328,7 +9328,7 @@ pub struct GrpcServer {
 
 <a id="rust-crates-hm-serve-src-grpc-mod-rs-boundedstream"></a>
 
-Source: [`crates/hm-serve/src/grpc/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/grpc/mod.rs).
+Source: [`crates/hm-serve/src/grpc/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/grpc/mod.rs).
 
 When to use: Use `BoundedStream` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9348,7 +9348,7 @@ pub struct BoundedStream {
 
 <a id="rust-crates-hm-serve-src-grpc-tls-rs-tlsidentity"></a>
 
-Source: [`crates/hm-serve/src/grpc/tls.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/grpc/tls.rs).
+Source: [`crates/hm-serve/src/grpc/tls.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/grpc/tls.rs).
 
 When to use: Use `TlsIdentity` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9367,7 +9367,7 @@ pub struct TlsIdentity {
 
 <a id="rust-crates-hm-serve-src-protocol-rs-frameparser"></a>
 
-Source: [`crates/hm-serve/src/protocol.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/protocol.rs).
+Source: [`crates/hm-serve/src/protocol.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/protocol.rs).
 
 When to use: Use `FrameParser` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9385,7 +9385,7 @@ pub struct FrameParser {
 
 <a id="rust-crates-hm-serve-src-requests-activate-rs-queryembeddingsource"></a>
 
-Source: [`crates/hm-serve/src/requests/activate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/requests/activate.rs).
+Source: [`crates/hm-serve/src/requests/activate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/requests/activate.rs).
 
 When to use: Use `QueryEmbeddingSource` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9403,7 +9403,7 @@ pub enum QueryEmbeddingSource {
 
 <a id="rust-crates-hm-serve-src-requests-activate-rs-preparedqueryembedding"></a>
 
-Source: [`crates/hm-serve/src/requests/activate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/requests/activate.rs).
+Source: [`crates/hm-serve/src/requests/activate.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/requests/activate.rs).
 
 When to use: Use `PreparedQueryEmbedding` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9424,7 +9424,7 @@ pub struct PreparedQueryEmbedding {
 
 <a id="rust-crates-hm-serve-src-requests-subscribe-rs-subscriptionstart"></a>
 
-Source: [`crates/hm-serve/src/requests/subscribe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/requests/subscribe.rs).
+Source: [`crates/hm-serve/src/requests/subscribe.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/requests/subscribe.rs).
 
 When to use: Use `SubscriptionStart` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9443,7 +9443,7 @@ pub struct SubscriptionStart {
 
 <a id="rust-crates-hm-serve-src-rest-mod-rs-toolcall"></a>
 
-Source: [`crates/hm-serve/src/rest/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/rest/mod.rs).
+Source: [`crates/hm-serve/src/rest/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/rest/mod.rs).
 
 When to use: Use `ToolCall` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9464,7 +9464,7 @@ pub struct ToolCall {
 
 <a id="rust-crates-hm-serve-src-rest-mod-rs-admincall"></a>
 
-Source: [`crates/hm-serve/src/rest/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/rest/mod.rs).
+Source: [`crates/hm-serve/src/rest/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/rest/mod.rs).
 
 When to use: Use `AdminCall` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9486,7 +9486,7 @@ pub struct AdminCall {
 
 <a id="rust-crates-hm-serve-src-rest-mod-rs-toolenvelope"></a>
 
-Source: [`crates/hm-serve/src/rest/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/rest/mod.rs).
+Source: [`crates/hm-serve/src/rest/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/rest/mod.rs).
 
 When to use: Use `ToolEnvelope` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9511,7 +9511,7 @@ pub struct ToolEnvelope {
 
 <a id="rust-crates-hm-serve-src-rest-mod-rs-restserver"></a>
 
-Source: [`crates/hm-serve/src/rest/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/rest/mod.rs).
+Source: [`crates/hm-serve/src/rest/mod.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/rest/mod.rs).
 
 When to use: Use `RestServer` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9530,7 +9530,7 @@ pub struct RestServer {
 
 <a id="rust-crates-hm-serve-src-uds-rs-tooldispatcher"></a>
 
-Source: [`crates/hm-serve/src/uds.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/uds.rs).
+Source: [`crates/hm-serve/src/uds.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/uds.rs).
 
 When to use: Use `ToolDispatcher` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9552,7 +9552,7 @@ pub trait ToolDispatcher: Send + Sync {
 
 <a id="rust-crates-hm-serve-src-uds-rs-udsserver"></a>
 
-Source: [`crates/hm-serve/src/uds.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-serve/src/uds.rs).
+Source: [`crates/hm-serve/src/uds.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-serve/src/uds.rs).
 
 When to use: Use `UdsServer` for actor ownership, embedded sessions, authenticated transports, and daemon request execution.
 
@@ -9574,7 +9574,7 @@ pub struct UdsServer {
 
 <a id="rust-crates-hm-sim-src-env-rs-simclock"></a>
 
-Source: [`crates/hm-sim/src/env.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-sim/src/env.rs).
+Source: [`crates/hm-sim/src/env.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-sim/src/env.rs).
 
 When to use: Use `SimClock` for deterministic fault schedules and real-daemon journey verification.
 
@@ -9591,7 +9591,7 @@ pub struct SimClock {
 
 <a id="rust-crates-hm-sim-src-env-rs-simentropy"></a>
 
-Source: [`crates/hm-sim/src/env.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-sim/src/env.rs).
+Source: [`crates/hm-sim/src/env.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-sim/src/env.rs).
 
 When to use: Use `SimEntropy` for deterministic fault schedules and real-daemon journey verification.
 
@@ -9608,7 +9608,7 @@ pub struct SimEntropy {
 
 <a id="rust-crates-hm-sim-src-env-rs-simulatedstorage"></a>
 
-Source: [`crates/hm-sim/src/env.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-sim/src/env.rs).
+Source: [`crates/hm-sim/src/env.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-sim/src/env.rs).
 
 When to use: Use `SimulatedStorage` for deterministic fault schedules and real-daemon journey verification.
 
@@ -9628,7 +9628,7 @@ pub struct SimulatedStorage {
 
 <a id="rust-crates-hm-sim-src-fault-rs-faultplan"></a>
 
-Source: [`crates/hm-sim/src/fault.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-sim/src/fault.rs).
+Source: [`crates/hm-sim/src/fault.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-sim/src/fault.rs).
 
 When to use: Use `FaultPlan` for deterministic fault schedules and real-daemon journey verification.
 
@@ -9650,7 +9650,7 @@ pub struct FaultPlan {
 
 <a id="rust-crates-hm-sim-src-harness-rs-harnessresult"></a>
 
-Source: [`crates/hm-sim/src/harness.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-sim/src/harness.rs).
+Source: [`crates/hm-sim/src/harness.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-sim/src/harness.rs).
 
 When to use: Use `HarnessResult` for deterministic fault schedules and real-daemon journey verification. Inspect its status, coverage, identifiers, and evidence before reporting success.
 
@@ -9665,7 +9665,7 @@ pub type HarnessResult<T> = Result<T, Box<dyn std::error::Error + Send + Sync>>;
 
 <a id="rust-crates-hm-sim-src-harness-rs-journeyharness"></a>
 
-Source: [`crates/hm-sim/src/harness.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-sim/src/harness.rs).
+Source: [`crates/hm-sim/src/harness.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-sim/src/harness.rs).
 
 When to use: Use `JourneyHarness` for deterministic fault schedules and real-daemon journey verification.
 
@@ -9684,7 +9684,7 @@ pub struct JourneyHarness {
 
 <a id="rust-crates-hm-sim-src-harness-rs-mcpclient"></a>
 
-Source: [`crates/hm-sim/src/harness.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-sim/src/harness.rs).
+Source: [`crates/hm-sim/src/harness.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-sim/src/harness.rs).
 
 When to use: Use `McpClient` for deterministic fault schedules and real-daemon journey verification.
 
@@ -9702,7 +9702,7 @@ pub struct McpClient {
 
 <a id="rust-crates-hm-sim-src-harness-rs-udsdaemon"></a>
 
-Source: [`crates/hm-sim/src/harness.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/crates/hm-sim/src/harness.rs).
+Source: [`crates/hm-sim/src/harness.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-sim/src/harness.rs).
 
 When to use: Use `UdsDaemon` for deterministic fault schedules and real-daemon journey verification.
 

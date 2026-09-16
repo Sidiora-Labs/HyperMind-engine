@@ -6,7 +6,7 @@ Generated from the canonical FlatBuffers and protobuf schemas. Field names, nume
 
 <a id="schema-schemas-events-fbs-resultstatus"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Result Status when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -21,7 +21,7 @@ enum ResultStatus : ubyte { ok, error, outcome_unknown }
 
 <a id="schema-schemas-events-fbs-approvaldecision"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Approval Decision when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -36,7 +36,7 @@ enum ApprovalDecision : ubyte { approved, denied }
 
 <a id="schema-schemas-events-fbs-effectstate"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Effect State when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -51,7 +51,7 @@ enum EffectState : ubyte { dispatched, committed, returned, outcome_unknown }
 
 <a id="schema-schemas-events-fbs-loopclosereason"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Loop Close Reason when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -66,7 +66,7 @@ enum LoopCloseReason : ubyte { done, abandoned, handed_off, superseded }
 
 <a id="schema-schemas-events-fbs-belieftype"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Belief Type when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -81,7 +81,7 @@ enum BeliefType : ubyte { fact, preference, constraint, goal, identity }
 
 <a id="schema-schemas-events-fbs-assertionclaim"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Assertion Claim when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -96,7 +96,7 @@ enum AssertionClaim : ubyte { affirmative, negative_existence }
 
 <a id="schema-schemas-events-fbs-attestationdisposition"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Attestation Disposition when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -111,7 +111,7 @@ enum AttestationDisposition : ubyte { used, ignored, helpful, harmful }
 
 <a id="schema-schemas-events-fbs-memoryfadereason"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Memory Fade Reason when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -126,7 +126,7 @@ enum MemoryFadeReason : ubyte { low_retrievability, superseded, explicit }
 
 <a id="schema-schemas-events-fbs-reviewrating"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Review Rating when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -141,7 +141,7 @@ enum ReviewRating : ubyte { again, hard, good, easy }
 
 <a id="schema-schemas-events-fbs-consolidationphasename"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Consolidation Phase Name when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -156,7 +156,7 @@ enum ConsolidationPhaseName : ubyte { nrem, connect, abstract, hindsight, review
 
 <a id="schema-schemas-events-fbs-consolidationphasestate"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Consolidation Phase State when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -171,7 +171,7 @@ enum ConsolidationPhaseState : ubyte { started, completed, aborted }
 
 <a id="schema-schemas-events-fbs-authority"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Authority when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -193,7 +193,7 @@ enum Authority : ubyte {
 
 <a id="schema-schemas-events-fbs-retention"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Retention when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -208,7 +208,7 @@ enum Retention : ubyte { current_state, daily, durable, do_not_store }
 
 <a id="schema-schemas-events-fbs-sensitivity"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Sensitivity when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -223,7 +223,7 @@ enum Sensitivity : ubyte { public, personal, secret }
 
 <a id="schema-schemas-events-fbs-provenancerange"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Provenance Range when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -243,7 +243,7 @@ struct ProvenanceRange {
 
 <a id="schema-schemas-events-fbs-modelprovenance"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Model Provenance when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -269,7 +269,7 @@ table ModelProvenance {
 
 <a id="schema-schemas-events-fbs-usermsg"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use User Msg when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -286,7 +286,7 @@ table UserMsg {
 
 <a id="schema-schemas-events-fbs-deliveredmsg"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Delivered Msg when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -303,7 +303,7 @@ table DeliveredMsg {
 
 <a id="schema-schemas-events-fbs-toolcall"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Tool Call when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -322,7 +322,7 @@ table ToolCall {
 
 <a id="schema-schemas-events-fbs-toolresult"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Tool Result when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -342,7 +342,7 @@ table ToolResult {
 
 <a id="schema-schemas-events-fbs-reasoning"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Reasoning when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -359,7 +359,7 @@ table Reasoning {
 
 <a id="schema-schemas-events-fbs-providerframe"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Provider Frame when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -377,7 +377,7 @@ table ProviderFrame {
 
 <a id="schema-schemas-events-fbs-mediaref"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Media Ref when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -396,7 +396,7 @@ table MediaRef {
 
 <a id="schema-schemas-events-fbs-effect"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Effect when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -415,7 +415,7 @@ table Effect {
 
 <a id="schema-schemas-events-fbs-approval"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Approval when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -433,7 +433,7 @@ table Approval {
 
 <a id="schema-schemas-events-fbs-outcome"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Outcome when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -453,7 +453,7 @@ table Outcome {
 
 <a id="schema-schemas-events-fbs-checkpoint"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Checkpoint when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -470,7 +470,7 @@ table Checkpoint {
 
 <a id="schema-schemas-events-fbs-supervisor"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Supervisor when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -488,7 +488,7 @@ table Supervisor {
 
 <a id="schema-schemas-events-fbs-recovery"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Recovery when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -506,7 +506,7 @@ table Recovery {
 
 <a id="schema-schemas-events-fbs-intentset"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Intent Set when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -523,7 +523,7 @@ table IntentSet {
 
 <a id="schema-schemas-events-fbs-loopopened"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Loop Opened when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -541,7 +541,7 @@ table LoopOpened {
 
 <a id="schema-schemas-events-fbs-loopclosed"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Loop Closed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -561,7 +561,7 @@ table LoopClosed {
 
 <a id="schema-schemas-events-fbs-binding"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Binding when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -584,7 +584,7 @@ table Binding {
 
 <a id="schema-schemas-events-fbs-assertion"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Assertion when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -609,7 +609,7 @@ table Assertion {
 
 <a id="schema-schemas-events-fbs-consolidation"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Consolidation when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -626,7 +626,7 @@ table Consolidation {
 
 <a id="schema-schemas-events-fbs-proposedassertion"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Proposed Assertion when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -651,7 +651,7 @@ table ProposedAssertion {
 
 <a id="schema-schemas-events-fbs-embedding"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Embedding when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -672,7 +672,7 @@ table Embedding {
 
 <a id="schema-schemas-events-fbs-retract"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Retract when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -690,7 +690,7 @@ table Retract {
 
 <a id="schema-schemas-events-fbs-attestation"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Attestation when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -708,7 +708,7 @@ table Attestation {
 
 <a id="schema-schemas-events-fbs-memoryminted"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Memory Minted when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -730,7 +730,7 @@ table MemoryMinted {
 
 <a id="schema-schemas-events-fbs-memoryrevised"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Memory Revised when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -753,7 +753,7 @@ table MemoryRevised {
 
 <a id="schema-schemas-events-fbs-memoryid"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Memory Id when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -770,7 +770,7 @@ table MemoryId {
 
 <a id="schema-schemas-events-fbs-memorymerged"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Memory Merged when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -793,7 +793,7 @@ table MemoryMerged {
 
 <a id="schema-schemas-events-fbs-memoryfaded"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Memory Faded when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -812,7 +812,7 @@ table MemoryFaded {
 
 <a id="schema-schemas-events-fbs-edgeasserted"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Edge Asserted when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -836,7 +836,7 @@ table EdgeAsserted {
 
 <a id="schema-schemas-events-fbs-edgeretracted"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Edge Retracted when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -854,7 +854,7 @@ table EdgeRetracted {
 
 <a id="schema-schemas-events-fbs-consolidationbudget"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Consolidation Budget when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -874,7 +874,7 @@ table ConsolidationBudget {
 
 <a id="schema-schemas-events-fbs-promptversion"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Prompt Version when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -893,7 +893,7 @@ table PromptVersion {
 
 <a id="schema-schemas-events-fbs-consolidationopened"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Consolidation Opened when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -916,7 +916,7 @@ table ConsolidationOpened {
 
 <a id="schema-schemas-events-fbs-consolidationphase"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Consolidation Phase when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -941,7 +941,7 @@ table ConsolidationPhase {
 
 <a id="schema-schemas-events-fbs-consolidationclosed"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Consolidation Closed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -965,7 +965,7 @@ table ConsolidationClosed {
 
 <a id="schema-schemas-events-fbs-consolidationretracted"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Consolidation Retracted when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -984,7 +984,7 @@ table ConsolidationRetracted {
 
 <a id="schema-schemas-events-fbs-reviewed"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Reviewed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1007,7 +1007,7 @@ table Reviewed {
 
 <a id="schema-schemas-events-fbs-attentiondecision"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Attention Decision when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1022,7 +1022,7 @@ enum AttentionDecision : ubyte { ignore, remember, batch, schedule, ask_user, st
 
 <a id="schema-schemas-events-fbs-predicatekind"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Predicate Kind when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1045,7 +1045,7 @@ enum PredicateKind : ubyte {
 
 <a id="schema-schemas-events-fbs-outcomeassessment"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Outcome Assessment when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1060,7 +1060,7 @@ enum OutcomeAssessment : ubyte { supported, contradicted, pending, unresolvable,
 
 <a id="schema-schemas-events-fbs-wakeat"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake At when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1077,7 +1077,7 @@ table WakeAt {
 
 <a id="schema-schemas-events-fbs-wakeschedule"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Schedule when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1094,7 +1094,7 @@ table WakeSchedule {
 
 <a id="schema-schemas-events-fbs-wakechildterminal"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Child Terminal when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1111,7 +1111,7 @@ table WakeChildTerminal {
 
 <a id="schema-schemas-events-fbs-wakeprocessexit"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Process Exit when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1128,7 +1128,7 @@ table WakeProcessExit {
 
 <a id="schema-schemas-events-fbs-wakefilechanged"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake File Changed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1145,7 +1145,7 @@ table WakeFileChanged {
 
 <a id="schema-schemas-events-fbs-wakerepositorychanged"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Repository Changed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1162,7 +1162,7 @@ table WakeRepositoryChanged {
 
 <a id="schema-schemas-events-fbs-wakechannelmessage"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Channel Message when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1179,7 +1179,7 @@ table WakeChannelMessage {
 
 <a id="schema-schemas-events-fbs-wakeexternalcondition"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake External Condition when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1196,7 +1196,7 @@ table WakeExternalCondition {
 
 <a id="schema-schemas-events-fbs-wakeuserresponse"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake User Response when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1213,7 +1213,7 @@ table WakeUserResponse {
 
 <a id="schema-schemas-events-fbs-wakeentitymentioned"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Entity Mentioned when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1230,7 +1230,7 @@ table WakeEntityMentioned {
 
 <a id="schema-schemas-events-fbs-wakeloopclosed"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Loop Closed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1247,7 +1247,7 @@ table WakeLoopClosed {
 
 <a id="schema-schemas-events-fbs-wakepredictionresolved"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Prediction Resolved when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1264,7 +1264,7 @@ table WakePredictionResolved {
 
 <a id="schema-schemas-events-fbs-wakebeliefchanged"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Belief Changed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1281,7 +1281,7 @@ table WakeBeliefChanged {
 
 <a id="schema-schemas-events-fbs-waketrigger"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Wake Trigger when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1310,7 +1310,7 @@ union WakeTrigger {
 
 <a id="schema-schemas-events-fbs-intentionset"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Intention Set when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1331,7 +1331,7 @@ table IntentionSet {
 
 <a id="schema-schemas-events-fbs-intentionfired"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Intention Fired when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1350,7 +1350,7 @@ table IntentionFired {
 
 <a id="schema-schemas-events-fbs-attentiondecided"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Attention Decided when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1370,7 +1370,7 @@ table AttentionDecided {
 
 <a id="schema-schemas-events-fbs-intentioncancelled"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Intention Cancelled when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1388,7 +1388,7 @@ table IntentionCancelled {
 
 <a id="schema-schemas-events-fbs-expectedpredicate"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Expected Predicate when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1408,7 +1408,7 @@ table ExpectedPredicate {
 
 <a id="schema-schemas-events-fbs-predicted"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Predicted when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1433,7 +1433,7 @@ table Predicted {
 
 <a id="schema-schemas-events-fbs-outcomeobserved"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Outcome Observed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1454,7 +1454,7 @@ table OutcomeObserved {
 
 <a id="schema-schemas-events-fbs-proceduresupport"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Procedure Support when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1473,7 +1473,7 @@ table ProcedureSupport {
 
 <a id="schema-schemas-events-fbs-proceduremined"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Procedure Mined when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1496,7 +1496,7 @@ table ProcedureMined {
 
 <a id="schema-schemas-events-fbs-procedurerevised"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Procedure Revised when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1520,7 +1520,7 @@ table ProcedureRevised {
 
 <a id="schema-schemas-events-fbs-procedureadopted"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Procedure Adopted when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1538,7 +1538,7 @@ table ProcedureAdopted {
 
 <a id="schema-schemas-events-fbs-eventpayload"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Event Payload when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1597,7 +1597,7 @@ union EventPayload {
 
 <a id="schema-schemas-events-fbs-eventenvelope"></a>
 
-Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/events.fbs).
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
 
 When to use: Use Event Envelope when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
 
@@ -1626,7 +1626,7 @@ table EventEnvelope {
 
 <a id="schema-schemas-protocol-fbs-responsestatus"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Response Status when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1641,7 +1641,7 @@ enum ResponseStatus : ubyte { ok, error }
 
 <a id="schema-schemas-protocol-fbs-mutationeffectstate"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Mutation Effect State when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1656,7 +1656,7 @@ enum MutationEffectState : ubyte { none, not_dispatched, unknown, rejected }
 
 <a id="schema-schemas-protocol-fbs-hello"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Hello when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1675,7 +1675,7 @@ table Hello {
 
 <a id="schema-schemas-protocol-fbs-welcome"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Welcome when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1698,7 +1698,7 @@ table Welcome {
 
 <a id="schema-schemas-protocol-fbs-appendevent"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Append Event when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1717,7 +1717,7 @@ table AppendEvent {
 
 <a id="schema-schemas-protocol-fbs-append"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Append when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1735,7 +1735,7 @@ table Append {
 
 <a id="schema-schemas-protocol-fbs-activate"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Activate when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1761,7 +1761,7 @@ table Activate {
 
 <a id="schema-schemas-protocol-fbs-transcript"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Transcript when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1780,7 +1780,7 @@ table Transcript {
 
 <a id="schema-schemas-protocol-fbs-recallmode"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Recall Mode when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1795,7 +1795,7 @@ enum RecallMode : ubyte { list_windows, open_window, resolve_members }
 
 <a id="schema-schemas-protocol-fbs-recall"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Recall when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1817,7 +1817,7 @@ table Recall {
 
 <a id="schema-schemas-protocol-fbs-asof"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use As Of when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1838,7 +1838,7 @@ table AsOf {
 
 <a id="schema-schemas-protocol-fbs-checkpoint"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Checkpoint when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1857,7 +1857,7 @@ table Checkpoint {
 
 <a id="schema-schemas-protocol-fbs-latestcheckpoint"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Latest Checkpoint when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1874,7 +1874,7 @@ table LatestCheckpoint {
 
 <a id="schema-schemas-protocol-fbs-attest"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Attest when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1895,7 +1895,7 @@ table Attest {
 
 <a id="schema-schemas-protocol-fbs-subscribe"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Subscribe when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1913,7 +1913,7 @@ table Subscribe {
 
 <a id="schema-schemas-protocol-fbs-health"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Health when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1928,7 +1928,7 @@ table Health {}
 
 <a id="schema-schemas-protocol-fbs-stats"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Stats when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1945,7 +1945,7 @@ table Stats {
 
 <a id="schema-schemas-protocol-fbs-latencyhistograms"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Latency Histograms when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1960,7 +1960,7 @@ table LatencyHistograms {}
 
 <a id="schema-schemas-protocol-fbs-verifystatus"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Verify Status when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1977,7 +1977,7 @@ table VerifyStatus {
 
 <a id="schema-schemas-protocol-fbs-rebuildprojection"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Rebuild Projection when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -1995,7 +1995,7 @@ table RebuildProjection {
 
 <a id="schema-schemas-protocol-fbs-cryptodelete"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Crypto Delete when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2012,7 +2012,7 @@ table CryptoDelete {
 
 <a id="schema-schemas-protocol-fbs-toolrequest"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Tool Request when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2030,7 +2030,7 @@ table ToolRequest {
 
 <a id="schema-schemas-protocol-fbs-requestpayload"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Request Payload when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2062,7 +2062,7 @@ union RequestPayload {
 
 <a id="schema-schemas-protocol-fbs-request"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Request when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2080,7 +2080,7 @@ table Request {
 
 <a id="schema-schemas-protocol-fbs-errordetail"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Error Detail when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2101,7 +2101,7 @@ table ErrorDetail {
 
 <a id="schema-schemas-protocol-fbs-appendack"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Append Ack when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2124,7 +2124,7 @@ table AppendAck {
 
 <a id="schema-schemas-protocol-fbs-bytesresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Bytes Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2141,7 +2141,7 @@ table BytesResult {
 
 <a id="schema-schemas-protocol-fbs-subscriptionack"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Subscription Ack when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2158,7 +2158,7 @@ table SubscriptionAck {
 
 <a id="schema-schemas-protocol-fbs-healthresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Health Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2177,7 +2177,7 @@ table HealthResult {
 
 <a id="schema-schemas-protocol-fbs-projectionstat"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Projection Stat when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2195,7 +2195,7 @@ table ProjectionStat {
 
 <a id="schema-schemas-protocol-fbs-statsresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Stats Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2215,7 +2215,7 @@ table StatsResult {
 
 <a id="schema-schemas-protocol-fbs-latencybucket"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Latency Bucket when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2234,7 +2234,7 @@ table LatencyBucket {
 
 <a id="schema-schemas-protocol-fbs-latencyresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Latency Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2251,7 +2251,7 @@ table LatencyResult {
 
 <a id="schema-schemas-protocol-fbs-verifyresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Verify Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2272,7 +2272,7 @@ table VerifyResult {
 
 <a id="schema-schemas-protocol-fbs-rebuildresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Rebuild Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2291,7 +2291,7 @@ table RebuildResult {
 
 <a id="schema-schemas-protocol-fbs-deleteresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Delete Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2309,7 +2309,7 @@ table DeleteResult {
 
 <a id="schema-schemas-protocol-fbs-framerecord"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Frame Record when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2331,7 +2331,7 @@ table FrameRecord {
 
 <a id="schema-schemas-protocol-fbs-transcriptresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Transcript Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2349,7 +2349,7 @@ table TranscriptResult {
 
 <a id="schema-schemas-protocol-fbs-temporalwindowrecord"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Temporal Window Record when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2369,7 +2369,7 @@ table TemporalWindowRecord {
 
 <a id="schema-schemas-protocol-fbs-recallresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Recall Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2387,7 +2387,7 @@ table RecallResult {
 
 <a id="schema-schemas-protocol-fbs-beliefprovenancerecord"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Belief Provenance Record when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2407,7 +2407,7 @@ table BeliefProvenanceRecord {
 
 <a id="schema-schemas-protocol-fbs-beliefconflictrecord"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Belief Conflict Record when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2428,7 +2428,7 @@ table BeliefConflictRecord {
 
 <a id="schema-schemas-protocol-fbs-beliefresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Belief Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2459,7 +2459,7 @@ table BeliefResult {
 
 <a id="schema-schemas-protocol-fbs-checkpointack"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Checkpoint Ack when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2476,7 +2476,7 @@ table CheckpointAck {
 
 <a id="schema-schemas-protocol-fbs-checkpointresult"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Checkpoint Result when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2495,7 +2495,7 @@ table CheckpointResult {
 
 <a id="schema-schemas-protocol-fbs-attestack"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Attest Ack when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2514,7 +2514,7 @@ table AttestAck {
 
 <a id="schema-schemas-protocol-fbs-responsepayload"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Response Payload when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2546,7 +2546,7 @@ union ResponsePayload {
 
 <a id="schema-schemas-protocol-fbs-response"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Response when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2565,7 +2565,7 @@ table Response {
 
 <a id="schema-schemas-protocol-fbs-event"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Event when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2588,7 +2588,7 @@ table Event {
 
 <a id="schema-schemas-protocol-fbs-wirepayload"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Wire Payload when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2609,7 +2609,7 @@ union WirePayload {
 
 <a id="schema-schemas-protocol-fbs-wireenvelope"></a>
 
-Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/protocol.fbs).
+Source: [`schemas/protocol.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/protocol.fbs).
 
 When to use: Use Wire Envelope when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2627,7 +2627,7 @@ table WireEnvelope {
 
 <a id="schema-schemas-hypermind-proto-hypermind"></a>
 
-Source: [`schemas/hypermind.proto`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/hypermind.proto).
+Source: [`schemas/hypermind.proto`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/hypermind.proto).
 
 When to use: Use Hyper Mind when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2651,7 +2651,7 @@ service HyperMind {
 
 <a id="schema-schemas-hypermind-proto-envelope"></a>
 
-Source: [`schemas/hypermind.proto`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/hypermind.proto).
+Source: [`schemas/hypermind.proto`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/hypermind.proto).
 
 When to use: Use Envelope when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 
@@ -2668,7 +2668,7 @@ message Envelope {
 
 <a id="schema-schemas-hypermind-proto-exchangerequest"></a>
 
-Source: [`schemas/hypermind.proto`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/schemas/hypermind.proto).
+Source: [`schemas/hypermind.proto`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/hypermind.proto).
 
 When to use: Use Exchange Request when implementing the matching protocol request, response, or transport wrapper. Negotiate the protocol version and capability first, and preserve connection identity, request identity, and error/effect state.
 

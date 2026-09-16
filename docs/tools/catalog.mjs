@@ -12,7 +12,7 @@ const walk = directory => !exists(directory) ? [] : fs.readdirSync(path.join(roo
   .flatMap(entry => entry.isDirectory() && !['target', 'node_modules', 'dist', 'build', 'book', '__pycache__', '.venv', 'venv', 'vendor', '__pypackages__', '.tox', '.mypy_cache', '.pytest_cache', '.ruff_cache', '.git'].includes(entry.name)
     ? walk(`${directory}/${entry.name}`) : entry.isFile() ? [`${directory}/${entry.name}`] : []);
 const usage = JSON.parse(read('docs/tools/usage.json'));
-const repositorySourcePrefix = 'https://github.com/Sidiora-Labs/HyperMind-engine/blob/master/';
+const repositorySourcePrefix = 'https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/';
 const sourceLink = file => `${repositorySourcePrefix}${file}`;
 const fence = (language, text) => {
   const marker = '`'.repeat(Math.max(3, ...[...text.matchAll(/`+/g)].map(match => match[0].length + 1)));
@@ -224,9 +224,10 @@ for (const [file, expected] of outputs) {
   if (!exists(file)) errors.push(`missing generated catalog: ${file}`);
   else if (read(file) !== expected) errors.push(`stale generated catalog: ${file}; run node docs/tools/catalog.mjs --write`);
 }
-const required = ['docs/start/quickstart.md', 'docs/concepts/architecture.md', 'docs/concepts/authority.md',
+const community = ['CONTRIBUTING.md', 'SECURITY.md', 'CONTRIBUTORS.md', 'CODE_OF_CONDUCT.md', 'SUPPORT.md'];
+const required = [...community, 'NOTICE', 'LICENSE', 'docs/start/quickstart.md', 'docs/concepts/architecture.md', 'docs/concepts/authority.md',
   'docs/concepts/retrieval.md', 'docs/concepts/time.md', 'docs/concepts/consolidation.md', 'docs/concepts/anticipation.md',
-  'docs/guides/migration.md', 'docs/guides/deployment.md', 'docs/guides/operations.md', 'docs/reference/schematics.md',
+  'docs/guides/migration.md', 'docs/guides/deployment.md', 'docs/guides/operations.md', 'docs/guides/ci.md', 'docs/reference/schematics.md',
   'docs/reference/protocol.md', 'docs/reference/mcp.md', 'docs/reference/cli.md', 'docs/reference/config.md', 'docs/reference/sdks.md',
   'docs/internals/recovery.md', 'docs/internals/generations.md', 'docs/internals/sealing.md', 'docs/internals/mmr.md',
   'docs/evaluation/methodology.md', 'docs/evaluation/results.md', 'docs/security/threat-model.md'];
@@ -240,7 +241,7 @@ for (const file of [...required.filter(file => file.startsWith('docs/')), ...out
   if (!summaryPages.has(file)) errors.push(`page is unreachable from mdBook summary: ${file}`);
 
 const markdown = [...walk('docs'), ...walk('deploy'), ...walk('sdk').filter(file => !/\/(?:generated|wire)\/|\/internal\/flatbuffers\//.test(file))]
-  .filter(file => file.endsWith('.md')).concat(required.filter(file => file.startsWith('README')));
+  .filter(file => file.endsWith('.md')).concat(required.filter(file => file.startsWith('README')), community);
 const headings = new Map();
 function anchors(file) {
   if (headings.has(file)) return headings.get(file);

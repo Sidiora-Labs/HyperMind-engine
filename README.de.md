@@ -157,7 +157,7 @@ Die Spezifikation definiert diese Abnahmeziele:
 | Recall@10 | ≥ 0,95 bei 10.000 Einträgen |
 | Warme Aktivierung | p99 < 10 ms bei 100.000 Einträgen |
 
-Der vollständige LongMemEval-Lauf läuft; die LoCoMo-Qualifikation steht aus. Der gezielte reale slice-7-Durchlauf bestand, qualifiziert aber ebenso wenig wie ein ausgewählter Diagnoselauf ein Release. Siehe [Messstand](docs/evaluation/results.md) und [Methodik](docs/evaluation/methodology.md).
+Der vollständige lokale LongMemEval-Lauf erreichte **459/500 (91,8 %)** mit Luna über Centra und ausschließlich lexikalischer Suche. LoCoMo läuft; seine Qualifikation steht weiterhin aus. Auch der gezielte reale slice-7-Durchlauf bestand. Diese Ergebnisse belegen weder einen erfolgreichen gehosteten CI-Lauf noch die Release-Qualifikation. Siehe [Messstand und Nachweise](docs/evaluation/results.md) und [Methodik](docs/evaluation/methodology.md).
 
 ## Entwickeln und Dokumentation prüfen
 
