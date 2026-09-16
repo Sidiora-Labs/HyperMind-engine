@@ -23,6 +23,11 @@ pub const MAXIMUM_IDENTIFIER_BYTES: usize = 4096;
 pub const MAXIMUM_VOCABULARY_TERMS: usize = 4096;
 pub const MAXIMUM_VOCABULARY_ALIASES: usize = 32;
 pub const MAXIMUM_VOCABULARY_NAME_BYTES: usize = 512;
+pub const REPOSITORY_SNAPSHOT_PROVIDER: &str = "hypermind.repository-snapshot.v1";
+pub const REPOSITORY_EXTRACT_MODEL_ID: &str = "repository-graph-extract";
+pub const REPOSITORY_EXTRACT_PROMPT_ID: &str = "repository-graph-extract/v1";
+pub const REPOSITORY_EXTRACT_PROMPT_VERSION: u16 = 1;
+pub const REPOSITORY_EXTRACT_RUN_PREFIX: &str = "repository-graph/";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Boundary {
@@ -384,7 +389,8 @@ fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Er
                 && (model.prompt_version == 0
                     || !model.call_id.as_deref().is_some_and(bounded_identifier)
                     || (model.input_tokens.saturating_add(model.output_tokens) == 0
-                        && !is_cortex_import(envelope, kind)))))
+                        && !is_cortex_import(envelope, kind)
+                        && !is_repository_extraction(envelope, kind)))))
     {
         return Err(Error::new(ErrorCode::SchemaInvalid));
     }
@@ -401,6 +407,37 @@ fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Er
         return Err(Error::new(ErrorCode::ProtectedTypeWrite));
     }
     Ok(())
+}
+
+fn is_repository_extraction(envelope: &EventEnvelope, kind: EventKind) -> bool {
+    let Some(model) = envelope.model_provenance.as_ref() else {
+        return false;
+    };
+    let Some(digest) = model.call_id.as_deref().filter(|digest| digest.len() == 32) else {
+        return false;
+    };
+    let mut expected_run = String::from(REPOSITORY_EXTRACT_RUN_PREFIX);
+    expected_run.reserve(digest.len() * 2);
+    for byte in digest {
+        write!(expected_run, "{byte:02x}").expect("writing to a String cannot fail");
+    }
+    matches!(
+        kind,
+        EventKind::MemoryMinted
+            | EventKind::MemoryRevised
+            | EventKind::EdgeAsserted
+            | EventKind::EdgeRetracted
+    ) && envelope.authority == Authority::DerivedInference
+        && envelope.run_id.as_deref() == Some(expected_run.as_bytes())
+        && model.model_id == REPOSITORY_EXTRACT_MODEL_ID
+        && model.prompt_id == REPOSITORY_EXTRACT_PROMPT_ID
+        && model.prompt_version == REPOSITORY_EXTRACT_PROMPT_VERSION
+        && model.temperature == 0.0
+        && model.input_tokens == 0
+        && model.output_tokens == 0
+        && model.cache_read_tokens == 0
+        && model.cache_write_tokens == 0
+        && model.cost_microusd == 0
 }
 
 fn is_cortex_import(envelope: &EventEnvelope, kind: EventKind) -> bool {

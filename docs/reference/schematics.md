@@ -24,6 +24,17 @@ Authority is one of `user_asserted`, `external_observed`,
 `derived_inference`. A derived value MUST NOT acquire observed authority merely
 by being copied through another surface.
 
+An LLM-derived record MUST carry model provenance that reports real model usage.
+Zero-cost provenance, where both token counters are zero, is admitted only for a
+deterministic producer pinned in the schema, and every field of that producer's
+identity MUST match. Two are pinned: the deterministic store import, and the
+repository graph extraction, which derives a repository graph from a
+caller-supplied snapshot without calling any model. The extraction declares
+model `repository-graph-extract`, prompt `repository-graph-extract/v1` at
+version 1, temperature zero, all four token counters and the cost at zero, a
+32-byte `call_id` holding the snapshot digest, and a `run_id` of
+`repository-graph/` followed by the lowercase hex of that `call_id`.
+
 ## 2. Ordering rules
 
 LSNs MUST begin at one and increase by exactly one within an actor. The actor

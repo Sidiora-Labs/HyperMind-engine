@@ -1,7 +1,8 @@
 use hm_core::{ErrorCode, LSN};
 use hm_schema::event::{
-    Boundary, EventHistory, EventKind, HistorySource, encode_event_envelope, verify_event,
-    verify_event_with_history,
+    Boundary, EventHistory, EventKind, HistorySource, REPOSITORY_EXTRACT_MODEL_ID,
+    REPOSITORY_EXTRACT_PROMPT_ID, REPOSITORY_EXTRACT_PROMPT_VERSION, REPOSITORY_EXTRACT_RUN_PREFIX,
+    encode_event_envelope, verify_event, verify_event_with_history,
 };
 use hm_schema::events::{
     Approval, Assertion, AssertionClaim, Attestation, AttestationDisposition, Authority,
@@ -1296,4 +1297,158 @@ fn donor_protocol_fuzz_corpus_never_panics() {
         count += 1;
     }
     assert_eq!(count, 45);
+}
+
+fn repository_extraction_envelope(payload: EventPayload) -> EventEnvelope {
+    let mut envelope = event_envelope(payload, 2);
+    envelope.authority = Authority::DerivedInference;
+    envelope.run_id =
+        Some(format!("{REPOSITORY_EXTRACT_RUN_PREFIX}{}", "5a".repeat(32)).into_bytes());
+    envelope.model_provenance = Some(Box::new(ModelProvenance {
+        model_id: REPOSITORY_EXTRACT_MODEL_ID.into(),
+        prompt_id: REPOSITORY_EXTRACT_PROMPT_ID.into(),
+        prompt_version: REPOSITORY_EXTRACT_PROMPT_VERSION,
+        call_id: Some(vec![0x5a; 32]),
+        ..ModelProvenance::default()
+    }));
+    envelope
+}
+
+fn repository_edge_asserted() -> EventPayload {
+    EventPayload::EdgeAsserted(Box::new(EdgeAsserted {
+        edge_id: vec![0x01; 32],
+        source_id: vec![0x02; 32],
+        target_id: vec![0x03; 32],
+        relation: "imports".to_owned(),
+        weight_micros: 250_000,
+        valid_from_ns: 0,
+        valid_to_ns: 0,
+        citations: belief_provenance(),
+    }))
+}
+
+#[test]
+fn repository_extraction_admits_zero_cost_provenance() {
+    let cases = [
+        (EventKind::EdgeAsserted, repository_edge_asserted()),
+        (
+            EventKind::MemoryMinted,
+            EventPayload::MemoryMinted(Box::new(memory_minted())),
+        ),
+        (
+            EventKind::MemoryRevised,
+            EventPayload::MemoryRevised(Box::new(MemoryRevised {
+                memory_id: vec![0x02; 32],
+                previous_lsn: 21,
+                name: "crates/hm-schema/src/event.rs".to_owned(),
+                definition: b"file in the repository graph".to_vec(),
+                tags: vec!["file".to_owned()],
+                salience_micros: 500_000,
+                citations: belief_provenance(),
+            })),
+        ),
+    ];
+    for (kind, payload) in cases {
+        let encoded = encode_event(&repository_extraction_envelope(payload));
+        for boundary in [Boundary::Disk, Boundary::Socket, Boundary::Import] {
+            verify_event(&encoded, kind, boundary)
+                .expect("repository extraction carries no model usage to invent");
+        }
+    }
+
+    let outcome = repository_extraction_envelope(EventPayload::Outcome(Box::new(Outcome {
+        effect_id: b"effect-1".to_vec(),
+        detail: b"written".to_vec(),
+        evidence_lsns: Some(vec![7]),
+        ..Outcome::default()
+    })));
+    let history = OneHistory {
+        lsn: LSN::new(7),
+        kind: EventKind::ToolResult,
+        authority: Authority::ToolObserved,
+        source: HistorySource::LedgerEvent,
+    };
+    verify_event_with_history(
+        &encode_event(&outcome),
+        EventKind::Outcome,
+        Boundary::Disk,
+        &history,
+    )
+    .expect("outcomes are not an LLM-derived kind");
+}
+
+#[test]
+fn repository_extraction_requires_its_declared_identity() {
+    let extraction = repository_extraction_envelope(repository_edge_asserted());
+    let mut invalid = Vec::new();
+    let mut changed = extraction.clone();
+    changed.model_provenance.as_mut().unwrap().model_id = "repository-graph-extractor".into();
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.model_provenance.as_mut().unwrap().prompt_id = "repository-graph-extract/v2".into();
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.model_provenance.as_mut().unwrap().prompt_version = 0;
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.model_provenance.as_mut().unwrap().temperature = 0.5;
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.model_provenance.as_mut().unwrap().cache_read_tokens = 1;
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed
+        .model_provenance
+        .as_mut()
+        .unwrap()
+        .cache_write_tokens = 1;
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.model_provenance.as_mut().unwrap().cost_microusd = 1;
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.model_provenance.as_mut().unwrap().call_id = Some(vec![0x5a; 31]);
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.run_id =
+        Some(format!("{REPOSITORY_EXTRACT_RUN_PREFIX}{}", "11".repeat(32)).into_bytes());
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.run_id = Some("5a".repeat(32).into_bytes());
+    invalid.push(changed);
+    let mut changed = extraction.clone();
+    changed.authority = Authority::RuntimeFact;
+    invalid.push(changed);
+    for changed in invalid {
+        assert_eq!(
+            verify_event(
+                &encode_event(&changed),
+                EventKind::EdgeAsserted,
+                Boundary::Disk
+            )
+            .expect_err("the extraction identity must match in every field")
+            .code,
+            ErrorCode::SchemaInvalid
+        );
+    }
+
+    let mut unrelated = repository_extraction_envelope(repository_edge_asserted());
+    unrelated.run_id = Some(b"assistant-run-9".to_vec());
+    unrelated.model_provenance = Some(Box::new(ModelProvenance {
+        model_id: "fixture-model".into(),
+        prompt_id: "merge-cluster".into(),
+        prompt_version: 1,
+        call_id: Some(vec![0x77; 32]),
+        ..ModelProvenance::default()
+    }));
+    assert_eq!(
+        verify_event(
+            &encode_event(&unrelated),
+            EventKind::EdgeAsserted,
+            Boundary::Disk
+        )
+        .expect_err("an ordinary derived record still has to report model usage")
+        .code,
+        ErrorCode::SchemaInvalid
+    );
 }
