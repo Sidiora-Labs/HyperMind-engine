@@ -3387,6 +3387,115 @@ pub enum RepoGraphError {
 }
 ```
 
+## hm-cortex::RepoNode
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-reponode"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoNode` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoNode {
+    pub node_id: [u8; 32],
+    pub kind: RepoFactKind,
+    pub name: String,
+    pub display_name: String,
+    pub definition: Vec<u8>,
+    pub tags: Vec<String>,
+    pub citation: RepoCitation,
+}
+```
+
+## hm-cortex::RepoEdge
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-repoedge"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoEdge` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoEdge {
+    pub edge_id: [u8; 32],
+    pub source_id: [u8; 32],
+    pub target_id: [u8; 32],
+    pub relation: String,
+    pub weight_micros: u32,
+    pub citation: RepoCitation,
+}
+```
+
+## hm-cortex::RepoDropReason
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-repodropreason"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoDropReason` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub enum RepoDropReason {
+    UnknownRelation,
+    UnresolvedTarget,
+    AmbiguousTarget,
+    SelfReference,
+    NodeLimit,
+    EdgeLimit,
+}
+```
+
+## hm-cortex::RepoDrop
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-repodrop"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoDrop` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoDrop {
+    pub source: String,
+    pub relation: String,
+    pub target: String,
+    pub reason: RepoDropReason,
+}
+```
+
+## hm-cortex::RepoGraph
+
+<a id="rust-crates-hm-cortex-src-repograph-rs-repograph"></a>
+
+Source: [`crates/hm-cortex/src/repograph.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-cortex/src/repograph.rs).
+
+When to use: Use `RepoGraph` for background ingestion, consolidation, attention, prediction assessment, and evidence-based procedural learning.
+
+Do not use: Do not promote inferred claims to observed authority, adopt procedures without user authority, or skip citation validation.
+
+
+```rust
+pub struct RepoGraph {
+    pub repository: String,
+    pub digest: [u8; 32],
+    pub nodes: Vec<RepoNode>,
+    pub edges: Vec<RepoEdge>,
+    pub dropped: Vec<RepoDrop>,
+    pub skipped: u64,
+}
+```
+
 ## hm-cortex::AttestationSignal
 
 <a id="rust-crates-hm-cortex-src-review-rs-attestationsignal"></a>

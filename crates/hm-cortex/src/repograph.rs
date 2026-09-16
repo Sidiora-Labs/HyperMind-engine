@@ -6,9 +6,23 @@ use std::collections::{BTreeMap, BTreeSet};
 pub const SNAPSHOT_CONTRACT: &str = "hypermind.repository-graph.v1";
 pub const SNAPSHOT_DIGEST_DOMAIN: &str = "hypermind.repository-snapshot.v1";
 pub const MAXIMUM_SNAPSHOT_FACTS: usize = 4_096;
+pub const MAXIMUM_SNAPSHOT_EDGES: usize = 8_192;
 pub const MAXIMUM_NAME_BYTES: usize = 1_024;
+pub const RELATIONS: [&str; 8] = [
+    "contains",
+    "imports",
+    "calls",
+    "defines",
+    "routes_to",
+    "covers",
+    "reads",
+    "writes",
+];
 
 const NODE_DOMAIN: &str = "hypermind.repository-node.v1";
+const EDGE_DOMAIN: &str = "hypermind.repository-edge.v1";
+const EDGE_WEIGHT_STEP: u32 = 250_000;
+const MAXIMUM_EDGE_WEIGHT: u32 = 1_000_000;
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum RepoFactKind {
@@ -342,4 +356,206 @@ fn parse_relation(entry: &Value) -> Option<RepoRelation> {
         relation: relation.to_owned(),
         target: target.to_owned(),
     })
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct RepoNode {
+    pub node_id: [u8; 32],
+    pub kind: RepoFactKind,
+    pub name: String,
+    pub display_name: String,
+    pub definition: Vec<u8>,
+    pub tags: Vec<String>,
+    pub citation: RepoCitation,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct RepoEdge {
+    pub edge_id: [u8; 32],
+    pub source_id: [u8; 32],
+    pub target_id: [u8; 32],
+    pub relation: String,
+    pub weight_micros: u32,
+    pub citation: RepoCitation,
+}
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub enum RepoDropReason {
+    UnknownRelation,
+    UnresolvedTarget,
+    AmbiguousTarget,
+    SelfReference,
+    NodeLimit,
+    EdgeLimit,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct RepoDrop {
+    pub source: String,
+    pub relation: String,
+    pub target: String,
+    pub reason: RepoDropReason,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct RepoGraph {
+    pub repository: String,
+    pub digest: [u8; 32],
+    pub nodes: Vec<RepoNode>,
+    pub edges: Vec<RepoEdge>,
+    pub dropped: Vec<RepoDrop>,
+    pub skipped: u64,
+}
+
+struct EdgeEvidence {
+    occurrences: u32,
+    citation: RepoCitation,
+}
+
+#[must_use]
+pub fn resolve(snapshot: &RepoSnapshot) -> RepoGraph {
+    let kept = snapshot.facts.len().min(MAXIMUM_SNAPSHOT_FACTS);
+    let facts = &snapshot.facts[..kept];
+    let mut dropped = Vec::new();
+    for fact in &snapshot.facts[kept..] {
+        dropped.push(RepoDrop {
+            source: fact.name.clone(),
+            relation: String::new(),
+            target: String::new(),
+            reason: RepoDropReason::NodeLimit,
+        });
+    }
+
+    let mut nodes = Vec::with_capacity(kept);
+    let mut exact: BTreeMap<&str, Vec<usize>> = BTreeMap::new();
+    let mut suffix: BTreeMap<&str, Vec<usize>> = BTreeMap::new();
+    for (index, fact) in facts.iter().enumerate() {
+        nodes.push(RepoNode {
+            node_id: node_id(&snapshot.repository, fact.kind, &fact.name),
+            kind: fact.kind,
+            name: fact.name.clone(),
+            display_name: node_display_name(fact.kind, &fact.name),
+            definition: node_definition(fact),
+            tags: node_tags(&snapshot.repository, fact.kind),
+            citation: fact.source,
+        });
+        exact.entry(fact.name.as_str()).or_default().push(index);
+        suffix
+            .entry(name_suffix(fact.name.as_str()))
+            .or_default()
+            .push(index);
+    }
+
+    let mut evidence: BTreeMap<(usize, &'static str, usize), EdgeEvidence> = BTreeMap::new();
+    for (index, fact) in facts.iter().enumerate() {
+        for declared in &fact.relations {
+            let Some(relation) = known_relation(&declared.relation) else {
+                dropped.push(drop_of(fact, declared, RepoDropReason::UnknownRelation));
+                continue;
+            };
+            let target = match resolve_target(&exact, &suffix, &declared.target) {
+                Ok(target) => target,
+                Err(reason) => {
+                    dropped.push(drop_of(fact, declared, reason));
+                    continue;
+                }
+            };
+            if target == index {
+                dropped.push(drop_of(fact, declared, RepoDropReason::SelfReference));
+                continue;
+            }
+            let entry = evidence
+                .entry((index, relation, target))
+                .or_insert(EdgeEvidence {
+                    occurrences: 0,
+                    citation: fact.source,
+                });
+            entry.occurrences = entry.occurrences.saturating_add(1);
+        }
+    }
+
+    let mut edges = Vec::new();
+    for ((source, relation, target), found) in evidence {
+        if edges.len() >= MAXIMUM_SNAPSHOT_EDGES {
+            dropped.push(RepoDrop {
+                source: nodes[source].name.clone(),
+                relation: relation.to_owned(),
+                target: nodes[target].name.clone(),
+                reason: RepoDropReason::EdgeLimit,
+            });
+            continue;
+        }
+        edges.push(RepoEdge {
+            edge_id: edge_id(&nodes[source].node_id, &nodes[target].node_id, relation),
+            source_id: nodes[source].node_id,
+            target_id: nodes[target].node_id,
+            relation: relation.to_owned(),
+            weight_micros: EDGE_WEIGHT_STEP
+                .saturating_mul(found.occurrences)
+                .min(MAXIMUM_EDGE_WEIGHT),
+            citation: found.citation,
+        });
+    }
+
+    RepoGraph {
+        repository: snapshot.repository.clone(),
+        digest: snapshot.digest,
+        nodes,
+        edges,
+        dropped,
+        skipped: snapshot.skipped,
+    }
+}
+
+#[must_use]
+pub fn edge_id(source_id: &[u8; 32], target_id: &[u8; 32], relation: &str) -> [u8; 32] {
+    let mut hasher = blake3::Hasher::new();
+    hasher.update(EDGE_DOMAIN.as_bytes());
+    hasher.update(&[0u8]);
+    hasher.update(source_id);
+    hasher.update(target_id);
+    let length = u32::try_from(relation.len()).unwrap_or(u32::MAX);
+    hasher.update(&length.to_le_bytes());
+    hasher.update(relation.as_bytes());
+    *hasher.finalize().as_bytes()
+}
+
+fn known_relation(relation: &str) -> Option<&'static str> {
+    RELATIONS
+        .into_iter()
+        .find(|candidate| *candidate == relation)
+}
+
+fn name_suffix(name: &str) -> &str {
+    match name.rfind(['/', '.']) {
+        Some(position) if position + 1 < name.len() => &name[position + 1..],
+        _ => name,
+    }
+}
+
+fn resolve_target(
+    exact: &BTreeMap<&str, Vec<usize>>,
+    suffix: &BTreeMap<&str, Vec<usize>>,
+    target: &str,
+) -> Result<usize, RepoDropReason> {
+    if let Some(candidates) = exact.get(target) {
+        return match candidates.as_slice() {
+            [only] => Ok(*only),
+            _ => Err(RepoDropReason::AmbiguousTarget),
+        };
+    }
+    match suffix.get(target).map(Vec::as_slice) {
+        Some([only]) => Ok(*only),
+        Some(_) => Err(RepoDropReason::AmbiguousTarget),
+        None => Err(RepoDropReason::UnresolvedTarget),
+    }
+}
+
+fn drop_of(fact: &RepoFact, declared: &RepoRelation, reason: RepoDropReason) -> RepoDrop {
+    RepoDrop {
+        source: fact.name.clone(),
+        relation: declared.relation.clone(),
+        target: declared.target.clone(),
+        reason,
+    }
 }
