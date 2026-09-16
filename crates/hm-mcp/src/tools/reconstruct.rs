@@ -12,7 +12,7 @@ use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct ReconstructionRuntime {
-    pub provider: Arc<dyn LlmProvider>,
+    provider: Arc<dyn LlmProvider>,
     pub admission: Arc<CallAdmission>,
 }
 
@@ -20,7 +20,7 @@ impl ReconstructionRuntime {
     #[must_use]
     pub fn new(provider: Arc<dyn LlmProvider>) -> Self {
         Self {
-            provider,
+            provider: crate::telemetry::observed(provider),
             admission: admission_from_env(),
         }
     }

@@ -7927,6 +7927,23 @@ pub struct McpServer {
 }
 ```
 
+## hm-mcp::ObservedProvider
+
+<a id="rust-crates-hm-mcp-src-telemetry-rs-observedprovider"></a>
+
+Source: [`crates/hm-mcp/src/telemetry.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/telemetry.rs).
+
+When to use: Use `ObservedProvider` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct ObservedProvider {
+    inner: Arc<dyn LlmProvider>,
+}
+```
+
 ## hm-mcp::AttestDisposition
 
 <a id="rust-crates-hm-mcp-src-tools-attest-rs-attestdisposition"></a>
@@ -8666,7 +8683,7 @@ Do not use: Do not ignore ok/effect_state, manufacture observed evidence through
 
 ```rust
 pub struct ReconstructionRuntime {
-    pub provider: Arc<dyn LlmProvider>,
+    provider: Arc<dyn LlmProvider>,
     pub admission: Arc<CallAdmission>,
 }
 ```

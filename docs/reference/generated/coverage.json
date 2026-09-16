@@ -1932,6 +1932,11 @@
       "file": "crates/hm-mcp/src/lib.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/telemetry.rs:ObservedProvider",
+      "name": "hm-mcp::ObservedProvider",
+      "file": "crates/hm-mcp/src/telemetry.rs"
+    },
+    {
       "id": "rust:crates/hm-mcp/src/tools/attest.rs:AttestDisposition",
       "name": "hm-mcp::AttestDisposition",
       "file": "crates/hm-mcp/src/tools/attest.rs"

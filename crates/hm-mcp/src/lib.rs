@@ -21,7 +21,9 @@ use serde_json::{Value, json};
 
 pub mod admission;
 pub mod dispatcher;
+pub mod telemetry;
 pub mod tools;
+pub use telemetry::ObservedProvider;
 pub use tools::attest::{AttestDisposition, AttestInput};
 pub use tools::believe::{
     BeliefClaimInput, BeliefTypeInput, BelieveInput, ClaimInput, ProvenanceInput,

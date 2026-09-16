@@ -3,6 +3,7 @@
 use crate::anticipation::{self, WakeDecision, WakeEvaluation};
 use hm_compose::bundle::{self, ActivationBundle, ActivationRequest};
 use hm_compose::tokens::{FallbackWeights, TokenCounter};
+use hm_core::telemetry::{Attribute, SpanBuilder, SpanKind, SpanOutcome};
 use hm_core::{ActorId, ConversationId, Error, ErrorCode, LSN, UtcNanos};
 use hm_cortex::attention::AttentionFactors;
 use hm_ledger::checkpoint::{SigningKeyPair, signing_key_pair_for};
@@ -386,7 +387,10 @@ impl ActorEngine {
     }
 
     pub async fn append(&self, events: Vec<IncomingEvent>) -> Result<AppendOutcome, Error> {
-        request(&self.commands, |reply| Command::Append(events, reply)).await
+        let span = ingestion_span(self.actor, events.len());
+        let outcome = request(&self.commands, |reply| Command::Append(events, reply)).await;
+        finish_ingestion(span, outcome.is_ok());
+        outcome
     }
 
     pub async fn append_idempotent(
@@ -395,10 +399,13 @@ impl ActorEngine {
         client_seq: u64,
         events: Vec<IncomingEvent>,
     ) -> Result<AppendOutcome, Error> {
-        request(&self.commands, |reply| {
+        let span = ingestion_span(self.actor, events.len());
+        let outcome = request(&self.commands, |reply| {
             Command::IdempotentAppend(connection_id, client_seq, events, reply)
         })
-        .await
+        .await;
+        finish_ingestion(span, outcome.is_ok());
+        outcome
     }
 
     pub async fn write_checkpoint(
@@ -587,6 +594,29 @@ impl ActorEngine {
         response
             .await
             .map_err(|_| Error::new(ErrorCode::OperationUnavailable))
+    }
+}
+
+fn ingestion_span(actor: ActorId, events: usize) -> Option<SpanBuilder> {
+    let mut span = hm_core::telemetry::start_span(SpanKind::Ingestion, "hypermind.ingestion")?;
+    span.attribute(Attribute::Integer(
+        "hypermind.actor",
+        i64::from(actor.get()),
+    ));
+    span.attribute(Attribute::Integer(
+        "hypermind.ingestion.events",
+        i64::try_from(events).unwrap_or(i64::MAX),
+    ));
+    Some(span)
+}
+
+fn finish_ingestion(span: Option<SpanBuilder>, appended: bool) {
+    if let Some(span) = span {
+        span.finish(if appended {
+            SpanOutcome::Ok
+        } else {
+            SpanOutcome::Error
+        });
     }
 }
 

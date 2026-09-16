@@ -4,6 +4,7 @@ use crate::Envelope;
 use crate::admission::admission_from_env;
 use crate::tools::relation;
 use crate::tools::remember::EmbeddingRuntime;
+use hm_core::telemetry::{Attribute, SpanBuilder, SpanKind, SpanOutcome};
 use hm_core::{ConversationId, Error, ErrorCode, LSN};
 use hm_cortex::budget::BudgetUsage;
 use hm_cortex::citations::{FrozenCandidate, SourceKind};
@@ -64,7 +65,7 @@ impl ConsolidationRuntime {
         )
         .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
         Ok(Some(Self {
-            provider: Arc::new(provider),
+            provider: crate::telemetry::observed(Arc::new(provider)),
             admission: admission_from_env(),
         }))
     }
@@ -72,7 +73,7 @@ impl ConsolidationRuntime {
     #[must_use]
     pub fn new(provider: Arc<dyn LlmProvider>) -> Self {
         Self {
-            provider,
+            provider: crate::telemetry::observed(provider),
             admission: Arc::new(CallAdmission::new(AdmissionLimits::default())),
         }
     }
@@ -148,8 +149,72 @@ pub async fn run(
     let history = read_history(actor).await?;
     match input.action {
         ConsolidateAction::List => Ok(list(history)),
-        ConsolidateAction::Run => start(actor, runtime, embedding, history, input).await,
+        ConsolidateAction::Run => {
+            let mode = input.mode;
+            let mut span =
+                hm_core::telemetry::start_span(SpanKind::Extraction, "hypermind.extraction");
+            if let Some(span) = span.as_mut() {
+                span.attribute(Attribute::Integer(
+                    "hypermind.actor",
+                    i64::from(actor.actor().get()),
+                ));
+                if let Some(mode) = mode {
+                    span.attribute(Attribute::Text(
+                        "hypermind.extraction.mode",
+                        mode_label(mode),
+                    ));
+                }
+            }
+            let started = start(actor, runtime, embedding, history, input).await;
+            if let Some(mut span) = span {
+                match started.as_ref() {
+                    Ok(envelope) => {
+                        record_extraction_cost(&mut span, envelope);
+                        span.finish(SpanOutcome::Ok);
+                    }
+                    Err(_) => span.finish(SpanOutcome::Error),
+                }
+            }
+            started
+        }
         ConsolidateAction::Retract => retract(actor, history, input).await,
+    }
+}
+
+const fn mode_label(mode: ConsolidateMode) -> &'static str {
+    match mode {
+        ConsolidateMode::Nrem => "nrem",
+        ConsolidateMode::Rem => "rem",
+        ConsolidateMode::Both => "both",
+    }
+}
+
+fn record_extraction_cost(span: &mut SpanBuilder, envelope: &Envelope) {
+    let Some(item) = envelope.items.first() else {
+        return;
+    };
+    for (key, source) in [
+        ("hypermind.extraction.llm_calls", &item["cost"]["llm_calls"]),
+        (
+            "hypermind.extraction.input_tokens",
+            &item["cost"]["input_tokens"],
+        ),
+        (
+            "hypermind.extraction.output_tokens",
+            &item["cost"]["output_tokens"],
+        ),
+        ("hypermind.extraction.microusd", &item["cost"]["microusd"]),
+        (
+            "hypermind.extraction.derived_records",
+            &item["stats"]["derived_records"],
+        ),
+    ] {
+        if let Some(value) = source.as_u64() {
+            span.attribute(Attribute::Integer(
+                key,
+                i64::try_from(value).unwrap_or(i64::MAX),
+            ));
+        }
     }
 }
 

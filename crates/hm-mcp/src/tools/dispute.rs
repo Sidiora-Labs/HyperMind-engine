@@ -29,7 +29,7 @@ impl DisputeRuntime {
     ) -> Self {
         Self {
             nli,
-            provider,
+            provider: provider.map(crate::telemetry::observed),
             minimum_tier,
         }
     }
