@@ -389,5 +389,7 @@ fn consolidation_opened(phases: Vec<ConsolidationPhaseName>) -> ConsolidationOpe
             max_microusd: 1_000,
             max_wall_ms: 10_000,
         }),
+        source_first_lsn: 0,
+        source_last_lsn: 0,
     }
 }

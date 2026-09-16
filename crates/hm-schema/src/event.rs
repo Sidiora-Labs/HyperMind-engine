@@ -1116,6 +1116,8 @@ fn validate_consolidation_opened(value: &ConsolidationOpened) -> Result<(), Erro
         || value.budget.max_tokens == 0
         || value.budget.max_microusd == 0
         || value.budget.max_wall_ms == 0
+        || (value.source_first_lsn == 0) != (value.source_last_lsn == 0)
+        || value.source_first_lsn > value.source_last_lsn
     {
         Err(Error::new(ErrorCode::SchemaInvalid))
     } else {

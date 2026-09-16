@@ -180,6 +180,8 @@ async fn start(
         phases: phases.clone(),
         prompts,
         budget: Box::new(budget.into()),
+        source_first_lsn: 0,
+        source_last_lsn: 0,
     };
     let mut events = vec![incoming(
         actor,

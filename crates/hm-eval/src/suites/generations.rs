@@ -212,6 +212,8 @@ fn generation_events(generation: u64, parent: u64, memory_id: &[u8]) -> Vec<Inco
                     max_microusd: 4_000,
                     max_wall_ms: 30_000,
                 }),
+                source_first_lsn: 0,
+                source_last_lsn: 0,
             })),
             None,
         ),

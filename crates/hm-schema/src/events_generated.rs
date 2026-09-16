@@ -15988,6 +15988,10 @@ mod root {
                 pub prompts: ::planus::alloc::vec::Vec<self::PromptVersion>,
                 /// The field `budget` in the table `ConsolidationOpened`
                 pub budget: ::planus::alloc::boxed::Box<self::ConsolidationBudget>,
+                /// The field `source_first_lsn` in the table `ConsolidationOpened`
+                pub source_first_lsn: u64,
+                /// The field `source_last_lsn` in the table `ConsolidationOpened`
+                pub source_last_lsn: u64,
             }
 
             #[allow(clippy::derivable_impls)]
@@ -16001,6 +16005,8 @@ mod root {
                         phases: ::core::default::Default::default(),
                         prompts: ::core::default::Default::default(),
                         budget: ::core::default::Default::default(),
+                        source_first_lsn: 0,
+                        source_last_lsn: 0,
                     }
                 }
             }
@@ -16026,6 +16032,8 @@ mod root {
                         ::planus::Offset<[::planus::Offset<self::PromptVersion>]>,
                     >,
                     field_budget: impl ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
+                    field_source_first_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_source_last_lsn: impl ::planus::WriteAsDefault<u64, u64>,
                 ) -> ::planus::Offset<Self> {
                     let prepared_scope_digest = field_scope_digest.prepare(builder);
                     let prepared_cadence_key = field_cadence_key.prepare(builder);
@@ -16035,14 +16043,22 @@ mod root {
                     let prepared_phases = field_phases.prepare(builder);
                     let prepared_prompts = field_prompts.prepare(builder);
                     let prepared_budget = field_budget.prepare(builder);
+                    let prepared_source_first_lsn = field_source_first_lsn.prepare(builder, &0);
+                    let prepared_source_last_lsn = field_source_last_lsn.prepare(builder, &0);
 
-                    let mut table_writer: ::planus::table_writer::TableWriter<18> =
+                    let mut table_writer: ::planus::table_writer::TableWriter<22> =
                         ::core::default::Default::default();
                     if prepared_generation.is_some() {
                         table_writer.write_entry::<u64>(2);
                     }
                     if prepared_expected_active_generation.is_some() {
                         table_writer.write_entry::<u64>(3);
+                    }
+                    if prepared_source_first_lsn.is_some() {
+                        table_writer.write_entry::<u64>(7);
+                    }
+                    if prepared_source_last_lsn.is_some() {
+                        table_writer.write_entry::<u64>(8);
                     }
                     table_writer.write_entry::<::planus::Offset<[u8]>>(0);
                     table_writer.write_entry::<::planus::Offset<str>>(1);
@@ -16066,6 +16082,16 @@ mod root {
                             {
                                 object_writer
                                     .write::<_, _, 8>(&prepared_expected_active_generation);
+                            }
+                            if let ::core::option::Option::Some(prepared_source_first_lsn) =
+                                prepared_source_first_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_source_first_lsn);
+                            }
+                            if let ::core::option::Option::Some(prepared_source_last_lsn) =
+                                prepared_source_last_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_source_last_lsn);
                             }
                             object_writer.write::<_, _, 4>(&prepared_scope_digest);
                             object_writer.write::<_, _, 4>(&prepared_cadence_key);
@@ -16117,6 +16143,8 @@ mod root {
                         &self.phases,
                         &self.prompts,
                         &self.budget,
+                        self.source_first_lsn,
+                        self.source_last_lsn,
                     )
                 }
             }
@@ -16252,6 +16280,69 @@ mod root {
             }
 
             impl<T0, T1, T2, T3, T4, T5, T6> ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`source_first_lsn` field](ConsolidationOpened#structfield.source_first_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_first_lsn<T7>(
+                    self,
+                    value: T7,
+                ) -> ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    ConsolidationOpenedBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+
+                /// Sets the [`source_first_lsn` field](ConsolidationOpened#structfield.source_first_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_first_lsn_as_default(
+                    self,
+                ) -> ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6, ::planus::DefaultValue)>
+                {
+                    self.source_first_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7> ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
+                /// Setter for the [`source_last_lsn` field](ConsolidationOpened#structfield.source_last_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_last_lsn<T8>(
+                    self,
+                    value: T8,
+                ) -> ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+                where
+                    T8: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = self.0;
+                    ConsolidationOpenedBuilder((v0, v1, v2, v3, v4, v5, v6, v7, value))
+                }
+
+                /// Sets the [`source_last_lsn` field](ConsolidationOpened#structfield.source_last_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_last_lsn_as_default(
+                    self,
+                ) -> ConsolidationOpenedBuilder<(
+                    T0,
+                    T1,
+                    T2,
+                    T3,
+                    T4,
+                    T5,
+                    T6,
+                    T7,
+                    ::planus::DefaultValue,
+                )> {
+                    self.source_last_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+                ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
                 /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ConsolidationOpened].
                 #[inline]
                 pub fn finish(
@@ -16273,8 +16364,10 @@ mod root {
                     T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
                     T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
                     T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
                 > ::planus::WriteAs<::planus::Offset<ConsolidationOpened>>
-                for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 type Prepared = ::planus::Offset<ConsolidationOpened>;
 
@@ -16295,8 +16388,10 @@ mod root {
                     T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
                     T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
                     T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
                 > ::planus::WriteAsOptional<::planus::Offset<ConsolidationOpened>>
-                for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 type Prepared = ::planus::Offset<ConsolidationOpened>;
 
@@ -16317,16 +16412,18 @@ mod root {
                     T4: ::planus::WriteAs<::planus::Offset<[self::ConsolidationPhaseName]>>,
                     T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<self::PromptVersion>]>>,
                     T6: ::planus::WriteAs<::planus::Offset<self::ConsolidationBudget>>,
+                    T7: ::planus::WriteAsDefault<u64, u64>,
+                    T8: ::planus::WriteAsDefault<u64, u64>,
                 > ::planus::WriteAsOffset<ConsolidationOpened>
-                for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                for ConsolidationOpenedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
             {
                 #[inline]
                 fn prepare(
                     &self,
                     builder: &mut ::planus::Builder,
                 ) -> ::planus::Offset<ConsolidationOpened> {
-                    let (v0, v1, v2, v3, v4, v5, v6) = &self.0;
-                    ConsolidationOpened::create(builder, v0, v1, v2, v3, v4, v5, v6)
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8) = &self.0;
+                    ConsolidationOpened::create(builder, v0, v1, v2, v3, v4, v5, v6, v7, v8)
                 }
             }
 
@@ -16402,6 +16499,26 @@ mod root {
                 pub fn budget(&self) -> ::planus::Result<self::ConsolidationBudgetRef<'a>> {
                     self.0.access_required(6, "ConsolidationOpened", "budget")
                 }
+
+                /// Getter for the [`source_first_lsn` field](ConsolidationOpened#structfield.source_first_lsn).
+                #[inline]
+                pub fn source_first_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(7, "ConsolidationOpened", "source_first_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`source_last_lsn` field](ConsolidationOpened#structfield.source_last_lsn).
+                #[inline]
+                pub fn source_last_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(8, "ConsolidationOpened", "source_last_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
             }
 
             impl<'a> ::core::fmt::Debug for ConsolidationOpenedRef<'a> {
@@ -16417,6 +16534,8 @@ mod root {
                     f.field("phases", &self.phases());
                     f.field("prompts", &self.prompts());
                     f.field("budget", &self.budget());
+                    f.field("source_first_lsn", &self.source_first_lsn());
+                    f.field("source_last_lsn", &self.source_last_lsn());
                     f.finish()
                 }
             }
@@ -16438,6 +16557,12 @@ mod root {
                         budget: ::planus::alloc::boxed::Box::new(
                             ::core::convert::TryInto::try_into(value.budget()?)?,
                         ),
+                        source_first_lsn: ::core::convert::TryInto::try_into(
+                            value.source_first_lsn()?,
+                        )?,
+                        source_last_lsn: ::core::convert::TryInto::try_into(
+                            value.source_last_lsn()?,
+                        )?,
                     })
                 }
             }
@@ -16522,7 +16647,7 @@ mod root {
             /// The table `ConsolidationPhase` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ConsolidationPhase` in the file `schemas/events.fbs:265`
+            /// * Table `ConsolidationPhase` in the file `schemas/events.fbs:267`
             #[derive(
                 Clone,
                 Debug,
@@ -17268,7 +17393,7 @@ mod root {
             /// The table `ConsolidationClosed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ConsolidationClosed` in the file `schemas/events.fbs:277`
+            /// * Table `ConsolidationClosed` in the file `schemas/events.fbs:279`
             #[derive(
                 Clone,
                 Debug,
@@ -17965,7 +18090,7 @@ mod root {
             /// The table `ConsolidationRetracted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ConsolidationRetracted` in the file `schemas/events.fbs:288`
+            /// * Table `ConsolidationRetracted` in the file `schemas/events.fbs:290`
             #[derive(
                 Clone,
                 Debug,
@@ -18345,7 +18470,7 @@ mod root {
             /// The table `Reviewed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Reviewed` in the file `schemas/events.fbs:294`
+            /// * Table `Reviewed` in the file `schemas/events.fbs:296`
             #[derive(
                 Clone,
                 Debug,
@@ -18919,7 +19044,7 @@ mod root {
             /// The enum `AttentionDecision` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `AttentionDecision` in the file `schemas/events.fbs:304`
+            /// * Enum `AttentionDecision` in the file `schemas/events.fbs:306`
             #[derive(
                 Copy,
                 Clone,
@@ -19122,7 +19247,7 @@ mod root {
             /// The enum `PredicateKind` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `PredicateKind` in the file `schemas/events.fbs:305`
+            /// * Enum `PredicateKind` in the file `schemas/events.fbs:307`
             #[derive(
                 Copy,
                 Clone,
@@ -19325,7 +19450,7 @@ mod root {
             /// The enum `OutcomeAssessment` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `OutcomeAssessment` in the file `schemas/events.fbs:314`
+            /// * Enum `OutcomeAssessment` in the file `schemas/events.fbs:316`
             #[derive(
                 Copy,
                 Clone,
@@ -19518,7 +19643,7 @@ mod root {
             /// The table `WakeAt` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeAt` in the file `schemas/events.fbs:316`
+            /// * Table `WakeAt` in the file `schemas/events.fbs:318`
             #[derive(
                 Clone,
                 Debug,
@@ -19780,7 +19905,7 @@ mod root {
             /// The table `WakeSchedule` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeSchedule` in the file `schemas/events.fbs:320`
+            /// * Table `WakeSchedule` in the file `schemas/events.fbs:322`
             #[derive(
                 Clone,
                 Debug,
@@ -20049,7 +20174,7 @@ mod root {
             /// The table `WakeChildTerminal` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeChildTerminal` in the file `schemas/events.fbs:324`
+            /// * Table `WakeChildTerminal` in the file `schemas/events.fbs:326`
             #[derive(
                 Clone,
                 Debug,
@@ -20321,7 +20446,7 @@ mod root {
             /// The table `WakeProcessExit` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeProcessExit` in the file `schemas/events.fbs:328`
+            /// * Table `WakeProcessExit` in the file `schemas/events.fbs:330`
             #[derive(
                 Clone,
                 Debug,
@@ -20593,7 +20718,7 @@ mod root {
             /// The table `WakeFileChanged` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeFileChanged` in the file `schemas/events.fbs:332`
+            /// * Table `WakeFileChanged` in the file `schemas/events.fbs:334`
             #[derive(
                 Clone,
                 Debug,
@@ -20865,7 +20990,7 @@ mod root {
             /// The table `WakeRepositoryChanged` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeRepositoryChanged` in the file `schemas/events.fbs:336`
+            /// * Table `WakeRepositoryChanged` in the file `schemas/events.fbs:338`
             #[derive(
                 Clone,
                 Debug,
@@ -21147,7 +21272,7 @@ mod root {
             /// The table `WakeChannelMessage` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeChannelMessage` in the file `schemas/events.fbs:340`
+            /// * Table `WakeChannelMessage` in the file `schemas/events.fbs:342`
             #[derive(
                 Clone,
                 Debug,
@@ -21419,7 +21544,7 @@ mod root {
             /// The table `WakeExternalCondition` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeExternalCondition` in the file `schemas/events.fbs:344`
+            /// * Table `WakeExternalCondition` in the file `schemas/events.fbs:346`
             #[derive(
                 Clone,
                 Debug,
@@ -21701,7 +21826,7 @@ mod root {
             /// The table `WakeUserResponse` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeUserResponse` in the file `schemas/events.fbs:348`
+            /// * Table `WakeUserResponse` in the file `schemas/events.fbs:350`
             #[derive(
                 Clone,
                 Debug,
@@ -21973,7 +22098,7 @@ mod root {
             /// The table `WakeEntityMentioned` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeEntityMentioned` in the file `schemas/events.fbs:352`
+            /// * Table `WakeEntityMentioned` in the file `schemas/events.fbs:354`
             #[derive(
                 Clone,
                 Debug,
@@ -22250,7 +22375,7 @@ mod root {
             /// The table `WakeLoopClosed` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeLoopClosed` in the file `schemas/events.fbs:356`
+            /// * Table `WakeLoopClosed` in the file `schemas/events.fbs:358`
             #[derive(
                 Clone,
                 Debug,
@@ -22520,7 +22645,7 @@ mod root {
             /// The table `WakePredictionResolved` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakePredictionResolved` in the file `schemas/events.fbs:360`
+            /// * Table `WakePredictionResolved` in the file `schemas/events.fbs:362`
             #[derive(
                 Clone,
                 Debug,
@@ -22804,7 +22929,7 @@ mod root {
             /// The table `WakeBeliefChanged` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `WakeBeliefChanged` in the file `schemas/events.fbs:364`
+            /// * Table `WakeBeliefChanged` in the file `schemas/events.fbs:366`
             #[derive(
                 Clone,
                 Debug,
@@ -23079,7 +23204,7 @@ mod root {
             /// The union `WakeTrigger` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `WakeTrigger` in the file `schemas/events.fbs:368`
+            /// * Union `WakeTrigger` in the file `schemas/events.fbs:370`
             #[derive(
                 Clone,
                 Debug,
@@ -23976,7 +24101,7 @@ mod root {
             /// The table `IntentionSet` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentionSet` in the file `schemas/events.fbs:384`
+            /// * Table `IntentionSet` in the file `schemas/events.fbs:386`
             #[derive(
                 Clone,
                 Debug,
@@ -24431,7 +24556,7 @@ mod root {
             /// The table `IntentionFired` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentionFired` in the file `schemas/events.fbs:392`
+            /// * Table `IntentionFired` in the file `schemas/events.fbs:394`
             #[derive(
                 Clone,
                 Debug,
@@ -24790,7 +24915,7 @@ mod root {
             /// The table `AttentionDecided` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `AttentionDecided` in the file `schemas/events.fbs:398`
+            /// * Table `AttentionDecided` in the file `schemas/events.fbs:400`
             #[derive(
                 Clone,
                 Debug,
@@ -25189,7 +25314,7 @@ mod root {
             /// The table `IntentionCancelled` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `IntentionCancelled` in the file `schemas/events.fbs:405`
+            /// * Table `IntentionCancelled` in the file `schemas/events.fbs:407`
             #[derive(
                 Clone,
                 Debug,
@@ -25497,7 +25622,7 @@ mod root {
             /// The table `ExpectedPredicate` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ExpectedPredicate` in the file `schemas/events.fbs:410`
+            /// * Table `ExpectedPredicate` in the file `schemas/events.fbs:412`
             #[derive(
                 Clone,
                 Debug,
@@ -25929,7 +26054,7 @@ mod root {
             /// The table `Predicted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `Predicted` in the file `schemas/events.fbs:417`
+            /// * Table `Predicted` in the file `schemas/events.fbs:419`
             #[derive(
                 Clone,
                 Debug,
@@ -26552,7 +26677,7 @@ mod root {
             /// The table `OutcomeObserved` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `OutcomeObserved` in the file `schemas/events.fbs:429`
+            /// * Table `OutcomeObserved` in the file `schemas/events.fbs:431`
             #[derive(
                 Clone,
                 Debug,
@@ -27010,7 +27135,7 @@ mod root {
             /// The table `ProcedureSupport` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProcedureSupport` in the file `schemas/events.fbs:437`
+            /// * Table `ProcedureSupport` in the file `schemas/events.fbs:439`
             #[derive(
                 Clone,
                 Debug,
@@ -27373,7 +27498,7 @@ mod root {
             /// The table `ProcedureMined` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProcedureMined` in the file `schemas/events.fbs:443`
+            /// * Table `ProcedureMined` in the file `schemas/events.fbs:445`
             #[derive(
                 Clone,
                 Debug,
@@ -27923,7 +28048,7 @@ mod root {
             /// The table `ProcedureRevised` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProcedureRevised` in the file `schemas/events.fbs:453`
+            /// * Table `ProcedureRevised` in the file `schemas/events.fbs:455`
             #[derive(
                 Clone,
                 Debug,
@@ -28539,7 +28664,7 @@ mod root {
             /// The table `ProcedureAdopted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `ProcedureAdopted` in the file `schemas/events.fbs:464`
+            /// * Table `ProcedureAdopted` in the file `schemas/events.fbs:466`
             #[derive(
                 Clone,
                 Debug,
@@ -28865,7 +28990,7 @@ mod root {
             /// The enum `VocabularyCategory` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `VocabularyCategory` in the file `schemas/events.fbs:469`
+            /// * Enum `VocabularyCategory` in the file `schemas/events.fbs:471`
             #[derive(
                 Copy,
                 Clone,
@@ -29045,7 +29170,7 @@ mod root {
             /// The table `VocabularyTerm` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `VocabularyTerm` in the file `schemas/events.fbs:471`
+            /// * Table `VocabularyTerm` in the file `schemas/events.fbs:473`
             #[derive(
                 Clone,
                 Debug,
@@ -29531,7 +29656,7 @@ mod root {
             /// The table `VocabularyImported` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `VocabularyImported` in the file `schemas/events.fbs:479`
+            /// * Table `VocabularyImported` in the file `schemas/events.fbs:481`
             #[derive(
                 Clone,
                 Debug,
@@ -30069,7 +30194,7 @@ mod root {
             /// The table `DocumentPageSpan` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentPageSpan` in the file `schemas/events.fbs:489`
+            /// * Table `DocumentPageSpan` in the file `schemas/events.fbs:491`
             #[derive(
                 Clone,
                 Debug,
@@ -30469,7 +30594,7 @@ mod root {
             /// The table `DocumentIngested` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentIngested` in the file `schemas/events.fbs:495`
+            /// * Table `DocumentIngested` in the file `schemas/events.fbs:497`
             #[derive(
                 Clone,
                 Debug,
@@ -30880,7 +31005,7 @@ mod root {
             /// The table `DocumentExtracted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentExtracted` in the file `schemas/events.fbs:503`
+            /// * Table `DocumentExtracted` in the file `schemas/events.fbs:505`
             #[derive(
                 Clone,
                 Debug,
@@ -31536,7 +31661,7 @@ mod root {
             /// The table `DocumentChunk` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentChunk` in the file `schemas/events.fbs:515`
+            /// * Table `DocumentChunk` in the file `schemas/events.fbs:517`
             #[derive(
                 Clone,
                 Debug,
@@ -32492,7 +32617,7 @@ mod root {
             /// The table `DocumentChunked` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentChunked` in the file `schemas/events.fbs:531`
+            /// * Table `DocumentChunked` in the file `schemas/events.fbs:533`
             #[derive(
                 Clone,
                 Debug,
@@ -33069,7 +33194,7 @@ mod root {
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:541`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:543`
             #[derive(
                 Clone,
                 Debug,
@@ -36012,7 +36137,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:591`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:593`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]

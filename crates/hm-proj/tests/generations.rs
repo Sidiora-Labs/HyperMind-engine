@@ -99,6 +99,8 @@ fn opened(lsn: u64, run_id: &[u8], generation: u64, parent: u64) -> Frame {
                 max_microusd: 1_000,
                 max_wall_ms: 30_000,
             }),
+            source_first_lsn: 0,
+            source_last_lsn: 0,
         })),
         None,
     )

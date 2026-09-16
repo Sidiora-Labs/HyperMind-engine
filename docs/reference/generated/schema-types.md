@@ -939,6 +939,8 @@ table ConsolidationOpened {
   phases:[ConsolidationPhaseName] (required);
   prompts:[PromptVersion] (required);
   budget:ConsolidationBudget (required);
+  source_first_lsn:ulong;
+  source_last_lsn:ulong;
 }
 ```
 

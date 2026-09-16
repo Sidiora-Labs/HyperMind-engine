@@ -317,6 +317,8 @@ fn plan(bytes: &[u8]) -> Result<(Plan, Manifest, String)> {
                     max_microusd: 1,
                     max_wall_ms: 1,
                 }),
+                source_first_lsn: 0,
+                source_last_lsn: 0,
             })),
             Authority::RuntimeFact,
             0,

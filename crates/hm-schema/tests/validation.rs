@@ -870,6 +870,8 @@ fn consolidation_events_round_trip_with_generation_and_model_provenance() {
                     max_microusd: 100_000,
                     max_wall_ms: 30_000,
                 }),
+                source_first_lsn: 0,
+                source_last_lsn: 0,
             })),
             false,
         ),
@@ -940,6 +942,60 @@ fn consolidation_events_round_trip_with_generation_and_model_provenance() {
             assert_eq!(model.input_tokens, 120);
             assert_eq!(model.cost_microusd, 17);
         }
+    }
+}
+
+#[test]
+fn consolidation_runs_declare_a_bounded_source_lsn_window() {
+    let window = |first: u64, last: u64| {
+        encode_event(&wave_six_envelope(
+            EventPayload::ConsolidationOpened(Box::new(ConsolidationOpened {
+                scope_digest: vec![0x62; 32],
+                cadence_key: "daily:2026-09-16".to_owned(),
+                generation: 7,
+                expected_active_generation: 6,
+                phases: vec![ConsolidationPhaseName::Nrem],
+                prompts: vec![PromptVersion {
+                    prompt_id: "merge-cluster".to_owned(),
+                    version: 1,
+                    model_id: "fixture-model".to_owned(),
+                }],
+                budget: Box::new(ConsolidationBudget {
+                    max_llm_calls: 8,
+                    max_tokens: 8_000,
+                    max_microusd: 100_000,
+                    max_wall_ms: 30_000,
+                }),
+                source_first_lsn: first,
+                source_last_lsn: last,
+            })),
+            false,
+        ))
+    };
+    for (first, last) in [(0, 0), (5, 9)] {
+        let verified = verify_event(
+            &window(first, last),
+            EventKind::ConsolidationOpened,
+            Boundary::Socket,
+        )
+        .expect("declared source window");
+        let EventPayload::ConsolidationOpened(opened) = verified.envelope.payload else {
+            panic!("consolidation opened payload");
+        };
+        assert_eq!(opened.source_first_lsn, first);
+        assert_eq!(opened.source_last_lsn, last);
+    }
+    for (first, last) in [(9, 5), (0, 9), (5, 0)] {
+        assert_eq!(
+            verify_event(
+                &window(first, last),
+                EventKind::ConsolidationOpened,
+                Boundary::Socket,
+            )
+            .expect_err("inconsistent source window")
+            .code,
+            ErrorCode::SchemaInvalid
+        );
     }
 }
 

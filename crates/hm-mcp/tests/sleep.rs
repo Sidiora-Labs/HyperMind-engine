@@ -284,6 +284,8 @@ fn opened(lsn: u64, run: &[u8]) -> Frame {
                 max_microusd: 10_000,
                 max_wall_ms: 30_000,
             }),
+            source_first_lsn: 0,
+            source_last_lsn: 0,
         })),
         None,
     )
