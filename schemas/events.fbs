@@ -468,6 +468,30 @@ table ProcedureAdopted {
   procedure_lsn:ulong;
 }
 
+table ProcedureImported {
+  procedure_id:[ubyte] (required);
+  name:string (required);
+  strategy:string (required);
+  expected_outcomes:[string] (required);
+  preconditions:[string] (required);
+  instructions:[ubyte] (required);
+  declared_tools:[string] (required);
+  source_uri:string (required);
+  source_digest:[ubyte] (required);
+  playbook_version:ushort;
+}
+
+table ProcedureImprovementProposed {
+  proposal_id:[ubyte] (required);
+  procedure_id:[ubyte] (required);
+  base_lsn:ulong;
+  strategy:string (required);
+  expected_outcomes:[string] (required);
+  preconditions:[string] (required);
+  rationale:string (required);
+  failure_lsns:[ulong] (required);
+}
+
 enum VocabularyCategory : ubyte { entity_type, entity_instance, relation }
 
 table VocabularyTerm {
@@ -637,7 +661,9 @@ union EventPayload {
   SourceConnectorBound,
   SourceDeliveryAccepted,
   SourceDeliverySettled,
-  SourceRevisionObserved
+  SourceRevisionObserved,
+  ProcedureImported,
+  ProcedureImprovementProposed
 }
 
 table EventEnvelope {

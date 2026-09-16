@@ -116,7 +116,7 @@ fn document_event_kinds_round_trip_and_are_wave_seven() {
         assert_eq!(kind.requires_run_id(), needs_run_id);
         assert!(!kind.is_llm_derived());
     }
-    assert!(EventKind::try_from(52).is_err());
+    assert!(EventKind::try_from(54).is_err());
 }
 
 #[test]

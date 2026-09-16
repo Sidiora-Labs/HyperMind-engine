@@ -1566,6 +1566,56 @@ table ProcedureAdopted {
 }
 ```
 
+## events.fbs::ProcedureImported
+
+<a id="schema-schemas-events-fbs-procedureimported"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Procedure Imported when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table ProcedureImported {
+  procedure_id:[ubyte] (required);
+  name:string (required);
+  strategy:string (required);
+  expected_outcomes:[string] (required);
+  preconditions:[string] (required);
+  instructions:[ubyte] (required);
+  declared_tools:[string] (required);
+  source_uri:string (required);
+  source_digest:[ubyte] (required);
+  playbook_version:ushort;
+}
+```
+
+## events.fbs::ProcedureImprovementProposed
+
+<a id="schema-schemas-events-fbs-procedureimprovementproposed"></a>
+
+Source: [`schemas/events.fbs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/schemas/events.fbs).
+
+When to use: Use Procedure Improvement Proposed when encoding or interpreting the corresponding versioned ledger record or discriminator. The fields below are the canonical on-disk contract; append through the actor so ordering, authority, and provenance are validated.
+
+Do not use: Do not write directly to a projection, bypass admission, or infer observed authority from serialized content. Protected identity, preference, and constraint writes require user or admin authority; derived content is not proof of an external effect.
+
+
+```text
+table ProcedureImprovementProposed {
+  proposal_id:[ubyte] (required);
+  procedure_id:[ubyte] (required);
+  base_lsn:ulong;
+  strategy:string (required);
+  expected_outcomes:[string] (required);
+  preconditions:[string] (required);
+  rationale:string (required);
+  failure_lsns:[ulong] (required);
+}
+```
+
 ## events.fbs::VocabularyCategory
 
 <a id="schema-schemas-events-fbs-vocabularycategory"></a>
@@ -1944,7 +1994,9 @@ union EventPayload {
   SourceConnectorBound,
   SourceDeliveryAccepted,
   SourceDeliverySettled,
-  SourceRevisionObserved
+  SourceRevisionObserved,
+  ProcedureImported,
+  ProcedureImprovementProposed
 }
 ```
 

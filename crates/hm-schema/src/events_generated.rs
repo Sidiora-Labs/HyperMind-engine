@@ -28987,10 +28987,1241 @@ mod root {
                 }
             }
 
+            /// The table `ProcedureImported` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `ProcedureImported` in the file `schemas/events.fbs:471`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ProcedureImported {
+                /// The field `procedure_id` in the table `ProcedureImported`
+                pub procedure_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `name` in the table `ProcedureImported`
+                pub name: ::planus::alloc::string::String,
+                /// The field `strategy` in the table `ProcedureImported`
+                pub strategy: ::planus::alloc::string::String,
+                /// The field `expected_outcomes` in the table `ProcedureImported`
+                pub expected_outcomes: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `preconditions` in the table `ProcedureImported`
+                pub preconditions: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `instructions` in the table `ProcedureImported`
+                pub instructions: ::planus::alloc::vec::Vec<u8>,
+                /// The field `declared_tools` in the table `ProcedureImported`
+                pub declared_tools: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `source_uri` in the table `ProcedureImported`
+                pub source_uri: ::planus::alloc::string::String,
+                /// The field `source_digest` in the table `ProcedureImported`
+                pub source_digest: ::planus::alloc::vec::Vec<u8>,
+                /// The field `playbook_version` in the table `ProcedureImported`
+                pub playbook_version: u16,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ProcedureImported {
+                fn default() -> Self {
+                    Self {
+                        procedure_id: ::core::default::Default::default(),
+                        name: ::core::default::Default::default(),
+                        strategy: ::core::default::Default::default(),
+                        expected_outcomes: ::core::default::Default::default(),
+                        preconditions: ::core::default::Default::default(),
+                        instructions: ::core::default::Default::default(),
+                        declared_tools: ::core::default::Default::default(),
+                        source_uri: ::core::default::Default::default(),
+                        source_digest: ::core::default::Default::default(),
+                        playbook_version: 0,
+                    }
+                }
+            }
+
+            impl ProcedureImported {
+                /// Creates a [ProcedureImportedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ProcedureImportedBuilder<()> {
+                    ProcedureImportedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_procedure_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_name: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_strategy: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_expected_outcomes: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_preconditions: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_instructions: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_declared_tools: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_source_uri: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_source_digest: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_playbook_version: impl ::planus::WriteAsDefault<u16, u16>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_procedure_id = field_procedure_id.prepare(builder);
+                    let prepared_name = field_name.prepare(builder);
+                    let prepared_strategy = field_strategy.prepare(builder);
+                    let prepared_expected_outcomes = field_expected_outcomes.prepare(builder);
+                    let prepared_preconditions = field_preconditions.prepare(builder);
+                    let prepared_instructions = field_instructions.prepare(builder);
+                    let prepared_declared_tools = field_declared_tools.prepare(builder);
+                    let prepared_source_uri = field_source_uri.prepare(builder);
+                    let prepared_source_digest = field_source_digest.prepare(builder);
+                    let prepared_playbook_version = field_playbook_version.prepare(builder, &0);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<24> =
+                        ::core::default::Default::default();
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<str>>(1);
+                    table_writer.write_entry::<::planus::Offset<str>>(2);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(3);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(4);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(5);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(6);
+                    table_writer.write_entry::<::planus::Offset<str>>(7);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(8);
+                    if prepared_playbook_version.is_some() {
+                        table_writer.write_entry::<u16>(9);
+                    }
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            object_writer.write::<_, _, 4>(&prepared_procedure_id);
+                            object_writer.write::<_, _, 4>(&prepared_name);
+                            object_writer.write::<_, _, 4>(&prepared_strategy);
+                            object_writer.write::<_, _, 4>(&prepared_expected_outcomes);
+                            object_writer.write::<_, _, 4>(&prepared_preconditions);
+                            object_writer.write::<_, _, 4>(&prepared_instructions);
+                            object_writer.write::<_, _, 4>(&prepared_declared_tools);
+                            object_writer.write::<_, _, 4>(&prepared_source_uri);
+                            object_writer.write::<_, _, 4>(&prepared_source_digest);
+                            if let ::core::option::Option::Some(prepared_playbook_version) =
+                                prepared_playbook_version
+                            {
+                                object_writer.write::<_, _, 2>(&prepared_playbook_version);
+                            }
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ProcedureImported>> for ProcedureImported {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImported> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ProcedureImported>> for ProcedureImported {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureImported>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ProcedureImported> for ProcedureImported {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImported> {
+                    ProcedureImported::create(
+                        builder,
+                        &self.procedure_id,
+                        &self.name,
+                        &self.strategy,
+                        &self.expected_outcomes,
+                        &self.preconditions,
+                        &self.instructions,
+                        &self.declared_tools,
+                        &self.source_uri,
+                        &self.source_digest,
+                        self.playbook_version,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [ProcedureImported] type.
+            ///
+            /// Can be created using the [ProcedureImported::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ProcedureImportedBuilder<State>(State);
+
+            impl ProcedureImportedBuilder<()> {
+                /// Setter for the [`procedure_id` field](ProcedureImported#structfield.procedure_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn procedure_id<T0>(self, value: T0) -> ProcedureImportedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    ProcedureImportedBuilder((value,))
+                }
+            }
+
+            impl<T0> ProcedureImportedBuilder<(T0,)> {
+                /// Setter for the [`name` field](ProcedureImported#structfield.name).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn name<T1>(self, value: T1) -> ProcedureImportedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0,) = self.0;
+                    ProcedureImportedBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> ProcedureImportedBuilder<(T0, T1)> {
+                /// Setter for the [`strategy` field](ProcedureImported#structfield.strategy).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn strategy<T2>(self, value: T2) -> ProcedureImportedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1) = self.0;
+                    ProcedureImportedBuilder((v0, v1, value))
+                }
+            }
+
+            impl<T0, T1, T2> ProcedureImportedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`expected_outcomes` field](ProcedureImported#structfield.expected_outcomes).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn expected_outcomes<T3>(
+                    self,
+                    value: T3,
+                ) -> ProcedureImportedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    ProcedureImportedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> ProcedureImportedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`preconditions` field](ProcedureImported#structfield.preconditions).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn preconditions<T4>(
+                    self,
+                    value: T4,
+                ) -> ProcedureImportedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    ProcedureImportedBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> ProcedureImportedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`instructions` field](ProcedureImported#structfield.instructions).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn instructions<T5>(
+                    self,
+                    value: T5,
+                ) -> ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    ProcedureImportedBuilder((v0, v1, v2, v3, v4, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`declared_tools` field](ProcedureImported#structfield.declared_tools).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn declared_tools<T6>(
+                    self,
+                    value: T6,
+                ) -> ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    ProcedureImportedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`source_uri` field](ProcedureImported#structfield.source_uri).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_uri<T7>(
+                    self,
+                    value: T7,
+                ) -> ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    ProcedureImportedBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7> ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
+                /// Setter for the [`source_digest` field](ProcedureImported#structfield.source_digest).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn source_digest<T8>(
+                    self,
+                    value: T8,
+                ) -> ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+                where
+                    T8: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = self.0;
+                    ProcedureImportedBuilder((v0, v1, v2, v3, v4, v5, v6, v7, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+                ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8)>
+            {
+                /// Setter for the [`playbook_version` field](ProcedureImported#structfield.playbook_version).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn playbook_version<T9>(
+                    self,
+                    value: T9,
+                ) -> ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+                where
+                    T9: ::planus::WriteAsDefault<u16, u16>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8) = self.0;
+                    ProcedureImportedBuilder((v0, v1, v2, v3, v4, v5, v6, v7, v8, value))
+                }
+
+                /// Sets the [`playbook_version` field](ProcedureImported#structfield.playbook_version) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn playbook_version_as_default(
+                    self,
+                ) -> ProcedureImportedBuilder<(
+                    T0,
+                    T1,
+                    T2,
+                    T3,
+                    T4,
+                    T5,
+                    T6,
+                    T7,
+                    T8,
+                    ::planus::DefaultValue,
+                )> {
+                    self.playbook_version(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
+                ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+            {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ProcedureImported].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImported>
+                where
+                    Self: ::planus::WriteAsOffset<ProcedureImported>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T7: ::planus::WriteAs<::planus::Offset<str>>,
+                    T8: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T9: ::planus::WriteAsDefault<u16, u16>,
+                > ::planus::WriteAs<::planus::Offset<ProcedureImported>>
+                for ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+            {
+                type Prepared = ::planus::Offset<ProcedureImported>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImported> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T7: ::planus::WriteAs<::planus::Offset<str>>,
+                    T8: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T9: ::planus::WriteAsDefault<u16, u16>,
+                > ::planus::WriteAsOptional<::planus::Offset<ProcedureImported>>
+                for ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+            {
+                type Prepared = ::planus::Offset<ProcedureImported>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureImported>> {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<str>>,
+                    T2: ::planus::WriteAs<::planus::Offset<str>>,
+                    T3: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T7: ::planus::WriteAs<::planus::Offset<str>>,
+                    T8: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T9: ::planus::WriteAsDefault<u16, u16>,
+                > ::planus::WriteAsOffset<ProcedureImported>
+                for ProcedureImportedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImported> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7, v8, v9) = &self.0;
+                    ProcedureImported::create(builder, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+                }
+            }
+
+            /// Reference to a deserialized [ProcedureImported].
+            #[derive(Copy, Clone)]
+            pub struct ProcedureImportedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> ProcedureImportedRef<'a> {
+                /// Getter for the [`procedure_id` field](ProcedureImported#structfield.procedure_id).
+                #[inline]
+                pub fn procedure_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "ProcedureImported", "procedure_id")
+                }
+
+                /// Getter for the [`name` field](ProcedureImported#structfield.name).
+                #[inline]
+                pub fn name(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(1, "ProcedureImported", "name")
+                }
+
+                /// Getter for the [`strategy` field](ProcedureImported#structfield.strategy).
+                #[inline]
+                pub fn strategy(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(2, "ProcedureImported", "strategy")
+                }
+
+                /// Getter for the [`expected_outcomes` field](ProcedureImported#structfield.expected_outcomes).
+                #[inline]
+                pub fn expected_outcomes(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0
+                        .access_required(3, "ProcedureImported", "expected_outcomes")
+                }
+
+                /// Getter for the [`preconditions` field](ProcedureImported#structfield.preconditions).
+                #[inline]
+                pub fn preconditions(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0
+                        .access_required(4, "ProcedureImported", "preconditions")
+                }
+
+                /// Getter for the [`instructions` field](ProcedureImported#structfield.instructions).
+                #[inline]
+                pub fn instructions(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(5, "ProcedureImported", "instructions")
+                }
+
+                /// Getter for the [`declared_tools` field](ProcedureImported#structfield.declared_tools).
+                #[inline]
+                pub fn declared_tools(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0
+                        .access_required(6, "ProcedureImported", "declared_tools")
+                }
+
+                /// Getter for the [`source_uri` field](ProcedureImported#structfield.source_uri).
+                #[inline]
+                pub fn source_uri(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0.access_required(7, "ProcedureImported", "source_uri")
+                }
+
+                /// Getter for the [`source_digest` field](ProcedureImported#structfield.source_digest).
+                #[inline]
+                pub fn source_digest(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(8, "ProcedureImported", "source_digest")
+                }
+
+                /// Getter for the [`playbook_version` field](ProcedureImported#structfield.playbook_version).
+                #[inline]
+                pub fn playbook_version(&self) -> ::planus::Result<u16> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(9, "ProcedureImported", "playbook_version")?
+                            .unwrap_or(0),
+                    )
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ProcedureImportedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ProcedureImportedRef");
+                    f.field("procedure_id", &self.procedure_id());
+                    f.field("name", &self.name());
+                    f.field("strategy", &self.strategy());
+                    f.field("expected_outcomes", &self.expected_outcomes());
+                    f.field("preconditions", &self.preconditions());
+                    f.field("instructions", &self.instructions());
+                    f.field("declared_tools", &self.declared_tools());
+                    f.field("source_uri", &self.source_uri());
+                    f.field("source_digest", &self.source_digest());
+                    f.field("playbook_version", &self.playbook_version());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ProcedureImportedRef<'a>> for ProcedureImported {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ProcedureImportedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        procedure_id: value.procedure_id()?.to_vec(),
+                        name: ::core::convert::Into::into(value.name()?),
+                        strategy: ::core::convert::Into::into(value.strategy()?),
+                        expected_outcomes: value.expected_outcomes()?.to_vec_result()?,
+                        preconditions: value.preconditions()?.to_vec_result()?,
+                        instructions: value.instructions()?.to_vec(),
+                        declared_tools: value.declared_tools()?.to_vec_result()?,
+                        source_uri: ::core::convert::Into::into(value.source_uri()?),
+                        source_digest: value.source_digest()?.to_vec(),
+                        playbook_version: ::core::convert::TryInto::try_into(
+                            value.playbook_version()?,
+                        )?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ProcedureImportedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ProcedureImportedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ProcedureImportedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ProcedureImported>> for ProcedureImported {
+                type Value = ::planus::Offset<ProcedureImported>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ProcedureImported>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ProcedureImportedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location("[ProcedureImportedRef]", "read_as_root", 0)
+                    })
+                }
+            }
+
+            /// The table `ProcedureImprovementProposed` in the namespace `hypermind.schema`
+            ///
+            /// Generated from these locations:
+            /// * Table `ProcedureImprovementProposed` in the file `schemas/events.fbs:484`
+            #[derive(
+                Clone,
+                Debug,
+                PartialEq,
+                PartialOrd,
+                Eq,
+                Ord,
+                Hash,
+                ::serde::Serialize,
+                ::serde::Deserialize,
+            )]
+            pub struct ProcedureImprovementProposed {
+                /// The field `proposal_id` in the table `ProcedureImprovementProposed`
+                pub proposal_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `procedure_id` in the table `ProcedureImprovementProposed`
+                pub procedure_id: ::planus::alloc::vec::Vec<u8>,
+                /// The field `base_lsn` in the table `ProcedureImprovementProposed`
+                pub base_lsn: u64,
+                /// The field `strategy` in the table `ProcedureImprovementProposed`
+                pub strategy: ::planus::alloc::string::String,
+                /// The field `expected_outcomes` in the table `ProcedureImprovementProposed`
+                pub expected_outcomes: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `preconditions` in the table `ProcedureImprovementProposed`
+                pub preconditions: ::planus::alloc::vec::Vec<::planus::alloc::string::String>,
+                /// The field `rationale` in the table `ProcedureImprovementProposed`
+                pub rationale: ::planus::alloc::string::String,
+                /// The field `failure_lsns` in the table `ProcedureImprovementProposed`
+                pub failure_lsns: ::planus::alloc::vec::Vec<u64>,
+            }
+
+            #[allow(clippy::derivable_impls)]
+            impl ::core::default::Default for ProcedureImprovementProposed {
+                fn default() -> Self {
+                    Self {
+                        proposal_id: ::core::default::Default::default(),
+                        procedure_id: ::core::default::Default::default(),
+                        base_lsn: 0,
+                        strategy: ::core::default::Default::default(),
+                        expected_outcomes: ::core::default::Default::default(),
+                        preconditions: ::core::default::Default::default(),
+                        rationale: ::core::default::Default::default(),
+                        failure_lsns: ::core::default::Default::default(),
+                    }
+                }
+            }
+
+            impl ProcedureImprovementProposed {
+                /// Creates a [ProcedureImprovementProposedBuilder] for serializing an instance of this table.
+                #[inline]
+                pub fn builder() -> ProcedureImprovementProposedBuilder<()> {
+                    ProcedureImprovementProposedBuilder(())
+                }
+
+                #[allow(clippy::too_many_arguments)]
+                pub fn create(
+                    builder: &mut ::planus::Builder,
+                    field_proposal_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_procedure_id: impl ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    field_base_lsn: impl ::planus::WriteAsDefault<u64, u64>,
+                    field_strategy: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_expected_outcomes: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_preconditions: impl ::planus::WriteAs<
+                        ::planus::Offset<[::planus::Offset<str>]>,
+                    >,
+                    field_rationale: impl ::planus::WriteAs<::planus::Offset<str>>,
+                    field_failure_lsns: impl ::planus::WriteAs<::planus::Offset<[u64]>>,
+                ) -> ::planus::Offset<Self> {
+                    let prepared_proposal_id = field_proposal_id.prepare(builder);
+                    let prepared_procedure_id = field_procedure_id.prepare(builder);
+                    let prepared_base_lsn = field_base_lsn.prepare(builder, &0);
+                    let prepared_strategy = field_strategy.prepare(builder);
+                    let prepared_expected_outcomes = field_expected_outcomes.prepare(builder);
+                    let prepared_preconditions = field_preconditions.prepare(builder);
+                    let prepared_rationale = field_rationale.prepare(builder);
+                    let prepared_failure_lsns = field_failure_lsns.prepare(builder);
+
+                    let mut table_writer: ::planus::table_writer::TableWriter<20> =
+                        ::core::default::Default::default();
+                    if prepared_base_lsn.is_some() {
+                        table_writer.write_entry::<u64>(2);
+                    }
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(0);
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(1);
+                    table_writer.write_entry::<::planus::Offset<str>>(3);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(4);
+                    table_writer.write_entry::<::planus::Offset<[::planus::Offset<str>]>>(5);
+                    table_writer.write_entry::<::planus::Offset<str>>(6);
+                    table_writer.write_entry::<::planus::Offset<[u64]>>(7);
+
+                    unsafe {
+                        table_writer.finish(builder, |object_writer| {
+                            if let ::core::option::Option::Some(prepared_base_lsn) =
+                                prepared_base_lsn
+                            {
+                                object_writer.write::<_, _, 8>(&prepared_base_lsn);
+                            }
+                            object_writer.write::<_, _, 4>(&prepared_proposal_id);
+                            object_writer.write::<_, _, 4>(&prepared_procedure_id);
+                            object_writer.write::<_, _, 4>(&prepared_strategy);
+                            object_writer.write::<_, _, 4>(&prepared_expected_outcomes);
+                            object_writer.write::<_, _, 4>(&prepared_preconditions);
+                            object_writer.write::<_, _, 4>(&prepared_rationale);
+                            object_writer.write::<_, _, 4>(&prepared_failure_lsns);
+                        });
+                    }
+                    builder.current_offset()
+                }
+            }
+
+            impl ::planus::WriteAs<::planus::Offset<ProcedureImprovementProposed>>
+                for ProcedureImprovementProposed
+            {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImprovementProposed> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl ::planus::WriteAsOptional<::planus::Offset<ProcedureImprovementProposed>>
+                for ProcedureImprovementProposed
+            {
+                type Prepared = ::planus::Offset<Self>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureImprovementProposed>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl ::planus::WriteAsOffset<ProcedureImprovementProposed> for ProcedureImprovementProposed {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImprovementProposed> {
+                    ProcedureImprovementProposed::create(
+                        builder,
+                        &self.proposal_id,
+                        &self.procedure_id,
+                        self.base_lsn,
+                        &self.strategy,
+                        &self.expected_outcomes,
+                        &self.preconditions,
+                        &self.rationale,
+                        &self.failure_lsns,
+                    )
+                }
+            }
+
+            /// Builder for serializing an instance of the [ProcedureImprovementProposed] type.
+            ///
+            /// Can be created using the [ProcedureImprovementProposed::builder] method.
+            #[derive(Debug)]
+            #[must_use]
+            pub struct ProcedureImprovementProposedBuilder<State>(State);
+
+            impl ProcedureImprovementProposedBuilder<()> {
+                /// Setter for the [`proposal_id` field](ProcedureImprovementProposed#structfield.proposal_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn proposal_id<T0>(
+                    self,
+                    value: T0,
+                ) -> ProcedureImprovementProposedBuilder<(T0,)>
+                where
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    ProcedureImprovementProposedBuilder((value,))
+                }
+            }
+
+            impl<T0> ProcedureImprovementProposedBuilder<(T0,)> {
+                /// Setter for the [`procedure_id` field](ProcedureImprovementProposed#structfield.procedure_id).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn procedure_id<T1>(
+                    self,
+                    value: T1,
+                ) -> ProcedureImprovementProposedBuilder<(T0, T1)>
+                where
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                {
+                    let (v0,) = self.0;
+                    ProcedureImprovementProposedBuilder((v0, value))
+                }
+            }
+
+            impl<T0, T1> ProcedureImprovementProposedBuilder<(T0, T1)> {
+                /// Setter for the [`base_lsn` field](ProcedureImprovementProposed#structfield.base_lsn).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn base_lsn<T2>(
+                    self,
+                    value: T2,
+                ) -> ProcedureImprovementProposedBuilder<(T0, T1, T2)>
+                where
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                {
+                    let (v0, v1) = self.0;
+                    ProcedureImprovementProposedBuilder((v0, v1, value))
+                }
+
+                /// Sets the [`base_lsn` field](ProcedureImprovementProposed#structfield.base_lsn) to the default value.
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn base_lsn_as_default(
+                    self,
+                ) -> ProcedureImprovementProposedBuilder<(T0, T1, ::planus::DefaultValue)>
+                {
+                    self.base_lsn(::planus::DefaultValue)
+                }
+            }
+
+            impl<T0, T1, T2> ProcedureImprovementProposedBuilder<(T0, T1, T2)> {
+                /// Setter for the [`strategy` field](ProcedureImprovementProposed#structfield.strategy).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn strategy<T3>(
+                    self,
+                    value: T3,
+                ) -> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3)>
+                where
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2) = self.0;
+                    ProcedureImprovementProposedBuilder((v0, v1, v2, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3)> {
+                /// Setter for the [`expected_outcomes` field](ProcedureImprovementProposed#structfield.expected_outcomes).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn expected_outcomes<T4>(
+                    self,
+                    value: T4,
+                ) -> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4)>
+                where
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2, v3) = self.0;
+                    ProcedureImprovementProposedBuilder((v0, v1, v2, v3, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4)> {
+                /// Setter for the [`preconditions` field](ProcedureImprovementProposed#structfield.preconditions).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn preconditions<T5>(
+                    self,
+                    value: T5,
+                ) -> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5)>
+                where
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                {
+                    let (v0, v1, v2, v3, v4) = self.0;
+                    ProcedureImprovementProposedBuilder((v0, v1, v2, v3, v4, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5)> {
+                /// Setter for the [`rationale` field](ProcedureImprovementProposed#structfield.rationale).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn rationale<T6>(
+                    self,
+                    value: T6,
+                ) -> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+                where
+                    T6: ::planus::WriteAs<::planus::Offset<str>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5) = self.0;
+                    ProcedureImprovementProposedBuilder((v0, v1, v2, v3, v4, v5, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+                /// Setter for the [`failure_lsns` field](ProcedureImprovementProposed#structfield.failure_lsns).
+                #[inline]
+                #[allow(clippy::type_complexity)]
+                pub fn failure_lsns<T7>(
+                    self,
+                    value: T7,
+                ) -> ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+                where
+                    T7: ::planus::WriteAs<::planus::Offset<[u64]>>,
+                {
+                    let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                    ProcedureImprovementProposedBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+                }
+            }
+
+            impl<T0, T1, T2, T3, T4, T5, T6, T7>
+                ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ProcedureImprovementProposed].
+                #[inline]
+                pub fn finish(
+                    self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImprovementProposed>
+                where
+                    Self: ::planus::WriteAsOffset<ProcedureImprovementProposed>,
+                {
+                    ::planus::WriteAsOffset::prepare(&self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<str>>,
+                    T7: ::planus::WriteAs<::planus::Offset<[u64]>>,
+                > ::planus::WriteAs<::planus::Offset<ProcedureImprovementProposed>>
+                for ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                type Prepared = ::planus::Offset<ProcedureImprovementProposed>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImprovementProposed> {
+                    ::planus::WriteAsOffset::prepare(self, builder)
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<str>>,
+                    T7: ::planus::WriteAs<::planus::Offset<[u64]>>,
+                >
+                ::planus::WriteAsOptional<::planus::Offset<ProcedureImprovementProposed>>
+                for ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                type Prepared = ::planus::Offset<ProcedureImprovementProposed>;
+
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::Offset<ProcedureImprovementProposed>>
+                {
+                    ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+                }
+            }
+
+            impl<
+                    T0: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T1: ::planus::WriteAs<::planus::Offset<[u8]>>,
+                    T2: ::planus::WriteAsDefault<u64, u64>,
+                    T3: ::planus::WriteAs<::planus::Offset<str>>,
+                    T4: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T5: ::planus::WriteAs<::planus::Offset<[::planus::Offset<str>]>>,
+                    T6: ::planus::WriteAs<::planus::Offset<str>>,
+                    T7: ::planus::WriteAs<::planus::Offset<[u64]>>,
+                > ::planus::WriteAsOffset<ProcedureImprovementProposed>
+                for ProcedureImprovementProposedBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::Offset<ProcedureImprovementProposed> {
+                    let (v0, v1, v2, v3, v4, v5, v6, v7) = &self.0;
+                    ProcedureImprovementProposed::create(builder, v0, v1, v2, v3, v4, v5, v6, v7)
+                }
+            }
+
+            /// Reference to a deserialized [ProcedureImprovementProposed].
+            #[derive(Copy, Clone)]
+            pub struct ProcedureImprovementProposedRef<'a>(
+                #[allow(dead_code)] ::planus::table_reader::Table<'a>,
+            );
+
+            impl<'a> ProcedureImprovementProposedRef<'a> {
+                /// Getter for the [`proposal_id` field](ProcedureImprovementProposed#structfield.proposal_id).
+                #[inline]
+                pub fn proposal_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(0, "ProcedureImprovementProposed", "proposal_id")
+                }
+
+                /// Getter for the [`procedure_id` field](ProcedureImprovementProposed#structfield.procedure_id).
+                #[inline]
+                pub fn procedure_id(&self) -> ::planus::Result<&'a [u8]> {
+                    self.0
+                        .access_required(1, "ProcedureImprovementProposed", "procedure_id")
+                }
+
+                /// Getter for the [`base_lsn` field](ProcedureImprovementProposed#structfield.base_lsn).
+                #[inline]
+                pub fn base_lsn(&self) -> ::planus::Result<u64> {
+                    ::core::result::Result::Ok(
+                        self.0
+                            .access(2, "ProcedureImprovementProposed", "base_lsn")?
+                            .unwrap_or(0),
+                    )
+                }
+
+                /// Getter for the [`strategy` field](ProcedureImprovementProposed#structfield.strategy).
+                #[inline]
+                pub fn strategy(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(3, "ProcedureImprovementProposed", "strategy")
+                }
+
+                /// Getter for the [`expected_outcomes` field](ProcedureImprovementProposed#structfield.expected_outcomes).
+                #[inline]
+                pub fn expected_outcomes(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0
+                        .access_required(4, "ProcedureImprovementProposed", "expected_outcomes")
+                }
+
+                /// Getter for the [`preconditions` field](ProcedureImprovementProposed#structfield.preconditions).
+                #[inline]
+                pub fn preconditions(
+                    &self,
+                ) -> ::planus::Result<
+                    ::planus::Vector<'a, ::planus::Result<&'a ::core::primitive::str>>,
+                > {
+                    self.0
+                        .access_required(5, "ProcedureImprovementProposed", "preconditions")
+                }
+
+                /// Getter for the [`rationale` field](ProcedureImprovementProposed#structfield.rationale).
+                #[inline]
+                pub fn rationale(&self) -> ::planus::Result<&'a ::core::primitive::str> {
+                    self.0
+                        .access_required(6, "ProcedureImprovementProposed", "rationale")
+                }
+
+                /// Getter for the [`failure_lsns` field](ProcedureImprovementProposed#structfield.failure_lsns).
+                #[inline]
+                pub fn failure_lsns(&self) -> ::planus::Result<::planus::Vector<'a, u64>> {
+                    self.0
+                        .access_required(7, "ProcedureImprovementProposed", "failure_lsns")
+                }
+            }
+
+            impl<'a> ::core::fmt::Debug for ProcedureImprovementProposedRef<'a> {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    let mut f = f.debug_struct("ProcedureImprovementProposedRef");
+                    f.field("proposal_id", &self.proposal_id());
+                    f.field("procedure_id", &self.procedure_id());
+                    f.field("base_lsn", &self.base_lsn());
+                    f.field("strategy", &self.strategy());
+                    f.field("expected_outcomes", &self.expected_outcomes());
+                    f.field("preconditions", &self.preconditions());
+                    f.field("rationale", &self.rationale());
+                    f.field("failure_lsns", &self.failure_lsns());
+                    f.finish()
+                }
+            }
+
+            impl<'a> ::core::convert::TryFrom<ProcedureImprovementProposedRef<'a>>
+                for ProcedureImprovementProposed
+            {
+                type Error = ::planus::Error;
+
+                #[allow(unreachable_code)]
+                fn try_from(value: ProcedureImprovementProposedRef<'a>) -> ::planus::Result<Self> {
+                    ::core::result::Result::Ok(Self {
+                        proposal_id: value.proposal_id()?.to_vec(),
+                        procedure_id: value.procedure_id()?.to_vec(),
+                        base_lsn: ::core::convert::TryInto::try_into(value.base_lsn()?)?,
+                        strategy: ::core::convert::Into::into(value.strategy()?),
+                        expected_outcomes: value.expected_outcomes()?.to_vec_result()?,
+                        preconditions: value.preconditions()?.to_vec_result()?,
+                        rationale: ::core::convert::Into::into(value.rationale()?),
+                        failure_lsns: value.failure_lsns()?.to_vec()?,
+                    })
+                }
+            }
+
+            impl<'a> ::planus::TableRead<'a> for ProcedureImprovementProposedRef<'a> {
+                #[inline]
+                fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                    ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                        buffer, offset,
+                    )?))
+                }
+            }
+
+            impl<'a> ::planus::VectorReadInner<'a> for ProcedureImprovementProposedRef<'a> {
+                type Error = ::planus::Error;
+                const STRIDE: usize = 4;
+
+                unsafe fn from_buffer(
+                    buffer: ::planus::SliceWithStartOffset<'a>,
+                    offset: usize,
+                ) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ProcedureImprovementProposedRef]",
+                            "get",
+                            buffer.offset_from_start,
+                        )
+                    })
+                }
+            }
+
+            /// # Safety
+            /// The planus compiler generates implementations that initialize
+            /// the bytes in `write_values`.
+            unsafe impl ::planus::VectorWrite<::planus::Offset<ProcedureImprovementProposed>>
+                for ProcedureImprovementProposed
+            {
+                type Value = ::planus::Offset<ProcedureImprovementProposed>;
+                const STRIDE: usize = 4;
+                #[inline]
+                fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                    ::planus::WriteAs::prepare(self, builder)
+                }
+
+                #[inline]
+                unsafe fn write_values(
+                    values: &[::planus::Offset<ProcedureImprovementProposed>],
+                    bytes: *mut ::core::mem::MaybeUninit<u8>,
+                    buffer_position: u32,
+                ) {
+                    let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                    for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                        ::planus::WriteAsPrimitive::write(
+                            v,
+                            ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                            buffer_position - (Self::STRIDE * i) as u32,
+                        );
+                    }
+                }
+            }
+
+            impl<'a> ::planus::ReadAsRoot<'a> for ProcedureImprovementProposedRef<'a> {
+                fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                    ::planus::TableRead::from_buffer(
+                        ::planus::SliceWithStartOffset {
+                            buffer: slice,
+                            offset_from_start: 0,
+                        },
+                        0,
+                    )
+                    .map_err(|error_kind| {
+                        error_kind.with_error_location(
+                            "[ProcedureImprovementProposedRef]",
+                            "read_as_root",
+                            0,
+                        )
+                    })
+                }
+            }
+
             /// The enum `VocabularyCategory` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `VocabularyCategory` in the file `schemas/events.fbs:471`
+            /// * Enum `VocabularyCategory` in the file `schemas/events.fbs:495`
             #[derive(
                 Copy,
                 Clone,
@@ -29170,7 +30401,7 @@ mod root {
             /// The table `VocabularyTerm` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `VocabularyTerm` in the file `schemas/events.fbs:473`
+            /// * Table `VocabularyTerm` in the file `schemas/events.fbs:497`
             #[derive(
                 Clone,
                 Debug,
@@ -29656,7 +30887,7 @@ mod root {
             /// The table `VocabularyImported` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `VocabularyImported` in the file `schemas/events.fbs:481`
+            /// * Table `VocabularyImported` in the file `schemas/events.fbs:505`
             #[derive(
                 Clone,
                 Debug,
@@ -30194,7 +31425,7 @@ mod root {
             /// The table `DocumentPageSpan` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentPageSpan` in the file `schemas/events.fbs:491`
+            /// * Table `DocumentPageSpan` in the file `schemas/events.fbs:515`
             #[derive(
                 Clone,
                 Debug,
@@ -30594,7 +31825,7 @@ mod root {
             /// The table `DocumentIngested` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentIngested` in the file `schemas/events.fbs:497`
+            /// * Table `DocumentIngested` in the file `schemas/events.fbs:521`
             #[derive(
                 Clone,
                 Debug,
@@ -31005,7 +32236,7 @@ mod root {
             /// The table `DocumentExtracted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentExtracted` in the file `schemas/events.fbs:505`
+            /// * Table `DocumentExtracted` in the file `schemas/events.fbs:529`
             #[derive(
                 Clone,
                 Debug,
@@ -31661,7 +32892,7 @@ mod root {
             /// The table `DocumentChunk` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentChunk` in the file `schemas/events.fbs:517`
+            /// * Table `DocumentChunk` in the file `schemas/events.fbs:541`
             #[derive(
                 Clone,
                 Debug,
@@ -32617,7 +33848,7 @@ mod root {
             /// The table `DocumentChunked` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `DocumentChunked` in the file `schemas/events.fbs:533`
+            /// * Table `DocumentChunked` in the file `schemas/events.fbs:557`
             #[derive(
                 Clone,
                 Debug,
@@ -33194,7 +34425,7 @@ mod root {
             /// The enum `SourceSignatureScheme` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `SourceSignatureScheme` in the file `schemas/events.fbs:543`
+            /// * Enum `SourceSignatureScheme` in the file `schemas/events.fbs:567`
             #[derive(
                 Copy,
                 Clone,
@@ -33367,7 +34598,7 @@ mod root {
             /// The enum `SourceDeliveryState` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `SourceDeliveryState` in the file `schemas/events.fbs:544`
+            /// * Enum `SourceDeliveryState` in the file `schemas/events.fbs:568`
             #[derive(
                 Copy,
                 Clone,
@@ -33551,7 +34782,7 @@ mod root {
             /// The enum `ConnectorState` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Enum `ConnectorState` in the file `schemas/events.fbs:545`
+            /// * Enum `ConnectorState` in the file `schemas/events.fbs:569`
             #[derive(
                 Copy,
                 Clone,
@@ -33726,7 +34957,7 @@ mod root {
             /// The table `SourceConnectorBound` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `SourceConnectorBound` in the file `schemas/events.fbs:547`
+            /// * Table `SourceConnectorBound` in the file `schemas/events.fbs:571`
             #[derive(
                 Clone,
                 Debug,
@@ -34411,7 +35642,7 @@ mod root {
             /// The table `SourceDeliveryAccepted` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `SourceDeliveryAccepted` in the file `schemas/events.fbs:559`
+            /// * Table `SourceDeliveryAccepted` in the file `schemas/events.fbs:583`
             #[derive(
                 Clone,
                 Debug,
@@ -35048,7 +36279,7 @@ mod root {
             /// The table `SourceDeliverySettled` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `SourceDeliverySettled` in the file `schemas/events.fbs:570`
+            /// * Table `SourceDeliverySettled` in the file `schemas/events.fbs:594`
             #[derive(
                 Clone,
                 Debug,
@@ -35630,7 +36861,7 @@ mod root {
             /// The table `SourceRevisionObserved` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `SourceRevisionObserved` in the file `schemas/events.fbs:580`
+            /// * Table `SourceRevisionObserved` in the file `schemas/events.fbs:604`
             #[derive(
                 Clone,
                 Debug,
@@ -36134,7 +37365,7 @@ mod root {
             /// The union `EventPayload` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Union `EventPayload` in the file `schemas/events.fbs:589`
+            /// * Union `EventPayload` in the file `schemas/events.fbs:613`
             #[derive(
                 Clone,
                 Debug,
@@ -36299,6 +37530,14 @@ mod root {
 
                 /// The variant of type `SourceRevisionObserved` in the union `EventPayload`
                 SourceRevisionObserved(::planus::alloc::boxed::Box<self::SourceRevisionObserved>),
+
+                /// The variant of type `ProcedureImported` in the union `EventPayload`
+                ProcedureImported(::planus::alloc::boxed::Box<self::ProcedureImported>),
+
+                /// The variant of type `ProcedureImprovementProposed` in the union `EventPayload`
+                ProcedureImprovementProposed(
+                    ::planus::alloc::boxed::Box<self::ProcedureImprovementProposed>,
+                ),
             }
 
             impl EventPayload {
@@ -36715,6 +37954,22 @@ mod root {
                 ) -> ::planus::UnionOffset<Self> {
                     ::planus::UnionOffset::new(51, value.prepare(builder).downcast())
                 }
+
+                #[inline]
+                pub fn create_procedure_imported(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::ProcedureImported>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(52, value.prepare(builder).downcast())
+                }
+
+                #[inline]
+                pub fn create_procedure_improvement_proposed(
+                    builder: &mut ::planus::Builder,
+                    value: impl ::planus::WriteAsOffset<self::ProcedureImprovementProposed>,
+                ) -> ::planus::UnionOffset<Self> {
+                    ::planus::UnionOffset::new(53, value.prepare(builder).downcast())
+                }
             }
 
             impl ::planus::WriteAsUnion<EventPayload> for EventPayload {
@@ -36807,6 +38062,12 @@ mod root {
                         }
                         Self::SourceRevisionObserved(value) => {
                             Self::create_source_revision_observed(builder, value)
+                        }
+                        Self::ProcedureImported(value) => {
+                            Self::create_procedure_imported(builder, value)
+                        }
+                        Self::ProcedureImprovementProposed(value) => {
+                            Self::create_procedure_improvement_proposed(builder, value)
                         }
                     }
                 }
@@ -37435,6 +38696,30 @@ mod root {
                 ) -> EventPayloadBuilder<::planus::Initialized<51, T>>
                 where
                     T: ::planus::WriteAsOffset<self::SourceRevisionObserved>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`ProcedureImported` variant](EventPayload#variant.ProcedureImported).
+                #[inline]
+                pub fn procedure_imported<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<52, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::ProcedureImported>,
+                {
+                    EventPayloadBuilder(::planus::Initialized(value))
+                }
+
+                /// Creates an instance of the [`ProcedureImprovementProposed` variant](EventPayload#variant.ProcedureImprovementProposed).
+                #[inline]
+                pub fn procedure_improvement_proposed<T>(
+                    self,
+                    value: T,
+                ) -> EventPayloadBuilder<::planus::Initialized<53, T>>
+                where
+                    T: ::planus::WriteAsOffset<self::ProcedureImprovementProposed>,
                 {
                     EventPayloadBuilder(::planus::Initialized(value))
                 }
@@ -38780,6 +40065,58 @@ mod root {
                     ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
                 }
             }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<52, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureImported>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(52, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<52, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureImported>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
+            impl<T> ::planus::WriteAsUnion<EventPayload> for EventPayloadBuilder<::planus::Initialized<53, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureImprovementProposed>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::planus::UnionOffset<EventPayload> {
+                    ::planus::UnionOffset::new(53, (self.0).0.prepare(builder).downcast())
+                }
+            }
+
+            impl<T> ::planus::WriteAsOptionalUnion<EventPayload>
+                for EventPayloadBuilder<::planus::Initialized<53, T>>
+            where
+                T: ::planus::WriteAsOffset<self::ProcedureImprovementProposed>,
+            {
+                #[inline]
+                fn prepare(
+                    &self,
+                    builder: &mut ::planus::Builder,
+                ) -> ::core::option::Option<::planus::UnionOffset<EventPayload>> {
+                    ::core::option::Option::Some(::planus::WriteAsUnion::prepare(self, builder))
+                }
+            }
 
             /// Reference to a deserialized [EventPayload].
             #[derive(Copy, Clone, Debug)]
@@ -38835,6 +40172,8 @@ mod root {
                 SourceDeliveryAccepted(self::SourceDeliveryAcceptedRef<'a>),
                 SourceDeliverySettled(self::SourceDeliverySettledRef<'a>),
                 SourceRevisionObserved(self::SourceRevisionObservedRef<'a>),
+                ProcedureImported(self::ProcedureImportedRef<'a>),
+                ProcedureImprovementProposed(self::ProcedureImprovementProposedRef<'a>),
             }
 
             impl<'a> ::core::convert::TryFrom<EventPayloadRef<'a>> for EventPayload {
@@ -39147,6 +40486,18 @@ mod root {
                                 ::core::convert::TryFrom::try_from(value)?,
                             ))
                         }
+
+                        EventPayloadRef::ProcedureImported(value) => {
+                            Self::ProcedureImported(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
+
+                        EventPayloadRef::ProcedureImprovementProposed(value) => {
+                            Self::ProcedureImprovementProposed(::planus::alloc::boxed::Box::new(
+                                ::core::convert::TryFrom::try_from(value)?,
+                            ))
+                        }
                     })
                 }
             }
@@ -39311,6 +40662,12 @@ mod root {
                         51 => ::core::result::Result::Ok(Self::SourceRevisionObserved(
                             ::planus::TableRead::from_buffer(buffer, field_offset)?,
                         )),
+                        52 => ::core::result::Result::Ok(Self::ProcedureImported(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
+                        53 => ::core::result::Result::Ok(Self::ProcedureImprovementProposed(
+                            ::planus::TableRead::from_buffer(buffer, field_offset)?,
+                        )),
                         _ => ::core::result::Result::Err(
                             ::planus::errors::ErrorKind::UnknownUnionTag { tag },
                         ),
@@ -39325,7 +40682,7 @@ mod root {
             /// The table `EventEnvelope` in the namespace `hypermind.schema`
             ///
             /// Generated from these locations:
-            /// * Table `EventEnvelope` in the file `schemas/events.fbs:643`
+            /// * Table `EventEnvelope` in the file `schemas/events.fbs:669`
             #[derive(
                 Clone, Debug, PartialEq, PartialOrd, ::serde::Serialize, ::serde::Deserialize,
             )]

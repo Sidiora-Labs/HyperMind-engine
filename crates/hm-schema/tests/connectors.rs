@@ -235,5 +235,5 @@ fn source_connector_kinds_are_wave_seven() {
         EventKind::try_from(51),
         Ok(EventKind::SourceRevisionObserved)
     );
-    assert_eq!(EventKind::try_from(52), Err(()));
+    assert_eq!(EventKind::try_from(54), Err(()));
 }

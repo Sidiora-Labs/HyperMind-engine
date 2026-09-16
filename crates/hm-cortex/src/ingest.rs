@@ -61,6 +61,7 @@ pub fn ingest(
                     | EventKind::MediaRef
                     | EventKind::SourceDeliveryAccepted
                     | EventKind::SourceRevisionObserved
+                    | EventKind::ProcedureImported
             ) =>
         {
             Authority::ExternalObserved
@@ -77,6 +78,7 @@ pub fn ingest(
                     | EventKind::MemoryMerged
                     | EventKind::EdgeAsserted
                     | EventKind::EdgeRetracted
+                    | EventKind::ProcedureImprovementProposed
             ) =>
         {
             authority_for_event(kind)

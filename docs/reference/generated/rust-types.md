@@ -6087,6 +6087,8 @@ pub enum EventKind {
     SourceDeliveryAccepted = 49,
     SourceDeliverySettled = 50,
     SourceRevisionObserved = 51,
+    ProcedureImported = 52,
+    ProcedureImprovementProposed = 53,
 }
 ```
 
@@ -10792,6 +10794,8 @@ pub enum EventKind {
     SourceDeliveryAccepted = 49,
     SourceDeliverySettled = 50,
     SourceRevisionObserved = 51,
+    ProcedureImported = 52,
+    ProcedureImprovementProposed = 53,
 }
 ```
 

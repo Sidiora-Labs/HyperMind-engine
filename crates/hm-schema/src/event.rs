@@ -7,10 +7,10 @@ use crate::events::{
     EdgeRetracted, Effect, Embedding, EventEnvelope, EventEnvelopeRef, EventPayload,
     ExpectedPredicate, IntentionCancelled, IntentionFired, IntentionSet, LoopCloseReason,
     LoopClosed, MemoryFaded, MemoryMerged, MemoryMinted, MemoryRevised, Outcome, OutcomeObserved,
-    Predicted, ProcedureAdopted, ProcedureMined, ProcedureRevised, ProcedureSupport,
-    ProposedAssertion, ProvenanceRange, Retract, Reviewed, SourceConnectorBound,
-    SourceDeliveryAccepted, SourceDeliverySettled, SourceDeliveryState, SourceRevisionObserved,
-    ToolResult, VocabularyImported, VocabularyTerm, WakeTrigger,
+    Predicted, ProcedureAdopted, ProcedureImported, ProcedureImprovementProposed, ProcedureMined,
+    ProcedureRevised, ProcedureSupport, ProposedAssertion, ProvenanceRange, Retract, Reviewed,
+    SourceConnectorBound, SourceDeliveryAccepted, SourceDeliverySettled, SourceDeliveryState,
+    SourceRevisionObserved, ToolResult, VocabularyImported, VocabularyTerm, WakeTrigger,
 };
 use hm_core::{Error, ErrorCode, LSN};
 use planus::ReadAsRoot;
@@ -21,6 +21,7 @@ use crate::validate::authority::{validate_observed_evidence, validate_optional_o
 pub const CURRENT_SCHEMA_VERSION: u16 = 2;
 pub const MAXIMUM_EVENT_BYTES: usize = 16 * 1024 * 1024;
 pub const MAXIMUM_IDENTIFIER_BYTES: usize = 4096;
+pub const MAXIMUM_PLAYBOOK_BYTES: usize = 65_536;
 pub const MAXIMUM_VOCABULARY_TERMS: usize = 4096;
 pub const MAXIMUM_VOCABULARY_ALIASES: usize = 32;
 pub const MAXIMUM_VOCABULARY_NAME_BYTES: usize = 512;
@@ -29,6 +30,8 @@ pub const REPOSITORY_EXTRACT_MODEL_ID: &str = "repository-graph-extract";
 pub const REPOSITORY_EXTRACT_PROMPT_ID: &str = "repository-graph-extract/v1";
 pub const REPOSITORY_EXTRACT_PROMPT_VERSION: u16 = 1;
 pub const REPOSITORY_EXTRACT_RUN_PREFIX: &str = "repository-graph/";
+
+const MAXIMUM_FAILURE_EVIDENCE: usize = 256;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Boundary {
@@ -91,6 +94,8 @@ pub enum EventKind {
     SourceDeliveryAccepted = 49,
     SourceDeliverySettled = 50,
     SourceRevisionObserved = 51,
+    ProcedureImported = 52,
+    ProcedureImprovementProposed = 53,
 }
 
 impl EventKind {
@@ -185,6 +190,8 @@ impl EventKind {
                     | Self::SourceDeliveryAccepted
                     | Self::SourceDeliverySettled
                     | Self::SourceRevisionObserved
+                    | Self::ProcedureImported
+                    | Self::ProcedureImprovementProposed
             )
     }
 
@@ -277,6 +284,8 @@ impl TryFrom<u8> for EventKind {
             49 => Ok(Self::SourceDeliveryAccepted),
             50 => Ok(Self::SourceDeliverySettled),
             51 => Ok(Self::SourceRevisionObserved),
+            52 => Ok(Self::ProcedureImported),
+            53 => Ok(Self::ProcedureImprovementProposed),
             _ => Err(()),
         }
     }
@@ -430,6 +439,14 @@ fn validate_envelope(envelope: &EventEnvelope, kind: EventKind) -> Result<(), Er
         return Err(Error::new(ErrorCode::ProtectedTypeWrite));
     }
     if kind == EventKind::SourceDeliverySettled && envelope.authority != Authority::RuntimeFact {
+        return Err(Error::new(ErrorCode::ProtectedTypeWrite));
+    }
+    if kind == EventKind::ProcedureImported && envelope.authority != Authority::ExternalObserved {
+        return Err(Error::new(ErrorCode::ProtectedTypeWrite));
+    }
+    if kind == EventKind::ProcedureImprovementProposed
+        && envelope.authority != Authority::DerivedInference
+    {
         return Err(Error::new(ErrorCode::ProtectedTypeWrite));
     }
     Ok(())
@@ -609,6 +626,10 @@ fn validate_payload(
         EventPayload::SourceDeliveryAccepted(value) => validate_source_delivery_accepted(value),
         EventPayload::SourceDeliverySettled(value) => validate_source_delivery_settled(value),
         EventPayload::SourceRevisionObserved(value) => validate_source_revision_observed(value),
+        EventPayload::ProcedureImported(value) => validate_procedure_imported(value),
+        EventPayload::ProcedureImprovementProposed(value) => {
+            validate_procedure_improvement_proposed(value, history)
+        }
     }
 }
 
@@ -842,6 +863,48 @@ fn validate_procedure_adopted(value: &ProcedureAdopted) -> Result<(), Error> {
     } else {
         Err(Error::new(ErrorCode::SchemaInvalid))
     }
+}
+
+fn validate_procedure_imported(value: &ProcedureImported) -> Result<(), Error> {
+    if !bounded_identifier(&value.procedure_id)
+        || !bounded_identifier(value.name.as_bytes())
+        || value.strategy.is_empty()
+        || value.expected_outcomes.is_empty()
+        || value.expected_outcomes.iter().any(String::is_empty)
+        || value.preconditions.iter().any(String::is_empty)
+        || value.declared_tools.iter().any(String::is_empty)
+        || value.instructions.is_empty()
+        || value.instructions.len() > MAXIMUM_PLAYBOOK_BYTES
+        || !bounded_identifier(value.source_uri.as_bytes())
+        || value.source_digest.len() != 32
+    {
+        Err(Error::new(ErrorCode::SchemaInvalid))
+    } else {
+        Ok(())
+    }
+}
+
+fn validate_procedure_improvement_proposed(
+    value: &ProcedureImprovementProposed,
+    history: &impl EventHistory,
+) -> Result<(), Error> {
+    if !bounded_identifier(&value.proposal_id)
+        || !bounded_identifier(&value.procedure_id)
+        || value.base_lsn == 0
+        || value.strategy.is_empty()
+        || value.expected_outcomes.is_empty()
+        || value.expected_outcomes.iter().any(String::is_empty)
+        || value.preconditions.iter().any(String::is_empty)
+        || value.rationale.is_empty()
+        || value.rationale.len() > MAXIMUM_PLAYBOOK_BYTES
+        || value.failure_lsns.is_empty()
+        || value.failure_lsns.len() > MAXIMUM_FAILURE_EVIDENCE
+        || value.failure_lsns.contains(&0)
+        || value.failure_lsns.windows(2).any(|pair| pair[0] >= pair[1])
+    {
+        return Err(Error::new(ErrorCode::SchemaInvalid));
+    }
+    validate_observed_evidence(&value.failure_lsns, history)
 }
 
 fn validate_vocabulary_imported(value: &VocabularyImported) -> Result<(), Error> {
@@ -1390,5 +1453,7 @@ fn payload_kind(payload: &EventPayload) -> EventKind {
         EventPayload::SourceDeliveryAccepted(_) => EventKind::SourceDeliveryAccepted,
         EventPayload::SourceDeliverySettled(_) => EventKind::SourceDeliverySettled,
         EventPayload::SourceRevisionObserved(_) => EventKind::SourceRevisionObserved,
+        EventPayload::ProcedureImported(_) => EventKind::ProcedureImported,
+        EventPayload::ProcedureImprovementProposed(_) => EventKind::ProcedureImprovementProposed,
     }
 }

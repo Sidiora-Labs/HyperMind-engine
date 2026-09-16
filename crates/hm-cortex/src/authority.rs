@@ -22,7 +22,8 @@ pub const fn authority_for_event(kind: EventKind) -> Authority {
         | EventKind::MediaRef
         | EventKind::DocumentIngested
         | EventKind::SourceDeliveryAccepted
-        | EventKind::SourceRevisionObserved => Authority::ExternalObserved,
+        | EventKind::SourceRevisionObserved
+        | EventKind::ProcedureImported => Authority::ExternalObserved,
         EventKind::Assertion
         | EventKind::Consolidation
         | EventKind::Embedding
@@ -36,7 +37,8 @@ pub const fn authority_for_event(kind: EventKind) -> Authority {
         | EventKind::ProcedureMined
         | EventKind::ProcedureRevised
         | EventKind::DocumentExtracted
-        | EventKind::DocumentChunked => Authority::DerivedInference,
+        | EventKind::DocumentChunked
+        | EventKind::ProcedureImprovementProposed => Authority::DerivedInference,
         EventKind::ToolCall
         | EventKind::Effect
         | EventKind::Approval

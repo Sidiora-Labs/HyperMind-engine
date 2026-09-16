@@ -197,6 +197,8 @@ pub(crate) const fn schema_kind(kind: EventKind) -> Option<event::EventKind> {
         EventKind::SourceDeliveryAccepted => event::EventKind::SourceDeliveryAccepted,
         EventKind::SourceDeliverySettled => event::EventKind::SourceDeliverySettled,
         EventKind::SourceRevisionObserved => event::EventKind::SourceRevisionObserved,
+        EventKind::ProcedureImported => event::EventKind::ProcedureImported,
+        EventKind::ProcedureImprovementProposed => event::EventKind::ProcedureImprovementProposed,
         EventKind::Assertion
         | EventKind::Consolidation
         | EventKind::Embedding

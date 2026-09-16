@@ -2,15 +2,16 @@
 
 use hm_core::{ErrorCode, LSN};
 use hm_schema::event::{
-    Boundary, EventHistory, EventKind, HistorySource, encode_event_envelope, verify_event,
-    verify_event_with_history,
+    Boundary, EventHistory, EventKind, HistorySource, MAXIMUM_PLAYBOOK_BYTES,
+    encode_event_envelope, verify_event, verify_event_with_history,
 };
 use hm_schema::events::{
     Authority, EventEnvelope, EventPayload, ExpectedPredicate, IntentionSet, OutcomeAssessment,
-    OutcomeObserved, PredicateKind, Predicted, ProcedureAdopted, Retention, Sensitivity, WakeAt,
-    WakeBeliefChanged, WakeChannelMessage, WakeChildTerminal, WakeEntityMentioned,
-    WakeExternalCondition, WakeFileChanged, WakeLoopClosed, WakePredictionResolved,
-    WakeProcessExit, WakeRepositoryChanged, WakeSchedule, WakeTrigger, WakeUserResponse,
+    OutcomeObserved, PredicateKind, Predicted, ProcedureAdopted, ProcedureImported,
+    ProcedureImprovementProposed, Retention, Sensitivity, WakeAt, WakeBeliefChanged,
+    WakeChannelMessage, WakeChildTerminal, WakeEntityMentioned, WakeExternalCondition,
+    WakeFileChanged, WakeLoopClosed, WakePredictionResolved, WakeProcessExit,
+    WakeRepositoryChanged, WakeSchedule, WakeTrigger, WakeUserResponse,
 };
 
 #[test]
@@ -87,6 +88,130 @@ fn bounds_predictions_requires_observations_and_protects_adoption() {
     )
     .unwrap_err();
     assert_eq!(error.code, ErrorCode::ProtectedTypeWrite);
+}
+
+#[test]
+fn playbook_imports_and_improvement_proposals_are_bounded_and_authority_gated() {
+    verify_event(
+        &encode_event_envelope(&envelope(
+            EventPayload::ProcedureImported(Box::new(imported_playbook())),
+            Authority::ExternalObserved,
+        )),
+        EventKind::ProcedureImported,
+        Boundary::Socket,
+    )
+    .unwrap();
+
+    assert_eq!(
+        import_error(imported_playbook(), Authority::UserAsserted),
+        ErrorCode::ProtectedTypeWrite
+    );
+
+    let mut oversize = imported_playbook();
+    oversize.instructions = vec![b'x'; MAXIMUM_PLAYBOOK_BYTES + 1];
+    let mut empty_body = imported_playbook();
+    empty_body.instructions = Vec::new();
+    let mut short_digest = imported_playbook();
+    short_digest.source_digest = vec![9; 31];
+    for invalid in [oversize, empty_body, short_digest] {
+        assert_eq!(
+            import_error(invalid, Authority::ExternalObserved),
+            ErrorCode::SchemaInvalid
+        );
+    }
+
+    verify_event_with_history(
+        &encode_event_envelope(&envelope(
+            EventPayload::ProcedureImprovementProposed(Box::new(improvement_proposal(vec![7], 5))),
+            Authority::DerivedInference,
+        )),
+        EventKind::ProcedureImprovementProposed,
+        Boundary::Socket,
+        &ObservedHistory,
+    )
+    .unwrap();
+
+    assert_eq!(
+        proposal_error(
+            improvement_proposal(vec![8], 5),
+            Authority::DerivedInference
+        ),
+        ErrorCode::CitationInvalid
+    );
+    for invalid in [
+        improvement_proposal(vec![7, 7], 5),
+        improvement_proposal(vec![0], 5),
+        improvement_proposal(Vec::new(), 5),
+        improvement_proposal((1..=257).collect(), 5),
+        improvement_proposal(vec![7], 0),
+    ] {
+        assert_eq!(
+            proposal_error(invalid, Authority::DerivedInference),
+            ErrorCode::SchemaInvalid
+        );
+    }
+    assert_eq!(
+        proposal_error(
+            improvement_proposal(vec![7], 5),
+            Authority::ExternalObserved
+        ),
+        ErrorCode::ProtectedTypeWrite
+    );
+}
+
+fn imported_playbook() -> ProcedureImported {
+    ProcedureImported {
+        procedure_id: b"procedure".to_vec(),
+        name: "restart the ingest worker".to_owned(),
+        strategy: "drain the queue, then restart".to_owned(),
+        expected_outcomes: vec!["queue depth returns to zero".to_owned()],
+        preconditions: vec!["the worker is unresponsive".to_owned()],
+        instructions: b"1. drain\n2. restart\n".to_vec(),
+        declared_tools: vec!["shell".to_owned()],
+        source_uri: "file:///playbooks/restart-ingest".to_owned(),
+        source_digest: vec![9; 32],
+        playbook_version: 1,
+    }
+}
+
+fn improvement_proposal(failure_lsns: Vec<u64>, base_lsn: u64) -> ProcedureImprovementProposed {
+    ProcedureImprovementProposed {
+        proposal_id: b"proposal".to_vec(),
+        procedure_id: b"procedure".to_vec(),
+        base_lsn,
+        strategy: "drain the queue, wait for the lease, then restart".to_owned(),
+        expected_outcomes: vec!["queue depth returns to zero".to_owned()],
+        preconditions: vec!["the worker is unresponsive".to_owned()],
+        rationale: "the restart raced the lease and the queue refilled".to_owned(),
+        failure_lsns,
+    }
+}
+
+fn import_error(value: ProcedureImported, authority: Authority) -> ErrorCode {
+    verify_event(
+        &encode_event_envelope(&envelope(
+            EventPayload::ProcedureImported(Box::new(value)),
+            authority,
+        )),
+        EventKind::ProcedureImported,
+        Boundary::Socket,
+    )
+    .expect_err("the import must fail closed")
+    .code
+}
+
+fn proposal_error(value: ProcedureImprovementProposed, authority: Authority) -> ErrorCode {
+    verify_event_with_history(
+        &encode_event_envelope(&envelope(
+            EventPayload::ProcedureImprovementProposed(Box::new(value)),
+            authority,
+        )),
+        EventKind::ProcedureImprovementProposed,
+        Boundary::Socket,
+        &ObservedHistory,
+    )
+    .expect_err("the proposal must fail closed")
+    .code
 }
 
 struct ObservedHistory;
