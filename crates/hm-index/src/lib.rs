@@ -2,6 +2,7 @@
 
 pub mod bm25;
 pub mod entity_rules;
+pub mod geometry;
 #[cfg(feature = "hnsw")]
 pub mod hnsw;
 pub mod simd;
