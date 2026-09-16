@@ -228,6 +228,7 @@ async fn real_observations_resolve_immutable_predictions_and_calibration_survive
     let report = server
         .inspect_envelope(InspectInput {
             uri: Some("hm://7/calibration".to_owned()),
+            ..InspectInput::default()
         })
         .await;
     assert!(report.ok);
@@ -250,6 +251,7 @@ async fn real_observations_resolve_immutable_predictions_and_calibration_survive
     let report = server
         .inspect_envelope(InspectInput {
             uri: Some("hm://7/calibration".to_owned()),
+            ..InspectInput::default()
         })
         .await;
     assert!(report.ok);
@@ -257,6 +259,7 @@ async fn real_observations_resolve_immutable_predictions_and_calibration_survive
     let attention = server
         .inspect_envelope(InspectInput {
             uri: Some("hm://7/attention".to_owned()),
+            ..InspectInput::default()
         })
         .await;
     assert!(attention.ok);

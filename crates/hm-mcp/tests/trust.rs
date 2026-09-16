@@ -89,6 +89,7 @@ async fn inspect_walks_provenance_and_mmr_receipts_and_forget_is_ledgered() {
     let inspected = server
         .inspect_envelope(InspectInput {
             uri: Some("hm://7/lsn/2".to_owned()),
+            ..InspectInput::default()
         })
         .await;
     assert!(inspected.ok);

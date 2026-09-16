@@ -130,6 +130,7 @@ async fn every_wake_trigger_is_persisted_and_observed_change_is_batched_across_r
     let inspected = server
         .inspect_envelope(hm_mcp::InspectInput {
             uri: Some("hm://7/attention".to_owned()),
+            ..hm_mcp::InspectInput::default()
         })
         .await;
     assert!(inspected.ok, "{inspected:?}");

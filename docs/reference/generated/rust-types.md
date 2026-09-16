@@ -7500,6 +7500,25 @@ pub struct ForgetInput {
 }
 ```
 
+## hm-mcp::InspectMode
+
+<a id="rust-crates-hm-mcp-src-tools-inspect-rs-inspectmode"></a>
+
+Source: [`crates/hm-mcp/src/tools/inspect.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/inspect.rs).
+
+When to use: Use `InspectMode` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub enum InspectMode {
+    #[default]
+    Status,
+    Discover,
+}
+```
+
 ## hm-mcp::InspectInput
 
 <a id="rust-crates-hm-mcp-src-tools-inspect-rs-inspectinput"></a>
@@ -7515,6 +7534,12 @@ Do not use: Do not ignore ok/effect_state, manufacture observed evidence through
 pub struct InspectInput {
     #[serde(default)]
     pub uri: Option<String>,
+    #[serde(default)]
+    pub mode: InspectMode,
+    #[serde(default)]
+    pub query: Option<String>,
+    #[serde(default)]
+    pub limit: Option<usize>,
 }
 ```
 
@@ -8013,6 +8038,72 @@ pub struct RetractInput {
     pub conversation: String,
     pub belief_id: String,
     pub provenance: Vec<ProvenanceInput>,
+}
+```
+
+## hm-mcp::Requirement
+
+<a id="rust-crates-hm-mcp-src-tools-surfaces-rs-requirement"></a>
+
+Source: [`crates/hm-mcp/src/tools/surfaces.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/surfaces.rs).
+
+When to use: Use `Requirement` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub enum Requirement {
+    None,
+    AdminToken,
+    EmbeddingRuntime,
+    ConsolidationRuntime,
+    ReconstructionRuntime,
+    DisputeRuntime,
+}
+```
+
+## hm-mcp::Availability
+
+<a id="rust-crates-hm-mcp-src-tools-surfaces-rs-availability"></a>
+
+Source: [`crates/hm-mcp/src/tools/surfaces.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/surfaces.rs).
+
+When to use: Use `Availability` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct Availability {
+    pub admin_token: bool,
+    pub embedding: bool,
+    pub consolidation: bool,
+    pub reconstruction: bool,
+    pub dispute: bool,
+}
+```
+
+## hm-mcp::Surface
+
+<a id="rust-crates-hm-mcp-src-tools-surfaces-rs-surface"></a>
+
+Source: [`crates/hm-mcp/src/tools/surfaces.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/surfaces.rs).
+
+When to use: Use `Surface` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority.
+
+
+```rust
+pub struct Surface {
+    pub verb: &'static str,
+    pub surface: &'static str,
+    pub summary: &'static str,
+    pub arguments: &'static str,
+    pub mutation: bool,
+    pub requirement: Requirement,
+    pub keywords: &'static [&'static str],
 }
 ```
 

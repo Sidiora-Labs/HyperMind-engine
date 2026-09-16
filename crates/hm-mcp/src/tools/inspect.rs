@@ -1,5 +1,6 @@
 #![allow(clippy::missing_errors_doc)]
 
+use super::surfaces::{self, Availability, Surface};
 use crate::Envelope;
 use hm_core::{Error, ErrorCode, LSN};
 use hm_schema::event::{self, Boundary, EventHistory};
@@ -7,17 +8,38 @@ use hm_schema::events::{AttentionDecision, Authority, EventPayload};
 use hm_serve::actor::ActorEngine;
 use rmcp::schemars;
 use serde::Deserialize;
-use serde_json::json;
+use serde_json::{Value, json};
 use std::collections::BTreeSet;
+
+#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum InspectMode {
+    #[default]
+    Status,
+    Discover,
+}
 
 #[derive(Clone, Debug, Default, Deserialize, schemars::JsonSchema)]
 pub struct InspectInput {
     #[serde(default)]
     pub uri: Option<String>,
+    #[serde(default)]
+    pub mode: InspectMode,
+    #[serde(default)]
+    pub query: Option<String>,
+    #[serde(default)]
+    pub limit: Option<usize>,
 }
 
 #[allow(clippy::too_many_lines)]
-pub async fn run(actor: &ActorEngine, input: InspectInput) -> Result<Envelope, Error> {
+pub async fn run(
+    actor: &ActorEngine,
+    availability: Availability,
+    input: InspectInput,
+) -> Result<Envelope, Error> {
+    if matches!(input.mode, InspectMode::Discover) {
+        return Ok(discover(actor, availability, &input));
+    }
     let stats = actor.stats().await?;
     let verification = actor.verification_status().await?;
     let mut envelope = Envelope::empty();
@@ -136,6 +158,48 @@ pub async fn run(actor: &ActorEngine, input: InspectInput) -> Result<Envelope, E
         envelope.provenance.push(item_uri);
     }
     Ok(envelope)
+}
+
+fn discover(actor: &ActorEngine, availability: Availability, input: &InspectInput) -> Envelope {
+    let limit = input
+        .limit
+        .unwrap_or(surfaces::DEFAULT_DISCOVERY_LIMIT)
+        .clamp(1, surfaces::MAXIMUM_DISCOVERY_LIMIT);
+    let matched = surfaces::search(input.query.as_deref(), surfaces::MAXIMUM_DISCOVERY_LIMIT);
+    let mut envelope = Envelope::empty();
+    for surface in matched.iter().copied().take(limit) {
+        envelope.items.push(discovery_item(surface, availability));
+    }
+    envelope.health = json!({
+        "actor": actor.actor().get(),
+        "advertised_tools": surfaces::ADVERTISED_TOOLS,
+        "discoverable_surfaces": surfaces::SURFACES.len(),
+        "matched": matched.len(),
+        "returned": envelope.items.len(),
+        "truncated": envelope.items.len() < matched.len(),
+    });
+    envelope
+        .warnings
+        .push("discovery_is_not_authorization".to_owned());
+    envelope
+}
+
+fn discovery_item(surface: &Surface, availability: Availability) -> Value {
+    let available = availability.satisfies(surface.requirement);
+    json!({
+        "verb": surface.verb,
+        "surface": format!("{}.{}", surface.verb, surface.surface),
+        "summary": surface.summary,
+        "arguments": surface.arguments,
+        "mutation": surface.mutation,
+        "requires": surface.requirement.as_str(),
+        "available": available,
+        "unavailable_reason": if available {
+            Value::Null
+        } else {
+            json!(surface.requirement.unavailable_reason())
+        },
+    })
 }
 
 #[derive(Default)]

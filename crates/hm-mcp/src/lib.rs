@@ -29,7 +29,7 @@ pub use tools::consolidate::{
 };
 pub use tools::dispute::{DisputeInput, DisputeRuntime};
 pub use tools::forget::{ForgetAction, ForgetInput};
-pub use tools::inspect::InspectInput;
+pub use tools::inspect::{InspectInput, InspectMode};
 pub use tools::intend::{
     AttentionFactorsInput, IntendAction, IntendCloseReason, IntendInput, WakeTriggerInput,
 };
@@ -185,6 +185,16 @@ impl McpServer {
         let mut server = dispatcher.server(actor);
         server.admin_token = admin_token;
         Ok(server)
+    }
+
+    fn availability(&self) -> tools::surfaces::Availability {
+        tools::surfaces::Availability {
+            admin_token: self.admin_token.is_some(),
+            embedding: self.embedding_runtime.is_some(),
+            consolidation: self.consolidation_runtime.is_some(),
+            reconstruction: self.reconstruction_runtime.is_some(),
+            dispute: self.dispute_runtime.is_some(),
+        }
     }
 
     pub async fn remember_envelope(&self, input: RememberInput) -> Envelope {
@@ -551,7 +561,7 @@ impl McpServer {
     }
 
     pub async fn inspect_envelope(&self, input: InspectInput) -> Envelope {
-        match tools::inspect::run(&self.actor, input).await {
+        match tools::inspect::run(&self.actor, self.availability(), input).await {
             Ok(value) => value,
             Err(error) => Envelope::error(error, false),
         }

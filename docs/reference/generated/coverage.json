@@ -1832,6 +1832,11 @@
       "file": "crates/hm-mcp/src/tools/forget.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/tools/inspect.rs:InspectMode",
+      "name": "hm-mcp::InspectMode",
+      "file": "crates/hm-mcp/src/tools/inspect.rs"
+    },
+    {
       "id": "rust:crates/hm-mcp/src/tools/inspect.rs:InspectInput",
       "name": "hm-mcp::InspectInput",
       "file": "crates/hm-mcp/src/tools/inspect.rs"
@@ -1940,6 +1945,21 @@
       "id": "rust:crates/hm-mcp/src/tools/retract.rs:RetractInput",
       "name": "hm-mcp::RetractInput",
       "file": "crates/hm-mcp/src/tools/retract.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/surfaces.rs:Requirement",
+      "name": "hm-mcp::Requirement",
+      "file": "crates/hm-mcp/src/tools/surfaces.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/surfaces.rs:Availability",
+      "name": "hm-mcp::Availability",
+      "file": "crates/hm-mcp/src/tools/surfaces.rs"
+    },
+    {
+      "id": "rust:crates/hm-mcp/src/tools/surfaces.rs:Surface",
+      "name": "hm-mcp::Surface",
+      "file": "crates/hm-mcp/src/tools/surfaces.rs"
     },
     {
       "id": "rust:crates/hm-mcp/src/tools/websource.rs:CrawlPolicy",
