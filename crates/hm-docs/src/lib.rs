@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 
+pub mod chunk;
 pub mod formats;
 pub mod loader;
 

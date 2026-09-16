@@ -962,6 +962,26 @@
       "file": "crates/hm-cortex/src/vocabulary.rs"
     },
     {
+      "id": "rust:crates/hm-docs/src/chunk.rs:TokenEstimator",
+      "name": "hm-docs::TokenEstimator",
+      "file": "crates/hm-docs/src/chunk.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/chunk.rs:WordEstimator",
+      "name": "hm-docs::WordEstimator",
+      "file": "crates/hm-docs/src/chunk.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/chunk.rs:ChunkCut",
+      "name": "hm-docs::ChunkCut",
+      "file": "crates/hm-docs/src/chunk.rs"
+    },
+    {
+      "id": "rust:crates/hm-docs/src/chunk.rs:ChunkSpan",
+      "name": "hm-docs::ChunkSpan",
+      "file": "crates/hm-docs/src/chunk.rs"
+    },
+    {
       "id": "rust:crates/hm-docs/src/formats/mail.rs:MailLoader",
       "name": "hm-docs::MailLoader",
       "file": "crates/hm-docs/src/formats/mail.rs"

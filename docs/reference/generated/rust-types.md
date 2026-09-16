@@ -3984,6 +3984,82 @@ pub struct VocabularySource<'a> {
 }
 ```
 
+## hm-docs::TokenEstimator
+
+<a id="rust-crates-hm-docs-src-chunk-rs-tokenestimator"></a>
+
+Source: [`crates/hm-docs/src/chunk.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/chunk.rs).
+
+When to use: Use `TokenEstimator` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub trait TokenEstimator {
+    fn estimate(&self, text: &str) -> u32;
+}
+```
+
+## hm-docs::WordEstimator
+
+<a id="rust-crates-hm-docs-src-chunk-rs-wordestimator"></a>
+
+Source: [`crates/hm-docs/src/chunk.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/chunk.rs).
+
+When to use: Use `WordEstimator` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct WordEstimator;
+```
+
+## hm-docs::ChunkCut
+
+<a id="rust-crates-hm-docs-src-chunk-rs-chunkcut"></a>
+
+Source: [`crates/hm-docs/src/chunk.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/chunk.rs).
+
+When to use: Use `ChunkCut` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub enum ChunkCut {
+    ParagraphEnd,
+    ParagraphCut,
+    RowEnd,
+    RowCut,
+}
+```
+
+## hm-docs::ChunkSpan
+
+<a id="rust-crates-hm-docs-src-chunk-rs-chunkspan"></a>
+
+Source: [`crates/hm-docs/src/chunk.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-docs/src/chunk.rs).
+
+When to use: Use `ChunkSpan` for document ingestion, format extraction, chunking and validated change plans for documents entering the ledger.
+
+Do not use: Do not use it to write to the ledger or a projection, and do not treat extracted or chunked text as observed evidence.
+
+
+```rust
+pub struct ChunkSpan {
+    pub byte_start: usize,
+    pub byte_end: usize,
+    pub cut: ChunkCut,
+    pub token_estimate: u32,
+    pub page_number: u32,
+    pub row_index: u32,
+    pub column_start: u32,
+    pub column_end: u32,
+}
+```
+
 ## hm-docs::MailLoader
 
 <a id="rust-crates-hm-docs-src-formats-mail-rs-mailloader"></a>
