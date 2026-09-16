@@ -57,6 +57,10 @@ impl EmbeddingRuntime {
         Ok(Some(Self::new(Arc::new(cached))))
     }
 
+    pub(crate) fn document_space(&self) -> SpaceIdentity {
+        self.embedder.identity(InputRole::Document)
+    }
+
     pub(crate) async fn documents(
         &self,
         documents: Vec<String>,
@@ -115,6 +119,22 @@ pub(crate) fn space_id(identity: &SpaceIdentity) -> String {
         "distance": format!("{:?}", identity.distance),
         "normalization": format!("{:?}", identity.normalization),
         "input_role": "document",
+    });
+    format!(
+        "hm-space-v1:{}",
+        blake3::hash(canonical.to_string().as_bytes()).to_hex()
+    )
+}
+
+pub(crate) fn relation_space_id(identity: &SpaceIdentity) -> String {
+    let canonical = serde_json::json!({
+        "encoder": identity.encoder_id,
+        "revision": identity.revision,
+        "dimensions": identity.dimensions,
+        "distance": format!("{:?}", identity.distance),
+        "normalization": format!("{:?}", identity.normalization),
+        "input_role": "document",
+        "lane": "relation",
     });
     format!(
         "hm-space-v1:{}",

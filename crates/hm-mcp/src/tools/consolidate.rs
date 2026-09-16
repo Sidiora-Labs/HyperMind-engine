@@ -2,6 +2,8 @@
 
 use crate::Envelope;
 use crate::admission::admission_from_env;
+use crate::tools::relation;
+use crate::tools::remember::EmbeddingRuntime;
 use hm_core::{ConversationId, Error, ErrorCode, LSN};
 use hm_cortex::budget::BudgetUsage;
 use hm_cortex::citations::{FrozenCandidate, SourceKind};
@@ -25,6 +27,8 @@ use serde::Deserialize;
 use serde_json::json;
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
+
+const MAXIMUM_RELATIONS: usize = 256;
 
 #[derive(Clone)]
 pub struct ConsolidationRuntime {
@@ -138,12 +142,13 @@ pub struct ConsolidateInput {
 pub async fn run(
     actor: &ActorEngine,
     runtime: Option<&ConsolidationRuntime>,
+    embedding: Option<&EmbeddingRuntime>,
     input: ConsolidateInput,
 ) -> Result<Envelope, Error> {
     let history = read_history(actor).await?;
     match input.action {
         ConsolidateAction::List => Ok(list(history)),
-        ConsolidateAction::Run => start(actor, runtime, history, input).await,
+        ConsolidateAction::Run => start(actor, runtime, embedding, history, input).await,
         ConsolidateAction::Retract => retract(actor, history, input).await,
     }
 }
@@ -152,6 +157,7 @@ pub async fn run(
 async fn start(
     actor: &ActorEngine,
     runtime: Option<&ConsolidationRuntime>,
+    embedding: Option<&EmbeddingRuntime>,
     history: RunHistory,
     input: ConsolidateInput,
 ) -> Result<Envelope, Error> {
@@ -351,6 +357,20 @@ async fn start(
         actor.actor(),
         outcome.last_lsn.get()
     ));
+    if let Some(embedding) = embedding {
+        if let Ok(report) = relation::build(actor, embedding, MAXIMUM_RELATIONS).await {
+            envelope.items[0]["relations_embedded"] = json!(report.embedded);
+            envelope.items[0]["relation_space"] = json!(report.space_id);
+        } else {
+            envelope
+                .gaps
+                .push(json!({"kind": "relation_embedding_pending"}));
+            envelope.warnings.push(
+                "Run published; its relationship embeddings were not confirmed committed."
+                    .to_owned(),
+            );
+        }
+    }
     Ok(envelope)
 }
 

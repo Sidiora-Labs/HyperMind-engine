@@ -8177,6 +8177,28 @@ pub struct ReconstructionRuntime {
 }
 ```
 
+## hm-mcp::RelationBuildReport
+
+<a id="rust-crates-hm-mcp-src-tools-relation-rs-relationbuildreport"></a>
+
+Source: [`crates/hm-mcp/src/tools/relation.rs`](https://github.com/Sidiora-Labs/HyperMind-engine/blob/main/crates/hm-mcp/src/tools/relation.rs).
+
+When to use: Use `RelationBuildReport` for typed MCP tool arguments, common envelopes, and explicitly configured provider-backed operations. Inspect its status, coverage, identifiers, and evidence before reporting success.
+
+Do not use: Do not ignore ok/effect_state, manufacture observed evidence through remember, or bypass destructive-operation authority. Do not discard gaps, partial coverage, or unknown effect state.
+
+
+```rust
+pub struct RelationBuildReport {
+    pub scanned: u64,
+    pub embedded: u64,
+    pub skipped: u64,
+    pub space_id: String,
+    pub first_lsn: u64,
+    pub last_lsn: u64,
+}
+```
+
 ## hm-mcp::EmbeddingRuntime
 
 <a id="rust-crates-hm-mcp-src-tools-remember-rs-embeddingruntime"></a>

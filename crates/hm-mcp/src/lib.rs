@@ -40,6 +40,7 @@ pub use tools::outcome::OutcomeInput;
 pub use tools::predict::{ExpectedPredicateInput, PredicateKindInput, PredictInput};
 pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
 pub use tools::reconstruct::ReconstructionRuntime;
+pub use tools::relation::RelationBuildReport;
 pub use tools::remember::{
     AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberInput, RememberKind, RetentionInput,
     SensitivityInput, VocabularyInput,
@@ -687,7 +688,13 @@ impl McpServer {
 
     pub async fn consolidate_envelope(&self, input: ConsolidateInput) -> Envelope {
         let mutation = !matches!(input.action, ConsolidateAction::List);
-        match tools::consolidate::run(&self.actor, self.consolidation_runtime.as_ref(), input).await
+        match tools::consolidate::run(
+            &self.actor,
+            self.consolidation_runtime.as_ref(),
+            self.embedding_runtime.as_ref(),
+            input,
+        )
+        .await
         {
             Ok(value) => value,
             Err(error) => Envelope::error(error, mutation),

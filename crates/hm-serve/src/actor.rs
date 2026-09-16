@@ -257,6 +257,7 @@ enum Command {
         oneshot::Sender<Result<GraphNeighbourhood, Error>>,
     ),
     Memories(usize, oneshot::Sender<Result<Vec<MemoryRecord>, Error>>),
+    Relations(usize, oneshot::Sender<Result<Vec<EdgeRecord>, Error>>),
     Append(
         Vec<IncomingEvent>,
         oneshot::Sender<Result<AppendOutcome, Error>>,
@@ -474,6 +475,10 @@ impl ActorEngine {
             Command::AsOf(belief_type, canonical_identity, as_of, reply)
         })
         .await
+    }
+
+    pub async fn relations(&self, limit: usize) -> Result<Vec<EdgeRecord>, Error> {
+        request(&self.commands, |reply| Command::Relations(limit, reply)).await
     }
 
     pub async fn stats(&self) -> Result<ActorStats, Error> {
@@ -769,6 +774,9 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
             Command::AsOf(belief_type, canonical_identity, as_of, reply) => {
                 let result = state.as_of(belief_type, &canonical_identity, as_of);
                 let _ = reply.send(result);
+            }
+            Command::Relations(limit, reply) => {
+                let _ = reply.send(state.relations(limit));
             }
             Command::VerificationStatus(reply) => {
                 let _ = reply.send(Ok(state.mmr.verification_status()));
@@ -1624,6 +1632,15 @@ impl WriterState {
             canonical_identity,
             as_of,
         )
+    }
+
+    fn relations(&self, limit: usize) -> Result<Vec<EdgeRecord>, Error> {
+        if limit == 0 || limit > MAXIMUM_GRAPH_NEIGHBOURS {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        let snapshot = self.projections.begin_snapshot()?;
+        let generation = RunsProjection::active_generation(&snapshot)?;
+        GraphProjection::list_edges(&snapshot, generation, self.last_wall_timestamp_ns, limit)
     }
 
     fn activate(&self, request: ActivateRequest) -> Result<ActivationBundle, Error> {

@@ -8,4 +8,6 @@ A run does not wait for the provider to answer before it knows whether it can af
 
 Publishing is atomic. Derived events remain staged and invisible until all relevant projections have applied them and `ConsolidationClosed` successfully compare-and-swaps the active generation. `ConsolidationRetracted` restores the parent generation immediately; cleanup is separate and cannot delay rollback.
 
+After a run publishes, the relationships of the active generation are turned into relationship representations and embedded in the background, in their own embedding space rather than the document one. Each relationship embedding carries the LSN of the asserting `EdgeAsserted` event as its target and is built from the source LSNs that produced the relationship, so a relationship can be ranked and explained without re-reading the run. The build is bounded, runs only after the publish append succeeds, and degrades to a gap and a warning instead of failing the run; the recall path never embeds relationships.
+
 The slice-6 evaluation gate measures zero lossy rewrites on the cortex incident fixtures, rejection of invalid citations and insufficient roots, crash recovery before and after publication, lost-ack deduplication, rollback of leased views, and consolidation-enabled LongMemEval when its author dataset is installed.

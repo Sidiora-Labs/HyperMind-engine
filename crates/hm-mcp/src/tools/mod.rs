@@ -10,6 +10,7 @@ pub mod outcome;
 pub mod predict;
 pub mod recall;
 pub mod reconstruct;
+pub mod relation;
 pub mod remember;
 pub mod retract;
 pub(crate) mod sources;

@@ -1977,6 +1977,11 @@
       "file": "crates/hm-mcp/src/tools/reconstruct.rs"
     },
     {
+      "id": "rust:crates/hm-mcp/src/tools/relation.rs:RelationBuildReport",
+      "name": "hm-mcp::RelationBuildReport",
+      "file": "crates/hm-mcp/src/tools/relation.rs"
+    },
+    {
       "id": "rust:crates/hm-mcp/src/tools/remember.rs:EmbeddingRuntime",
       "name": "hm-mcp::EmbeddingRuntime",
       "file": "crates/hm-mcp/src/tools/remember.rs"
