@@ -51,7 +51,7 @@ jobs:
           python-version: '3.13.11'
       - name: Install pinned YAML parser
         run: python -m pip install --disable-pip-version-check -r deploy/requirements.txt
-      - uses: docker/setup-compose-action@364cc21a5de5b1ee4a7f5f9d3fa374ce0ccde746 # v1.2.0
+      - uses: docker/setup-compose-action@4eb059ff7f16592f9c84d5ca339c53cb7c5064e2 # v2.3.0
         with:
           version: v5.1.4
           cache-binary: false
