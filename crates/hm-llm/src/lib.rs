@@ -284,3 +284,5 @@ mod wire_tests {
         assert!(decode_wire_response("data: {\"ok\":true}\n\ndata: [DONE]").is_err());
     }
 }
+
+pub mod catalog;

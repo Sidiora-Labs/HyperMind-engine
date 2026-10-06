@@ -845,12 +845,14 @@ acceptance = "Real bounded filesystem and argument-vector Git observations evalu
 title = "External exact-price model catalogs"
 wave = 3
 owner_lane = "provider"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 coverage = ["req.coverage.catalog"]
-touches = ["crates/hm-llm/src/catalog.rs", "crates/hm-llm/tests/catalog.rs", "crates/hm-serve/src/model_inventory.rs"]
+touches = ["crates/hm-llm/src/catalog.rs", "crates/hm-llm/tests/catalog.rs", "crates/hm-serve/src/model_inventory.rs", "crates/hm-serve/tests/model_inventory.rs"]
 verify_cmd = "cargo test -p hm-llm --test catalog"
 acceptance = "External catalogs preserve additive metadata, capabilities, modality limits, context ceilings and exact tiered prices. Missing prices differ from zero, invalid prices refuse, and readiness names actual observations."
+
+result = "Catalog and native inventory compile passed. Three exact-price parser tests and one real-file native inventory test passed. Original bytes, additive metadata, fractional nanodollars, generations and unknown readiness are preserved. Native dispatcher and provider usage integration remain separate."
 
 [task.3.16]
 title = "PostgreSQL operational storage with writer fences"

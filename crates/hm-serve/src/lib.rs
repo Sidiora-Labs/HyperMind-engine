@@ -29,3 +29,5 @@ pub mod context_memory;
 pub mod context_retrieval;
 
 pub mod development_admission;
+
+pub mod model_inventory;
