@@ -719,8 +719,10 @@ qualification = "Actual Swift engine journey passed after preserving bounded ope
 title = "Runnable configured local and remote embedding providers"
 wave = 2
 owner_lane = "retrieval"
-status = "in_progress"
+status = "done"
 requires = ["task.2.3", "task.2.12"]
 touches = ["crates/hm-mcp/src/tools/remember.rs", "crates/hm-mcp/tests/context_embedding_runtime.rs"]
 verify_cmd = "cargo test -p hm-mcp --test context_embedding_runtime"
 acceptance = "Operator configuration selects explicit off, verified local or remote-compatible embedding runtimes for the actual daemon. Real local inference drives scoped source registration, backfill and retrieval through existing tool consumers; invalid or unavailable configuration fails visibly without model substitution or secret disclosure."
+
+qualification = "Library compile and actual environment-configured MCP local BGE journey passed, including verified artifact loading, registration, bounded backfill, restart and semantic retrieval. Off and missing-cache cases passed; missing artifacts refused without download. Remote-compatible configuration is implemented, while live remote-provider qualification remains outstanding."
