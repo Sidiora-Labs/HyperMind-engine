@@ -17,3 +17,5 @@ One scoped context owner per session and one memory authority per actor. Public 
 Import is resumable and digest verified, retains source identities and revisions, and writes through the existing ledger admission path. Cutover occurs at a quiescent boundary with durable progress. Rollback retains accepted post-cutover writes; an unsupported backward mapping requires forward recovery rather than data loss.
 
 Wave 1 delivers interoperable context, worker and migration components plus their existing-surface consumer. Wave 2 closes durable ledger integration and source/SDK parity. Wave 3 closes deep memory and worker behaviors. Wave 4 qualifies complete user journeys and comparative evaluation. A component gate alone does not establish integration or release qualification.
+
+spec/hypermind-03/capabilities.kvx is the complete capability acceptance map. Its coverage and deep memory requirements refine the wave tasks. A wave cannot claim complete parity while any assigned requirement remains unimplemented or unqualified.

@@ -30,6 +30,7 @@ contract = "spec/hypermind-03/capabilities.kvx is the complete capability accept
 [req.1]
 title = "Immutable conversation history and source recovery"
 acceptance = "Ordered validated source ingestion, idempotent replay, edits and tombstones as relations, scope-bound source recovery, frozen child snapshots, and canonical export/import without rewriting original bytes."
+ac_1 = "Ordered validated source ingestion, idempotent replay, edits and tombstones as relations, scope-bound source recovery, frozen child snapshots, and canonical export/import without rewriting original bytes."
 
 [task.1.1]
 title = "Immutable conversation history and source recovery"
@@ -46,6 +47,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.2]
 title = "Stable context generations and cache invalidation"
 acceptance = "Frozen baseline, recent delta and live tail; exact byte replay; scope/model/policy/source identity fences; hard and soft folds; pending reductions; immediate invalidation for revoked access or corrected required evidence; atomic checkpoint restoration."
+ac_1 = "Frozen baseline, recent delta and live tail; exact byte replay; scope/model/policy/source identity fences; hard and soft folds; pending reductions; immediate invalidation for revoked access or corrected required evidence; atomic checkpoint restoration."
 
 [task.1.2]
 title = "Stable context generations and cache invalidation"
@@ -62,6 +64,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.3]
 title = "Recoverable reduction and bounded context selection"
 acceptance = "Four summary tiers, age and importance selection, protected current work and tool dependencies, deterministic pressure bands, queued idempotent reductions, exact expansion references, output reservation and fail-closed overflow."
+ac_1 = "Four summary tiers, age and importance selection, protected current work and tool dependencies, deterministic pressure bands, queued idempotent reductions, exact expansion references, output reservation and fail-closed overflow."
 
 [task.1.3]
 title = "Recoverable reduction and bounded context selection"
@@ -78,6 +81,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.4]
 title = "Resumable historian jobs and coverage validation"
 acceptance = "Bounded chunk selection, four-tier structured results, immutable source coverage, source digest validation, lease/attempt fencing, cancellation, timeout, retry cooldown, resumable claims, and stale publication refusal. No paid call or text synthesis on context assembly."
+ac_1 = "Bounded chunk selection, four-tier structured results, immutable source coverage, source digest validation, lease/attempt fencing, cancellation, timeout, retry cooldown, resumable claims, and stale publication refusal. No paid call or text synthesis on context assembly."
 
 [task.1.4]
 title = "Resumable historian jobs and coverage validation"
@@ -94,6 +98,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.5]
 title = "Precise temporal context and scoped identity"
 acceptance = "Occurrence, recording, validity and verification times; explicit offset and source coverage; deterministic gap markers; unknown timestamps remain unknown; scoped session and external project mapping without truncating identity."
+ac_1 = "Occurrence, recording, validity and verification times; explicit offset and source coverage; deterministic gap markers; unknown timestamps remain unknown; scoped session and external project mapping without truncating identity."
 
 [task.1.5]
 title = "Precise temporal context and scoped identity"
@@ -110,6 +115,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.6]
 title = "Unified evidence retrieval and visibility filtering"
 acceptance = "Bounded candidate fusion for memory, conversation, file, commit, document, entity and relationship sources; compatible vector fingerprints, deterministic rank fusion, date filters, explicit semantic degradation, already-visible suppression and exact source references."
+ac_1 = "Bounded candidate fusion for memory, conversation, file, commit, document, entity and relationship sources; compatible vector fingerprints, deterministic rank fusion, date filters, explicit semantic degradation, already-visible suppression and exact source references."
 
 [task.1.6]
 title = "Unified evidence retrieval and visibility filtering"
@@ -126,6 +132,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.7]
 title = "Fenced background maintenance and publication"
 acceptance = "One scheduler coordinates distinct historian, verification, curation, extraction, indexing and consolidation jobs; persisted watermarks, source identity deduplication, budget reservations/settlement, fencing, cooldown, cancellation, and derived-source exclusion."
+ac_1 = "One scheduler coordinates distinct historian, verification, curation, extraction, indexing and consolidation jobs; persisted watermarks, source identity deduplication, budget reservations/settlement, fencing, cooldown, cancellation, and derived-source exclusion."
 
 [task.1.7]
 title = "Fenced background maintenance and publication"
@@ -142,6 +149,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.8]
 title = "Notes, primers, anchors and knowledge revisions"
 acceptance = "Immutable anchors versus revisioned notes and primers, lineage and contradiction links, retention and tombstones, bounded conditional-note predicates, optimistic revisions, owner or exact grant access, and explicit proposals for protected user attributes."
+ac_1 = "Immutable anchors versus revisioned notes and primers, lineage and contradiction links, retention and tombstones, bounded conditional-note predicates, optimistic revisions, owner or exact grant access, and explicit proposals for protected user attributes."
 
 [task.1.8]
 title = "Notes, primers, anchors and knowledge revisions"
@@ -158,6 +166,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.9]
 title = "Provider-safe context rendering and token admission"
 acceptance = "Provider-neutral source parts, role/part capability profiles, tool adjacency including repeated IDs, opaque multimodal references, provenance and authority labels, one context/output budget, safe required tiers, and a canonical ContextReport consumed by session assembly."
+ac_1 = "Provider-neutral source parts, role/part capability profiles, tool adjacency including repeated IDs, opaque multimodal references, provenance and authority labels, one context/output budget, safe required tiers, and a canonical ContextReport consumed by session assembly."
 
 [task.1.9]
 title = "Provider-safe context rendering and token admission"
@@ -174,6 +183,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.10]
 title = "Authenticated bounded transport"
 acceptance = "Versioned bounded frames with correlation and monotonic sequencing, authenticated scope-bound local sessions, cancellation/deadline metadata, chunk bounds, typed effect-aware failures and real local transport round trips."
+ac_1 = "Versioned bounded frames with correlation and monotonic sequencing, authenticated scope-bound local sessions, cancellation/deadline metadata, chunk bounds, typed effect-aware failures and real local transport round trips."
 
 [task.1.10]
 title = "Authenticated bounded transport"
@@ -190,6 +200,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.11]
 title = "Scoped module registry and flow-controlled routing"
 acceptance = "Validated manifests, capability negotiation, authenticated registrations, epoch-safe channel binding, fair byte/call credits, bounded queues, cancellation, drain and replacement refusal before dispatch."
+ac_1 = "Validated manifests, capability negotiation, authenticated registrations, epoch-safe channel binding, fair byte/call credits, bounded queues, cancellation, drain and replacement refusal before dispatch."
 
 [task.1.11]
 title = "Scoped module registry and flow-controlled routing"
@@ -206,6 +217,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.12]
 title = "Contained process supervision and replacement"
 acceptance = "Real child lifecycle with explicit command/environment, restart budget/backoff, launch identity, readiness/health, graceful drain, bounded shutdown, replacement readiness and honest platform capability reporting."
+ac_1 = "Real child lifecycle with explicit command/environment, restart budget/backoff, launch identity, readiness/health, graceful drain, bounded shutdown, replacement readiness and honest platform capability reporting."
 
 [task.1.12]
 title = "Contained process supervision and replacement"
@@ -222,6 +234,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.13]
 title = "Durable effect recovery and idempotent delivery"
 acceptance = "Persist intent before dispatch; idempotency bound to payload and scope; explicit prepared/dispatched/uncertain/terminal states; no replay of uncertain effects; cursor-resumable receipts and crash recovery using real storage."
+ac_1 = "Persist intent before dispatch; idempotency bound to payload and scope; explicit prepared/dispatched/uncertain/terminal states; no replay of uncertain effects; cursor-resumable receipts and crash recovery using real storage."
 
 [task.1.13]
 title = "Durable effect recovery and idempotent delivery"
@@ -238,6 +251,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.14]
 title = "Durable scoped event delivery"
 acceptance = "Scoped append/replay, stable subscriptions, ack/nak/terminal disposition, bounded attempts, dead-letter-before-terminal, register CAS, deterministic naming/grants, and real restart behavior with explicit backend capabilities."
+ac_1 = "Scoped append/replay, stable subscriptions, ack/nak/terminal disposition, bounded attempts, dead-letter-before-terminal, register CAS, deterministic naming/grants, and real restart behavior with explicit backend capabilities."
 
 [task.1.14]
 title = "Durable scoped event delivery"
@@ -254,6 +268,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.15]
 title = "Versioned tool, runner and context roles"
 acceptance = "Tool schema/semantic pinning, withdrawn-tool receipts, runner terminal/delivery invariants, compaction replacement ranges and request fences, transform declaration bounds and authority narrowing. Implement real role state machines and independently authored contract cases."
+ac_1 = "Tool schema/semantic pinning, withdrawn-tool receipts, runner terminal/delivery invariants, compaction replacement ranges and request fences, transform declaration bounds and authority narrowing. Implement real role state machines and independently authored contract cases."
 
 [task.1.15]
 title = "Versioned tool, runner and context roles"
@@ -270,6 +285,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.16]
 title = "Fenced operational storage and canonical paths"
 acceptance = "Canonical existing project roots, explicit recovery resolution, private file-backed SQLite, advisory writer locks with monotonic epochs, ordered checksummed migrations, store-ahead refusal, transaction fencing, and crash-safe replacement."
+ac_1 = "Canonical existing project roots, explicit recovery resolution, private file-backed SQLite, advisory writer locks with monotonic epochs, ordered checksummed migrations, store-ahead refusal, transaction fencing, and crash-safe replacement."
 
 [task.1.16]
 title = "Fenced operational storage and canonical paths"
@@ -286,6 +302,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.17]
 title = "Verified Hypermid import and identity mapping"
 acceptance = "Resumable import of versioned Hypermid history and knowledge into the existing ActorEngine ledger; exact scope/actor mapping, source IDs/digests/provenance, idempotent batches, corruption refusal, progress receipts and safe restart. Never map arbitrary project hashes into the u16 actor ID."
+ac_1 = "Resumable import of versioned Hypermid history and knowledge into the existing ActorEngine ledger; exact scope/actor mapping, source IDs/digests/provenance, idempotent batches, corruption refusal, progress receipts and safe restart. Never map arbitrary project hashes into the u16 actor ID."
 
 [task.1.17]
 title = "Verified Hypermid import and identity mapping"
@@ -303,6 +320,7 @@ qualification = "Focused import and restart tests passed; integrated projection 
 [req.18]
 title = "Context client and OSS host adapter contracts"
 acceptance = "Typed generic host adapter and Python/TypeScript context clients reaching the existing verbs; negotiated version, scoped identities, no implicit compaction ownership, token budgets, error/effect mapping, diagnostics and cursor resume. OSS Gideon-facing integration through documented generic contract."
+ac_1 = "Typed generic host adapter and Python/TypeScript context clients reaching the existing verbs; negotiated version, scoped identities, no implicit compaction ownership, token budgets, error/effect mapping, diagnostics and cursor resume. OSS Gideon-facing integration through documented generic contract."
 
 [task.1.18]
 title = "Context client and OSS host adapter contracts"
@@ -319,6 +337,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.19]
 title = "Context and memory operations in the inspection console"
 acceptance = "Native console views for scoped sessions, included/omitted context, coverage, cache generation, historian/maintenance state, memory provenance and migration receipts; real transport-backed inspection and escaped content, responsive rendering and honest empty/error states."
+ac_1 = "Native console views for scoped sessions, included/omitted context, coverage, cache generation, historian/maintenance state, memory provenance and migration receipts; real transport-backed inspection and escaped content, responsive rendering and honest empty/error states."
 
 [task.1.19]
 title = "Context and memory operations in the inspection console"
@@ -335,6 +354,7 @@ qualification = "Implementation and focused component checks passed; integrated 
 [req.20]
 title = "Unified session context through existing agent surfaces"
 acceptance = "Compose context components against actual ActorEngine history and evidence; expose through existing activate/inspect/remember argument variants with stable fourteen-verb inventory; recover after restart and return explicit health, provenance and omitted context. No isolated unused subsystem counts as completion."
+ac_1 = "Compose context components against actual ActorEngine history and evidence; expose through existing activate/inspect/remember argument variants with stable fourteen-verb inventory; recover after restart and return explicit health, provenance and omitted context. No isolated unused subsystem counts as completion."
 
 [task.1.20]
 title = "Unified session context through existing agent surfaces"

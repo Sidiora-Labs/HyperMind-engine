@@ -4,51 +4,69 @@
 
 ## Tasks
 
-  - [-] 1.1 Immutable conversation history and source recovery
+  - [x] 1.1 Immutable conversation history and source recovery
     - _Requirements: req.1_
-  - [-] 1.2 Stable context generations and cache invalidation
+  - [x] 1.2 Stable context generations and cache invalidation
     - _Requirements: req.2_
-  - [-] 1.3 Recoverable reduction and bounded context selection
+  - [x] 1.3 Recoverable reduction and bounded context selection
     - _Requirements: req.3_
-  - [-] 1.4 Resumable historian jobs and coverage validation
+  - [x] 1.4 Resumable historian jobs and coverage validation
     - _Requirements: req.4_
-  - [-] 1.5 Precise temporal context and scoped identity
+  - [x] 1.5 Precise temporal context and scoped identity
     - _Requirements: req.5_
-  - [-] 1.6 Unified evidence retrieval and visibility filtering
+  - [x] 1.6 Unified evidence retrieval and visibility filtering
     - _Requirements: req.6_
-  - [-] 1.7 Fenced background maintenance and publication
+  - [x] 1.7 Fenced background maintenance and publication
     - _Requirements: req.7_
-  - [-] 1.8 Notes, primers, anchors and knowledge revisions
+  - [x] 1.8 Notes, primers, anchors and knowledge revisions
     - _Requirements: req.8_
-  - [-] 1.9 Provider-safe context rendering and token admission
+  - [x] 1.9 Provider-safe context rendering and token admission
     - _Requirements: req.9_
-  - [-] 1.10 Authenticated bounded transport
+  - [x] 1.10 Authenticated bounded transport
     - _Requirements: req.10_
-  - [-] 1.11 Scoped module registry and flow-controlled routing
+  - [x] 1.11 Scoped module registry and flow-controlled routing
     - _Requirements: req.11_
-  - [-] 1.12 Contained process supervision and replacement
+  - [x] 1.12 Contained process supervision and replacement
     - _Requirements: req.12_
-  - [-] 1.13 Durable effect recovery and idempotent delivery
+  - [x] 1.13 Durable effect recovery and idempotent delivery
     - _Requirements: req.13_
-  - [-] 1.14 Durable scoped event delivery
+  - [x] 1.14 Durable scoped event delivery
     - _Requirements: req.14_
-  - [-] 1.15 Versioned tool, runner and context roles
+  - [x] 1.15 Versioned tool, runner and context roles
     - _Requirements: req.15_
-  - [-] 1.16 Fenced operational storage and canonical paths
+  - [x] 1.16 Fenced operational storage and canonical paths
     - _Requirements: req.16_
-  - [-] 1.17 Verified Hypermid import and identity mapping
+  - [x] 1.17 Verified Hypermid import and identity mapping
     - _Requirements: req.17_
-  - [-] 1.18 Context client and OSS host adapter contracts
+  - [x] 1.18 Context client and OSS host adapter contracts
     - _Requirements: req.18_
-  - [-] 1.19 Context and memory operations in the inspection console
+  - [x] 1.19 Context and memory operations in the inspection console
     - _Requirements: req.19_
-  - [-] 1.20 Unified session context through existing agent surfaces
+  - [x] 1.20 Unified session context through existing agent surfaces
     - _Requirements: req.20_
-  - [ ] 1.21 Integrate the unified context and memory journey
-  - [ ] 2.1 Ledger-backed revisions, invalidation and complete migration
+  - [x] 1.21 Integrate the unified context and memory journey
+  - [x] 1.22 Ledger-backed session mutations and job lifecycle
+  - [x] 1.23 Complete source history ingestion and expansion
+  - [x] 1.24 Persisted context generations and historian publication
+  - [x] 1.25 Configured trusted context scope on runnable surfaces
+  - [x] 1.26 Connected module runtime and durable operational ownership
+  - [x] 1.27 Lossless cross-language temporal contracts
+  - [x] 1.28 Atomic source publication admission
+  - [x] 2.1 Ledger-backed revisions, invalidation and complete migration
   - [ ] 2.2 Complete SDK and OSS Gideon integration
-  - [ ] 2.3 Unified source retrieval and embedding lifecycle
+  - [x] 2.3 Unified source retrieval and embedding lifecycle
   - [ ] 2.4 Wave 2 integration
+  - [x] 2.5 Python and TypeScript executable context consumers
+  - [x] 2.6 Go typed context consumer
+  - [x] 2.7 Swift typed context consumer
+  - [x] 2.8 Rust and C ABI trusted context integration
+  - [x] 2.9 OSS Gideon host context ownership adapter
+  - [x] 2.10 Lossless temporal contract across memory operations
+  - [x] 2.11 Native memory and retrieval surface integration
+  - [x] 2.12 Real semantic embedding lifecycle qualification
+  - [-] 2.13 Scoped native memory portability consumers
+  - [x] 2.14 Validated Hypermid source history migration
+  - [x] 2.15 Swift operation error fidelity
   - [ ] 3.1 Complete background knowledge development
   - [ ] 3.2 Complete module and operational capability parity
   - [ ] 3.3 Complete long-session and provider continuity
@@ -62,8 +80,8 @@
 ```json
 {
   "waves": [
-    { "id": 1,  "tasks": ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "1.11", "1.12", "1.13", "1.14", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20", "1.21"] },
-    { "id": 2,  "tasks": ["2.1", "2.2", "2.3", "2.4"] },
+    { "id": 1,  "tasks": ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "1.11", "1.12", "1.13", "1.14", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20", "1.21", "1.22", "1.23", "1.24", "1.25", "1.26", "1.27", "1.28"] },
+    { "id": 2,  "tasks": ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "2.10", "2.11", "2.12", "2.13", "2.14", "2.15"] },
     { "id": 3,  "tasks": ["3.1", "3.2", "3.3", "3.4"] },
     { "id": 4,  "tasks": ["4.1", "4.2", "4.3"] }
   ]

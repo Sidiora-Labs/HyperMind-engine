@@ -6,97 +6,118 @@
 
 ### Acceptance Criteria
 
+1. Ordered validated source ingestion, idempotent replay, edits and tombstones as relations, scope-bound source recovery, frozen child snapshots, and canonical export/import without rewriting original bytes.
 
 ## Requirement 2: Stable context generations and cache invalidation
 
 ### Acceptance Criteria
 
+1. Frozen baseline, recent delta and live tail; exact byte replay; scope/model/policy/source identity fences; hard and soft folds; pending reductions; immediate invalidation for revoked access or corrected required evidence; atomic checkpoint restoration.
 
 ## Requirement 3: Recoverable reduction and bounded context selection
 
 ### Acceptance Criteria
 
+1. Four summary tiers, age and importance selection, protected current work and tool dependencies, deterministic pressure bands, queued idempotent reductions, exact expansion references, output reservation and fail-closed overflow.
 
 ## Requirement 4: Resumable historian jobs and coverage validation
 
 ### Acceptance Criteria
 
+1. Bounded chunk selection, four-tier structured results, immutable source coverage, source digest validation, lease/attempt fencing, cancellation, timeout, retry cooldown, resumable claims, and stale publication refusal. No paid call or text synthesis on context assembly.
 
 ## Requirement 5: Precise temporal context and scoped identity
 
 ### Acceptance Criteria
 
+1. Occurrence, recording, validity and verification times; explicit offset and source coverage; deterministic gap markers; unknown timestamps remain unknown; scoped session and external project mapping without truncating identity.
 
 ## Requirement 6: Unified evidence retrieval and visibility filtering
 
 ### Acceptance Criteria
 
+1. Bounded candidate fusion for memory, conversation, file, commit, document, entity and relationship sources; compatible vector fingerprints, deterministic rank fusion, date filters, explicit semantic degradation, already-visible suppression and exact source references.
 
 ## Requirement 7: Fenced background maintenance and publication
 
 ### Acceptance Criteria
 
+1. One scheduler coordinates distinct historian, verification, curation, extraction, indexing and consolidation jobs; persisted watermarks, source identity deduplication, budget reservations/settlement, fencing, cooldown, cancellation, and derived-source exclusion.
 
 ## Requirement 8: Notes, primers, anchors and knowledge revisions
 
 ### Acceptance Criteria
 
+1. Immutable anchors versus revisioned notes and primers, lineage and contradiction links, retention and tombstones, bounded conditional-note predicates, optimistic revisions, owner or exact grant access, and explicit proposals for protected user attributes.
 
 ## Requirement 9: Provider-safe context rendering and token admission
 
 ### Acceptance Criteria
 
+1. Provider-neutral source parts, role/part capability profiles, tool adjacency including repeated IDs, opaque multimodal references, provenance and authority labels, one context/output budget, safe required tiers, and a canonical ContextReport consumed by session assembly.
 
 ## Requirement 10: Authenticated bounded transport
 
 ### Acceptance Criteria
 
+1. Versioned bounded frames with correlation and monotonic sequencing, authenticated scope-bound local sessions, cancellation/deadline metadata, chunk bounds, typed effect-aware failures and real local transport round trips.
 
 ## Requirement 11: Scoped module registry and flow-controlled routing
 
 ### Acceptance Criteria
 
+1. Validated manifests, capability negotiation, authenticated registrations, epoch-safe channel binding, fair byte/call credits, bounded queues, cancellation, drain and replacement refusal before dispatch.
 
 ## Requirement 12: Contained process supervision and replacement
 
 ### Acceptance Criteria
 
+1. Real child lifecycle with explicit command/environment, restart budget/backoff, launch identity, readiness/health, graceful drain, bounded shutdown, replacement readiness and honest platform capability reporting.
 
 ## Requirement 13: Durable effect recovery and idempotent delivery
 
 ### Acceptance Criteria
 
+1. Persist intent before dispatch; idempotency bound to payload and scope; explicit prepared/dispatched/uncertain/terminal states; no replay of uncertain effects; cursor-resumable receipts and crash recovery using real storage.
 
 ## Requirement 14: Durable scoped event delivery
 
 ### Acceptance Criteria
 
+1. Scoped append/replay, stable subscriptions, ack/nak/terminal disposition, bounded attempts, dead-letter-before-terminal, register CAS, deterministic naming/grants, and real restart behavior with explicit backend capabilities.
 
 ## Requirement 15: Versioned tool, runner and context roles
 
 ### Acceptance Criteria
 
+1. Tool schema/semantic pinning, withdrawn-tool receipts, runner terminal/delivery invariants, compaction replacement ranges and request fences, transform declaration bounds and authority narrowing. Implement real role state machines and independently authored contract cases.
 
 ## Requirement 16: Fenced operational storage and canonical paths
 
 ### Acceptance Criteria
 
+1. Canonical existing project roots, explicit recovery resolution, private file-backed SQLite, advisory writer locks with monotonic epochs, ordered checksummed migrations, store-ahead refusal, transaction fencing, and crash-safe replacement.
 
 ## Requirement 17: Verified Hypermid import and identity mapping
 
 ### Acceptance Criteria
 
+1. Resumable import of versioned Hypermid history and knowledge into the existing ActorEngine ledger; exact scope/actor mapping, source IDs/digests/provenance, idempotent batches, corruption refusal, progress receipts and safe restart. Never map arbitrary project hashes into the u16 actor ID.
 
 ## Requirement 18: Context client and OSS host adapter contracts
 
 ### Acceptance Criteria
 
+1. Typed generic host adapter and Python/TypeScript context clients reaching the existing verbs; negotiated version, scoped identities, no implicit compaction ownership, token budgets, error/effect mapping, diagnostics and cursor resume. OSS Gideon-facing integration through documented generic contract.
 
 ## Requirement 19: Context and memory operations in the inspection console
 
 ### Acceptance Criteria
 
+1. Native console views for scoped sessions, included/omitted context, coverage, cache generation, historian/maintenance state, memory provenance and migration receipts; real transport-backed inspection and escaped content, responsive rendering and honest empty/error states.
 
 ## Requirement 20: Unified session context through existing agent surfaces
 
 ### Acceptance Criteria
+
+1. Compose context components against actual ActorEngine history and evidence; expose through existing activate/inspect/remember argument variants with stable fourteen-verb inventory; recover after restart and return explicit health, provenance and omitted context. No isolated unused subsystem counts as completion.
