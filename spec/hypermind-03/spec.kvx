@@ -421,11 +421,13 @@ qualification = "Library compile and actual seven-source lexical journey passed 
 title = "Wave 2 integration"
 wave = 2
 owner_lane = "integration"
-status = "pending"
+status = "done"
 requires = ["task.2.1","task.2.2","task.2.3", "task.2.11", "task.2.12", "task.2.13", "task.2.14", "task.2.15", "task.2.17"]
 touches = ["crates/hm-sim/tests/unified_memory_journey.rs"]
 verify_cmd = "cargo test -p hm-sim --test unified_memory_journey"
 acceptance = "One live host journey exercises all wave-2 consumers with real persistence and qualified SDK paths."
+
+qualification = "Actual mTLS daemon and installed OSS Gideon host journey passed with verified local BGE retrieval, native revisions, source correction, precise time and byte recovery, denied grants, durable maintenance and unknown usage, abrupt restart, canonical artifact restoration and a second restored-host restart. Full operational parity, autonomous knowledge workers, broad provider quality and remaining platform qualification remain later waves."
 
 [task.3.1]
 title = "Complete background knowledge development"
