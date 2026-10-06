@@ -1847,6 +1847,7 @@ dependencies = [
  "hm-serve",
  "reqwest",
  "rmcp",
+ "rustix",
  "serde",
  "serde_json",
  "tempfile",

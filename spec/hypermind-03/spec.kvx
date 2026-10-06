@@ -1261,11 +1261,11 @@ owner_lane = "surface"
 status = "in_progress"
 requires = ["task.3.25"]
 coverage = ["req.coverage.auth", "req.coverage.context_mode", "req.coverage.diagnostics"]
-touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs", "crates/hm-mcp/src/tools/session_context.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/tests/test_continuity_host.py", "crates/hm-serve/Cargo.toml", "crates/hm-serve/src/lib.rs"]
+touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs", "crates/hm-mcp/src/tools/session_context.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/tests/test_continuity_host.py", "crates/hm-serve/Cargo.toml", "crates/hm-serve/src/lib.rs", "crates/hm-mcp/src/dispatcher.rs", "crates/hm-mcp/src/fabric_runtime.rs", "crates/hm-mcp/src/lib.rs", "crates/hm-mcp/src/main.rs", "crates/hm-mcp/tests/fabric_runtime.rs", "crates/hm-cli/src/serve.rs"]
 verify_cmd = "cargo test -p hm-serve --test fabric_service --test continuity_service"
 acceptance = "Native operational and continuation services expose real configured backends, routes, jobs, budgets, mode boundaries and effect receipts through existing surfaces without granting callers new authority."
 
-result = "Native continuity service and installed host off/pass-through/shadow behavior passed their focused gates; incompatible hosts explicitly refuse primary. Native operational service now also passes actual authenticated worker dispatch, durable replay, capacity refusal before effect creation, selected-store reopen, and cancellation after real dispatch. Confirmed worker shutdown preserves uncertain effects; absent original evidence refuses reconciliation. Public operational routing and primary host serving remain separate integration work."
+result = "Native continuity and operational service gates passed, including preserved host off/pass-through bytes, read-only shadow comparison, durable native hook receipts, real worker cancellation and retained uncertainty. Existing MCP dispatch now reuses one trusted operational owner; its actual actor and signed-worker journey passed scope/version and caller-configuration refusal, result replay, inspection and shutdown. Daemon and stdio startup compile with an owner-only loader. Actual startup-file, daemon/socket and SDK journeys, broader operational families and compatible primary host serving remain unqualified."
 
 [task.3.47]
 title = "Installed host development and operational consumers"

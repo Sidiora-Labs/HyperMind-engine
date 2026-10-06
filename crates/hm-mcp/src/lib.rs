@@ -22,6 +22,7 @@ use serde_json::{Value, json};
 
 pub mod admission;
 pub mod dispatcher;
+pub mod fabric_runtime;
 pub mod extraction;
 pub mod telemetry;
 pub mod tools;
@@ -146,6 +147,7 @@ pub struct McpServer {
     web_source_runtime: Option<WebSourceRuntime>,
     media_runtime: Option<MediaRuntime>,
     source_runtime: Option<SourceRuntime>,
+    fabric_service: Option<std::sync::Arc<hm_serve::fabric_service::FabricService>>,
     context_scope: Option<hm_context::Scope>,
 }
 
@@ -163,6 +165,7 @@ impl McpServer {
             web_source_runtime: None,
             media_runtime: None,
             source_runtime: None,
+            fabric_service: None,
             context_scope: None,
         }
     }
@@ -183,8 +186,15 @@ impl McpServer {
             web_source_runtime: None,
             media_runtime: None,
             source_runtime: None,
+            fabric_service: None,
             context_scope: None,
         }
+    }
+
+    #[must_use]
+    pub fn with_admin_token(mut self, token: hm_serve::config::CapabilityToken) -> Self {
+        self.admin_token = Some(token);
+        self
     }
 
     #[must_use]
@@ -288,13 +298,14 @@ impl McpServer {
                 .context_scope
                 .as_ref()
                 .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
-            return tools::session_context::remember_with_development(
+            return tools::session_context::remember_with_operational(
                 &self.actor,
                 scope,
                 &input.conversation,
                 context,
                 self.embedding_runtime.as_ref(),
                 self.development_runtime.as_ref(),
+                self.fabric_service.as_deref(),
             )
             .await;
         }
@@ -826,12 +837,13 @@ impl McpServer {
             .as_deref()
             .is_some_and(|uri| uri.starts_with(&format!("hm://{}/context", self.actor.actor())))
         {
-            return match tools::session_context::inspect_with_development(
+            return match tools::session_context::inspect_with_operational(
                 &self.actor,
                 self.context_scope.as_ref(),
                 input.uri.as_deref().unwrap(),
                 self.embedding_runtime.as_ref(),
                 self.development_runtime.as_ref(),
+                self.fabric_service.as_deref(),
             )
             .await
             {

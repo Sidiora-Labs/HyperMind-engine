@@ -29,6 +29,9 @@ pub enum RememberContext {
     Job {
         request: ContextJobRequest,
     },
+    Fabric {
+        request: hm_serve::fabric_service::FabricRequest,
+    },
     Continuity {
         request: hm_serve::continuity_service::ContinuityRequest,
     },
@@ -86,6 +89,26 @@ pub async fn remember_with_development(
     runtime: Option<&super::remember::EmbeddingRuntime>,
     development: Option<&super::remember::DevelopmentRuntime>,
 ) -> Result<Envelope, Error> {
+    remember_with_operational(
+        actor,
+        scope,
+        conversation,
+        input,
+        runtime,
+        development,
+        None,
+    )
+    .await
+}
+pub async fn remember_with_operational(
+    actor: &ActorEngine,
+    scope: &Scope,
+    conversation: &str,
+    input: Value,
+    runtime: Option<&super::remember::EmbeddingRuntime>,
+    development: Option<&super::remember::DevelopmentRuntime>,
+    fabric: Option<&hm_serve::fabric_service::FabricService>,
+) -> Result<Envelope, Error> {
     if input
         .get("request")
         .and_then(|r| r.get("version"))
@@ -96,6 +119,11 @@ pub async fn remember_with_development(
     }
     let operation: RememberContext = serde_json::from_value(input).map_err(|_| invalid())?;
     let reply = match operation {
+        RememberContext::Fabric { request } => fabric
+            .ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?
+            .execute(actor, scope, request)
+            .await
+            .map_err(fabric_error)?,
         RememberContext::Continuity { request } => {
             hm_serve::continuity_service::execute(actor, scope, scope, request).await?
         }
@@ -340,7 +368,27 @@ pub async fn inspect_with_development(
     runtime: Option<&super::remember::EmbeddingRuntime>,
     development: Option<&super::remember::DevelopmentRuntime>,
 ) -> Result<Envelope, Error> {
+    inspect_with_operational(actor, scope, uri, runtime, development, None).await
+}
+pub async fn inspect_with_operational(
+    actor: &ActorEngine,
+    scope: Option<&Scope>,
+    uri: &str,
+    runtime: Option<&super::remember::EmbeddingRuntime>,
+    development: Option<&super::remember::DevelopmentRuntime>,
+    fabric: Option<&hm_serve::fabric_service::FabricService>,
+) -> Result<Envelope, Error> {
     let scope = scope.ok_or_else(invalid)?;
+    if uri == format!("hm://{}/context-fabric", actor.actor()) {
+        return Ok(envelope(
+            fabric
+                .ok_or_else(|| Error::new(ErrorCode::OperationUnavailable))?
+                .inspect(scope, hm_context::Cursor::default(), 128)
+                .await
+                .map_err(fabric_error)?,
+        ));
+    }
+
     if uri == format!("hm://{}/context-development", actor.actor()) {
         let service = development_service(actor, scope, development)?;
         let mut state = service
@@ -524,5 +572,25 @@ fn development_service(
         Some(runtime) => runtime.service(actor.clone(), scope.clone()),
         None => hm_serve::development_service::DevelopmentService::new(scope.clone(), vec![])
             .map_err(hm_serve::session_context::memory_error),
+    }
+}
+
+pub(crate) fn fabric_error(error: hm_serve::fabric_service::FabricError) -> Error {
+    use hm_serve::fabric_service::FabricError;
+    match error {
+        FabricError::Context(error) => hm_serve::session_context::context_error(error),
+        FabricError::Runtime(hm_fabric::runtime::RuntimeError::Context(error))
+        | FabricError::Backend(hm_fabric::backend_runtime::BackendRuntimeError::Context(error)) => {
+            hm_serve::session_context::context_error(error)
+        }
+        FabricError::Backend(hm_fabric::backend_runtime::BackendRuntimeError::Conflict) => {
+            Error::new(ErrorCode::IdempotencyConflict)
+        }
+        FabricError::Ledger(error) => error,
+        FabricError::Json(_) => Error::new(ErrorCode::SchemaInvalid),
+        FabricError::Cancelled { .. } | FabricError::EvidenceUnavailable { .. } => {
+            Error::new(ErrorCode::OperationUnavailable)
+        }
+        _ => Error::new(ErrorCode::OperationUnavailable),
     }
 }

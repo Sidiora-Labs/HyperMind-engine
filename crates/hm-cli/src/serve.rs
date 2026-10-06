@@ -95,7 +95,10 @@ pub(crate) async fn run(
     let mut bound_actors = std::collections::BTreeSet::new();
     for path in &options.context_scopes {
         let binding = hm_serve::context_config::load_for_server(path, &config)?;
-        anyhow::ensure!(bound_actors.insert(binding.actor), "duplicate actor context scope");
+        anyhow::ensure!(
+            bound_actors.insert(binding.actor),
+            "duplicate actor context scope"
+        );
         context_scopes.push(binding);
     }
     let mut grpc = Vec::new();
@@ -136,12 +139,18 @@ pub(crate) async fn run(
     }
     let mut dispatcher =
         tokio::task::spawn_blocking(hm_mcp::dispatcher::McpToolDispatcher::from_env).await??;
-    for binding in context_scopes {
-        dispatcher = dispatcher.with_context_scope(binding);
+    for binding in &context_scopes {
+        dispatcher = dispatcher.with_context_scope(binding.clone());
     }
-    let uds = UdsServer::bind((*config).clone())
-        .await?
-        .with_tool_dispatcher(Arc::new(dispatcher));
+    dispatcher = hm_mcp::fabric_runtime::configure_from_env(dispatcher, &context_scopes).await?;
+    let dispatcher = Arc::new(dispatcher);
+    let uds = match UdsServer::bind((*config).clone()).await {
+        Ok(uds) => uds.with_tool_dispatcher(dispatcher.clone()),
+        Err(error) => {
+            let _ = dispatcher.shutdown_fabric().await;
+            return Err(error.into());
+        }
+    };
     let (stop, signal) = watch::channel(false);
     let mut tasks: JoinSet<Result<()>> = JoinSet::new();
     for server in grpc {
@@ -174,10 +183,21 @@ pub(crate) async fn run(
         },
     };
     let _ = stop.send(true);
+    let mut join_error = None;
     while let Some(joined) = tasks.join_next().await {
-        joined??;
+        let outcome = joined.map_err(anyhow::Error::from).and_then(|value| value);
+        if let Err(error) = outcome {
+            if join_error.is_none() {
+                join_error = Some(error);
+            }
+        }
     }
+    let shutdown = dispatcher.shutdown_fabric().await;
     result?;
+    if let Some(error) = join_error {
+        return Err(error);
+    }
+    shutdown?;
     Ok(json!({"ok": true, "stopped": true}))
 }
 

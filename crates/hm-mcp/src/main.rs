@@ -31,7 +31,9 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
                 && config_path.is_none()
                 && context_scope_path.is_none() =>
             {
-                println!("{USAGE}\n\n--config PATH         Private server configuration.\n--context-scope PATH  Owner-only version-1 JSON actor/scope mapping for context operations.");
+                println!(
+                    "{USAGE}\n\n--config PATH         Private server configuration.\n--context-scope PATH  Owner-only version-1 JSON actor/scope mapping for context operations."
+                );
                 return Ok(());
             }
             _ => return Err(USAGE.into()),
@@ -50,9 +52,19 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
         projection_map_bytes: config.projection_map_bytes,
     })
     .await?;
-    let mut server = hm_mcp::McpServer::configured(actor, Some(config.admin_token)).await?;
-    if let Some(context) = context {
-        server = server.with_context_scope(context.scope);
+    let mut dispatcher =
+        tokio::task::spawn_blocking(hm_mcp::dispatcher::McpToolDispatcher::from_env).await??;
+    let bindings: Vec<_> = context.into_iter().collect();
+    for binding in &bindings {
+        dispatcher = dispatcher.with_context_scope(binding.clone());
     }
-    hm_mcp::serve_stdio(server).await
+    dispatcher = hm_mcp::fabric_runtime::configure_from_env(dispatcher, &bindings).await?;
+    let server = dispatcher
+        .server(actor)
+        .with_admin_token(config.admin_token);
+    let served = hm_mcp::serve_stdio(server).await;
+    let shutdown = dispatcher.shutdown_fabric().await;
+    served?;
+    shutdown?;
+    Ok(())
 }

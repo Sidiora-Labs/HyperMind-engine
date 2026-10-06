@@ -14,6 +14,7 @@ path = "src/main.rs"
 hnsw = ["hm-serve/hnsw"]
 
 [dependencies]
+rustix = { version = "1.1.4", features = ["fs", "process"] }
 hm-fabric = { path = "../hm-fabric" }
 hm-context = { path = "../hm-context" }
 base64 = "0.22.1"

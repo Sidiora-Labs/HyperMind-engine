@@ -7,6 +7,8 @@ use hm_serve::uds::ToolDispatcher;
 
 #[derive(Clone, Default)]
 pub struct McpToolDispatcher {
+    fabric_services:
+        std::collections::BTreeMap<u16, std::sync::Arc<hm_serve::fabric_service::FabricService>>,
     context_scopes: std::collections::BTreeMap<u16, hm_context::Scope>,
     pub development_runtime: Option<crate::DevelopmentRuntime>,
     pub embedding_runtime: Option<EmbeddingRuntime>,
@@ -20,6 +22,7 @@ pub struct McpToolDispatcher {
 impl McpToolDispatcher {
     pub fn from_env() -> Result<Self, Error> {
         Ok(Self {
+            fabric_services: Default::default(),
             context_scopes: Default::default(),
             development_runtime: crate::DevelopmentRuntime::from_env()?,
             embedding_runtime: EmbeddingRuntime::from_env()
@@ -30,6 +33,49 @@ impl McpToolDispatcher {
             media_runtime: tools::media::MediaRuntime::from_env()?,
             source_runtime: tools::source::SourceRuntime::from_env()?,
         })
+    }
+
+    pub async fn with_fabric_startup(
+        mut self,
+        binding: hm_serve::context_config::TrustedContextConfig,
+        config: hm_fabric::runtime::RuntimeConfig,
+        backend: hm_fabric::backend_runtime::BackendRuntime,
+        worker: hm_fabric::supervisor::ProcessSpec,
+        metadata: hm_serve::fabric_service::TrustedMetadata,
+    ) -> Result<Self, Error> {
+        if binding.version != 1
+            || binding.actor == 0
+            || binding.scope != config.scope
+            || self.fabric_services.contains_key(&binding.actor)
+        {
+            return Err(Error::new(ErrorCode::CapabilityDenied));
+        }
+        binding
+            .scope
+            .validate()
+            .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+        let service =
+            hm_serve::fabric_service::FabricService::start(config, backend, worker, metadata)
+                .await
+                .map_err(crate::tools::session_context::fabric_error)?;
+        self.fabric_services
+            .insert(binding.actor, std::sync::Arc::new(service));
+        self.context_scopes.insert(binding.actor, binding.scope);
+        Ok(self)
+    }
+
+    pub async fn shutdown_fabric(&self) -> Result<(), Error> {
+        for (actor, service) in &self.fabric_services {
+            let scope = self
+                .context_scopes
+                .get(actor)
+                .ok_or_else(|| Error::new(ErrorCode::CapabilityDenied))?;
+            service
+                .shutdown(scope)
+                .await
+                .map_err(crate::tools::session_context::fabric_error)?;
+        }
+        Ok(())
     }
 
     #[must_use]
@@ -44,7 +90,9 @@ impl McpToolDispatcher {
     #[must_use]
     pub fn server(&self, actor: ActorEngine) -> McpServer {
         let scope = self.context_scopes.get(&actor.actor().get()).cloned();
+        let fabric = self.fabric_services.get(&actor.actor().get()).cloned();
         let mut server = McpServer::new(actor);
+        server.fabric_service = fabric;
         if let Some(scope) = scope {
             server = server.with_context_scope(scope);
         }
