@@ -255,20 +255,11 @@ impl RuntimeService {
         }
         config.root = root.path().to_owned();
         backend.fence()?;
-        for name in ["effects.sqlite", "effects.sqlite.effects.lock"] {
-            let path = root.path().join(name);
-            check_file(&path)?;
-            use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
-            let file = fs::OpenOptions::new()
-                .read(true)
-                .write(true)
-                .create(true)
-                .truncate(false)
-                .mode(0o600)
-                .open(path)?;
-            file.set_permissions(fs::Permissions::from_mode(0o600))?;
-        }
-        let effects = EffectStore::open(root.path().join("effects.sqlite"))?;
+        let effects = EffectStore::from_backend(
+            config.scope.clone(),
+            root.path().to_str().ok_or_else(|| RuntimeError::Protocol("UTF-8 backend home required".into()))?.to_owned(),
+            backend.record_store(),
+        )?;
         let mut tools = ToolRegistry::default();
         tools.register(digest_contract())?;
         let mut service = Self {

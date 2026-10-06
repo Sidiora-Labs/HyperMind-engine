@@ -1141,7 +1141,7 @@ touches = ["crates/hm-fabric/src/backend_config.rs", "crates/hm-fabric/tests/bac
 verify_cmd = "cargo test -p hm-fabric --test backend_config"
 acceptance = "Native backend selection validates scoped descriptors, collision-safe identities, least-privilege secret handles and explicit home resolution, and consumes real SQLite or PostgreSQL operational stores."
 
-result = "Backend selection and actual authenticated worker journeys passed using retained SQLite or PostgreSQL operational ownership and process-local or NATS delivery. Results and receipt outboxes use the selected backend with digest references. Effects remain in the explicit SQLite journal; full PostgreSQL effect migration remains separate."
+result = "Configured runtime results, receipt outboxes and effects now use the retained selected SQLite or PostgreSQL operational owner. The actual PostgreSQL worker and abrupt process-exit journey passed durable uncertainty, observation-based reconciliation, ordered receipts, acknowledgements and restart without an extra effect database. Legacy SQLite compatibility passed. Network interruption during commit and aggregate release qualification remain separate."
 
 [task.3.37]
 title = "Peer enrollment and direct or relay federation"
