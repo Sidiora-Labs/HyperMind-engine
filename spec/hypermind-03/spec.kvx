@@ -838,12 +838,14 @@ acceptance = "Reviewed retention plans protect pinned evidence and required line
 title = "Authorized conditions and deferred-note delivery"
 wave = 3
 owner_lane = "reduction"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 coverage = ["req.deep.deferred_notes", "req.coverage.conditions"]
 touches = ["crates/hm-cortex/src/development_conditions.rs", "crates/hm-serve/src/development_conditions.rs", "crates/hm-serve/tests/development_conditions.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_conditions"
 acceptance = "Real bounded filesystem and argument-vector Git observations evaluate declarative predicates under authorized roots. False, unavailable and refused remain distinct; source changes invalidate readiness and successful delivery has one durable occurrence."
+
+result = "Compile and four actual files, Git and ledger restart tests passed. Bounded scoped facts distinguish false, unknown and refusal; exact source and condition revisions fence readiness and one durable delivery receipt per occurrence. Host delivery and blocked filesystem IO cancellation remain separate."
 
 [task.3.15]
 title = "External exact-price model catalogs"

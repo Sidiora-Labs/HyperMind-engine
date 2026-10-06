@@ -35,3 +35,5 @@ pub mod model_inventory;
 pub mod development_profile;
 
 pub mod development_mapping;
+
+pub mod development_conditions;
