@@ -1068,12 +1068,14 @@ acceptance = "Actual provider profiles and tokenizers preserve repeated tool ide
 title = "Source lineage and frozen child continuity"
 wave = 3
 owner_lane = "history"
-status = "in_progress"
+status = "done"
 requires = ["task.3.6"]
 coverage = ["req.coverage.history", "req.coverage.hooks"]
 touches = ["crates/hm-context/src/source_continuity.rs", "crates/hm-serve/tests/source_continuity.rs"]
 verify_cmd = "cargo test -p hm-serve --test source_continuity"
 acceptance = "Actual edits, frozen children, reductions and restart preserve original source identities, times and bytes. Child mutations and usage remain isolated under explicit contribution limits."
+
+result = "Compile and actual native continuity journey passed for immutable source IDs, exact bytes and times, isolated edits and forks, current-work protection, bounded child contributions, reduction and restart. Native lifecycle callers must revalidate plans under their existing mutation fences and bind usage to trusted receipts."
 
 [task.3.33]
 title = "Deterministic pressure and hook boundaries"
