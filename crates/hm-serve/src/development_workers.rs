@@ -173,6 +173,12 @@ struct Observed {
     tokens: u64,
     unknown: bool,
 }
+struct SharedTransport(Arc<crate::development_usage::ObservedTransport>);
+impl hm_llm::WireTransport for SharedTransport {
+    fn send(&self, request: &hm_llm::WireRequest) -> Result<hm_llm::WireResponse, LlmError> {
+        hm_llm::WireTransport::send(self.0.as_ref(), request)
+    }
+}
 struct CountedProvider {
     inner: Arc<dyn LlmProvider>,
     observed: Arc<Mutex<Observed>>,
@@ -239,7 +245,7 @@ impl DevelopmentWorker for ConfiguredWorker {
         Box<dyn std::future::Future<Output = Result<DevelopmentPlan, WorkerFailure>> + Send + '_>,
     > {
         Box::pin(async move {
-            match self.run_configured(evidence, plan_id).await? {
+            match self.run_configured(evidence, plan_id, None).await? {
                 WorkerOutcome::Publication(plan) => Ok(plan),
                 WorkerOutcome::NoWork(_) => Err(failure(
                     "no-work outcome requires scheduler receipt",
@@ -252,11 +258,11 @@ impl DevelopmentWorker for ConfiguredWorker {
         &self,
         evidence: EvidenceSnapshot,
         plan_id: String,
-        _context: DispatchContext,
+        context: DispatchContext,
     ) -> std::pin::Pin<
         Box<dyn std::future::Future<Output = Result<WorkerOutcome, WorkerFailure>> + Send + '_>,
     > {
-        self.run_configured(evidence, plan_id)
+        self.run_configured(evidence, plan_id, Some(context))
     }
 }
 impl ConfiguredWorker {
@@ -264,6 +270,7 @@ impl ConfiguredWorker {
         &self,
         evidence: EvidenceSnapshot,
         plan_id: String,
+        context: Option<DispatchContext>,
     ) -> std::pin::Pin<
         Box<dyn std::future::Future<Output = Result<WorkerOutcome, WorkerFailure>> + Send + '_>,
     > {
@@ -451,12 +458,42 @@ impl ConfiguredWorker {
             crate::context_projection::validate_tail(&self.actor, tail)
                 .await
                 .map_err(|e| failure(e, Usage::Known(0)))?;
+            let context = context.ok_or_else(|| {
+                failure(
+                    "original scheduler dispatch binding required",
+                    Usage::Known(0),
+                )
+            })?;
+            let binding = crate::development_usage::OriginalCallBinding {
+                call_ordinal: 0,
+                scope: context.scope,
+                job_id: context.lease.job_id.clone(),
+                attempt: context.lease.attempt,
+                maintenance_lease: context.maintenance_lease,
+                worker_id: context.worker_id,
+                session_id: evidence.session_id.clone(),
+                plan_id: plan_id.clone(),
+                provider_id: "ollama".into(),
+                model_id: self.model.clone(),
+                evidence_digest: evidence.digest.clone(),
+                source_digests: evidence
+                    .sources
+                    .iter()
+                    .map(|source| (source.id.clone(), source.content_digest.clone()))
+                    .collect(),
+            };
+            let handle = tokio::runtime::Handle::current();
             let endpoint = self.endpoint.clone();
             let model = self.model.clone();
             let observed = Arc::new(Mutex::new(Observed::default()));
             let task_observed = observed.clone();
             let output_id = plan_id.clone();
             let task = tokio::task::spawn_blocking(move || -> Result<WorkerOutcome, String> {
+                let transport = Arc::new(crate::development_usage::ObservedTransport::configured(
+                    context.actor,
+                    binding,
+                    handle,
+                ));
                 let actual = hm_llm::ollama::Ollama::new(
                     hm_llm::ProviderConfig {
                         endpoint,
@@ -465,14 +502,15 @@ impl ConfiguredWorker {
                         tier: hm_llm::ModelTier::Economy,
                         pricing: Default::default(),
                     },
-                    hm_llm::HttpTransport::default(),
+                    SharedTransport(transport.clone()),
                 )
                 .map_err(|e| format!("{e:?}"))?;
                 let provider = CountedProvider {
                     inner: Arc::new(actual),
                     observed: task_observed,
                 };
-                let mut plan = match operation {
+                let outcome = (|| -> Result<WorkerOutcome, String> {
+                    let mut plan = match operation {
                     WorkerOperation::Curation { actions } => {
                         hm_cortex::development_curation::curate(
                             evidence,
@@ -571,8 +609,11 @@ impl ConfiguredWorker {
                         }
                     },
                 };
-                plan.id = output_id;
-                Ok(WorkerOutcome::Publication(plan))
+                    plan.id = output_id;
+                    Ok(WorkerOutcome::Publication(plan))
+                })();
+                transport.close().map_err(|e| format!("{e:?}"))?;
+                outcome
             });
             match tokio::time::timeout(self.timeout, task).await {
                 Ok(Ok(Ok(plan))) => Ok(plan),

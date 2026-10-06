@@ -657,9 +657,13 @@ pub async fn rollup(
         {
             continue;
         }
-        let observation = original_observations
+        let observations: Vec<_> = original_observations
             .iter()
-            .find(|observation| observation.binding == binding);
+            .filter(|observation| {
+                observation.binding.job_id == binding.job_id
+                    && observation.binding.attempt == binding.attempt
+            })
+            .collect();
         if let Some(settlement) = settlements.iter().find(|settlement| {
             settlement.job_id == binding.job_id && settlement.attempt == binding.attempt
         }) {
@@ -689,7 +693,7 @@ pub async fn rollup(
                 rollup.active_reservations += 1;
             }
         }
-        if let Some(observation) = observation {
+        for observation in observations {
             rollup.observed_calls += 1;
             rollup.observations.push(observation.id.clone());
         }

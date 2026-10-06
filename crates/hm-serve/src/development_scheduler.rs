@@ -406,7 +406,7 @@ async fn terminal_locked(
         crate::development_usage::for_attempt(actor, scope, &lease.job_id, lease.attempt).await?;
     let result = if let Some(observation) = &observation {
         validate_binding_state(&saved, &observation.binding, false)?;
-        let usage = crate::development_usage::actual_tokens(observation)
+        let usage = crate::development_usage::proof_tokens(observation)
             .map_or(Usage::Unknown, Usage::Known);
         match result {
             Ok((_, receipt)) => Ok((usage, receipt)),
@@ -425,7 +425,7 @@ async fn terminal_locked(
             .fail(lease, failure.usage, failure.error, time)?,
     };
     if let Some(observation) = observation {
-        if let Some(actual_tokens) = crate::development_usage::actual_tokens(&observation) {
+        if let Some(actual_tokens) = crate::development_usage::proof_tokens(&observation) {
             saved.observed_settlements.insert(
                 DevelopmentSchedules::charge_key(lease),
                 ObservedSettlement {
@@ -762,14 +762,14 @@ pub(crate) async fn validate_original_binding(
 pub(crate) async fn reconcile_original_observation(
     actor: &ActorEngine,
     scope: &Scope,
-    observation: &crate::development_usage::OriginalUsageObservation,
+    observation: &crate::development_usage::AttemptUsageProof,
 ) -> Result<(), MemoryError> {
     let _scheduler_guard = SCHEDULER_MUTATIONS.lock().await;
     let _guard = crate::context_jobs::CONTEXT_MUTATIONS.lock().await;
     let tail = actor.stats().await?.applied.last_lsn;
     let mut saved = load(actor, scope).await?;
     validate_binding_state(&saved, &observation.binding, false)?;
-    let actual_tokens = crate::development_usage::actual_tokens(observation)
+    let actual_tokens = crate::development_usage::proof_tokens(observation)
         .ok_or_else(|| error("original counters remain unknown"))?;
     let key = format!(
         "{}:{}",

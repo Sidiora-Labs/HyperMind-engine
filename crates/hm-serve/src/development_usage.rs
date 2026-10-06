@@ -30,6 +30,8 @@ const PROVIDER: &str = "hypermind/development-usage/v1";
 static WRITER: tokio::sync::Mutex<()> = tokio::sync::Mutex::const_new(());
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct OriginalCallBinding {
+    #[serde(default, skip_serializing_if = "is_zero")]
+    pub call_ordinal: u64,
     pub scope: Scope,
     pub job_id: String,
     pub attempt: u64,
@@ -41,6 +43,9 @@ pub struct OriginalCallBinding {
     pub model_id: String,
     pub evidence_digest: String,
     pub source_digests: BTreeMap<String, String>,
+}
+fn is_zero(value: &u64) -> bool {
+    *value == 0
 }
 impl OriginalCallBinding {
     fn id(&self) -> Result<String, MemoryError> {
@@ -67,6 +72,8 @@ struct State {
     scope: Scope,
     sequence: u64,
     attempts: BTreeMap<String, OriginalAttempt>,
+    #[serde(default)]
+    closed_attempts: BTreeMap<String, u64>,
 }
 fn invalid(message: &str) -> MemoryError {
     ContextError::Invalid(message.into()).into()
@@ -77,6 +84,7 @@ async fn load(actor: &ActorEngine, scope: &Scope) -> Result<State, MemoryError> 
         scope: scope.clone(),
         sequence: 0,
         attempts: BTreeMap::new(),
+        closed_attempts: BTreeMap::new(),
     };
     for frame in actor.frames_since(LSN::new(0), None, usize::MAX).await? {
         if frame.header.kind != hm_ledger::frame::EventKind::ProviderFrame {
@@ -118,6 +126,25 @@ async fn load(actor: &ActorEngine, scope: &Scope) -> Result<State, MemoryError> 
                 if parsed != observation.snapshot {
                     return Err(invalid("original usage evidence"));
                 }
+            }
+        }
+        for (id, count) in &next.closed_attempts {
+            if *count == 0 {
+                return Err(invalid("original attempt closure"));
+            }
+            let calls: Vec<_> = next
+                .attempts
+                .values()
+                .filter(|call| attempt_id(&call.binding).ok().as_ref() == Some(id))
+                .collect();
+            if calls.len() as u64 != *count
+                || !(1..=*count).all(|ordinal| {
+                    calls
+                        .iter()
+                        .any(|call| call.binding.call_ordinal == ordinal)
+                })
+            {
+                return Err(invalid("original closed call coverage"));
             }
         }
         state = next;
@@ -169,6 +196,9 @@ async fn begin(
     development_scheduler::validate_original_binding(actor, binding, true).await?;
     let mut state = load(actor, &binding.scope).await?;
     let id = binding.id()?;
+    if state.closed_attempts.contains_key(&attempt_id(binding)?) {
+        return Err(invalid("original attempt already closed"));
+    }
     if state.attempts.contains_key(&id) {
         return Err(invalid(
             "original provider attempt already dispatched; never repeated",
@@ -260,23 +290,119 @@ pub async fn inspect(
         .filter_map(|attempt| attempt.observation)
         .collect())
 }
+#[derive(Clone, Debug)]
+pub(crate) struct AttemptUsageProof {
+    pub id: String,
+    pub binding: OriginalCallBinding,
+    observations: Vec<OriginalUsageObservation>,
+    complete: bool,
+}
+fn attempt_id(binding: &OriginalCallBinding) -> Result<String, MemoryError> {
+    let mut canonical = binding.clone();
+    canonical.call_ordinal = 0;
+    canonical.id()
+}
+pub(crate) fn proof_tokens(proof: &AttemptUsageProof) -> Option<u64> {
+    if !proof.complete {
+        return None;
+    }
+    proof
+        .observations
+        .iter()
+        .try_fold(0u64, |total, observation| {
+            total.checked_add(actual_tokens(observation)?)
+        })
+}
 pub(crate) async fn for_attempt(
     actor: &ActorEngine,
     scope: &Scope,
     job_id: &str,
     attempt: u64,
-) -> Result<Option<OriginalUsageObservation>, MemoryError> {
-    let observations: Vec<_> = load(actor, scope)
-        .await?
+) -> Result<Option<AttemptUsageProof>, MemoryError> {
+    let state = load(actor, scope).await?;
+    let mut calls: Vec<_> = state
         .attempts
         .into_values()
         .filter(|a| a.binding.job_id == job_id && a.binding.attempt == attempt)
-        .filter_map(|a| a.observation)
         .collect();
-    if observations.len() > 1 {
-        return Err(ContextError::Conflict.into());
+    calls.sort_by_key(|a| a.binding.call_ordinal);
+    let Some(first) = calls.first() else {
+        return Ok(None);
+    };
+    let mut binding = first.binding.clone();
+    binding.call_ordinal = 0;
+    let canonical_id = binding.id()?;
+    for call in &calls {
+        if attempt_id(&call.binding)? != canonical_id {
+            return Err(ContextError::Conflict.into());
+        }
     }
-    Ok(observations.into_iter().next())
+    let legacy = calls.len() == 1 && calls[0].binding.call_ordinal == 0;
+    let closed = state.closed_attempts.get(&canonical_id).copied();
+    let complete = (legacy || closed == Some(calls.len() as u64))
+        && calls.iter().enumerate().all(|(index, call)| {
+            (legacy || call.binding.call_ordinal == index as u64 + 1) && call.observation.is_some()
+        });
+    let observations: Vec<_> = calls
+        .iter()
+        .filter_map(|call| call.observation.clone())
+        .collect();
+    let id = if legacy && observations.len() == 1 {
+        observations[0].id.clone()
+    } else {
+        digest_bytes(&serde_json::to_vec(&(
+            canonical_id,
+            closed,
+            calls
+                .iter()
+                .map(|call| {
+                    (
+                        &call.request_digest,
+                        call.observation.as_ref().map(|o| &o.id),
+                    )
+                })
+                .collect::<Vec<_>>(),
+        ))?)
+    };
+    Ok(Some(AttemptUsageProof {
+        id,
+        binding,
+        observations,
+        complete,
+    }))
+}
+pub(crate) async fn close_attempt(
+    actor: &ActorEngine,
+    binding: &OriginalCallBinding,
+    calls: u64,
+) -> Result<(), MemoryError> {
+    if calls == 0 {
+        return Ok(());
+    }
+    let _writer = WRITER.lock().await;
+    let _guard = crate::context_jobs::CONTEXT_MUTATIONS.lock().await;
+    let tail = actor.stats().await?.applied.last_lsn;
+    let mut state = load(actor, &binding.scope).await?;
+    let id = attempt_id(binding)?;
+    if let Some(old) = state.closed_attempts.get(&id) {
+        return if *old == calls {
+            Ok(())
+        } else {
+            Err(ContextError::Conflict.into())
+        };
+    }
+    let matching: Vec<_> = state
+        .attempts
+        .values()
+        .filter(|a| attempt_id(&a.binding).ok().as_ref() == Some(&id))
+        .collect();
+    if matching.len() as u64 != calls
+        || !(1..=calls).all(|ordinal| matching.iter().any(|a| a.binding.call_ordinal == ordinal))
+    {
+        return Err(invalid("original attempt call coverage"));
+    }
+    state.closed_attempts.insert(id, calls);
+    append(actor, tail, &mut state).await
 }
 pub(crate) fn actual_tokens(observation: &OriginalUsageObservation) -> Option<u64> {
     if !observation.accepted_response || observation.snapshot.error.is_some() {
@@ -308,14 +434,51 @@ pub async fn reconcile_unknown(
     development_scheduler::reconcile_original_observation(actor, scope, &observation).await
 }
 
-struct ObservedTransport {
+pub(crate) struct ObservedTransport {
     actor: ActorEngine,
     binding: OriginalCallBinding,
     handle: tokio::runtime::Handle,
     transport: HttpTransport,
+    ordinal: Option<std::sync::atomic::AtomicU64>,
+}
+impl ObservedTransport {
+    pub(crate) fn configured(
+        actor: ActorEngine,
+        binding: OriginalCallBinding,
+        handle: tokio::runtime::Handle,
+    ) -> Self {
+        Self {
+            actor,
+            binding,
+            handle,
+            transport: HttpTransport::default(),
+            ordinal: Some(std::sync::atomic::AtomicU64::new(0)),
+        }
+    }
+    pub(crate) fn calls(&self) -> u64 {
+        self.ordinal
+            .as_ref()
+            .map_or(1, |value| value.load(std::sync::atomic::Ordering::SeqCst))
+    }
+    pub(crate) fn close(&self) -> Result<(), LlmError> {
+        self.handle
+            .block_on(close_attempt(&self.actor, &self.binding, self.calls()))
+            .map_err(|e| LlmError::Network(e.to_string()))
+    }
 }
 impl WireTransport for ObservedTransport {
     fn send(&self, request: &WireRequest) -> Result<WireResponse, LlmError> {
+        let mut binding = self.binding.clone();
+        if let Some(ordinal) = &self.ordinal {
+            binding.call_ordinal = ordinal
+                .fetch_update(
+                    std::sync::atomic::Ordering::SeqCst,
+                    std::sync::atomic::Ordering::SeqCst,
+                    |value| value.checked_add(1),
+                )
+                .map_err(|_| LlmError::Capacity)?
+                + 1;
+        }
         if request.body["model"].as_str() != Some(&self.binding.model_id) {
             return Err(LlmError::InvalidArgument(
                 "original provider model mismatch".into(),
@@ -325,13 +488,13 @@ impl WireTransport for ObservedTransport {
             &serde_json::to_vec(&request.body).map_err(|e| LlmError::Wire(e.to_string()))?,
         );
         self.handle
-            .block_on(begin(&self.actor, &self.binding, &request_digest))
+            .block_on(begin(&self.actor, &binding, &request_digest))
             .map_err(|e| LlmError::Network(e.to_string()))?;
         let (response, bytes) = self.transport.send_observed(request)?;
         self.handle
             .block_on(capture(
                 &self.actor,
-                &self.binding,
+                &binding,
                 &request_digest,
                 &response,
                 bytes,
@@ -390,6 +553,7 @@ impl DevelopmentWorker for ObservedHistorianWorker {
         let provider_id = self.provider_id.clone();
         Box::pin(async move {
             let binding = OriginalCallBinding {
+                call_ordinal: 0,
                 scope: context.scope,
                 job_id: context.lease.job_id.clone(),
                 attempt: context.lease.attempt,
@@ -413,6 +577,7 @@ impl DevelopmentWorker for ObservedHistorianWorker {
                     binding,
                     handle,
                     transport: HttpTransport::default(),
+                    ordinal: None,
                 };
                 provider.generate_with_transport(evidence, plan_id, &transport)
             });
@@ -442,10 +607,43 @@ pub async fn dispatched_attempts(
     if scope != owner {
         return Err(ContextError::ScopeMismatch.into());
     }
-    Ok(load(actor, scope)
+    let mut bindings = BTreeMap::new();
+    for attempt in load(actor, scope).await?.attempts.into_values() {
+        let mut binding = attempt.binding;
+        binding.call_ordinal = 0;
+        bindings.insert(binding.id()?, binding);
+    }
+    Ok(bindings.into_values().collect())
+}
+#[derive(Clone, Debug, Serialize)]
+pub struct OriginalAttemptObservation {
+    pub id: String,
+    pub binding: OriginalCallBinding,
+    pub observation_ids: Vec<String>,
+    pub complete: bool,
+    pub known_tokens: Option<u64>,
+}
+pub async fn inspect_attempt(
+    actor: &ActorEngine,
+    scope: &Scope,
+    owner: &Scope,
+    job_id: &str,
+    attempt: u64,
+) -> Result<Option<OriginalAttemptObservation>, MemoryError> {
+    if scope != owner {
+        return Err(ContextError::ScopeMismatch.into());
+    }
+    Ok(for_attempt(actor, scope, job_id, attempt)
         .await?
-        .attempts
-        .into_values()
-        .map(|attempt| attempt.binding)
-        .collect())
+        .map(|proof| OriginalAttemptObservation {
+            known_tokens: proof_tokens(&proof),
+            id: proof.id,
+            binding: proof.binding,
+            observation_ids: proof
+                .observations
+                .into_iter()
+                .map(|observation| observation.id)
+                .collect(),
+            complete: proof.complete,
+        }))
 }
