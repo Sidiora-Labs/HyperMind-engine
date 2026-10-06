@@ -641,8 +641,10 @@ qualification = "Library compile and three real ledger consumer tests passed. So
 title = "Real semantic embedding lifecycle qualification"
 wave = 2
 owner_lane = "cache"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["crates/hm-sim/tests/unified_retrieval_journey.rs"]
 verify_cmd = "cargo test -p hm-sim --test unified_retrieval_journey actual_local_model_backfill_resumes -- --ignored"
 acceptance = "A verified real local embedding model drives bounded backfill, semantic ranking, fingerprint compatibility, restart resumption and content-change invalidation; lexical or generated-vector substitutes cannot qualify this capability."
+
+qualification = "Verified pinned BGE-small with real ONNX inference passed the named lifecycle journey: bounded backfill resume, restart, model/content fingerprints, ranking, stale-vector exclusion and fresh rebackfill. Broader model quality and remote provider qualification remain outstanding."
