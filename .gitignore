@@ -18,3 +18,5 @@
 /deploy/**/*.csr
 /deploy/**/*.srl
 *.kvx.lock
+.codegraph/
+.env
