@@ -1137,7 +1137,7 @@ owner_lane = "storage"
 status = "done"
 requires = ["task.3.16"]
 coverage = ["req.coverage.storage", "req.coverage.identity"]
-touches = ["crates/hm-fabric/src/backend_config.rs", "crates/hm-fabric/tests/backend_config.rs"]
+touches = ["crates/hm-fabric/src/backend_config.rs", "crates/hm-fabric/tests/backend_config.rs", "crates/hm-fabric/src/effects.rs", "crates/hm-fabric/src/runtime.rs", "crates/hm-fabric/tests/effect_backend.rs"]
 verify_cmd = "cargo test -p hm-fabric --test backend_config"
 acceptance = "Native backend selection validates scoped descriptors, collision-safe identities, least-privilege secret handles and explicit home resolution, and consumes real SQLite or PostgreSQL operational stores."
 
@@ -1167,7 +1167,7 @@ touches = ["crates/hm-context/src/mobile_journal.rs", "sdk/swift/Sources/HyperMi
 verify_cmd = "cargo test -p hm-context --test mobile_journal"
 acceptance = "A durable outbound mutation journal reconciles pending and uncertain writes through an encrypted resumed connection before another write. Opaque wake identifiers carry no memory content; native mobile qualification is recorded separately."
 
-result = "The neutral outbound journal passed native compilation and three real filesystem and process-restart tests. It records uncertainty before dispatch and preserves exact mutation identity and blocked replay after interruption. Encrypted native receipt validation, Swift consumption and handset qualification remain separate pending gates."
+result = "The durable outbound journal and encrypted consumer passed native compilation, real filesystem restart tests and an actual mutual TLS journey. A forced process exit after a synced side effect preserved uncertainty; a fresh encrypted session reconciled genuine sparse native receipts before the next write. Replay and foreign identity fences passed. Swift consumption, product endpoint integration and handset qualification remain pending."
 
 [task.3.39]
 title = "Bounded authenticated notification envelopes"
