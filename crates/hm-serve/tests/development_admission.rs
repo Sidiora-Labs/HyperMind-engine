@@ -710,3 +710,152 @@ async fn original_conversation_evidence_is_bridged_with_generated_record_in_one_
     );
     actor.shutdown().await.unwrap();
 }
+
+#[tokio::test]
+async fn verification_metadata_preserves_pinned_original_and_rejects_changed_source_quotes() {
+    let dir = tempfile::tempdir().unwrap();
+    let actor = ActorEngine::open(config(dir.path())).await.unwrap();
+    setup(&actor, DevelopmentKind::Verification).await;
+    let old = context_memory::rebuild(&actor, &owner())
+        .await
+        .unwrap()
+        .records["existing"]
+        .clone();
+    let mut pinned = old.clone();
+    pinned.pinned = true;
+    pinned.content = "source evidence".into();
+    pinned.revision += 1;
+    pinned.revision_digest.clear();
+    command(
+        &actor,
+        "pin-verification",
+        MemoryCommand::Revise {
+            record: pinned,
+            expected_revision: old.revision,
+        },
+    )
+    .await;
+    command(
+        &actor,
+        "grant-verification",
+        MemoryCommand::SetGrant {
+            grant: MemoryGrant {
+                principal_digest: None,
+                id: "read-grant".into(),
+                principal: worker(),
+                record_ids: BTreeSet::from(["existing".into()]),
+                categories: BTreeSet::new(),
+                read: true,
+                expires_at_ns: None,
+                revoked: false,
+                revision: 2,
+                record_revisions: BTreeMap::new(),
+            },
+        },
+    )
+    .await;
+    let original = context_memory::rebuild(&actor, &owner())
+        .await
+        .unwrap()
+        .records["existing"]
+        .clone();
+    let evidence = snapshot(&actor, "cap", true).await;
+    let source = &evidence.sources[0];
+    let metadata = serde_json::json!({
+        "record_id":"existing", "fingerprint":digest_bytes(original.content.as_bytes()),
+        "findings":[{"state":"supported","confidence":900000,"span":{
+            "source_id":source.id,"source_revision":source.revision,"source_digest":source.digest,
+            "content_digest":source.content_digest,"path":null,"start":0,"end":source.content.len(),"quoted_digest":digest_bytes(&source.content)
+        }}]
+    });
+    let verification = DevelopmentVerification {
+        id: "metadata-verification".into(),
+        record_id: "existing".into(),
+        revision_digest: original.revision_digest.clone(),
+        state: DevelopmentVerificationState::Supported,
+        evidence_source_id: Some(source.id.clone()),
+        confidence: 900000,
+        created_at_ns: 100,
+        metadata: metadata.clone(),
+    };
+    let mut bad = verification.clone();
+    bad.metadata["findings"][0]["span"]["quoted_digest"] =
+        serde_json::json!(digest_bytes(b"changed quote"));
+    let before = actor.stats().await.unwrap();
+    assert!(
+        development_admission::admit(
+            &actor,
+            &owner(),
+            &worker(),
+            "worker-runtime",
+            plan(
+                "bad-metadata",
+                DevelopmentKind::Verification,
+                evidence.clone(),
+                vec![PlannedKnowledgeMutation::Verify { verification: bad }]
+            )
+        )
+        .await
+        .is_err()
+    );
+    assert_eq!(actor.stats().await.unwrap(), before);
+    let mut oversized = verification.clone();
+    oversized.metadata["extra"] = serde_json::json!("x".repeat(65536));
+    assert!(
+        development_admission::admit(
+            &actor,
+            &owner(),
+            &worker(),
+            "worker-runtime",
+            plan(
+                "oversized-metadata",
+                DevelopmentKind::Verification,
+                evidence.clone(),
+                vec![PlannedKnowledgeMutation::Verify {
+                    verification: oversized
+                }]
+            )
+        )
+        .await
+        .is_err()
+    );
+    development_admission::admit(
+        &actor,
+        &owner(),
+        &worker(),
+        "worker-runtime",
+        plan(
+            "valid-metadata",
+            DevelopmentKind::Verification,
+            evidence,
+            vec![PlannedKnowledgeMutation::Verify { verification }],
+        ),
+    )
+    .await
+    .unwrap();
+    let state = context_memory::rebuild(&actor, &owner()).await.unwrap();
+    assert_eq!(state.records["existing"], original);
+    assert_eq!(
+        state.verifications["metadata-verification"].metadata,
+        metadata
+    );
+    let mut legacy = serde_json::to_value(&state.verifications["metadata-verification"]).unwrap();
+    legacy.as_object_mut().unwrap().remove("metadata");
+    let legacy: context_memory::Verification = serde_json::from_value(legacy).unwrap();
+    assert!(legacy.metadata.is_null());
+    assert!(
+        serde_json::to_value(legacy)
+            .unwrap()
+            .get("metadata")
+            .is_none()
+    );
+    actor.shutdown().await.unwrap();
+    let actor = ActorEngine::open(config(dir.path())).await.unwrap();
+    let state = context_memory::rebuild(&actor, &owner()).await.unwrap();
+    assert_eq!(state.records["existing"], original);
+    assert_eq!(
+        state.verifications["metadata-verification"].metadata,
+        metadata
+    );
+    actor.shutdown().await.unwrap();
+}

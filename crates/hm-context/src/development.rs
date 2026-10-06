@@ -260,6 +260,8 @@ pub struct DevelopmentVerification {
     pub confidence: u32,
     #[serde(with = "crate::types::timestamp_wire")]
     pub created_at_ns: i64,
+    #[serde(default, skip_serializing_if = "Value::is_null")]
+    pub metadata: Value,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "operation", rename_all = "snake_case", deny_unknown_fields)]

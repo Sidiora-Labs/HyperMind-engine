@@ -332,6 +332,7 @@ fn translate(
                 needed_sources.extend(record.provenance.iter().map(|p| p.source_id.clone()));
             }
             PlannedKnowledgeMutation::Verify { verification } => {
+                context_memory::validate_verification_evidence(&verification.metadata, evidence)?;
                 if let Some(id) = &verification.evidence_source_id {
                     needed_sources.insert(id.clone());
                 }

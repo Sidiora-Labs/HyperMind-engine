@@ -1242,8 +1242,30 @@ result = "Minimal isolated devices and stable namespace-init termination passed 
 title = "Persist exact verification mapping and source span evidence"
 wave = 3
 owner_lane = "memory"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 touches = ["crates/hm-context/src/development.rs", "crates/hm-serve/src/context_memory.rs", "crates/hm-serve/src/context_memory/imports.rs", "crates/hm-serve/tests/development_admission.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_admission"
 acceptance = "Verification metadata preserves exact source digests, bounded spans and mapping fingerprints through atomic native admission and restart without rewriting original records. Existing verification payloads remain compatible."
+
+result = "Registered library compile, six actual native admission tests and the real provider mapping consumer passed. Bounded verification metadata preserves exact quoted spans, source digests and mapping fingerprints; invalid metadata publishes nothing and legacy omitted metadata retains journal digests."
+
+[task.3.50]
+title = "Preserve canonical lineage in atomic memory curation"
+wave = 3
+owner_lane = "memory"
+status = "in_progress"
+requires = ["task.3.5"]
+touches = ["crates/hm-cortex/src/development_curation.rs", "crates/hm-serve/tests/development_curation.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_curation actual_curation_classification_conflict_and_restart -- --ignored"
+acceptance = "Real provider merges use the native lineage relation and preserve exact parent provenance, protected records and restart recovery."
+
+[task.3.51]
+title = "Constrain historian quotations to observed original source bytes"
+wave = 3
+owner_lane = "memory"
+status = "in_progress"
+requires = ["task.3.5"]
+touches = ["crates/hm-cortex/src/development_historian.rs", "crates/hm-serve/tests/development_historian.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_historian"
+acceptance = "Actual generation returns source-bound quotations without synthetic fallback; native atomic summary and fact admission preserves original evidence and survives restart."

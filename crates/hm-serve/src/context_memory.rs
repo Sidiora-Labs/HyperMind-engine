@@ -187,6 +187,8 @@ pub struct Verification {
     pub confidence: u32,
     #[serde(with = "nanos")]
     pub created_at_ns: i64,
+    #[serde(default, skip_serializing_if = "Value::is_null")]
+    pub metadata: Value,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -895,6 +897,7 @@ impl MemoryProjection {
                 {
                     return Err(ContextError::Stale.into());
                 }
+                validate_verification_metadata(self, v)?;
                 if self.verifications.contains_key(&v.id) {
                     return Err(ContextError::Conflict.into());
                 }
@@ -1576,4 +1579,151 @@ fn apply_development_commands(
         ids.push(id);
     }
     Ok(ids)
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct VerificationMetadata {
+    record_id: String,
+    fingerprint: String,
+    findings: Vec<VerificationMetadataFinding>,
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct VerificationMetadataFinding {
+    state: VerificationState,
+    span: VerificationMetadataSpan,
+    confidence: u32,
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct VerificationMetadataSpan {
+    source_id: String,
+    source_revision: u64,
+    source_digest: String,
+    content_digest: String,
+    path: Option<String>,
+    start: u64,
+    end: u64,
+    quoted_digest: String,
+}
+fn verification_digest(value: &str) -> bool {
+    value.len() == 64
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+}
+fn validate_verification_metadata(
+    state: &MemoryProjection,
+    verification: &Verification,
+) -> Result<(), MemoryError> {
+    if verification.metadata.is_null() {
+        return Ok(());
+    }
+    if !verification.metadata.is_object() {
+        return Err(ContextError::Invalid("verification metadata must be an object".into()).into());
+    }
+    let bytes = serde_json::to_vec(&verification.metadata)?;
+    if bytes.len() > 65536 {
+        return Err(ContextError::Capacity.into());
+    }
+    let metadata: VerificationMetadata = serde_json::from_slice(&bytes)?;
+    if metadata.record_id != verification.record_id
+        || !verification_digest(&metadata.fingerprint)
+        || metadata.findings.is_empty()
+        || metadata.findings.len() > 128
+    {
+        return Err(ContextError::Invalid(
+            "invalid verification metadata identity or bounds".into(),
+        )
+        .into());
+    }
+    let mut aggregate = VerificationState::Unresolved;
+    let mut confidence = 1_000_000;
+    let mut cited = BTreeSet::new();
+    for finding in metadata.findings {
+        let span = finding.span;
+        validate_id(&span.source_id)?;
+        if span.source_revision == 0
+            || !verification_digest(&span.source_digest)
+            || !verification_digest(&span.content_digest)
+            || !verification_digest(&span.quoted_digest)
+            || finding.confidence > 1_000_000
+        {
+            return Err(ContextError::Invalid("invalid verification source span".into()).into());
+        }
+        if let Some(path) = &span.path {
+            if path.is_empty()
+                || path.len() > 4096
+                || path.chars().any(char::is_control)
+                || std::path::Path::new(path).is_absolute()
+                || std::path::Path::new(path)
+                    .components()
+                    .any(|component| !matches!(component, std::path::Component::Normal(_)))
+            {
+                return Err(
+                    ContextError::Invalid("invalid verification source path".into()).into(),
+                );
+            }
+        }
+        let source = state
+            .sources
+            .get(&span.source_id)
+            .ok_or_else(|| ContextError::Unavailable("verification source".into()))?;
+        let start = usize::try_from(span.start).map_err(|_| ContextError::Capacity)?;
+        let end = usize::try_from(span.end).map_err(|_| ContextError::Capacity)?;
+        if source.tombstoned
+            || source.digest != span.content_digest
+            || start >= end
+            || end > source.content.len()
+            || digest_bytes(&source.content[start..end]) != span.quoted_digest
+        {
+            return Err(ContextError::Stale.into());
+        }
+        cited.insert(span.source_id);
+        confidence = confidence.min(finding.confidence);
+        if finding.state == VerificationState::Contradicted {
+            aggregate = VerificationState::Contradicted;
+        } else if finding.state == VerificationState::Supported
+            && aggregate != VerificationState::Contradicted
+        {
+            aggregate = VerificationState::Supported;
+        }
+    }
+    if aggregate != verification.state
+        || confidence != verification.confidence
+        || verification
+            .evidence_source_id
+            .as_ref()
+            .is_none_or(|id| !cited.contains(id))
+    {
+        return Err(ContextError::Conflict.into());
+    }
+    Ok(())
+}
+
+pub(crate) fn validate_verification_evidence(
+    metadata: &Value,
+    evidence: &hm_context::development::EvidenceSnapshot,
+) -> Result<(), MemoryError> {
+    if metadata.is_null() {
+        return Ok(());
+    }
+    let bytes = serde_json::to_vec(metadata)?;
+    if bytes.len() > 65536 {
+        return Err(ContextError::Capacity.into());
+    }
+    let metadata: VerificationMetadata = serde_json::from_slice(&bytes)?;
+    for finding in metadata.findings {
+        let span = finding.span;
+        if !evidence.sources.iter().any(|source| {
+            source.id == span.source_id
+                && source.revision == span.source_revision
+                && source.digest == span.source_digest
+                && source.content_digest == span.content_digest
+        }) {
+            return Err(ContextError::ScopeMismatch.into());
+        }
+    }
+    Ok(())
 }

@@ -348,6 +348,7 @@ impl MemoryProjection {
                 confidence: confidence(v, "confidence")?,
                 created_at_ns: ms(v, "created_at_ms")?
                     .ok_or_else(|| invalid("verification time"))?,
+                metadata: Value::Null,
             };
             if !imported.revisions.values().any(|r| {
                 r.id == verification.record_id && r.revision_digest == verification.revision_digest
