@@ -1217,12 +1217,14 @@ acceptance = "Each declared platform reports and exercises its actual process-tr
 title = "Autonomous source indexing and vector lifecycle"
 wave = 3
 owner_lane = "retrieval"
-status = "in_progress"
+status = "done"
 requires = ["task.3.8"]
 coverage = ["req.coverage.indexing", "req.coverage.embedding"]
 touches = ["crates/hm-serve/src/development_indexing.rs", "crates/hm-serve/tests/development_indexing.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_indexing"
 acceptance = "Actual source and embedding consumers reconcile earliest dirty positions, bounded file and opt-in Git scans and vector checkpoints. Source, digest and grants are rechecked before publication; corrections hide stale derivatives immediately."
+
+result = "Actual local embedding and native ledger journey passed for bounded authorized file and opt-in Git scans, durable earliest-dirty progress, restart, semantic retrieval, source correction invalidation, rebackfill and policy revocation. Periodic service scheduling remains a separate consumer integration."
 
 [task.3.44]
 title = "Canonical segmented logs and secret redaction"
