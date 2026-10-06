@@ -889,12 +889,14 @@ acceptance = "Actual owned child trees retain stable launch identities, bounded 
 title = "Negotiated public transport compatibility"
 wave = 3
 owner_lane = "transport"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 coverage = ["req.coverage.transport"]
 touches = ["crates/hm-fabric/src/compat_transport.rs", "crates/hm-fabric/tests/compat_transport.rs"]
 verify_cmd = "cargo test -p hm-fabric --test compat_transport"
 acceptance = "Negotiated public Hypermid framing enforces bounded envelopes and digest-checked chunks before effects, with authentic peer/session identity, compatible versions, replay refusal and no downgrade."
+
+result = "Authenticated native adapter compile and real two-process peer gate passed, including exact public frame limits, negotiation, chunk ordering, digest and replay refusal. Direct public TLS, enrollment and federation remain separate."
 
 [task.3.20]
 title = "Signed artifact installation and ownership receipts"
@@ -1078,7 +1080,7 @@ acceptance = "Actual NATS and JetStream enforce scoped server grants, isolated i
 title = "Operational backend selection and descriptors"
 wave = 3
 owner_lane = "storage"
-status = "pending"
+status = "in_progress"
 requires = ["task.3.16"]
 coverage = ["req.coverage.storage", "req.coverage.identity"]
 touches = ["crates/hm-fabric/src/backend_config.rs", "crates/hm-fabric/tests/backend_config.rs"]

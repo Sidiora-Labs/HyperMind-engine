@@ -18,3 +18,4 @@ pub mod storage;
 pub mod runtime;
 
 pub mod postgres;
+pub mod compat_transport;
