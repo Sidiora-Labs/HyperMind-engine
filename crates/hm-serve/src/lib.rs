@@ -33,3 +33,5 @@ pub mod development_admission;
 pub mod model_inventory;
 
 pub mod development_profile;
+
+pub mod development_mapping;

@@ -26,3 +26,5 @@ pub mod vocabulary;
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub mod development_profile;
+
+pub mod development_mapping;

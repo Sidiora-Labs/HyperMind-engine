@@ -746,12 +746,14 @@ result = "Native capability and atomic admission compile passed. Five real ledge
 title = "Source mapping and incremental evidence verification"
 wave = 3
 owner_lane = "history"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 coverage = ["req.deep.source_mapping", "req.deep.incremental_verification"]
 touches = ["crates/hm-cortex/src/development_mapping.rs", "crates/hm-serve/src/development_mapping.rs", "crates/hm-serve/tests/development_mapping.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_mapping"
 acceptance = "Current authorized source bytes drive mappings and per-record changed-evidence verification; moved, deleted or revised inputs invalidate publication. Findings preserve cited support, contradictions and unresolved evidence."
+
+result = "Actual repository, ledger and provider mapping journey passed. Exact semantic findings, source moves and edits, metadata persistence, restart, unchanged skips, changed-record recheck and current grant fences were exercised. External file writers remain outside ledger atomicity; publication validates observed bytes then native source fences."
 
 [task.3.7]
 title = "Resumable complete verification cycles"
