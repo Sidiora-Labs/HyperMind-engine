@@ -854,12 +854,14 @@ acceptance = "External catalogs preserve additive metadata, capabilities, modali
 title = "PostgreSQL operational storage with writer fences"
 wave = 3
 owner_lane = "storage"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 coverage = ["req.coverage.postgres"]
 touches = ["crates/hm-fabric/src/postgres.rs", "crates/hm-fabric/tests/postgres.rs"]
 verify_cmd = "cargo test -p hm-fabric --test postgres"
 acceptance = "A real provisioned PostgreSQL backend uses session advisory locks, monotonic fences and checksum-ordered namespace migrations. Lost connection ends write liveness and stale sessions cannot commit."
+
+result = "Real PostgreSQL store compile and focused backend gate passed: least-privilege provisioning, session lock contention, exact identity and checksummed migrations, monotonic epoch, stale and lost writer refusal, actual process interruption and server restart. Plaintext endpoints are restricted to numeric loopback; remote TLS and native backend selection remain separate."
 
 [task.3.17]
 title = "Process-local bus and naming parity"

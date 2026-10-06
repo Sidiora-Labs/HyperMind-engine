@@ -23,6 +23,7 @@ hm-cortex = { path = "../hm-cortex" }
 hm-embed = { path = "../hm-embed" }
 hm-index = { path = "../hm-index" }
 hm-ledger = { path = "../hm-ledger" }
+hm-llm = { path = "../hm-llm" }
 hm-proj = { path = "../hm-proj" }
 hm-schema = { path = "../hm-schema" }
 hyper-util = { version = "0.1.20", features = ["server-auto", "service", "tokio"] }

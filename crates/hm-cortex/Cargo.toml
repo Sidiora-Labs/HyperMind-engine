@@ -11,12 +11,14 @@ blake3 = "1.8.2"
 chrono = { version = "0.4.42", default-features = false, features = ["std"] }
 chrono-tz = "0.10.4"
 hm-core = { path = "../hm-core" }
+hm-context = { path = "../hm-context" }
 hm-llm = { path = "../hm-llm" }
 hm-schema = { path = "../hm-schema" }
 ort = { version = "=2.0.0-rc.13", default-features = false, features = ["copy-dylibs", "download-binaries", "ndarray", "std", "tls-rustls"] }
 reqwest = { version = "0.12.23", default-features = false, features = ["blocking", "rustls-tls"] }
 regex = "1.12.2"
 serde_json = "1.0.145"
+serde = { version = "1.0.228", features = ["derive"] }
 sha2.workspace = true
 subtle = "2.6.1"
 tokenizers = { version = "0.22.2", default-features = false, features = ["fancy-regex"] }

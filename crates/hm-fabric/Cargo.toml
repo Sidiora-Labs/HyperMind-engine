@@ -18,8 +18,13 @@ rusqlite = { version = "0.38", features = ["bundled"] }
 fs2 = "0.4"
 ed25519-dalek = "2.2"
 subtle = "2.6.1"
+postgres = "0.19"
+tar = "0.4"
+base64 = "0.22.1"
+rustix = { version = "1", features = ["process"] }
 
 [dev-dependencies]
+hm-ledger = { path = "../hm-ledger" }
 tempfile = "3.23.0"
 
 [lints]
