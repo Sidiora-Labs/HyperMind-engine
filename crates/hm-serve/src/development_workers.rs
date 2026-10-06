@@ -1,7 +1,9 @@
 use crate::{
     actor::ActorEngine,
     context_memory::{self, MemoryError},
-    development_scheduler::{DevelopmentWorker, WorkerFailure},
+    development_scheduler::{
+        DevelopmentWorker, DispatchContext, TrustedNoWork, WorkerFailure, WorkerOutcome,
+    },
 };
 use hm_context::{ContextError, development::*, history::SourceRelation, maintenance::Usage};
 use hm_cortex::{
@@ -186,9 +188,12 @@ impl LlmProvider for CountedProvider {
         &self,
         request: &StructuredRequest,
     ) -> Result<StructuredResponse, LlmError> {
+        {
+            let mut usage = self.observed.lock().map_err(|_| LlmError::Capacity)?;
+            usage.calls = usage.calls.checked_add(1).ok_or(LlmError::Capacity)?;
+        }
         let response = self.inner.generate_structured(request);
         let mut usage = self.observed.lock().map_err(|_| LlmError::Capacity)?;
-        usage.calls += 1;
         match &response {
             Ok(result) => {
                 let Some(tokens) = result
@@ -232,6 +237,35 @@ impl DevelopmentWorker for ConfiguredWorker {
         plan_id: String,
     ) -> std::pin::Pin<
         Box<dyn std::future::Future<Output = Result<DevelopmentPlan, WorkerFailure>> + Send + '_>,
+    > {
+        Box::pin(async move {
+            match self.run_configured(evidence, plan_id).await? {
+                WorkerOutcome::Publication(plan) => Ok(plan),
+                WorkerOutcome::NoWork(_) => Err(failure(
+                    "no-work outcome requires scheduler receipt",
+                    Usage::Known(0),
+                )),
+            }
+        })
+    }
+    fn run_outcome(
+        &self,
+        evidence: EvidenceSnapshot,
+        plan_id: String,
+        _context: DispatchContext,
+    ) -> std::pin::Pin<
+        Box<dyn std::future::Future<Output = Result<WorkerOutcome, WorkerFailure>> + Send + '_>,
+    > {
+        self.run_configured(evidence, plan_id)
+    }
+}
+impl ConfiguredWorker {
+    fn run_configured(
+        &self,
+        evidence: EvidenceSnapshot,
+        plan_id: String,
+    ) -> std::pin::Pin<
+        Box<dyn std::future::Future<Output = Result<WorkerOutcome, WorkerFailure>> + Send + '_>,
     > {
         Box::pin(async move {
             let tail = self
@@ -422,7 +456,7 @@ impl DevelopmentWorker for ConfiguredWorker {
             let observed = Arc::new(Mutex::new(Observed::default()));
             let task_observed = observed.clone();
             let output_id = plan_id.clone();
-            let task = tokio::task::spawn_blocking(move || -> Result<DevelopmentPlan, String> {
+            let task = tokio::task::spawn_blocking(move || -> Result<WorkerOutcome, String> {
                 let actual = hm_llm::ollama::Ollama::new(
                     hm_llm::ProviderConfig {
                         endpoint,
@@ -520,19 +554,25 @@ impl DevelopmentWorker for ConfiguredWorker {
                         } => plan,
                         hm_cortex::development_retrospective::RetrospectiveProposal::NoSignal {
                             ..
-                        } => DevelopmentPlan {
-                            version: 1,
-                            id: plan_id,
-                            kind: DevelopmentKind::Retrospective,
-                            evidence,
-                            mutations: vec![],
-                            proposal: None,
-                            usage: Usage::Known(0),
-                        },
+                        } => {
+                            let state = provider
+                                .observed
+                                .lock()
+                                .map_err(|_| "provider call accounting unavailable")?;
+                            if state.calls != 0 || state.unknown || state.tokens != 0 {
+                                return Err("no-signal outcome followed provider attempt".into());
+                            }
+                            return Ok(WorkerOutcome::NoWork(TrustedNoWork {
+                                evidence,
+                                plan_id,
+                                kind: DevelopmentKind::Retrospective,
+                                reason: "no_signal".into(),
+                            }));
+                        }
                     },
                 };
                 plan.id = output_id;
-                Ok(plan)
+                Ok(WorkerOutcome::Publication(plan))
             });
             match tokio::time::timeout(self.timeout, task).await {
                 Ok(Ok(Ok(plan))) => Ok(plan),

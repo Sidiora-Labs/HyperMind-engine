@@ -45,7 +45,7 @@ pub enum Usage { Known(u64), Unknown }
 impl Default for Usage { fn default() -> Self { Self::Unknown } }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
-pub enum JobStatus { Pending, Running(JobLease), Complete, Cancelled, Exhausted }
+pub enum JobStatus { Pending, Running(JobLease), Complete, NoWork, Cancelled, Exhausted }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct JobRecord {
@@ -221,6 +221,15 @@ impl MaintenanceScheduler {
             let receipt = PublicationReceipt { job_id: job.id.clone(), kind: job.request.kind, cursor: job.request.cursor, output_digest: output_digest.into(), authority: Authority::DerivedInference };
             update_watermark(state, receipt.kind);
             Ok(receipt)
+        })
+    }
+
+    pub fn settle_no_work(&mut self, lease: &JobLease, now_ms: u64) -> Result<(), ContextError> {
+        self.transaction(|state| {
+            validate_lease(state, lease, now_ms)?;
+            let job = state.jobs.get_mut(&lease.job_id).ok_or(ContextError::Stale)?;
+            job.status = JobStatus::NoWork;
+            Ok(())
         })
     }
 

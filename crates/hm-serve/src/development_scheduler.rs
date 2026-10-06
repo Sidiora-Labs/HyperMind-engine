@@ -47,10 +47,47 @@ pub struct ObservedSettlement {
     pub attempt: u64,
     pub actual_tokens: u64,
 }
+#[derive(Clone, Debug)]
+pub struct TrustedNoWork {
+    pub(crate) evidence: EvidenceSnapshot,
+    pub(crate) plan_id: String,
+    pub(crate) kind: DevelopmentKind,
+    pub(crate) reason: String,
+}
+#[derive(Clone, Debug)]
+pub enum WorkerOutcome {
+    Publication(DevelopmentPlan),
+    NoWork(TrustedNoWork),
+}
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct NoWorkReceipt {
+    pub version: u32,
+    pub id: String,
+    pub scope: Scope,
+    pub job_id: String,
+    pub attempt: u64,
+    pub evidence_digest: String,
+    pub reason: String,
+    pub provider_calls: u64,
+    pub usage: Usage,
+    pub knowledge_published: bool,
+}
 pub trait DevelopmentWorker: Send + Sync {
     fn kind(&self) -> DevelopmentKind;
     fn provider_policy(&self) -> Option<&str> {
         None
+    }
+    fn run_outcome(
+        &self,
+        evidence: EvidenceSnapshot,
+        plan_id: String,
+        context: DispatchContext,
+    ) -> Pin<Box<dyn Future<Output = Result<WorkerOutcome, WorkerFailure>> + Send + '_>> {
+        Box::pin(async move {
+            self.run_observed(evidence, plan_id, context)
+                .await
+                .map(WorkerOutcome::Publication)
+        })
     }
     fn run_observed(
         &self,
@@ -132,6 +169,8 @@ struct LedgerState {
     receipts: BTreeMap<String, SavedReceipt>,
     #[serde(default)]
     observed_settlements: BTreeMap<String, ObservedSettlement>,
+    #[serde(default)]
+    no_work_receipts: BTreeMap<String, NoWorkReceipt>,
 }
 fn error(message: &str) -> MemoryError {
     ContextError::Invalid(message.into()).into()
@@ -160,6 +199,7 @@ async fn load(actor: &ActorEngine, scope: &Scope) -> Result<LedgerState, MemoryE
         pending: BTreeMap::new(),
         receipts: BTreeMap::new(),
         observed_settlements: BTreeMap::new(),
+        no_work_receipts: BTreeMap::new(),
     };
     for frame in actor.frames_since(LSN::new(0), None, usize::MAX).await? {
         if frame.header.kind != hm_ledger::frame::EventKind::ProviderFrame {
@@ -184,6 +224,24 @@ async fn load(actor: &ActorEngine, scope: &Scope) -> Result<LedgerState, MemoryE
             return Err(error("scheduler replay sequence"));
         }
         next.state.validate()?;
+        for (id, receipt) in &next.no_work_receipts {
+            if id != &receipt.id
+                || receipt.scope != *scope
+                || receipt.provider_calls != 0
+                || receipt.usage != Usage::Known(0)
+                || receipt.knowledge_published
+                || receipt.reason != "no_signal"
+                || next.state.jobs.get(&receipt.job_id).is_none_or(|job| {
+                    job.attempt != receipt.attempt
+                        || job.status
+                            != DispatchStatus::Complete {
+                                receipt_id: id.clone(),
+                            }
+                })
+            {
+                return Err(error("invalid no-work receipt replay"));
+            }
+        }
         saved = next;
     }
     Ok(saved)
@@ -393,8 +451,20 @@ pub async fn dispatch(
     if scope != owner {
         return Err(ContextError::ScopeMismatch.into());
     }
-    let state = inspect(actor, scope).await?;
+    validate_id(request_id)?;
+    let initial = load(actor, scope).await?;
+    let state = initial.state;
     let job = state.jobs.get(job_id).ok_or(ContextError::Stale)?;
+    if let DispatchStatus::Complete { receipt_id } = &job.status {
+        if initial
+            .no_work_receipts
+            .get(receipt_id)
+            .is_some_and(|receipt| receipt.job_id == job_id && receipt.attempt == job.attempt)
+        {
+            return Ok(state);
+        }
+    }
+
     let schedule = state.schedules[&job.schedule_id].clone();
     let worker = registry
         .workers
@@ -468,7 +538,7 @@ pub async fn dispatch(
     let plan_id = format!("development-{}-{}", lease.job_id, lease.attempt);
     let result = tokio::time::timeout(
         std::time::Duration::from_millis(schedule.timeout_ms),
-        worker.run_observed(
+        worker.run_outcome(
             evidence.clone(),
             plan_id.clone(),
             DispatchContext {
@@ -489,7 +559,13 @@ pub async fn dispatch(
     )
     .await;
     let plan = match result {
-        Ok(Ok(plan)) => plan,
+        Ok(Ok(WorkerOutcome::Publication(plan))) => plan,
+        Ok(Ok(WorkerOutcome::NoWork(outcome))) => {
+            return finish_no_work(
+                actor, scope, &schedule, &lease, &plan_id, &evidence, outcome,
+            )
+            .await;
+        }
         Ok(Err(failure)) => return terminal(actor, scope, &lease, Err(failure)).await,
         Err(_) => return expire_dispatch(actor, scope, &lease).await,
     };
@@ -730,4 +806,105 @@ pub async fn observed_settlements(
         .observed_settlements
         .into_values()
         .collect())
+}
+
+pub async fn no_work_receipts(
+    actor: &ActorEngine,
+    scope: &Scope,
+    owner: &Scope,
+) -> Result<Vec<NoWorkReceipt>, MemoryError> {
+    if owner != scope {
+        return Err(ContextError::ScopeMismatch.into());
+    }
+    Ok(load(actor, scope)
+        .await?
+        .no_work_receipts
+        .into_values()
+        .collect())
+}
+async fn finish_no_work(
+    actor: &ActorEngine,
+    scope: &Scope,
+    schedule: &DevelopmentSchedule,
+    lease: &DispatchLease,
+    plan_id: &str,
+    evidence: &EvidenceSnapshot,
+    outcome: TrustedNoWork,
+) -> Result<DevelopmentSchedules, MemoryError> {
+    if outcome.plan_id != plan_id
+        || outcome.kind != schedule.kind
+        || outcome.evidence != *evidence
+        || outcome.reason != "no_signal"
+    {
+        return Err(error("invalid trusted no-work outcome"));
+    }
+    let _scheduler_guard = SCHEDULER_MUTATIONS.lock().await;
+    let fresh = development_admission::snapshot(
+        actor,
+        scope,
+        &schedule.principal,
+        &schedule.worker_id,
+        schedule.snapshot.clone(),
+    )
+    .await?;
+    let _guard = crate::context_jobs::CONTEXT_MUTATIONS.lock().await;
+    let tail = actor.stats().await?.applied.last_lsn;
+    if fresh.ledger_tail != tail.get() {
+        return Err(ContextError::Stale.into());
+    }
+    let mut current = fresh.clone();
+    current.ledger_tail = evidence.ledger_tail;
+    current.memory_cursor = evidence.memory_cursor;
+    current.source_cursor = evidence.source_cursor;
+    current.digest = current.computed_digest()?;
+    if current != *evidence {
+        return Err(ContextError::Stale.into());
+    }
+    let mut saved = load(actor, scope).await?;
+    let time = now()?;
+    saved.state.validate_lease(lease, time)?;
+    if crate::development_usage::for_attempt(actor, scope, &lease.job_id, lease.attempt)
+        .await?
+        .is_some()
+    {
+        return Err(error("provider observation contradicts no-call outcome"));
+    }
+    let job = &saved.state.jobs[&lease.job_id];
+    let accounting_id = job.accounting_id.clone();
+    let mut accounting = hm_context::maintenance::MaintenanceScheduler::from_snapshot(
+        saved.state.accounting.clone(),
+    )?;
+    let active = match &accounting.snapshot().jobs[&accounting_id].status {
+        hm_context::maintenance::JobStatus::Running(active) => active.clone(),
+        _ => return Err(ContextError::Stale.into()),
+    };
+    if active.attempt != lease.attempt {
+        return Err(ContextError::Stale.into());
+    }
+    accounting.settle_no_work(&active, time)?;
+    saved.state.accounting = accounting.snapshot();
+    let receipt_id = format!("no-work-{}-{}", lease.job_id, lease.attempt);
+    saved
+        .state
+        .jobs
+        .get_mut(&lease.job_id)
+        .ok_or(ContextError::Stale)?
+        .status = DispatchStatus::Complete {
+        receipt_id: receipt_id.clone(),
+    };
+    let receipt = NoWorkReceipt {
+        version: 1,
+        id: receipt_id.clone(),
+        scope: scope.clone(),
+        job_id: lease.job_id.clone(),
+        attempt: lease.attempt,
+        evidence_digest: evidence.digest.clone(),
+        reason: outcome.reason,
+        provider_calls: 0,
+        usage: Usage::Known(0),
+        knowledge_published: false,
+    };
+    saved.no_work_receipts.insert(receipt_id, receipt);
+    append(actor, tail, &mut saved).await?;
+    Ok(saved.state)
 }

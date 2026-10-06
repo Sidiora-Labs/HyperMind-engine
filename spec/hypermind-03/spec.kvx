@@ -1400,8 +1400,10 @@ result = "Compile and actual native activation journey passed for protected cont
 title = "Complete genuine no-work background outcomes durably"
 wave = 3
 owner_lane = "maintenance"
-status = "in_progress"
+status = "done"
 requires = ["task.3.12", "task.3.53"]
-touches = ["crates/hm-serve/src/development_scheduler.rs", "crates/hm-serve/src/development_workers.rs", "crates/hm-mcp/tests/development_review_workers.rs"]
+touches = ["crates/hm-context/src/maintenance.rs", "crates/hm-serve/src/development_scheduler.rs", "crates/hm-serve/src/development_workers.rs", "crates/hm-mcp/tests/development_review_workers.rs"]
 verify_cmd = "cargo test -p hm-mcp --test development_review_workers"
 acceptance = "Real configured review and learning workers complete their native journeys across restart. A validated genuine zero-call no-work result settles its existing attempt once with a durable operational receipt, without fabricating knowledge publication or weakening empty-plan admission."
+
+result = "Native compilation and the real configured review-worker journey passed. Profile decisions, primer creation and refresh, retrospective publication and restart reached genuine zero-call no-work completion. Its durable receipt preserves spending and pre-dispatch publication watermarks across a second restart and same-job replay, without failure diagnostics or an empty knowledge publication."
