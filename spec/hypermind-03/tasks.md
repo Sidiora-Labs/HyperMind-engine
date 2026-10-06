@@ -53,9 +53,9 @@
   - [x] 1.27 Lossless cross-language temporal contracts
   - [x] 1.28 Atomic source publication admission
   - [x] 2.1 Ledger-backed revisions, invalidation and complete migration
-  - [ ] 2.2 Complete SDK and OSS Gideon integration
+  - [x] 2.2 Complete SDK and OSS Gideon integration
   - [x] 2.3 Unified source retrieval and embedding lifecycle
-  - [ ] 2.4 Wave 2 integration
+  - [x] 2.4 Wave 2 integration
   - [x] 2.5 Python and TypeScript executable context consumers
   - [x] 2.6 Go typed context consumer
   - [x] 2.7 Swift typed context consumer
@@ -64,13 +64,57 @@
   - [x] 2.10 Lossless temporal contract across memory operations
   - [x] 2.11 Native memory and retrieval surface integration
   - [x] 2.12 Real semantic embedding lifecycle qualification
-  - [-] 2.13 Scoped native memory portability consumers
+  - [x] 2.13 Scoped native memory portability consumers
   - [x] 2.14 Validated Hypermid source history migration
   - [x] 2.15 Swift operation error fidelity
+  - [x] 2.17 Runnable configured local and remote embedding providers
   - [ ] 3.1 Complete background knowledge development
   - [ ] 3.2 Complete module and operational capability parity
   - [ ] 3.3 Complete long-session and provider continuity
   - [ ] 3.4 Wave 3 integration
+  - [-] 3.5 Atomic development publication and reviewed proposals
+  - [ ] 3.6 Source mapping and incremental evidence verification
+  - [ ] 3.7 Resumable complete verification cycles
+  - [ ] 3.8 Grounded curation and sharing classification
+  - [ ] 3.9 Correction-driven retrospective lessons
+  - [ ] 3.10 Enabled profile collection and owner review
+  - [ ] 3.11 Actual historian and grounded knowledge extraction
+  - [ ] 3.12 Durable knowledge schedules and bounded dispatch
+  - [ ] 3.13 Retention plans and physical record purge
+  - [ ] 3.14 Authorized conditions and deferred-note delivery
+  - [-] 3.15 External exact-price model catalogs
+  - [-] 3.16 PostgreSQL operational storage with writer fences
+  - [-] 3.17 Process-local bus and naming parity
+  - [-] 3.18 Owned process trees and platform restrictions
+  - [-] 3.19 Negotiated public transport compatibility
+  - [-] 3.20 Signed artifact installation and ownership receipts
+  - [-] 3.21 Durable role state and process restart
+  - [ ] 3.22 Destination policy and dispatch secret boundaries
+  - [-] 3.23 SDK continuation and uncertain-effect recovery
+  - [ ] 3.24 Native knowledge review and operational views
+  - [ ] 3.25 Scoped development service and real consumer dispatch
+  - [ ] 3.26 Recurring primers and evidence-based refresh
+  - [ ] 3.27 Encrypted portable state and atomic restore
+  - [ ] 3.28 Source-grounded documentation proposals
+  - [ ] 3.29 Categorized cross-session knowledge injection
+  - [ ] 3.30 Revision-bound compact memory cues
+  - [ ] 3.31 Provider profile and tool continuity
+  - [ ] 3.32 Source lineage and frozen child continuity
+  - [ ] 3.33 Deterministic pressure and hook boundaries
+  - [ ] 3.34 Exact provider usage and quota observations
+  - [ ] 3.35 NATS durable delivery and server-enforced grants
+  - [ ] 3.36 Operational backend selection and descriptors
+  - [ ] 3.37 Peer enrollment and direct or relay federation
+  - [ ] 3.38 Durable outbound mobile mutation reconciliation
+  - [ ] 3.39 Bounded authenticated notification envelopes
+  - [ ] 3.40 Native service ownership and ordered shutdown
+  - [ ] 3.41 Actual tool and provider role conformance
+  - [ ] 3.42 Declared platform containment qualification
+  - [ ] 3.43 Autonomous source indexing and vector lifecycle
+  - [ ] 3.44 Canonical segmented logs and secret redaction
+  - [ ] 3.45 Canonical background reservations and usage rollups
+  - [ ] 3.46 Native operational and continuity services
+  - [ ] 3.47 Installed host development and operational consumers
   - [ ] 4.1 Comparative quality, continuity and cost evaluation
   - [ ] 4.2 Complete console and host user journeys
   - [ ] 4.3 Release qualification and reversible cutover evidence
@@ -81,8 +125,8 @@
 {
   "waves": [
     { "id": 1,  "tasks": ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "1.11", "1.12", "1.13", "1.14", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20", "1.21", "1.22", "1.23", "1.24", "1.25", "1.26", "1.27", "1.28"] },
-    { "id": 2,  "tasks": ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "2.10", "2.11", "2.12", "2.13", "2.14", "2.15"] },
-    { "id": 3,  "tasks": ["3.1", "3.2", "3.3", "3.4"] },
+    { "id": 2,  "tasks": ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "2.10", "2.11", "2.12", "2.13", "2.14", "2.15", "2.17"] },
+    { "id": 3,  "tasks": ["3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15", "3.16", "3.17", "3.18", "3.19", "3.20", "3.21", "3.22", "3.23", "3.24", "3.25", "3.26", "3.27", "3.28", "3.29", "3.30", "3.31", "3.32", "3.33", "3.34", "3.35", "3.36", "3.37", "3.38", "3.39", "3.40", "3.41", "3.42", "3.43", "3.44", "3.45", "3.46", "3.47"] },
     { "id": 4,  "tasks": ["4.1", "4.2", "4.3"] }
   ]
 }

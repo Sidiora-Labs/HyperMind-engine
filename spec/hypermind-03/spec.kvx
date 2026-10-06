@@ -434,7 +434,7 @@ title = "Complete background knowledge development"
 wave = 3
 owner_lane = "integration"
 status = "pending"
-requires = ["task.2.4"]
+requires = ["task.3.5", "task.3.6", "task.3.7", "task.3.8", "task.3.9", "task.3.10", "task.3.11", "task.3.12", "task.3.13", "task.3.14", "task.3.24", "task.3.25", "task.3.26", "task.3.27", "task.3.28", "task.3.29", "task.3.30", "task.3.43", "task.3.45", "task.3.47"]
 touches = ["crates/hm-cortex"]
 verify_cmd = "cargo test -p hm-sim --test unified_background_journey"
 acceptance = "Verification, curation, retrospective lessons, primers, conditional notes, profile proposals and documentation proposals consume real evidence under scoped budgets with no recursive evidence promotion."
@@ -444,7 +444,7 @@ title = "Complete module and operational capability parity"
 wave = 3
 owner_lane = "integration"
 status = "pending"
-requires = ["task.2.4"]
+requires = ["task.3.15", "task.3.16", "task.3.17", "task.3.18", "task.3.19", "task.3.20", "task.3.21", "task.3.22", "task.3.27", "task.3.34", "task.3.35", "task.3.36", "task.3.37", "task.3.38", "task.3.39", "task.3.40", "task.3.41", "task.3.42", "task.3.44", "task.3.46", "task.3.47"]
 touches = ["crates/hm-fabric"]
 verify_cmd = "cargo test -p hm-fabric --test runtime_journey"
 acceptance = "Module capabilities, bus backends, role conformance, process containment, portable state, encrypted push, log/usage/model contracts and optional remote routing have real consumers and explicit platform/backend qualification."
@@ -454,7 +454,7 @@ title = "Complete long-session and provider continuity"
 wave = 3
 owner_lane = "integration"
 status = "pending"
-requires = ["task.2.4"]
+requires = ["task.3.11", "task.3.23", "task.3.29", "task.3.30", "task.3.31", "task.3.32", "task.3.33", "task.3.46", "task.3.47"]
 touches = ["crates/hm-context"]
 verify_cmd = "cargo test -p hm-sim --test long_session_journey"
 acceptance = "Long sessions survive pressure, edits, forks, repeated tool IDs, multimodal content, cancellation, stale background results and model changes while preserving exact recovery and current required evidence."
@@ -728,3 +728,476 @@ verify_cmd = "cargo test -p hm-mcp --test context_embedding_runtime"
 acceptance = "Operator configuration selects explicit off, verified local or remote-compatible embedding runtimes for the actual daemon. Real local inference drives scoped source registration, backfill and retrieval through existing tool consumers; invalid or unavailable configuration fails visibly without model substitution or secret disclosure."
 
 qualification = "Library compile and actual environment-configured MCP local BGE journey passed, including verified artifact loading, registration, bounded backfill, restart and semantic retrieval. Off and missing-cache cases passed; missing artifacts refused without download. Remote-compatible configuration is implemented, while live remote-provider qualification remains outstanding."
+
+[task.3.5]
+title = "Atomic development publication and reviewed proposals"
+wave = 3
+owner_lane = "effects"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.deep.anchored_knowledge", "req.deep.profile_review"]
+touches = ["crates/hm-context/src/development.rs", "crates/hm-serve/src/context_memory.rs", "crates/hm-serve/src/development_admission.rs", "crates/hm-serve/tests/development_admission.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_admission"
+acceptance = "Finite owner-registered worker authority, source and record fences, bounded atomic mutation batches and reviewed proposals share native ledger admission. Any failed command or stale fence commits nothing; workers cannot register authority, approve proposals or promote generated evidence. Restart preserves receipts, revocations and decisions."
+
+[task.3.6]
+title = "Source mapping and incremental evidence verification"
+wave = 3
+owner_lane = "history"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.deep.source_mapping", "req.deep.incremental_verification"]
+touches = ["crates/hm-cortex/src/development_mapping.rs", "crates/hm-serve/src/development_mapping.rs", "crates/hm-serve/tests/development_mapping.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_mapping"
+acceptance = "Current authorized source bytes drive mappings and per-record changed-evidence verification; moved, deleted or revised inputs invalidate publication. Findings preserve cited support, contradictions and unresolved evidence."
+
+[task.3.7]
+title = "Resumable complete verification cycles"
+wave = 3
+owner_lane = "cache"
+status = "pending"
+requires = ["task.3.5", "task.3.6"]
+coverage = ["req.deep.complete_verification"]
+touches = ["crates/hm-cortex/src/development_verification.rs", "crates/hm-serve/src/development_verification.rs", "crates/hm-serve/tests/development_verification.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_verification"
+acceptance = "A durable complete verification cycle enumerates authorized records independently of change detection, resumes a bounded backlog after cancellation and restart, and reports actual contiguous coverage."
+
+[task.3.8]
+title = "Grounded curation and sharing classification"
+wave = 3
+owner_lane = "retrieval"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.deep.curation", "req.deep.classification_and_sharing"]
+touches = ["crates/hm-cortex/src/development_curation.rs", "crates/hm-serve/src/development_curation.rs", "crates/hm-serve/tests/development_curation.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_curation"
+acceptance = "Grounded curation and classification produce revision-checked native plans; merges preserve all original anchors and contradictions, pinned records cannot be archived, and content changes revoke prior sharing eligibility."
+
+[task.3.9]
+title = "Correction-driven retrospective lessons"
+wave = 3
+owner_lane = "temporal"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.deep.retrospective_lessons"]
+touches = ["crates/hm-cortex/src/development_retrospective.rs", "crates/hm-serve/src/development_retrospective.rs", "crates/hm-serve/tests/development_retrospective.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_retrospective"
+acceptance = "New typed user corrections produce deduplicated source-linked lesson proposals; no eligible signal makes no provider call, and cancelled or changed input publishes nothing."
+
+[task.3.10]
+title = "Enabled profile collection and owner review"
+wave = 3
+owner_lane = "notes"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.deep.profile_review"]
+touches = ["crates/hm-cortex/src/development_profile.rs", "crates/hm-serve/src/development_profile.rs", "crates/hm-serve/tests/development_profile.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_profile"
+acceptance = "Explicit enablement precedes behavioral collection. Independently recurring evidence produces uncertain owner-review proposals; current-revision approval, rejection, withdrawal and revocation remain authoritative."
+
+[task.3.11]
+title = "Actual historian and grounded knowledge extraction"
+wave = 3
+owner_lane = "historian"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.deep.anchored_knowledge", "req.deep.cross_session_memory", "req.coverage.historian"]
+touches = ["crates/hm-cortex/src/development_historian.rs", "crates/hm-serve/src/development_historian.rs", "crates/hm-serve/tests/development_historian.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_historian"
+acceptance = "A real configured provider produces valid four-tier history and source-grounded knowledge under a frozen snapshot, measured or explicitly unknown usage and bounded attempts; stale or cancelled work cannot publish."
+
+[task.3.12]
+title = "Durable knowledge schedules and bounded dispatch"
+wave = 3
+owner_lane = "maintenance"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.deep.knowledge_schedules"]
+touches = ["crates/hm-context/src/development_schedule.rs", "crates/hm-serve/src/development_scheduler.rs", "crates/hm-serve/tests/development_scheduler.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_scheduler"
+acceptance = "Independent disabled, manual and timed schedules persist leases, partial backlogs and watermarks. Reservations precede dispatch, interrupted unknown charges remain held, and repeated identical failures visibly open a circuit breaker."
+
+[task.3.13]
+title = "Retention plans and physical record purge"
+wave = 3
+owner_lane = "migration"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.deep.retention_and_purge"]
+touches = ["crates/hm-serve/src/retention.rs", "crates/hm-ledger/src/retention.rs", "crates/hm-serve/tests/retention.rs"]
+verify_cmd = "cargo test -p hm-serve --test retention"
+acceptance = "Reviewed retention plans protect pinned evidence and required lineage, exclude tombstones immediately and erase eligible record data according to actual ledger key and storage semantics. Actor-wide deletion cannot masquerade as record purge; retained backup copies remain explicit."
+
+[task.3.14]
+title = "Authorized conditions and deferred-note delivery"
+wave = 3
+owner_lane = "reduction"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.deep.deferred_notes", "req.coverage.conditions"]
+touches = ["crates/hm-cortex/src/development_conditions.rs", "crates/hm-serve/src/development_conditions.rs", "crates/hm-serve/tests/development_conditions.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_conditions"
+acceptance = "Real bounded filesystem and argument-vector Git observations evaluate declarative predicates under authorized roots. False, unavailable and refused remain distinct; source changes invalidate readiness and successful delivery has one durable occurrence."
+
+[task.3.15]
+title = "External exact-price model catalogs"
+wave = 3
+owner_lane = "provider"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.coverage.catalog"]
+touches = ["crates/hm-llm/src/catalog.rs", "crates/hm-llm/tests/catalog.rs", "crates/hm-serve/src/model_inventory.rs"]
+verify_cmd = "cargo test -p hm-llm --test catalog"
+acceptance = "External catalogs preserve additive metadata, capabilities, modality limits, context ceilings and exact tiered prices. Missing prices differ from zero, invalid prices refuse, and readiness names actual observations."
+
+[task.3.16]
+title = "PostgreSQL operational storage with writer fences"
+wave = 3
+owner_lane = "storage"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.coverage.postgres"]
+touches = ["crates/hm-fabric/src/postgres.rs", "crates/hm-fabric/tests/postgres.rs"]
+verify_cmd = "cargo test -p hm-fabric --test postgres"
+acceptance = "A real provisioned PostgreSQL backend uses session advisory locks, monotonic fences and checksum-ordered namespace migrations. Lost connection ends write liveness and stale sessions cannot commit."
+
+[task.3.17]
+title = "Process-local bus and naming parity"
+wave = 3
+owner_lane = "bus"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.coverage.bus"]
+touches = ["crates/hm-fabric/src/bus_memory.rs", "crates/hm-fabric/tests/bus_memory.rs"]
+verify_cmd = "cargo test -p hm-fabric --test bus_memory"
+acceptance = "A distinct process-local backend implements bounded stream, queue, register, census and settlement behavior with exact scoped naming and grants. Durable-only guarantees are explicitly inapplicable."
+
+[task.3.18]
+title = "Owned process trees and platform restrictions"
+wave = 3
+owner_lane = "supervisor"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.coverage.containment", "req.coverage.supervisor"]
+touches = ["crates/hm-fabric/src/containment.rs", "crates/hm-fabric/src/containment", "crates/hm-fabric/src/supervisor.rs", "crates/hm-fabric/tests/containment.rs"]
+verify_cmd = "cargo test -p hm-fabric --test containment"
+acceptance = "Actual owned child trees retain stable launch identities, bounded resource policies and explicit filesystem and network restrictions. Unsupported containment refuses restricted launch; interruption reaps descendants and reused PIDs are never terminated."
+
+[task.3.19]
+title = "Negotiated public transport compatibility"
+wave = 3
+owner_lane = "transport"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.coverage.transport"]
+touches = ["crates/hm-fabric/src/compat_transport.rs", "crates/hm-fabric/tests/compat_transport.rs"]
+verify_cmd = "cargo test -p hm-fabric --test compat_transport"
+acceptance = "Negotiated public Hypermid framing enforces bounded envelopes and digest-checked chunks before effects, with authentic peer/session identity, compatible versions, replay refusal and no downgrade."
+
+[task.3.20]
+title = "Signed artifact installation and ownership receipts"
+wave = 3
+owner_lane = "routing"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.coverage.registry"]
+touches = ["crates/hm-fabric/src/artifacts.rs", "crates/hm-fabric/src/registry_install.rs", "crates/hm-fabric/tests/registry_install.rs"]
+verify_cmd = "cargo test -p hm-fabric --test registry_install"
+acceptance = "Signed immutable metadata and artifact digests govern reviewed staged installation, replacement and removal. Interrupted activation preserves a healthy incumbent; rollback and deletion use exact ownership receipts."
+
+[task.3.21]
+title = "Durable role state and process restart"
+wave = 3
+owner_lane = "roles"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.coverage.roles", "req.coverage.role_conformance"]
+touches = ["crates/hm-fabric/src/role_store.rs", "crates/hm-fabric/src/role_dispatch.rs", "crates/hm-fabric/tests/role_restart.rs"]
+verify_cmd = "cargo test -p hm-fabric --test role_restart"
+acceptance = "Real role processes persist negotiated capabilities, approvals, held work, source fences and terminal outcomes. Restart cannot dispatch unapproved work or replay uncertain effects; late results require acknowledgement."
+
+[task.3.22]
+title = "Destination policy and dispatch secret boundaries"
+wave = 3
+owner_lane = "effects"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.coverage.egress", "req.coverage.credentials"]
+touches = ["crates/hm-fabric/src/egress.rs", "crates/hm-fabric/src/secret_handles.rs", "crates/hm-fabric/tests/egress.rs", "crates/hm-fabric/tests/secret_handles.rs"]
+verify_cmd = "cargo test -p hm-fabric --test egress --test secret_handles"
+acceptance = "Actual destination resolution, redirects and proxies enforce egress policy before unauthorized connections. Dispatch resolves scoped secret handles without exposing values in arguments, logs, evidence or export, while uncertain writes retain uncertainty."
+
+[task.3.23]
+title = "SDK continuation and uncertain-effect recovery"
+wave = 3
+owner_lane = "clients"
+status = "in_progress"
+requires = ["task.2.4"]
+coverage = ["req.coverage.sdk"]
+touches = ["sdk/python/hypermind/continuity.py", "sdk/python/tests/test_continuity.py", "sdk/typescript/packages/client/src/continuity.ts", "sdk/go/continuity.go", "sdk/swift/Sources/HyperMind/ContextContinuity.swift", "crates/hm-sim/tests/sdk_continuity.rs"]
+verify_cmd = "cargo test -p hm-sim --test sdk_continuity"
+acceptance = "Actual language consumers preserve epochs, cursors, source identity, version refusal, cancellation and typed uncertain effects through reauthentication and restart. Potentially accepted writes are never automatically retried."
+
+[task.3.24]
+title = "Native knowledge review and operational views"
+wave = 3
+owner_lane = "console"
+status = "pending"
+requires = ["task.3.25"]
+coverage = ["req.coverage.ui", "req.coverage.diagnostics"]
+touches = ["sdk/typescript/packages/console/src/development.ts", "sdk/typescript/packages/console/src/operations.ts", "sdk/typescript/packages/console/src/continuity.ts", "sdk/typescript/packages/console/src/development.test.ts", "sdk/typescript/packages/console/src/operations.test.ts", "sdk/typescript/packages/console/src/continuity.test.ts"]
+verify_cmd = "node --test sdk/typescript/packages/console/dist/development.test.js"
+acceptance = "Existing native console navigation consumes real development and operational services with source detail, preserved rejected drafts, scoped review plans, progress and durable outcomes. Unavailable and unknown remain explicit; browser qualification stays separate."
+
+[task.3.25]
+title = "Scoped development service and real consumer dispatch"
+wave = 3
+owner_lane = "surface"
+status = "pending"
+requires = ["task.3.5"]
+coverage = ["req.coverage.auth", "req.coverage.historian"]
+touches = ["crates/hm-serve/src/development_service.rs", "crates/hm-serve/tests/development_service.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_service"
+acceptance = "Scoped native dispatch, inspection, cancellation and owner review consume real development plans through atomic ledger admission. Capabilities describe actual registered workers, and blocked provider work cannot stall actor health."
+
+[task.3.26]
+title = "Recurring primers and evidence-based refresh"
+wave = 3
+owner_lane = "notes"
+status = "pending"
+requires = ["task.3.10"]
+coverage = ["req.deep.primer_development", "req.deep.primer_refresh"]
+touches = ["crates/hm-cortex/src/development_primers.rs", "crates/hm-serve/src/development_primers.rs", "crates/hm-serve/tests/development_primers.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_primers"
+acceptance = "Verified recurring questions produce evidence-linked primers without collapsing incompatible answers. Bounded refresh retains prior answers and exact anchors, checks current revisions and leaves unresolved backlog on blocked evidence or budget."
+
+[task.3.27]
+title = "Encrypted portable state and atomic restore"
+wave = 3
+owner_lane = "migration"
+status = "pending"
+requires = ["task.3.13"]
+coverage = ["req.coverage.migration", "req.deep.retention_and_purge"]
+touches = ["crates/hm-serve/src/backup.rs", "crates/hm-serve/tests/backup.rs"]
+verify_cmd = "cargo test -p hm-serve --test backup"
+acceptance = "Actual authenticated encryption protects canonical portable state. Manifest, source and graph validation precede atomic restore; interruption preserves current accepted state and excluded or retained data is explicit."
+
+[task.3.28]
+title = "Source-grounded documentation proposals"
+wave = 3
+owner_lane = "temporal"
+status = "pending"
+requires = ["task.3.9"]
+coverage = ["req.deep.documentation_proposals"]
+touches = ["crates/hm-cortex/src/development_documents.rs", "crates/hm-serve/src/development_documents.rs", "crates/hm-serve/tests/development_documents.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_documents"
+acceptance = "Actual repository deltas produce cited documentation patches with source and target digests. Only current owner-approved plans apply, unrelated edits cause refusal, and a durable receipt records the result."
+
+[task.3.29]
+title = "Categorized cross-session knowledge injection"
+wave = 3
+owner_lane = "historian"
+status = "pending"
+requires = ["task.3.11"]
+coverage = ["req.deep.cross_session_memory"]
+touches = ["crates/hm-context/src/knowledge_injection.rs", "crates/hm-serve/src/knowledge_injection.rs", "crates/hm-serve/tests/knowledge_injection.rs"]
+verify_cmd = "cargo test -p hm-serve --test knowledge_injection"
+acceptance = "Native category, pin, archive and observed-use state controls deterministic budgeted cross-session injection. Importance remains distinct from use, visible evidence is suppressed precisely, and exact recall remains available."
+
+[task.3.30]
+title = "Revision-bound compact memory cues"
+wave = 3
+owner_lane = "cache"
+status = "pending"
+requires = ["task.3.7"]
+coverage = ["req.deep.compact_memory_cues"]
+touches = ["crates/hm-context/src/memory_cues.rs", "crates/hm-serve/src/memory_cues.rs", "crates/hm-serve/tests/memory_cues.rs"]
+verify_cmd = "cargo test -p hm-serve --test memory_cues"
+acceptance = "Compact cues are revision-bound cached derivatives with exact source expansion and textual fallback. Optional visual use requires actual supported modality and observed cost; unavailable vision cannot count as successful recall."
+
+[task.3.31]
+title = "Provider profile and tool continuity"
+wave = 3
+owner_lane = "provider"
+status = "pending"
+requires = ["task.3.15"]
+coverage = ["req.coverage.provider", "req.coverage.cache"]
+touches = ["crates/hm-context/src/provider_continuity.rs", "crates/hm-serve/tests/provider_continuity.rs"]
+verify_cmd = "cargo test -p hm-serve --test provider_continuity"
+acceptance = "Actual provider profiles and tokenizers preserve repeated tool identifiers, role adjacency, opaque parts, exact input/output budgets and model-change invalidation. Unsupported serializers refuse before provider dispatch."
+
+[task.3.32]
+title = "Source lineage and frozen child continuity"
+wave = 3
+owner_lane = "history"
+status = "pending"
+requires = ["task.3.6"]
+coverage = ["req.coverage.history", "req.coverage.hooks"]
+touches = ["crates/hm-context/src/source_continuity.rs", "crates/hm-serve/tests/source_continuity.rs"]
+verify_cmd = "cargo test -p hm-serve --test source_continuity"
+acceptance = "Actual edits, frozen children, reductions and restart preserve original source identities, times and bytes. Child mutations and usage remain isolated under explicit contribution limits."
+
+[task.3.33]
+title = "Deterministic pressure and hook boundaries"
+wave = 3
+owner_lane = "reduction"
+status = "pending"
+requires = ["task.3.14"]
+coverage = ["req.coverage.reduction", "req.coverage.cache", "req.coverage.hooks"]
+touches = ["crates/hm-context/src/continuity_pressure.rs", "crates/hm-serve/tests/continuity_pressure.rs"]
+verify_cmd = "cargo test -p hm-serve --test continuity_pressure"
+acceptance = "Deterministic pressure protects current work, required evidence, tool dependencies and output reserve. Reductions apply once at compatible boundaries, exact expansion works, and irreducible overflow refuses dispatch."
+
+[task.3.34]
+title = "Exact provider usage and quota observations"
+wave = 3
+owner_lane = "provider"
+status = "pending"
+requires = ["task.3.15"]
+coverage = ["req.coverage.usage"]
+touches = ["crates/hm-llm/src/provider_usage.rs", "crates/hm-llm/tests/provider_usage.rs"]
+verify_cmd = "cargo test -p hm-llm --test provider_usage"
+acceptance = "Provider usage preserves exact token and cache categories, quota and refill windows, balances, funding provenance, account scope, staleness and in-band errors. Unknown counters and charges never become zero."
+
+[task.3.35]
+title = "NATS durable delivery and server-enforced grants"
+wave = 3
+owner_lane = "bus"
+status = "pending"
+requires = ["task.3.17"]
+coverage = ["req.coverage.nats"]
+touches = ["crates/hm-fabric/src/bus_nats.rs", "crates/hm-fabric/tests/bus_nats.rs"]
+verify_cmd = "cargo test -p hm-fabric --test bus_nats"
+acceptance = "Actual NATS and JetStream enforce scoped server grants, isolated inboxes and pre-provisioned durable consumers. Real acknowledgement, redelivery, dead letters, revocation, reconnect and cursor gaps preserve delivery semantics."
+
+[task.3.36]
+title = "Operational backend selection and descriptors"
+wave = 3
+owner_lane = "storage"
+status = "pending"
+requires = ["task.3.16"]
+coverage = ["req.coverage.storage", "req.coverage.identity"]
+touches = ["crates/hm-fabric/src/backend_config.rs", "crates/hm-fabric/tests/backend_config.rs"]
+verify_cmd = "cargo test -p hm-fabric --test backend_config"
+acceptance = "Native backend selection validates scoped descriptors, collision-safe identities, least-privilege secret handles and explicit home resolution, and consumes real SQLite or PostgreSQL operational stores."
+
+[task.3.37]
+title = "Peer enrollment and direct or relay federation"
+wave = 3
+owner_lane = "transport"
+status = "pending"
+requires = ["task.3.19"]
+coverage = ["req.coverage.remote"]
+touches = ["crates/hm-fabric/src/enrollment.rs", "crates/hm-fabric/src/federation.rs", "crates/hm-fabric/tests/enrollment.rs", "crates/hm-fabric/tests/federation.rs"]
+verify_cmd = "cargo test -p hm-fabric --test enrollment --test federation"
+acceptance = "Actual mutually authenticated peers enroll with reviewed expiring grants and signed discovery. Direct routes precede allowed relays; relay grants are side-specific and single-use, and revocation stops new admission."
+
+[task.3.38]
+title = "Durable outbound mobile mutation reconciliation"
+wave = 3
+owner_lane = "clients"
+status = "pending"
+requires = ["task.3.23", "task.3.37"]
+coverage = ["req.coverage.mobile"]
+touches = ["crates/hm-context/src/mobile_journal.rs", "sdk/swift/Sources/HyperMind/MobileJournal.swift", "crates/hm-context/tests/mobile_journal.rs"]
+verify_cmd = "cargo test -p hm-context --test mobile_journal"
+acceptance = "A durable outbound mutation journal reconciles pending and uncertain writes through an encrypted resumed connection before another write. Opaque wake identifiers carry no memory content; native mobile qualification is recorded separately."
+
+[task.3.39]
+title = "Bounded authenticated notification envelopes"
+wave = 3
+owner_lane = "effects"
+status = "pending"
+requires = ["task.3.22"]
+coverage = ["req.coverage.push"]
+touches = ["crates/hm-fabric/src/push.rs", "crates/hm-fabric/tests/push.rs"]
+verify_cmd = "cargo test -p hm-fabric --test push"
+acceptance = "Real bounded HPKE envelopes preserve confidential or pinned-sender-authenticated modes. Tamper, wrong recipient, replay, expiry and downgrade refuse before content is released; native notifications consume the envelope."
+
+[task.3.40]
+title = "Native service ownership and ordered shutdown"
+wave = 3
+owner_lane = "routing"
+status = "pending"
+requires = ["task.3.18", "task.3.20"]
+coverage = ["req.coverage.service_manager"]
+touches = ["crates/hm-fabric/src/service_manager.rs", "crates/hm-fabric/src/service_manager", "crates/hm-fabric/tests/service_manager.rs"]
+verify_cmd = "cargo test -p hm-fabric --test service_manager"
+acceptance = "Per-user native service plans and ownership receipts preserve restart behavior and complete child drain. Unsupported platform or service-manager operations return native refusal details and never alter unrelated services."
+
+[task.3.41]
+title = "Actual tool and provider role conformance"
+wave = 3
+owner_lane = "roles"
+status = "pending"
+requires = ["task.3.21"]
+coverage = ["req.coverage.role_conformance"]
+touches = ["crates/hm-fabric/tests/role_tool_live.rs", "crates/hm-fabric/tests/role_runner_live.rs", "crates/hm-fabric/tests/role_compaction_live.rs", "crates/hm-fabric/tests/role_transform_live.rs"]
+verify_cmd = "cargo test -p hm-fabric --test role_tool_live --test role_runner_live --test role_compaction_live --test role_transform_live"
+acceptance = "Actual tool, model-runner, compaction and transform roles run through authenticated routes and fresh-state crash points. Provider and operation absence is explicit; approval, late delivery, pure setup and narrowing-only policy survive restart."
+
+[task.3.42]
+title = "Declared platform containment qualification"
+wave = 3
+owner_lane = "supervisor"
+status = "pending"
+requires = ["task.3.18"]
+coverage = ["req.coverage.containment"]
+touches = ["crates/hm-fabric/src/containment", "crates/hm-fabric/tests/containment_platform.rs"]
+verify_cmd = "cargo test -p hm-fabric --test containment_platform"
+acceptance = "Each declared platform reports and exercises its actual process-tree, resource, filesystem and network containment. Missing platform evidence remains unqualified instead of inheriting another platform pass."
+
+[task.3.43]
+title = "Autonomous source indexing and vector lifecycle"
+wave = 3
+owner_lane = "retrieval"
+status = "pending"
+requires = ["task.3.8"]
+coverage = ["req.coverage.indexing", "req.coverage.embedding"]
+touches = ["crates/hm-serve/src/development_indexing.rs", "crates/hm-serve/tests/development_indexing.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_indexing"
+acceptance = "Actual source and embedding consumers reconcile earliest dirty positions, bounded file and opt-in Git scans and vector checkpoints. Source, digest and grants are rechecked before publication; corrections hide stale derivatives immediately."
+
+[task.3.44]
+title = "Canonical segmented logs and secret redaction"
+wave = 3
+owner_lane = "effects"
+status = "pending"
+requires = ["task.3.39"]
+coverage = ["req.coverage.logging"]
+touches = ["crates/hm-fabric/src/logs.rs", "crates/hm-fabric/tests/logs.rs"]
+verify_cmd = "cargo test -p hm-fabric --test logs"
+acceptance = "Canonical bounded logs preserve whole records under concurrency, hierarchical filters, redaction before persistence, daily rotation and explicit resumed-viewer gaps. Control bytes cannot forge records."
+
+[task.3.45]
+title = "Canonical background reservations and usage rollups"
+wave = 3
+owner_lane = "maintenance"
+status = "pending"
+requires = ["task.3.12", "task.3.34"]
+coverage = ["req.coverage.usage", "req.deep.knowledge_schedules"]
+touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_service.rs"]
+verify_cmd = "cargo test -p hm-serve --test usage_service"
+acceptance = "Native host cost and usage remain canonical. Background calls reserve cost and concurrency before dispatch, settle real observations once, retain unknown charges through restart and expose exact attributed rollups."
+
+[task.3.46]
+title = "Native operational and continuity services"
+wave = 3
+owner_lane = "surface"
+status = "pending"
+requires = ["task.3.25"]
+coverage = ["req.coverage.auth", "req.coverage.context_mode", "req.coverage.diagnostics"]
+touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs"]
+verify_cmd = "cargo test -p hm-serve --test fabric_service --test continuity_service"
+acceptance = "Native operational and continuation services expose real configured backends, routes, jobs, budgets, mode boundaries and effect receipts through existing surfaces without granting callers new authority."
+
+[task.3.47]
+title = "Installed host development and operational consumers"
+wave = 3
+owner_lane = "clients"
+status = "pending"
+requires = ["task.3.23", "task.3.25", "task.3.46"]
+coverage = ["req.coverage.host", "req.coverage.sdk"]
+touches = ["sdk/python/hypermind/development.py", "sdk/python/hypermind/fabric.py", "sdk/python/tests/test_development.py", "sdk/python/tests/test_fabric.py", "crates/hm-sim/tests/development_host.rs"]
+verify_cmd = "cargo test -p hm-sim --test development_host"
+acceptance = "Installed host consumers preserve transcript, provider, tool approval, cancellation, usage and final-delivery ownership while using native development and operational services. Full-host readiness requires every declared supported family."
