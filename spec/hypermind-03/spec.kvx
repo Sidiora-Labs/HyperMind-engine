@@ -1072,11 +1072,11 @@ owner_lane = "provider"
 status = "in_progress"
 requires = ["task.3.15"]
 coverage = ["req.coverage.provider", "req.coverage.cache"]
-touches = ["crates/hm-context/src/provider_continuity.rs", "crates/hm-serve/tests/provider_continuity.rs", "crates/hm-serve/src/context_tokenizer.rs", "crates/hm-serve/tests/context_tokenizer.rs", "crates/hm-serve/src/context_projection.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/knowledge_injection.rs", "crates/hm-serve/src/memory_cues.rs", "sdk/python/native/src/lib.rs", "sdk/python/hypermind/engine.py"]
+touches = ["crates/hm-context/src/provider_continuity.rs", "crates/hm-serve/tests/provider_continuity.rs", "crates/hm-serve/src/context_tokenizer.rs", "crates/hm-serve/tests/context_tokenizer.rs", "crates/hm-serve/src/context_projection.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/knowledge_injection.rs", "crates/hm-serve/src/memory_cues.rs", "sdk/python/native/src/lib.rs", "sdk/python/hypermind/engine.py", "crates/hm-serve/tests/provider_chat_framing.rs"]
 verify_cmd = "cargo test -p hm-serve --test provider_continuity"
 acceptance = "Actual provider profiles and tokenizers preserve repeated tool identifiers, role adjacency, opaque parts, exact input/output budgets and model-change invalidation. Unsupported serializers refuse before provider dispatch."
 
-result = "Trusted native tokenizer installation now binds exact artifacts, model revisions and generations to context projections. The pinned Qwen tokenizer matched actual raw generation and one-user text chat input counts; native reopen, generation invalidation and Python native rebuild passed. Full history, tool and attachment serializers remain unqualified and refuse unsupported dispatch."
+result = "Trusted native tokenizer identity binds artifacts, model revisions, provider endpoint/version and registry generation. Actual Qwen text and complete text/tool-cycle framing matched provider prompt counts and reserved output limits, including repeated tool IDs by occurrence. The serving provider render-only path preserves original payload bytes and schema ordering, verifies model/template identity before and after measurement and refuses unsupported or stale input. Native Python bindings rebuilt successfully. Opaque parts, attachments, other provider serializers and complete installed-host qualification remain incomplete."
 
 [task.3.32]
 title = "Source lineage and frozen child continuity"

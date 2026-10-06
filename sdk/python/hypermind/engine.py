@@ -33,6 +33,9 @@ class Engine:
     async def count_ollama_user_input(self, model_id: str, expected_generation: int, content: str):
         return json.loads(await asyncio.to_thread(self._native.count_ollama_user_input, model_id, expected_generation, content))
 
+    async def count_ollama_chat_input(self, model_id: str, expected_generation: int, payload: bytes, budget: dict):
+        return json.loads(await asyncio.to_thread(self._native.count_ollama_chat_input, model_id, expected_generation, bytes(payload), json.dumps(budget, separators=(",", ":"))))
+
     async def tool(self, verb: str, arguments: dict):
         try:
             return json.loads(await asyncio.to_thread(self._native.call, verb, json.dumps(arguments, separators=(",", ":"))))

@@ -106,6 +106,15 @@ impl NativeEngine {
         })
     }
 
+    fn count_ollama_chat_input(&self, py: Python<'_>, model_id: String, expected_generation: u64, payload: Vec<u8>, budget_json: String) -> PyResult<String> {
+        if self.actor.is_none() { return Err(PyRuntimeError::new_err("engine is closed")); }
+        let budget = serde_json::from_str(&budget_json).map_err(failure)?;
+        py.allow_threads(|| {
+            let measurement = self.runtime.block_on(hm_serve::context_tokenizer::count_ollama_chat_input(&model_id, expected_generation, &payload, budget)).map_err(failure)?;
+            serde_json::to_string(&measurement).map_err(failure)
+        })
+    }
+
     fn call(&self, py: Python<'_>, verb: String, arguments_json: String) -> PyResult<String> {
         let actor = self
             .actor
