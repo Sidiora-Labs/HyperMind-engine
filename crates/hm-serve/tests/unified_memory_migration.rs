@@ -177,6 +177,11 @@ async fn native_mutations_are_atomic_revision_fenced_and_restore_from_ledger() {
     let exported = context_memory::export(&actor, &scope(), &scope())
         .await
         .unwrap();
+    let jsonl = exported.to_jsonl().unwrap();
+    let exported = context_memory::MemoryExport::from_jsonl(&jsonl).unwrap();
+    let mut corrupt = jsonl.clone();
+    corrupt[0] = b'x';
+    assert!(context_memory::MemoryExport::from_jsonl(&corrupt).is_err());
     let count = actor.stats().await.unwrap().log_events;
     actor.shutdown().await.unwrap();
     let actor = ActorEngine::open(config(&dir.path().join("a"), 7))
@@ -250,6 +255,44 @@ async fn chronological_anchors_cannot_be_rewritten_and_forged_spans_commit_nothi
         command(&actor, "forged", MemoryCommand::Create { record: n })
             .await
             .is_err()
+    );
+    let mut runtime =
+        MemoryRecord::new("runtime", RecordKind::Note, "forged runtime authority", 20);
+    runtime.authority = Authority::RuntimeFact;
+    assert!(
+        command(&actor, "runtime", MemoryCommand::Create { record: runtime })
+            .await
+            .is_err()
+    );
+    let mut forged = context_memory::export(&actor, &scope(), &scope())
+        .await
+        .unwrap();
+    for event in &mut forged.events {
+        if event["command"]["kind"] == "create" {
+            let mut record: MemoryRecord =
+                serde_json::from_value(event["command"]["record"].clone()).unwrap();
+            record.authority = Authority::RuntimeFact;
+            record.revision_digest = record.computed_revision_digest().unwrap();
+            event["command"]["record"] = serde_json::to_value(record).unwrap();
+            let request = MemoryRequest {
+                version: 1,
+                scope: scope(),
+                request_id: event["request_id"].as_str().unwrap().into(),
+                command: serde_json::from_value(event["command"].clone()).unwrap(),
+            };
+            event["digest"] = json!(digest_bytes(&serde_json::to_vec(&request).unwrap()));
+        }
+    }
+    forged.digest.clear();
+    forged.digest = digest_bytes(&serde_json::to_vec(&forged).unwrap());
+    assert!(
+        command(
+            &actor,
+            "forged-export",
+            MemoryCommand::RestoreExport { export: forged }
+        )
+        .await
+        .is_err()
     );
     assert_eq!(count, actor.stats().await.unwrap().log_events);
     actor.shutdown().await.unwrap();
@@ -325,6 +368,7 @@ fn bundle() -> ImportBundle {
     entries.push(entry("smart-detail","smart_note_detail",json!({"record_id":"conditional","predicate":{"operator":"all","clauses":[{"field":"event.kind","comparison":"eq","value":"build"}]},"predicate_digest":"original-predicate-digest","last_result":null})));
     entries.push(entry("grant","grant",json!({"grant_id":"sharing","grantee_scope_digest":"not-an-owner","operations":["read"],"categories":["architecture"],"expires_at_ms":10,"revoked_at_ms":null,"revision":1})));
     let mut b = ImportBundle {
+        context_sources: vec![],
         version: 1,
         import_id: "export".into(),
         scope: scope(),
@@ -341,6 +385,21 @@ async fn migration_stages_all_rows_then_publishes_native_revisions_idempotently(
     registry.bind(scope(), 7, vec![]).unwrap();
     let bundle = bundle();
     let actor = ActorEngine::open(config(dir.path(), 7)).await.unwrap();
+    let mut malformed = bundle.clone();
+    let grant = malformed
+        .entries
+        .iter_mut()
+        .find(|e| e.kind == "grant")
+        .unwrap();
+    grant.payload["categories"] = json!(["architecture", 12]);
+    grant.digest = digest_bytes(&serde_json::to_vec(&grant.payload).unwrap());
+    malformed.digest = malformed.computed_digest().unwrap();
+    assert!(
+        import_batch(&actor, &registry, &malformed, 3)
+            .await
+            .is_err()
+    );
+    assert_eq!(actor.stats().await.unwrap().log_events, 0);
     let partial = import_batch(&actor, &registry, &bundle, 3).await.unwrap();
     assert!(!partial.complete);
     assert!(

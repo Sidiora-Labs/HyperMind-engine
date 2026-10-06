@@ -365,11 +365,13 @@ qualification = "Actual configured daemon and authenticated child worker journey
 title = "Ledger-backed revisions, invalidation and complete migration"
 wave = 2
 owner_lane = "migration"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["crates/hm-serve/src/context_memory.rs", "crates/hm-serve/src/hypermid_import.rs", "crates/hm-serve/tests/unified_memory_migration.rs"]
 verify_cmd = "cargo test -p hm-serve --test unified_memory_migration"
 acceptance = "All accepted knowledge and context mutations use ledger events and rebuildable projections; migration preserves revisions, tombstones, sharing scope, time and provenance; durable job reconciliation does not hide partial commits."
+
+qualification = "Native import and memory migration tests passed six real cases, including revisions, restart, staged visibility, canonical JSON Lines, optimistic conflicts, malformed sharing refusal and nested authority escalation refusal. Source-history adapter qualification is tracked in task.2.14; physical purge and cutover remain later obligations."
 
 [task.2.2]
 title = "Complete SDK and OSS Gideon integration"

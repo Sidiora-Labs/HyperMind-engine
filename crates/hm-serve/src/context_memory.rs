@@ -885,6 +885,7 @@ pub async fn execute(
     principal: &Scope,
     request: MemoryRequest,
 ) -> Result<MemoryReceipt, MemoryError> {
+    validate_external_authority(&request.command, 0)?;
     if matches!(
         &request.command,
         MemoryCommand::ImportRows { .. } | MemoryCommand::CommitImport { .. }
@@ -1186,4 +1187,96 @@ fn acyclic_relation(relation: &str) -> bool {
         relation,
         "derived_from" | "supersedes" | "merged_from" | "split_from"
     )
+}
+
+impl MemoryExport {
+    pub fn to_jsonl(&self) -> Result<Vec<u8>, MemoryError> {
+        self.validate()?;
+        let mut bytes = serde_json::to_vec(
+            &serde_json::json!({"kind":"manifest","version":self.version,"scope":self.scope,"cursor":self.cursor,"event_count":self.events.len(),"digest":self.digest}),
+        )?;
+        bytes.push(b'\n');
+        for event in &self.events {
+            bytes.extend(serde_json::to_vec(
+                &serde_json::json!({"kind":"event","event":event}),
+            )?);
+            bytes.push(b'\n');
+        }
+        Ok(bytes)
+    }
+    pub fn from_jsonl(bytes: &[u8]) -> Result<Self, MemoryError> {
+        if bytes.len() > 64 * 1024 * 1024 {
+            return Err(ContextError::Capacity.into());
+        }
+        let text = std::str::from_utf8(bytes)
+            .map_err(|_| ContextError::Invalid("invalid memory export encoding".into()))?;
+        let mut lines = text.lines();
+        let header: Value = serde_json::from_str(
+            lines
+                .next()
+                .ok_or_else(|| ContextError::Invalid("missing memory manifest".into()))?,
+        )?;
+        if header["kind"] != "manifest" {
+            return Err(ContextError::Invalid("invalid memory manifest".into()).into());
+        }
+        let mut events = Vec::new();
+        for line in lines {
+            let row: Value = serde_json::from_str(line)?;
+            if row["kind"] != "event" {
+                return Err(ContextError::Invalid("invalid memory export row".into()).into());
+            }
+            events.push(row["event"].clone());
+        }
+        if header["event_count"].as_u64() != Some(events.len() as u64) {
+            return Err(ContextError::Conflict.into());
+        }
+        let export = Self {
+            version: serde_json::from_value(header["version"].clone())?,
+            scope: serde_json::from_value(header["scope"].clone())?,
+            cursor: serde_json::from_value(header["cursor"].clone())?,
+            events,
+            digest: header["digest"]
+                .as_str()
+                .ok_or_else(|| ContextError::Invalid("missing memory export digest".into()))?
+                .into(),
+        };
+        export.validate()?;
+        Ok(export)
+    }
+    pub fn validate(&self) -> Result<(), MemoryError> {
+        self.scope.validate()?;
+        let mut check = self.clone();
+        check.digest.clear();
+        if self.version != 1
+            || self.cursor != self.events.len() as u64
+            || self.digest != digest_bytes(&serde_json::to_vec(&check)?)
+        {
+            return Err(ContextError::Conflict.into());
+        }
+        Ok(())
+    }
+}
+
+fn validate_external_authority(command: &MemoryCommand, depth: usize) -> Result<(), MemoryError> {
+    if depth > 16 {
+        return Err(ContextError::Capacity.into());
+    }
+    match command {
+        MemoryCommand::Create { record } | MemoryCommand::Revise { record, .. }
+            if record.authority == Authority::RuntimeFact =>
+        {
+            Err(ContextError::Invalid(
+                "runtime authority requires verified internal publication".into(),
+            )
+            .into())
+        }
+        MemoryCommand::RestoreExport { export } => {
+            for value in &export.events {
+                let event: MemoryEvent = serde_json::from_value(value.clone())?;
+                validate_external_authority(&event.command, depth + 1)?;
+            }
+            Ok(())
+        }
+        _ => Ok(()),
+    }
 }

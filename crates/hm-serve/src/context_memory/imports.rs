@@ -376,15 +376,37 @@ impl MemoryProjection {
         for e in entries.iter().filter(|e| e.kind == "grant") {
             let v = &e.payload;
             let principal_digest = string(v, "grantee_scope_digest")?;
-            let categories = v["categories"]
-                .as_array()
-                .map(|a| {
-                    a.iter()
-                        .filter_map(Value::as_str)
-                        .map(str::to_owned)
-                        .collect::<BTreeSet<_>>()
-                })
-                .unwrap_or_default();
+            let all_categories = v["categories"].is_null();
+            let categories = if all_categories {
+                BTreeSet::new()
+            } else {
+                serde_json::from_value::<BTreeSet<String>>(v["categories"].clone())?
+            };
+            let operations: Vec<String> = serde_json::from_value(v["operations"].clone())?;
+            if operations.iter().any(|op| {
+                ![
+                    "read",
+                    "search",
+                    "create",
+                    "update",
+                    "archive",
+                    "restore",
+                    "merge",
+                    "split",
+                    "relocate",
+                    "delete",
+                    "purge",
+                    "verify",
+                    "embed",
+                    "index",
+                    "summarize",
+                    "import",
+                    "export",
+                ]
+                .contains(&op.as_str())
+            }) {
+                return Err(invalid("grant operation"));
+            }
             let id = string(v, "grant_id")?;
             let principal = self.scope.clone();
             let mut g = MemoryGrant {
@@ -404,7 +426,7 @@ impl MemoryProjection {
             for r in imported
                 .records
                 .values()
-                .filter(|r| g.categories.is_empty() || g.categories.contains(&r.category))
+                .filter(|r| all_categories || g.categories.contains(&r.category))
             {
                 g.record_ids.insert(r.id.clone());
                 g.record_revisions
