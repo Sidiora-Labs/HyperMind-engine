@@ -1,0 +1,70 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { spawn } from "node:child_process";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import net from "node:net";
+import os from "node:os";
+import path from "node:path";
+import { Client } from "@hypermind/client";
+import { buildDevelopmentView, developmentAction, DevelopmentState, inspectDevelopment, renderDevelopment, renderDevelopmentDraft, submitDevelopmentReview } from "./development.js";
+import { clientTransport } from "./node-transport.js";
+
+const scope = { owner_id: "console-owner", project_id: "console-project", workspace_id: null };
+const ROOT = path.resolve(__dirname, "../../../../..");
+
+test("development console consumes native runtime, schedules, owner refusal and durable state", async (context) => {
+  assert.equal(process.env.HM_DEVELOPMENT_PROVIDER, "ollama", "configure an actual native provider for this gate");
+  const directory = await mkdtemp(path.join(os.tmpdir(), "hypermind-development-console-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const socket = path.join(directory, "daemon.sock");
+  const config = path.join(directory, "server.conf");
+  const binding = path.join(directory, "scope.json");
+  const token = "44".repeat(32);
+  await writeFile(config, [`socket=${socket}`, `data=${path.join(directory, "data")}`, `user=${"11".repeat(16)}`, `kek=${"22".repeat(32)}`, `admin_token=${"33".repeat(32)}`, `actor=7:${token}`, "projection_map_bytes=67108864", ""].join("\n"), { mode: 0o600 });
+  await writeFile(binding, JSON.stringify({ version: 1, actor: 7, scope }), { mode: 0o600 });
+  let stderr = "";
+  const daemon = spawn(process.env.HM_DAEMON_BIN ?? path.join(ROOT, "target/debug/hm"), ["serve", "--config", config, "--context-scope", binding], { stdio: ["ignore", "ignore", "pipe"], env: { ...process.env, HM_RECONSTRUCTION_PROVIDER: "" } });
+  daemon.stderr.on("data", (chunk) => { stderr += String(chunk); });
+  context.after(async () => { if (daemon.exitCode === null) { daemon.kill("SIGINT"); await new Promise<void>((resolve) => daemon.once("exit", () => resolve())); } });
+  let ready = false;
+  for (let attempt = 0; attempt < 300; attempt++) {
+    try { const probe = net.createConnection(socket); await new Promise<void>((resolve, reject) => { probe.once("connect", resolve); probe.once("error", reject); }); probe.destroy(); ready = true; break; } catch { if (daemon.exitCode !== null) break; await new Promise((resolve) => setTimeout(resolve, 20)); }
+  }
+  assert.ok(ready, `native daemon unavailable: ${stderr}`);
+  const client = await Client.connect({ socketPath: socket, capabilityToken: Buffer.from(token, "hex"), connectionId: Buffer.alloc(16, 9) });
+  context.after(() => client.close());
+  const transport = clientTransport(client);
+  const initial = await inspectDevelopment(transport, 7);
+  assert.deepEqual(initial.scope, scope);
+  assert.deepEqual(initial.workers.map((w) => w.kind).sort(), ["extraction", "historian"]);
+  const html = renderDevelopment(initial, 7);
+  assert.ok(html.includes("Unavailable worker families:"));
+  assert.ok(html.includes("profile proposal"));
+  assert.ok(html.includes("No schedules configured."));
+  assert.ok(html.includes("No profile or documentation proposals await review."));
+  const registered = await transport.callTool("remember", { actor: 7, conversation: "conversation", kind: "user", content: "", context: { operation: "development", request: { version: 1, scope, request_id: "register-console", action: { action: "register", worker_id: "historian", capability_id: "console-capability", session_id: "console-session", conversation: "conversation", source_ids: [], record_ids: [], new_record_ids: [], budget: { reserved_tokens: 1024, max_input_bytes: 65536, max_output_bytes: 65536, max_mutations: 1 }, lease_ms: 600000 } } } });
+  assert.equal(registered.ok, true, JSON.stringify(registered.warnings));
+  await developmentAction(transport, 7, "conversation", scope, { action: "configure", schedule: { id: "console-manual", mode: { mode: "manual" }, worker_id: "historian", snapshot: { capability_id: "console-capability", source_ids: [], record_ids: [] }, reservation: 1024, timeout_ms: 1000, backoff_ms: 0, max_attempts: 2, identical_failure_limit: 2 } }, "configure-console");
+  const queued = await developmentAction(transport, 7, "conversation", scope, { action: "enqueue", schedule_id: "console-manual" }, "enqueue-console");
+  const jobId = (queued.items[0] as { job_id: string }).job_id;
+  assert.equal(typeof jobId, "string");
+  const pending = await inspectDevelopment(transport, 7);
+  assert.ok(renderDevelopment(pending, 7).includes('data-dispatch="'));
+  await developmentAction(transport, 7, "conversation", scope, { action: "cancel", job_id: jobId }, "cancel-console");
+  const cancelled = await inspectDevelopment(transport, 7);
+  assert.ok(renderDevelopment(cancelled, 7).includes("cancelled"));
+  assert.equal((cancelled.scheduler.jobs as Record<string, { status: { state: string } }>)[jobId].status.state, "cancelled");
+  const draft = { proposalId: "unavailable-proposal", revision: 1, digest: "0".repeat(64), decision: "accept" as const, note: "<script>retain my local review note</script>" };
+  const state: DevelopmentState = { view: cancelled, draft, notice: "", busy: false };
+  assert.equal(await submitDevelopmentReview(state, transport, 7, "conversation"), false);
+  assert.strictEqual(state.draft, draft);
+  assert.ok(state.notice.includes("preserved"));
+  assert.ok(renderDevelopmentDraft(draft).includes("&lt;script&gt;"));
+  assert.equal(renderDevelopmentDraft(draft).includes("<script>"), false);
+  const raw = await transport.callTool("inspect", { uri: "hm://7/context-development" });
+  assert.deepEqual(buildDevelopmentView(raw).scheduler, cancelled.scheduler);
+  await assert.rejects(() => developmentAction(transport, 7, "conversation", { ...scope, owner_id: "foreign" }, { action: "inspect" }, "foreign-console"));
+  await developmentAction(transport, 7, "conversation", scope, { action: "revoke", capability_id: "console-capability", expected_revision: 1 }, "revoke-console");
+  const revoked = await inspectDevelopment(transport, 7);
+  assert.equal(revoked.capabilities[0].revoked, true);
+});

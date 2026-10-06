@@ -980,12 +980,14 @@ result = "Focused Python, TypeScript, Go and Swift continuity journeys passed. G
 title = "Native knowledge review and operational views"
 wave = 3
 owner_lane = "console"
-status = "pending"
+status = "in_progress"
 requires = ["task.3.25"]
 coverage = ["req.coverage.ui", "req.coverage.diagnostics"]
 touches = ["sdk/typescript/packages/console/src/development.ts", "sdk/typescript/packages/console/src/operations.ts", "sdk/typescript/packages/console/src/continuity.ts", "sdk/typescript/packages/console/src/development.test.ts", "sdk/typescript/packages/console/src/operations.test.ts", "sdk/typescript/packages/console/src/continuity.test.ts"]
 verify_cmd = "node --test sdk/typescript/packages/console/dist/development.test.js"
 acceptance = "Existing native console navigation consumes real development and operational services with source detail, preserved rejected drafts, scoped review plans, progress and durable outcomes. Unavailable and unknown remain explicit; browser qualification stays separate."
+
+result = "Development view and native console entry point compile. Actual daemon socket test passed for worker availability, registered permissions, schedules, queue and cancellation, owner review refusal with preserved draft and grant revocation. Operations, continuity and browser qualification remain pending."
 
 [task.3.25]
 title = "Scoped development service and real consumer dispatch"

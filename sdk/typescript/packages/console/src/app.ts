@@ -20,6 +20,7 @@ import {
   renderEvidencePath,
 } from "./evidence.js";
 import { buildContextSessions, inspectContext, renderContext, renderContextSessionOptions } from "./context.js";
+import { mountDevelopment } from "./development.js";
 import { escapeText, section } from "./html.js";
 import { buildOverview, OverviewView, renderOverview } from "./overview.js";
 import { buildRemovalPreview, renderRemovalPreview } from "./removal.js";
@@ -390,6 +391,10 @@ async function render(): Promise<void> {
   mount.append(summary);
   showActivity(mount);
   await showContext(mount);
+  const development = document.createElement("section");
+  development.id = "console-development";
+  mount.append(development);
+  await mountDevelopment(development, transport, overview.actor, String(values.get("conversation") ?? ""));
   await showSources(mount);
   await showEvidence(mount, values);
   await showAccess(mount);
