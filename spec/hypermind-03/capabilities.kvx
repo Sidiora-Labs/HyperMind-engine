@@ -62,9 +62,9 @@ remaining = "Real background model execution and complete knowledge publication 
 [req.coverage.provider]
 status = "implemented_focused"
 tasks = ["task.2.2", "task.3.3"]
-current_paths = ["crates/hm-context/src/provider.rs", "crates/hm-llm/src/contract.rs"]
+current_paths = ["crates/hm-context/src/provider.rs", "crates/hm-llm/src/contract.rs", "crates/hm-serve/src/context_tokenizer.rs", "sdk/python/hypermind/continuity_host.py"]
 acceptance = "Provider-neutral blocks preserve roles, opaque parts and paired tool calls under exact input and output budgets. Capability changes produce a fresh generation; unsupported serializers or tokenizers refuse before model dispatch. Host serialization returns verifiable bytes and digest."
-remaining = "Complete provider family and installed host serializer parity remains pending."
+remaining = "Trusted native tokenizer artifacts and generations now qualify exact raw input and one-user text chat framing against a real provider. A version-fenced OSS Gideon Primary text journey passed. Full history, tool, attachment and other provider serializers remain incomplete."
 
 [req.coverage.hooks]
 status = "integration_pending"
@@ -76,9 +76,9 @@ remaining = "All host lifecycle hooks, child usage attribution and contribution 
 [req.coverage.context_mode]
 status = "integration_pending"
 tasks = ["task.2.2", "task.3.46", "task.4.3"]
-current_paths = ["crates/hm-serve/src/context_config.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/continuity_service.rs", "sdk/python/hypermind/continuity_host.py"]
+current_paths = ["crates/hm-serve/src/context_config.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/continuity_service.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/hypermind/gideon_continuity_install.py"]
 acceptance = "Off and pass-through retain existing host provider input. Shadow compares derived results without publishing, model calls or serving-cursor advance. Primary dispatch requires a verified projection or explicit policy refusal. Independent feature flags change only at turn boundaries."
-remaining = "The installed host preserves off/pass-through bytes and qualifies read-only shadow comparison with boundary policy changes. Hosts without failure-refusing hooks reject primary mode. Primary host serving, cancellation and all turn variants remain unqualified."
+remaining = "Off, pass-through and shadow retain their scoped host evidence. Version-fenced OSS Gideon Primary text dispatch now passes actual provider delivery, exact framed budget, source recovery and hook cleanup. Default agent-loop tools and history, cancellation variants and broader host qualification remain incomplete."
 
 [req.coverage.diagnostics]
 status = "integration_pending"
@@ -208,7 +208,7 @@ status = "integration_pending"
 tasks = ["task.3.34", "task.3.45", "task.3.2"]
 current_paths = ["crates/hm-llm/src/provider_usage.rs", "crates/hm-serve/src/usage_service.rs", "crates/hm-serve/src/development_usage.rs", "crates/hm-fabric/src/role_runner.rs"]
 acceptance = "Preserve quota windows, refill timing, balances, token/cache categories, funding provenance, account scope, staleness and in-band errors. Reserve foreground and background cost and concurrency before dispatch; unknown charges stay reserved until reconciled. Store per-turn attribution for host rollups."
-remaining = "Original historian, extraction and authenticated runner observations settle existing reservations once and retain unknown holds across restart. Generic worker capture, account-wide quota coverage, public exact rollups and complete model-budget consumers remain pending."
+remaining = "Original historian, extraction, runner and generic multi-call observations settle existing reservations once. Actual cancellation and lost completion preserve unknown holds through restart until original late evidence reconciles once. Hard process loss, account-wide quotas, public exact rollups and all-family model-budget integration remain pending."
 
 [req.coverage.push]
 status = "pending"

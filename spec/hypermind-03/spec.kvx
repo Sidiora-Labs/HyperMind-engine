@@ -1265,7 +1265,7 @@ touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continu
 verify_cmd = "cargo test -p hm-serve --test fabric_service --test continuity_service"
 acceptance = "Native operational and continuation services expose real configured backends, routes, jobs, budgets, mode boundaries and effect receipts through existing surfaces without granting callers new authority."
 
-result = "Native continuity and operational services passed scoped gates and actual trusted daemon startup, worker dispatch, replay, restart and cleanup. The real Linux MCP stdio journey now passes retained dispatch, receipt replay across restart, missing or invalid configuration refusal and worker teardown. Accepted cross-session knowledge shares the assembly policy fence; real Primary hooks survive unchanged restart and refuse stale generations or revoked grants. Additional startup backends, operational families and compatible primary host serving remain incomplete."
+result = "Native operational daemon and Linux MCP stdio journeys pass retained dispatch, receipt replay, trusted configuration refusal and worker cleanup. Accepted knowledge shares the native assembly fence across restart and grant changes. The supported OSS Gideon text-only Primary path now passes real provider delivery, exact framed input budget, original source recovery and hook cleanup. Additional startup backends, operational families and default agent-loop tool and history framing remain incomplete."
 
 [task.3.47]
 title = "Installed host development and operational consumers"
@@ -1274,11 +1274,11 @@ owner_lane = "clients"
 status = "in_progress"
 requires = ["task.3.23", "task.3.25", "task.3.46"]
 coverage = ["req.coverage.host", "req.coverage.sdk"]
-touches = ["sdk/python/hypermind/__init__.py", "sdk/python/hypermind/development.py", "sdk/python/hypermind/fabric.py", "sdk/python/tests/test_development.py", "sdk/python/tests/test_fabric.py", "crates/hm-sim/tests/development_host.rs"]
+touches = ["sdk/python/hypermind/__init__.py", "sdk/python/hypermind/development.py", "sdk/python/hypermind/fabric.py", "sdk/python/tests/test_development.py", "sdk/python/tests/test_fabric.py", "crates/hm-sim/tests/development_host.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/hypermind/gideon_continuity_install.py", "sdk/python/tests/test_primary_host_integration.py", "sdk/python/tests/primary_host_native_journey.py"]
 verify_cmd = "cargo test -p hm-sim --test development_host"
 acceptance = "Installed host consumers preserve transcript, provider, tool approval, cancellation, usage and final-delivery ownership while using native development and operational services. Full-host readiness requires every declared supported family."
 
-result = "Typed Python development and operational clients now consume existing native tool transports. Real authenticated daemon journeys passed owner consent, original session collection, primer backlog, configured no-work completion, cancellation, capability revocation and restart. Operational digest dispatch, replay, conflict, stopped-worker uncertainty and receipt recovery also passed. Complete installed-host integration, broader runtime families and primary provider dispatch remain pending."
+result = "Typed Python clients pass actual authenticated development and operational daemon journeys. A version-fenced installer and adapter now pass the original new-session OSS Gideon Primary journey with the actual text provider, native tokenizer, reserved output budget, source recovery and final hook cleanup. Default agent-loop tools, richer history, broader runtime families and complete installed-host qualification remain pending."
 
 [task.3.48]
 title = "Repair isolated device mounts and owned namespace teardown"
