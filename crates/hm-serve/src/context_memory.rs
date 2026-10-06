@@ -208,6 +208,27 @@ pub struct MemoryGrant {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum MemoryCommand {
+    RegisterWorker {
+        capability: hm_context::development::WorkerCapability,
+    },
+    RevokeWorker {
+        id: String,
+        expected_revision: u64,
+    },
+    DevelopmentCommit {
+        capability_id: String,
+        capability_revision: u64,
+        lease_attempt: u64,
+        plan_id: String,
+        plan_digest: String,
+        snapshot_digest: String,
+        commands: Vec<MemoryCommand>,
+        proposal: Option<hm_context::development::ApprovalProposal>,
+    },
+    DecideDevelopmentProposal {
+        decision: hm_context::development::ProposalDecision,
+        commands: Vec<MemoryCommand>,
+    },
     Create {
         record: MemoryRecord,
     },
@@ -309,6 +330,10 @@ pub struct MemoryProjection {
     receipts: BTreeMap<String, (String, MemoryReceipt)>,
     pending: BTreeMap<String, PendingImport>,
     pub completed_imports: BTreeMap<String, String>,
+    pub worker_capabilities: BTreeMap<String, hm_context::development::WorkerCapability>,
+    pub development_proposals: BTreeMap<String, hm_context::development::ApprovalProposal>,
+    pub development_receipts: BTreeMap<String, hm_context::development::WorkerReceipt>,
+    pub worker_attempts: BTreeSet<(String, u64, u64)>,
     events: Vec<MemoryEvent>,
 }
 impl MemoryProjection {
@@ -326,6 +351,10 @@ impl MemoryProjection {
             receipts: BTreeMap::new(),
             pending: BTreeMap::new(),
             completed_imports: BTreeMap::new(),
+            worker_capabilities: BTreeMap::new(),
+            development_proposals: BTreeMap::new(),
+            development_receipts: BTreeMap::new(),
+            worker_attempts: BTreeSet::new(),
             events: vec![],
         }
     }
@@ -549,6 +578,157 @@ impl MemoryProjection {
     }
     fn apply(&mut self, c: &MemoryCommand, lsn: u64) -> Result<(), MemoryError> {
         match c {
+            MemoryCommand::RegisterWorker { capability } => {
+                capability.validate()?;
+                if capability.scope != self.scope
+                    || capability.principal == self.scope
+                    || capability.revoked
+                {
+                    return Err(ContextError::ScopeMismatch.into());
+                }
+                let expected = self
+                    .worker_capabilities
+                    .get(&capability.id)
+                    .map_or(1, |old| old.revision.saturating_add(1));
+                if capability.revision != expected {
+                    return Err(ContextError::Stale.into());
+                }
+                if self.worker_capabilities.len() >= 256
+                    && !self.worker_capabilities.contains_key(&capability.id)
+                {
+                    return Err(ContextError::Capacity.into());
+                }
+                self.worker_capabilities
+                    .insert(capability.id.clone(), capability.clone());
+            }
+            MemoryCommand::RevokeWorker {
+                id,
+                expected_revision,
+            } => {
+                let capability = self
+                    .worker_capabilities
+                    .get_mut(id)
+                    .ok_or_else(|| ContextError::Unavailable("worker capability".into()))?;
+                if capability.revision != *expected_revision || capability.revoked {
+                    return Err(ContextError::Stale.into());
+                }
+                capability.revision = capability
+                    .revision
+                    .checked_add(1)
+                    .ok_or(ContextError::Capacity)?;
+                capability.revoked = true;
+            }
+            MemoryCommand::DevelopmentCommit {
+                capability_id,
+                capability_revision,
+                lease_attempt,
+                plan_id,
+                plan_digest,
+                snapshot_digest,
+                commands,
+                proposal,
+            } => {
+                let capability = self
+                    .worker_capabilities
+                    .get(capability_id)
+                    .ok_or_else(|| ContextError::Unavailable("worker capability".into()))?;
+                let attempt = (capability_id.clone(), *capability_revision, *lease_attempt);
+                if capability.revoked
+                    || capability.revision != *capability_revision
+                    || capability.lease.attempt != *lease_attempt
+                    || self.worker_attempts.contains(&attempt)
+                {
+                    return Err(ContextError::Stale.into());
+                }
+                if self.development_receipts.contains_key(plan_id) {
+                    return Err(ContextError::Conflict.into());
+                }
+                let mut candidate = self.clone();
+                let mut ids = apply_development_commands(&mut candidate, commands, lsn)?;
+                if let Some(proposal) = proposal {
+                    if proposal.scope != self.scope
+                        || proposal.revision != 1
+                        || proposal.status != hm_context::development::ProposalStatus::Pending
+                        || proposal.digest != proposal.computed_digest()?
+                        || candidate.development_proposals.contains_key(&proposal.id)
+                        || candidate.development_proposals.len() >= 512
+                    {
+                        return Err(ContextError::Conflict.into());
+                    }
+                    candidate
+                        .development_proposals
+                        .insert(proposal.id.clone(), proposal.clone());
+                }
+                ids.sort();
+                ids.dedup();
+                candidate.worker_attempts.insert(attempt);
+                candidate.development_receipts.insert(
+                    plan_id.clone(),
+                    hm_context::development::WorkerReceipt {
+                        version: 1,
+                        plan_id: plan_id.clone(),
+                        scope: self.scope.clone(),
+                        ledger_lsn: lsn,
+                        cursor: self.cursor.checked_add(1).ok_or(ContextError::Capacity)?,
+                        snapshot_digest: snapshot_digest.clone(),
+                        plan_digest: plan_digest.clone(),
+                        mutation_ids: ids,
+                        proposal_id: proposal.as_ref().map(|p| p.id.clone()),
+                        replayed: false,
+                    },
+                );
+                *self = candidate;
+            }
+            MemoryCommand::DecideDevelopmentProposal { decision, commands } => {
+                let proposal = self
+                    .development_proposals
+                    .get(&decision.proposal_id)
+                    .ok_or_else(|| ContextError::Unavailable("development proposal".into()))?;
+                if proposal.revision != decision.expected_revision
+                    || proposal.digest != decision.expected_digest
+                    || proposal.status != hm_context::development::ProposalStatus::Pending
+                {
+                    return Err(ContextError::Stale.into());
+                }
+                if decision.decision == hm_context::development::ProposalDecisionKind::Reject
+                    && !commands.is_empty()
+                {
+                    return Err(ContextError::Conflict.into());
+                }
+                let mut candidate = self.clone();
+                let ids = apply_development_commands(&mut candidate, commands, lsn)?;
+                let proposal = candidate
+                    .development_proposals
+                    .get_mut(&decision.proposal_id)
+                    .unwrap();
+                proposal.status =
+                    if decision.decision == hm_context::development::ProposalDecisionKind::Accept {
+                        hm_context::development::ProposalStatus::Accepted
+                    } else {
+                        hm_context::development::ProposalStatus::Rejected
+                    };
+                proposal.revision = proposal
+                    .revision
+                    .checked_add(1)
+                    .ok_or(ContextError::Capacity)?;
+                proposal.digest = proposal.computed_digest()?;
+                candidate.development_receipts.insert(
+                    decision.request_id.clone(),
+                    hm_context::development::WorkerReceipt {
+                        version: 1,
+                        plan_id: decision.request_id.clone(),
+                        scope: self.scope.clone(),
+                        ledger_lsn: lsn,
+                        cursor: self.cursor.checked_add(1).ok_or(ContextError::Capacity)?,
+                        snapshot_digest: proposal.evidence.digest.clone(),
+                        plan_digest: digest_bytes(&serde_json::to_vec(decision)?),
+                        mutation_ids: ids,
+                        proposal_id: Some(proposal.id.clone()),
+                        replayed: false,
+                    },
+                );
+                *self = candidate;
+            }
             MemoryCommand::RestoreJsonl {
                 jsonl,
                 artifact_digest,
@@ -609,6 +789,23 @@ impl MemoryProjection {
                 self.audits.extend(restored.audits);
                 self.completed_imports.extend(restored.completed_imports);
                 self.pending.extend(restored.pending);
+                for id in restored.worker_capabilities.keys() {
+                    if self.worker_capabilities.contains_key(id) {
+                        return Err(ContextError::Conflict.into());
+                    }
+                }
+                for id in restored.development_proposals.keys() {
+                    if self.development_proposals.contains_key(id) {
+                        return Err(ContextError::Conflict.into());
+                    }
+                }
+                self.worker_capabilities
+                    .extend(restored.worker_capabilities);
+                self.development_proposals
+                    .extend(restored.development_proposals);
+                self.development_receipts
+                    .extend(restored.development_receipts);
+                self.worker_attempts.extend(restored.worker_attempts);
             }
             MemoryCommand::Create { record } => {
                 if self.records.contains_key(&record.id)
@@ -913,7 +1110,16 @@ pub(crate) async fn execute_locked(
     actor: &ActorEngine,
     trusted_scope: &Scope,
     principal: &Scope,
+    request: MemoryRequest,
+) -> Result<MemoryReceipt, MemoryError> {
+    execute_fenced_locked(actor, trusted_scope, principal, request, None).await
+}
+pub(crate) async fn execute_fenced_locked(
+    actor: &ActorEngine,
+    trusted_scope: &Scope,
+    principal: &Scope,
     mut request: MemoryRequest,
+    expected_tail: Option<LSN>,
 ) -> Result<MemoryReceipt, MemoryError> {
     trusted_scope.validate()?;
     principal.validate()?;
@@ -941,7 +1147,10 @@ pub(crate) async fn execute_locked(
         }
         _ => {}
     }
-    let tail = actor.stats().await?.applied.last_lsn;
+    let tail = match expected_tail {
+        Some(tail) => tail,
+        None => actor.stats().await?.applied.last_lsn,
+    };
     let mut state = rebuild(actor, trusted_scope).await?;
     let digest = digest_bytes(&serde_json::to_vec(&request)?);
     if let Some((previous, receipt)) = state.receipts.get(&request.request_id) {
@@ -954,6 +1163,10 @@ pub(crate) async fn execute_locked(
     }
     state.apply(&request.command, tail.get() + 1)?;
     let cursor = state.cursor.checked_add(1).ok_or(ContextError::Capacity)?;
+    let generated_publication = matches!(
+        &request.command,
+        MemoryCommand::DevelopmentCommit { .. } | MemoryCommand::DecideDevelopmentProposal { .. }
+    );
     let event = MemoryEvent {
         version: 1,
         scope: trusted_scope.clone(),
@@ -980,7 +1193,11 @@ pub(crate) async fn execute_locked(
         origin_actor: 0,
         run_id: None,
         model_provenance: None,
-        authority: hm_schema::events::Authority::ExternalObserved,
+        authority: if generated_publication {
+            hm_schema::events::Authority::DerivedInference
+        } else {
+            hm_schema::events::Authority::ExternalObserved
+        },
         retention: Retention::Durable,
         sensitivity: Sensitivity::Personal,
         event_time_ns: 0,
@@ -1139,7 +1356,7 @@ impl SmartCondition {
         })
     }
 }
-fn principal_digest(scope: &Scope) -> String {
+pub(crate) fn principal_digest(scope: &Scope) -> String {
     let mut bytes = b"hypermid.memory.scope.v1\0".to_vec();
     for s in [&scope.owner_id, &scope.project_id] {
         bytes.extend_from_slice(&(s.len() as u64).to_be_bytes());
@@ -1273,6 +1490,19 @@ fn validate_external_authority(command: &MemoryCommand, depth: usize) -> Result<
         return Err(ContextError::Capacity.into());
     }
     match command {
+        MemoryCommand::DevelopmentCommit { commands, .. }
+        | MemoryCommand::DecideDevelopmentProposal { commands, .. } => {
+            if depth == 0 {
+                return Err(ContextError::Invalid(
+                    "development publication requires guarded admission".into(),
+                )
+                .into());
+            }
+            for command in commands {
+                validate_external_authority(command, depth + 1)?;
+            }
+            Ok(())
+        }
         MemoryCommand::Create { record } | MemoryCommand::Revise { record, .. }
             if record.authority == Authority::RuntimeFact =>
         {
@@ -1307,4 +1537,43 @@ fn verified_jsonl(bytes: &[u8], artifact_digest: &str) -> Result<MemoryExport, M
         return Err(ContextError::Invalid("memory artifact digest mismatch".into()).into());
     }
     MemoryExport::from_jsonl(bytes)
+}
+
+fn apply_development_commands(
+    state: &mut MemoryProjection,
+    commands: &[MemoryCommand],
+    lsn: u64,
+) -> Result<Vec<String>, MemoryError> {
+    if commands.len() > 64 {
+        return Err(ContextError::Capacity.into());
+    }
+    let mut ids = Vec::new();
+    for command in commands {
+        let id = match command {
+            MemoryCommand::Create { record } | MemoryCommand::Revise { record, .. } => {
+                if !matches!(
+                    record.authority,
+                    Authority::AssistantGenerated | Authority::DerivedInference
+                ) {
+                    return Err(ContextError::Invalid(
+                        "generated records require generated authority".into(),
+                    )
+                    .into());
+                }
+                record.id.clone()
+            }
+            MemoryCommand::Source { source } => source.id.clone(),
+            MemoryCommand::SetStatus { id, .. } => id.clone(),
+            MemoryCommand::Verify { verification } => verification.record_id.clone(),
+            MemoryCommand::Lineage { lineage } => lineage.child_record_id.clone(),
+            _ => {
+                return Err(
+                    ContextError::Invalid("unsupported development mutation".into()).into(),
+                );
+            }
+        };
+        state.apply(command, lsn)?;
+        ids.push(id);
+    }
+    Ok(ids)
 }
