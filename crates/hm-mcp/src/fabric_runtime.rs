@@ -3,6 +3,7 @@ use hm_core::{Error, ErrorCode};
 use hm_fabric::{
     backend_config::*,
     backend_runtime::{BackendRuntime, RUNTIME_BACKEND_MIGRATIONS},
+    postgres::PostgresSecretHandle,
     runtime::RuntimeConfig,
     supervisor::{Probe, ProcessSpec, RestartPolicy},
 };
@@ -29,19 +30,15 @@ struct Startup {
     worker: Worker,
     client_key: [u8; 32],
     worker_key: [u8; 32],
+    #[serde(default)]
+    postgres_secrets: BTreeMap<String, PathBuf>,
 }
 fn invalid() -> Error {
     Error::new(ErrorCode::InvalidArgument)
 }
-pub async fn configure_from_env(
-    dispatcher: McpToolDispatcher,
-    bindings: &[TrustedContextConfig],
-) -> Result<McpToolDispatcher, Error> {
-    let Some(path) = std::env::var_os("HM_FABRIC_CONFIG") else {
-        return Ok(dispatcher);
-    };
+fn read_owner_file(path: PathBuf, limit: u64) -> Result<Vec<u8>, Error> {
     let fd = rustix::fs::open(
-        PathBuf::from(path),
+        path,
         rustix::fs::OFlags::RDONLY
             | rustix::fs::OFlags::NOFOLLOW
             | rustix::fs::OFlags::NONBLOCK
@@ -54,17 +51,17 @@ pub async fn configure_from_env(
     if !meta.is_file()
         || meta.uid() != rustix::process::geteuid().as_raw()
         || meta.mode() & 0o777 != 0o600
-        || meta.len() > 65536
+        || meta.len() > limit
     {
         return Err(Error::new(ErrorCode::CapabilityDenied));
     }
     let mut bytes = Vec::new();
     (&mut file)
-        .take(65537)
+        .take(limit + 1)
         .read_to_end(&mut bytes)
         .map_err(|_| invalid())?;
     let after = file.metadata().map_err(|_| invalid())?;
-    if bytes.len() > 65536
+    if bytes.len() as u64 > limit
         || meta.len() != after.len()
         || meta.mtime() != after.mtime()
         || meta.mtime_nsec() != after.mtime_nsec()
@@ -73,6 +70,16 @@ pub async fn configure_from_env(
     {
         return Err(Error::new(ErrorCode::CapabilityDenied));
     }
+    Ok(bytes)
+}
+pub async fn configure_from_env(
+    dispatcher: McpToolDispatcher,
+    bindings: &[TrustedContextConfig],
+) -> Result<McpToolDispatcher, Error> {
+    let Some(path) = std::env::var_os("HM_FABRIC_CONFIG") else {
+        return Ok(dispatcher);
+    };
+    let bytes = read_owner_file(PathBuf::from(path), 65536)?;
     let config: Startup = serde_json::from_slice(&bytes).map_err(|_| invalid())?;
     let binding = bindings
         .iter()
@@ -88,16 +95,33 @@ pub async fn configure_from_env(
         || config.worker_key == [0; 32]
         || config.client_key == config.worker_key
         || !matches!(
-            config.backend.operational,
-            OperationalBackendDescriptor::Sqlite
-        )
-        || !matches!(
             config.backend.bus,
             BusBackendDescriptor::ProcessLocal { .. }
         )
     {
         return Err(invalid());
     }
+    let credential = match &config.backend.operational {
+        OperationalBackendDescriptor::Sqlite if config.postgres_secrets.is_empty() => None,
+        OperationalBackendDescriptor::Postgres { secret_ref, .. }
+            if config.postgres_secrets.len() == 1 =>
+        {
+            let path = config
+                .postgres_secrets
+                .get(secret_ref)
+                .ok_or_else(invalid)?;
+            if !path.is_absolute() {
+                return Err(invalid());
+            }
+            let bytes = read_owner_file(path.clone(), 8192)?;
+            let password = String::from_utf8(bytes).map_err(|_| invalid())?;
+            if password.is_empty() || password.contains(['\0', '\r', '\n']) {
+                return Err(invalid());
+            }
+            Some((secret_ref.clone(), PostgresSecretHandle::new(password)))
+        }
+        _ => return Err(invalid()),
+    };
     hm_context::validate_id(&config.worker.module_id).map_err(|_| invalid())?;
     if !config.worker.command.is_absolute()
         || !config.worker.cwd.is_absolute()
@@ -114,7 +138,13 @@ pub async fn configure_from_env(
     let selected = select_backend_async(
         descriptor,
         RUNTIME_BACKEND_MIGRATIONS,
-        |_| Err(BackendConfigError::SecretUnavailable),
+        {
+            let mut credential = credential;
+            move |reference| match credential.take() {
+                Some((expected, secret)) if reference == expected => Ok(secret),
+                _ => Err(BackendConfigError::SecretUnavailable),
+            }
+        },
         |_| Err(BackendConfigError::SecretUnavailable),
     )
     .await
