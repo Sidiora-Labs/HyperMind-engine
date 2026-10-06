@@ -10,6 +10,7 @@ repository.workspace = true
 hnsw = ["hm-proj/hnsw"]
 
 [dependencies]
+thiserror = "2"
 hm-fabric = { path = "../hm-fabric" }
 hm-context = { path = "../hm-context" }
 axum = { version = "0.8.9", features = ["json"] }

@@ -69,3 +69,5 @@ pub mod continuity_service;
 pub mod development_indexing;
 
 pub mod development_documents;
+
+pub mod fabric_service;
