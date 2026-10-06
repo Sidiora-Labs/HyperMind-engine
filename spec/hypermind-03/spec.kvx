@@ -1081,12 +1081,14 @@ result = "Compile and actual native continuity journey passed for immutable sour
 title = "Deterministic pressure and hook boundaries"
 wave = 3
 owner_lane = "reduction"
-status = "in_progress"
+status = "done"
 requires = ["task.3.14"]
 coverage = ["req.coverage.reduction", "req.coverage.cache", "req.coverage.hooks"]
 touches = ["crates/hm-context/src/continuity_pressure.rs", "crates/hm-serve/tests/continuity_pressure.rs"]
 verify_cmd = "cargo test -p hm-serve --test continuity_pressure"
 acceptance = "Deterministic pressure protects current work, required evidence, tool dependencies and output reserve. Reductions apply once at compatible boundaries, exact expansion works, and irreducible overflow refuses dispatch."
+
+result = "Compile and real persisted pressure journey passed. Four tiers, deferred fold once across restart, exact long tool expansion, protected evidence, output reservation, tool pairing and hook fences were exercised. Native dispatch must construct authoritative snapshots and consume the final receipt."
 
 [task.3.34]
 title = "Exact provider usage and quota observations"
