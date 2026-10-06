@@ -17,10 +17,23 @@ pub struct RetentionPolicy {
 }
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
+pub struct RetainedCopy {
+    pub digest_kind: String,
+    pub lsn: u64,
+    pub kind: String,
+    pub id: String,
+    pub digest: String,
+}
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
 pub struct RetentionPlan {
     pub version: u32,
     pub scope: Scope,
     pub record_ids: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub source_ids: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub source_copies: Vec<RetainedCopy>,
     pub expected_tail: u64,
     pub planned_at_ns: i64,
     pub policy: RetentionPolicy,
@@ -43,6 +56,10 @@ pub struct PurgeReceipt {
     pub scope: Scope,
     pub plan_digest: String,
     pub record_ids: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub source_ids: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub source_copies: Vec<RetainedCopy>,
     pub original_root: Vec<u8>,
     pub redacted_frames: usize,
     pub managed_cleanup_complete: bool,
@@ -135,6 +152,7 @@ async fn build(
     let state = context_memory::rebuild(actor, scope).await?;
     let targets: BTreeSet<_> = record_ids.iter().cloned().collect();
     let mut revisions = BTreeMap::new();
+    let mut source_ids = BTreeSet::new();
     for id in &record_ids {
         let record = state
             .records
@@ -149,15 +167,18 @@ async fn build(
             return Err(unavailable("protected record or retention window"));
         }
         let history: Vec<_> = state.revisions.values().filter(|r| r.id == *id).collect();
-        if history.iter().any(|r| {
-            r.pinned
-                || !r.provenance.is_empty()
-                || !r.lineage.is_empty()
-                || !r.contradictions.is_empty()
-        }) {
+        if history
+            .iter()
+            .any(|r| r.pinned || !r.lineage.is_empty() || !r.contradictions.is_empty())
+        {
             return Err(unavailable(
-                "source or required evidence dependency unsupported",
+                "pinned or required evidence dependency unsupported",
             ));
+        }
+        for revision in &history {
+            for provenance in &revision.provenance {
+                source_ids.insert(provenance.source_id.clone());
+            }
         }
         revisions.insert(
             id.clone(),
@@ -177,6 +198,22 @@ async fn build(
     }) {
         return Err(unavailable("retained lineage or competing evidence"));
     }
+    for source_id in &source_ids {
+        let source = state
+            .sources
+            .get(source_id)
+            .ok_or_else(|| unavailable("missing original source"))?;
+        if !source.tombstoned {
+            return Err(unavailable("original source is not withdrawn"));
+        }
+        if state.revisions.values().any(|r| {
+            !targets.contains(&r.id) && r.provenance.iter().any(|p| &p.source_id == source_id)
+        }) {
+            return Err(unavailable(
+                "original source is protected by an unrelated historical citation",
+            ));
+        }
+    }
     let frames = if tail.get() == 0 {
         vec![]
     } else {
@@ -187,6 +224,8 @@ async fn build(
     }
     let mut replacements = BTreeMap::new();
     let mut tombstones = BTreeMap::new();
+    let mut source_tombstones = BTreeMap::new();
+    let mut source_copies = Vec::new();
     for frame in frames {
         if frame.header.kind != hm_ledger::frame::EventKind::ProviderFrame {
             return Err(unavailable("non-native ledger copies unsupported"));
@@ -203,20 +242,26 @@ async fn build(
         let mut event: serde_json::Value = serde_json::from_slice(&provider.api_content)?;
         let event_scope: Scope = serde_json::from_value(event["scope"].clone())?;
         let command: MemoryCommand = serde_json::from_value(event["command"].clone())?;
-        let id = match &command {
+        let (id, is_source) = match &command {
             MemoryCommand::Create { record } | MemoryCommand::Revise { record, .. } => {
-                record.id.clone()
+                (record.id.clone(), false)
             }
             MemoryCommand::Tombstone { id, .. }
             | MemoryCommand::SetStatus { id, .. }
-            | MemoryCommand::PurgedRecord { id, .. } => id.clone(),
-            _ => {
-                return Err(unavailable(
-                    "mixed/import/source/worker/grant copies unsupported",
-                ));
+            | MemoryCommand::PurgedRecord { id, .. } => (id.clone(), false),
+            MemoryCommand::Source { source } => (source.id.clone(), true),
+            MemoryCommand::TombstoneSource { id } | MemoryCommand::PurgedSource { id, .. } => {
+                (id.clone(), true)
             }
+            _ => return Err(unavailable("mixed/import/worker/grant copies unsupported")),
         };
-        if event_scope != *scope || !targets.contains(&id) {
+        if event_scope != *scope
+            || if is_source {
+                !source_ids.contains(&id)
+            } else {
+                !targets.contains(&id)
+            }
+        {
             continue;
         }
         if matches!(
@@ -229,14 +274,85 @@ async fn build(
         ) {
             tombstones.insert(id.clone(), frame.header.wall_timestamp_ns.get());
         }
+        if matches!(command, MemoryCommand::TombstoneSource { .. }) {
+            source_tombstones.insert(id.clone(), frame.header.wall_timestamp_ns.get());
+        }
         let original_digest = event["digest"]
             .as_str()
             .ok_or_else(|| unavailable("native receipt digest"))?
             .to_owned();
-        let sanitized = MemoryCommand::PurgedRecord {
-            id: id.clone(),
-            revision_digests: revisions[&id].clone(),
-            original_request_digest: original_digest,
+        let sanitized = if is_source {
+            let source_digest = state.sources[&id].digest.clone();
+            let copy_digest = match &command {
+                MemoryCommand::Source { source } => source.digest.clone(),
+                _ => source_digest.clone(),
+            };
+            source_copies.push(RetainedCopy {
+                digest_kind: "source_content_sha256".into(),
+                lsn: frame.header.lsn.get(),
+                kind: if matches!(command, MemoryCommand::Source { .. }) {
+                    "raw_source"
+                } else {
+                    "source_withdrawal"
+                }
+                .into(),
+                id: id.clone(),
+                digest: copy_digest,
+            });
+            MemoryCommand::PurgedSource {
+                id: id.clone(),
+                source_digest,
+                original_request_digest: original_digest,
+            }
+        } else {
+            if !source_ids.is_empty() {
+                source_copies.push(RetainedCopy {
+                    digest_kind: "record_revision_sha256".into(),
+                    lsn: frame.header.lsn.get(),
+                    kind: if matches!(
+                        command,
+                        MemoryCommand::Create { .. } | MemoryCommand::Revise { .. }
+                    ) {
+                        "record_revision"
+                    } else {
+                        "record_status"
+                    }
+                    .into(),
+                    id: id.clone(),
+                    digest: match &command {
+                        MemoryCommand::Create { record } | MemoryCommand::Revise { record, .. } => {
+                            state
+                                .revisions
+                                .get(&(id.clone(), record.revision))
+                                .ok_or_else(|| unavailable("historical revision inventory"))?
+                                .revision_digest
+                                .clone()
+                        }
+                        MemoryCommand::Tombstone {
+                            expected_revision, ..
+                        }
+                        | MemoryCommand::SetStatus {
+                            expected_revision, ..
+                        } => {
+                            let revision = expected_revision
+                                .checked_add(1)
+                                .ok_or(ContextError::Capacity)?;
+                            state
+                                .revisions
+                                .get(&(id.clone(), revision))
+                                .ok_or_else(|| unavailable("historical status revision inventory"))?
+                                .revision_digest
+                                .clone()
+                        }
+                        _ => return Err(unavailable("historical revision inventory")),
+                    },
+                });
+            }
+            MemoryCommand::PurgedRecord {
+                id: id.clone(),
+                revision_digests: revisions[&id].clone(),
+                original_request_digest: original_digest,
+            }
         };
         let request = MemoryRequest {
             version: 1,
@@ -263,9 +379,20 @@ async fn build(
             return Err(unavailable("tombstone grace window"));
         }
     }
+    for id in &source_ids {
+        let timestamp = *source_tombstones
+            .get(id)
+            .ok_or_else(|| unavailable("source withdrawal evidence"))?;
+        if timestamp
+            .checked_add(policy.tombstone_grace_ns)
+            .is_none_or(|until| until > planned_at_ns)
+        {
+            return Err(unavailable("source withdrawal grace window"));
+        }
+    }
     let root = actor.verification_status().await?.root;
     crate::context_projection::validate_tail(actor, tail).await?;
-    let mut plan=RetentionPlan{version:1,scope:scope.clone(),record_ids,expected_tail,planned_at_ns,policy,affected_lsns:replacements.keys().copied().collect(),original_root:root.to_vec(),storage_semantics:"managed_filesystem_removal; original MMR commitments retained; no crypto/device erase".into(),external_copies:"external exports, backups, snapshots and copied ciphertext are not controlled and may remain decryptable".into(),digest:String::new()};
+    let mut plan=RetentionPlan{version:1,scope:scope.clone(),record_ids,source_ids:source_ids.into_iter().collect(),source_copies,expected_tail,planned_at_ns,policy,affected_lsns:replacements.keys().copied().collect(),original_root:root.to_vec(),storage_semantics:"managed_filesystem_removal; original MMR commitments retained; no crypto/device erase".into(),external_copies:"external exports, backups, snapshots and copied ciphertext are not controlled and may remain decryptable".into(),digest:String::new()};
     plan.digest = plan_digest(&plan)?;
     Ok((plan, replacements))
 }
@@ -339,6 +466,8 @@ fn receipt(plan: &RetentionPlan, count: usize, replayed: bool) -> PurgeReceipt {
         scope: plan.scope.clone(),
         plan_digest: plan.digest.clone(),
         record_ids: plan.record_ids.clone(),
+        source_ids: plan.source_ids.clone(),
+        source_copies: plan.source_copies.clone(),
         original_root: plan.original_root.clone(),
         redacted_frames: count,
         managed_cleanup_complete: true,

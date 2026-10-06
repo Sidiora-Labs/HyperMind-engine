@@ -210,6 +210,7 @@ pub struct MemoryGrant {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum MemoryCommand {
+    PurgedSource { id: String, source_digest: String, original_request_digest: String },
     PurgedRecord { id: String, revision_digests: Vec<String>, original_request_digest: String },
     RegisterWorker {
         capability: hm_context::development::WorkerCapability,
@@ -327,6 +328,7 @@ pub struct MemoryProjection {
     pub purged_records: BTreeMap<String, Vec<String>>,
     pub revisions: BTreeMap<(String, u64), MemoryRecord>,
     pub sources: BTreeMap<String, MemorySource>,
+    pub purged_sources: BTreeMap<String, String>,
     pub verifications: BTreeMap<String, Verification>,
     pub grants: BTreeMap<String, MemoryGrant>,
     pub origins: BTreeMap<String, crate::hypermid_import::ImportEntry>,
@@ -349,6 +351,7 @@ impl MemoryProjection {
             purged_records: BTreeMap::new(),
             revisions: BTreeMap::new(),
             sources: BTreeMap::new(),
+            purged_sources: BTreeMap::new(),
             verifications: BTreeMap::new(),
             grants: BTreeMap::new(),
             origins: BTreeMap::new(),
@@ -583,8 +586,13 @@ impl MemoryProjection {
         Ok(())
     }
     fn apply(&mut self, c: &MemoryCommand, lsn: u64) -> Result<(), MemoryError> {
-        if !self.purged_records.is_empty() && matches!(c, MemoryCommand::ImportRows {..} | MemoryCommand::CommitImport {..} | MemoryCommand::RestoreExport {..} | MemoryCommand::RestoreJsonl {..}) { return Err(ContextError::Unavailable("purged memory requires redaction-aware portability".into()).into()); }
+        if (!self.purged_records.is_empty() || !self.purged_sources.is_empty()) && matches!(c, MemoryCommand::ImportRows {..} | MemoryCommand::CommitImport {..} | MemoryCommand::RestoreExport {..} | MemoryCommand::RestoreJsonl {..}) { return Err(ContextError::Unavailable("purged memory requires redaction-aware portability".into()).into()); }
         match c {
+            MemoryCommand::PurgedSource { id, source_digest, .. } => {
+                validate_id(id)?;
+                self.sources.remove(id);
+                self.purged_sources.insert(id.clone(), source_digest.clone());
+            }
             MemoryCommand::PurgedRecord { id, revision_digests, .. } => {
                 validate_id(id)?;
                 self.records.remove(id);
@@ -873,6 +881,7 @@ impl MemoryProjection {
             } => self.change_status(id, *status, *expected_revision, lsn)?,
             MemoryCommand::Source { source } => {
                 validate_id(&source.id)?;
+                if self.purged_sources.contains_key(&source.id) { return Err(ContextError::Conflict.into()); }
                 if source.content.len() > 512 * 1024
                     || source.tombstoned
                     || source.digest != digest_bytes(&source.content)
@@ -1078,7 +1087,7 @@ pub async fn rebuild(actor: &ActorEngine, scope: &Scope) -> Result<MemoryProject
             state.receipts.insert(
                 e.request_id.clone(),
                 (
-                    match &e.command { MemoryCommand::PurgedRecord { original_request_digest, .. } => original_request_digest.clone(), _ => e.digest.clone() },
+                    match &e.command { MemoryCommand::PurgedRecord { original_request_digest, .. } | MemoryCommand::PurgedSource { original_request_digest, .. } => original_request_digest.clone(), _ => e.digest.clone() },
                     MemoryReceipt {
                         version: 1,
                         scope: scope.clone(),
@@ -1256,7 +1265,7 @@ pub async fn export(
         return Err(ContextError::ScopeMismatch.into());
     }
     let state = rebuild(actor, scope).await?;
-    if !state.purged_records.is_empty() { return Err(ContextError::Unavailable("exact v1 export unavailable after physical purge".into()).into()); }
+    if !state.purged_records.is_empty() || !state.purged_sources.is_empty() { return Err(ContextError::Unavailable("exact v1 export unavailable after physical purge".into()).into()); }
     let events = state
         .events
         .into_iter()
@@ -1505,7 +1514,7 @@ fn validate_external_authority(command: &MemoryCommand, depth: usize) -> Result<
         return Err(ContextError::Capacity.into());
     }
     match command {
-        MemoryCommand::PurgedRecord { .. } => Err(ContextError::Invalid("purge skeleton requires certified storage admission".into()).into()),
+        MemoryCommand::PurgedRecord { .. } | MemoryCommand::PurgedSource { .. } => Err(ContextError::Invalid("purge skeleton requires certified storage admission".into()).into()),
         MemoryCommand::DevelopmentCommit { commands, .. }
         | MemoryCommand::DecideDevelopmentProposal { commands, .. } => {
             if depth == 0 {
