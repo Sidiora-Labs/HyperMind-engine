@@ -985,12 +985,14 @@ acceptance = "Existing native console navigation consumes real development and o
 title = "Scoped development service and real consumer dispatch"
 wave = 3
 owner_lane = "surface"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 coverage = ["req.coverage.auth", "req.coverage.historian"]
 touches = ["crates/hm-serve/src/development_service.rs", "crates/hm-serve/tests/development_service.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_service"
 acceptance = "Scoped native dispatch, inspection, cancellation and owner review consume real development plans through atomic ledger admission. Capabilities describe actual registered workers, and blocked provider work cannot stall actor health."
+
+result = "Development service compile and actual configured provider journey passed. Trusted owner dispatch, actual worker registration, atomic fact publication, actor health, absent worker refusal, cancellation, revocation and restart were exercised. Native routing and current summary projection consumption remain task3.53."
 
 [task.3.26]
 title = "Recurring primers and evidence-based refresh"

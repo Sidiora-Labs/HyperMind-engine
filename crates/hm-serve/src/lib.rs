@@ -45,3 +45,5 @@ pub mod development_historian;
 pub mod development_scheduler;
 
 pub mod development_retrospective;
+
+pub mod development_service;
