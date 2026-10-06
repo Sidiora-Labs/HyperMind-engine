@@ -59,3 +59,5 @@ pub mod mobile_delivery;
 pub mod role_compaction;
 
 pub mod provider_egress;
+
+pub mod role_transform;
