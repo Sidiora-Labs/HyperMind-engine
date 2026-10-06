@@ -43,3 +43,5 @@ pub mod service_manager;
 pub mod bus_nats;
 
 pub mod federation;
+
+pub mod egress;

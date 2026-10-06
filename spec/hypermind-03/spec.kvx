@@ -952,12 +952,14 @@ result = "Durable role compile and four actual restart behaviors passed: fresh s
 title = "Destination policy and dispatch secret boundaries"
 wave = 3
 owner_lane = "effects"
-status = "pending"
+status = "in_progress"
 requires = ["task.3.5"]
 coverage = ["req.coverage.egress", "req.coverage.credentials"]
 touches = ["crates/hm-fabric/src/egress.rs", "crates/hm-fabric/src/secret_handles.rs", "crates/hm-fabric/tests/egress.rs", "crates/hm-fabric/tests/secret_handles.rs"]
 verify_cmd = "cargo test -p hm-fabric --test egress --test secret_handles"
 acceptance = "Actual destination resolution, redirects and proxies enforce egress policy before unauthorized connections. Dispatch resolves scoped secret handles without exposing values in arguments, logs, evidence or export, while uncertain writes retain uncertainty."
+
+result = "Egress compile and four real local network tests passed for pinned destinations, redirect authorization, bounded responses and explicit HTTP proxy forwarding. HTTPS proxy tunneling refuses. Opaque secret handles and provider, Git and tool consumer integration remain pending."
 
 [task.3.23]
 title = "SDK continuation and uncertain-effect recovery"
