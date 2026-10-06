@@ -5,3 +5,4 @@ export { GrpcConfig, GrpcTransportError } from "./grpc";
 export { render } from "@hypermind/render";
 
 export * from "./context";
+export * from "./continuity";

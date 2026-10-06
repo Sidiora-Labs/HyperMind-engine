@@ -950,7 +950,7 @@ touches = ["sdk/python/hypermind/continuity.py", "sdk/python/tests/test_continui
 verify_cmd = "cargo test -p hm-sim --test sdk_continuity"
 acceptance = "Actual language consumers preserve epochs, cursors, source identity, version refusal, cancellation and typed uncertain effects through reauthentication and restart. Potentially accepted writes are never automatically retried."
 
-result = "Python continuity preserves accepted cursor and generation, source and fork recovery, and uncertain mutation checkpoints. Native compile and focused restart and cancellation journey passed. TypeScript, Go, Swift, remote authentication and aggregate continuity remain pending."
+result = "Python and TypeScript continuity preserve accepted cursor and generation, source and fork recovery, and uncertain mutation checkpoints. Native compile and focused restart and cancellation journeys passed for both languages. Go, Swift, remote authentication and aggregate continuity remain pending."
 
 [task.3.24]
 title = "Native knowledge review and operational views"
@@ -967,7 +967,7 @@ acceptance = "Existing native console navigation consumes real development and o
 title = "Scoped development service and real consumer dispatch"
 wave = 3
 owner_lane = "surface"
-status = "pending"
+status = "in_progress"
 requires = ["task.3.5"]
 coverage = ["req.coverage.auth", "req.coverage.historian"]
 touches = ["crates/hm-serve/src/development_service.rs", "crates/hm-serve/tests/development_service.rs"]
@@ -1215,3 +1215,23 @@ coverage = ["req.coverage.host", "req.coverage.sdk"]
 touches = ["sdk/python/hypermind/development.py", "sdk/python/hypermind/fabric.py", "sdk/python/tests/test_development.py", "sdk/python/tests/test_fabric.py", "crates/hm-sim/tests/development_host.rs"]
 verify_cmd = "cargo test -p hm-sim --test development_host"
 acceptance = "Installed host consumers preserve transcript, provider, tool approval, cancellation, usage and final-delivery ownership while using native development and operational services. Full-host readiness requires every declared supported family."
+
+[task.3.48]
+title = "Repair isolated device mounts and owned namespace teardown"
+wave = 3
+owner_lane = "runtime"
+status = "in_progress"
+requires = ["task.2.4"]
+touches = ["crates/hm-fabric/src/containment/linux.rs", "crates/hm-fabric/tests/containment.rs"]
+verify_cmd = "cargo test -p hm-fabric --test containment"
+acceptance = "A private minimal device filesystem supports real process execution without exposing host devices. Stable namespace-init process handles terminate the owned tree before the outer launcher, without PID reuse risk or unrestricted fallback."
+
+[task.3.49]
+title = "Persist exact verification mapping and source span evidence"
+wave = 3
+owner_lane = "memory"
+status = "in_progress"
+requires = ["task.3.5"]
+touches = ["crates/hm-context/src/development.rs", "crates/hm-serve/src/context_memory.rs", "crates/hm-serve/src/context_memory/imports.rs", "crates/hm-serve/tests/development_admission.rs"]
+verify_cmd = "cargo test -p hm-serve --test development_admission"
+acceptance = "Verification metadata preserves exact source digests, bounded spans and mapping fingerprints through atomic native admission and restart without rewriting original records. Existing verification payloads remain compatible."
