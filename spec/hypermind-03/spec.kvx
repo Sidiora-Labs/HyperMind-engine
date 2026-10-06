@@ -1139,7 +1139,7 @@ touches = ["crates/hm-fabric/src/backend_config.rs", "crates/hm-fabric/tests/bac
 verify_cmd = "cargo test -p hm-fabric --test backend_config"
 acceptance = "Native backend selection validates scoped descriptors, collision-safe identities, least-privilege secret handles and explicit home resolution, and consumes real SQLite or PostgreSQL operational stores."
 
-result = "Backend selection compile and four real tests passed including SQLite and PostgreSQL, exact scoped identity, canonical homes, bounded explicit creation and retained ownership. Process-local bus requires digest references. NATS remains unavailable until its backend lands; native runtime handle integration remains separate."
+result = "Backend selection and actual authenticated worker journeys passed using retained SQLite or PostgreSQL operational ownership and process-local or NATS delivery. Results and receipt outboxes use the selected backend with digest references. Effects remain in the explicit SQLite journal; full PostgreSQL effect migration remains separate."
 
 [task.3.37]
 title = "Peer enrollment and direct or relay federation"

@@ -1,3 +1,6 @@
+use crate::backend_config::BackendReadiness;
+use crate::backend_runtime::{BackendRuntime, BackendRuntimeError, RuntimePublication};
+use crate::bus_nats::NatsReplay;
 use crate::{
     bus::{Bus, Event, Grant},
     effects::{
@@ -13,8 +16,8 @@ use crate::{
     },
 };
 use ed25519_dalek::SigningKey;
-use hm_context::types::{digest_bytes, validate_id, ContextError, Cursor, Scope};
-use rusqlite::{params, OptionalExtension};
+use hm_context::types::{ContextError, Cursor, Scope, digest_bytes, validate_id};
+use rusqlite::{OptionalExtension, params};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -28,10 +31,16 @@ const PRINCIPAL: &str = "runtime";
 const STREAM: &str = "runtime_receipts";
 const RELAY: &str = "runtime_receipt_relay";
 const WORKER_ENV: &str = "HM_FABRIC_WORKER_CONFIG";
-const MIGRATIONS: &[Migration] = &[Migration { version:1, name:"runtime_contracts", sql:"CREATE TABLE runtime_scope(id INTEGER PRIMARY KEY CHECK(id=1), scope TEXT NOT NULL); CREATE TABLE runtime_results(id TEXT PRIMARY KEY, result BLOB NOT NULL);" }];
+const MIGRATIONS: &[Migration] = &[Migration {
+    version: 1,
+    name: "runtime_contracts",
+    sql: "CREATE TABLE runtime_scope(id INTEGER PRIMARY KEY CHECK(id=1), scope TEXT NOT NULL); CREATE TABLE runtime_results(id TEXT PRIMARY KEY, result BLOB NOT NULL);",
+}];
 
 #[derive(Debug, thiserror::Error)]
 pub enum RuntimeError {
+    #[error(transparent)]
+    Backend(#[from] BackendRuntimeError),
     #[error(transparent)]
     Context(#[from] ContextError),
     #[error(transparent)]
@@ -152,9 +161,10 @@ impl RuntimeConfig {
 pub struct RuntimeService {
     config: RuntimeConfig,
     root: CanonicalRoot,
-    owner: FencedStore,
+    owner: Option<FencedStore>,
+    backend: Option<BackendRuntime>,
     effects: EffectStore,
-    bus: Bus,
+    bus: Option<Bus>,
     tools: ToolRegistry,
     runs: RunRegistry,
     router: Router,
@@ -217,9 +227,10 @@ impl RuntimeService {
         let mut service = Self {
             config,
             root,
-            owner,
+            owner: Some(owner),
+            backend: None,
             effects,
-            bus,
+            bus: Some(bus),
             tools,
             runs: RunRegistry::default(),
             router: Router::new(),
@@ -233,14 +244,107 @@ impl RuntimeService {
         service.relay_receipts()?;
         Ok(service)
     }
+    pub fn from_backends(
+        mut config: RuntimeConfig,
+        backend: BackendRuntime,
+    ) -> Result<Self, RuntimeError> {
+        config.scope.validate()?;
+        let root = CanonicalRoot::admit(&config.root)?;
+        if root.path() != backend.home() || config.scope != *backend.scope() {
+            return Err(ContextError::ScopeMismatch.into());
+        }
+        config.root = root.path().to_owned();
+        backend.fence()?;
+        for name in ["effects.sqlite", "effects.sqlite.effects.lock"] {
+            let path = root.path().join(name);
+            check_file(&path)?;
+            use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
+            let file = fs::OpenOptions::new()
+                .read(true)
+                .write(true)
+                .create(true)
+                .truncate(false)
+                .mode(0o600)
+                .open(path)?;
+            file.set_permissions(fs::Permissions::from_mode(0o600))?;
+        }
+        let effects = EffectStore::open(root.path().join("effects.sqlite"))?;
+        let mut tools = ToolRegistry::default();
+        tools.register(digest_contract())?;
+        let mut service = Self {
+            config,
+            root,
+            owner: None,
+            backend: Some(backend),
+            effects,
+            bus: None,
+            tools,
+            runs: RunRegistry::default(),
+            router: Router::new(),
+            supervisor: Supervisor::new(),
+            listener: None,
+            transport: None,
+            binding: None,
+            queued: BTreeSet::new(),
+            in_flight: BTreeMap::new(),
+        };
+        service.relay_receipts()?;
+        Ok(service)
+    }
+    pub fn backend_readiness(&self) -> Result<Option<BackendReadiness>, RuntimeError> {
+        self.backend
+            .as_ref()
+            .map(|backend| backend.readiness().map_err(RuntimeError::from))
+            .transpose()
+    }
+    pub fn backend_publications(
+        &self,
+        limit: u32,
+    ) -> Result<Vec<RuntimePublication>, RuntimeError> {
+        self.backend
+            .as_ref()
+            .ok_or_else(|| RuntimeError::Protocol("selected backend required".into()))?
+            .publications(limit)
+            .map_err(RuntimeError::from)
+    }
+    pub async fn flush_backend_events(&self) -> Result<usize, RuntimeError> {
+        match &self.backend {
+            Some(backend) => Ok(backend.flush_events().await?),
+            None => Ok(0),
+        }
+    }
+    pub async fn events_async(&self, after: u64, limit: u32) -> Result<NatsReplay, RuntimeError> {
+        match &self.backend {
+            Some(backend) => Ok(backend.replay_events(after, limit).await?),
+            None => {
+                let events = self.events(after, limit)?;
+                let cursor = events.last().map_or(after, |event| event.sequence);
+                Ok(NatsReplay {
+                    events,
+                    gaps: vec![],
+                    cursor,
+                })
+            }
+        }
+    }
     pub fn writer_epoch(&self) -> u64 {
-        self.owner.epoch()
+        self.backend.as_ref().map_or_else(
+            || self.owner.as_ref().map_or(0, FencedStore::epoch),
+            BackendRuntime::owner_epoch,
+        )
     }
     pub fn root(&self) -> &Path {
         self.root.path()
     }
     fn fence(&self) -> Result<(), RuntimeError> {
-        self.owner.read(|_| Ok(()))?;
+        if let Some(backend) = &self.backend {
+            backend.fence()?;
+        } else {
+            self.owner
+                .as_ref()
+                .ok_or_else(|| RuntimeError::Protocol("owner missing".into()))?
+                .read(|_| Ok(()))?;
+        }
         Ok(())
     }
     pub async fn launch_worker(
@@ -264,7 +368,7 @@ impl RuntimeService {
             Ok(_) => {
                 return Err(RuntimeError::Protocol(
                     "socket path occupied by non-socket".into(),
-                ))
+                ));
             }
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
             Err(e) => return Err(e.into()),
@@ -362,7 +466,7 @@ impl RuntimeService {
         match self.tools.resolve("digest", &request.pin)? {
             ToolReceipt::Available { .. } => {}
             ToolReceipt::Withdrawn { .. } => {
-                return Err(RuntimeError::Protocol("tool withdrawn".into()))
+                return Err(RuntimeError::Protocol("tool withdrawn".into()));
             }
         }
         let bytes = serde_json::to_vec(&request)?;
@@ -373,7 +477,7 @@ impl RuntimeService {
             match old.state {
                 EffectState::Terminal => return Ok(old),
                 EffectState::Uncertain | EffectState::Dispatched => {
-                    return Err(RuntimeError::Uncertain(old.key))
+                    return Err(RuntimeError::Uncertain(old.key));
                 }
                 EffectState::Prepared => {
                     if self.queued.contains(&request.id) {
@@ -484,6 +588,7 @@ impl RuntimeService {
             self.mark_in_flight_uncertain()?;
             return Err(error.into());
         }
+        self.flush_backend_events().await?;
         Ok(Some(dispatch.call.id))
     }
     pub async fn receive_result(&mut self) -> Result<WorkerResult, RuntimeError> {
@@ -507,6 +612,8 @@ impl RuntimeService {
         let result = self.accept_result(frame);
         if result.is_err() {
             self.mark_in_flight_uncertain()?;
+        } else {
+            self.flush_backend_events().await?;
         }
         result
     }
@@ -536,7 +643,15 @@ impl RuntimeService {
             ));
         }
         let encoded = serde_json::to_vec(&result)?;
-        self.owner.transaction(self.owner.epoch(),|tx|{tx.execute("INSERT INTO runtime_results VALUES(?1,?2) ON CONFLICT(id) DO UPDATE SET result=excluded.result",params![result.id,encoded])?;Ok(())})?;
+        if let Some(backend) = &self.backend {
+            backend.put_result(&result)?;
+        } else {
+            let owner = self
+                .owner
+                .as_mut()
+                .ok_or_else(|| RuntimeError::Protocol("owner missing".into()))?;
+            owner.transaction(owner.epoch(),|tx|{tx.execute("INSERT INTO runtime_results VALUES(?1,?2) ON CONFLICT(id) DO UPDATE SET result=excluded.result",params![result.id,encoded])?;Ok(())})?;
+        }
         self.effects.complete(
             &self.config.scope,
             &result.id,
@@ -575,6 +690,7 @@ impl RuntimeService {
         let id = request.id.clone();
         let intent = self.submit(request)?;
         if intent.state == EffectState::Terminal {
+            self.flush_backend_events().await?;
             return self.result(&id)?.ok_or_else(|| {
                 RuntimeError::Protocol("terminal effect has no successful result".into())
             });
@@ -601,15 +717,22 @@ impl RuntimeService {
         {
             return Ok(None);
         }
-        let bytes: Option<Vec<u8>> = self.owner.read(|db| {
-            Ok(db
-                .query_row(
-                    "SELECT result FROM runtime_results WHERE id=?1",
-                    [id],
-                    |r| r.get(0),
-                )
-                .optional()?)
-        })?;
+        if let Some(backend) = &self.backend {
+            return Ok(backend.result(id)?);
+        }
+        let bytes: Option<Vec<u8>> = self
+            .owner
+            .as_ref()
+            .ok_or_else(|| RuntimeError::Protocol("owner missing".into()))?
+            .read(|db| {
+                Ok(db
+                    .query_row(
+                        "SELECT result FROM runtime_results WHERE id=?1",
+                        [id],
+                        |r| r.get(0),
+                    )
+                    .optional()?)
+            })?;
         bytes
             .map(|b| serde_json::from_slice(&b).map_err(RuntimeError::from))
             .transpose()
@@ -628,7 +751,16 @@ impl RuntimeService {
     }
     pub fn events(&self, after: u64, limit: u32) -> Result<Vec<Event>, RuntimeError> {
         self.fence()?;
-        Ok(self.bus.replay(PRINCIPAL, STREAM, after, limit)?)
+        if self.backend.is_some() {
+            return Err(RuntimeError::Protocol(
+                "selected backend event replay requires events_async".into(),
+            ));
+        }
+        Ok(self
+            .bus
+            .as_ref()
+            .ok_or_else(|| RuntimeError::Protocol("bus missing".into()))?
+            .replay(PRINCIPAL, STREAM, after, limit)?)
     }
     fn mark_in_flight_uncertain(&mut self) -> Result<(), RuntimeError> {
         for (id, version) in &mut self.in_flight {
@@ -717,6 +849,7 @@ impl RuntimeService {
         self.transport.take();
         self.listener.take();
         self.binding.take();
+        self.flush_backend_events().await?;
         Ok(())
     }
     pub fn relay_receipts(&mut self) -> Result<usize, RuntimeError> {
@@ -734,7 +867,14 @@ impl RuntimeService {
                     "receipt-{}-{}",
                     receipt.cursor.epoch, receipt.cursor.sequence
                 );
-                self.bus.append_once(PRINCIPAL, STREAM, &key, &payload)?;
+                if let Some(backend) = &self.backend {
+                    backend.enqueue_receipt(&receipt)?;
+                } else {
+                    self.bus
+                        .as_mut()
+                        .ok_or_else(|| RuntimeError::Protocol("bus missing".into()))?
+                        .append_once(PRINCIPAL, STREAM, &key, &payload)?;
+                }
                 self.effects
                     .acknowledge(&self.config.scope, RELAY, receipt.cursor)?;
                 count += 1;

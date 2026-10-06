@@ -1,5 +1,6 @@
 use crate::bus::{BackendCapabilities, Bus};
 use crate::bus_memory::{MemoryBus, MemoryBusLimits};
+use crate::bus_nats::{NatsBinding, NatsBus, NatsCredentials};
 use crate::postgres::{
     PostgresDescriptor, PostgresError, PostgresOperationalStore, PostgresSecretHandle,
 };
@@ -52,8 +53,17 @@ pub enum OperationalBackendDescriptor {
 #[serde(tag = "backend", rename_all = "snake_case", deny_unknown_fields)]
 pub enum BusBackendDescriptor {
     Sqlite,
-    ProcessLocal { limits: MemoryBusLimits },
-    Nats { server_url: String },
+    ProcessLocal {
+        limits: MemoryBusLimits,
+    },
+    Nats {
+        server_url: String,
+    },
+    ProvisionedNats {
+        server_url: String,
+        binding: NatsBinding,
+        secret_ref: String,
+    },
 }
 #[derive(Debug, thiserror::Error)]
 pub enum BackendConfigError {
@@ -157,7 +167,8 @@ pub fn validate_descriptor(
                 ));
             }
         }
-        BusBackendDescriptor::Nats { server_url } => {
+        BusBackendDescriptor::Nats { server_url }
+        | BusBackendDescriptor::ProvisionedNats { server_url, .. } => {
             if server_url.len() > 2048
                 || !server_url.starts_with("nats://")
                 || server_url.contains(['@', '?', '#', '%'])
@@ -169,6 +180,17 @@ pub fn validate_descriptor(
             }
         }
         BusBackendDescriptor::Sqlite => {}
+    }
+    if let BusBackendDescriptor::ProvisionedNats {
+        binding,
+        secret_ref,
+        ..
+    } = &descriptor.bus
+    {
+        validate_id(secret_ref)?;
+        if binding.scope != descriptor.scope {
+            return Err(BackendConfigError::IdentityMismatch);
+        }
     }
     let path = if descriptor.home.path.is_absolute() {
         if descriptor.home.base.is_some() {
@@ -233,6 +255,7 @@ pub enum SelectedOperationalStore {
 pub enum SelectedBus {
     Sqlite(Bus),
     ProcessLocal(MemoryBus),
+    Nats(NatsBus),
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BackendReadiness {
@@ -305,6 +328,7 @@ impl SelectedBackends {
         let bus_capabilities = match &self.bus {
             SelectedBus::Sqlite(bus) => bus.capabilities(),
             SelectedBus::ProcessLocal(bus) => bus.capabilities(),
+            SelectedBus::Nats(bus) => bus.capabilities(),
         };
         Ok(BackendReadiness {
             identity_digest: self.digest.clone(),
@@ -316,17 +340,17 @@ impl SelectedBackends {
     }
 }
 
-pub fn select_backend(
+struct PreparedBackends {
+    validated: ValidatedDescriptor,
+    home: CanonicalRoot,
+    owner: FencedStore,
+    operational: SelectedOperationalStore,
+}
+fn prepare_backend(
     validated: ValidatedDescriptor,
     migrations: &[Migration],
     mut resolve_secret: impl FnMut(&str) -> Result<PostgresSecretHandle, BackendConfigError>,
-) -> Result<SelectedBackends, BackendConfigError> {
-    if matches!(&validated.descriptor.bus, BusBackendDescriptor::Nats { .. }) {
-        return Err(BackendConfigError::Unavailable {
-            backend: "nats".into(),
-            reason: "native selection requires an authenticated provisioned NATS adapter".into(),
-        });
-    }
+) -> Result<PreparedBackends, BackendConfigError> {
     let secret = match &validated.descriptor.operational {
         OperationalBackendDescriptor::Postgres { secret_ref, .. } => {
             Some(resolve_secret(secret_ref)?)
@@ -371,6 +395,23 @@ pub fn select_backend(
             )?)
         }
     };
+    Ok(PreparedBackends {
+        validated,
+        home,
+        owner,
+        operational,
+    })
+}
+fn finish_backend(
+    prepared: PreparedBackends,
+    remote: Option<NatsBus>,
+) -> Result<SelectedBackends, BackendConfigError> {
+    let PreparedBackends {
+        validated,
+        home,
+        owner,
+        operational,
+    } = prepared;
     let bus = match &validated.descriptor.bus {
         BusBackendDescriptor::Sqlite => {
             private_file(&home.path().join("backend-bus.sqlite"))?;
@@ -383,11 +424,13 @@ pub fn select_backend(
         BusBackendDescriptor::ProcessLocal { limits } => {
             SelectedBus::ProcessLocal(MemoryBus::new(validated.descriptor.scope.clone(), *limits)?)
         }
+        BusBackendDescriptor::ProvisionedNats { .. } => {
+            SelectedBus::Nats(remote.ok_or(BackendConfigError::SecretUnavailable)?)
+        }
         BusBackendDescriptor::Nats { .. } => {
             return Err(BackendConfigError::Unavailable {
                 backend: "nats".into(),
-                reason: "native selection requires an authenticated provisioned NATS adapter"
-                    .into(),
+                reason: "preprovisioned scoped binding and secret handle required".into(),
             });
         }
     };
@@ -402,6 +445,59 @@ pub fn select_backend(
     };
     selected.readiness()?;
     Ok(selected)
+}
+pub fn select_backend(
+    validated: ValidatedDescriptor,
+    migrations: &[Migration],
+    resolve_secret: impl FnMut(&str) -> Result<PostgresSecretHandle, BackendConfigError>,
+) -> Result<SelectedBackends, BackendConfigError> {
+    if matches!(
+        &validated.descriptor.bus,
+        BusBackendDescriptor::Nats { .. } | BusBackendDescriptor::ProvisionedNats { .. }
+    ) {
+        return Err(BackendConfigError::Unavailable {
+            backend: "nats".into(),
+            reason: "authenticated NATS selection requires the async constructor".into(),
+        });
+    }
+    finish_backend(
+        prepare_backend(validated, migrations, resolve_secret)?,
+        None,
+    )
+}
+pub async fn select_backend_async(
+    validated: ValidatedDescriptor,
+    migrations: &'static [Migration],
+    resolve_postgres: impl FnMut(&str) -> Result<PostgresSecretHandle, BackendConfigError>
+    + Send
+    + 'static,
+    mut resolve_nats: impl FnMut(&str) -> Result<NatsCredentials, BackendConfigError>,
+) -> Result<SelectedBackends, BackendConfigError> {
+    let remote = match &validated.descriptor.bus {
+        BusBackendDescriptor::ProvisionedNats {
+            server_url,
+            binding,
+            secret_ref,
+        } => Some(NatsBus::connect(server_url, binding.clone(), resolve_nats(secret_ref)?).await?),
+        BusBackendDescriptor::Nats { .. } => {
+            return Err(BackendConfigError::Unavailable {
+                backend: "nats".into(),
+                reason: "preprovisioned scoped binding and secret handle required".into(),
+            });
+        }
+        _ => None,
+    };
+    tokio::task::spawn_blocking(move || {
+        finish_backend(
+            prepare_backend(validated, migrations, resolve_postgres)?,
+            remote,
+        )
+    })
+    .await
+    .map_err(|_| BackendConfigError::Unavailable {
+        backend: "operational".into(),
+        reason: "backend selection worker stopped".into(),
+    })?
 }
 fn create_home(validated: &ValidatedDescriptor) -> Result<CanonicalRoot, BackendConfigError> {
     if validated.missing_components == 0 {
