@@ -613,11 +613,13 @@ qualification = "Library compile and three actual embedded/callback tests passed
 title = "OSS Gideon host context ownership adapter"
 wave = 2
 owner_lane = "supervisor"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["sdk/python/hypermind/gideon.py", "sdk/python/tests/test_gideon_context.py"]
 verify_cmd = "python3 -m unittest discover -s sdk/python/tests -p test_gideon_context.py"
 acceptance = "The host adapter imports authoritative messages, applies native provider context, reserves output budget, suppresses competing compaction only under explicit ownership, and preserves source identity across retries, edits, forks and resume."
+
+qualification = "One real OSS Gideon host/native-engine journey passed using its actual conversation journal, prompt assembler and context registry. It exercised imports, ownership, retries, output reservation, edits, exact originals, frozen forks and fresh adapter restart. Streamed provider execution and the full host seam matrix remain outstanding."
 
 [task.2.10]
 title = "Lossless temporal contract across memory operations"
