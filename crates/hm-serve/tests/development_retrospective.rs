@@ -153,7 +153,7 @@ fn provider() -> Arc<dyn LlmProvider> {
         Ollama::new(
             ProviderConfig {
                 endpoint: std::env::var("HM_TEST_OLLAMA_ENDPOINT")
-                    .unwrap_or_else(|_| "http://127.0.0.1:11439/api/chat".into()),
+                    .expect("set HM_TEST_OLLAMA_ENDPOINT to the configured local generation endpoint"),
                 api_key: None,
                 model: std::env::var("HM_TEST_OLLAMA_MODEL")
                     .unwrap_or_else(|_| "qwen2.5:3b".into()),

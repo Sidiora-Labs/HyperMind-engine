@@ -51,7 +51,9 @@ fn exact_profile_tool_occurrences_and_original_recovery() {
 #[tokio::test]
 async fn actual_local_text_generation_has_measured_output_ceiling() {
     let client=reqwest::Client::builder().timeout(std::time::Duration::from_secs(45)).build().unwrap();
-    let response=client.post("http://127.0.0.1:11439/api/generate").json(&serde_json::json!({"model":"qwen2.5:3b","prompt":"Reply with one short word.","stream":false,"options":{"num_predict":8,"temperature":0}})).send().await.unwrap().error_for_status().unwrap();
+    let endpoint=std::env::var("HM_TEST_OLLAMA_ENDPOINT").expect("set HM_TEST_OLLAMA_ENDPOINT to the configured local generation endpoint");
+    let mut endpoint=reqwest::Url::parse(&endpoint).unwrap();endpoint.set_path("/api/generate");
+    let response=client.post(endpoint).json(&serde_json::json!({"model":"qwen2.5:3b","prompt":"Reply with one short word.","stream":false,"options":{"num_predict":8,"temperature":0}})).send().await.unwrap().error_for_status().unwrap();
     let observation:serde_json::Value=response.json().await.unwrap();
     assert_eq!(observation["done"],true);
     assert!(observation["prompt_eval_count"].as_u64().unwrap()>0);

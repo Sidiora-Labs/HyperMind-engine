@@ -107,7 +107,7 @@ async fn real_repository_review_stale_refusal_owner_application_and_receipt() {
         Arc::new(
             Ollama::new(
                 ProviderConfig {
-                    endpoint: "http://127.0.0.1:11439/api/chat".into(),
+                    endpoint: std::env::var("HM_TEST_OLLAMA_ENDPOINT").expect("set HM_TEST_OLLAMA_ENDPOINT to the configured local generation endpoint"),
                     api_key: None,
                     model: "qwen2.5:3b".into(),
                     tier: ModelTier::Economy,
