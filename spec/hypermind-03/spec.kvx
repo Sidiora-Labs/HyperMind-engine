@@ -397,11 +397,13 @@ qualification = "Native import and memory migration tests passed six real cases,
 title = "Complete SDK and OSS Gideon integration"
 wave = 2
 owner_lane = "integration"
-status = "in_progress"
+status = "done"
 requires = ["task.2.5", "task.2.6", "task.2.7", "task.2.8", "task.2.9", "task.2.10"]
 touches = ["sdk"]
 verify_cmd = "cargo test -p hm-sim --test unified_sdk_journey"
 acceptance = "Python, TypeScript, Rust, Go and Swift paths demonstrate version negotiation, source ingestion, context ownership, restart and exact recovery against the same implementation; unsupported surfaces are explicitly reported."
+
+qualification = "Scoped compile and one combined journey passed seven real routes: Rust embedded, Python embedded and mTLS, TypeScript embedded and local socket, Go local socket, and Swift C ABI. Common scope, version, source digest, exact nanoseconds, binary originals, idempotence and context digest survived daemon restart and embedded reopen. Apple and mobile runtime matrices remain unqualified."
 
 [task.2.3]
 title = "Unified source retrieval and embedding lifecycle"
