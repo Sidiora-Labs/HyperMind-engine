@@ -397,7 +397,7 @@ qualification = "Native import and memory migration tests passed six real cases,
 title = "Complete SDK and OSS Gideon integration"
 wave = 2
 owner_lane = "integration"
-status = "pending"
+status = "in_progress"
 requires = ["task.2.5", "task.2.6", "task.2.7", "task.2.8", "task.2.9", "task.2.10"]
 touches = ["sdk"]
 verify_cmd = "cargo test -p hm-sim --test unified_sdk_journey"
@@ -420,7 +420,7 @@ title = "Wave 2 integration"
 wave = 2
 owner_lane = "integration"
 status = "pending"
-requires = ["task.2.1","task.2.2","task.2.3", "task.2.11", "task.2.12", "task.2.13", "task.2.14", "task.2.15"]
+requires = ["task.2.1","task.2.2","task.2.3", "task.2.11", "task.2.12", "task.2.13", "task.2.14", "task.2.15", "task.2.17"]
 touches = ["crates/hm-sim/tests/unified_memory_journey.rs"]
 verify_cmd = "cargo test -p hm-sim --test unified_memory_journey"
 acceptance = "One live host journey exercises all wave-2 consumers with real persistence and qualified SDK paths."
@@ -710,3 +710,13 @@ verify_cmd = "swift test --package-path sdk/swift --filter Context"
 acceptance = "Typed Swift errors preserve the actual native error code, bounded message and effect state without leaking complete request content. The real context journey identifies the failing operation and verifies the corrected contract."
 
 qualification = "Actual Swift engine journey passed after preserving bounded operation error details and correcting the current typed import row and receipt contract. Raw request content remains excluded from errors."
+
+[task.2.17]
+title = "Runnable configured local and remote embedding providers"
+wave = 2
+owner_lane = "retrieval"
+status = "in_progress"
+requires = ["task.2.3", "task.2.12"]
+touches = ["crates/hm-mcp/src/tools/remember.rs", "crates/hm-mcp/tests/context_embedding_runtime.rs"]
+verify_cmd = "cargo test -p hm-mcp --test context_embedding_runtime"
+acceptance = "Operator configuration selects explicit off, verified local or remote-compatible embedding runtimes for the actual daemon. Real local inference drives scoped source registration, backfill and retrieval through existing tool consumers; invalid or unavailable configuration fails visibly without model substitution or secret disclosure."
