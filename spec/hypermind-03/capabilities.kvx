@@ -17,10 +17,10 @@ remaining = "Cross-platform aliases and all executable admission paths still req
 
 [req.coverage.storage]
 status = "implemented_focused"
-tasks = ["task.2.1", "task.3.2"]
-current_paths = ["crates/hm-ledger/src/lib.rs", "crates/hm-fabric/src/storage.rs"]
+tasks = ["task.2.1", "task.3.36", "task.3.2"]
+current_paths = ["crates/hm-ledger/src/lib.rs", "crates/hm-fabric/src/storage.rs", "crates/hm-fabric/src/backend_config.rs", "crates/hm-fabric/src/backend_runtime.rs", "crates/hm-fabric/src/effects.rs"]
 acceptance = "The event ledger owns durable memory. Operational descriptors omit administrator secrets, bind backend and isolation, and declare home resolution. SQLite schema changes are ordered, checksum checked and transactional; newer unsupported state opens a documented recovery path."
-remaining = "Operational stores must share declared writer ownership; complete descriptor and platform qualification remains pending."
+remaining = "Selected SQLite and PostgreSQL owners now retain operational records, results and effects; actual worker and PostgreSQL crash/reopen gates passed. Network interruption during commit, broader platform coverage and aggregate release qualification remain pending."
 
 [req.coverage.postgres]
 status = "pending"
@@ -75,10 +75,10 @@ remaining = "All host lifecycle hooks, child usage attribution and contribution 
 
 [req.coverage.context_mode]
 status = "integration_pending"
-tasks = ["task.2.2", "task.4.3"]
-current_paths = ["crates/hm-serve/src/context_config.rs", "crates/hm-serve/src/session_context.rs"]
+tasks = ["task.2.2", "task.3.46", "task.4.3"]
+current_paths = ["crates/hm-serve/src/context_config.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/continuity_service.rs", "sdk/python/hypermind/continuity_host.py"]
 acceptance = "Off and pass-through retain existing host provider input. Shadow compares derived results without publishing, model calls or serving-cursor advance. Primary dispatch requires a verified projection or explicit policy refusal. Independent feature flags change only at turn boundaries."
-remaining = "Complete mode enforcement across native host turn variants is pending."
+remaining = "The installed host preserves off/pass-through bytes and qualifies read-only shadow comparison with boundary policy changes. Hosts without failure-refusing hooks reject primary mode. Primary host serving, cancellation and all turn variants remain unqualified."
 
 [req.coverage.diagnostics]
 status = "integration_pending"
@@ -204,11 +204,11 @@ acceptance = "Load external model catalogs with provider capabilities, modality 
 remaining = "Existing provider registry does not establish complete external catalog and price contract parity."
 
 [req.coverage.usage]
-status = "pending"
-tasks = ["task.3.2"]
-current_paths = ["crates/hm-llm/src/cost.rs", "crates/hm-cortex/src/budget.rs", "crates/hm-context/src/maintenance.rs"]
+status = "integration_pending"
+tasks = ["task.3.34", "task.3.45", "task.3.2"]
+current_paths = ["crates/hm-llm/src/provider_usage.rs", "crates/hm-serve/src/usage_service.rs", "crates/hm-serve/src/development_usage.rs", "crates/hm-fabric/src/role_runner.rs"]
 acceptance = "Preserve quota windows, refill timing, balances, token/cache categories, funding provenance, account scope, staleness and in-band errors. Reserve foreground and background cost and concurrency before dispatch; unknown charges stay reserved until reconciled. Store per-turn attribution for host rollups."
-remaining = "Full provider/account usage contract, exact rollups and model-budget consumer integration are pending."
+remaining = "Original historian, extraction and authenticated runner observations settle existing reservations once and retain unknown holds across restart. Generic worker capture, account-wide quota coverage, public exact rollups and complete model-budget consumers remain pending."
 
 [req.coverage.push]
 status = "pending"
@@ -246,18 +246,18 @@ acceptance = "Enroll named peers explicitly with mutual TLS, reviewed expiring g
 remaining = "Existing TLS server is not federated routing, device enrollment or relay qualification."
 
 [req.coverage.mobile]
-status = "pending"
-tasks = ["task.3.2", "task.4.2"]
-current_paths = ["sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+status = "integration_pending"
+tasks = ["task.3.38", "task.3.2", "task.4.2"]
+current_paths = ["crates/hm-context/src/mobile_journal.rs", "crates/hm-fabric/src/mobile_delivery.rs", "crates/hm-capi/src/mobile_journal.rs", "sdk/swift/Sources/HyperMind/MobileJournal.swift"]
 acceptance = "Maintain an outbound encrypted mobile connection with a durable local mutation journal. Reconcile unsettled mutations before admitting another write after resume; preserve unknown outcomes. Native inspection is one-column with usable filters, persistent connection status and review actions."
-remaining = "Embedded Swift support is present; phone federation, mutation reconciliation and native mobile journeys are pending."
+remaining = "Native Rust and Swift Linux journal consumers passed actual encrypted peer interruption, reopen and receipt reconciliation. Production endpoint integration, Apple platforms, handset lifecycle, background wake and native inspection UI remain pending."
 
 [req.coverage.sdk]
 status = "integration_pending"
-tasks = ["task.2.2", "task.4.3"]
+tasks = ["task.2.2", "task.3.23", "task.3.38", "task.3.47", "task.4.3"]
 current_paths = ["sdk/python/hypermind/context.py", "sdk/typescript/packages/client/src/context.ts", "crates/hm-serve/src/embedded.rs", "sdk/go", "sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
 acceptance = "Rust, Python, TypeScript, Go and Swift preserve version negotiation, frame bounds, event order, source digests, cursors, cancellations and typed effect uncertainty. Reconnect reauthenticates and invalidates old epochs. Shared vectors and real daemon restart journeys qualify each language independently."
-remaining = "Main task.2.2 names Rust/Python/TypeScript/Go only; Swift scoped context, streaming transport and reconnect must be added before complete parity."
+remaining = "Selected Rust, Python, TypeScript, Go and Swift routes passed native continuity and supported restart journeys. Swift encrypted journal reconciliation is qualified on Linux. Full development/operational consumers, in-flight Swift cancellation, Apple platforms and complete language parity remain pending."
 
 [req.coverage.host]
 status = "pending"
