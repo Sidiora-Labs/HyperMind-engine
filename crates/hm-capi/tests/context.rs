@@ -25,7 +25,8 @@ fn close(engine: *mut HmEngine) {
     assert_eq!(unsafe { hm_engine_close(engine) }, HmStatus::Ok);
     unsafe { hm_engine_free(engine) };
 }
-fn call(engine: *mut HmEngine, verb: &str, arguments: Value) -> Value {
+fn call(engine: *mut HmEngine, verb: &str, mut arguments: Value) -> Value {
+    if verb == "remember" { arguments["kind"] = json!("user"); }
     let verb = CString::new(verb).unwrap();
     let args = CString::new(arguments.to_string()).unwrap();
     let waiter = hm_waiter_new();

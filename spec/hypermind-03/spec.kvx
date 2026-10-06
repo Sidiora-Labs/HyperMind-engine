@@ -595,11 +595,13 @@ acceptance = "The Swift embedded consumer preserves scoped ownership, exact time
 title = "Rust and C ABI trusted context integration"
 wave = 2
 owner_lane = "provider"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["crates/hm-serve/src/embedded.rs", "crates/hm-capi"]
 verify_cmd = "cargo test -p hm-capi --test context"
 acceptance = "Embedded constructors configure trusted scope before calls; Rust and C ABI clients use the same source, mutation, context, job and recovery contracts with unchanged fourteen tool verbs."
+
+qualification = "Library compile and three actual embedded/callback tests passed, including exact bytes, scoped source ingestion, context, jobs, restart and scope refusal. Import and relation wrappers remain subject to aggregate SDK qualification."
 
 [task.2.9]
 title = "OSS Gideon host context ownership adapter"
