@@ -48,7 +48,16 @@ fn default_model() -> String {
     "gpt-4o".into()
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
+struct AcceptedKnowledge {
+    plans: Vec<hm_context::knowledge_injection::KnowledgePlan>,
+    cues: Vec<hm_context::memory_cues::CuePlan>,
+    blocks: Vec<ContextBlock>,
+    policy_digest: String,
+}
+#[derive(Clone, Debug, Serialize, Deserialize)]
 struct Binding {
+    #[serde(default)]
+    knowledge: Option<AcceptedKnowledge>,
     request: SessionContextRequest,
     conversation: String,
 }
@@ -197,11 +206,30 @@ pub async fn activate_with_provider(
             }
         }
     }
-    let binding = Binding {
+    let knowledge = if request.generation == 0 {
+        None
+    } else {
+        existing
+            .get(&request.session_id)
+            .filter(|b| {
+                b.request.model_id == request.model_id
+                    && b.request.budget == request.budget
+                    && b.request.memory_scopes == request.memory_scopes
+                    && b.request.required_message_ids == request.required_message_ids
+                    && serde_json::to_value(b.request.profile).ok()
+                        == serde_json::to_value(request.profile).ok()
+            })
+            .and_then(|b| b.knowledge.clone())
+    };
+    let mut binding = Binding {
+        knowledge,
         request,
         conversation: conversation.into(),
     };
     let result = assemble(actor, &binding, provider).await?;
+    binding.knowledge = Some(
+        serde_json::from_value(result["knowledge"]["accepted"].clone()).map_err(|_| invalid())?,
+    );
     let content = serde_json::to_vec(&binding).map_err(|_| invalid())?;
     if existing
         .get(&binding.request.session_id)
@@ -461,12 +489,35 @@ async fn assemble(
         now_ns,
         required_ids: required,
         memory_views,
-        projection_request,
+        mut projection_request,
         memory_scopes,
         facts,
         memory_fence,
         ..
     } = materialization;
+    let mut accepted_knowledge = match &binding.knowledge {
+        Some(accepted) => {
+            validate_accepted_knowledge(actor, accepted).await?;
+            accepted.clone()
+        }
+        None => {
+            build_knowledge(
+                actor,
+                request,
+                &history,
+                &memory_scopes,
+                &projection_request.required_blocks,
+            )
+            .await?
+        }
+    };
+    projection_request.policy_revision = digest_bytes(
+        &serde_json::to_vec(&(
+            &projection_request.policy_revision,
+            &accepted_knowledge.policy_digest,
+        ))
+        .map_err(|_| invalid())?,
+    );
     let initial = crate::context_projection::assemble(
         actor,
         &history,
@@ -566,7 +617,23 @@ async fn assemble(
     let (evidence, evidence_gaps, evidence_omissions, retrieval_view) =
         retrieve(actor, binding, &history, &tokenizer, provider).await?;
     gaps.extend(evidence_gaps);
+    for plan in &mut accepted_knowledge.plans {
+        plan.generation = projection.generation;
+        plan.digest.clear();
+        plan.digest = digest_bytes(&serde_json::to_vec(plan).map_err(|_| invalid())?);
+    }
+    for cue in &mut accepted_knowledge.cues {
+        cue.generation = projection.generation;
+        cue.digest = cue.computed_digest().map_err(map)?;
+    }
     let mut blocks = projection.blocks.clone();
+    blocks.extend(
+        accepted_knowledge
+            .blocks
+            .iter()
+            .filter(|b| !projection.blocks.iter().any(|old| old.id == b.id))
+            .cloned(),
+    );
     for block in evidence {
         if !blocks.iter().any(|existing| existing.id == block.id) {
             blocks.push(block);
@@ -644,6 +711,7 @@ async fn assemble(
     if final_memory_fence != memory_fence {
         return Err(Error::new(ErrorCode::SequenceViolation));
     }
+    validate_accepted_knowledge(actor, &accepted_knowledge).await?;
     let final_jobs =
         crate::context_jobs::inspect_state(actor, &request.scope, &request.scope.owner_id).await?;
     if final_history.history.export_canonical().map_err(map)?
@@ -662,7 +730,7 @@ async fn assemble(
         .collect::<Result<Vec<_>, _>>()
         .map_err(map)?;
     Ok(
-        json!({"version":CONTRACT_VERSION,"session_id":request.session_id,"ledger_tail":final_tail.get(),"report":rendered.report,"messages":rendered.messages,"history":{"message_count":source_messages.len(),"cursor":history.cursor(),"parent":history.parent(),"relations":history.relations(),"source_spans":spans},"coverage":temporal,"cache":{"available":true,"generation":projection.generation,"fence":projection.fence,"replayed":projection.replayed,"pending_reductions":projection.pending_reductions,"coverage":projection.coverage,"materialization_digest":digest_bytes(&projection.bytes)},"jobs":{"available":true,"state":jobs},"memory":{"available":true,"scopes":memory_views},"retrieval":retrieval_view,"provenance":uris,"migrations":{"available":true,"recent_receipts":migrations},"gaps":gaps}),
+        json!({"version":CONTRACT_VERSION,"session_id":request.session_id,"ledger_tail":final_tail.get(),"report":rendered.report,"messages":rendered.messages,"history":{"message_count":source_messages.len(),"cursor":history.cursor(),"parent":history.parent(),"relations":history.relations(),"source_spans":spans},"coverage":temporal,"cache":{"available":true,"generation":projection.generation,"fence":projection.fence,"replayed":projection.replayed,"pending_reductions":projection.pending_reductions,"coverage":projection.coverage,"materialization_digest":digest_bytes(&projection.bytes)},"jobs":{"available":true,"state":jobs},"memory":{"available":true,"scopes":memory_views},"retrieval":retrieval_view,"knowledge":{"available":true,"observed_use":"not_recorded_by_assembly","accepted":accepted_knowledge},"provenance":uris,"migrations":{"available":true,"recent_receipts":migrations},"gaps":gaps}),
     )
 }
 
@@ -920,4 +988,280 @@ pub async fn inspect_memory(
     };
     crate::context_projection::validate_tail(actor, tail).await?;
     Ok(value)
+}
+
+async fn validate_accepted_knowledge(
+    actor: &ActorEngine,
+    accepted: &AcceptedKnowledge,
+) -> Result<(), Error> {
+    for plan in &accepted.plans {
+        for selected in &plan.selected {
+            let record = crate::knowledge_injection::exact_recall(
+                actor,
+                &plan.scope,
+                &plan.principal,
+                &selected.id,
+            )
+            .await
+            .map_err(memory_error)?
+            .ok_or_else(|| Error::new(ErrorCode::SequenceViolation))?;
+            if record.revision_digest != selected.revision_digest
+                || record.status != crate::context_memory::RecordStatus::Active
+            {
+                return Err(Error::new(ErrorCode::SequenceViolation));
+            }
+            let memory = crate::context_memory::rebuild(actor, &plan.scope)
+                .await
+                .map_err(memory_error)?;
+            for provenance in &record.provenance {
+                let source = memory
+                    .sources
+                    .get(&provenance.source_id)
+                    .ok_or_else(invalid)?;
+                if let Some(locator) = source.locator.strip_prefix("conversation:") {
+                    let suffix = format!(":{}", source.id);
+                    let session = locator.strip_suffix(&suffix).ok_or_else(invalid)?;
+                    let conversations: std::collections::BTreeSet<_> = memory
+                        .worker_capabilities
+                        .values()
+                        .filter(|cap| {
+                            cap.scope == plan.scope
+                                && cap.session_id == session
+                                && cap.source_ids.contains(&source.id)
+                        })
+                        .map(|cap| cap.conversation.clone())
+                        .collect();
+                    if conversations.len() != 1 {
+                        return Err(Error::new(ErrorCode::OperationUnavailable));
+                    }
+                    let conversation = conversations.iter().next().ok_or_else(invalid)?;
+                    let original =
+                        crate::context_history::replay(actor, &plan.scope, session, conversation)
+                            .await
+                            .map_err(history_error)?;
+                    if !original
+                        .history
+                        .visible_messages()
+                        .iter()
+                        .any(|m| m.id == source.id)
+                    {
+                        return Err(Error::new(ErrorCode::SequenceViolation));
+                    }
+                    let span = original.history.source_span(&source.id).map_err(map)?;
+                    if digest_bytes(&original.history.recover(&plan.scope, &span).map_err(map)?)
+                        != source.digest
+                    {
+                        return Err(Error::new(ErrorCode::SequenceViolation));
+                    }
+                }
+            }
+        }
+    }
+    for cue in &accepted.cues {
+        cue.validate().map_err(map)?;
+    }
+    Ok(())
+}
+async fn build_knowledge(
+    actor: &ActorEngine,
+    request: &SessionContextRequest,
+    history: &SourceHistory,
+    scopes: &[Scope],
+    required: &[ContextBlock],
+) -> Result<AcceptedKnowledge, Error> {
+    use hm_context::{
+        knowledge_injection::VisibleEvidence,
+        memory_cues::{CueProfile, CueRecord, CueSnapshot, CueSource, build_cues},
+    };
+    let tokenizer = hm_compose::tokens::TokenCounter::for_model(
+        &request.model_id,
+        None,
+        hm_compose::tokens::FallbackWeights::default(),
+    )?;
+    if matches!(tokenizer, hm_compose::tokens::TokenCounter::Fallback { .. }) {
+        return Err(Error::new(ErrorCode::OperationUnavailable));
+    }
+    let counter = |bytes: &[u8]| {
+        tokenizer
+            .count(bytes)
+            .map(|n| n as u64)
+            .map_err(|_| ContextError::Unavailable("knowledge tokenizer".into()))
+    };
+    let mut accepted = AcceptedKnowledge {
+        plans: vec![],
+        cues: vec![],
+        blocks: vec![],
+        policy_digest: String::new(),
+    };
+    let protected_blocks = required
+        .iter()
+        .try_fold(0u64, |sum, block| {
+            counter(&serde_json::to_vec(block)?)
+                .and_then(|n| sum.checked_add(n).ok_or(ContextError::Capacity))
+        })
+        .map_err(map)?;
+    let mut protected_messages = 0u64;
+    for message in history.visible_messages() {
+        if request.required_message_ids.contains(&message.id)
+            || history
+                .visible_messages()
+                .last()
+                .is_some_and(|last| last.id == message.id)
+        {
+            protected_messages = protected_messages
+                .checked_add(
+                    counter(&serde_json::to_vec(message).map_err(|_| invalid())?).map_err(map)?,
+                )
+                .ok_or_else(invalid)?;
+        }
+    }
+    let mut remaining = request
+        .budget
+        .available()
+        .map_err(map)?
+        .saturating_sub(protected_blocks.saturating_add(protected_messages))
+        / 4;
+    let visible = VisibleEvidence {
+        records: vec![],
+        source_spans: history
+            .visible_messages()
+            .iter()
+            .map(|m| history.source_span(&m.id))
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(map)?,
+    };
+    for scope in scopes {
+        let memory = crate::context_memory::rebuild(actor, scope)
+            .await
+            .map_err(memory_error)?;
+        let mut frozen = crate::knowledge_injection::snapshot(
+            actor,
+            scope,
+            &request.scope,
+            &request.session_id,
+            1,
+        )
+        .await
+        .map_err(memory_error)?;
+        frozen.records.retain(|r| {
+            memory.records.get(&r.id).is_some_and(|record| {
+                matches!(
+                    record.kind,
+                    crate::context_memory::RecordKind::Fact
+                        | crate::context_memory::RecordKind::Episode
+                ) && !record.pinned
+            })
+        });
+        frozen.seal().map_err(map)?;
+        let plan = hm_context::knowledge_injection::select_knowledge(
+            &frozen, remaining, &visible, &counter,
+        )
+        .map_err(map)?;
+        let mut cue_records = vec![];
+        for block in &plan.blocks {
+            let record = &memory.records[&block.id];
+            if record.metadata.get("context_cue").and_then(Value::as_bool) == Some(true) {
+                let mut sources = vec![];
+                for p in &record.provenance {
+                    let source = memory.sources.get(&p.source_id).ok_or_else(invalid)?;
+                    let bytes = usize::try_from(p.span_start)
+                        .ok()
+                        .zip(usize::try_from(p.span_end).ok())
+                        .and_then(|(start, end)| source.content.get(start..end))
+                        .ok_or_else(invalid)?;
+                    if digest_bytes(bytes) != p.quoted_digest
+                        || digest_bytes(&source.content) != p.source_digest
+                    {
+                        return Err(Error::new(ErrorCode::SequenceViolation));
+                    }
+                    sources.push(CueSource {
+                        id: p.source_id.clone(),
+                        digest: p.source_digest.clone(),
+                        start: p.span_start,
+                        end: p.span_end,
+                        quoted_digest: p.quoted_digest.clone(),
+                        bytes: bytes.to_vec(),
+                    });
+                }
+                cue_records.push(CueRecord {
+                    id: record.id.clone(),
+                    revision: record.revision,
+                    revision_digest: record.revision_digest.clone(),
+                    content: record.content.clone(),
+                    authority: record.authority,
+                    sources,
+                });
+            } else {
+                let mut block = block.clone();
+                block.id = knowledge_block_id(scope, &record.id)?;
+                if !required.iter().any(|r| r.id == block.id) {
+                    accepted.blocks.push(block);
+                }
+            }
+        }
+        if !cue_records.is_empty() {
+            let cue = build_cues(
+                &CueSnapshot {
+                    scope: scope.clone(),
+                    principal: request.scope.clone(),
+                    permission_digest: digest_bytes(
+                        &serde_json::to_vec(&memory.grants).map_err(|_| invalid())?,
+                    ),
+                    records: cue_records,
+                },
+                CueProfile {
+                    model_id: request.model_id.clone(),
+                    max_cue_bytes: 256,
+                    request_visual: false,
+                },
+                TokenBudget {
+                    context_tokens: remaining.saturating_add(1),
+                    reserved_output_tokens: 1,
+                    required_tokens: 0,
+                },
+                1,
+                &counter,
+            )
+            .map_err(map)?;
+            for compact in &cue.cues {
+                let original = plan
+                    .blocks
+                    .iter()
+                    .find(|b| b.id == compact.record_id)
+                    .ok_or_else(invalid)?;
+                accepted.blocks.push(ContextBlock {
+                    id: knowledge_block_id(scope, &compact.record_id)?,
+                    text: format!(
+                        "Memory cue{}; exact recall {}\n{}",
+                        if compact.truncated {
+                            " (truncated)"
+                        } else {
+                            ""
+                        },
+                        compact.record_id,
+                        compact.text
+                    ),
+                    authority: compact.authority,
+                    provenance: original.provenance.clone(),
+                    tokens: 0,
+                    required: false,
+                });
+            }
+            accepted.cues.push(cue);
+        }
+        remaining = remaining.saturating_sub(plan.token_count);
+        accepted.plans.push(plan);
+    }
+    accepted.policy_digest = digest_bytes(
+        &serde_json::to_vec(&(&accepted.plans, &accepted.cues, &accepted.blocks))
+            .map_err(|_| invalid())?,
+    );
+    Ok(accepted)
+}
+fn knowledge_block_id(scope: &Scope, id: &str) -> Result<String, Error> {
+    Ok(format!(
+        "knowledge:{}:{}",
+        scope.digest().map_err(map)?,
+        digest_bytes(id.as_bytes())
+    ))
 }

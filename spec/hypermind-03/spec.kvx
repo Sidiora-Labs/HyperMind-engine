@@ -1383,3 +1383,15 @@ verify_cmd = "cargo test -p hm-serve --test vector_replay"
 acceptance = "Real persisted embedding components retain exact float bits through tagged JSON replay and restart while arbitrary decimal precision and native dimension validation remain enabled."
 
 result = "Real local embedding replay passed before and after restart with all 384 float bit patterns preserved, unchanged original frame bytes, semantic retrieval, duplicate backfill refusal and unchanged malformed-dimension validation. Arbitrary decimal precision remains enabled."
+
+[task.3.57]
+title = "Consume current categorized knowledge in native context generations"
+wave = 3
+owner_lane = "context"
+status = "done"
+requires = ["task.3.29", "task.3.30", "task.3.53"]
+touches = ["crates/hm-serve/src/session_context.rs", "crates/hm-serve/tests/knowledge_context.rs"]
+verify_cmd = "cargo test -p hm-serve --test knowledge_context"
+acceptance = "Native activation injects budgeted authorized knowledge and optional text cues while preserving required evidence. Compatible generations retain accepted bytes across restart; current revocation, deletion and source changes prevent invalid cache reuse."
+
+result = "Compile and actual native activation journey passed for protected context plus categorized knowledge, text cues, exact recall, compatible cached bytes after new observations, explicit generation folding and restart. Revocation and deletion refuse invalid cached evidence; a new fold excludes it. Assembly never fabricates observed use."
