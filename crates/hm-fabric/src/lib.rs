@@ -55,3 +55,5 @@ pub mod backend_runtime;
 pub mod role_runner;
 
 pub mod mobile_delivery;
+
+pub mod role_compaction;

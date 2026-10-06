@@ -1200,11 +1200,11 @@ owner_lane = "roles"
 status = "in_progress"
 requires = ["task.3.21"]
 coverage = ["req.coverage.role_conformance"]
-touches = ["crates/hm-fabric/tests/role_tool_live.rs", "crates/hm-fabric/tests/role_runner_live.rs", "crates/hm-fabric/tests/role_compaction_live.rs", "crates/hm-fabric/tests/role_transform_live.rs"]
+touches = ["crates/hm-fabric/tests/role_tool_live.rs", "crates/hm-fabric/tests/role_runner_live.rs", "crates/hm-fabric/tests/role_compaction_live.rs", "crates/hm-fabric/tests/role_transform_live.rs", "crates/hm-fabric/src/role_compaction.rs"]
 verify_cmd = "cargo test -p hm-fabric --test role_tool_live --test role_runner_live --test role_compaction_live --test role_transform_live"
 acceptance = "Actual tool, model-runner, compaction and transform roles run through authenticated routes and fresh-state crash points. Provider and operation absence is explicit; approval, late delivery, pure setup and narrowing-only policy survive restart."
 
-result = "Declared native tool and model-runner components passed library checks, real authenticated process and provider journeys, and actual CLI routes. Runner output retains original provider bytes and measured counters; kill and reopen preserve the canonical unknown hold and refuse redispatch. Runner settlement integration, compaction and transform role conformance remain pending."
+result = "Actual authenticated tool and model-runner journeys, canonical runner settlement and original response accounting passed. An embedded model compaction consumer now passes actual native history, exact source coverage, DerivedInference reduction, original recovery, stale-source refusal and cancellation with an unknown reservation across restart. It uses the existing runner and reduction queue. Durable historian publication, daemon compaction attachment, tool or opaque compaction and transform role conformance remain pending."
 
 [task.3.42]
 title = "Declared platform containment qualification"
