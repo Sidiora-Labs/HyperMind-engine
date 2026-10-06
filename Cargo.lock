@@ -1759,6 +1759,7 @@ dependencies = [
  "ed25519-dalek",
  "fs2",
  "futures-util",
+ "getrandom 0.3.4",
  "hm-context",
  "hm-core",
  "hm-ledger",
@@ -1777,6 +1778,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "tokio-rustls",
+ "zeroize",
 ]
 
 [[package]]

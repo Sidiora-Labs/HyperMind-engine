@@ -47,3 +47,5 @@ pub mod federation;
 pub mod egress;
 
 pub mod role_workers;
+
+pub mod secret_handles;

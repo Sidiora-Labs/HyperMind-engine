@@ -961,7 +961,7 @@ touches = ["crates/hm-fabric/src/egress.rs", "crates/hm-fabric/src/secret_handle
 verify_cmd = "cargo test -p hm-fabric --test egress --test secret_handles"
 acceptance = "Actual destination resolution, redirects and proxies enforce egress policy before unauthorized connections. Dispatch resolves scoped secret handles without exposing values in arguments, logs, evidence or export, while uncertain writes retain uncertainty."
 
-result = "Egress compile and four real local network tests passed for pinned destinations, redirect authorization, bounded responses and explicit HTTP proxy forwarding. HTTPS proxy tunneling refuses. Opaque secret handles and provider, Git and tool consumer integration remain pending."
+result = "Egress and opaque secret handle checks passed with actual local connections. Scope, current principal, operation and request-bound credentials are injected only at dispatch; response echoes and exported diagnostics exclude values. Redirected secret dispatch refuses, and uncertain writes never replay. Handles are volatile. Provider, Git and general tool consumer integration remains pending."
 
 [task.3.23]
 title = "SDK continuation and uncertain-effect recovery"
