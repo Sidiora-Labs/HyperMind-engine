@@ -286,3 +286,5 @@ mod wire_tests {
 }
 
 pub mod catalog;
+
+pub mod provider_usage;

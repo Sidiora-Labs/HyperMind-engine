@@ -1086,12 +1086,14 @@ acceptance = "Deterministic pressure protects current work, required evidence, t
 title = "Exact provider usage and quota observations"
 wave = 3
 owner_lane = "provider"
-status = "in_progress"
+status = "done"
 requires = ["task.3.15"]
 coverage = ["req.coverage.usage"]
 touches = ["crates/hm-llm/src/provider_usage.rs", "crates/hm-llm/tests/provider_usage.rs"]
 verify_cmd = "cargo test -p hm-llm --test provider_usage"
 acceptance = "Provider usage preserves exact token and cache categories, quota and refill windows, balances, funding provenance, account scope, staleness and in-band errors. Unknown counters and charges never become zero."
+
+result = "Compile and four provider observation and exact accounting tests passed. Absent counters remain unknown, zero is explicit, and rational price observations preserve precision. No live account quota was inferred; native canonical usage consumption remains separate."
 
 [task.3.35]
 title = "NATS durable delivery and server-enforced grants"
