@@ -1054,12 +1054,14 @@ result = "Compile and two actual native ledger tests passed for exact token budg
 title = "Revision-bound compact memory cues"
 wave = 3
 owner_lane = "cache"
-status = "in_progress"
+status = "done"
 requires = ["task.3.7"]
 coverage = ["req.deep.compact_memory_cues"]
 touches = ["crates/hm-context/src/memory_cues.rs", "crates/hm-serve/src/memory_cues.rs", "crates/hm-serve/tests/memory_cues.rs"]
 verify_cmd = "cargo test -p hm-serve --test memory_cues"
 acceptance = "Compact cues are revision-bound cached derivatives with exact source expansion and textual fallback. Optional visual use requires actual supported modality and observed cost; unavailable vision cannot count as successful recall."
+
+result = "Compile and actual native cue journey passed for deterministic exact-token text cues, unchanged persisted replay, authorized original span expansion, revision and grant invalidation, restart and authoritative history tombstones. Unsupported visual cues report textual fallback without claiming image execution. Native session consumer integration remains separate."
 
 [task.3.31]
 title = "Provider profile and tool continuity"
