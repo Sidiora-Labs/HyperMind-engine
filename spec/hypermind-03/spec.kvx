@@ -385,11 +385,13 @@ acceptance = "Python, TypeScript, Rust, Go and Swift paths demonstrate version n
 title = "Unified source retrieval and embedding lifecycle"
 wave = 2
 owner_lane = "retrieval"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["crates/hm-serve/src/context_retrieval.rs", "crates/hm-sim/tests/unified_retrieval_journey.rs"]
 verify_cmd = "cargo test -p hm-sim --test unified_retrieval_journey"
 acceptance = "Memory, messages, files, commits, documents and relationships feed existing retrieval lanes; vectors have model/content fingerprints and resumable bounded backfill; provider failure remains observable."
+
+qualification = "Library compile and actual seven-source lexical journey passed with scoped grants, corrections, tombstones and restart. Actual local embedding lifecycle passed separately in task.2.12. Automatic connector scans and complete remote provider matrices remain open coverage obligations."
 
 [task.2.4]
 title = "Wave 2 integration"
