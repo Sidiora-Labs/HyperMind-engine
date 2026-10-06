@@ -342,3 +342,97 @@ async fn actual_preprovisioned_jetstream_delivery_registers_grants_and_restart()
         Err(ContextError::ScopeMismatch)
     ));
 }
+
+#[tokio::test]
+#[ignore]
+async fn receipt_process_child() {
+    let server = fixture("HM_NATS_TEST_SERVER");
+    let bus = connect(&server, 5).await;
+    let delivery = bus.next().await.unwrap().unwrap();
+    let path = std::env::var("HM_NATS_RECEIPT_IPC").unwrap();
+    std::fs::write(&path, serde_json::to_vec(&delivery).unwrap()).unwrap();
+    tokio::time::sleep(Duration::from_millis(900)).await;
+    assert!(matches!(
+        bus.disposition(&delivery, Disposition::Ack).await,
+        Err(ContextError::Stale)
+    ));
+    let receipt = bus.settlement_receipt(&delivery).await.unwrap().unwrap();
+    std::fs::write(format!("{path}.receipt"), receipt.revision.to_string()).unwrap();
+}
+
+#[tokio::test]
+async fn actual_cross_process_receipt_and_rekey() {
+    let server = fixture("HM_NATS_TEST_SERVER");
+    let bus = connect(&server, 5).await;
+    for _ in 0..32 {
+        match bus.next().await.unwrap() {
+            Some(delivery) => bus.disposition(&delivery, Disposition::Ack).await.unwrap(),
+            None => break,
+        }
+    }
+    let nonce = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos()
+        .to_string();
+    bus.append_once(&format!("receipt-{nonce}"), &digest(&nonce))
+        .await
+        .unwrap();
+    let path = std::env::temp_dir().join(format!("hm-receipt-{nonce}"));
+    let mut child = tokio::process::Command::new(std::env::current_exe().unwrap())
+        .args(["--ignored", "--exact", "receipt_process_child"])
+        .env("HM_NATS_RECEIPT_IPC", &path)
+        .spawn()
+        .unwrap();
+    for _ in 0..100 {
+        if path.exists() {
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(20)).await;
+    }
+    let original: hm_fabric::bus::Delivery =
+        serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    tokio::time::sleep(Duration::from_millis(550)).await;
+    let redelivery = bus.next().await.unwrap().unwrap();
+    assert_eq!(original.event, redelivery.event);
+    assert!(redelivery.attempt > original.attempt);
+    let revision = bus
+        .settlement_receipt(&redelivery)
+        .await
+        .unwrap()
+        .unwrap()
+        .revision;
+    assert!(child.wait().await.unwrap().success());
+    let observed: u64 = std::fs::read_to_string(format!("{}.receipt", path.display()))
+        .unwrap()
+        .parse()
+        .unwrap();
+    assert_eq!(observed, revision);
+    bus.disposition(&redelivery, Disposition::Ack)
+        .await
+        .unwrap();
+    assert!(bus.capability_matrix().shared_settlement_receipt_guard);
+    assert!(!bus.capability_matrix().cross_process_late_ack_fence);
+    let durable = bus.binding().consumer.clone();
+    control("rekey-server", None).await;
+    assert!(
+        NatsBus::connect(&server.url, server.bindings[5].clone(), server.credentials)
+            .await
+            .is_err()
+    );
+    let rotated = fixture("HM_NATS_TEST_SERVER");
+    let fresh = connect(&rotated, 5).await;
+    assert_eq!(fresh.binding().consumer, durable);
+    let event = fresh
+        .append_once(&format!("rekey-{nonce}"), &digest("rekey"))
+        .await
+        .unwrap();
+    let delivery = fresh.next().await.unwrap().unwrap();
+    assert_eq!(delivery.event, event);
+    fresh
+        .disposition(&delivery, Disposition::Ack)
+        .await
+        .unwrap();
+    std::fs::remove_file(&path).unwrap();
+    std::fs::remove_file(format!("{}.receipt", path.display())).unwrap();
+}

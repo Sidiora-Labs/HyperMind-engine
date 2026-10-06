@@ -57,6 +57,7 @@ pub struct NatsCapabilityMatrix {
     pub broker_leaf_qualified: bool,
     pub broker_system_account_qualified: bool,
     pub cross_process_late_ack_fence: bool,
+    pub shared_settlement_receipt_guard: bool,
 }
 #[derive(Clone)]
 pub struct NatsBus {
@@ -69,6 +70,7 @@ struct Flight {
     delivery: Delivery,
     reply: String,
     deadline: Instant,
+    receipt: Register,
 }
 struct Stored {
     sequence: u64,
@@ -306,6 +308,7 @@ impl NatsBus {
             broker_leaf_qualified: false,
             broker_system_account_qualified: false,
             cross_process_late_ack_fence: false,
+            shared_settlement_receipt_guard: true,
         }
     }
     async fn publish_ref(
@@ -457,20 +460,95 @@ impl NatsBus {
             subscriber: self.binding.consumer.clone(),
             attempt,
         };
+        let receipt = self.claim_receipt(&delivery).await?;
         if attempt > self.binding.max_attempts {
+            let key = self.receipt_key(&delivery);
+            let settling = self
+                .register_cas(
+                    &key,
+                    receipt.revision,
+                    &Self::receipt_value(&delivery, "settling"),
+                )
+                .await?;
             self.dead_letter(&delivery).await?;
             self.ack_sync(&reply, b"+TERM").await?;
+            self.register_cas(
+                &key,
+                settling.revision,
+                &Self::receipt_value(&delivery, "settled"),
+            )
+            .await?;
             return Ok(None);
         }
         flights.insert(
             (sequence, attempt),
             Flight {
+                receipt,
                 delivery: delivery.clone(),
                 reply,
                 deadline: Instant::now() + Duration::from_millis(self.binding.ack_wait_ms),
             },
         );
         Ok(Some(delivery))
+    }
+    fn receipt_key(&self, delivery: &Delivery) -> String {
+        format!(
+            "receipt_{}",
+            hm_context::types::digest_bytes(
+                format!(
+                    "{}:{}:{}",
+                    delivery.event.stream, delivery.subscriber, delivery.event.sequence
+                )
+                .as_bytes()
+            )
+        )
+    }
+    fn receipt_value(delivery: &Delivery, state: &str) -> Vec<u8> {
+        hm_context::types::digest_bytes(
+            format!(
+                "{}:{}:{}:{}:{}",
+                delivery.event.stream,
+                delivery.subscriber,
+                delivery.event.sequence,
+                delivery.attempt,
+                state
+            )
+            .as_bytes(),
+        )
+        .into_bytes()
+    }
+    async fn claim_receipt(&self, delivery: &Delivery) -> Result<Register, ContextError> {
+        let key = self.receipt_key(delivery);
+        let previous = self.register_get(&key).await?;
+        if let Some(ref old) = previous {
+            // A redelivery may supersede a held lease, but never an uncertain settlement.
+            let held = (1..delivery.attempt.min(1002)).any(|attempt| {
+                let mut earlier = delivery.clone();
+                earlier.attempt = attempt;
+                old.value == Self::receipt_value(&earlier, "held")
+                    || old.value == Self::receipt_value(&earlier, "nak")
+            });
+            if !held {
+                return Err(ContextError::Conflict);
+            }
+        }
+        self.register_cas(
+            &key,
+            previous.map_or(0, |v| v.revision),
+            &Self::receipt_value(delivery, "held"),
+        )
+        .await
+    }
+    pub async fn settlement_receipt(
+        &self,
+        delivery: &Delivery,
+    ) -> Result<Option<Register>, ContextError> {
+        if delivery.event.stream != self.binding.stream
+            || delivery.subscriber != self.binding.consumer
+        {
+            return Err(ContextError::ScopeMismatch);
+        }
+        self.register_get(&self.receipt_key(delivery)).await
     }
     async fn ack_sync(&self, reply: &str, payload: &[u8]) -> Result<(), ContextError> {
         let response = self
@@ -517,6 +595,23 @@ impl NatsBus {
         if flight.delivery != *delivery || flight.deadline <= Instant::now() {
             return Err(ContextError::Stale);
         }
+        let receipt_key = self.receipt_key(delivery);
+        let current = self
+            .register_get(&receipt_key)
+            .await?
+            .ok_or(ContextError::Stale)?;
+        if current != flight.receipt {
+            return Err(ContextError::Stale);
+        }
+        if !matches!(disposition, Disposition::Progress { .. }) {
+            flight.receipt = self
+                .register_cas(
+                    &receipt_key,
+                    current.revision,
+                    &Self::receipt_value(delivery, "settling"),
+                )
+                .await?;
+        }
         match disposition {
             Disposition::Progress { lease_ms } => {
                 if lease_ms != self.binding.ack_wait_ms as i64 {
@@ -546,6 +641,19 @@ impl NatsBus {
                 self.ack_sync(&flight.reply, b"+TERM").await?;
             }
         }
+        let state = if matches!(disposition, Disposition::Nak)
+            && delivery.attempt < self.binding.max_attempts
+        {
+            "nak"
+        } else {
+            "settled"
+        };
+        self.register_cas(
+            &receipt_key,
+            flight.receipt.revision,
+            &Self::receipt_value(delivery, state),
+        )
+        .await?;
         flights.remove(&key);
         Ok(())
     }

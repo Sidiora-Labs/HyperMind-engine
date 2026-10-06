@@ -1128,7 +1128,7 @@ touches = ["crates/hm-fabric/src/bus_nats.rs", "crates/hm-fabric/tests/bus_nats.
 verify_cmd = "cargo test -p hm-fabric --test bus_nats"
 acceptance = "Actual NATS and JetStream enforce scoped server grants, isolated inboxes and pre-provisioned durable consumers. Real acknowledgement, redelivery, dead letters, revocation, reconnect and cursor gaps preserve delivery semantics."
 
-result = "Compile and actual broker journey passed across six scoped families, durable delivery, dead letters, CAS, restart, permission refusal and cursor gaps. Cross-process late acknowledgement fencing, credential rekey and additional broker topologies remain incomplete."
+result = "Actual broker delivery, restart and grant tests passed. An additional two-process journey passed shared KV receipt supersession and credential rekey, including old-credential refusal and durable reuse. KV and broker acknowledgement are separate operations; atomic late-ack fencing remains unsupported and uncertain settlement requires reconciliation. Leaf and system-account qualification remain pending."
 
 [task.3.36]
 title = "Operational backend selection and descriptors"
