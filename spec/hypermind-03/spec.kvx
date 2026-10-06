@@ -1160,10 +1160,10 @@ result = "Enrollment and federation compile checks and actual authenticated peer
 title = "Durable outbound mobile mutation reconciliation"
 wave = 3
 owner_lane = "clients"
-status = "pending"
+status = "in_progress"
 requires = ["task.3.23", "task.3.37"]
 coverage = ["req.coverage.mobile"]
-touches = ["crates/hm-context/src/mobile_journal.rs", "sdk/swift/Sources/HyperMind/MobileJournal.swift", "crates/hm-context/tests/mobile_journal.rs"]
+touches = ["crates/hm-context/src/mobile_journal.rs", "sdk/swift/Sources/HyperMind/MobileJournal.swift", "crates/hm-context/tests/mobile_journal.rs", "crates/hm-fabric/src/mobile_delivery.rs", "crates/hm-fabric/tests/mobile_delivery.rs"]
 verify_cmd = "cargo test -p hm-context --test mobile_journal"
 acceptance = "A durable outbound mutation journal reconciles pending and uncertain writes through an encrypted resumed connection before another write. Opaque wake identifiers carry no memory content; native mobile qualification is recorded separately."
 
@@ -1395,3 +1395,13 @@ verify_cmd = "cargo test -p hm-serve --test knowledge_context"
 acceptance = "Native activation injects budgeted authorized knowledge and optional text cues while preserving required evidence. Compatible generations retain accepted bytes across restart; current revocation, deletion and source changes prevent invalid cache reuse."
 
 result = "Compile and actual native activation journey passed for protected context plus categorized knowledge, text cues, exact recall, compatible cached bytes after new observations, explicit generation folding and restart. Revocation and deletion refuse invalid cached evidence; a new fold excludes it. Assembly never fabricates observed use."
+
+[task.3.58]
+title = "Complete genuine no-work background outcomes durably"
+wave = 3
+owner_lane = "maintenance"
+status = "in_progress"
+requires = ["task.3.12", "task.3.53"]
+touches = ["crates/hm-serve/src/development_scheduler.rs", "crates/hm-serve/src/development_workers.rs", "crates/hm-mcp/tests/development_review_workers.rs"]
+verify_cmd = "cargo test -p hm-mcp --test development_review_workers"
+acceptance = "Real configured review and learning workers complete their native journeys across restart. A validated genuine zero-call no-work result settles its existing attempt once with a durable operational receipt, without fabricating knowledge publication or weakening empty-plan admission."
