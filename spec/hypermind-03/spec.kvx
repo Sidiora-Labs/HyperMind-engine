@@ -589,11 +589,13 @@ qualification = "Declared focused consumer checks passed; evolving native memory
 title = "Swift typed context consumer"
 wave = 2
 owner_lane = "historian"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["sdk/swift"]
 verify_cmd = "swift test --package-path sdk/swift --filter Context"
 acceptance = "The Swift embedded consumer preserves scoped ownership, exact timestamps and source recovery through the C ABI. Actual toolchain and platform qualification are explicit."
+
+qualification = "Swift 6.2.4 compiled and linked the real C ABI on Linux. Exact timestamp and scope refusal cases passed; the corrected source, historian, notes, fork, import and reopen journey passed separately. Execution requires a runtime compatible with the native library glibc; Apple and aggregate platform qualification remain outstanding."
 
 [task.2.8]
 title = "Rust and C ABI trusted context integration"

@@ -23,6 +23,7 @@ public struct ContextHistorianResult: Codable, Sendable {
 public struct ContextHistorianClaim: Codable, Sendable {
     public let job: ContextJSON; public let worker: String; public let attempt: UInt64
     public init(response: ContextJSON) throws {
+        let response = response["request_id"].string == nil ? response : response["result"]
         guard let worker = response["worker"].string, let attempt = response["attempt"].integer, attempt > 0, response["job"]["id"].string != nil else { throw ContextClientError.invalidResponse("historian claim") }
         try identifier(worker); try safeInteger(UInt64(attempt), minimum: 1)
         self.worker = worker; self.attempt = UInt64(attempt); job = response["job"]
