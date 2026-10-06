@@ -39,3 +39,5 @@ pub mod backend_config;
 pub mod enrollment;
 
 pub mod service_manager;
+
+pub mod bus_nats;
