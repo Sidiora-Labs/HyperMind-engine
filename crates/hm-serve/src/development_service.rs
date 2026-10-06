@@ -32,6 +32,24 @@ pub struct ServiceSchedule {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "action", rename_all = "snake_case", deny_unknown_fields)]
 pub enum DevelopmentAction {
+    ProfileSetEnabled {
+        enabled: bool,
+    },
+    ProfileCollectSession {
+        session_id: String,
+        conversation: String,
+    },
+    PrimerCollectSession {
+        session_id: String,
+        conversation: String,
+    },
+    PrimerEnqueue {
+        job_id: String,
+        target_id: String,
+        refresh: bool,
+    },
+    ProfileInspect,
+    PrimerInspect,
     Register {
         worker_id: String,
         capability_id: String,
@@ -177,6 +195,42 @@ impl DevelopmentService {
         validate_id(&request.request_id)?;
         let request_digest = digest_bytes(&serde_json::to_vec(&request)?);
         match request.action {
+            DevelopmentAction::ProfileSetEnabled { enabled } => Ok(serde_json::to_value(
+                crate::development_profile::set_enabled(actor, &self.scope, owner, enabled).await?,
+            )?),
+            DevelopmentAction::ProfileCollectSession {
+                session_id,
+                conversation,
+            } => Ok(json!({
+                "source_ids": crate::development_profile::collect_session(actor, &self.scope, owner, &session_id, &conversation).await?
+            })),
+            DevelopmentAction::PrimerCollectSession {
+                session_id,
+                conversation,
+            } => Ok(json!({
+                "source_ids": crate::development_primers::collect_session(actor, &self.scope, owner, &session_id, &conversation).await?
+            })),
+            DevelopmentAction::PrimerEnqueue {
+                job_id,
+                target_id,
+                refresh,
+            } => Ok(serde_json::to_value(
+                crate::development_primers::enqueue(
+                    actor,
+                    &self.scope,
+                    owner,
+                    &job_id,
+                    &target_id,
+                    refresh,
+                )
+                .await?,
+            )?),
+            DevelopmentAction::ProfileInspect => {
+                crate::development_profile::inspect(actor, &self.scope, owner).await
+            }
+            DevelopmentAction::PrimerInspect => {
+                crate::development_primers::inspect(actor, &self.scope, owner).await
+            }
             DevelopmentAction::Inspect => self.inspect(actor, owner).await,
             DevelopmentAction::Register {
                 worker_id,

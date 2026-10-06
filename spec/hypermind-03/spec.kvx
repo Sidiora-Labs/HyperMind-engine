@@ -996,11 +996,11 @@ owner_lane = "surface"
 status = "done"
 requires = ["task.3.5"]
 coverage = ["req.coverage.auth", "req.coverage.historian"]
-touches = ["crates/hm-serve/src/development_service.rs", "crates/hm-serve/tests/development_service.rs"]
+touches = ["crates/hm-serve/src/development_service.rs", "crates/hm-serve/tests/development_service.rs", "crates/hm-mcp/tests/development_owner_actions.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_service"
 acceptance = "Scoped native dispatch, inspection, cancellation and owner review consume real development plans through atomic ledger admission. Capabilities describe actual registered workers, and blocked provider work cannot stall actor health."
 
-result = "Development service compile and actual configured provider journey passed. Trusted owner dispatch, actual worker registration, atomic fact publication, actor health, absent worker refusal, cancellation, revocation and restart were exercised. Native routing and current summary projection consumption remain task3.53."
+result = "Native development dispatch and original provider qualification are preserved. Six typed public owner actions now expose profile consent and collection, primer collection and backlog enqueue, and read-only inspection through the existing MCP request. The actual native ledger journey passed absent-consent, source and scope fences, idempotent collection, disable and restart checks. Provider dispatch remains covered by the configured worker journey."
 
 [task.3.26]
 title = "Recurring primers and evidence-based refresh"
@@ -1248,7 +1248,7 @@ owner_lane = "maintenance"
 status = "in_progress"
 requires = ["task.3.12", "task.3.34"]
 coverage = ["req.coverage.usage", "req.deep.knowledge_schedules"]
-touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_service.rs"]
+touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_service.rs", "crates/hm-fabric/src/role_runner.rs", "crates/hm-fabric/tests/runner_usage.rs", "crates/hm-fabric/tests/role_runner_live.rs"]
 verify_cmd = "cargo test -p hm-serve --test usage_service"
 acceptance = "Native host cost and usage remain canonical. Background calls reserve cost and concurrency before dispatch, settle real observations once, retain unknown charges through restart and expose exact attributed rollups."
 
