@@ -987,7 +987,7 @@ touches = ["sdk/typescript/packages/console/src/development.ts", "sdk/typescript
 verify_cmd = "node --test sdk/typescript/packages/console/dist/development.test.js"
 acceptance = "Existing native console navigation consumes real development and operational services with source detail, preserved rejected drafts, scoped review plans, progress and durable outcomes. Unavailable and unknown remain explicit; browser qualification stays separate."
 
-result = "Development view and native console entry point compile. Actual daemon socket test passed for worker availability, registered permissions, schedules, queue and cancellation, owner review refusal with preserved draft and grant revocation. Operations, continuity and browser qualification remain pending."
+result = "Development, operational and continuity views are wired into the native console. TypeScript compilation and actual daemon consumer journeys passed native receipts, selected backend availability, unsupported operation refusal, scoped continuity and shadow pressure, preserved refused policy drafts, and real worker cancellation with uncertainty. Current connected-host primary remains unavailable. Browser interaction, cross-navigation draft persistence and broader family qualification remain separate."
 
 [task.3.25]
 title = "Scoped development service and real consumer dispatch"

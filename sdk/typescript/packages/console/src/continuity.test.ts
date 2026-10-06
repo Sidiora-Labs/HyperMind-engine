@@ -1,0 +1,43 @@
+import assert from "node:assert/strict";
+import type { Scope } from "@hypermind/client";
+import { freezeSourceMessage } from "@hypermind/client";
+import { continuityAction, ContinuityState, inspectContinuity, renderContinuity, renderContinuityDraft, renderContinuityPressure, submitContinuityDraft } from "./continuity.js";
+import { operationalReply } from "./operations.js";
+import { ConsoleTransport } from "./transport.js";
+
+export async function exerciseNativeContinuity(transport: ConsoleTransport, actor: number, scope: Scope): Promise<void> {
+  const content = "Source history for an operational continuity inspection.";
+  const source = freezeSourceMessage({ id: "console-source", ordinal: 1, role: "user", parts: [{ kind: "text", text: content }], occurred_at_ns: "100", recorded_at_ns: "200", authority: "user_asserted", source_digest: "" });
+  const ingested = await transport.callTool("remember", { conversation: "console-continuity", kind: "user", content: "", context: { operation: "source", request: { version: 1, scope, session_id: "console-continuity", conversation: "console-continuity", message: source, original_bytes: Array.from(new TextEncoder().encode(content)) } } });
+  assert.equal(ingested.ok, true, ingested.warnings.join("; "));
+  const activated = await transport.callTool("activate", { conversation: "console-continuity", query: "", budget_tokens: 4096, context: { version: 1, scope, session_id: "console-continuity", budget: { context_tokens: 4096, reserved_output_tokens: 256, required_tokens: 0 } } });
+  assert.equal(activated.ok, true, activated.warnings.join("; "));
+  const initial = await inspectContinuity(transport, actor, "console-continuity", "console-continuity");
+  assert.equal(initial.sourceCount, 1);
+  assert.equal(initial.policy.mode, "off");
+  assert.ok(renderContinuity(initial).includes("Primary host dispatch is unavailable"));
+  assert.equal(renderContinuity(initial).includes(content), false);
+  const draft = { mode: "shadow" as const, strict: false, revision: initial.policy.revision, generation: initial.generation };
+  const state: ContinuityState = { view: initial, draft, notice: "", busy: false };
+  await continuityAction(transport, actor, "console-continuity", scope, initial.sessionId, initial.generation, { action: "configure", mode: "pass_through", strict: false, expected_revision: initial.policy.revision }, "continuity-native-mode");
+  assert.equal(await submitContinuityDraft(state, transport, actor, "console-continuity"), false);
+  assert.strictEqual(state.draft, draft);
+  assert.ok(state.notice.includes("remain unchanged"));
+  assert.ok(renderContinuityDraft(draft).includes('value="primary" disabled'));
+  const pass = await inspectContinuity(transport, actor, initial.sessionId, "console-continuity");
+  const budget = { context_tokens: 4096, reserved_output_tokens: 256, required_tokens: 0 };
+  const unchanged = operationalReply(await continuityAction(transport, actor, "console-continuity", scope, pass.sessionId, pass.generation, { action: "pressure", budget, required_ids: [] }, "continuity-pass-pressure"), "continuity");
+  assert.equal(unchanged.provider_input_changed, false);
+  assert.equal(unchanged.plan, null);
+  await continuityAction(transport, actor, "console-continuity", scope, pass.sessionId, pass.generation, { action: "configure", mode: "shadow", strict: false, expected_revision: pass.policy.revision }, "continuity-shadow-mode");
+  const shadow = await inspectContinuity(transport, actor, pass.sessionId, "console-continuity");
+  const pressure = operationalReply(await continuityAction(transport, actor, "console-continuity", scope, shadow.sessionId, shadow.generation, { action: "pressure", budget, required_ids: [] }, "continuity-shadow-pressure"), "continuity");
+  assert.equal(pressure.mode, "shadow");
+  assert.equal(pressure.published, false);
+  const html = renderContinuityPressure(pressure);
+  assert.ok(html.includes("Profile digest"));
+  assert.ok(html.includes("Reserved output tokens"));
+  assert.equal(html.includes(content), false);
+  await assert.rejects(() => continuityAction(transport, actor, "console-continuity", scope, shadow.sessionId, shadow.generation, { action: "pressure", budget: { context_tokens: 1, reserved_output_tokens: 256, required_tokens: 0 }, required_ids: [] }, "continuity-overflow"));
+  await assert.rejects(() => continuityAction(transport, actor, "console-continuity", scope, shadow.sessionId, shadow.generation, { action: "configure", mode: "primary", strict: true, expected_revision: shadow.policy.revision }));
+}

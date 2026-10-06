@@ -12,3 +12,5 @@ export * from "./access.js";
 export * from "./removal.js";
 export * from "./context.js";
 export * from "./development.js";
+export * from "./operations.js";
+export * from "./continuity.js";

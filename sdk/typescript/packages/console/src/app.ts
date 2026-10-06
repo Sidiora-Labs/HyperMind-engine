@@ -1,3 +1,5 @@
+import { mountOperations } from "./operations.js";
+import { mountContinuity } from "./continuity.js";
 import { buildAccessView, renderAccess } from "./access.js";
 import { createActivityFeed, renderActivity } from "./activity.js";
 import {
@@ -395,6 +397,14 @@ async function render(): Promise<void> {
   development.id = "console-development";
   mount.append(development);
   await mountDevelopment(development, transport, overview.actor, String(values.get("conversation") ?? ""));
+  const operations = document.createElement("section");
+  operations.id = "console-operations";
+  mount.append(operations);
+  await mountOperations(operations, transport, overview.actor);
+  const continuity = document.createElement("section");
+  continuity.id = "console-continuity";
+  mount.append(continuity);
+  await mountContinuity(continuity, transport, overview.actor, String(values.get("conversation") ?? "") || "console-continuity-inspection");
   await showSources(mount);
   await showEvidence(mount, values);
   await showAccess(mount);
