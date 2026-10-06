@@ -1647,6 +1647,7 @@ dependencies = [
  "ort",
  "regex",
  "reqwest",
+ "rustix",
  "serde",
  "serde_json",
  "sha2 0.10.9",
@@ -1713,8 +1714,10 @@ dependencies = [
  "hm-core",
  "hm-ledger",
  "postgres",
+ "rcgen",
  "rusqlite",
  "rustix",
+ "rustls",
  "serde",
  "serde_json",
  "sha2 0.10.9",
@@ -1723,6 +1726,7 @@ dependencies = [
  "tempfile",
  "thiserror",
  "tokio",
+ "tokio-rustls",
 ]
 
 [[package]]

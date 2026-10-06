@@ -1114,6 +1114,8 @@ touches = ["crates/hm-fabric/src/enrollment.rs", "crates/hm-fabric/src/federatio
 verify_cmd = "cargo test -p hm-fabric --test enrollment --test federation"
 acceptance = "Actual mutually authenticated peers enroll with reviewed expiring grants and signed discovery. Direct routes precede allowed relays; relay grants are side-specific and single-use, and revocation stops new admission."
 
+result = "Enrollment compile and actual TLS peer journey passed with ten separate peer processes. Mutual TLS 1.3, owner reviewed one-use tickets, grant intersection, scope, expiry, nonce replay and persisted revocation survive restart. Federation remains pending."
+
 [task.3.38]
 title = "Durable outbound mobile mutation reconciliation"
 wave = 3
