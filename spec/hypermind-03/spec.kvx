@@ -968,7 +968,7 @@ touches = ["sdk/python/hypermind/continuity.py", "sdk/python/tests/test_continui
 verify_cmd = "cargo test -p hm-sim --test sdk_continuity"
 acceptance = "Actual language consumers preserve epochs, cursors, source identity, version refusal, cancellation and typed uncertain effects through reauthentication and restart. Potentially accepted writes are never automatically retried."
 
-result = "Python and TypeScript continuity preserve accepted cursor and generation, source and fork recovery, and uncertain mutation checkpoints. Native compile and focused restart and cancellation journeys passed for both languages. Go, Swift, remote authentication and aggregate continuity remain pending."
+result = "Python, TypeScript and Go continuity focused journeys passed. Go additionally exercised authenticated reconnect and actual stopped-daemon cancellation with blocked replay. Swift compiles but fork source recovery after reopen remains unqualified; aggregate continuity remains pending."
 
 [task.3.24]
 title = "Native knowledge review and operational views"
