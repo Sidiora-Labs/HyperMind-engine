@@ -1227,12 +1227,14 @@ acceptance = "Canonical bounded logs preserve whole records under concurrency, h
 title = "Canonical background reservations and usage rollups"
 wave = 3
 owner_lane = "maintenance"
-status = "pending"
+status = "in_progress"
 requires = ["task.3.12", "task.3.34"]
 coverage = ["req.coverage.usage", "req.deep.knowledge_schedules"]
 touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_service.rs"]
 verify_cmd = "cargo test -p hm-serve --test usage_service"
 acceptance = "Native host cost and usage remain canonical. Background calls reserve cost and concurrency before dispatch, settle real observations once, retain unknown charges through restart and expose exact attributed rollups."
+
+result = "Native usage service compile and two focused tests passed, including real provider response bytes, exact observed counters, durable unknown reservations and idempotent reconciliation. The original development worker response must still settle its existing scheduler reservation without a second call or duplicate charge."
 
 [task.3.46]
 title = "Native operational and continuity services"
