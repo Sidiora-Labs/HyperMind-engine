@@ -677,8 +677,10 @@ acceptance = "The declared public Hypermid context export format migrates origin
 title = "Swift operation error fidelity"
 wave = 2
 owner_lane = "provider"
-status = "in_progress"
+status = "done"
 requires = ["task.2.8"]
 touches = ["sdk/swift/Sources/HyperMind/ContextClient.swift", "sdk/swift/Tests/HyperMindTests/ContextTests.swift"]
 verify_cmd = "swift test --package-path sdk/swift --filter Context"
 acceptance = "Typed Swift errors preserve the actual native error code, bounded message and effect state without leaking complete request content. The real context journey identifies the failing operation and verifies the corrected contract."
+
+qualification = "Actual Swift engine journey passed after preserving bounded operation error details and correcting the current typed import row and receipt contract. Raw request content remains excluded from errors."

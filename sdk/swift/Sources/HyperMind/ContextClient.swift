@@ -1,5 +1,38 @@
 import Foundation
 
+public struct ContextOperationError: Error, Equatable, Sendable, CustomStringConvertible {
+    public let verb: String
+    public let operation: String?
+    public let code: String?
+    public let message: String?
+    public let effectState: String
+    public let systemError: Int64?
+    public let lsn: Int64?
+    public let offset: Int64?
+    public var description: String {
+        "ContextOperationError(verb: \(verb), operation: \(operation ?? "none"), code: \(code ?? "unknown"), message: \(message ?? "unavailable"), effectState: \(effectState))"
+    }
+    fileprivate init(verb: String, arguments: ContextJSON, envelope: ContextJSON) {
+        func symbol(_ value: String?) -> String? {
+            guard let value, !value.isEmpty, value.utf8.count <= 128,
+                  value.utf8.allSatisfy({ (65...90).contains($0) || (97...122).contains($0) || (48...57).contains($0) || $0 == 95 }) else { return nil }
+            return value
+        }
+        self.verb = symbol(verb) ?? "unknown"
+        let action = arguments["context"]["request"]["action"]["action"].string
+        self.operation = symbol(action ?? arguments["context"]["operation"].string)
+        let failure = envelope["items"].array?.first ?? .null
+        let code = symbol(failure["error"].string)
+        self.code = code?.hasPrefix("k") == true ? code : nil
+        self.message = self.code
+        self.systemError = failure["system_error"].integer
+        self.lsn = failure["lsn"].integer
+        self.offset = failure["offset"].integer
+        let effect = envelope["effect_state"].string
+        self.effectState = ["not_dispatched", "rejected", "completed", "dispatched", "uncertain", "unknown", "applied", "partial"].contains(effect ?? "") ? effect! : "unknown"
+    }
+}
+
 public actor HyperMindContextClient {
     public let engine: HyperMindEngine
     public let scope: ContextScope
@@ -17,7 +50,7 @@ public actor HyperMindContextClient {
     private func call(_ verb: String, _ arguments: [String: ContextJSON]) async throws -> ContextJSON {
         let response = try await engine.call(verb: verb, argumentsJSON: ContextJSON.object(arguments).canonical())
         let value = try JSONDecoder().decode(ContextJSON.self, from: Data(response.utf8))
-        guard value["ok"] == .bool(true) else { throw ContextClientError.operationFailed(effectState: value["effect_state"].string ?? "unknown") }
+        guard value["ok"] == .bool(true) else { throw ContextOperationError(verb: verb, arguments: .object(arguments), envelope: value) }
         guard let first = value["items"].array?.first else { throw ContextClientError.invalidResponse("missing item") }
         return first
     }
@@ -87,7 +120,7 @@ public actor HyperMindContextClient {
         guard bundle.scope == scope else { throw ContextClientError.scopeMismatch }; try safeInteger(maxEntries, minimum: 1)
         let value = try await mutation("import", request: bundle.wire(), extra: ["max_entries": .integer(Int64(maxEntries))])
         let result = try decode(value, as: ContextImportReceipt.self)
-        guard result.version == 1, result.scope == scope, result.import_id == bundle.importID, result.bundle_digest == bundle.digest else { throw ContextClientError.invalidResponse("import identity") }
+        guard result.version == 2, result.scope == scope, result.import_id == bundle.importID, result.bundle_digest == bundle.digest else { throw ContextClientError.invalidResponse("import identity") }
         return result
     }
     public func remember(content: String, kind: ContextMemoryKind = .user) async throws -> ContextJSON {
@@ -97,7 +130,7 @@ public actor HyperMindContextClient {
         try safeInteger(limit, minimum: 1)
         let raw = try await engine.recall(argumentsJSON: ContextJSON.object(["mode": .string("lexical"), "query": .string(query), "limit": .integer(Int64(limit))]).canonical())
         let envelope = try JSONDecoder().decode(ContextJSON.self, from: Data(raw.utf8))
-        guard envelope["ok"] == .bool(true) else { throw ContextClientError.operationFailed(effectState: envelope["effect_state"].string ?? "unknown") }; return envelope
+        guard envelope["ok"] == .bool(true) else { throw ContextOperationError(verb: "recall", arguments: .null, envelope: envelope) }; return envelope
     }
 }
 public enum ContextMemoryKind: String, Sendable { case user, assistant, document }
