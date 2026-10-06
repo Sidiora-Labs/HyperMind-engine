@@ -1167,6 +1167,8 @@ touches = ["crates/hm-context/src/mobile_journal.rs", "sdk/swift/Sources/HyperMi
 verify_cmd = "cargo test -p hm-context --test mobile_journal"
 acceptance = "A durable outbound mutation journal reconciles pending and uncertain writes through an encrypted resumed connection before another write. Opaque wake identifiers carry no memory content; native mobile qualification is recorded separately."
 
+result = "The neutral outbound journal passed native compilation and three real filesystem and process-restart tests. It records uncertainty before dispatch and preserves exact mutation identity and blocked replay after interruption. Encrypted native receipt validation, Swift consumption and handset qualification remain separate pending gates."
+
 [task.3.39]
 title = "Bounded authenticated notification envelopes"
 wave = 3
