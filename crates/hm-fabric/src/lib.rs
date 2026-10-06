@@ -41,3 +41,5 @@ pub mod enrollment;
 pub mod service_manager;
 
 pub mod bus_nats;
+
+pub mod federation;

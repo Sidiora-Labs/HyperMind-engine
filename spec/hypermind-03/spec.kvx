@@ -1133,14 +1133,14 @@ result = "Backend selection compile and four real tests passed including SQLite 
 title = "Peer enrollment and direct or relay federation"
 wave = 3
 owner_lane = "transport"
-status = "in_progress"
+status = "done"
 requires = ["task.3.19"]
 coverage = ["req.coverage.remote"]
 touches = ["crates/hm-fabric/src/enrollment.rs", "crates/hm-fabric/src/federation.rs", "crates/hm-fabric/tests/enrollment.rs", "crates/hm-fabric/tests/federation.rs"]
 verify_cmd = "cargo test -p hm-fabric --test enrollment --test federation"
 acceptance = "Actual mutually authenticated peers enroll with reviewed expiring grants and signed discovery. Direct routes precede allowed relays; relay grants are side-specific and single-use, and revocation stops new admission."
 
-result = "Enrollment compile and actual TLS peer journey passed with ten separate peer processes. Mutual TLS 1.3, owner reviewed one-use tickets, grant intersection, scope, expiry, nonce replay and persisted revocation survive restart. Federation remains pending."
+result = "Enrollment and federation compile checks and actual authenticated peer process journeys passed. Reviewed grants, signed direct discovery, explicit TLS relay routing, replay refusal, expiry and revocation survive restart. Internet NAT traversal and mobile qualification remain separate."
 
 [task.3.38]
 title = "Durable outbound mobile mutation reconciliation"
