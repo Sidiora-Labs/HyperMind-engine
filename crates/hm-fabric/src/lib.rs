@@ -37,3 +37,5 @@ pub mod registry_install;
 pub mod backend_config;
 
 pub mod enrollment;
+
+pub mod service_manager;

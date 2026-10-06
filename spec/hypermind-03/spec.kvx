@@ -1166,12 +1166,14 @@ acceptance = "Real bounded HPKE envelopes preserve confidential or pinned-sender
 title = "Native service ownership and ordered shutdown"
 wave = 3
 owner_lane = "routing"
-status = "in_progress"
+status = "done"
 requires = ["task.3.18", "task.3.20"]
 coverage = ["req.coverage.service_manager"]
 touches = ["crates/hm-fabric/src/service_manager.rs", "crates/hm-fabric/src/service_manager", "crates/hm-fabric/tests/service_manager.rs"]
 verify_cmd = "cargo test -p hm-fabric --test service_manager"
 acceptance = "Per-user native service plans and ownership receipts preserve restart behavior and complete child drain. Unsupported platform or service-manager operations return native refusal details and never alter unrelated services."
+
+result = "Compile and actual Linux user service journey passed: signed artifact ownership, native restart, nested process group termination and uninstall. Native stop reported timeout with no remaining owned processes; graceful shutdown and other platform qualification are not claimed."
 
 [task.3.41]
 title = "Actual tool and provider role conformance"
