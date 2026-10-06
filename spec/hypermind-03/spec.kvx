@@ -957,11 +957,11 @@ owner_lane = "effects"
 status = "in_progress"
 requires = ["task.3.5"]
 coverage = ["req.coverage.egress", "req.coverage.credentials"]
-touches = ["crates/hm-fabric/src/egress.rs", "crates/hm-fabric/src/secret_handles.rs", "crates/hm-fabric/tests/egress.rs", "crates/hm-fabric/tests/secret_handles.rs", "crates/hm-fabric/src/provider_egress.rs", "crates/hm-fabric/src/role_runner.rs", "crates/hm-fabric/tests/provider_egress_live.rs"]
+touches = ["crates/hm-fabric/src/egress.rs", "crates/hm-fabric/src/secret_handles.rs", "crates/hm-fabric/tests/egress.rs", "crates/hm-fabric/tests/secret_handles.rs", "crates/hm-fabric/src/provider_egress.rs", "crates/hm-fabric/src/role_runner.rs", "crates/hm-fabric/tests/provider_egress_live.rs", "crates/hm-fabric/src/tool_http.rs", "crates/hm-fabric/src/role_workers.rs", "crates/hm-fabric/tests/tool_http_live.rs"]
 verify_cmd = "cargo test -p hm-fabric --test egress --test secret_handles"
 acceptance = "Actual destination resolution, redirects and proxies enforce egress policy before unauthorized connections. Dispatch resolves scoped secret handles without exposing values in arguments, logs, evidence or export, while uncertain writes retain uncertainty."
 
-result = "Actual egress and scoped secret-handle components passed their focused connection gates. Native runner catalog and inference now dispatch through the authenticated host broker with request-bound secret grants; actual guarded and default model paths preserve original response bytes and existing reservation ownership. The v2 protocol pin rejects a real legacy worker during registration before work or network dispatch; prior catalogs require explicit review and registration. Returned evidence excludes the test credential. Other provider, Git and general tool consumers, and new live credential-echo or cancellation qualification remain pending."
+result = "Actual egress and secret-handle components, native runner catalog and inference use authenticated host dispatch with request-bound grants. The v2 runner pin refuses a real legacy worker before work or network dispatch. A separate approved HTTP tool now uses the same guarded egress and secret authority through the production tool-worker handler; actual writes, successful receipt replay, redirects, dropped replies, credential echo, accepted-effect worker loss, principal revocation and restart passed. Unknown effects refuse redispatch and observed worker diagnostics exclude credentials. The original process-tool protocol remains qualified. Other provider and Git consumers, general process networking and installed daemon HTTP-tool attachment remain pending."
 
 [task.3.23]
 title = "SDK continuation and uncertain-effect recovery"

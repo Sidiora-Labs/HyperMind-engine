@@ -597,6 +597,12 @@ fn approved(
 }
 
 pub async fn tool_worker_from_env() -> Result<(), ToolWorkerError> {
+    if std::env::var_os(crate::tool_http::HTTP_CONFIG).is_some() {
+        if std::env::var_os(TOOL_ENV).is_some() {
+            return Err(ToolWorkerError::Refused("conflicting owner tool configurations".into()));
+        }
+        return crate::tool_http::http_tool_worker_from_env().await.map_err(|_|ToolWorkerError::Refused("HTTP tool worker refused".into()));
+    }
     let config: WorkerConfiguration = serde_json::from_str(
         &std::env::var(TOOL_ENV)
             .map_err(|_| ToolWorkerError::Refused("tool configuration missing".into()))?,

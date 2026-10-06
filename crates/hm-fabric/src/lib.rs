@@ -61,3 +61,5 @@ pub mod role_compaction;
 pub mod provider_egress;
 
 pub mod role_transform;
+
+pub mod tool_http;
