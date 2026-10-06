@@ -193,7 +193,15 @@ struct StoredVector {
     key: Key,
     source_revision: u64,
     registration: EmbeddingRegistration,
+    #[serde(deserialize_with = "deserialize_stored_vector")]
     vector: EmbeddedVector,
+}
+fn deserialize_stored_vector<'de, D>(deserializer: D) -> Result<EmbeddedVector, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let value = serde_json::Value::deserialize(deserializer)?;
+    serde_json::from_value(value).map_err(serde::de::Error::custom)
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "operation", rename_all = "snake_case", deny_unknown_fields)]

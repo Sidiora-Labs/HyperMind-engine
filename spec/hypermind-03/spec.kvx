@@ -1367,3 +1367,15 @@ verify_cmd = "cargo test -p hm-serve --test retention_metrics"
 acceptance = "Distinct supported purge plans retain exact per-plan receipt counts through retry and restart, and native log metrics measure the active certified storage generation. Existing purge authority and supported coverage remain unchanged."
 
 result = "Actual two-plan native purge test passed with exact receipt equality on retry and restart, active-generation byte metrics, unchanged original MMR roots and altered-approval refusal."
+
+[task.3.56]
+title = "Preserve real vector replay with exact JSON numbers"
+wave = 3
+owner_lane = "retrieval"
+status = "done"
+requires = ["task.2.17"]
+touches = ["crates/hm-serve/src/context_retrieval.rs", "crates/hm-serve/tests/vector_replay.rs"]
+verify_cmd = "cargo test -p hm-serve --test vector_replay"
+acceptance = "Real persisted embedding components retain exact float bits through tagged JSON replay and restart while arbitrary decimal precision and native dimension validation remain enabled."
+
+result = "Real local embedding replay passed before and after restart with all 384 float bit patterns preserved, unchanged original frame bytes, semantic retrieval, duplicate backfill refusal and unchanged malformed-dimension validation. Arbitrary decimal precision remains enabled."
