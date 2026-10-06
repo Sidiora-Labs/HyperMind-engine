@@ -884,12 +884,14 @@ result = "Process-local bus compile and six focused tests passed including concu
 title = "Owned process trees and platform restrictions"
 wave = 3
 owner_lane = "supervisor"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 coverage = ["req.coverage.containment", "req.coverage.supervisor"]
 touches = ["crates/hm-fabric/src/containment.rs", "crates/hm-fabric/src/containment", "crates/hm-fabric/src/supervisor.rs", "crates/hm-fabric/tests/containment.rs"]
 verify_cmd = "cargo test -p hm-fabric --test containment"
 acceptance = "Actual owned child trees retain stable launch identities, bounded resource policies and explicit filesystem and network restrictions. Unsupported containment refuses restricted launch; interruption reaps descendants and reused PIDs are never terminated."
+
+result = "Linux compile and two real containment tests passed after isolated device and namespace-init teardown repair. Owned descendants are reaped using stable handles; readonly rootfs, network denial and configured resource restrictions are exercised. Other platforms and aggregate security qualification remain separate."
 
 [task.3.19]
 title = "Negotiated public transport compatibility"
@@ -1220,11 +1222,13 @@ acceptance = "Installed host consumers preserve transcript, provider, tool appro
 title = "Repair isolated device mounts and owned namespace teardown"
 wave = 3
 owner_lane = "runtime"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 touches = ["crates/hm-fabric/src/containment/linux.rs", "crates/hm-fabric/tests/containment.rs"]
 verify_cmd = "cargo test -p hm-fabric --test containment"
 acceptance = "A private minimal device filesystem supports real process execution without exposing host devices. Stable namespace-init process handles terminate the owned tree before the outer launcher, without PID reuse risk or unrestricted fallback."
+
+result = "Minimal isolated devices and stable namespace-init termination passed compile and both real Linux containment cases without unrestricted fallback."
 
 [task.3.49]
 title = "Persist exact verification mapping and source span evidence"
