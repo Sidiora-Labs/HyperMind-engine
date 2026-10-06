@@ -1160,14 +1160,14 @@ result = "Enrollment and federation compile checks and actual authenticated peer
 title = "Durable outbound mobile mutation reconciliation"
 wave = 3
 owner_lane = "clients"
-status = "in_progress"
+status = "done"
 requires = ["task.3.23", "task.3.37"]
 coverage = ["req.coverage.mobile"]
-touches = ["crates/hm-context/src/mobile_journal.rs", "sdk/swift/Sources/HyperMind/MobileJournal.swift", "crates/hm-context/tests/mobile_journal.rs", "crates/hm-fabric/src/mobile_delivery.rs", "crates/hm-fabric/tests/mobile_delivery.rs"]
+touches = ["crates/hm-context/src/mobile_journal.rs", "sdk/swift/Sources/HyperMind/MobileJournal.swift", "crates/hm-context/tests/mobile_journal.rs", "crates/hm-fabric/src/mobile_delivery.rs", "crates/hm-fabric/tests/mobile_delivery.rs", "crates/hm-capi/src/mobile_journal.rs", "crates/hm-capi/src/lib.rs", "crates/hm-capi/include/hypermind.h", "crates/hm-capi/Cargo.toml", "crates/hm-capi/tests/header.rs", "sdk/swift/Tests/HyperMindTests/MobileJournalTests.swift"]
 verify_cmd = "cargo test -p hm-context --test mobile_journal"
 acceptance = "A durable outbound mutation journal reconciles pending and uncertain writes through an encrypted resumed connection before another write. Opaque wake identifiers carry no memory content; native mobile qualification is recorded separately."
 
-result = "The durable outbound journal and encrypted consumer passed native compilation, real filesystem restart tests and an actual mutual TLS journey. A forced process exit after a synced side effect preserved uncertainty; a fresh encrypted session reconciled genuine sparse native receipts before the next write. Replay and foreign identity fences passed. Swift consumption, product endpoint integration and handset qualification remain pending."
+result = "The Rust journal, authenticated receipt adapter and Swift native consumer passed scoped compilation and real process or filesystem journeys. ABI symbol checks passed. Actual Swift TLS dispatch survived a forced peer exit after a synced side effect, preserved uncertainty on journal reopen, and reconciled sparse native receipts before another write. Exact effect bytes and duplicate refusal passed. Apple platforms, handset behavior, background wakes, Swift process termination and production endpoint integration remain separately unqualified."
 
 [task.3.39]
 title = "Bounded authenticated notification envelopes"

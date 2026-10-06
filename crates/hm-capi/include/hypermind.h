@@ -14,7 +14,7 @@ extern "C" {
  * signature changes. Enumerator values below are append-only.
  */
 #define HM_ABI_VERSION_MAJOR 1
-#define HM_ABI_VERSION_MINOR 1
+#define HM_ABI_VERSION_MINOR 2
 
 /*
  * Boundary status tier. Values 0 through 6 are faults raised at this boundary.
@@ -48,6 +48,8 @@ typedef enum HmStatus {
  */
 typedef struct HmEngine HmEngine;
 
+typedef struct HmMobileJournal HmMobileJournal;
+
 /*
  * Receives the outcome of exactly one hm_engine_call. kernel_code carries the
  * numeric kernel error discriminant when status is HM_STATUS_KERNEL and -1
@@ -73,6 +75,12 @@ typedef struct HmWaiter HmWaiter;
  * Returns the ABI version packed as (major << 16) | minor.
  */
 uint32_t hm_abi_version(void);
+
+/* Native outbound journal. Returned JSON uses hm_string_free.
+ * Calls on a handle are serialized; free requires exclusive ownership. */
+HmStatus hm_mobile_journal_open(const char *configuration, HmMobileJournal **out);
+HmStatus hm_mobile_journal_call(HmMobileJournal *journal, const char *operation, const char *arguments, char **out);
+void hm_mobile_journal_free(HmMobileJournal *journal);
 
 /*
  * Returns the last boundary error recorded on the calling thread, or NULL when

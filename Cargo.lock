@@ -1605,8 +1605,10 @@ version = "0.1.0"
 dependencies = [
  "hm-context",
  "hm-core",
+ "hm-fabric",
  "hm-mcp",
  "hm-serve",
+ "rustls",
  "serde",
  "serde_json",
  "tempfile",

@@ -2,11 +2,13 @@
 
 mod call;
 mod engine;
+mod mobile_journal;
 mod status;
 mod waiter;
 
 pub use call::{HmResultCallback, hm_engine_call};
 pub use engine::{HmEngine, hm_engine_clone, hm_engine_close, hm_engine_free, hm_engine_open};
+pub use mobile_journal::{HmMobileJournal, hm_mobile_journal_open, hm_mobile_journal_call, hm_mobile_journal_free};
 pub use status::{HmStatus, hm_last_error_clear, hm_last_error_message, hm_string_free};
 pub use waiter::{HmWaiter, hm_waiter_callback, hm_waiter_free, hm_waiter_new, hm_waiter_wait};
 
@@ -16,11 +18,11 @@ pub const HM_ABI_VERSION_MAJOR: u32 = 1;
 
 /// Minor component of the wire-visible ABI version. It changes when a symbol is
 /// added.
-pub const HM_ABI_VERSION_MINOR: u32 = 1;
+pub const HM_ABI_VERSION_MINOR: u32 = 2;
 
 /// Every `extern "C"` symbol this library exports, sorted by name. The header is
 /// locked against this table by `tests/header.rs`.
-pub const HM_EXPORTED_SYMBOLS: [&str; 13] = [
+pub const HM_EXPORTED_SYMBOLS: [&str; 16] = [
     "hm_abi_version",
     "hm_engine_call",
     "hm_engine_clone",
@@ -29,6 +31,9 @@ pub const HM_EXPORTED_SYMBOLS: [&str; 13] = [
     "hm_engine_open",
     "hm_last_error_clear",
     "hm_last_error_message",
+    "hm_mobile_journal_call",
+    "hm_mobile_journal_free",
+    "hm_mobile_journal_open",
     "hm_string_free",
     "hm_waiter_callback",
     "hm_waiter_free",

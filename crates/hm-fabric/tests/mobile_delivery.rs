@@ -80,6 +80,8 @@ async fn owner() -> AuthenticatedIdentity {
 }
 #[derive(Clone, Serialize, Deserialize)]
 struct Fixture {
+    #[serde(default)]
+    refusal_connections: Option<usize>,
     role: String,
     address: SocketAddr,
     ca: PathBuf,
@@ -275,7 +277,7 @@ async fn native_effect_peer() {
         .await
         .unwrap();
     drop(session);
-    for _ in 0..5 {
+    for _ in 0..f.refusal_connections.unwrap_or(5) {
         let (stream, _) = listener.accept().await.unwrap();
         let mut session = PublicTlsSession::accept(
             stream,
@@ -378,6 +380,7 @@ async fn encrypted_resume_reconciles_real_effect_before_next_write() {
     let a = issue(dir.path(), "a", &issuer);
     let b = issue(dir.path(), "b", &issuer);
     let f = Fixture {
+        refusal_connections: None,
         role: "crash".into(),
         address: address(),
         ca,
@@ -516,4 +519,94 @@ async fn encrypted_resume_reconciles_real_effect_before_next_write() {
     let disk = std::fs::read_to_string(journal_path).unwrap();
     assert!(!disk.contains("observed-file-sha256"));
     assert!(!disk.contains("payload1"));
+}
+
+#[tokio::test]
+#[ignore = "emits private configuration for the Swift encrypted consumer"]
+async fn emit_swift_mobile_fixture() {
+    let directory = PathBuf::from(
+        std::env::var("HM_SWIFT_MOBILE_FIXTURE_DIR").expect("private fixture directory"),
+    );
+    std::fs::create_dir_all(&directory).unwrap();
+    let owner = owner().await;
+    let mut params = CertificateParams::new(Vec::<String>::new()).unwrap();
+    params.is_ca = IsCa::Ca(BasicConstraints::Unconstrained);
+    params.key_usages = vec![KeyUsagePurpose::KeyCertSign, KeyUsagePurpose::CrlSign];
+    let issuer = CertifiedIssuer::self_signed(params, KeyPair::generate().unwrap()).unwrap();
+    let ca = directory.join("ca.der");
+    std::fs::write(&ca, issuer.der()).unwrap();
+    let server = issue(&directory, "server", &issuer);
+    let device = issue(&directory, "device", &issuer);
+    let fixture = Fixture {
+        refusal_connections: Some(0),
+        role: "crash".into(),
+        address: address(),
+        ca: ca.clone(),
+        cert: server.cert.clone(),
+        key: server.key.clone(),
+        enrollment: directory.join("enrollment.db"),
+        bindings: directory.join("bindings.db"),
+        effects: directory.join("effects.db"),
+        output: directory.join("effect.bin"),
+        ready: directory.join("crash-ready"),
+        stage: directory.join("effect-applied"),
+        payload1: vec![255, 0, 13, 10, 206, 187],
+        payload2: b"second".to_vec(),
+    };
+    let ticket = {
+        let mut store = EnrollmentStore::open(&fixture.enrollment, &owner).unwrap();
+        store
+            .review(
+                &owner,
+                DeviceReview {
+                    device_id: "device-a".into(),
+                    name: "Personal device".into(),
+                    certificate_sha256: device.fingerprint.clone(),
+                    scope: scope(),
+                    grants: grants(),
+                    expires_ms: now() + 3_600_000,
+                },
+            )
+            .unwrap()
+    };
+    let config = serde_json::json!({
+        "connection": {
+            "address": fixture.address.to_string(), "server_name": "localhost",
+            "ca_der": std::fs::read(&ca).unwrap(),
+            "certificate_der": std::fs::read(&device.cert).unwrap(),
+            "private_key_der": std::fs::read(&device.key).unwrap(),
+            "ticket": ticket.nonce,
+            "grants": grants(), "server_certificate_sha256": server.fingerprint,
+        },
+        "binding": JournalBinding { scope: scope(), device_id: "device-a".into(), session_id: "app-session".into() },
+        "fixture": fixture,
+        "peer_executable": std::env::current_exe().unwrap(),
+        "payload1": fixture.payload1,
+        "payload2": fixture.payload2,
+        "payload1_digest": digest_bytes(&fixture.payload1),
+        "payload2_digest": digest_bytes(&fixture.payload2),
+    });
+    let path = directory.join("swift-mobile-config.json");
+    let mut options = std::fs::OpenOptions::new();
+    options.write(true).create_new(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        options.mode(0o600);
+    }
+    let mut file = options.open(&path).unwrap();
+    file.write_all(&serde_json::to_vec(&config).unwrap())
+        .unwrap();
+    file.sync_all().unwrap();
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        std::fs::set_permissions(&directory, std::fs::Permissions::from_mode(0o700)).unwrap();
+        for entry in std::fs::read_dir(&directory).unwrap() {
+            let path = entry.unwrap().path();
+            if path.is_file() {
+                std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o600)).unwrap();
+            }
+        }
+    }
 }
