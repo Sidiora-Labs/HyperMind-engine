@@ -67,3 +67,5 @@ pub mod memory_cues;
 pub mod continuity_service;
 
 pub mod development_indexing;
+
+pub mod development_documents;

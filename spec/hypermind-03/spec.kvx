@@ -1030,12 +1030,14 @@ acceptance = "Actual authenticated encryption protects canonical portable state.
 title = "Source-grounded documentation proposals"
 wave = 3
 owner_lane = "temporal"
-status = "in_progress"
+status = "done"
 requires = ["task.3.9"]
 coverage = ["req.deep.documentation_proposals"]
 touches = ["crates/hm-cortex/src/development_documents.rs", "crates/hm-serve/src/development_documents.rs", "crates/hm-serve/tests/development_documents.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_documents"
 acceptance = "Actual repository deltas produce cited documentation patches with source and target digests. Only current owner-approved plans apply, unrelated edits cause refusal, and a durable receipt records the result."
+
+result = "Compile and real provider journey passed for an actual source delta, cited documentation replacement, native owner approval, foreign and stale refusal, exclusive staged file creation, exact applied-output acknowledgement and durable restart receipt. The owner applies staged bytes explicitly; automatic overwrites or filesystem compare-and-swap are not claimed."
 
 [task.3.29]
 title = "Categorized cross-session knowledge injection"
