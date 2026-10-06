@@ -4,7 +4,7 @@ use std::{collections::BTreeMap, fs::{self, File}, io::Write, path::{Path, PathB
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub enum JobKind { Historian, Verification, Curation, Extraction, Indexing, Consolidation }
+pub enum JobKind { Historian, Verification, Curation, Extraction, Indexing, Consolidation, Retrospective, Primer, ConditionalNote, ProfileProposal, DocumentationProposal }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SchedulerConfig {
@@ -83,6 +83,14 @@ pub struct SchedulerSnapshot {
 pub struct MaintenanceScheduler { path: Option<PathBuf>, state: SchedulerSnapshot }
 
 impl MaintenanceScheduler {
+    pub fn enqueue_evidence(&mut self, kind: JobKind, input_digest: String, cursor: Cursor, policy_revision: u64, reservation: u64) -> Result<String, ContextError> {
+        cursor.validate()?;
+        if reservation == 0 || reservation > self.state.config.budget || input_digest.len() != 64 || !input_digest.bytes().all(|b| b.is_ascii_hexdigit()) { return Err(ContextError::Invalid("invalid evidence reservation".into())); }
+        let fence = PublicationFence { input_digest, source_revision: cursor.sequence, policy_revision };
+        let id = digest_bytes(&serde_json::to_vec(&(&self.state.scope, kind, &fence))?);
+        if let Some(existing) = self.state.jobs.get(&id) { if existing.request.cursor != cursor || existing.request.reservation != reservation { return Err(ContextError::Conflict); } return Ok(id); }
+        self.transaction(|state| { state.jobs.insert(id.clone(), JobRecord { id: id.clone(), request: JobRequest { kind, sources: vec![], cursor, source_revision: fence.source_revision, policy_revision, reservation }, fence, status: JobStatus::Pending, attempts: 0, available_ms: 0, output_digest: None }); update_watermark(state, kind); Ok(id) })
+    }
     pub fn open(path: impl AsRef<Path>, scope: Scope, config: SchedulerConfig) -> Result<Self, ContextError> {
         scope.validate()?;
         if config.max_concurrency == 0 || config.lease_ms == 0 || config.max_attempts == 0 || config.budget == 0 {
@@ -117,7 +125,7 @@ impl MaintenanceScheduler {
             if id != &job.id || job.attempts > state.config.max_attempts { return Err(ContextError::Invalid("invalid job snapshot".into())); }
         }
         committed_budget(&state)?;
-        for kind in [JobKind::Historian,JobKind::Verification,JobKind::Curation,JobKind::Extraction,JobKind::Indexing,JobKind::Consolidation] { update_watermark(&mut state,kind); }
+        for kind in [JobKind::Historian,JobKind::Verification,JobKind::Curation,JobKind::Extraction,JobKind::Indexing,JobKind::Consolidation,JobKind::Retrospective,JobKind::Primer,JobKind::ConditionalNote,JobKind::ProfileProposal,JobKind::DocumentationProposal] { update_watermark(&mut state,kind); }
         Ok(Self { path: None, state })
     }
 
@@ -234,7 +242,9 @@ impl MaintenanceScheduler {
     pub fn settle_unknown(&mut self, id: &str, attempt: u64, actual: u64) -> Result<(), ContextError> {
         self.transaction(|state| {
             let key = usage_key(id, attempt);
-            state.unknown_usage.remove(&key).ok_or(ContextError::Stale)?;
+            let reserved = *state.unknown_usage.get(&key).ok_or(ContextError::Stale)?;
+            if actual > reserved { return Err(ContextError::Capacity); }
+            state.unknown_usage.remove(&key);
             state.spent = state.spent.checked_add(actual).ok_or(ContextError::Capacity)?;
             Ok(())
         })
