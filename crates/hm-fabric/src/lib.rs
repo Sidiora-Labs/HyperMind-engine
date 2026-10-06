@@ -33,3 +33,5 @@ pub mod containment;
 pub mod artifacts;
 
 pub mod registry_install;
+
+pub mod backend_config;
