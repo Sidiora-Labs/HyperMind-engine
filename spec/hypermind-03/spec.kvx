@@ -1072,6 +1072,8 @@ touches = ["crates/hm-context/src/provider_continuity.rs", "crates/hm-serve/test
 verify_cmd = "cargo test -p hm-serve --test provider_continuity"
 acceptance = "Actual provider profiles and tokenizers preserve repeated tool identifiers, role adjacency, opaque parts, exact input/output budgets and model-change invalidation. Unsupported serializers refuse before provider dispatch."
 
+result = "Compile and two real tests passed for exact canonical envelope token counts, occurrence-bound tool IDs, original opaque source recovery, model and budget fences, cancellation and actual local text generation with measured output. Native chat framing and unsupported tool or opaque provider serializers remain unqualified and refuse dispatch."
+
 [task.3.32]
 title = "Source lineage and frozen child continuity"
 wave = 3
