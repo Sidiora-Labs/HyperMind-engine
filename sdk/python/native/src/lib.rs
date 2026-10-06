@@ -82,6 +82,30 @@ impl NativeEngine {
         })
     }
 
+    fn tokenizer_identity(&self, py: Python<'_>, model_id: String) -> PyResult<String> {
+        if self.actor.is_none() { return Err(PyRuntimeError::new_err("engine is closed")); }
+        py.allow_threads(|| {
+            let identity = hm_serve::context_tokenizer::identity(&model_id).map_err(failure)?;
+            serde_json::to_string(&identity).map_err(failure)
+        })
+    }
+
+    fn count_provider_input(&self, py: Python<'_>, model_id: String, expected_generation: u64, bytes: Vec<u8>) -> PyResult<String> {
+        if self.actor.is_none() { return Err(PyRuntimeError::new_err("engine is closed")); }
+        py.allow_threads(|| {
+            let measurement = hm_serve::context_tokenizer::count_provider_input(&model_id, expected_generation, &bytes).map_err(failure)?;
+            serde_json::to_string(&measurement).map_err(failure)
+        })
+    }
+
+    fn count_ollama_user_input(&self, py: Python<'_>, model_id: String, expected_generation: u64, content: String) -> PyResult<String> {
+        if self.actor.is_none() { return Err(PyRuntimeError::new_err("engine is closed")); }
+        py.allow_threads(|| {
+            let measurement = hm_serve::context_tokenizer::count_ollama_user_input(&model_id, expected_generation, &content).map_err(failure)?;
+            serde_json::to_string(&measurement).map_err(failure)
+        })
+    }
+
     fn call(&self, py: Python<'_>, verb: String, arguments_json: String) -> PyResult<String> {
         let actor = self
             .actor

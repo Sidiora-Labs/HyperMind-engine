@@ -1072,11 +1072,11 @@ owner_lane = "provider"
 status = "in_progress"
 requires = ["task.3.15"]
 coverage = ["req.coverage.provider", "req.coverage.cache"]
-touches = ["crates/hm-context/src/provider_continuity.rs", "crates/hm-serve/tests/provider_continuity.rs"]
+touches = ["crates/hm-context/src/provider_continuity.rs", "crates/hm-serve/tests/provider_continuity.rs", "crates/hm-serve/src/context_tokenizer.rs", "crates/hm-serve/tests/context_tokenizer.rs", "crates/hm-serve/src/context_projection.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/knowledge_injection.rs", "crates/hm-serve/src/memory_cues.rs", "sdk/python/native/src/lib.rs", "sdk/python/hypermind/engine.py"]
 verify_cmd = "cargo test -p hm-serve --test provider_continuity"
 acceptance = "Actual provider profiles and tokenizers preserve repeated tool identifiers, role adjacency, opaque parts, exact input/output budgets and model-change invalidation. Unsupported serializers refuse before provider dispatch."
 
-result = "Compile and two real tests passed for exact canonical envelope token counts, occurrence-bound tool IDs, original opaque source recovery, model and budget fences, cancellation and actual local text generation with measured output. Native chat framing and unsupported tool or opaque provider serializers remain unqualified and refuse dispatch."
+result = "Trusted native tokenizer installation now binds exact artifacts, model revisions and generations to context projections. The pinned Qwen tokenizer matched actual raw generation and one-user text chat input counts; native reopen, generation invalidation and Python native rebuild passed. Full history, tool and attachment serializers remain unqualified and refuse unsupported dispatch."
 
 [task.3.32]
 title = "Source lineage and frozen child continuity"
@@ -1261,11 +1261,11 @@ owner_lane = "surface"
 status = "in_progress"
 requires = ["task.3.25"]
 coverage = ["req.coverage.auth", "req.coverage.context_mode", "req.coverage.diagnostics"]
-touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs", "crates/hm-mcp/src/tools/session_context.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/tests/test_continuity_host.py", "crates/hm-serve/Cargo.toml", "crates/hm-serve/src/lib.rs", "crates/hm-mcp/src/dispatcher.rs", "crates/hm-mcp/src/fabric_runtime.rs", "crates/hm-mcp/src/lib.rs", "crates/hm-mcp/src/main.rs", "crates/hm-mcp/tests/fabric_runtime.rs", "crates/hm-cli/src/serve.rs", "crates/hm-cli/tests/fabric_service_journey.rs"]
+touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs", "crates/hm-mcp/src/tools/session_context.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/tests/test_continuity_host.py", "crates/hm-serve/Cargo.toml", "crates/hm-serve/src/lib.rs", "crates/hm-mcp/src/dispatcher.rs", "crates/hm-mcp/src/fabric_runtime.rs", "crates/hm-mcp/src/lib.rs", "crates/hm-mcp/src/main.rs", "crates/hm-mcp/tests/fabric_runtime.rs", "crates/hm-cli/src/serve.rs", "crates/hm-cli/tests/fabric_service_journey.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-serve/tests/continuity_knowledge.rs"]
 verify_cmd = "cargo test -p hm-serve --test fabric_service --test continuity_service"
 acceptance = "Native operational and continuation services expose real configured backends, routes, jobs, budgets, mode boundaries and effect receipts through existing surfaces without granting callers new authority."
 
-result = "Native continuity and operational service components and retained MCP dispatch passed their scoped gates. The actual daemon and production worker now pass trusted startup, authenticated socket dispatch, durable replay and restart, and child cleanup. Wrong scope, actor, file mode, symlink and file owner refuse before backend creation. Stdio behavior, additional startup backends and operational families, and compatible primary host serving remain incomplete."
+result = "Native continuity and operational services passed scoped gates and actual trusted daemon startup, worker dispatch, replay, restart and cleanup. Accepted cross-session knowledge now shares the assembly policy fence; real Primary hooks survive unchanged restart and refuse stale generations or revoked grants. Stdio behavior, additional startup backends and operational families, and compatible primary host serving remain incomplete."
 
 [task.3.47]
 title = "Installed host development and operational consumers"

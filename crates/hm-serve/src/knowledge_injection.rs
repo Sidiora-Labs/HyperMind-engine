@@ -163,15 +163,8 @@ pub async fn select(
     model_id: &str,
 ) -> Result<KnowledgePlan, MemoryError> {
     let frozen = snapshot(actor, scope, principal, session_id, generation).await?;
-    let tokenizer = hm_compose::tokens::TokenCounter::for_model(
-        model_id,
-        None,
-        hm_compose::tokens::FallbackWeights::default(),
-    )
+    let tokenizer = crate::context_tokenizer::counter_for_model(model_id)
     .map_err(|_| ContextError::Unavailable("knowledge tokenizer".into()))?;
-    if matches!(tokenizer, hm_compose::tokens::TokenCounter::Fallback { .. }) {
-        return Err(ContextError::Unavailable("exact knowledge tokenizer".into()).into());
-    }
     let counter = |bytes: &[u8]| {
         tokenizer
             .count(bytes)

@@ -54,11 +54,21 @@ struct State {
     request: ProjectionRequest,
     cache: CacheCheckpoint,
     summaries: Vec<Publication>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    tokenizer_fence: Option<String>,
 }
 pub fn source_revision(history: &SourceHistory) -> Result<String, ContextError> { Ok(digest_bytes(&history.export_canonical()?)) }
 pub fn fence_for(history: &SourceHistory, request: &ProjectionRequest) -> Result<CacheFence, ContextError> {
+    let tokenizer_fence = crate::context_tokenizer::fence_digest(&request.model_id).map_err(|_| ContextError::Unavailable("exact context tokenizer".into()))?;
+    fence_with_tokenizer(history, request, Some(&tokenizer_fence))
+}
+fn fence_with_tokenizer(history: &SourceHistory, request: &ProjectionRequest, tokenizer_fence: Option<&str>) -> Result<CacheFence, ContextError> {
     for id in [&request.model_id, &request.policy_revision, &request.permission_revision] { validate_id(id)?; }
-    let fence = CacheFence { scope: history.scope().clone(), session_id: history.session_id().into(), model_id: request.model_id.clone(), policy_revision: digest_bytes(&serde_json::to_vec(&(&request.policy_revision, &request.permission_revision, &request.required_blocks, &request.required_message_ids, request.tier))?), source_revision: source_revision(history)? };
+    let policy_bytes = match tokenizer_fence {
+        Some(identity) => serde_json::to_vec(&(&request.policy_revision, &request.permission_revision, identity, &request.required_blocks, &request.required_message_ids, request.tier))?,
+        None => serde_json::to_vec(&(&request.policy_revision, &request.permission_revision, &request.required_blocks, &request.required_message_ids, request.tier))?,
+    };
+    let fence = CacheFence { scope: history.scope().clone(), session_id: history.session_id().into(), model_id: request.model_id.clone(), policy_revision: digest_bytes(&policy_bytes), source_revision: source_revision(history)? };
     fence.validate()?;
     Ok(fence)
 }
@@ -82,7 +92,7 @@ fn validate_state(state: &State) -> Result<SourceHistory, Error> {
     let mut ids = BTreeSet::new();
     for publication in &state.summaries { validate_publication(&history, publication).map_err(map)?; if !ids.insert(&publication.chunk.digest) { return Err(invalid()); } }
     if state.cache.invalidation.is_none() {
-        if fence_for(&history, &state.request).map_err(map)? != state.cache.fence { return Err(invalid()); }
+        if fence_with_tokenizer(&history, &state.request, state.tokenizer_fence.as_deref()).map_err(map)? != state.cache.fence { return Err(invalid()); }
         let materialization: ContextMaterialization = serde_json::from_slice(&cache.replay(&state.cache.fence).map_err(map)?).map_err(|_| invalid())?;
         let visible = history.visible_messages();
         for message in &materialization.messages { if !visible.contains(&message) { return Err(invalid()); } }
@@ -126,8 +136,7 @@ fn view(state: &State, replayed: bool, ledger_tail: LSN) -> Result<ProjectionVie
     Ok(ProjectionView { fence: state.cache.fence.clone(), generation: cache.generation(), bytes, messages: materialization.messages, blocks: materialization.blocks, coverage: materialization.coverage, pending_reductions: cache.pending().len(), replayed, ledger_tail: ledger_tail.get() })
 }
 fn materialize(history: &SourceHistory, request: &ProjectionRequest, publications: &[Publication]) -> Result<ContextMaterialization, Error> {
-    let tokenizer = hm_compose::tokens::TokenCounter::for_model(&request.model_id, None, hm_compose::tokens::FallbackWeights::default())?;
-    if matches!(tokenizer, hm_compose::tokens::TokenCounter::Fallback { .. }) { return Err(Error::new(ErrorCode::OperationUnavailable)); }
+    let tokenizer = crate::context_tokenizer::counter_for_model(&request.model_id)?;
     let messages = history.visible_messages();
     let mut protected: BTreeSet<String> = request.required_message_ids.iter().cloned().collect();
     if let Some(last) = messages.last() { protected.insert(last.id.clone()); }
@@ -183,6 +192,10 @@ pub async fn current(actor: &ActorEngine, scope: &Scope, session: &str) -> Resul
     let tail = actor.stats().await?.applied.last_lsn;
     let state = load(actor, scope, session).await?;
     validate_tail(actor, tail).await?;
+    if let Some(state) = &state {
+        let history = SourceHistory::restore_canonical(&state.history).map_err(map)?;
+        if fence_for(&history, &state.request).map_err(map)? != state.cache.fence { return Err(Error::new(ErrorCode::OperationUnavailable)); }
+    }
     state.as_ref().map(|state| view(state, true, tail)).transpose()
 }
 pub async fn assemble(actor: &ActorEngine, history: &SourceHistory, request: ProjectionRequest, mut expected_tail: LSN) -> Result<ProjectionView, Error> {
@@ -199,11 +212,12 @@ pub async fn assemble(actor: &ActorEngine, history: &SourceHistory, request: Pro
                 state.cache = cache.checkpoint().map_err(map)?;
                 persist(actor, &mut state, &mut expected_tail).await?;
             }
-            let permission_changed = state.request.permission_revision != request.permission_revision || state.request.policy_revision != request.policy_revision;
+            let tokenizer_fence = crate::context_tokenizer::fence_digest(&request.model_id)?;
+            let permission_changed = state.request.permission_revision != request.permission_revision || state.request.policy_revision != request.policy_revision || state.tokenizer_fence.as_deref() != Some(tokenizer_fence.as_str());
             if permission_changed { state.summaries.clear(); } else { state.summaries.retain(|publication| validate_publication(history, publication).is_ok()); }
             let replacement = region(history, &request, &state.summaries)?;
             cache.reconcile(cache.generation(), &fence, BoundaryChange::Replace { baseline: CacheRegion::default(), delta: CacheRegion::default(), live_tail: replacement }).map_err(map)?;
-            state.history = history.export_canonical().map_err(map)?; state.request = request; state.cache = cache.checkpoint().map_err(map)?;
+            state.history = history.export_canonical().map_err(map)?; state.tokenizer_fence = Some(tokenizer_fence); state.request = request; state.cache = cache.checkpoint().map_err(map)?;
             persist(actor, &mut state, &mut expected_tail).await?;
             return view(&state, false, expected_tail);
         }
@@ -217,7 +231,8 @@ pub async fn assemble(actor: &ActorEngine, history: &SourceHistory, request: Pro
         return view(&state, true, expected_tail);
     }
     let cache = ContextCache::new(fence, CacheRegion::default(), CacheRegion::default(), region(history, &request, &[])?).map_err(map)?;
-    let mut state = State { version: CONTRACT_VERSION, revision: 0, history: history.export_canonical().map_err(map)?, request, cache: cache.checkpoint().map_err(map)?, summaries: Vec::new() };
+    let tokenizer_fence = Some(crate::context_tokenizer::fence_digest(&request.model_id)?);
+    let mut state = State { version: CONTRACT_VERSION, revision: 0, history: history.export_canonical().map_err(map)?, request, cache: cache.checkpoint().map_err(map)?, summaries: Vec::new(), tokenizer_fence };
     persist(actor, &mut state, &mut expected_tail).await?;
     view(&state, false, expected_tail)
 }
@@ -225,7 +240,7 @@ pub async fn publish_summary(actor: &ActorEngine, history: &SourceHistory, expec
     let _guard = WRITER.get_or_init(|| tokio::sync::Mutex::new(())).lock().await;
     validate_tail(actor, expected_tail).await?;
     let mut state = load(actor, history.scope(), history.session_id()).await?.ok_or_else(invalid)?;
-    if &state.cache.fence != expected_fence || source_revision(history).map_err(map)? != expected_fence.source_revision || state.cache.invalidation.is_some() { return Err(invalid()); }
+    if fence_for(history, &state.request).map_err(map)? != state.cache.fence || &state.cache.fence != expected_fence || source_revision(history).map_err(map)? != expected_fence.source_revision || state.cache.invalidation.is_some() { return Err(invalid()); }
     let publication = Publication { chunk, result };
     validate_publication(history, &publication).map_err(map)?;
     if let Some(existing) = state.summaries.iter().find(|p| p.chunk.digest == publication.chunk.digest) { validate_tail(actor, expected_tail).await?; return if existing == &publication { view(&state, true, expected_tail) } else { Err(invalid()) }; }
@@ -253,7 +268,7 @@ pub async fn sync_summaries(actor: &ActorEngine, history: &SourceHistory, expect
     let _guard = WRITER.get_or_init(|| tokio::sync::Mutex::new(())).lock().await;
     validate_tail(actor, expected_tail).await?;
     let mut state = load(actor, history.scope(), history.session_id()).await?.ok_or_else(invalid)?;
-    if &state.cache.fence != expected_fence || source_revision(history).map_err(map)? != expected_fence.source_revision || state.cache.invalidation.is_some() { return Err(invalid()); }
+    if fence_for(history, &state.request).map_err(map)? != state.cache.fence || &state.cache.fence != expected_fence || source_revision(history).map_err(map)? != expected_fence.source_revision || state.cache.invalidation.is_some() { return Err(invalid()); }
     let mut publications: Vec<_> = results.into_iter().map(|(chunk,result)| Publication { chunk, result }).collect();
     publications.sort_by(|a,b| a.chunk.digest.cmp(&b.chunk.digest));
     let mut ids = BTreeSet::new();

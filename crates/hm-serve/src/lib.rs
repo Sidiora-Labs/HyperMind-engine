@@ -71,3 +71,5 @@ pub mod development_indexing;
 pub mod development_documents;
 
 pub mod fabric_service;
+
+pub mod context_tokenizer;

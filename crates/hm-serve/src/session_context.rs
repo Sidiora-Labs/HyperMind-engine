@@ -511,13 +511,7 @@ async fn assemble(
             .await?
         }
     };
-    projection_request.policy_revision = digest_bytes(
-        &serde_json::to_vec(&(
-            &projection_request.policy_revision,
-            &accepted_knowledge.policy_digest,
-        ))
-        .map_err(|_| invalid())?,
-    );
+    bind_knowledge_policy(&mut projection_request, &accepted_knowledge.policy_digest)?;
     let initial = crate::context_projection::assemble(
         actor,
         &history,
@@ -606,14 +600,7 @@ async fn assemble(
         temporal_sources.into_iter().map(|s| s.source).collect(),
     )
     .map_err(map)?;
-    let tokenizer = hm_compose::tokens::TokenCounter::for_model(
-        &request.model_id,
-        None,
-        hm_compose::tokens::FallbackWeights::default(),
-    )?;
-    if matches!(tokenizer, hm_compose::tokens::TokenCounter::Fallback { .. }) {
-        return Err(Error::new(ErrorCode::OperationUnavailable));
-    }
+    let tokenizer = crate::context_tokenizer::counter_for_model(&request.model_id)?;
     let (evidence, evidence_gaps, evidence_omissions, retrieval_view) =
         retrieve(actor, binding, &history, &tokenizer, provider).await?;
     gaps.extend(evidence_gaps);
@@ -738,7 +725,7 @@ async fn retrieve(
     actor: &ActorEngine,
     binding: &Binding,
     history: &SourceHistory,
-    tokenizer: &hm_compose::tokens::TokenCounter,
+    tokenizer: &crate::context_tokenizer::BoundTokenCounter,
     provider: Option<&crate::context_retrieval::EmbeddingProvider>,
 ) -> Result<(Vec<ContextBlock>, Vec<String>, Vec<Omission>, Value), Error> {
     let r = &binding.request;
@@ -768,10 +755,11 @@ async fn retrieve(
         max_tokens: r.budget.available().map_err(map)?,
     };
     let retrieved = crate::context_retrieval::retrieve(
-        actor, &r.scope, &r.query, &request, tokenizer, provider,
+        actor, &r.scope, &r.query, &request, tokenizer.native_counter(), provider,
     )
     .await
     .map_err(retrieval_error)?;
+    tokenizer.ensure_current()?;
     let mut gaps = Vec::new();
     if let hm_context::retrieval::SemanticStatus::Unavailable { reason } = &retrieved.semantic {
         gaps.push(format!("Semantic retrieval unavailable: {reason}"));
@@ -1073,14 +1061,7 @@ async fn build_knowledge(
         knowledge_injection::VisibleEvidence,
         memory_cues::{CueProfile, CueRecord, CueSnapshot, CueSource, build_cues},
     };
-    let tokenizer = hm_compose::tokens::TokenCounter::for_model(
-        &request.model_id,
-        None,
-        hm_compose::tokens::FallbackWeights::default(),
-    )?;
-    if matches!(tokenizer, hm_compose::tokens::TokenCounter::Fallback { .. }) {
-        return Err(Error::new(ErrorCode::OperationUnavailable));
-    }
+    let tokenizer = crate::context_tokenizer::counter_for_model(&request.model_id)?;
     let counter = |bytes: &[u8]| {
         tokenizer
             .count(bytes)
@@ -1264,4 +1245,44 @@ fn knowledge_block_id(scope: &Scope, id: &str) -> Result<String, Error> {
         scope.digest().map_err(map)?,
         digest_bytes(id.as_bytes())
     ))
+}
+
+fn bind_knowledge_policy(
+    request: &mut ProjectionRequest,
+    accepted_digest: &str,
+) -> Result<(), Error> {
+    request.policy_revision = digest_bytes(
+        &serde_json::to_vec(&(&request.policy_revision, accepted_digest)).map_err(|_| invalid())?,
+    );
+    Ok(())
+}
+pub async fn accepted_materialization_locked(
+    actor: &ActorEngine,
+    request: &SessionContextRequest,
+    history: &SourceHistory,
+) -> Result<RequiredMaterialization, Error> {
+    let mut material = required_materialization_locked(actor, request, history).await?;
+    let saved = bindings(actor).await?;
+    let binding = saved.get(&request.session_id).ok_or_else(invalid)?;
+    if binding.request.scope != request.scope
+        || binding.request.model_id != request.model_id
+        || binding.request.budget != request.budget
+        || binding.request.memory_scopes != request.memory_scopes
+    {
+        return Err(Error::new(ErrorCode::SequenceViolation));
+    }
+    if let Some(accepted) = &binding.knowledge {
+        validate_accepted_knowledge(actor, accepted).await?;
+        bind_knowledge_policy(&mut material.projection_request, &accepted.policy_digest)?;
+        for block in &accepted.blocks {
+            if !material
+                .blocks
+                .iter()
+                .any(|existing| existing.id == block.id)
+            {
+                material.blocks.push(block.clone());
+            }
+        }
+    }
+    Ok(material)
 }

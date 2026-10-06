@@ -49,15 +49,8 @@ fn now() -> Result<i64, MemoryError> {
     )
     .map_err(|_| ContextError::Capacity.into())
 }
-fn counter(model: &str) -> Result<hm_compose::tokens::TokenCounter, MemoryError> {
-    let counter = hm_compose::tokens::TokenCounter::for_model(
-        model,
-        None,
-        hm_compose::tokens::FallbackWeights::default(),
-    )?;
-    if matches!(counter, hm_compose::tokens::TokenCounter::Fallback { .. }) {
-        return Err(ContextError::Unavailable("exact cue tokenizer unavailable".into()).into());
-    }
+fn counter(model: &str) -> Result<crate::context_tokenizer::BoundTokenCounter, MemoryError> {
+    let counter = crate::context_tokenizer::counter_for_model(model)?;
     Ok(counter)
 }
 fn snapshot(

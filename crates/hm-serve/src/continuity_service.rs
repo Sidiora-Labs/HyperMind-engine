@@ -205,8 +205,15 @@ async fn snapshot(
         .map_err(session_context::history_error)?;
     let unsupported_parts = !ledger.unsupported_parts.is_empty();
     let material =
-        session_context::required_materialization_locked(actor, &request, &ledger.history).await?;
-    let projection = context_projection::current(actor, scope, session).await?;
+        session_context::accepted_materialization_locked(actor, &request, &ledger.history).await?;
+    let mut projection = context_projection::current(actor, scope, session).await?;
+    if let Some(view) = &mut projection {
+        for block in &material.blocks {
+            if !view.blocks.iter().any(|existing| existing.id == block.id) {
+                view.blocks.push(block.clone());
+            }
+        }
+    }
     if projection.as_ref().map_or(0, |p| p.generation) != expected_generation {
         return Err(error(ErrorCode::SequenceViolation));
     }
@@ -288,14 +295,7 @@ fn pressure(
     if policy.mode == ContinuityMode::Primary && !verified {
         return Err(error(ErrorCode::SequenceViolation));
     }
-    let tokenizer = hm_compose::tokens::TokenCounter::for_model(
-        &s.request.model_id,
-        None,
-        hm_compose::tokens::FallbackWeights::default(),
-    )?;
-    if matches!(tokenizer, hm_compose::tokens::TokenCounter::Fallback { .. }) {
-        return Err(error(ErrorCode::OperationUnavailable));
-    }
+    let tokenizer = crate::context_tokenizer::counter_for_model(&s.request.model_id)?;
     let counter = |bytes: &[u8]| {
         tokenizer
             .count(bytes)

@@ -24,6 +24,15 @@ class Engine:
         return ContextClient(self, scope, session_id, actor=actor, context_owner=context_owner, conversation=conversation)
 
 
+    async def tokenizer_identity(self, model_id: str):
+        return json.loads(await asyncio.to_thread(self._native.tokenizer_identity, model_id))
+
+    async def count_provider_input(self, model_id: str, expected_generation: int, final_input: bytes):
+        return json.loads(await asyncio.to_thread(self._native.count_provider_input, model_id, expected_generation, bytes(final_input)))
+
+    async def count_ollama_user_input(self, model_id: str, expected_generation: int, content: str):
+        return json.loads(await asyncio.to_thread(self._native.count_ollama_user_input, model_id, expected_generation, content))
+
     async def tool(self, verb: str, arguments: dict):
         try:
             return json.loads(await asyncio.to_thread(self._native.call, verb, json.dumps(arguments, separators=(",", ":"))))

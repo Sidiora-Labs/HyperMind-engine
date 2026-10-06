@@ -10,6 +10,7 @@ repository.workspace = true
 hnsw = ["hm-proj/hnsw"]
 
 [dependencies]
+sha2.workspace = true
 thiserror = "2"
 hm-fabric = { path = "../hm-fabric" }
 hm-context = { path = "../hm-context" }
