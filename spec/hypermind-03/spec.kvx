@@ -998,12 +998,14 @@ result = "Development service compile and actual configured provider journey pas
 title = "Recurring primers and evidence-based refresh"
 wave = 3
 owner_lane = "notes"
-status = "in_progress"
+status = "done"
 requires = ["task.3.10"]
 coverage = ["req.deep.primer_development", "req.deep.primer_refresh"]
 touches = ["crates/hm-cortex/src/development_primers.rs", "crates/hm-serve/src/development_primers.rs", "crates/hm-serve/tests/development_primers.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_primers"
 acceptance = "Verified recurring questions produce evidence-linked primers without collapsing incompatible answers. Bounded refresh retains prior answers and exact anchors, checks current revisions and leaves unresolved backlog on blocked evidence or budget."
+
+result = "Compile and actual primer development and refresh journey passed with two real provider calls. Question, answer history, original provenance and current source fingerprints survive restart; atomic backlog archival and budget, tombstone and pinned-record refusal retain queued jobs. Automatic pool discovery and native worker registration remain integration obligations."
 
 [task.3.27]
 title = "Encrypted portable state and atomic restore"
@@ -1311,3 +1313,13 @@ requires = ["task.3.25", "task.3.11"]
 touches = ["crates/hm-mcp/src/lib.rs", "crates/hm-mcp/src/dispatcher.rs", "crates/hm-mcp/src/tools/remember.rs", "crates/hm-mcp/src/tools/session_context.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-mcp/tests/development_runtime.rs"]
 verify_cmd = "cargo test -p hm-mcp --test development_runtime"
 acceptance = "Existing context operations consume trusted configured development workers and current native historian publications. Source, permission and generation fences protect active cached bytes, restart and the next compatible reduction."
+
+[task.3.54]
+title = "Qualify restored child session bindings in Swift continuity"
+wave = 3
+owner_lane = "sdk"
+status = "in_progress"
+requires = ["task.2.7"]
+touches = ["sdk/swift/Sources/HyperMind/ContextContinuity.swift", "sdk/swift/Tests/HyperMindTests/ContextContinuityTests.swift"]
+verify_cmd = "cd sdk/swift && swift test --filter ContextContinuityTests"
+acceptance = "The actual native Swift consumer restores checkpoints and binds forked child sessions before recovering exact original source bytes, timestamps and identity."
