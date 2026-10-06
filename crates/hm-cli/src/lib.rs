@@ -54,6 +54,8 @@ enum Command {
     FabricWorker,
     /// Run an authenticated worker for an approved native tool.
     FabricToolWorker,
+    /// Run an authenticated worker for an approved model runner.
+    FabricRunnerWorker,
     Init {
         #[arg(long)]
         path: PathBuf,
@@ -242,6 +244,10 @@ async fn execute(command: Command) -> Result<Value> {
         }
         Command::FabricToolWorker => {
             hm_fabric::role_workers::tool_worker_from_env().await?;
+            Ok(json!({"ok":true,"stopped":true}))
+        }
+        Command::FabricRunnerWorker => {
+            hm_fabric::role_runner::runner_worker_from_env().await?;
             Ok(json!({"ok":true,"stopped":true}))
         }
         Command::Init {

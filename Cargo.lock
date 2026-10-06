@@ -1763,6 +1763,8 @@ dependencies = [
  "hm-context",
  "hm-core",
  "hm-ledger",
+ "hm-llm",
+ "hm-serve",
  "postgres",
  "rcgen",
  "reqwest",

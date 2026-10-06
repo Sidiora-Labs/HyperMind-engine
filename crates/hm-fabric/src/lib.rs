@@ -51,3 +51,5 @@ pub mod role_workers;
 pub mod secret_handles;
 
 pub mod backend_runtime;
+
+pub mod role_runner;
