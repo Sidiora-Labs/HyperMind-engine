@@ -23,3 +23,7 @@ pub mod compat_transport;
 pub mod role_store;
 
 pub mod role_dispatch;
+
+pub mod bus_contract;
+
+pub mod bus_memory;

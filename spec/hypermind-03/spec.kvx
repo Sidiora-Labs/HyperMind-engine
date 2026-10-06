@@ -869,12 +869,14 @@ result = "Real PostgreSQL store compile and focused backend gate passed: least-p
 title = "Process-local bus and naming parity"
 wave = 3
 owner_lane = "bus"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 coverage = ["req.coverage.bus"]
-touches = ["crates/hm-fabric/src/bus_memory.rs", "crates/hm-fabric/tests/bus_memory.rs"]
+touches = ["crates/hm-fabric/src/bus_contract.rs", "crates/hm-fabric/src/bus_memory.rs", "crates/hm-fabric/tests/bus_memory.rs"]
 verify_cmd = "cargo test -p hm-fabric --test bus_memory"
 acceptance = "A distinct process-local backend implements bounded stream, queue, register, census and settlement behavior with exact scoped naming and grants. Durable-only guarantees are explicitly inapplicable."
+
+result = "Process-local bus compile and six focused tests passed including concurrent publishing, CAS, queue claims and settlement. Six scoped stream families, collision checks, bounded digest messages, census and dead letters are implemented. Durability and distribution are unavailable; distributed backend remains separate."
 
 [task.3.18]
 title = "Owned process trees and platform restrictions"
