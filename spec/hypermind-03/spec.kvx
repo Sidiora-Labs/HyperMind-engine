@@ -398,7 +398,7 @@ title = "Wave 2 integration"
 wave = 2
 owner_lane = "integration"
 status = "pending"
-requires = ["task.2.1","task.2.2","task.2.3", "task.2.11", "task.2.12"]
+requires = ["task.2.1","task.2.2","task.2.3", "task.2.11", "task.2.12", "task.2.13", "task.2.14", "task.2.15"]
 touches = ["crates/hm-sim/tests/unified_memory_journey.rs"]
 verify_cmd = "cargo test -p hm-sim --test unified_memory_journey"
 acceptance = "One live host journey exercises all wave-2 consumers with real persistence and qualified SDK paths."
@@ -648,3 +648,33 @@ verify_cmd = "cargo test -p hm-sim --test unified_retrieval_journey actual_local
 acceptance = "A verified real local embedding model drives bounded backfill, semantic ranking, fingerprint compatibility, restart resumption and content-change invalidation; lexical or generated-vector substitutes cannot qualify this capability."
 
 qualification = "Verified pinned BGE-small with real ONNX inference passed the named lifecycle journey: bounded backfill resume, restart, model/content fingerprints, ranking, stale-vector exclusion and fresh rebackfill. Broader model quality and remote provider qualification remain outstanding."
+
+[task.2.13]
+title = "Scoped native memory portability consumers"
+wave = 2
+owner_lane = "surface"
+status = "in_progress"
+requires = ["task.2.11"]
+touches = ["crates/hm-mcp/src/tools/session_context.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-mcp/tests/session_context.rs", "sdk"]
+verify_cmd = "cargo test -p hm-mcp --test session_context"
+acceptance = "Scoped inspection exports canonical authoritative memory JSON Lines with verified manifest digest and byte count; the same native mutation path restores valid exports, rejects foreign or forged authority, and preserves revisions across reopen. Client consumers expose the actual transport contract."
+
+[task.2.14]
+title = "Validated Hypermid source history migration"
+wave = 2
+owner_lane = "source_service"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["crates/hm-serve/src/hypermid_context_import.rs", "crates/hm-serve/src/hypermid_import.rs", "crates/hm-serve/tests/hypermid_context_import.rs", "crates/hm-serve/tests/hypermid_import.rs", "crates/hm-sim/tests/unified_context_journey.rs"]
+verify_cmd = "cargo test -p hm-serve --test hypermid_context_import --test hypermid_import --test unified_memory_migration"
+acceptance = "The declared public Hypermid context export format migrates original source identities, bytes, times and supported relations through preflight validation, bounded staging and atomic visibility. Replay is idempotent, malformed or unsupported authority commits nothing, and exact recovery survives restart."
+
+[task.2.15]
+title = "Swift operation error fidelity"
+wave = 2
+owner_lane = "provider"
+status = "in_progress"
+requires = ["task.2.8"]
+touches = ["sdk/swift/Sources/HyperMind/ContextClient.swift", "sdk/swift/Tests/HyperMindTests/ContextTests.swift"]
+verify_cmd = "swift test --package-path sdk/swift --filter Context"
+acceptance = "Typed Swift errors preserve the actual native error code, bounded message and effect state without leaking complete request content. The real context journey identifies the failing operation and verifies the corrected contract."
