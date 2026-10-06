@@ -629,11 +629,13 @@ qualification = "Declared focused consumer checks passed; evolving native memory
 title = "Native memory and retrieval surface integration"
 wave = 2
 owner_lane = "surface"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["crates/hm-mcp/src/tools/session_context.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-mcp/tests/session_context.rs"]
 verify_cmd = "cargo test -p hm-mcp --test session_context"
 acceptance = "Existing verbs and scoped inspection expose native memory revisions, grants, tombstones, source registration, retrieval and configured real embedding backfill. Ledger errors preserve effect uncertainty and stale source state never serves as current context."
+
+qualification = "Library compile and three real ledger consumer tests passed. Source-backed notes, revisions, stale rejection, tombstones, lexical source retrieval, temporal offsets and explicit unavailable embeddings survived restart. Cross-actor sharing and export transport remain separate obligations."
 
 [task.2.12]
 title = "Real semantic embedding lifecycle qualification"
