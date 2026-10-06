@@ -187,6 +187,7 @@ async fn canonical(root: &Path, prompt: &str) -> (ActorEngine, CanonicalUsageBin
     .await
     .unwrap();
     let b = CanonicalUsageBinding {
+        lease: r.lease.clone(),
         reservation_id: r.id,
         input_digest: r.input_digest,
         reservation_digest: r.request_digest,

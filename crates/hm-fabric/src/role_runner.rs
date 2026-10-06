@@ -114,6 +114,7 @@ impl RunnerDeclaration {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct CanonicalUsageBinding {
+    pub lease: hm_context::maintenance::JobLease,
     pub reservation_id: String,
     pub input_digest: String,
     pub reservation_digest: String,
@@ -127,6 +128,7 @@ pub struct RunnerInput {
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RunnerOutcome {
+    pub provider_request_digest: String,
     pub value: serde_json::Value,
     pub original_provider_bytes: Vec<u8>,
     pub observation: ProviderUsageSnapshot,
@@ -134,6 +136,27 @@ pub struct RunnerOutcome {
     pub source: SourceFence,
     pub profile_fence: String,
     pub request_digest: String,
+}
+pub struct AuthenticatedRunnerReceipt {
+    outcome: RunnerOutcome,
+    scope: Scope,
+    worker_id: String,
+}
+impl AuthenticatedRunnerReceipt {
+    pub fn outcome(&self) -> &RunnerOutcome {
+        &self.outcome
+    }
+    pub fn scope(&self) -> &Scope {
+        &self.scope
+    }
+    pub fn worker_id(&self) -> &str {
+        &self.worker_id
+    }
+}
+pub fn provider_request_digest(d: &RunnerDeclaration, input: &RunnerInput) -> Result<String> {
+    d.validate()?;
+    let body = serde_json::json!({"model":d.profile.model_id,"messages":[{"role":"system","content":d.system},{"role":"user","content":input.prompt}],"format":d.json_schema,"stream":false,"options":{"num_predict":d.budget.reserved_output_tokens as u32}});
+    Ok(digest_bytes(&serde_json::to_vec(&body).map_err(err)?))
 }
 #[derive(Clone)]
 pub struct RunnerWorkerConfig {
@@ -373,7 +396,9 @@ impl RunnerWorkerSession {
                     .ok_or_else(|| err("missing work"))?;
                 let input = validate_input(&self.declaration, &work.work)?;
                 let parsed = observation(&result.original_provider_bytes, &ticket.id)?;
-                if result.usage != input.usage
+                if result.provider_request_digest
+                    != provider_request_digest(&self.declaration, &input)?
+                    || result.usage != input.usage
                     || result.request_digest != ticket.work_digest
                     || result.source != work.work.source
                     || result.profile_fence != profile(&self.declaration, &work.work.source)?
@@ -398,6 +423,34 @@ impl RunnerWorkerSession {
         let _ = self.router.complete(&self.binding, &ticket.id);
         self.in_flight = None;
         result
+    }
+    pub async fn receive_with_receipt(
+        &mut self,
+        registry: &mut DurableRoleRegistry,
+        source: &SourceFence,
+    ) -> Result<(WorkRecord, AuthenticatedRunnerReceipt)> {
+        let worker_id = self
+            .supervisor
+            .active()
+            .ok_or_else(|| err("worker unavailable"))?
+            .identity
+            .module_id
+            .clone();
+        let record = self.receive(registry, source).await?;
+        let output = record
+            .output
+            .as_ref()
+            .ok_or_else(|| err("missing output"))?;
+        if !matches!(output.terminal, RunTerminal::Completed { .. }) {
+            return Err(err("provider usage remains unknown"));
+        }
+        let outcome = serde_json::from_slice(&output.payload).map_err(err)?;
+        let receipt = AuthenticatedRunnerReceipt {
+            outcome,
+            scope: self.scope.clone(),
+            worker_id,
+        };
+        Ok((record, receipt))
     }
     pub async fn cancel(&mut self, registry: &mut DurableRoleRegistry) -> Result<()> {
         let t = self.in_flight.as_ref().ok_or_else(|| err("no run"))?;
@@ -532,9 +585,13 @@ fn approved(c: &Configuration, r: &RoleWireRequest) -> Result<()> {
 struct Observed {
     inner: HttpTransport,
     bytes: Arc<Mutex<Option<Vec<u8>>>>,
+    request_digest: Arc<Mutex<Option<String>>>,
 }
 impl WireTransport for Observed {
     fn send(&self, r: &WireRequest) -> std::result::Result<WireResponse, LlmError> {
+        *self.request_digest.lock().map_err(|_| LlmError::Capacity)? = Some(digest_bytes(
+            &serde_json::to_vec(&r.body).map_err(|_| LlmError::Capacity)?,
+        ));
         let (response, bytes) = self.inner.send_observed(r)?;
         *self.bytes.lock().map_err(|_| LlmError::Capacity)? = Some(bytes);
         Ok(response)
@@ -646,6 +703,7 @@ pub async fn runner_worker_from_env() -> Result<()> {
         let id = r.work.id.clone();
         let task = tokio::task::spawn_blocking(move || {
             let bytes = Arc::new(Mutex::new(None));
+            let request_digest = Arc::new(Mutex::new(None));
             let provider = Ollama::new(
                 ProviderConfig {
                     endpoint: d.endpoint,
@@ -657,6 +715,7 @@ pub async fn runner_worker_from_env() -> Result<()> {
                 Observed {
                     inner: HttpTransport::default(),
                     bytes: bytes.clone(),
+                    request_digest: request_digest.clone(),
                 },
             )
             .map_err(err)?;
@@ -671,7 +730,11 @@ pub async fn runner_worker_from_env() -> Result<()> {
                 .lock()
                 .map_err(|_| err("provider capture poisoned"))?
                 .take();
-            Ok::<_, RunnerError>((result, raw))
+            let request_digest = request_digest
+                .lock()
+                .map_err(|_| err("request capture poisoned"))?
+                .take();
+            Ok::<_, RunnerError>((result, raw, request_digest))
         });
         let mut started = Frame::request(&r.work.id, b"provider_dispatch_started".to_vec());
         started.kind = FrameKind::Response;
@@ -680,7 +743,7 @@ pub async fn runner_worker_from_env() -> Result<()> {
             r.work.deadline_ns.saturating_sub(now()).max(0) as u64,
         ));
         let finished = tokio::select! {result=task=>Some(result.map_err(err)??),incoming=transport.receive()=>{let cancel=incoming.map_err(err)?;if cancel.kind!=FrameKind::Cancel || cancel.correlation_id!=r.work.id{return Err(err("unexpected in-flight frame"));}None},_=tokio::time::sleep(timeout)=>None};
-        let output = if let Some((response, raw)) = finished {
+        let output = if let Some((response, raw, request_digest)) = finished {
             match response {
                 Ok(response) => {
                     if !response.value.is_object()
@@ -696,6 +759,8 @@ pub async fn runner_worker_from_env() -> Result<()> {
                     let observed = observation(&raw, &r.work.id)?;
                     measured(&c.declaration, &input, &observed)?;
                     let outcome = RunnerOutcome {
+                        provider_request_digest: request_digest
+                            .ok_or_else(|| err("missing original request digest"))?,
                         value: response.value,
                         original_provider_bytes: raw,
                         observation: observed,

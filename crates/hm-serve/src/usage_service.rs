@@ -125,6 +125,8 @@ pub struct ReservationRequest {
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct UsageReservation {
+    #[serde(default)]
+    pub runner_dispatch: Option<RunnerDispatchBinding>,
     pub id: String,
     pub request_digest: String,
     pub input_digest: String,
@@ -420,6 +422,7 @@ pub async fn reserve(
         .claim_job(&job_id, now, state.limits.lease_ms)?
         .ok_or(ContextError::Capacity)?;
     let reservation = UsageReservation {
+        runner_dispatch: None,
         id: id.clone(),
         request_digest,
         input_digest: request.input_digest,
@@ -934,4 +937,182 @@ pub async fn expire(
         append(actor, tail, &mut state).await?;
     }
     Ok(state)
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+pub struct RunnerDispatchBinding {
+    pub role_work_digest: String,
+    pub provider_request_digest: String,
+    pub source: hm_fabric::role_store::SourceFence,
+    pub profile_fence: String,
+    pub worker_id: String,
+}
+fn runner_binding_matches(
+    reservation: &UsageReservation,
+    binding: &hm_fabric::role_runner::CanonicalUsageBinding,
+) -> bool {
+    reservation.id == binding.reservation_id
+        && reservation.request_digest == binding.reservation_digest
+        && reservation.input_digest == binding.input_digest
+        && reservation.reserved_tokens == binding.reserved_tokens
+        && reservation.lease == binding.lease
+}
+pub async fn begin_runner_dispatch(
+    actor: &ActorEngine,
+    scope: &Scope,
+    owner: &Scope,
+    registry: &hm_fabric::role_store::DurableRoleRegistry,
+    work_id: &str,
+    declaration: &hm_fabric::role_runner::RunnerDeclaration,
+    worker_id: &str,
+) -> Result<hm_fabric::role_runner::CanonicalUsageBinding, MemoryError> {
+    authorize(scope, owner)?;
+    if registry.scope() != scope {
+        return Err(ContextError::ScopeMismatch.into());
+    }
+    let record = registry
+        .get(work_id)
+        .map_err(|e| invalid(&e.to_string()))?
+        .ok_or(ContextError::Stale)?;
+    if record.state != hm_fabric::role_store::WorkState::Approved
+        || record.descriptor
+            != declaration
+                .descriptor()
+                .map_err(|e| invalid(&e.to_string()))?
+    {
+        return Err(ContextError::Stale.into());
+    }
+    let input: hm_fabric::role_runner::RunnerInput = serde_json::from_slice(&record.work.payload)?;
+    if input.usage.input_digest != digest_bytes(input.prompt.as_bytes()) {
+        return Err(ContextError::Conflict.into());
+    }
+    let dispatch = RunnerDispatchBinding {
+        role_work_digest: digest_bytes(&serde_json::to_vec(&record.work)?),
+        provider_request_digest: hm_fabric::role_runner::provider_request_digest(
+            declaration,
+            &input,
+        )
+        .map_err(|e| invalid(&e.to_string()))?,
+        source: record.work.source.clone(),
+        profile_fence: hm_context::provider_continuity::fence_profile(
+            &declaration.profile,
+            declaration.budget,
+            &serde_json::to_string(&record.work.source)?,
+        )?
+        .digest,
+        worker_id: worker_id.into(),
+    };
+    let _writer = WRITER.lock().await;
+    let _guard = crate::context_jobs::CONTEXT_MUTATIONS.lock().await;
+    let tail = actor.stats().await?.applied.last_lsn;
+    let mut state = load(actor, scope).await?;
+    let reservation = state
+        .reservations
+        .get(&input.usage.reservation_id)
+        .ok_or(ContextError::Stale)?;
+    if !runner_binding_matches(reservation, &input.usage)
+        || reservation.attribution.worker_id != worker_id
+        || reservation.attribution.model_id != declaration.profile.model_id
+        || reservation.attribution.provider_id != "ollama-local"
+    {
+        return Err(ContextError::ScopeMismatch.into());
+    }
+    if reservation.dispatched
+        || reservation.observation_id.is_some()
+        || reservation.settled_tokens.is_some()
+        || reservation.lease.expires_ms <= now_ms()?
+        || state.accounting.jobs[&reservation.lease.job_id].status
+            != JobStatus::Running(reservation.lease.clone())
+    {
+        return Err(ContextError::Stale.into());
+    }
+    let reservation = state
+        .reservations
+        .get_mut(&input.usage.reservation_id)
+        .ok_or(ContextError::Stale)?;
+    reservation.dispatched = true;
+    reservation.runner_dispatch = Some(dispatch);
+    append(actor, tail, &mut state).await?;
+    Ok(input.usage)
+}
+pub async fn ingest_runner_receipt(
+    actor: &ActorEngine,
+    scope: &Scope,
+    owner: &Scope,
+    receipt: &hm_fabric::role_runner::AuthenticatedRunnerReceipt,
+) -> Result<UsageObservation, MemoryError> {
+    authorize(scope, owner)?;
+    if receipt.scope() != scope {
+        return Err(ContextError::ScopeMismatch.into());
+    }
+    let outcome = receipt.outcome();
+    let _writer = WRITER.lock().await;
+    let _guard = crate::context_jobs::CONTEXT_MUTATIONS.lock().await;
+    let tail = actor.stats().await?.applied.last_lsn;
+    let mut state = load(actor, scope).await?;
+    let reservation = state
+        .reservations
+        .get(&outcome.usage.reservation_id)
+        .ok_or(ContextError::Stale)?
+        .clone();
+    let dispatch = reservation
+        .runner_dispatch
+        .as_ref()
+        .ok_or(ContextError::Stale)?;
+    if !reservation.dispatched
+        || !runner_binding_matches(&reservation, &outcome.usage)
+        || dispatch.worker_id != receipt.worker_id()
+        || reservation.attribution.worker_id != receipt.worker_id()
+        || dispatch.source != outcome.source
+        || dispatch.role_work_digest != outcome.request_digest
+        || dispatch.provider_request_digest != outcome.provider_request_digest
+        || dispatch.profile_fence != outcome.profile_fence
+    {
+        return Err(ContextError::Conflict.into());
+    }
+    let observation_id = digest_bytes(&serde_json::to_vec(&(
+        scope,
+        &reservation.id,
+        &outcome.original_provider_bytes,
+    ))?);
+    if let Some(existing) = &reservation.observation_id {
+        if existing != &observation_id {
+            return Err(ContextError::Conflict.into());
+        }
+        return state
+            .observations
+            .get(existing)
+            .cloned()
+            .ok_or(ContextError::Stale.into());
+    }
+    let snapshot = ProviderUsageSnapshot::parse(
+        &outcome.original_provider_bytes,
+        ObservationMetadata {
+            provider_id: reservation.attribution.provider_id.clone(),
+            source: "authenticated-original-runner-response".into(),
+            evidence_id: observation_id.clone(),
+            observed_at_ns: now_ns()?,
+            expires_at_ns: None,
+            format: ObservationFormat::Ollama,
+        },
+    )
+    .map_err(|e| invalid(&e.to_string()))?;
+    let accepted_response = snapshot.raw["model"].as_str()
+        == Some(reservation.attribution.model_id.as_str())
+        && snapshot.raw["done"] == true
+        && snapshot.error.is_none();
+    let observation = UsageObservation {
+        id: observation_id.clone(),
+        reservation_id: reservation.id.clone(),
+        attribution: reservation.attribution.clone(),
+        snapshot,
+        catalog_estimate: None,
+        accepted_response,
+    };
+    state
+        .observations
+        .insert(observation_id.clone(), observation.clone());
+    settle_state(&mut state, &reservation.id, &observation_id, now_ms()?)?;
+    append(actor, tail, &mut state).await?;
+    Ok(observation)
 }
