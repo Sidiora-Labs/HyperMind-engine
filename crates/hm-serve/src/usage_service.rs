@@ -1120,3 +1120,131 @@ pub async fn ingest_runner_receipt(
     append(actor, tail, &mut state).await?;
     Ok(observation)
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct UsageRollupWire {
+    #[serde(with = "exact_usage_count")]
+    pub known_tokens: u64,
+    #[serde(with = "exact_usage_count")]
+    pub held_tokens: u64,
+    #[serde(with = "exact_usage_count")]
+    pub unknown_reservations: u64,
+    #[serde(with = "exact_usage_count")]
+    pub active_reservations: u64,
+    #[serde(with = "exact_usage_count")]
+    pub observed_calls: u64,
+    pub attributions: Vec<UsageAttribution>,
+    pub observations: Vec<String>,
+}
+impl From<UsageRollup> for UsageRollupWire {
+    fn from(value: UsageRollup) -> Self {
+        Self {
+            known_tokens: value.known_tokens,
+            held_tokens: value.held_tokens,
+            unknown_reservations: value.unknown_reservations,
+            active_reservations: value.active_reservations,
+            observed_calls: value.observed_calls,
+            attributions: value.attributions,
+            observations: value.observations,
+        }
+    }
+}
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct UsagePublicView {
+    pub version: u32,
+    pub scope: Scope,
+    pub rollup: UsageRollupWire,
+    pub state: serde_json::Value,
+}
+pub async fn public_view(
+    actor: &ActorEngine,
+    scope: &Scope,
+    owner: &Scope,
+    query: RollupQuery,
+) -> Result<UsagePublicView, MemoryError> {
+    authorize(scope, owner)?;
+    let tail = actor.stats().await?.applied.last_lsn;
+    let state = inspect(actor, scope, owner).await?;
+    let rollup = rollup(actor, scope, owner, query).await?;
+    crate::context_projection::validate_tail(actor, tail).await?;
+    Ok(UsagePublicView {
+        version: 1,
+        scope: scope.clone(),
+        rollup: rollup.into(),
+        state: public_state(&state)?,
+    })
+}
+fn public_state(state: &UsageState) -> Result<serde_json::Value, MemoryError> {
+    let reservations: Vec<_> = state
+        .reservations
+        .values()
+        .map(|reservation| {
+            serde_json::json!({
+                "id": reservation.id, "attribution": reservation.attribution,
+                "reserved_tokens": reservation.reserved_tokens.to_string(),
+                "reserved_at_ms": reservation.reserved_at_ms.to_string(),
+                "attempt": reservation.lease.attempt.to_string(),
+                "expires_ms": reservation.lease.expires_ms.to_string(),
+                "dispatched": reservation.dispatched,
+                "observation_id": reservation.observation_id,
+                "settled_tokens": reservation.settled_tokens.map(|count| count.to_string()),
+            })
+        })
+        .collect();
+    let observations: Vec<_> = state.observations.values().map(|observation| serde_json::json!({
+        "id": observation.id, "reservation_id": observation.reservation_id,
+        "attribution": observation.attribution, "accepted_response": observation.accepted_response,
+        "evidence_digest": observation.snapshot.fingerprint,
+        "provider_usage": public_provider_snapshot(&observation.snapshot),
+        "catalog_estimate": observation.catalog_estimate,
+    })).collect();
+    Ok(serde_json::json!({
+        "limits": { "total_tokens": state.limits.total_tokens.to_string(), "hourly_tokens": state.limits.hourly_tokens.to_string(), "daily_tokens": state.limits.daily_tokens.to_string(), "job_tokens": state.limits.job_tokens.to_string(), "concurrency": state.limits.concurrency.to_string(), "lease_ms": state.limits.lease_ms.to_string() },
+        "spent": state.accounting.spent.to_string(),
+        "unknown_usage": state.accounting.unknown_usage.iter().map(|(id,count)| (id.clone(),count.to_string())).collect::<BTreeMap<_,_>>(),
+        "reservations": reservations, "observations": observations,
+    }))
+}
+pub fn public_provider_snapshot(snapshot: &ProviderUsageSnapshot) -> serde_json::Value {
+    let windows: Vec<_> = snapshot.quota_windows.iter().map(|window| serde_json::json!({
+        "name": window.name, "unit": window.unit, "limit": window.limit,
+        "remaining": window.remaining, "used": window.used,
+        "starts_at_ns": window.starts_at_ns, "resets_at_ns": window.resets_at_ns,
+        "refill_amount": window.refill_amount, "interval_ms": window.interval_ms.map(|count| count.to_string()),
+    })).collect();
+    serde_json::json!({
+        "provider_id": snapshot.observation.provider_id,
+        "format": snapshot.observation.format,
+        "observed_at_ns": snapshot.observation.observed_at_ns.to_string(),
+        "expires_at_ns": snapshot.observation.expires_at_ns.map(|time| time.to_string()),
+        "tokens": snapshot.tokens, "quota_windows": windows,
+        "balance": snapshot.balance, "reported_charge": snapshot.reported_charge,
+        "funding": snapshot.funding.as_ref().map(|funding| serde_json::json!({"credits":funding.credits,"spent":funding.spent})),
+        "error_observed": snapshot.error.is_some(), "evidence_digest": snapshot.fingerprint,
+    })
+}
+mod exact_usage_count {
+    use serde::{Deserialize, Deserializer, Serializer};
+    pub fn serialize<S: Serializer>(value: &u64, serializer: S) -> Result<S::Ok, S::Error> {
+        serializer.serialize_str(&value.to_string())
+    }
+    pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<u64, D::Error> {
+        #[derive(Deserialize)]
+        #[serde(untagged)]
+        enum Input {
+            Decimal(String),
+            Legacy(u64),
+        }
+        match Input::deserialize(deserializer)? {
+            Input::Decimal(value) => {
+                let parsed: u64 = value.parse().map_err(serde::de::Error::custom)?;
+                if value != parsed.to_string() {
+                    return Err(serde::de::Error::custom("noncanonical usage count"));
+                }
+                Ok(parsed)
+            }
+            Input::Legacy(value) if value <= 9_007_199_254_740_991 => Ok(value),
+            Input::Legacy(_) => Err(serde::de::Error::custom("unsafe numeric usage count")),
+        }
+    }
+}

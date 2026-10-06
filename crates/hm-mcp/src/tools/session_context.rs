@@ -389,6 +389,24 @@ pub async fn inspect_with_operational(
         ));
     }
 
+    if uri == format!("hm://{}/context-usage", actor.actor()) {
+        let view = hm_serve::usage_service::public_view(
+            actor,
+            scope,
+            scope,
+            hm_serve::usage_service::RollupQuery {
+                session_id: None,
+                turn_id: None,
+                job_id: None,
+                provider_id: None,
+                start_ms: None,
+                end_ms: None,
+            },
+        )
+        .await
+        .map_err(hm_serve::session_context::memory_error)?;
+        return Ok(envelope(serde_json::to_value(view).map_err(|_| invalid())?));
+    }
     if uri == format!("hm://{}/context-development", actor.actor()) {
         let service = development_service(actor, scope, development)?;
         let mut state = service
