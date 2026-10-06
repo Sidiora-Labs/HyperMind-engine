@@ -13,3 +13,6 @@ __all__ += ["ContextBlock", "ContextClient", "ContextClientError", "ContextDiagn
 from .development import DevelopmentClient, DevelopmentBudget, SnapshotRequest, ScheduleMode, ServiceSchedule, ProposalDecision
 from .fabric import FabricClient
 __all__ += ["DevelopmentClient", "DevelopmentBudget", "SnapshotRequest", "ScheduleMode", "ServiceSchedule", "ProposalDecision", "FabricClient"]
+
+from .usage import UsageClient, decode_usage_view, decode_provider_usage
+__all__ += ["UsageClient", "decode_usage_view", "decode_provider_usage"]
