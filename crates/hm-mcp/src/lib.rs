@@ -48,9 +48,9 @@ pub use tools::recall::{RecallFilters, RecallInput, RecallMode};
 pub use tools::reconstruct::ReconstructionRuntime;
 pub use tools::relation::RelationBuildReport;
 pub use tools::remember::{
-    AnchorFacet, EmbeddingRuntime, RememberAnchor, RememberDerive, RememberDocument, RememberInput,
-    RememberKind,
-    RememberSource, RetentionInput, SensitivityInput, VocabularyInput,
+    AnchorFacet, DevelopmentRuntime, EmbeddingRuntime, RememberAnchor, RememberDerive,
+    RememberDocument, RememberInput, RememberKind, RememberSource, RetentionInput,
+    SensitivityInput, VocabularyInput,
 };
 pub use tools::retract::RetractInput;
 pub use tools::source::{
@@ -141,6 +141,7 @@ pub struct McpServer {
     dispute_runtime: Option<DisputeRuntime>,
     consolidation_runtime: Option<ConsolidationRuntime>,
     embedding_runtime: Option<EmbeddingRuntime>,
+    development_runtime: Option<DevelopmentRuntime>,
     reconstruction_runtime: Option<ReconstructionRuntime>,
     web_source_runtime: Option<WebSourceRuntime>,
     media_runtime: Option<MediaRuntime>,
@@ -157,6 +158,7 @@ impl McpServer {
             dispute_runtime: None,
             consolidation_runtime: None,
             embedding_runtime: None,
+            development_runtime: None,
             reconstruction_runtime: None,
             web_source_runtime: None,
             media_runtime: None,
@@ -176,6 +178,7 @@ impl McpServer {
             dispute_runtime: None,
             consolidation_runtime: None,
             embedding_runtime: None,
+            development_runtime: None,
             reconstruction_runtime: None,
             web_source_runtime: None,
             media_runtime: None,
@@ -185,7 +188,16 @@ impl McpServer {
     }
 
     #[must_use]
-    pub fn with_context_scope(mut self, scope: hm_context::Scope) -> Self { self.context_scope=Some(scope); self }
+    pub fn with_context_scope(mut self, scope: hm_context::Scope) -> Self {
+        self.context_scope = Some(scope);
+        self
+    }
+
+    #[must_use]
+    pub fn with_development_runtime(mut self, runtime: DevelopmentRuntime) -> Self {
+        self.development_runtime = Some(runtime);
+        self
+    }
 
     #[must_use]
     pub fn with_dispute_runtime(mut self, runtime: DisputeRuntime) -> Self {
@@ -260,12 +272,33 @@ impl McpServer {
 
     #[allow(clippy::too_many_lines, clippy::single_match_else)]
     async fn remember_inner(&self, mut input: RememberInput) -> Result<Envelope, Error> {
-        if let Some(context)=input.context.take() {
-            if !input.content.is_empty() || input.source.is_some() || input.derive.is_some() || input.document.is_some() || input.source_delivery.is_some() || input.source_settlement.is_some() || input.source_sync.is_some() || input.vocabulary.is_some() {return Err(Error::new(ErrorCode::InvalidArgument));}
-            let scope=self.context_scope.as_ref().ok_or_else(||Error::new(ErrorCode::InvalidArgument))?;
-            return tools::session_context::remember(&self.actor,scope,&input.conversation,context,self.embedding_runtime.as_ref()).await;
+        if let Some(context) = input.context.take() {
+            if !input.content.is_empty()
+                || input.source.is_some()
+                || input.derive.is_some()
+                || input.document.is_some()
+                || input.source_delivery.is_some()
+                || input.source_settlement.is_some()
+                || input.source_sync.is_some()
+                || input.vocabulary.is_some()
+            {
+                return Err(Error::new(ErrorCode::InvalidArgument));
+            }
+            let scope = self
+                .context_scope
+                .as_ref()
+                .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+            return tools::session_context::remember_with_development(
+                &self.actor,
+                scope,
+                &input.conversation,
+                context,
+                self.embedding_runtime.as_ref(),
+                self.development_runtime.as_ref(),
+            )
+            .await;
         }
-        let _context_guard=hm_serve::context_jobs::CONTEXT_MUTATIONS.lock().await;
+        let _context_guard = hm_serve::context_jobs::CONTEXT_MUTATIONS.lock().await;
         if input.conversation.is_empty() {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
@@ -745,7 +778,7 @@ impl McpServer {
     }
 
     pub async fn activate_envelope(&self, input: ActivateInput) -> Envelope {
-        let mutation=input.context.is_some();
+        let mutation = input.context.is_some();
         match self.activate_inner(input).await {
             Ok(value) => value,
             Err(error) if error.code == ErrorCode::Tripwire => Envelope::security_error(error),
@@ -754,10 +787,22 @@ impl McpServer {
     }
 
     async fn activate_inner(&self, input: ActivateInput) -> Result<Envelope, Error> {
-        if let Some(mut context)=input.context {
-            if context.get("query").is_none() {context["query"]=json!(input.query);}
-            let scope=self.context_scope.as_ref().ok_or_else(||Error::new(ErrorCode::InvalidArgument))?;
-            return tools::session_context::activate(&self.actor,&input.conversation,scope,context,self.embedding_runtime.as_ref()).await;
+        if let Some(mut context) = input.context {
+            if context.get("query").is_none() {
+                context["query"] = json!(input.query);
+            }
+            let scope = self
+                .context_scope
+                .as_ref()
+                .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?;
+            return tools::session_context::activate(
+                &self.actor,
+                &input.conversation,
+                scope,
+                context,
+                self.embedding_runtime.as_ref(),
+            )
+            .await;
         }
         if input.conversation.is_empty() || input.budget_tokens == 0 {
             return Err(Error::new(ErrorCode::InvalidArgument));
@@ -776,8 +821,23 @@ impl McpServer {
     }
 
     pub async fn inspect_envelope(&self, input: InspectInput) -> Envelope {
-        if input.uri.as_deref().is_some_and(|uri|uri.starts_with(&format!("hm://{}/context",self.actor.actor()))) {
-            return match tools::session_context::inspect(&self.actor,self.context_scope.as_ref(),input.uri.as_deref().unwrap(),self.embedding_runtime.as_ref()).await {Ok(v)=>v,Err(e)=>Envelope::error(e,true)};
+        if input
+            .uri
+            .as_deref()
+            .is_some_and(|uri| uri.starts_with(&format!("hm://{}/context", self.actor.actor())))
+        {
+            return match tools::session_context::inspect_with_development(
+                &self.actor,
+                self.context_scope.as_ref(),
+                input.uri.as_deref().unwrap(),
+                self.embedding_runtime.as_ref(),
+                self.development_runtime.as_ref(),
+            )
+            .await
+            {
+                Ok(v) => v,
+                Err(e) => Envelope::error(e, true),
+            };
         }
         match tools::inspect::run(
             &self.actor,
@@ -788,9 +848,9 @@ impl McpServer {
         .await
         {
             Ok(mut value) => {
-                value.health["context"]=json!({"version":hm_context::CONTRACT_VERSION,"available":self.context_scope.is_some(),"activation":"activate.context","mutations":"remember.context","inspection":"hm://actor/context","operations":["source","relation","fork","job","import","memory","retrieval_source","retrieval_tombstone","embedding","backfill"]});
+                value.health["context"] = json!({"version":hm_context::CONTRACT_VERSION,"available":self.context_scope.is_some(),"activation":"activate.context","mutations":"remember.context","inspection":"hm://actor/context","operations":["source","relation","fork","job","import","memory","retrieval_source","retrieval_tombstone","embedding","backfill"]});
                 value
-            },
+            }
             Err(error) => Envelope::error(error, false),
         }
     }

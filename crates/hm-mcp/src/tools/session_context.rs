@@ -29,6 +29,9 @@ pub enum RememberContext {
     Job {
         request: ContextJobRequest,
     },
+    Development {
+        request: hm_serve::development_service::DevelopmentRequest,
+    },
     Memory {
         request: hm_serve::context_memory::MemoryRequest,
     },
@@ -70,6 +73,16 @@ pub async fn remember(
     input: Value,
     runtime: Option<&super::remember::EmbeddingRuntime>,
 ) -> Result<Envelope, Error> {
+    remember_with_development(actor, scope, conversation, input, runtime, None).await
+}
+pub async fn remember_with_development(
+    actor: &ActorEngine,
+    scope: &Scope,
+    conversation: &str,
+    input: Value,
+    runtime: Option<&super::remember::EmbeddingRuntime>,
+    development: Option<&super::remember::DevelopmentRuntime>,
+) -> Result<Envelope, Error> {
     if input
         .get("request")
         .and_then(|r| r.get("version"))
@@ -80,6 +93,13 @@ pub async fn remember(
     }
     let operation: RememberContext = serde_json::from_value(input).map_err(|_| invalid())?;
     let reply = match operation {
+        RememberContext::Development { request } => {
+            let service = development_service(actor, scope, development)?;
+            service
+                .execute(actor, scope, request)
+                .await
+                .map_err(hm_serve::session_context::memory_error)?
+        }
         RememberContext::Memory { request } => {
             if matches!(&request.command,hm_serve::context_memory::MemoryCommand::Create{record}|hm_serve::context_memory::MemoryCommand::Revise{record,..} if record.authority==Authority::RuntimeFact)
             {
@@ -305,7 +325,25 @@ pub async fn inspect(
     uri: &str,
     runtime: Option<&super::remember::EmbeddingRuntime>,
 ) -> Result<Envelope, Error> {
+    inspect_with_development(actor, scope, uri, runtime, None).await
+}
+pub async fn inspect_with_development(
+    actor: &ActorEngine,
+    scope: Option<&Scope>,
+    uri: &str,
+    runtime: Option<&super::remember::EmbeddingRuntime>,
+    development: Option<&super::remember::DevelopmentRuntime>,
+) -> Result<Envelope, Error> {
     let scope = scope.ok_or_else(invalid)?;
+    if uri == format!("hm://{}/context-development", actor.actor()) {
+        let service = development_service(actor, scope, development)?;
+        let mut state = service
+            .inspect(actor, scope)
+            .await
+            .map_err(hm_serve::session_context::memory_error)?;
+        state["runtime"] = super::remember::DevelopmentRuntime::metadata(development);
+        return Ok(envelope(state));
+    }
     if uri == format!("hm://{}/context-memory-export", actor.actor()) {
         return Ok(envelope(
             hm_serve::session_context::export_memory(actor, scope).await?,
@@ -469,4 +507,16 @@ async fn memory_inspect(
         )
         .await?,
     ))
+}
+
+fn development_service(
+    actor: &ActorEngine,
+    scope: &Scope,
+    runtime: Option<&super::remember::DevelopmentRuntime>,
+) -> Result<hm_serve::development_service::DevelopmentService, Error> {
+    match runtime {
+        Some(runtime) => runtime.service(actor.clone(), scope.clone()),
+        None => hm_serve::development_service::DevelopmentService::new(scope.clone(), vec![])
+            .map_err(hm_serve::session_context::memory_error),
+    }
 }

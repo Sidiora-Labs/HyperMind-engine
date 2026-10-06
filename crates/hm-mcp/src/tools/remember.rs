@@ -420,3 +420,237 @@ pub struct RememberInput {
     #[serde(default)]
     pub context: Option<serde_json::Value>,
 }
+
+#[derive(Clone)]
+pub struct DevelopmentRuntime {
+    endpoint: String,
+    model: String,
+    timeout: std::time::Duration,
+}
+impl DevelopmentRuntime {
+    pub fn from_env() -> Result<Option<Self>, Error> {
+        let selected = match std::env::var("HM_DEVELOPMENT_PROVIDER") {
+            Ok(value) => value,
+            Err(std::env::VarError::NotPresent) => "off".into(),
+            Err(_) => return Err(Error::new(ErrorCode::InvalidArgument)),
+        };
+        match selected.as_str() {
+            "off" => Ok(None),
+            "ollama" => {
+                let endpoint = std::env::var("HM_DEVELOPMENT_ENDPOINT")
+                    .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+                let model = std::env::var("HM_DEVELOPMENT_MODEL")
+                    .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+                Self::ollama(endpoint, model, std::time::Duration::from_secs(60)).map(Some)
+            }
+            _ => Err(Error::new(ErrorCode::InvalidArgument)),
+        }
+    }
+    pub fn ollama(
+        endpoint: String,
+        model: String,
+        timeout: std::time::Duration,
+    ) -> Result<Self, Error> {
+        let url = url::Url::parse(&endpoint).map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+        if !matches!(url.scheme(), "http" | "https")
+            || !url.username().is_empty()
+            || url.password().is_some()
+            || url.query().is_some()
+            || url.fragment().is_some()
+            || timeout.is_zero()
+            || timeout > std::time::Duration::from_secs(300)
+        {
+            return Err(Error::new(ErrorCode::InvalidArgument));
+        }
+        hm_context::validate_id(&model).map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+        Ok(Self {
+            endpoint,
+            model,
+            timeout,
+        })
+    }
+    pub fn service(
+        &self,
+        actor: hm_serve::actor::ActorEngine,
+        scope: hm_context::Scope,
+    ) -> Result<hm_serve::development_service::DevelopmentService, Error> {
+        use hm_context::development::DevelopmentKind;
+        let workers: Vec<(
+            String,
+            Arc<dyn hm_serve::development_scheduler::DevelopmentWorker>,
+        )> = [
+            ("historian", DevelopmentKind::Historian),
+            ("extraction", DevelopmentKind::Extraction),
+        ]
+        .into_iter()
+        .map(|(id, kind)| {
+            (
+                id.into(),
+                Arc::new(RuntimeDevelopmentWorker {
+                    actor: actor.clone(),
+                    runtime: self.clone(),
+                    kind,
+                }) as Arc<dyn hm_serve::development_scheduler::DevelopmentWorker>,
+            )
+        })
+        .collect();
+        hm_serve::development_service::DevelopmentService::new(scope, workers)
+            .map_err(hm_serve::session_context::memory_error)
+    }
+    pub fn metadata(runtime: Option<&Self>) -> serde_json::Value {
+        match runtime {
+            None => {
+                serde_json::json!({"provider":"off","registered_families":[],"readiness":"disabled","unavailable_families":["historian","extraction","indexing","verification","curation","retrospective","primer","conditional_note","profile_proposal","documentation_proposal"]})
+            }
+            Some(runtime) => {
+                serde_json::json!({"provider":"ollama","model":runtime.model,"readiness":"configured","registered_families":["historian","extraction"],"unavailable_families":["indexing","verification","curation","retrospective","primer","conditional_note","profile_proposal","documentation_proposal"],"historian_summary_slot":"first authorized new record ID in lexical order"})
+            }
+        }
+    }
+}
+struct RuntimeDevelopmentWorker {
+    actor: hm_serve::actor::ActorEngine,
+    runtime: DevelopmentRuntime,
+    kind: hm_context::development::DevelopmentKind,
+}
+impl hm_serve::development_scheduler::DevelopmentWorker for RuntimeDevelopmentWorker {
+    fn kind(&self) -> hm_context::development::DevelopmentKind {
+        self.kind
+    }
+    fn provider_policy(&self) -> Option<&str> {
+        Some("ollama")
+    }
+    fn run(
+        &self,
+        evidence: hm_context::development::EvidenceSnapshot,
+        plan_id: String,
+    ) -> std::pin::Pin<
+        Box<
+            dyn std::future::Future<
+                    Output = Result<
+                        hm_context::development::DevelopmentPlan,
+                        hm_serve::development_scheduler::WorkerFailure,
+                    >,
+                > + Send
+                + '_,
+        >,
+    > {
+        Box::pin(async move {
+            use hm_context::{ContextError, development::DevelopmentKind, maintenance::Usage};
+            let prepare = async {
+                let memory =
+                    hm_serve::context_memory::rebuild(&self.actor, &evidence.scope).await?;
+                let capability = memory
+                    .worker_capabilities
+                    .get(&evidence.capability_id)
+                    .ok_or(ContextError::Stale)?;
+                if capability.digest()? != evidence.capability_digest {
+                    return Err(hm_serve::context_memory::MemoryError::Context(
+                        ContextError::Stale,
+                    ));
+                }
+                let mut slots: Vec<_> = capability.new_record_ids.iter().cloned().collect();
+                let summary = if self.kind == DevelopmentKind::Historian {
+                    if slots.len() < 2 {
+                        return Err(ContextError::Invalid(
+                            "historian requires authorized summary and fact slots".into(),
+                        )
+                        .into());
+                    }
+                    Some(slots.remove(0))
+                } else {
+                    None
+                };
+                if slots.is_empty() || slots.len() > 63 {
+                    return Err(
+                        ContextError::Invalid("authorized fact slots required".into()).into(),
+                    );
+                }
+                let chunk = if self.kind == DevelopmentKind::Historian {
+                    let history = hm_serve::context_history::replay(
+                        &self.actor,
+                        &evidence.scope,
+                        &evidence.session_id,
+                        &evidence.conversation,
+                    )
+                    .await
+                    .map_err(|error| match error {
+                        hm_serve::context_history::HistoryError::Context(error) => {
+                            hm_serve::context_memory::MemoryError::Context(error)
+                        }
+                        hm_serve::context_history::HistoryError::Ledger(error) => {
+                            hm_serve::context_memory::MemoryError::Ledger(error)
+                        }
+                    })?
+                    .history;
+                    let ids: std::collections::BTreeSet<_> = evidence
+                        .sources
+                        .iter()
+                        .map(|source| source.id.as_str())
+                        .collect();
+                    let sources: Vec<_> = history
+                        .visible_messages()
+                        .into_iter()
+                        .filter(|source| ids.contains(source.id.as_str()))
+                        .cloned()
+                        .collect();
+                    if sources.len() != evidence.sources.len() {
+                        return Err(ContextError::Invalid(
+                            "historian requires exact conversation sources".into(),
+                        )
+                        .into());
+                    }
+                    let spans = sources
+                        .iter()
+                        .map(|source| history.source_span(&source.id))
+                        .collect::<Result<Vec<_>, _>>()?;
+                    let mut chunks = hm_context::historian::select_chunks_with_spans(
+                        &sources,
+                        &spans,
+                        hm_context::historian::ChunkLimits {
+                            max_messages: 256,
+                            max_bytes: usize::try_from(evidence.budget.max_input_bytes)
+                                .map_err(|_| ContextError::Capacity)?,
+                        },
+                    )?;
+                    if chunks.len() != 1 {
+                        return Err(ContextError::Invalid(
+                            "historian source set exceeds one bounded chunk".into(),
+                        )
+                        .into());
+                    }
+                    Some(chunks.remove(0))
+                } else {
+                    None
+                };
+                let provider = hm_cortex::development_historian::HistorianProvider::new(
+                    self.runtime.endpoint.clone(),
+                    self.runtime.model.clone(),
+                    self.kind,
+                    summary,
+                    slots,
+                    chunk,
+                )?;
+                hm_serve::development_historian::HistorianWorker::new(
+                    provider,
+                    self.runtime.timeout,
+                )
+                .map_err(hm_serve::context_memory::MemoryError::Context)
+            }
+            .await;
+            let worker =
+                prepare.map_err(|error| hm_serve::development_scheduler::WorkerFailure {
+                    error: error.to_string(),
+                    usage: Usage::Known(0),
+                })?;
+            worker
+                .generate(evidence, plan_id)
+                .await
+                .map(|execution| execution.plan)
+                .map_err(|failure| hm_serve::development_scheduler::WorkerFailure {
+                    error: failure.error,
+                    usage: failure.usage,
+                })
+        })
+    }
+}

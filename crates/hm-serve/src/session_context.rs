@@ -437,6 +437,32 @@ async fn assemble(
             published.push((job.chunk, result));
         }
     }
+    let native_memory = crate::context_memory::rebuild(actor, &request.scope)
+        .await
+        .map_err(memory_error)?;
+    let native_summaries = crate::development_service::current_summaries(
+        &native_memory,
+        &request.scope,
+        &history,
+        policy,
+        now_ns,
+    )
+    .map_err(memory_error)?;
+    for (id, reason) in native_summaries.omitted {
+        gaps.push(format!("Native summary {id} omitted: {reason}"));
+    }
+    for (chunk, result) in native_summaries.summaries {
+        if let Some((_, existing)) = published.iter().find(|(old, _)| old.digest == chunk.digest) {
+            if existing != &result {
+                gaps.push(format!(
+                    "Native summary for {} conflicts with an existing publication",
+                    chunk.digest
+                ));
+            }
+        } else {
+            published.push((chunk, result));
+        }
+    }
     let synced = crate::context_projection::sync_summaries(
         actor,
         &history,
@@ -664,6 +690,7 @@ async fn memory_materialization(
 ) -> Result<(Vec<ContextBlock>, Vec<Value>, String), Error> {
     let mut blocks = Vec::new();
     let mut views = Vec::new();
+    let mut fences = Vec::new();
     for scope in scopes {
         scope.validate().map_err(map)?;
         let memory = crate::context_memory::rebuild(actor, scope)
@@ -671,6 +698,7 @@ async fn memory_materialization(
             .map_err(memory_error)?;
         let mut visible = Vec::new();
         let mut origins = Vec::new();
+        let mut required_records = Vec::new();
         for record in memory
             .records
             .values()
@@ -697,6 +725,7 @@ async fn memory_materialization(
             {
                 continue;
             }
+            required_records.push((record.id.clone(), record.revision_digest.clone()));
             let mut provenance: Vec<_> = record
                 .provenance
                 .iter()
@@ -737,12 +766,13 @@ async fn memory_materialization(
                 required: true,
             });
         }
+        fences.push(json!({"scope":scope,"required_records":required_records}));
         views.push(
             json!({"scope":scope,"cursor":memory.cursor,"visible":visible,"provenance":origins}),
         );
     }
     let fence = digest_bytes(
-        &serde_json::to_vec(&views).map_err(|_| Error::new(ErrorCode::SchemaInvalid))?,
+        &serde_json::to_vec(&fences).map_err(|_| Error::new(ErrorCode::SchemaInvalid))?,
     );
     Ok((blocks, views, fence))
 }

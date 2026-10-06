@@ -1314,11 +1314,13 @@ result = "Compile and seven atomic admission tests passed. Archived generation f
 title = "Connect native development dispatch and validated historian context"
 wave = 3
 owner_lane = "surface"
-status = "in_progress"
+status = "done"
 requires = ["task.3.25", "task.3.11"]
 touches = ["crates/hm-mcp/src/lib.rs", "crates/hm-mcp/src/dispatcher.rs", "crates/hm-mcp/src/tools/remember.rs", "crates/hm-mcp/src/tools/session_context.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-mcp/tests/development_runtime.rs"]
 verify_cmd = "cargo test -p hm-mcp --test development_runtime"
 acceptance = "Existing context operations consume trusted configured development workers and current native historian publications. Source, permission and generation fences protect active cached bytes, restart and the next compatible reduction."
+
+result = "Compile and actual production dispatcher with real provider journey passed. Native summary publication preserves deferred provider bytes and generation until the next compatible fold; restart and stale-policy omission passed. Unsupported worker families remain absent. Socket framing and aggregate hosted journeys remain separate."
 
 [task.3.54]
 title = "Qualify restored child session bindings in Swift continuity"
