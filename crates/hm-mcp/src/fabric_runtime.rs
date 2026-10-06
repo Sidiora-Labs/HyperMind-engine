@@ -3,6 +3,7 @@ use hm_core::{Error, ErrorCode};
 use hm_fabric::{
     backend_config::*,
     backend_runtime::{BackendRuntime, RUNTIME_BACKEND_MIGRATIONS},
+    bus_nats::NatsCredentials,
     postgres::PostgresSecretHandle,
     runtime::RuntimeConfig,
     supervisor::{Probe, ProcessSpec, RestartPolicy},
@@ -32,6 +33,8 @@ struct Startup {
     worker_key: [u8; 32],
     #[serde(default)]
     postgres_secrets: BTreeMap<String, PathBuf>,
+    #[serde(default)]
+    nats_secrets: BTreeMap<String, PathBuf>,
 }
 fn invalid() -> Error {
     Error::new(ErrorCode::InvalidArgument)
@@ -94,13 +97,34 @@ pub async fn configure_from_env(
         || config.client_key == [0; 32]
         || config.worker_key == [0; 32]
         || config.client_key == config.worker_key
-        || !matches!(
-            config.backend.bus,
-            BusBackendDescriptor::ProcessLocal { .. }
-        )
     {
         return Err(invalid());
     }
+    let nats_credential = match &config.backend.bus {
+        BusBackendDescriptor::ProcessLocal { .. } if config.nats_secrets.is_empty() => None,
+        BusBackendDescriptor::ProvisionedNats { secret_ref, .. }
+            if config.nats_secrets.len() == 1 =>
+        {
+            let path = config.nats_secrets.get(secret_ref).ok_or_else(invalid)?;
+            if !path.is_absolute() || std::fs::canonicalize(path).map_err(|_| invalid())? != *path {
+                return Err(invalid());
+            }
+            let secret: NatsCredentials =
+                serde_json::from_slice(&read_owner_file(path.clone(), 8192)?)
+                    .map_err(|_| invalid())?;
+            if secret.username.is_empty()
+                || secret.username.len() > 128
+                || secret.password.is_empty()
+                || secret.password.len() > 4096
+                || secret.username.contains(['\0', '\r', '\n'])
+                || secret.password.contains(['\0', '\r', '\n'])
+            {
+                return Err(invalid());
+            }
+            Some((secret_ref.clone(), secret))
+        }
+        _ => return Err(invalid()),
+    };
     let credential = match &config.backend.operational {
         OperationalBackendDescriptor::Sqlite if config.postgres_secrets.is_empty() => None,
         OperationalBackendDescriptor::Postgres { secret_ref, .. }
@@ -145,7 +169,13 @@ pub async fn configure_from_env(
                 _ => Err(BackendConfigError::SecretUnavailable),
             }
         },
-        |_| Err(BackendConfigError::SecretUnavailable),
+        {
+            let mut credential = nats_credential;
+            move |reference| match credential.take() {
+                Some((expected, secret)) if reference == expected => Ok(secret),
+                _ => Err(BackendConfigError::SecretUnavailable),
+            }
+        },
     )
     .await
     .map_err(|_| Error::new(ErrorCode::OperationUnavailable))?;

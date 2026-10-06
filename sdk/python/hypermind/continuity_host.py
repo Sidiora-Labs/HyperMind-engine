@@ -58,6 +58,9 @@ class GideonContinuityAdapter(GideonContextAdapter):
         self._tokenizer_identity: dict | None = None
         self.final_input_count: dict | None = None
         self.final_chat_count: dict | None = None
+        self._native_runtime = None
+        self._native_provider = None
+        self.provider_dispatches: list[dict] = []
 
     @property
     def owns_compaction(self) -> bool:
@@ -93,6 +96,11 @@ class GideonContinuityAdapter(GideonContextAdapter):
                 raise ContextBoundaryRefusal('native continuity mode was not accepted at boundary')
             self.mode, self.strict, self._pending_mode = mode, strict, None
         self.comparison = None
+        self.final_input_count = None
+        self.final_chat_count = None
+        self.provider_dispatches = []
+        self._native_runtime = None
+        self._native_provider = None
         self._ticket = None
         if self.mode in ('off', 'pass_through'):
             self._turn_active = True
@@ -166,6 +174,20 @@ class GideonContinuityAdapter(GideonContextAdapter):
                 raise ContextBoundaryRefusal('primary dispatch lost its installed turn authority')
             import inspect
             from pathlib import Path
+            if type(provider_client).__name__ == 'NativeAgentRuntime':
+                from gideon.cognition import context_engine
+                expected = getattr(context_engine, 'HYPERMIND_DEFAULT_RUNTIME_SHA256', None)
+                if not expected or sha256(Path(inspect.getfile(type(provider_client))).read_bytes()).hexdigest() != expected:
+                    raise ContextBoundaryRefusal('default runtime dispatch integration differs')
+                if provider_client._session_key != session_key or provider_client._definition.model != model_id:
+                    raise ContextBoundaryRefusal('default runtime binding differs')
+                if not isinstance(provider_input, str) or not self._pending_input or self._pending_input not in provider_input:
+                    raise ContextBoundaryRefusal('host hooks removed the verified native context')
+                self._native_runtime = provider_client
+                self._native_provider = provider_client._model
+                provider_client._hypermind_primary_owner = self
+                self._native_provider._hypermind_primary_owner = self
+                return
             supported = '2d9537932fc26b290f2c688dd45f2a1016b6113a57cfdb528b56fe723a76d24e'
             if provider_client is None or type(provider_client).__name__ != 'OllamaProvider':
                 raise ContextBoundaryRefusal('actual provider framing is not qualified for primary continuity')
@@ -223,6 +245,102 @@ class GideonContinuityAdapter(GideonContextAdapter):
                     pass
             raise
 
+    async def validate_model_dispatch(self, runtime, messages, tools) -> None:
+        from gideon.cognition.context_engine import get_engine, ContextBoundaryRefusal
+        if self.mode != 'primary':
+            return
+        if get_engine() is not self or not self._turn_active or runtime is not self._native_runtime or runtime._model is not self._native_provider:
+            raise ContextBoundaryRefusal('native runtime model dispatch lost turn authority')
+        if self._prepared_digest != self._digest(self._events()) or self._binding() != self._provider_binding:
+            raise ContextBoundaryRefusal('host source or budget changed during native execution')
+        if self._ticket is None:
+            generation = await self.continuity.generation()
+            fresh = await self.continuity.call({'action': 'pre_hook', 'budget': asdict(self.budget), 'required_ids': []}, generation=generation)
+            if fresh.get('mode') != 'primary' or not fresh.get('ticket'):
+                raise ContextBoundaryRefusal('native follow-up projection refused')
+            self._generation, self._ticket = generation, fresh['ticket']
+        self._native_request = (messages, tools)
+
+    def normalize_provider_messages(self, provider, messages):
+        from gideon.cognition.context_engine import ContextBoundaryRefusal
+        if self.mode != 'primary' or self._native_runtime is None:
+            return messages
+        if provider is not self._native_provider or self._ticket is None:
+            raise ContextBoundaryRefusal('tool argument normalization lost turn authority')
+        from copy import deepcopy
+        normalized = deepcopy(messages)
+        for message in normalized:
+            for call in message.get('tool_calls', []):
+                function = call.get('function', {})
+                arguments = function.get('arguments')
+                if isinstance(arguments, str):
+                    try:
+                        arguments = json.loads(arguments)
+                    except (TypeError, ValueError) as error:
+                        raise ContextBoundaryRefusal('tool arguments are not valid JSON') from error
+                    if not isinstance(arguments, dict):
+                        raise ContextBoundaryRefusal('tool arguments must be a JSON object')
+                    function['arguments'] = arguments
+        self._native_request = (normalized, self._native_request[1])
+        return normalized
+
+    async def validate_provider_dispatch(self, provider, payload) -> None:
+        from gideon.cognition import context_engine
+        from gideon.cognition.context_engine import ContextBoundaryRefusal
+        from pathlib import Path
+        import inspect
+        if self.mode != 'primary' or self._native_runtime is None:
+            return
+        try:
+            if context_engine.get_engine() is not self or provider is not self._native_provider or self._ticket is None:
+                raise ContextBoundaryRefusal('actual provider dispatch lost native authority')
+            expected = getattr(context_engine, 'HYPERMIND_DEFAULT_PROVIDER_SHA256', None)
+            if type(provider).__name__ != 'OllamaProvider' or not expected or sha256(Path(inspect.getfile(type(provider))).read_bytes()).hexdigest() != expected:
+                raise ContextBoundaryRefusal('actual default provider serializer differs')
+            messages, tools = self._native_request
+            if payload.get('messages') != messages or payload.get('tools', []) != (tools or []) or payload.get('model') != self.provider.model_id:
+                raise ContextBoundaryRefusal('actual provider payload differs from bound runtime request')
+            if any(not isinstance(message.get('content', ''), str) or message.get('images') for message in messages):
+                raise ContextBoundaryRefusal('nontext native modalities are unsupported')
+            if not any(self._pending_input in message.get('content', '') for message in messages if message.get('role') == 'user'):
+                raise ContextBoundaryRefusal('actual runtime history lost verified native projection')
+            identity = self._tokenizer_identity
+            if identity is None:
+                raise ContextBoundaryRefusal('trusted tokenizer binding absent')
+            if sha256(provider.endpoint.rstrip('/').encode()).hexdigest() != identity.get('provider_endpoint_sha256'):
+                raise ContextBoundaryRefusal('actual provider endpoint differs from trusted registry')
+            counter = getattr(self.context.client, 'count_ollama_chat_input', None)
+            if not callable(counter):
+                raise ContextBoundaryRefusal('exact native messages and tools serializer is unavailable')
+            payload['truncate'] = False
+            payload_bytes = json.dumps(payload, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode()
+            await provider.start()
+            actual_http_body = provider._client.build_request('POST', '/api/chat', json=payload).content
+            if actual_http_body != payload_bytes:
+                raise ContextBoundaryRefusal('actual HTTP provider JSON bytes differ from native counted payload')
+            measured = await counter(self.provider.model_id, identity['generation'], payload_bytes, asdict(self.budget))
+            if measured.get('identity') != identity or measured.get('payload_sha256') != sha256(payload_bytes).hexdigest() or type(measured.get('tokens')) is not int or not 0 <= measured['tokens'] <= self.budget.available:
+                raise ContextBoundaryRefusal('exact provider framing or budget refused')
+            if self._prepared_digest != self._digest(self._events()) or self._binding() != self._provider_binding:
+                raise ContextBoundaryRefusal('host source or budget changed during provider validation')
+            validated = await self.continuity.call({'action': 'post_hook', 'ticket': self._ticket}, generation=self._generation)
+            if validated.get('mode') != 'primary' or validated['receipt']['rendered_digest'] != self._ticket['rendered_digest']:
+                raise ContextBoundaryRefusal('actual provider native post-hook receipt absent')
+            self._ticket = None
+            if context_engine.get_engine() is not self or provider is not self._native_runtime._model or self._prepared_digest != self._digest(self._events()) or self._binding() != self._provider_binding:
+                raise ContextBoundaryRefusal('actual provider authority changed before dispatch')
+            if json.dumps(payload, ensure_ascii=False, separators=(',', ':'), allow_nan=False).encode() != payload_bytes:
+                raise ContextBoundaryRefusal('actual provider payload changed during native validation')
+            self.final_chat_count = measured
+            self.provider_dispatches.append(measured)
+        except BaseException:
+            if self._ticket is not None:
+                try:
+                    await asyncio.shield(self.cancel_turn())
+                except BaseException:
+                    pass
+            raise
+
     async def assemble_for_dispatch(self, builder, text: str, *, is_new_session: bool, provider_client=None, **kwargs):
         try:
             result = await self.assemble_pending(builder, text, is_new_session=is_new_session, **kwargs)
@@ -242,10 +360,20 @@ class GideonContinuityAdapter(GideonContextAdapter):
             self._ticket = None
         self._turn_active = False
         self._prepared_digest = None
+        for target in (self._native_runtime, self._native_provider):
+            if target is not None and getattr(target, '_hypermind_primary_owner', None) is self:
+                del target._hypermind_primary_owner
+        self._native_runtime = None
+        self._native_provider = None
 
     def after_turn(self, session_key: str) -> None:
         if self._ticket is not None:
             raise RuntimeError('cancel or validate the native hook before completing the turn')
         self._turn_active = False
         self._pending_input = None
+        for target in (self._native_runtime, self._native_provider):
+            if target is not None and getattr(target, '_hypermind_primary_owner', None) is self:
+                del target._hypermind_primary_owner
+        self._native_runtime = None
+        self._native_provider = None
         super().after_turn(session_key)
