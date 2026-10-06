@@ -22,6 +22,7 @@ async fn seeded_server(path: &std::path::Path) -> McpServer {
     ] {
         let remembered = server
             .remember_envelope(RememberInput {
+                context: None,
                 conversation: "manifest".to_owned(),
                 content: content.to_owned(),
                 kind: RememberKind::Document,
@@ -59,6 +60,7 @@ async fn activate_reports_retrieved_selected_and_included() {
 
     let activated = server
         .activate_envelope(ActivateInput {
+                context: None,
             conversation: "manifest".to_owned(),
             query: "heliotrope".to_owned(),
             turn_text: String::new(),
@@ -108,6 +110,7 @@ async fn other_verbs_do_not_carry_a_manifest() {
 
     let remembered = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "manifest".to_owned(),
             content: "heliotrope alone".to_owned(),
             kind: RememberKind::Document,

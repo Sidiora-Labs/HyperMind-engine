@@ -1,9 +1,3 @@
-// These tests build and run only on Apple platforms with a Swift toolchain.
-// This repository's Linux CI does not compile or execute them, and no passing
-// Swift test run is claimed anywhere in the repository. Run them yourself with
-// `swift test` after building the native library, as sdk/swift/README.md
-// describes.
-
 import XCTest
 
 @testable import HyperMind

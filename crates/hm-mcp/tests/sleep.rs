@@ -52,6 +52,7 @@ async fn attest_and_consolidate_complete_real_ledger_lifecycles() {
     let server = McpServer::new(actor.clone());
     let remembered = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "sleep-lifecycle".to_owned(),
             content: "deployment evidence".to_owned(),
             kind: RememberKind::User,

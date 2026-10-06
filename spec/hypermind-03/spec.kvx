@@ -1,0 +1,642 @@
+[meta]
+feature = "hypermind-03"
+title = "Unified agent context, memory and module runtime"
+status = "in_progress"
+spec_version = "1.0.0"
+
+[design.authority]
+contract = "HyperMind is the canonical engine. The event ledger remains the authority for durable memory; context, indexes and caches are derived. Host transcripts remain authoritative inputs with immutable source identities. Operational job and process stores never become independent memory authorities."
+compatibility = "Preserve the hypermind-01 and hypermind-02 contracts. Hypermid compatibility is explicit and versioned. Existing accepted wire discriminants and event meanings remain stable. Existing qualification limitations are not cleared by this feature."
+
+[design.context]
+contract = "A session assembles immutable source history, frozen context regions, required live bindings and retrieved evidence into one provider-safe budget. Original source bytes remain recoverable. Required freshness and access changes invalidate affected cache entries before serving."
+types = "crates/hm-context/src/types.rs defines the shared version-1 scope, cursor, source message, source span, token budget and context report. Actor identifiers are locally assigned and never derived by truncating external identities."
+
+[design.background]
+contract = "History summarization and durable memory consolidation are distinct, coordinated background jobs. Every job has a frozen source set, identity-bound cursor, fenced attempt and budget. Derived text is never automatically admitted as fresh observation. Publication checks source and policy revisions."
+
+[design.integration]
+contract = "One scoped context owner per session and one memory authority per actor. Public embedded APIs, daemon surfaces, SDKs and the inspection console consume the same contracts. User memory is never rendered as system or developer authority. Existing fourteen tool verbs remain stable."
+
+[design.migration]
+contract = "Import is resumable and digest verified, retains source identities and revisions, and writes through the existing ledger admission path. Cutover occurs at a quiescent boundary with durable progress. Rollback retains accepted post-cutover writes; an unsupported backward mapping requires forward recovery rather than data loss."
+
+[design.delivery]
+contract = "Wave 1 delivers interoperable context, worker and migration components plus their existing-surface consumer. Wave 2 closes durable ledger integration and source/SDK parity. Wave 3 closes deep memory and worker behaviors. Wave 4 qualifies complete user journeys and comparative evaluation. A component gate alone does not establish integration or release qualification."
+
+[design.coverage]
+contract = "spec/hypermind-03/capabilities.kvx is the complete capability acceptance map. Its coverage and deep memory requirements refine the wave tasks. A wave cannot claim complete parity while any assigned requirement remains unimplemented or unqualified."
+
+[req.1]
+title = "Immutable conversation history and source recovery"
+acceptance = "Ordered validated source ingestion, idempotent replay, edits and tombstones as relations, scope-bound source recovery, frozen child snapshots, and canonical export/import without rewriting original bytes."
+
+[task.1.1]
+title = "Immutable conversation history and source recovery"
+wave = 1
+owner_lane = "history"
+status = "done"
+requires = []
+reqs = ["req.1"]
+touches = ["crates/hm-context/src/history.rs", "crates/hm-context/tests/history.rs"]
+verify_cmd = "cargo test -p hm-context --test history"
+acceptance = "Ordered validated source ingestion, idempotent replay, edits and tombstones as relations, scope-bound source recovery, frozen child snapshots, and canonical export/import without rewriting original bytes."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.2]
+title = "Stable context generations and cache invalidation"
+acceptance = "Frozen baseline, recent delta and live tail; exact byte replay; scope/model/policy/source identity fences; hard and soft folds; pending reductions; immediate invalidation for revoked access or corrected required evidence; atomic checkpoint restoration."
+
+[task.1.2]
+title = "Stable context generations and cache invalidation"
+wave = 1
+owner_lane = "cache"
+status = "done"
+requires = []
+reqs = ["req.2"]
+touches = ["crates/hm-context/src/cache.rs", "crates/hm-context/tests/cache.rs"]
+verify_cmd = "cargo test -p hm-context --test cache"
+acceptance = "Frozen baseline, recent delta and live tail; exact byte replay; scope/model/policy/source identity fences; hard and soft folds; pending reductions; immediate invalidation for revoked access or corrected required evidence; atomic checkpoint restoration."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.3]
+title = "Recoverable reduction and bounded context selection"
+acceptance = "Four summary tiers, age and importance selection, protected current work and tool dependencies, deterministic pressure bands, queued idempotent reductions, exact expansion references, output reservation and fail-closed overflow."
+
+[task.1.3]
+title = "Recoverable reduction and bounded context selection"
+wave = 1
+owner_lane = "reduction"
+status = "done"
+requires = []
+reqs = ["req.3"]
+touches = ["crates/hm-context/src/reduction.rs", "crates/hm-context/tests/reduction.rs"]
+verify_cmd = "cargo test -p hm-context --test reduction"
+acceptance = "Four summary tiers, age and importance selection, protected current work and tool dependencies, deterministic pressure bands, queued idempotent reductions, exact expansion references, output reservation and fail-closed overflow."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.4]
+title = "Resumable historian jobs and coverage validation"
+acceptance = "Bounded chunk selection, four-tier structured results, immutable source coverage, source digest validation, lease/attempt fencing, cancellation, timeout, retry cooldown, resumable claims, and stale publication refusal. No paid call or text synthesis on context assembly."
+
+[task.1.4]
+title = "Resumable historian jobs and coverage validation"
+wave = 1
+owner_lane = "historian"
+status = "done"
+requires = []
+reqs = ["req.4"]
+touches = ["crates/hm-context/src/historian.rs", "crates/hm-context/tests/historian.rs"]
+verify_cmd = "cargo test -p hm-context --test historian"
+acceptance = "Bounded chunk selection, four-tier structured results, immutable source coverage, source digest validation, lease/attempt fencing, cancellation, timeout, retry cooldown, resumable claims, and stale publication refusal. No paid call or text synthesis on context assembly."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.5]
+title = "Precise temporal context and scoped identity"
+acceptance = "Occurrence, recording, validity and verification times; explicit offset and source coverage; deterministic gap markers; unknown timestamps remain unknown; scoped session and external project mapping without truncating identity."
+
+[task.1.5]
+title = "Precise temporal context and scoped identity"
+wave = 1
+owner_lane = "temporal"
+status = "done"
+requires = []
+reqs = ["req.5"]
+touches = ["crates/hm-context/src/temporal.rs", "crates/hm-context/tests/temporal.rs"]
+verify_cmd = "cargo test -p hm-context --test temporal"
+acceptance = "Occurrence, recording, validity and verification times; explicit offset and source coverage; deterministic gap markers; unknown timestamps remain unknown; scoped session and external project mapping without truncating identity."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.6]
+title = "Unified evidence retrieval and visibility filtering"
+acceptance = "Bounded candidate fusion for memory, conversation, file, commit, document, entity and relationship sources; compatible vector fingerprints, deterministic rank fusion, date filters, explicit semantic degradation, already-visible suppression and exact source references."
+
+[task.1.6]
+title = "Unified evidence retrieval and visibility filtering"
+wave = 1
+owner_lane = "retrieval"
+status = "done"
+requires = []
+reqs = ["req.6"]
+touches = ["crates/hm-context/src/retrieval.rs", "crates/hm-context/tests/retrieval.rs"]
+verify_cmd = "cargo test -p hm-context --test retrieval"
+acceptance = "Bounded candidate fusion for memory, conversation, file, commit, document, entity and relationship sources; compatible vector fingerprints, deterministic rank fusion, date filters, explicit semantic degradation, already-visible suppression and exact source references."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.7]
+title = "Fenced background maintenance and publication"
+acceptance = "One scheduler coordinates distinct historian, verification, curation, extraction, indexing and consolidation jobs; persisted watermarks, source identity deduplication, budget reservations/settlement, fencing, cooldown, cancellation, and derived-source exclusion."
+
+[task.1.7]
+title = "Fenced background maintenance and publication"
+wave = 1
+owner_lane = "maintenance"
+status = "done"
+requires = []
+reqs = ["req.7"]
+touches = ["crates/hm-context/src/maintenance.rs", "crates/hm-context/tests/maintenance.rs"]
+verify_cmd = "cargo test -p hm-context --test maintenance"
+acceptance = "One scheduler coordinates distinct historian, verification, curation, extraction, indexing and consolidation jobs; persisted watermarks, source identity deduplication, budget reservations/settlement, fencing, cooldown, cancellation, and derived-source exclusion."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.8]
+title = "Notes, primers, anchors and knowledge revisions"
+acceptance = "Immutable anchors versus revisioned notes and primers, lineage and contradiction links, retention and tombstones, bounded conditional-note predicates, optimistic revisions, owner or exact grant access, and explicit proposals for protected user attributes."
+
+[task.1.8]
+title = "Notes, primers, anchors and knowledge revisions"
+wave = 1
+owner_lane = "notes"
+status = "done"
+requires = []
+reqs = ["req.8"]
+touches = ["crates/hm-context/src/notes.rs", "crates/hm-context/tests/notes.rs"]
+verify_cmd = "cargo test -p hm-context --test notes"
+acceptance = "Immutable anchors versus revisioned notes and primers, lineage and contradiction links, retention and tombstones, bounded conditional-note predicates, optimistic revisions, owner or exact grant access, and explicit proposals for protected user attributes."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.9]
+title = "Provider-safe context rendering and token admission"
+acceptance = "Provider-neutral source parts, role/part capability profiles, tool adjacency including repeated IDs, opaque multimodal references, provenance and authority labels, one context/output budget, safe required tiers, and a canonical ContextReport consumed by session assembly."
+
+[task.1.9]
+title = "Provider-safe context rendering and token admission"
+wave = 1
+owner_lane = "provider"
+status = "done"
+requires = []
+reqs = ["req.9"]
+touches = ["crates/hm-context/src/provider.rs", "crates/hm-context/tests/provider.rs"]
+verify_cmd = "cargo test -p hm-context --test provider"
+acceptance = "Provider-neutral source parts, role/part capability profiles, tool adjacency including repeated IDs, opaque multimodal references, provenance and authority labels, one context/output budget, safe required tiers, and a canonical ContextReport consumed by session assembly."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.10]
+title = "Authenticated bounded transport"
+acceptance = "Versioned bounded frames with correlation and monotonic sequencing, authenticated scope-bound local sessions, cancellation/deadline metadata, chunk bounds, typed effect-aware failures and real local transport round trips."
+
+[task.1.10]
+title = "Authenticated bounded transport"
+wave = 1
+owner_lane = "transport"
+status = "done"
+requires = []
+reqs = ["req.10"]
+touches = ["crates/hm-fabric/src/transport.rs", "crates/hm-fabric/tests/transport.rs"]
+verify_cmd = "cargo test -p hm-fabric --test transport"
+acceptance = "Versioned bounded frames with correlation and monotonic sequencing, authenticated scope-bound local sessions, cancellation/deadline metadata, chunk bounds, typed effect-aware failures and real local transport round trips."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.11]
+title = "Scoped module registry and flow-controlled routing"
+acceptance = "Validated manifests, capability negotiation, authenticated registrations, epoch-safe channel binding, fair byte/call credits, bounded queues, cancellation, drain and replacement refusal before dispatch."
+
+[task.1.11]
+title = "Scoped module registry and flow-controlled routing"
+wave = 1
+owner_lane = "routing"
+status = "done"
+requires = []
+reqs = ["req.11"]
+touches = ["crates/hm-fabric/src/routing.rs", "crates/hm-fabric/tests/routing.rs"]
+verify_cmd = "cargo test -p hm-fabric --test routing"
+acceptance = "Validated manifests, capability negotiation, authenticated registrations, epoch-safe channel binding, fair byte/call credits, bounded queues, cancellation, drain and replacement refusal before dispatch."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.12]
+title = "Contained process supervision and replacement"
+acceptance = "Real child lifecycle with explicit command/environment, restart budget/backoff, launch identity, readiness/health, graceful drain, bounded shutdown, replacement readiness and honest platform capability reporting."
+
+[task.1.12]
+title = "Contained process supervision and replacement"
+wave = 1
+owner_lane = "supervisor"
+status = "done"
+requires = []
+reqs = ["req.12"]
+touches = ["crates/hm-fabric/src/supervisor.rs", "crates/hm-fabric/tests/supervisor.rs"]
+verify_cmd = "cargo test -p hm-fabric --test supervisor"
+acceptance = "Real child lifecycle with explicit command/environment, restart budget/backoff, launch identity, readiness/health, graceful drain, bounded shutdown, replacement readiness and honest platform capability reporting."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.13]
+title = "Durable effect recovery and idempotent delivery"
+acceptance = "Persist intent before dispatch; idempotency bound to payload and scope; explicit prepared/dispatched/uncertain/terminal states; no replay of uncertain effects; cursor-resumable receipts and crash recovery using real storage."
+
+[task.1.13]
+title = "Durable effect recovery and idempotent delivery"
+wave = 1
+owner_lane = "effects"
+status = "done"
+requires = []
+reqs = ["req.13"]
+touches = ["crates/hm-fabric/src/effects.rs", "crates/hm-fabric/tests/effects.rs"]
+verify_cmd = "cargo test -p hm-fabric --test effects"
+acceptance = "Persist intent before dispatch; idempotency bound to payload and scope; explicit prepared/dispatched/uncertain/terminal states; no replay of uncertain effects; cursor-resumable receipts and crash recovery using real storage."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.14]
+title = "Durable scoped event delivery"
+acceptance = "Scoped append/replay, stable subscriptions, ack/nak/terminal disposition, bounded attempts, dead-letter-before-terminal, register CAS, deterministic naming/grants, and real restart behavior with explicit backend capabilities."
+
+[task.1.14]
+title = "Durable scoped event delivery"
+wave = 1
+owner_lane = "bus"
+status = "done"
+requires = []
+reqs = ["req.14"]
+touches = ["crates/hm-fabric/src/bus.rs", "crates/hm-fabric/tests/bus.rs"]
+verify_cmd = "cargo test -p hm-fabric --test bus"
+acceptance = "Scoped append/replay, stable subscriptions, ack/nak/terminal disposition, bounded attempts, dead-letter-before-terminal, register CAS, deterministic naming/grants, and real restart behavior with explicit backend capabilities."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.15]
+title = "Versioned tool, runner and context roles"
+acceptance = "Tool schema/semantic pinning, withdrawn-tool receipts, runner terminal/delivery invariants, compaction replacement ranges and request fences, transform declaration bounds and authority narrowing. Implement real role state machines and independently authored contract cases."
+
+[task.1.15]
+title = "Versioned tool, runner and context roles"
+wave = 1
+owner_lane = "roles"
+status = "done"
+requires = []
+reqs = ["req.15"]
+touches = ["crates/hm-fabric/src/roles.rs", "crates/hm-fabric/tests/roles.rs"]
+verify_cmd = "cargo test -p hm-fabric --test roles"
+acceptance = "Tool schema/semantic pinning, withdrawn-tool receipts, runner terminal/delivery invariants, compaction replacement ranges and request fences, transform declaration bounds and authority narrowing. Implement real role state machines and independently authored contract cases."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.16]
+title = "Fenced operational storage and canonical paths"
+acceptance = "Canonical existing project roots, explicit recovery resolution, private file-backed SQLite, advisory writer locks with monotonic epochs, ordered checksummed migrations, store-ahead refusal, transaction fencing, and crash-safe replacement."
+
+[task.1.16]
+title = "Fenced operational storage and canonical paths"
+wave = 1
+owner_lane = "storage"
+status = "done"
+requires = []
+reqs = ["req.16"]
+touches = ["crates/hm-fabric/src/storage.rs", "crates/hm-fabric/tests/storage.rs"]
+verify_cmd = "cargo test -p hm-fabric --test storage"
+acceptance = "Canonical existing project roots, explicit recovery resolution, private file-backed SQLite, advisory writer locks with monotonic epochs, ordered checksummed migrations, store-ahead refusal, transaction fencing, and crash-safe replacement."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.17]
+title = "Verified Hypermid import and identity mapping"
+acceptance = "Resumable import of versioned Hypermid history and knowledge into the existing ActorEngine ledger; exact scope/actor mapping, source IDs/digests/provenance, idempotent batches, corruption refusal, progress receipts and safe restart. Never map arbitrary project hashes into the u16 actor ID."
+
+[task.1.17]
+title = "Verified Hypermid import and identity mapping"
+wave = 1
+owner_lane = "migration"
+status = "done"
+requires = []
+reqs = ["req.17"]
+touches = ["crates/hm-serve/src/hypermid_import.rs", "crates/hm-serve/tests/hypermid_import.rs"]
+verify_cmd = "cargo test -p hm-serve --test hypermid_import"
+acceptance = "Resumable import of versioned Hypermid history and knowledge into the existing ActorEngine ledger; exact scope/actor mapping, source IDs/digests/provenance, idempotent batches, corruption refusal, progress receipts and safe restart. Never map arbitrary project hashes into the u16 actor ID."
+
+qualification = "Focused import and restart tests passed; integrated projection conversion is tracked separately."
+
+[req.18]
+title = "Context client and OSS host adapter contracts"
+acceptance = "Typed generic host adapter and Python/TypeScript context clients reaching the existing verbs; negotiated version, scoped identities, no implicit compaction ownership, token budgets, error/effect mapping, diagnostics and cursor resume. OSS Gideon-facing integration through documented generic contract."
+
+[task.1.18]
+title = "Context client and OSS host adapter contracts"
+wave = 1
+owner_lane = "clients"
+status = "done"
+requires = []
+reqs = ["req.18"]
+touches = ["sdk/python/hypermind/context.py", "sdk/python/tests/test_context.py"]
+verify_cmd = "python3 -m unittest discover -s sdk/python/tests -p test_context.py"
+acceptance = "Typed generic host adapter and Python/TypeScript context clients reaching the existing verbs; negotiated version, scoped identities, no implicit compaction ownership, token budgets, error/effect mapping, diagnostics and cursor resume. OSS Gideon-facing integration through documented generic contract."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.19]
+title = "Context and memory operations in the inspection console"
+acceptance = "Native console views for scoped sessions, included/omitted context, coverage, cache generation, historian/maintenance state, memory provenance and migration receipts; real transport-backed inspection and escaped content, responsive rendering and honest empty/error states."
+
+[task.1.19]
+title = "Context and memory operations in the inspection console"
+wave = 1
+owner_lane = "console"
+status = "done"
+requires = []
+reqs = ["req.19"]
+touches = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/context.test.ts"]
+verify_cmd = "npm --prefix sdk/typescript run test --workspace @hypermind/console"
+acceptance = "Native console views for scoped sessions, included/omitted context, coverage, cache generation, historian/maintenance state, memory provenance and migration receipts; real transport-backed inspection and escaped content, responsive rendering and honest empty/error states."
+qualification = "Implementation and focused component checks passed; integrated consumer and release qualification are recorded separately."
+
+[req.20]
+title = "Unified session context through existing agent surfaces"
+acceptance = "Compose context components against actual ActorEngine history and evidence; expose through existing activate/inspect/remember argument variants with stable fourteen-verb inventory; recover after restart and return explicit health, provenance and omitted context. No isolated unused subsystem counts as completion."
+
+[task.1.20]
+title = "Unified session context through existing agent surfaces"
+wave = 1
+owner_lane = "surface"
+status = "done"
+requires = []
+reqs = ["req.20"]
+touches = ["crates/hm-serve/src/session_context.rs", "crates/hm-mcp/tests/session_context.rs"]
+verify_cmd = "cargo test -p hm-mcp --test session_context"
+acceptance = "Compose context components against actual ActorEngine history and evidence; expose through existing activate/inspect/remember argument variants with stable fourteen-verb inventory; recover after restart and return explicit health, provenance and omitted context. No isolated unused subsystem counts as completion."
+
+qualification = "Implementation and focused ledger-backed consumer tests passed; executable journey qualification is tracked in task.1.21."
+
+[task.1.21]
+title = "Integrate the unified context and memory journey"
+wave = 1
+owner_lane = "integration"
+status = "done"
+requires = ["task.1.1","task.1.2","task.1.3","task.1.4","task.1.5","task.1.6","task.1.7","task.1.8","task.1.9","task.1.10","task.1.11","task.1.12","task.1.13","task.1.14","task.1.15","task.1.16","task.1.17","task.1.18","task.1.19","task.1.20", "task.1.22", "task.1.23", "task.1.24", "task.1.25", "task.1.26", "task.1.27", "task.1.28"]
+touches = ["crates/hm-sim/tests/unified_context_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test unified_context_journey"
+acceptance = "A real daemon imports source history, serves bounded context, reduces and expands history, applies a correction, restarts and resumes without lost memory, duplicate effects or widened authority."
+
+qualification = "Actual configured daemon and authenticated child worker journey passed, including source recovery, four-tier reductions, invalid publication refusal, correction, restart, import resumption and effect replay."
+
+[task.2.1]
+title = "Ledger-backed revisions, invalidation and complete migration"
+wave = 2
+owner_lane = "migration"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["crates/hm-serve/src/context_memory.rs", "crates/hm-serve/src/hypermid_import.rs", "crates/hm-serve/tests/unified_memory_migration.rs"]
+verify_cmd = "cargo test -p hm-serve --test unified_memory_migration"
+acceptance = "All accepted knowledge and context mutations use ledger events and rebuildable projections; migration preserves revisions, tombstones, sharing scope, time and provenance; durable job reconciliation does not hide partial commits."
+
+[task.2.2]
+title = "Complete SDK and OSS Gideon integration"
+wave = 2
+owner_lane = "integration"
+status = "pending"
+requires = ["task.2.5", "task.2.6", "task.2.7", "task.2.8", "task.2.9", "task.2.10"]
+touches = ["sdk"]
+verify_cmd = "cargo test -p hm-sim --test unified_sdk_journey"
+acceptance = "Python, TypeScript, Rust, Go and Swift paths demonstrate version negotiation, source ingestion, context ownership, restart and exact recovery against the same implementation; unsupported surfaces are explicitly reported."
+
+[task.2.3]
+title = "Unified source retrieval and embedding lifecycle"
+wave = 2
+owner_lane = "retrieval"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["crates/hm-serve/src/context_retrieval.rs", "crates/hm-sim/tests/unified_retrieval_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test unified_retrieval_journey"
+acceptance = "Memory, messages, files, commits, documents and relationships feed existing retrieval lanes; vectors have model/content fingerprints and resumable bounded backfill; provider failure remains observable."
+
+[task.2.4]
+title = "Wave 2 integration"
+wave = 2
+owner_lane = "integration"
+status = "pending"
+requires = ["task.2.1","task.2.2","task.2.3", "task.2.11", "task.2.12"]
+touches = ["crates/hm-sim/tests/unified_memory_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test unified_memory_journey"
+acceptance = "One live host journey exercises all wave-2 consumers with real persistence and qualified SDK paths."
+
+[task.3.1]
+title = "Complete background knowledge development"
+wave = 3
+owner_lane = "integration"
+status = "pending"
+requires = ["task.2.4"]
+touches = ["crates/hm-cortex"]
+verify_cmd = "cargo test -p hm-sim --test unified_background_journey"
+acceptance = "Verification, curation, retrospective lessons, primers, conditional notes, profile proposals and documentation proposals consume real evidence under scoped budgets with no recursive evidence promotion."
+
+[task.3.2]
+title = "Complete module and operational capability parity"
+wave = 3
+owner_lane = "integration"
+status = "pending"
+requires = ["task.2.4"]
+touches = ["crates/hm-fabric"]
+verify_cmd = "cargo test -p hm-fabric --test runtime_journey"
+acceptance = "Module capabilities, bus backends, role conformance, process containment, portable state, encrypted push, log/usage/model contracts and optional remote routing have real consumers and explicit platform/backend qualification."
+
+[task.3.3]
+title = "Complete long-session and provider continuity"
+wave = 3
+owner_lane = "integration"
+status = "pending"
+requires = ["task.2.4"]
+touches = ["crates/hm-context"]
+verify_cmd = "cargo test -p hm-sim --test long_session_journey"
+acceptance = "Long sessions survive pressure, edits, forks, repeated tool IDs, multimodal content, cancellation, stale background results and model changes while preserving exact recovery and current required evidence."
+
+[task.3.4]
+title = "Wave 3 integration"
+wave = 3
+owner_lane = "integration"
+status = "pending"
+requires = ["task.3.1","task.3.2","task.3.3"]
+touches = ["crates/hm-sim/tests/unified_runtime_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test unified_runtime_journey"
+acceptance = "Real processes integrate background memory, context continuity and operational services through supported host surfaces."
+
+[task.4.1]
+title = "Comparative quality, continuity and cost evaluation"
+wave = 4
+owner_lane = "integration"
+status = "pending"
+requires = ["task.3.4"]
+touches = ["crates/hm-eval"]
+verify_cmd = "cargo run -p hm-eval -- unified-gate"
+acceptance = "Compare Hypermid, HyperMind baseline and the unified implementation on pinned workloads; report recall, temporal correctness, citations, compression fidelity, latency, cache reuse, background usage and recovery with ablations and explicit unavailable measurements."
+
+[task.4.2]
+title = "Complete console and host user journeys"
+wave = 4
+owner_lane = "integration"
+status = "pending"
+requires = ["task.3.4"]
+touches = ["sdk/typescript/packages/console"]
+verify_cmd = "npm --prefix sdk/typescript run test:context-journey"
+acceptance = "Real browser and host journeys cover inspection, editing, original evidence, jobs, budgets, modules, migration, export and recovery at desktop and mobile sizes."
+
+[task.4.3]
+title = "Release qualification and reversible cutover evidence"
+wave = 4
+owner_lane = "integration"
+status = "pending"
+requires = ["task.4.1","task.4.2"]
+touches = ["crates/hm-sim/tests/unified_cutover.rs"]
+verify_cmd = "cargo test -p hm-sim --test unified_cutover"
+acceptance = "Isolated replay, non-authoritative shadow, quiescent cutover and rollback preserve all accepted writes; complete declared platform and SDK matrices or report exact remaining qualification. Existing unfinished release gates remain outstanding until actually passed."
+
+
+
+[task.1.22]
+title = "Ledger-backed session mutations and job lifecycle"
+wave = 1
+owner_lane = "background_service"
+status = "done"
+requires = ["task.1.4","task.1.7","task.1.8"]
+touches = ["crates/hm-serve/src/context_jobs.rs","crates/hm-serve/tests/context_jobs.rs"]
+verify_cmd = "cargo test -p hm-serve --test context_jobs"
+acceptance = "Expose ledger-backed note/primer/anchor mutations and durable historian/maintenance job claims, completions, cancellation and inspection under exact trusted scope; checkpoint before returning and recover after restart."
+
+qualification = "Implementation and focused ledger-backed consumer tests passed; executable journey qualification is tracked in task.1.21."
+
+[task.1.23]
+title = "Complete source history ingestion and expansion"
+wave = 1
+owner_lane = "source_service"
+status = "done"
+requires = ["task.1.1","task.1.3"]
+touches = ["crates/hm-serve/src/context_history.rs","crates/hm-serve/tests/context_history.rs"]
+verify_cmd = "cargo test -p hm-serve --test context_history"
+acceptance = "Versioned source messages retain original identities, time, tool and opaque parts, edits, forks and exact source spans through ledger admission, restart and scoped recovery; existing conversation events adapt losslessly."
+
+qualification = "Implementation and focused ledger-backed consumer tests passed; executable journey qualification is tracked in task.1.21."
+
+[task.1.24]
+title = "Persisted context generations and historian publication"
+wave = 1
+owner_lane = "projection_service"
+status = "done"
+requires = ["task.1.2","task.1.3","task.1.4"]
+touches = ["crates/hm-serve/src/context_projection.rs","crates/hm-serve/tests/context_projection.rs"]
+verify_cmd = "cargo test -p hm-serve --test context_projection"
+acceptance = "Persist scoped cache generations, reductions and completed historian outputs through the ledger, apply validated coverage to actual context selection, preserve byte replay and exact expansion after restart, invalidate stale bindings."
+
+qualification = "Implementation and focused ledger-backed consumer tests passed; executable journey qualification is tracked in task.1.21."
+
+[task.1.25]
+title = "Configured trusted context scope on runnable surfaces"
+wave = 1
+owner_lane = "scope_configuration"
+status = "done"
+requires = ["task.1.5"]
+touches = ["crates/hm-serve/src/context_config.rs","crates/hm-serve/tests/context_config.rs","crates/hm-mcp/src/main.rs"]
+verify_cmd = "cargo test -p hm-serve --test context_config"
+acceptance = "Runnable MCP and daemon surfaces obtain trusted scope from owner-controlled configuration, reject mismatched requests and expose negotiated supported context capability without trusting request scope."
+
+qualification = "Focused implementation checks passed; executable consumer qualification remains in the integration gate."
+
+[task.1.26]
+title = "Connected module runtime and durable operational ownership"
+wave = 1
+owner_lane = "runtime_service"
+status = "done"
+requires = ["task.1.10","task.1.11","task.1.12","task.1.13","task.1.14","task.1.15","task.1.16"]
+touches = ["crates/hm-fabric/src/runtime.rs","crates/hm-fabric/tests/runtime.rs"]
+verify_cmd = "cargo test -p hm-fabric --test runtime"
+acceptance = "Connect real authenticated transport, registration, routing, supervision, role dispatch and durable event/effect recovery with one declared storage owner and real worker round trips."
+
+qualification = "Focused implementation checks passed; executable consumer qualification remains in the integration gate."
+
+[task.1.27]
+title = "Lossless cross-language temporal contracts"
+wave = 1
+owner_lane = "temporal_wire"
+status = "done"
+requires = ["task.1.18"]
+touches = ["crates/hm-context/src/types.rs","sdk/python/hypermind/context.py","sdk/typescript/packages/client/src/context.ts"]
+verify_cmd = "python3 -m unittest discover -s sdk/python/tests -p test_context.py"
+acceptance = "Nanosecond timestamps and unsigned fields round-trip across Rust, Python and TypeScript without unsafe JSON integers; canonical source identities agree across SDKs and preserve unknown times."
+
+qualification = "Focused implementation checks passed; executable consumer qualification remains in the integration gate."
+
+[task.1.28]
+title = "Atomic source publication admission"
+wave = 1
+owner_lane = "effects"
+status = "done"
+requires = ["task.1.1"]
+touches = ["crates/hm-serve/src/actor.rs", "crates/hm-serve/tests/context_admission.rs"]
+verify_cmd = "cargo test -p hm-serve --test context_admission"
+acceptance = "Actor-loop source tail compare and append is atomic against every native writer; stale source and derived-state publication refuses without modifying the ledger."
+
+qualification = "Actor-loop atomic admission and restart tests passed; stale batches preserve ledger, projections, MMR and subscriber state."
+
+[task.2.5]
+title = "Python and TypeScript executable context consumers"
+wave = 2
+owner_lane = "clients"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["sdk/python", "sdk/typescript/packages/client", "sdk/typescript/packages/engine"]
+verify_cmd = "cargo test -p hm-sim --test context_client_journey"
+acceptance = "Native and remote clients consume typed source, relation, fork, import, knowledge, job and inspection operations against the actual engine; opaque identifiers, nanosecond timestamps, restart and effect uncertainty retain exact semantics."
+
+[task.2.6]
+title = "Go typed context consumer"
+wave = 2
+owner_lane = "reduction"
+status = "done"
+requires = ["task.1.21"]
+touches = ["sdk/go"]
+verify_cmd = "cd sdk/go && go test -run TestContextJourney ./..."
+acceptance = "The actual daemon accepts scoped Go context requests and source identities; the client demonstrates version refusal, source edits, restart and exact recovery without alternate memory authority."
+
+qualification = "Declared focused consumer checks passed; evolving native memory and aggregate platform acceptance remains in task.2.2."
+
+[task.2.7]
+title = "Swift typed context consumer"
+wave = 2
+owner_lane = "historian"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["sdk/swift"]
+verify_cmd = "swift test --package-path sdk/swift --filter Context"
+acceptance = "The Swift embedded consumer preserves scoped ownership, exact timestamps and source recovery through the C ABI. Actual toolchain and platform qualification are explicit."
+
+[task.2.8]
+title = "Rust and C ABI trusted context integration"
+wave = 2
+owner_lane = "provider"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["crates/hm-serve/src/embedded.rs", "crates/hm-capi"]
+verify_cmd = "cargo test -p hm-capi --test context"
+acceptance = "Embedded constructors configure trusted scope before calls; Rust and C ABI clients use the same source, mutation, context, job and recovery contracts with unchanged fourteen tool verbs."
+
+[task.2.9]
+title = "OSS Gideon host context ownership adapter"
+wave = 2
+owner_lane = "supervisor"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["sdk/python/hypermind/gideon.py", "sdk/python/tests/test_gideon_context.py"]
+verify_cmd = "python3 -m unittest discover -s sdk/python/tests -p test_gideon_context.py"
+acceptance = "The host adapter imports authoritative messages, applies native provider context, reserves output budget, suppresses competing compaction only under explicit ownership, and preserves source identity across retries, edits, forks and resume."
+
+[task.2.10]
+title = "Lossless temporal contract across memory operations"
+wave = 2
+owner_lane = "temporal"
+status = "done"
+requires = ["task.1.21"]
+touches = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/temporal.rs", "sdk"]
+verify_cmd = "cargo test -p hm-context --test temporal_wire"
+acceptance = "Every public nanosecond field uses exact canonical decimal serialization across sources, notes, anchors and validity fields, with explicit clock provenance and no floating-point truncation."
+
+qualification = "Declared focused consumer checks passed; evolving native memory and aggregate platform acceptance remains in task.2.2."
+
+[task.2.11]
+title = "Native memory and retrieval surface integration"
+wave = 2
+owner_lane = "surface"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["crates/hm-mcp/src/tools/session_context.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-mcp/tests/session_context.rs"]
+verify_cmd = "cargo test -p hm-mcp --test session_context"
+acceptance = "Existing verbs and scoped inspection expose native memory revisions, grants, tombstones, source registration, retrieval and configured real embedding backfill. Ledger errors preserve effect uncertainty and stale source state never serves as current context."
+
+[task.2.12]
+title = "Real semantic embedding lifecycle qualification"
+wave = 2
+owner_lane = "cache"
+status = "in_progress"
+requires = ["task.1.21"]
+touches = ["crates/hm-sim/tests/unified_retrieval_journey.rs"]
+verify_cmd = "cargo test -p hm-sim --test unified_retrieval_journey actual_local_model_backfill_resumes -- --ignored"
+acceptance = "A verified real local embedding model drives bounded backfill, semantic ranking, fingerprint compatibility, restart resumption and content-change invalidation; lexical or generated-vector substitutes cannot qualify this capability."

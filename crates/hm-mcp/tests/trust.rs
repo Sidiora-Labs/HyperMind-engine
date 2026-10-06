@@ -138,6 +138,7 @@ async fn tripwire_is_a_warning_and_crypto_shred_requires_the_admin_token() {
     let server = McpServer::new_with_admin(actor.clone(), [0x5a; 32]);
     let remembered = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "tripwire".to_owned(),
             content: "tripwire content".to_owned(),
             kind: RememberKind::User,
@@ -157,6 +158,7 @@ async fn tripwire_is_a_warning_and_crypto_shred_requires_the_admin_token() {
     assert!(remembered.ok);
     let activation = server
         .activate_envelope(ActivateInput {
+                context: None,
             conversation: "tripwire".to_owned(),
             query: String::new(),
             turn_text: String::new(),

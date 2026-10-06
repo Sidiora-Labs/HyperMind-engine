@@ -7,6 +7,7 @@ use hm_serve::uds::ToolDispatcher;
 
 #[derive(Clone, Default)]
 pub struct McpToolDispatcher {
+    context_scopes: std::collections::BTreeMap<u16, hm_context::Scope>,
     pub embedding_runtime: Option<EmbeddingRuntime>,
     pub reconstruction_runtime: Option<ReconstructionRuntime>,
     pub consolidation_runtime: Option<ConsolidationRuntime>,
@@ -18,6 +19,7 @@ pub struct McpToolDispatcher {
 impl McpToolDispatcher {
     pub fn from_env() -> Result<Self, Error> {
         Ok(Self {
+            context_scopes: Default::default(),
             embedding_runtime: EmbeddingRuntime::from_env()
                 .map_err(|_| Error::new(ErrorCode::InvalidArgument))?,
             reconstruction_runtime: ReconstructionRuntime::from_env()?,
@@ -29,8 +31,18 @@ impl McpToolDispatcher {
     }
 
     #[must_use]
+    pub fn with_context_scope(mut self, config: hm_serve::context_config::TrustedContextConfig) -> Self {
+        self.context_scopes.insert(config.actor, config.scope);
+        self
+    }
+
+    #[must_use]
     pub fn server(&self, actor: ActorEngine) -> McpServer {
+        let scope = self.context_scopes.get(&actor.actor().get()).cloned();
         let mut server = McpServer::new(actor);
+        if let Some(scope) = scope {
+            server = server.with_context_scope(scope);
+        }
         server.embedding_runtime.clone_from(&self.embedding_runtime);
         server
             .reconstruction_runtime

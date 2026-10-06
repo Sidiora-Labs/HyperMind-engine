@@ -33,6 +33,7 @@ async fn anchored_remember_and_entity_near_recall_preserve_policy_fields() {
     let server = McpServer::new(actor.clone());
     let remembered = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "meaning".to_owned(),
             content: "Alice Smith changed src/main.rs for GH-123".to_owned(),
             kind: RememberKind::User,
@@ -96,6 +97,7 @@ async fn anchored_remember_and_entity_near_recall_preserve_policy_fields() {
     let before = actor.stats().await.expect("stats").log_events;
     let discarded = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "meaning".to_owned(),
             content: "never persist this".to_owned(),
             kind: RememberKind::User,

@@ -1,0 +1,1920 @@
+[meta]
+feature = "hypermind-03"
+title = "Complete capability coverage and qualification obligations"
+status = "in_progress"
+schema_version = 1
+public_map_entries = 149
+authority = "The HyperMind event ledger is the durable memory authority. Public Hypermid capabilities are mapped by identifier; this inventory does not claim compatibility or completion merely from source presence."
+status_contract = "implemented_focused means a bounded component exists with focused evidence, not complete capability acceptance; integration_pending means related code exists but full behavior or consumers remain incomplete; pending means implementation or qualification remains required; unsupported means current runtime explicitly lacks the behavior and cannot report success."
+task_contract = "Main task IDs refer to spec.kvx. Requirements here refine those tasks and do not start, claim or complete them. Every capability is closed only when its requirement and declared real consumer evidence pass."
+
+[req.coverage.identity]
+status = "integration_pending"
+tasks = ["task.2.1"]
+current_paths = ["crates/hm-context/src/types.rs", "crates/hm-fabric/src/storage.rs"]
+acceptance = "Canonical existing roots retain worktree separation; recovery-only identities cannot publish. Persist external owner and project mappings without narrowing them into local actor identifiers. Concurrent writers use monotonically increasing fences and stale fences commit nothing."
+remaining = "Cross-platform aliases and all executable admission paths still require integration evidence."
+
+[req.coverage.storage]
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.2"]
+current_paths = ["crates/hm-ledger/src/lib.rs", "crates/hm-fabric/src/storage.rs"]
+acceptance = "The event ledger owns durable memory. Operational descriptors omit administrator secrets, bind backend and isolation, and declare home resolution. SQLite schema changes are ordered, checksum checked and transactional; newer unsupported state opens a documented recovery path."
+remaining = "Operational stores must share declared writer ownership; complete descriptor and platform qualification remains pending."
+
+[req.coverage.postgres]
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/storage.rs"]
+acceptance = "Implement PostgreSQL operational storage against pre-provisioned databases using session locks, monotonic write fences and namespace migrations. Connection loss ends liveness; colliding display names cannot share physical databases. Keep durable memory authority in the ledger."
+remaining = "No PostgreSQL driver or real backend consumer is present in the new storage component."
+
+[req.coverage.history]
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/history.rs", "crates/hm-serve/src/context_history.rs"]
+acceptance = "Ingest a complete validated source batch atomically with stable identities, source digests, ordering and scoped cursor checks. Edits, deletion relations, retries and child snapshots preserve original bytes. Exact recovery checks source spans against authoritative content after restart."
+remaining = "Full host variants, migration revisions and long-session recovery remain integration obligations."
+
+[req.coverage.cache]
+requires_acceptance = ["req.deep.compact_memory_cues"]
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/cache.rs", "crates/hm-serve/src/context_projection.rs"]
+acceptance = "Persist complete generations with source, policy, permission, provider and budget fences. Deferred passes reuse identical prefix bytes; new summaries apply only at compatible boundaries. Changed required evidence invalidates eligibility before serving; corrupt derived state rebuilds from the ledger."
+remaining = "Focused cache behavior does not establish long-session or host provider continuity."
+
+[req.coverage.reduction]
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/reduction.rs"]
+acceptance = "Protect current work, output reserve and tool dependencies before age-based selection across four detail tiers. Every reduction has a stable target, explicit disposition and exact expansion reference. Pressure plans are deterministic; irreducible overflow prevents dispatch."
+remaining = "Live provider continuity, multimodal tools and complete recovery-marker journeys are pending."
+
+[req.coverage.historian]
+requires_acceptance = ["req.deep.source_mapping", "req.deep.incremental_verification", "req.deep.complete_verification", "req.deep.curation", "req.deep.classification_and_sharing", "req.deep.retrospective_lessons", "req.deep.profile_review", "req.deep.primer_development", "req.deep.primer_refresh", "req.deep.documentation_proposals", "req.deep.knowledge_schedules"]
+status = "integration_pending"
+tasks = ["task.3.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/historian.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "One fenced attempt operates on a frozen source set with bounded calls, time and usage. Publish only structurally valid nonempty output matching current source and policy. Cancellation, timeout and source changes reject publication; usage remains separate from foreground turns."
+remaining = "Real background model execution and complete knowledge publication have not been demonstrated by component scheduling gates."
+
+[req.coverage.provider]
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.3"]
+current_paths = ["crates/hm-context/src/provider.rs", "crates/hm-llm/src/contract.rs"]
+acceptance = "Provider-neutral blocks preserve roles, opaque parts and paired tool calls under exact input and output budgets. Capability changes produce a fresh generation; unsupported serializers or tokenizers refuse before model dispatch. Host serialization returns verifiable bytes and digest."
+remaining = "Complete provider family and installed host serializer parity remains pending."
+
+[req.coverage.hooks]
+status = "integration_pending"
+tasks = ["task.2.2", "task.3.3"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-context/src/history.rs"]
+acceptance = "Child sessions receive immutable scoped parent snapshots under an explicit contribution ceiling. Pre-hooks may deny or contribute bounded attributed blocks but cannot mutate source history; failed pre-hooks leave no partial effects. Post-hooks observe only committed state with trace and cursor metadata."
+remaining = "All host lifecycle hooks, child usage attribution and contribution flows need installed integration."
+
+[req.coverage.context_mode]
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["crates/hm-serve/src/context_config.rs", "crates/hm-serve/src/session_context.rs"]
+acceptance = "Off and pass-through retain existing host provider input. Shadow compares derived results without publishing, model calls or serving-cursor advance. Primary dispatch requires a verified projection or explicit policy refusal. Independent feature flags change only at turn boundaries."
+remaining = "Complete mode enforcement across native host turn variants is pending."
+
+[req.coverage.diagnostics]
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/telemetry.rs", "sdk/typescript/packages/console/src/context.ts"]
+acceptance = "Report scoped source cursors, generations, budgets, cache decisions, jobs, module state, typed errors and recovery eligibility with observation times. Default output omits content and secrets; absent measurements remain unknown, unavailable or degraded rather than zero."
+remaining = "Native console and host failure journeys have not closed the inspection matrix."
+
+[req.coverage.migration]
+requires_acceptance = ["req.deep.retention_and_purge"]
+status = "integration_pending"
+tasks = ["task.2.1", "task.4.3"]
+current_paths = ["crates/hm-serve/src/hypermid_import.rs", "crates/hm-cli/src/lib.rs"]
+acceptance = "Stage bounded versioned imports, verify manifest digests, preserve revisions, scope grants, timestamps and provenance, then publish idempotently. Canonical export excludes secrets and disposable derivatives. Cutover drains writers; rollback preserves accepted post-cutover writes or requires explicit forward recovery."
+remaining = "Complete record families, retention, encrypted backup and cutover crash matrix remain pending."
+
+[req.coverage.notes]
+requires_acceptance = ["req.deep.anchored_knowledge", "req.deep.cross_session_memory", "req.deep.deferred_notes", "req.deep.profile_review", "req.deep.retention_and_purge"]
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "Anchors keep original content; notes and primers require expected revisions. Tombstones and retention exclude expired content without silently purging protected evidence. Lineage is acyclic and contradictions retain competing evidence. Conditional evaluation is bounded; protected user attributes require a proposal and owner decision."
+remaining = "Chronological anchor provenance and complete dependent-index invalidation remain pending integration requirements."
+
+[req.coverage.retrieval]
+requires_acceptance = ["req.deep.cross_session_memory", "req.deep.classification_and_sharing"]
+status = "implemented_focused"
+tasks = ["task.2.3"]
+current_paths = ["crates/hm-context/src/retrieval.rs", "crates/hm-index/src/bm25.rs", "crates/hm-index/src/hnsw.rs"]
+acceptance = "Search authorized memory, messages, files, commits, documents and relations through deterministic lexical, semantic or hybrid ranking. Filter source time and stale or tombstoned content; suppress evidence already visible by exact coverage. Explain scores, provenance, unavailable vectors and bounded reranking."
+remaining = "Typed fusion exists; complete real index and embedding provider consumers remain pending."
+
+[req.coverage.embedding]
+status = "integration_pending"
+tasks = ["task.2.3"]
+current_paths = ["crates/hm-embed/src/local.rs", "crates/hm-embed/src/remote.rs", "crates/hm-context/src/retrieval.rs"]
+acceptance = "Declare off, local, remote-compatible and managed embedding modes. Model, dimensions, registration and content fingerprints fence every vector. Reject non-finite or zero-norm vectors and model substitution; bounded backfill resumes checkpoints without replacing valid vectors on failure."
+remaining = "Provider registration lifecycle and all bounded backfill failure classes require integration."
+
+[req.coverage.indexing]
+requires_acceptance = ["req.deep.source_mapping", "req.deep.retention_and_purge"]
+status = "integration_pending"
+tasks = ["task.2.3"]
+current_paths = ["crates/hm-cortex/src/repograph.rs", "crates/hm-cortex/src/connectors/sync.rs", "crates/hm-context/src/retrieval.rs"]
+acceptance = "Index raw messages, authorized canonical files and opt-in repository commits under byte, item and time limits. Recheck source identity, digest and grants immediately before publication; a source correction hides stale lexical, vector and ranking derivatives in the same accepted mutation."
+remaining = "Predicate-driven file indexing, opt-in commit ingestion and atomic derivative invalidation are not fully connected."
+
+[req.coverage.auth]
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.2"]
+current_paths = ["crates/hm-serve/src/auth.rs", "crates/hm-context/src/notes.rs", "crates/hm-context/src/retrieval.rs"]
+acceptance = "Authorize each operation by principal, owner, project, optional workspace, exact resource, revision and expiry. Worker grants enumerate inputs and writes and cannot be widened. Revocation blocks dispatch and publication; workspace membership alone never authorizes foreign mutation."
+remaining = "Uniform expiring principal and worker capabilities across transport, ledger and operational modules remain pending."
+
+[req.coverage.transport]
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.2"]
+current_paths = ["crates/hm-fabric/src/transport.rs", "crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Validate bounded frames before body allocation and authenticate protocol, daemon identity, nonces and connection class. Remote operation is opt-in with mutually authenticated encryption. Negotiate version and feature ranges without downgrade; reject replay or incompatible peers before effects."
+remaining = "Hypermid framing compatibility and complete remote transport/certificate qualification remain pending."
+
+[req.coverage.routing]
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/routing.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Validate module identity, digest, dependency, policy and launch proof before registration. Publish routes only after authenticated binding; epoch changes retire old frames. Request and byte credits remain independent and bounded; cancellation and deadline races settle once without extending the original deadline."
+remaining = "Complete declared module discovery, flow behavior and crash-driven host routes require integration."
+
+[req.coverage.supervisor]
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/supervisor.rs"]
+acceptance = "Clear child environments, bound stderr and readiness, preserve a healthy incumbent on failed warmup and drain before retirement. Cap restart windows and exponential backoff. Declare direct-child and stronger containment capabilities separately and never advertise unavailable process-tree or resource isolation."
+remaining = "Current implementation manages direct children; process-tree termination, resource limits and filesystem isolation are unsupported."
+
+[req.coverage.containment]
+status = "unsupported"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/supervisor.rs"]
+acceptance = "Implement platform process-tree ownership with stable launch identity, bounded CPU and memory resources and explicit filesystem/network grants. Recovered daemons cannot terminate a reused PID. Interruption reaps descendants without orphaned pipes; unsupported platforms refuse restricted launches."
+remaining = "Process-tree termination, resource limits and filesystem isolation are currently false in containment capabilities."
+
+[req.coverage.effects]
+status = "implemented_focused"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/effects.rs", "crates/hm-ledger/src/idempotency.rs"]
+acceptance = "Persist intent before dispatch and terminal outcome before acknowledgement. Reused effect IDs must match input digests; recovery distinguishes not-started, committed and unknown. Cancel or disconnect never converts uncertainty into a retryable failure or blindly repeats durable mutation."
+remaining = "Executable multi-process crash and host delivery journeys remain pending."
+
+[req.coverage.bus]
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/bus.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Scope stream names and exact grants; retain durable replay positions, attempt-fenced acknowledgements, redelivery, dead letters and revisioned registers. Queue and payload limits fail visibly; revocation precedes serving. Operational delivery storage never becomes another memory authority."
+remaining = "Only SQLite operational delivery is implemented; a distinct process-local backend, all six public naming families, census guards, digest-only messages and distributed parity remain pending."
+
+[req.coverage.nats]
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/bus.rs"]
+acceptance = "Connect to provisioned NATS/JetStream with bounded isolated inboxes, durable stream cursors, acknowledgements, redelivery, dead letters and revisioned registers. Server-enforced allow-only grants reflect local scope and revocation; reconnect exposes cursor gaps rather than silent loss."
+remaining = "No NATS or JetStream backend exists in the current bus component."
+
+[req.coverage.roles]
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Tool, model-runner, compaction and transform roles negotiate schemas and semantic digests, explicit capability operations, ordered hooks and bounded replacements. Late results require acknowledgement; held work withdraws safely. Each role runs through authenticated local routes."
+remaining = "Complete real-provider conformance, crash points and all negotiated role operations remain pending."
+
+[req.coverage.role_conformance]
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/tests/roles.rs", "crates/hm-fabric/tests/runtime.rs"]
+acceptance = "Use real role executables and providers on fresh state roots, record a committed point, terminate the process and resume through the same authenticated route. Verify approvals, catalogs, late delivery, compaction fences and cancellation; capability absence is a skip or failure, never a pass."
+remaining = "Component dispatch tests are not the complete live-provider role conformance matrix."
+
+[req.coverage.catalog]
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/registry.rs", "crates/hm-llm/src/cost.rs"]
+acceptance = "Load external model catalogs with provider capabilities, modality limits, context ceilings and exact tiered integer prices. Preserve unknown additive metadata, reject malformed prices and expose catalog generation and readiness without fabricated bundled values."
+remaining = "Existing provider registry does not establish complete external catalog and price contract parity."
+
+[req.coverage.usage]
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/cost.rs", "crates/hm-cortex/src/budget.rs", "crates/hm-context/src/maintenance.rs"]
+acceptance = "Preserve quota windows, refill timing, balances, token/cache categories, funding provenance, account scope, staleness and in-band errors. Reserve foreground and background cost and concurrency before dispatch; unknown charges stay reserved until reconciled. Store per-turn attribution for host rollups."
+remaining = "Full provider/account usage contract, exact rollups and model-budget consumer integration are pending."
+
+[req.coverage.push]
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = []
+acceptance = "Implement bounded confidential and sender-authenticated HPKE notification envelopes with authenticated metadata and downgrade refusal. Device wake payloads contain only opaque identifiers; replay, wrong recipients and expired keys cannot open application content or initiate operations."
+remaining = "No sealed push envelope or notification consumer is present in the new foundation components."
+
+[req.coverage.logging]
+status = "pending"
+tasks = ["task.3.2", "task.4.2"]
+current_paths = ["crates/hm-core/src/telemetry.rs"]
+acceptance = "Encode and parse canonical bounded log records with hierarchical severity filters and control-character handling. Redact secret-bearing fields before persistence or transport, retain append-only daily segments and rotate one writer. Resumed viewers receive an explicit gap when history expired."
+remaining = "Tracing exists; canonical segmented logging and end-to-end secret-safe log UI are pending."
+
+[req.coverage.registry]
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/routing.rs"]
+acceptance = "Review capability changes, verify signed immutable release metadata and artifact digests in bounded staging, then activate atomically with retained rollback material. Ownership receipts identify installed paths; uninstall only removes still-matching owned files after retain/export/purge selection."
+remaining = "Runtime registration exists; signed artifact install/update/uninstall ownership workflow does not."
+
+[req.coverage.service_manager]
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = []
+acceptance = "Provide per-user native daemon service definitions on supported platforms, preserving full child-drain time and restart-on-crash behavior. Return native refusal details and ownership receipts. Install and uninstall do not modify unrelated services or silently elevate privileges."
+remaining = "Cross-platform service-manager installation and shutdown qualification remain pending."
+
+[req.coverage.remote]
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Enroll named peers explicitly with mutual TLS, reviewed expiring grants and signed discovery. Try permitted direct routes before relays; relay grants are side-specific, one-use and expiring. Advertise only remotely allowed operations and intersect peer grants with local policy."
+remaining = "Existing TLS server is not federated routing, device enrollment or relay qualification."
+
+[req.coverage.mobile]
+status = "pending"
+tasks = ["task.3.2", "task.4.2"]
+current_paths = ["sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Maintain an outbound encrypted mobile connection with a durable local mutation journal. Reconcile unsettled mutations before admitting another write after resume; preserve unknown outcomes. Native inspection is one-column with usable filters, persistent connection status and review actions."
+remaining = "Embedded Swift support is present; phone federation, mutation reconciliation and native mobile journeys are pending."
+
+[req.coverage.sdk]
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py", "sdk/typescript/packages/client/src/context.ts", "crates/hm-serve/src/embedded.rs", "sdk/go", "sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Rust, Python, TypeScript, Go and Swift preserve version negotiation, frame bounds, event order, source digests, cursors, cancellations and typed effect uncertainty. Reconnect reauthenticates and invalidates old epochs. Shared vectors and real daemon restart journeys qualify each language independently."
+remaining = "Main task.2.2 names Rust/Python/TypeScript/Go only; Swift scoped context, streaming transport and reconnect must be added before complete parity."
+
+[req.coverage.host]
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "An installed OSS Gideon adapter translates owner/project/workspace/session/model/credential identities without guessing, supervises negotiated local lifecycle and preserves native transcript authority. Every primary model turn binds, ingests, projects and serializes before dispatch. Full-host readiness requires every declared family."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[req.coverage.ui]
+requires_acceptance = ["req.deep.documentation_proposals", "req.deep.profile_review"]
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Native inspection, settings and operations use existing navigation and component patterns. Revision conflicts preserve drafts; plans show scope, expiry and digest before apply; ordered progress ends in a durable receipt with unknown outcomes distinct from failure. Desktop/mobile keyboard, touch, screen-reader and reduced-motion journeys use real services."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[req.coverage.credentials]
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.2"]
+current_paths = ["crates/hm-ledger/src/credentials.rs", "sdk/typescript/packages/console/src/access.ts"]
+acceptance = "Read surfaces expose credential names, scope, backend, presence, validation time and consumers only. Secret values are write-only opaque handles resolved at dispatch. Credential changes fence consumers; no credential canary reaches prompts, process arguments, logs, exports or evidence."
+remaining = "Complete host credential binding and actual secret-containment user paths remain pending."
+
+[req.coverage.egress]
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-llm/src/admission.rs"]
+acceptance = "Apply destination policy to original requests and resolved DNS, redirects and proxies, refusing mixed addresses, rebinding and metadata-network bypass before unauthorized connections. Git and tool network effects use the same policy and typed denial classification."
+remaining = "Provider admission alone does not establish complete DNS/redirect/proxy and Git egress containment."
+
+[req.coverage.conditions]
+requires_acceptance = ["req.deep.deferred_notes"]
+status = "pending"
+tasks = ["task.3.1", "task.4.2"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-cortex/src/repograph.rs"]
+acceptance = "Expose bounded declarative file existence/content/time and repository ancestry/tag predicates under authorized roots. Canonicalize and revalidate targets; use argument-vector execution, verify repository identity and bound output. Never execute a note expression as code."
+remaining = "The fact predicate interpreter is implemented; file and Git condition producers are pending."
+
+[req.coverage.cli]
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["crates/hm-cli/src/lib.rs"]
+acceptance = "Provide status, inspection, configuration, maintenance, lifecycle, conditions and export commands with structured output and stable exit classes. Noninteractive mutations require complete scoped inputs and plan preconditions; unknown effects are reported without implicit retry."
+remaining = "Full command family parity and actual lifecycle service consumers remain pending."
+
+[req.coverage.release]
+status = "pending"
+tasks = ["task.4.1", "task.4.3"]
+current_paths = ["crates/hm-eval/src/lib.rs", "crates/hm-sim/tests"]
+acceptance = "Pin source and workload digests and record real-path recall, temporal/citation correctness, compression fidelity, latency, prefix reuse, cost and recovery. Qualify required platforms, SDKs, crash, authorization and supply-chain journeys; unavailable measurements stay explicit and do not count as passes."
+remaining = "Aggregate acceptance and reversible cutover have not passed; prior outstanding release gates remain outstanding."
+
+[capability.ctx-ownership]
+public_map = "context"
+public_id = "ctx-ownership"
+requirement = "req.coverage.history"
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/history.rs", "crates/hm-serve/src/context_history.rs"]
+acceptance = "Fence one context writer per scoped session while retaining host ownership of raw conversations and rejecting malformed envelopes before effects. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full host variants, migration revisions and long-session recovery remain integration obligations."
+
+[capability.ctx-identity]
+public_map = "context"
+public_id = "ctx-identity"
+requirement = "req.coverage.identity"
+status = "integration_pending"
+tasks = ["task.2.1"]
+current_paths = ["crates/hm-context/src/types.rs", "crates/hm-fabric/src/storage.rs"]
+acceptance = "Keep persistent identities for sessions, parts, tool pairs, retries, forks and summaries instead of using content or array positions as identity. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Cross-platform aliases and all executable admission paths still require integration evidence."
+
+[capability.ctx-history]
+public_map = "context"
+public_id = "ctx-history"
+requirement = "req.coverage.history"
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/history.rs", "crates/hm-serve/src/context_history.rs"]
+acceptance = "Recover original ordered source bytes after edits, forks, tombstones and restart without rewriting accepted history. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full host variants, migration revisions and long-session recovery remain integration obligations."
+
+[capability.ctx-projection]
+public_map = "context"
+public_id = "ctx-projection"
+requirement = "req.coverage.provider"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.3"]
+current_paths = ["crates/hm-context/src/provider.rs", "crates/hm-llm/src/contract.rs"]
+acceptance = "Identical committed cursor, policy, provider and budget inputs yield the same normalized projection bytes and recorded selection digest. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete provider family and installed host serializer parity remains pending."
+
+[capability.ctx-provider-serialization]
+public_map = "context"
+public_id = "ctx-provider-serialization"
+requirement = "req.coverage.provider"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.3"]
+current_paths = ["crates/hm-context/src/provider.rs", "crates/hm-llm/src/contract.rs"]
+acceptance = "Host serialization validates provider role/part/cache support, preserves tool adjacency and accounts exact provider input tokens. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete provider family and installed host serializer parity remains pending."
+
+[capability.ctx-cache-policy]
+public_map = "context"
+public_id = "ctx-cache-policy"
+requirement = "req.coverage.cache"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/cache.rs", "crates/hm-serve/src/context_projection.rs"]
+acceptance = "Distinguish baseline fold, delta refresh and live-tail update; deferred serving preserves previously frozen byte regions. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused cache behavior does not establish long-session or host provider continuity."
+
+[capability.ctx-tier-decay]
+public_map = "context"
+public_id = "ctx-tier-decay"
+requirement = "req.coverage.reduction"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/reduction.rs"]
+acceptance = "Supply four immutable ordered detail levels per summary and prioritize protected work before selecting older history fidelity. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Live provider continuity, multimodal tools and complete recovery-marker journeys are pending."
+
+[capability.ctx-background-summary]
+public_map = "context"
+public_id = "ctx-background-summary"
+requirement = "req.coverage.historian"
+status = "integration_pending"
+tasks = ["task.3.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/historian.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "Bound single-flight idle summary work by source range, digest, locale, tier schema, lease and attempt with accounted real usage. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Real background model execution and complete knowledge publication have not been demonstrated by component scheduling gates."
+
+[capability.ctx-reduction]
+public_map = "context"
+public_id = "ctx-reduction"
+requirement = "req.coverage.reduction"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/reduction.rs"]
+acceptance = "Every stable reduction target reports queued, applied, rejected or already applied and every applied marker has exact source recovery. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Live provider continuity, multimodal tools and complete recovery-marker journeys are pending."
+
+[capability.ctx-reclaim]
+public_map = "context"
+public_id = "ctx-reclaim"
+requirement = "req.coverage.reduction"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/reduction.rs"]
+acceptance = "Rank recoverable candidates deterministically with explicit exclusions, savings, pressure band and boundary while refusing unsafe hard overflow. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Live provider continuity, multimodal tools and complete recovery-marker journeys are pending."
+
+[capability.ctx-recovery]
+public_map = "context"
+public_id = "ctx-recovery"
+requirement = "req.coverage.cache"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/cache.rs", "crates/hm-serve/src/context_projection.rs"]
+acceptance = "Restore only complete projections with matching cursor, generation, provider, policy and budget; quarantine corrupt derivatives without source loss. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused cache behavior does not establish long-session or host provider continuity."
+
+[capability.ctx-subagents]
+public_map = "context"
+public_id = "ctx-subagents"
+requirement = "req.coverage.hooks"
+status = "integration_pending"
+tasks = ["task.2.2", "task.3.3"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-context/src/history.rs"]
+acceptance = "Spawn children from an immutable authorized parent snapshot and keep child mutations and attributed usage separate. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "All host lifecycle hooks, child usage attribution and contribution flows need installed integration."
+
+[capability.ctx-hooks]
+public_map = "context"
+public_id = "ctx-hooks"
+requirement = "req.coverage.hooks"
+status = "integration_pending"
+tasks = ["task.2.2", "task.3.3"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-context/src/history.rs"]
+acceptance = "Deliver bounded traced lifecycle hooks whose pre-phase failures cannot commit partial context state and whose post-phase is advisory. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "All host lifecycle hooks, child usage attribution and contribution flows need installed integration."
+
+[capability.ctx-modes]
+public_map = "context"
+public_id = "ctx-modes"
+requirement = "req.coverage.context_mode"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["crates/hm-serve/src/context_config.rs", "crates/hm-serve/src/session_context.rs"]
+acceptance = "Exercise off, pass-through, nonauthoritative shadow and primary serving independently from feature and refusal policies. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete mode enforcement across native host turn variants is pending."
+
+[capability.ctx-diagnostics]
+public_map = "context"
+public_id = "ctx-diagnostics"
+requirement = "req.coverage.diagnostics"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/telemetry.rs", "sdk/typescript/packages/console/src/context.ts"]
+acceptance = "Expose complete bounded operational context state and distinguish absent usage, no call, reported zero and cached/background/subagent usage. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Native console and host failure journeys have not closed the inspection matrix."
+
+[capability.ctx-portability]
+public_map = "context"
+public_id = "ctx-portability"
+requirement = "req.coverage.migration"
+status = "integration_pending"
+tasks = ["task.2.1", "task.4.3"]
+current_paths = ["crates/hm-serve/src/hypermid_import.rs", "crates/hm-cli/src/lib.rs"]
+acceptance = "Resume staged migration from digest-checked checkpoints and switch serving ownership only after quiescence. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete record families, retention, encrypted backup and cutover crash matrix remain pending."
+
+[capability.ctx-gideon-adapter]
+public_map = "context"
+public_id = "ctx-gideon-adapter"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Installed adapter status shows actual engine health and binding while off/pass-through preserve native provider input bytes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.ctx-gideon-integration]
+public_map = "context"
+public_id = "ctx-gideon-integration"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Native host turns, edits, forks, compaction, failover and child lifecycle all use explicit verified context protocol operations. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.fabric.framing]
+public_map = "fabric"
+public_id = "fabric.framing"
+requirement = "req.coverage.transport"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.2"]
+current_paths = ["crates/hm-fabric/src/transport.rs", "crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Prove 8 MiB envelope rejection before body allocation and 64 KiB digest-checked chunk reassembly with the public versioned framing contract. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Hypermid framing compatibility and complete remote transport/certificate qualification remain pending."
+
+[capability.fabric.authentication]
+public_map = "fabric"
+public_id = "fabric.authentication"
+requirement = "req.coverage.transport"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.2"]
+current_paths = ["crates/hm-fabric/src/transport.rs", "crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Bind local owner credentials and supervised launch proof; external sessions require encrypted peer identity and explicit scope. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Hypermid framing compatibility and complete remote transport/certificate qualification remain pending."
+
+[capability.fabric.manifests]
+public_map = "fabric"
+public_id = "fabric.manifests"
+requirement = "req.coverage.routing"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/routing.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Discover configured manifest roots only and validate artifacts, dependencies, capabilities and launch evidence before exposing a module. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete declared module discovery, flow behavior and crash-driven host routes require integration."
+
+[capability.fabric.routes]
+public_map = "fabric"
+public_id = "fabric.routes"
+requirement = "req.coverage.routing"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/routing.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Publish acknowledged route bindings atomically and reject frames stamped with a retired binding epoch. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete declared module discovery, flow behavior and crash-driven host routes require integration."
+
+[capability.fabric.flow_control]
+public_map = "fabric"
+public_id = "fabric.flow_control"
+requirement = "req.coverage.routing"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/routing.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Independently bound route request credits, byte credits, queued payloads and control traffic without cross-route starvation. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete declared module discovery, flow behavior and crash-driven host routes require integration."
+
+[capability.fabric.cancellation]
+public_map = "fabric"
+public_id = "fabric.cancellation"
+requirement = "req.coverage.routing"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/routing.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Carry one absolute deadline across hops and settle completion, timeout, cancellation and disconnect races with one terminal outcome. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete declared module discovery, flow behavior and crash-driven host routes require integration."
+
+[capability.fabric.supervision]
+public_map = "fabric"
+public_id = "fabric.supervision"
+requirement = "req.coverage.supervisor"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/supervisor.rs"]
+acceptance = "Bound child readiness, health, restart backoff and drains, including stable identity checks during daemon recovery. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Current implementation manages direct children; process-tree termination, resource limits and filesystem isolation are unsupported."
+
+[capability.fabric.replacement]
+public_map = "fabric"
+public_id = "fabric.replacement"
+requirement = "req.coverage.supervisor"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/supervisor.rs"]
+acceptance = "Preview registry changes and preserve the incumbent until the replacement is ready; cutover withdraws old admission before draining. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Current implementation manages direct children; process-tree termination, resource limits and filesystem isolation are unsupported."
+
+[capability.fabric.effects]
+public_map = "fabric"
+public_id = "fabric.effects"
+requirement = "req.coverage.effects"
+status = "implemented_focused"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/effects.rs", "crates/hm-ledger/src/idempotency.rs"]
+acceptance = "Recover persisted effect intent and outcome after interruption without repeating uncertain external mutations. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Executable multi-process crash and host delivery journeys remain pending."
+
+[capability.fabric.events]
+public_map = "fabric"
+public_id = "fabric.events"
+requirement = "req.coverage.bus"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/bus.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Deliver scoped event snapshots, replay and live continuation with durable acknowledgements, redelivery and dead letters. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Only SQLite operational delivery is implemented; a distinct process-local backend, all six public naming families, census guards, digest-only messages and distributed parity remain pending."
+
+[capability.fabric.diagnostics]
+public_map = "fabric"
+public_id = "fabric.diagnostics"
+requirement = "req.coverage.diagnostics"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/telemetry.rs", "sdk/typescript/packages/console/src/context.ts"]
+acceptance = "Inspect dependencies, resource limits, stderr, route state and launch/terminal history even while a module is failing. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Native console and host failure journeys have not closed the inspection matrix."
+
+[capability.fabric.control]
+public_map = "fabric"
+public_id = "fabric.control"
+requirement = "req.coverage.routing"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/routing.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Expose scoped typed control operations with idempotent writes and generation-stamped registry, route and event responses. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete declared module discovery, flow behavior and crash-driven host routes require integration."
+
+[capability.fabric.registry_release]
+public_map = "fabric"
+public_id = "fabric.registry_release"
+requirement = "req.coverage.registry"
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/routing.rs"]
+acceptance = "Install, update and uninstall verified artifacts using staged activation, rollback and exact file ownership receipts. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Runtime registration exists; signed artifact install/update/uninstall ownership workflow does not."
+
+[capability.fabric.service_manager]
+public_map = "fabric"
+public_id = "fabric.service_manager"
+requirement = "req.coverage.service_manager"
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = []
+acceptance = "Exercise per-user native daemon service registration, restart and ordered child shutdown on each declared platform. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Cross-platform service-manager installation and shutdown qualification remain pending."
+
+[capability.fabric.federation]
+public_map = "fabric"
+public_id = "fabric.federation"
+requirement = "req.coverage.remote"
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Pair peers explicitly, verify candidates and intersect remote capabilities with local policy across direct and relay transports. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Existing TLS server is not federated routing, device enrollment or relay qualification."
+
+[capability.fabric.phone]
+public_map = "fabric"
+public_id = "fabric.phone"
+requirement = "req.coverage.mobile"
+status = "pending"
+tasks = ["task.3.2", "task.4.2"]
+current_paths = ["sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Reconcile the durable outbound phone mutation journal on reconnect before accepting new mutation; wake messages contain no content. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Embedded Swift support is present; phone federation, mutation reconciliation and native mobile journeys are pending."
+
+[capability.fabric.gideon_adapter]
+public_map = "fabric"
+public_id = "fabric.gideon_adapter"
+requirement = "req.coverage.sdk"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py", "sdk/typescript/packages/client/src/context.ts", "crates/hm-serve/src/embedded.rs", "sdk/go", "sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Provide asynchronous control, routes, event streams, cancellation and effect-status operations; epoch changes invalidate cached handles. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Main task.2.2 names Rust/Python/TypeScript/Go only; Swift scoped context, streaming transport and reconnect must be added before complete parity."
+
+[capability.base-project-identity]
+public_map = "foundation"
+public_id = "base-project-identity"
+requirement = "req.coverage.identity"
+status = "integration_pending"
+tasks = ["task.2.1"]
+current_paths = ["crates/hm-context/src/types.rs", "crates/hm-fabric/src/storage.rs"]
+acceptance = "Canonical live aliases converge while worktrees remain distinct; missing-root recovery identity is not a write-admitting identity. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Cross-platform aliases and all executable admission paths still require integration evidence."
+
+[capability.base-lease]
+public_map = "foundation"
+public_id = "base-lease"
+requirement = "req.coverage.identity"
+status = "integration_pending"
+tasks = ["task.2.1"]
+current_paths = ["crates/hm-context/src/types.rs", "crates/hm-fabric/src/storage.rs"]
+acceptance = "Crash-released liveness combines with monotonic module/backend/scope fencing so a replaced writer cannot publish. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Cross-platform aliases and all executable admission paths still require integration evidence."
+
+[capability.base-storage-contracts]
+public_map = "foundation"
+public_id = "base-storage-contracts"
+requirement = "req.coverage.storage"
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.2"]
+current_paths = ["crates/hm-ledger/src/lib.rs", "crates/hm-fabric/src/storage.rs"]
+acceptance = "Storage descriptors preserve backend, isolation, least-privilege location and explicit home resolution without admin credentials or wire-layer drivers. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Operational stores must share declared writer ownership; complete descriptor and platform qualification remains pending."
+
+[capability.base-store-sqlite]
+public_map = "foundation"
+public_id = "base-store-sqlite"
+requirement = "req.coverage.storage"
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.2"]
+current_paths = ["crates/hm-ledger/src/lib.rs", "crates/hm-fabric/src/storage.rs"]
+acceptance = "Open owner-protected SQLite under a writer lease, reject reordered migrations and avoid repeated seeding after reopen. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Operational stores must share declared writer ownership; complete descriptor and platform qualification remains pending."
+
+[capability.base-store-postgres]
+public_map = "foundation"
+public_id = "base-store-postgres"
+requirement = "req.coverage.postgres"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/storage.rs"]
+acceptance = "Use session advisory locks and namespace migrations for pre-provisioned PostgreSQL stores with collision-safe database identities. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "No PostgreSQL driver or real backend consumer is present in the new storage component."
+
+[capability.base-cache-core]
+public_map = "foundation"
+public_id = "base-cache-core"
+requirement = "req.coverage.cache"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/cache.rs", "crates/hm-serve/src/context_projection.rs"]
+acceptance = "Full cache compare-and-swap includes boundaries and deferred work; replay cannot trigger rendering and rebuild drains queued changes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused cache behavior does not establish long-session or host provider continuity."
+
+[capability.base-model-catalog]
+public_map = "foundation"
+public_id = "base-model-catalog"
+requirement = "req.coverage.catalog"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/registry.rs", "crates/hm-llm/src/cost.rs"]
+acceptance = "Parse provider capabilities, modalities, raw additions, exact context limits and tiered integer pricing from external catalog data. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Absent prices and explicit zero remain different; exact nonzero values cannot be rounded away."
+remaining = "Existing provider registry does not establish complete external catalog and price contract parity."
+
+[capability.base-provider-usage]
+public_map = "foundation"
+public_id = "base-provider-usage"
+requirement = "req.coverage.usage"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/cost.rs", "crates/hm-cortex/src/budget.rs", "crates/hm-context/src/maintenance.rs"]
+acceptance = "Represent provider quota/reset windows, balance/funding provenance, staleness and in-band errors without treating unknown usage as zero. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full provider/account usage contract, exact rollups and model-budget consumer integration are pending."
+
+[capability.base-push-seal]
+public_map = "foundation"
+public_id = "base-push-seal"
+requirement = "req.coverage.push"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = []
+acceptance = "Open bounded confidential or sender-authenticated HPKE envelopes only under the matching recipient and authentication mode without downgrade. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Check size before encryption and authenticate against the complete pinned sender key."
+remaining = "No sealed push envelope or notification consumer is present in the new foundation components."
+
+[capability.base-fleet-log]
+public_map = "foundation"
+public_id = "base-fleet-log"
+requirement = "req.coverage.logging"
+status = "pending"
+tasks = ["task.3.2", "task.4.2"]
+current_paths = ["crates/hm-core/src/telemetry.rs"]
+acceptance = "Round-trip canonical log lines, hierarchical filters and guarded control characters through append-only daily rotation with redaction. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Concurrent producers emit whole records; control bytes cannot forge another record."
+remaining = "Tracing exists; canonical segmented logging and end-to-end secret-safe log UI are pending."
+
+[capability.base-bus-contracts]
+public_map = "foundation"
+public_id = "base-bus-contracts"
+requirement = "req.coverage.bus"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/bus.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Declare digest-only bus messages, cursor streams, CAS registers, queues, census guards and dead-letter/error semantics consistently across backends. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. A delivery has one recorded settlement and a dead-letter append commits before terminal removal."
+remaining = "Only SQLite operational delivery is implemented; a distinct process-local backend, all six public naming families, census guards, digest-only messages and distributed parity remain pending."
+
+[capability.base-bus-memory]
+public_map = "foundation"
+public_id = "base-bus-memory"
+requirement = "req.coverage.bus"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/bus.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Provide actual process-local stream/register/queue semantics matching durable bus behavior and real permission refusal without claiming SQLite is memory-backend parity. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Backend-specific properties are marked inapplicable instead of reported as successful parity."
+remaining = "Only SQLite operational delivery is implemented; a distinct process-local backend, all six public naming families, census guards, digest-only messages and distributed parity remain pending."
+
+[capability.base-bus-naming]
+public_map = "foundation"
+public_id = "base-bus-naming"
+requirement = "req.coverage.bus"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/bus.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Derive all six stream families, census and durable names from validated owner/principal tokens with bounded allow-only permissions. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Reject overlapping subscriptions and filters escaping participant workload scope."
+remaining = "Only SQLite operational delivery is implemented; a distinct process-local backend, all six public naming families, census guards, digest-only messages and distributed parity remain pending."
+
+[capability.base-bus-nats]
+public_map = "foundation"
+public_id = "base-bus-nats"
+requirement = "req.coverage.nats"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/bus.rs"]
+acceptance = "Use provisioned NATS/JetStream streams and private inboxes with server-enforced grants, durable acknowledgement and immediate revocation. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Workload participants cannot provision consumers; real restart, key rotation, revocation, leaf-node and system properties need separate evidence."
+remaining = "No NATS or JetStream backend exists in the current bus component."
+
+[capability.base-role-harness]
+public_map = "foundation"
+public_id = "base-role-harness"
+requirement = "req.coverage.role_conformance"
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/tests/roles.rs", "crates/hm-fabric/tests/runtime.rs"]
+acceptance = "Launch real roles under fresh state roots, terminate after a recorded durable point and validate restart through actual module routes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Each crash point uses its own state root and a recorded actual process termination."
+remaining = "Component dispatch tests are not the complete live-provider role conformance matrix."
+
+[capability.base-role-tool]
+public_map = "foundation"
+public_id = "base-role-tool"
+requirement = "req.coverage.roles"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Describe deterministic tool catalogs with pinned schemas/semantics, withdraw held work and acknowledge late results. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Restart cannot dispatch previously unapproved work."
+remaining = "Complete real-provider conformance, crash points and all negotiated role operations remain pending."
+
+[capability.base-role-tool-conformance]
+public_map = "foundation"
+public_id = "base-role-tool-conformance"
+requirement = "req.coverage.role_conformance"
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/tests/roles.rs", "crates/hm-fabric/tests/runtime.rs"]
+acceptance = "Exercise a live tool provider across real route and approval crash points while reporting unavailable capabilities separately. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Component dispatch tests are not the complete live-provider role conformance matrix."
+
+[capability.base-role-runner]
+public_map = "foundation"
+public_id = "base-role-runner"
+requirement = "req.coverage.roles"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Negotiate transcript, run/stream, model-view, delivery, baseline, plan changes, hooks, compaction and tool-attribution operations. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete real-provider conformance, crash points and all negotiated role operations remain pending."
+
+[capability.base-role-runner-conformance]
+public_map = "foundation"
+public_id = "base-role-runner-conformance"
+requirement = "req.coverage.role_conformance"
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/tests/roles.rs", "crates/hm-fabric/tests/runtime.rs"]
+acceptance = "Run actual model/tool boundaries with a real runner process and verify resume, cancellation and role guarantees after crashes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Component dispatch tests are not the complete live-provider role conformance matrix."
+
+[capability.base-role-compaction]
+public_map = "foundation"
+public_id = "base-role-compaction"
+requirement = "req.coverage.roles"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Validate pure setup, bounded deltas, source/version fences and half-open replacements with wait/ready/refusal and actual model-view updates. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Superseded or late answers cannot alter model views; setup remains side-effect free after restart."
+remaining = "Complete real-provider conformance, crash points and all negotiated role operations remain pending."
+
+[capability.base-role-transform]
+public_map = "foundation"
+public_id = "base-role-transform"
+requirement = "req.coverage.roles"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Bound hook phase/order/operation grants and questions, enforce declared failure policy and purity, and recover interrupted transformations. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. A runtime plan may narrow the registered grant only; out-of-policy answers follow frozen failure policy."
+remaining = "Complete real-provider conformance, crash points and all negotiated role operations remain pending."
+
+[capability.seam-config-load]
+public_map = "gideon-seams"
+public_id = "seam-config-load"
+requirement = "req.coverage.context_mode"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["crates/hm-serve/src/context_config.rs", "crates/hm-serve/src/session_context.rs"]
+acceptance = "Read validated host configuration without silently migrating or persisting ordinary reads; context mode defaults to off. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete mode enforcement across native host turn variants is pending."
+
+[capability.seam-runtime-lifecycle]
+public_map = "gideon-seams"
+public_id = "seam-runtime-lifecycle"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Host startup authenticates and verifies daemon health, while retirement drains owned resources and preserves native lifecycle authority. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.seam-context-contract]
+public_map = "gideon-seams"
+public_id = "seam-context-contract"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Implement ingest/assemble/after-turn through cursor/digest-bound requests and retain the default host engine when optional mode is disabled. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.seam-context-default]
+public_map = "gideon-seams"
+public_id = "seam-context-default"
+requirement = "req.coverage.context_mode"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["crates/hm-serve/src/context_config.rs", "crates/hm-serve/src/session_context.rs"]
+acceptance = "Off and pass-through preserve native recall, push-context composition and provider inputs byte-for-byte where promised. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete mode enforcement across native host turn variants is pending."
+
+[capability.seam-prompt-assembly]
+public_map = "gideon-seams"
+public_id = "seam-prompt-assembly"
+requirement = "req.coverage.provider"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.3"]
+current_paths = ["crates/hm-context/src/provider.rs", "crates/hm-llm/src/contract.rs"]
+acceptance = "Host prompt composition retains identity/runtime/channel/skill/safety layers and attributes engine evidence under enforced headroom. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete provider family and installed host serializer parity remains pending."
+
+[capability.seam-transcript-journal]
+public_map = "gideon-seams"
+public_id = "seam-transcript-journal"
+requirement = "req.coverage.history"
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/history.rs", "crates/hm-serve/src/context_history.rs"]
+acceptance = "Keep the host transcript as sole raw source authority across append, archive, edit, rewind and fork operations. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full host variants, migration revisions and long-session recovery remain integration obligations."
+
+[capability.seam-transcript-digest]
+public_map = "gideon-seams"
+public_id = "seam-transcript-digest"
+requirement = "req.coverage.history"
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/history.rs", "crates/hm-serve/src/context_history.rs"]
+acceptance = "Host and engine compute the same canonical span fingerprint over source roles and content without rewriting source identities. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full host variants, migration revisions and long-session recovery remain integration obligations."
+
+[capability.seam-summary-validity]
+public_map = "gideon-seams"
+public_id = "seam-summary-validity"
+requirement = "req.coverage.cache"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/cache.rs", "crates/hm-serve/src/context_projection.rs"]
+acceptance = "A summary can serve only when its recorded source prefix digest still matches authoritative history. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Eligibility additionally binds coverage cursors, algorithm version and summary output digest."
+remaining = "Focused cache behavior does not establish long-session or host provider continuity."
+
+[capability.seam-summary-view]
+public_map = "gideon-seams"
+public_id = "seam-summary-view"
+requirement = "req.coverage.cache"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/cache.rs", "crates/hm-serve/src/context_projection.rs"]
+acceptance = "Apply validated summary coverage to model-visible history while retaining exact raw transcript bytes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused cache behavior does not establish long-session or host provider continuity."
+
+[capability.seam-summary-write]
+public_map = "gideon-seams"
+public_id = "seam-summary-write"
+requirement = "req.coverage.cache"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/cache.rs", "crates/hm-serve/src/context_projection.rs"]
+acceptance = "Publish a complete digest-bound derived summary atomically and retain the original transcript during interruption. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. One lease owns derived publication; the host and engine cannot both publish for the same scope."
+remaining = "Focused cache behavior does not establish long-session or host provider continuity."
+
+[capability.seam-background-compression]
+public_map = "gideon-seams"
+public_id = "seam-background-compression"
+requirement = "req.coverage.historian"
+status = "integration_pending"
+tasks = ["task.3.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/historian.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "Only eligible idle sessions receive bounded summary work, with native transcripts retained and independently recoverable. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Real background model execution and complete knowledge publication have not been demonstrated by component scheduling gates."
+
+[capability.seam-inprocess-compaction]
+public_map = "gideon-seams"
+public_id = "seam-inprocess-compaction"
+requirement = "req.coverage.reduction"
+status = "implemented_focused"
+tasks = ["task.3.3"]
+current_paths = ["crates/hm-context/src/reduction.rs"]
+acceptance = "Preserve structural head/tail and active dependencies when pruning tool output or replacing middle spans. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Live provider continuity, multimodal tools and complete recovery-marker journeys are pending."
+
+[capability.seam-readable-memory]
+public_map = "gideon-seams"
+public_id = "seam-readable-memory"
+requirement = "req.coverage.notes"
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "Preserve native preferences, project/daily records, retention and readable markdown views through canonical ledger-backed migration. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Chronological anchor provenance and complete dependent-index invalidation remain pending integration requirements."
+
+[capability.seam-memory-service]
+public_map = "gideon-seams"
+public_id = "seam-memory-service"
+requirement = "req.coverage.retrieval"
+status = "implemented_focused"
+tasks = ["task.2.3"]
+current_paths = ["crates/hm-context/src/retrieval.rs", "crates/hm-index/src/bm25.rs", "crates/hm-index/src/hnsw.rs"]
+acceptance = "Expose semantic/episodic/lesson/slot/graph/recall/audit/maintenance operations with explicit unavailable and fallback semantics. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Typed fusion exists; complete real index and embedding provider consumers remain pending."
+
+[capability.seam-semantic-archive]
+public_map = "gideon-seams"
+public_id = "seam-semantic-archive"
+requirement = "req.coverage.retrieval"
+status = "implemented_focused"
+tasks = ["task.2.3"]
+current_paths = ["crates/hm-context/src/retrieval.rs", "crates/hm-index/src/bm25.rs", "crates/hm-index/src/hnsw.rs"]
+acceptance = "Migrate native records/events/graph/import/undo/deletion/statistics/embedding state preserving identity and accepted writes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Typed fusion exists; complete real index and embedding provider consumers remain pending."
+
+[capability.seam-native-agent-loop]
+public_map = "gideon-seams"
+public_id = "seam-native-agent-loop"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Native streamed model/tool loops retain approvals, failover, usage, results and completion ownership while consuming attributed context. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.seam-provider-stream]
+public_map = "gideon-seams"
+public_id = "seam-provider-stream"
+requirement = "req.coverage.provider"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.3"]
+current_paths = ["crates/hm-context/src/provider.rs", "crates/hm-llm/src/contract.rs"]
+acceptance = "Preserve served-model identity, streamed usage, cancellation and provider shutdown contracts during context integration. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. All model calls retain the configured host provider; provider credentials never enter context wire payloads."
+remaining = "Complete provider family and installed host serializer parity remains pending."
+
+[capability.seam-usage-ledger]
+public_map = "gideon-seams"
+public_id = "seam-usage-ledger"
+requirement = "req.coverage.usage"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/cost.rs", "crates/hm-cortex/src/budget.rs", "crates/hm-context/src/maintenance.rs"]
+acceptance = "Persist provider/model/token/cache/cost/attribution rows per native turn for exact canonical rollups. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Native provider usage remains canonical and operational metrics cannot count provider calls or charges again."
+remaining = "Full provider/account usage contract, exact rollups and model-budget consumer integration are pending."
+
+[capability.seam-tool-catalog]
+public_map = "gideon-seams"
+public_id = "seam-tool-catalog"
+requirement = "req.coverage.roles"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/roles.rs", "crates/hm-fabric/src/runtime.rs"]
+acceptance = "Combine native/app/MCP catalog ownership, preferences and portable schemas without giving retrieved memory tool authority. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete real-provider conformance, crash points and all negotiated role operations remain pending."
+
+[capability.seam-mcp-lifecycle]
+public_map = "gideon-seams"
+public_id = "seam-mcp-lifecycle"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Host owns admitted server connections, OAuth transport, pooling, invocation, session eviction and orderly shutdown. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.seam-approval-gate]
+public_map = "gideon-seams"
+public_id = "seam-approval-gate"
+requirement = "req.coverage.effects"
+status = "implemented_focused"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/effects.rs", "crates/hm-ledger/src/idempotency.rs"]
+acceptance = "Native session-local approve/reject/revise/timeout/cancel decisions remain authoritative for effects. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Executable multi-process crash and host delivery journeys remain pending."
+
+[capability.seam-cancel-scope]
+public_map = "gideon-seams"
+public_id = "seam-cancel-scope"
+requirement = "req.coverage.effects"
+status = "implemented_focused"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/effects.rs", "crates/hm-ledger/src/idempotency.rs"]
+acceptance = "Keep one active native turn cancellation reason, model abort and owned child retirement synchronized without duplicate terminal events. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Transfer cancellation ownership once upon daemon acceptance and recover the final cursor and effect state."
+remaining = "Executable multi-process crash and host delivery journeys remain pending."
+
+[capability.seam-turn-stop]
+public_map = "gideon-seams"
+public_id = "seam-turn-stop"
+requirement = "req.coverage.effects"
+status = "implemented_focused"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/effects.rs", "crates/hm-ledger/src/idempotency.rs"]
+acceptance = "Withdraw pending approvals, retire children and request provider cancellation under existing soft/hard stop outcomes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Forward cancellation to the current owner; the host cannot independently kill daemon-owned work concurrently."
+remaining = "Executable multi-process crash and host delivery journeys remain pending."
+
+[capability.seam-final-delivery]
+public_map = "gideon-seams"
+public_id = "seam-final-delivery"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Preserve native origin-aware redacted final delivery to sessions, inbox and configured channels without engine-side duplication. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.seam-chat-turn]
+public_map = "gideon-seams"
+public_id = "seam-chat-turn"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Stream host events, retain usage and final assistant persistence, and complete the authorized turn after client disconnection. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.seam-chat-persistence]
+public_map = "gideon-seams"
+public_id = "seam-chat-persistence"
+requirement = "req.coverage.history"
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/history.rs", "crates/hm-serve/src/context_history.rs"]
+acceptance = "Persist redacted transcript and metadata atomically while refusing shorter-buffer overwrites of accepted history. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full host variants, migration revisions and long-session recovery remain integration obligations."
+
+[capability.seam-git-egress]
+public_map = "gideon-seams"
+public_id = "seam-git-egress"
+requirement = "req.coverage.egress"
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-llm/src/admission.rs"]
+acceptance = "Native Git network operations retain configured destination policy and classified failures. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Provider admission alone does not establish complete DNS/redirect/proxy and Git egress containment."
+
+[capability.seam-budget-authority]
+public_map = "gideon-seams"
+public_id = "seam-budget-authority"
+requirement = "req.coverage.usage"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/cost.rs", "crates/hm-cortex/src/budget.rs", "crates/hm-context/src/maintenance.rs"]
+acceptance = "Configured day/run cost/token/time/tool ceilings remain authoritative across foreground and new background work. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Admit and stop added background work through existing host budget authority rather than a parallel budget ledger."
+remaining = "Full provider/account usage contract, exact rollups and model-budget consumer integration are pending."
+
+[capability.seam-sandbox-provider]
+public_map = "gideon-seams"
+public_id = "seam-sandbox-provider"
+requirement = "req.coverage.containment"
+status = "unsupported"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/supervisor.rs"]
+acceptance = "Restricted execution uses the configured host sandbox and advertises unavailable containment instead of silently executing unrestricted. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Process-tree termination, resource limits and filesystem isolation are currently false in containment capabilities."
+
+[capability.seam-terminal]
+public_map = "gideon-seams"
+public_id = "seam-terminal"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Retain native live chat, tool events, approvals, stop, navigation, model settings and setup around the integrated engine. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.seam-memory-console]
+public_map = "gideon-seams"
+public_id = "seam-memory-console"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Preserve native semantic/episodic/lesson/slot/graph/recall/health/audit/settings user journeys with source-grounded state. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.seam-context-ledger]
+public_map = "gideon-seams"
+public_id = "seam-context-ledger"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Show the actual context admitted to a turn, subsequent learned evidence and linked telemetry with redacted default inspection. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.seam-usage-console]
+public_map = "gideon-seams"
+public_id = "seam-usage-console"
+requirement = "req.coverage.usage"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/cost.rs", "crates/hm-cortex/src/budget.rs", "crates/hm-context/src/maintenance.rs"]
+acceptance = "Render canonical per-turn and live usage/cache/cost values without combining unknown with zero or inventing rollups. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full provider/account usage contract, exact rollups and model-budget consumer integration are pending."
+
+[capability.seam-python-package]
+public_map = "gideon-seams"
+public_id = "seam-python-package"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Ship and import the installed OSS Gideon adapter within its runtime packaging and retain its native command lifecycle. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.seam-container-package]
+public_map = "gideon-seams"
+public_id = "seam-container-package"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Build an unprivileged local runtime image containing backend, console and integrated engine with reversible persistent-state upgrades. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Local transport/storage remain unprivileged and the integrated context engine defaults to off."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.mem-foundation]
+public_map = "memory"
+public_id = "mem-foundation"
+requirement = "req.coverage.storage"
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.2"]
+current_paths = ["crates/hm-ledger/src/lib.rs", "crates/hm-fabric/src/storage.rs"]
+acceptance = "Use ledger-backed records with atomic revisions, schema fencing and scope cursors; never create a competing durable memory database. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Operational stores must share declared writer ownership; complete descriptor and platform qualification remains pending."
+
+[capability.mem-records]
+public_map = "memory"
+public_id = "mem-records"
+requirement = "req.coverage.notes"
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "Retain fact/episode/note/conditional-note/chronological-anchor/summary families with optimistic revisions and exact original source recovery. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Chronological anchor provenance and complete dependent-index invalidation remain pending integration requirements."
+
+[capability.mem-lineage]
+public_map = "memory"
+public_id = "mem-lineage"
+requirement = "req.coverage.notes"
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "Preserve source spans, revision ancestry, verification history, contradictions and tombstones while atomically hiding every stale derivative. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Chronological anchor provenance and complete dependent-index invalidation remain pending integration requirements."
+
+[capability.mem-embedding]
+public_map = "memory"
+public_id = "mem-embedding"
+requirement = "req.coverage.embedding"
+status = "integration_pending"
+tasks = ["task.2.3"]
+current_paths = ["crates/hm-embed/src/local.rs", "crates/hm-embed/src/remote.rs", "crates/hm-context/src/retrieval.rs"]
+acceptance = "Support all declared embedding modes, active registration fingerprints and bounded resumable backfill with lexical degradation on failures. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Provider registration lifecycle and all bounded backfill failure classes require integration."
+
+[capability.mem-retrieval]
+public_map = "memory"
+public_id = "mem-retrieval"
+requirement = "req.coverage.retrieval"
+status = "implemented_focused"
+tasks = ["task.2.3"]
+current_paths = ["crates/hm-context/src/retrieval.rs", "crates/hm-index/src/bm25.rs", "crates/hm-index/src/hnsw.rs"]
+acceptance = "Rank authorized memory/message/file/commit evidence with source-time filters, hybrid fusion, already-visible suppression and bounded reranking. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Results also expose verification, contradictions, score components, suppression counts and cursor; suppressed unauthorized rows never reveal content."
+remaining = "Typed fusion exists; complete real index and embedding provider consumers remain pending."
+
+[capability.mem-maintenance]
+public_map = "memory"
+public_id = "mem-maintenance"
+requirement = "req.coverage.historian"
+status = "integration_pending"
+tasks = ["task.3.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/historian.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "Schedule extraction, verification, conditions, summary/decay, vectors, reconciliation, invalidation, compaction, integrity, portability and purge under scoped budgets. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Real background model execution and complete knowledge publication have not been demonstrated by component scheduling gates."
+
+[capability.mem-indexes]
+public_map = "memory"
+public_id = "mem-indexes"
+requirement = "req.coverage.indexing"
+status = "integration_pending"
+tasks = ["task.2.3"]
+current_paths = ["crates/hm-cortex/src/repograph.rs", "crates/hm-cortex/src/connectors/sync.rs", "crates/hm-context/src/retrieval.rs"]
+acceptance = "Recover raw-message indexes and implement authorized predicate-controlled files and opt-in bounded Git ingestion with identity rechecks. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Raw-message reconciliation resumes at the earliest durable dirty position; unauthorized rejected file bytes are never stored. Non-repository scans persist cooldown."
+remaining = "Predicate-driven file indexing, opt-in commit ingestion and atomic derivative invalidation are not fully connected."
+
+[capability.mem-clients]
+public_map = "memory"
+public_id = "mem-clients"
+requirement = "req.coverage.sdk"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py", "sdk/typescript/packages/client/src/context.ts", "crates/hm-serve/src/embedded.rs", "sdk/go", "sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Typed host clients cover records, retrieval, maintenance, diagnostics and lifecycle without bypassing ledger admission through direct database writes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Main task.2.2 names Rust/Python/TypeScript/Go only; Swift scoped context, streaming transport and reconnect must be added before complete parity."
+
+[capability.mem-remote]
+public_map = "memory"
+public_id = "mem-remote"
+requirement = "req.coverage.sdk"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py", "sdk/typescript/packages/client/src/context.ts", "crates/hm-serve/src/embedded.rs", "sdk/go", "sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "In-process and local-bus clients share streaming, cancellation, flow control, cursor resume and idempotent mutation semantics. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Main task.2.2 names Rust/Python/TypeScript/Go only; Swift scoped context, streaming transport and reconnect must be added before complete parity."
+
+[capability.mem-portability]
+public_map = "memory"
+public_id = "mem-portability"
+requirement = "req.coverage.migration"
+status = "integration_pending"
+tasks = ["task.2.1", "task.4.3"]
+current_paths = ["crates/hm-serve/src/hypermid_import.rs", "crates/hm-cli/src/lib.rs"]
+acceptance = "Canonical scoped JSON Lines export preserves authoritative records and provenance, excludes derivatives/secrets and verifies imports before visibility. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Scope relocation requires destination write authority. Exclude vectors, indexes, leases, jobs, credentials and secret handles."
+remaining = "Complete record families, retention, encrypted backup and cutover crash matrix remain pending."
+
+[capability.mem-recovery]
+public_map = "memory"
+public_id = "mem-recovery"
+requirement = "req.coverage.migration"
+status = "integration_pending"
+tasks = ["task.2.1", "task.4.3"]
+current_paths = ["crates/hm-serve/src/hypermid_import.rs", "crates/hm-cli/src/lib.rs"]
+acceptance = "Fence future stores, journal atomic migrations, validate backup graphs and rebuild derived indexes through the installed host lifecycle. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. A destructive schema change requires a verified backup; fresh and upgraded authoritative schemas converge."
+remaining = "Complete record families, retention, encrypted backup and cutover crash matrix remain pending."
+
+[capability.mem-release]
+public_map = "memory"
+public_id = "mem-release"
+requirement = "req.coverage.release"
+status = "pending"
+tasks = ["task.4.1", "task.4.3"]
+current_paths = ["crates/hm-eval/src/lib.rs", "crates/hm-sim/tests"]
+acceptance = "Package the complete local memory consumer and lifecycle with compatibility gates and content-safe diagnostics using local runtime dependencies. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Aggregate acceptance and reversible cutover have not passed; prior outstanding release gates remain outstanding."
+
+[capability.security.scoped-capabilities]
+public_map = "security"
+public_id = "security.scoped-capabilities"
+requirement = "req.coverage.auth"
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.2"]
+current_paths = ["crates/hm-serve/src/auth.rs", "crates/hm-context/src/notes.rs", "crates/hm-context/src/retrieval.rs"]
+acceptance = "Test exact operation/resource and owner/project/workspace authority, expiry and revocation at protocol admission and commit. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Uniform expiring principal and worker capabilities across transport, ledger and operational modules remain pending."
+
+[capability.security.worker-authority]
+public_map = "security"
+public_id = "security.worker-authority"
+requirement = "req.coverage.auth"
+status = "integration_pending"
+tasks = ["task.2.1", "task.3.2"]
+current_paths = ["crates/hm-serve/src/auth.rs", "crates/hm-context/src/notes.rs", "crates/hm-context/src/retrieval.rs"]
+acceptance = "Workers receive finite expiring authority for named records and operations and cannot mint grants or write foreign destinations. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Uniform expiring principal and worker capabilities across transport, ledger and operational modules remain pending."
+
+[capability.security.authenticated-protocol]
+public_map = "security"
+public_id = "security.authenticated-protocol"
+requirement = "req.coverage.transport"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.2"]
+current_paths = ["crates/hm-fabric/src/transport.rs", "crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Remote transport uses TLS 1.3 mutually authenticated identity and short-lived authorization with replay-resistant enrollment. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Hypermid framing compatibility and complete remote transport/certificate qualification remain pending."
+
+[capability.security.client-compatibility]
+public_map = "security"
+public_id = "security.client-compatibility"
+requirement = "req.coverage.transport"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.2"]
+current_paths = ["crates/hm-fabric/src/transport.rs", "crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Both supported version boundaries connect; out-of-range clients receive stable incompatibility errors and produce no writes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Hypermid framing compatibility and complete remote transport/certificate qualification remain pending."
+
+[capability.security.sandbox-effects]
+public_map = "security"
+public_id = "security.sandbox-effects"
+requirement = "req.coverage.containment"
+status = "unsupported"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/supervisor.rs"]
+acceptance = "Restricted integrations cannot reach ungranted files, network, credentials or storage and preserve uncertain outcomes after interruption. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Process-tree termination, resource limits and filesystem isolation are currently false in containment capabilities."
+
+[capability.security.egress-secrets]
+public_map = "security"
+public_id = "security.egress-secrets"
+requirement = "req.coverage.egress"
+status = "pending"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-llm/src/admission.rs"]
+acceptance = "Resolve secrets at dispatch behind opaque handles and block destination bypass through DNS, redirects and proxies before connection. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Provider admission alone does not establish complete DNS/redirect/proxy and Git egress containment."
+
+[capability.security.model-budget]
+public_map = "security"
+public_id = "security.model-budget"
+requirement = "req.coverage.usage"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/cost.rs", "crates/hm-cortex/src/budget.rs", "crates/hm-context/src/maintenance.rs"]
+acceptance = "Admit foreground and background calls only after per-call, concurrency, time-window and job reservations; retain unknown charges. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full provider/account usage contract, exact rollups and model-budget consumer integration are pending."
+
+[capability.security.memory-provenance]
+public_map = "security"
+public_id = "security.memory-provenance"
+requirement = "req.coverage.notes"
+status = "implemented_focused"
+tasks = ["task.2.1", "task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-serve/src/context_jobs.rs"]
+acceptance = "Memory text remains attributed data; privileged promotion requires an explicit revision-bound owner decision invalidated by edits. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Chronological anchor provenance and complete dependent-index invalidation remain pending integration requirements."
+
+[capability.security.artifact-supply-chain]
+public_map = "security"
+public_id = "security.artifact-supply-chain"
+requirement = "req.coverage.registry"
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/routing.rs"]
+acceptance = "Verify bounded staged artifacts before execution and require review for new authority; interrupted update leaves the prior version runnable. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Runtime registration exists; signed artifact install/update/uninstall ownership workflow does not."
+
+[capability.security.data-lifecycle]
+public_map = "security"
+public_id = "security.data-lifecycle"
+requirement = "req.coverage.migration"
+status = "integration_pending"
+tasks = ["task.2.1", "task.4.3"]
+current_paths = ["crates/hm-serve/src/hypermid_import.rs", "crates/hm-cli/src/lib.rs"]
+acceptance = "Deletion immediately hides recall and later removes derived copies; encrypted backup/restore verifies manifests before atomic activation. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete record families, retention, encrypted backup and cutover crash matrix remain pending."
+
+[capability.security.crash-recovery]
+public_map = "security"
+public_id = "security.crash-recovery"
+requirement = "req.coverage.effects"
+status = "implemented_focused"
+tasks = ["task.3.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/effects.rs", "crates/hm-ledger/src/idempotency.rs"]
+acceptance = "Inject interruption at real admission/publication boundaries and demonstrate no duplicate effects, lost source or cursor regression. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Executable multi-process crash and host delivery journeys remain pending."
+
+[capability.security.release-evidence]
+public_map = "security"
+public_id = "security.release-evidence"
+requirement = "req.coverage.release"
+status = "pending"
+tasks = ["task.4.1", "task.4.3"]
+current_paths = ["crates/hm-eval/src/lib.rs", "crates/hm-sim/tests"]
+acceptance = "All mandatory security evidence refers to the same source digest and real product paths with provider availability stated explicitly. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Aggregate acceptance and reversible cutover have not passed; prior outstanding release gates remain outstanding."
+
+[capability.surface.client.framing]
+public_map = "surfaces"
+public_id = "surface.client.framing"
+requirement = "req.coverage.transport"
+status = "implemented_focused"
+tasks = ["task.2.2", "task.3.2"]
+current_paths = ["crates/hm-fabric/src/transport.rs", "crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Rust, Python, TypeScript and Swift reproduce the same bounded public frames/chunks and reject declared oversize before body allocation. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Hypermid framing compatibility and complete remote transport/certificate qualification remain pending."
+
+[capability.surface.client.capabilities]
+public_map = "surfaces"
+public_id = "surface.client.capabilities"
+requirement = "req.coverage.sdk"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py", "sdk/typescript/packages/client/src/context.ts", "crates/hm-serve/src/embedded.rs", "sdk/go", "sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Negotiate transport, limits, lifecycle, effects, scope, cursor resume and adapter-family support before other operations. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Unknown additive capability metadata remains compatible; unavailable actions are absent or include a typed refusal."
+remaining = "Main task.2.2 names Rust/Python/TypeScript/Go only; Swift scoped context, streaming transport and reconnect must be added before complete parity."
+
+[capability.surface.client.python-host-adapter]
+public_map = "surfaces"
+public_id = "surface.client.python-host-adapter"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Translate all essential Gideon identity/model/credential/session/lifecycle concepts with scope proof before daemon dispatch. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.surface.client.language-parity]
+public_map = "surfaces"
+public_id = "surface.client.language-parity"
+requirement = "req.coverage.sdk"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py", "sdk/typescript/packages/client/src/context.ts", "crates/hm-serve/src/embedded.rs", "sdk/go", "sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Rust, TypeScript and Swift preserve request/event/error/chunk/cancel/reconnect semantics and additive fields using common vectors. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Main task.2.2 names Rust/Python/TypeScript/Go only; Swift scoped context, streaming transport and reconnect must be added before complete parity."
+
+[capability.surface.client.reconnect]
+public_map = "surfaces"
+public_id = "surface.client.reconnect"
+requirement = "req.coverage.sdk"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py", "sdk/typescript/packages/client/src/context.ts", "crates/hm-serve/src/embedded.rs", "sdk/go", "sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Reauthenticate on reconnect, reject wrong epochs visibly and return unknown for potentially accepted writes without automatic retry. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Main task.2.2 names Rust/Python/TypeScript/Go only; Swift scoped context, streaming transport and reconnect must be added before complete parity."
+
+[capability.surface.inspect.sessions]
+public_map = "surfaces"
+public_id = "surface.inspect.sessions"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Filter native session inspection by lifecycle, scope, model, time and text including unhealthy or archived sessions. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Filtered query identity stays distinct from the full list and unavailable differs from empty."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.inspect.timeline]
+public_map = "surfaces"
+public_id = "surface.inspect.timeline"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Order turns, tools, memory, cache, reductions, errors and traces by authoritative epoch/sequence rather than arrival time. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Snapshot plus replay shows each terminal item once and announces irrecoverable cursor gaps."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.inspect.memory]
+public_map = "surfaces"
+public_id = "surface.inspect.memory"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Link memory scope, revisions, lineage, source evidence, verification, contradictions, vectors, ranking and jobs in detail views. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Label immutable anchors separately from summaries and reveal only counts for unauthorized suppression."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.inspect.memory-conflicts]
+public_map = "surfaces"
+public_id = "surface.inspect.memory-conflicts"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Submit displayed revision/digest, preserve rejected drafts and provide compare, reload and revision-aware reapply. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.inspect.cache]
+public_map = "surfaces"
+public_id = "surface.inspect.cache"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Show generation, identity digest, bytes, age, hits/misses and freshness with reviewable clear/rebuild plans. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.config.runtime]
+public_map = "surfaces"
+public_id = "surface.config.runtime"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Show effective settings, source, editability, restart needs and revisions; context mode and strictness remain independent fields. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.config.models]
+public_map = "surfaces"
+public_id = "surface.config.models"
+requirement = "req.coverage.catalog"
+status = "pending"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-llm/src/registry.rs", "crates/hm-llm/src/cost.rs"]
+acceptance = "Show actual provider readiness, dimensions, binding/residency and last observed real probe while unknown metadata stays unknown. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Preview affected duties before rebinding and show ready only after the required actual probe."
+remaining = "Existing provider registry does not establish complete external catalog and price contract parity."
+
+[capability.surface.config.credentials]
+public_map = "surfaces"
+public_id = "surface.config.credentials"
+requirement = "req.coverage.credentials"
+status = "integration_pending"
+tasks = ["task.2.2", "task.4.2"]
+current_paths = ["crates/hm-ledger/src/credentials.rs", "sdk/typescript/packages/console/src/access.ts"]
+acceptance = "Read only credential metadata and accept secret values on write with scope, consumers and validation timestamps. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Credential deletion previews affected consumers and requires owner review."
+remaining = "Complete host credential binding and actual secret-containment user paths remain pending."
+
+[capability.surface.operations.diagnostics]
+public_map = "surfaces"
+public_id = "surface.operations.diagnostics"
+requirement = "req.coverage.diagnostics"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["crates/hm-serve/src/session_context.rs", "crates/hm-serve/src/telemetry.rs", "sdk/typescript/packages/console/src/context.ts"]
+acceptance = "Diagnose store, daemon, adapter, transport, clients, children, models and indexes with timed failures and useful next actions. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Retain the prior timed observation when a rerun fails and label cached observations clearly."
+remaining = "Native console and host failure journeys have not closed the inspection matrix."
+
+[capability.surface.operations.logs]
+public_map = "surfaces"
+public_id = "surface.operations.logs"
+requirement = "req.coverage.logging"
+status = "pending"
+tasks = ["task.3.2", "task.4.2"]
+current_paths = ["crates/hm-core/src/telemetry.rs"]
+acceptance = "Filter bounded logs by severity/component/scope/session/trace/time; viewport pause does not stop collection and reconnect exposes gaps. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Tracing exists; canonical segmented logging and end-to-end secret-safe log UI are pending."
+
+[capability.surface.operations.maintenance-plan]
+public_map = "surfaces"
+public_id = "surface.operations.maintenance-plan"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Review expiring scoped digest-covered plans for integrity, reconciliation, reindex, compaction, cleanup and rebuild before mutation. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Plans enumerate budgets, blockers, destructive effects and restart needs; altered or expired plans cannot apply."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.operations.maintenance-receipt]
+public_map = "surfaces"
+public_id = "surface.operations.maintenance-receipt"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Stream ordered maintenance progress and persist terminal committed, failed, cancelled or unknown receipts. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Cancellation cannot rewrite a committed receipt; reconnect recovers by job identity and cursor."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.lifecycle.install]
+public_map = "surfaces"
+public_id = "surface.lifecycle.install"
+requirement = "req.coverage.registry"
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/routing.rs"]
+acceptance = "Review platform, permissions, directories, service ownership and protected connection material before installation writes. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Apply uses the reviewed plan digest; any blocker prevents all proposed writes."
+remaining = "Runtime registration exists; signed artifact install/update/uninstall ownership workflow does not."
+
+[capability.surface.lifecycle.update]
+public_map = "surfaces"
+public_id = "surface.lifecycle.update"
+requirement = "req.coverage.registry"
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/routing.rs"]
+acceptance = "Review candidate compatibility, migrations, capacity, drains and rollback resources before update activation. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Active work must drain or visibly block; advertise rollback only when stored receipt evidence proves availability."
+remaining = "Runtime registration exists; signed artifact install/update/uninstall ownership workflow does not."
+
+[capability.surface.lifecycle.uninstall]
+public_map = "surfaces"
+public_id = "surface.lifecycle.uninstall"
+requirement = "req.coverage.registry"
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-fabric/src/routing.rs"]
+acceptance = "Separate service/runtime/configuration/user-data ownership and require explicit retain, export or purge decisions. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Retain/export cannot delete user data; purge requires fresh reviewed owner authority."
+remaining = "Runtime registration exists; signed artifact install/update/uninstall ownership workflow does not."
+
+[capability.surface.lifecycle.migration]
+public_map = "surfaces"
+public_id = "surface.lifecycle.migration"
+requirement = "req.coverage.migration"
+status = "integration_pending"
+tasks = ["task.2.1", "task.4.3"]
+current_paths = ["crates/hm-serve/src/hypermid_import.rs", "crates/hm-cli/src/lib.rs"]
+acceptance = "Stage authoritative import validation and show conflicts or unsupported rows before idempotent reviewed publication. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Complete record families, retention, encrypted backup and cutover crash matrix remain pending."
+
+[capability.surface.lifecycle.export]
+public_map = "surfaces"
+public_id = "surface.lifecycle.export"
+requirement = "req.coverage.migration"
+status = "integration_pending"
+tasks = ["task.2.1", "task.4.3"]
+current_paths = ["crates/hm-serve/src/hypermid_import.rs", "crates/hm-cli/src/lib.rs"]
+acceptance = "Preview scope, contents, exclusions, destination and estimate; return the actual manifest digest and byte count. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Verify the actual artifact digest before presenting success."
+remaining = "Complete record families, retention, encrypted backup and cutover crash matrix remain pending."
+
+[capability.surface.integration.mcp-bridge]
+public_map = "surfaces"
+public_id = "surface.integration.mcp-bridge"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Expose only authorized memory/search/session/diagnostic tools and do not infer lifecycle or credential authority. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Keep full-host availability false when only a tool bridge is installed and preserve schemas and typed errors."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.integration.full-host]
+public_map = "surfaces"
+public_id = "surface.integration.full-host"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Report full-host availability only after identity, scope, sessions, memory, config, credentials, lifecycle, cursor and reconnect families are present. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.surface.integration.stdio]
+public_map = "surfaces"
+public_id = "surface.integration.stdio"
+requirement = "req.coverage.supervisor"
+status = "implemented_focused"
+tasks = ["task.3.2"]
+current_paths = ["crates/hm-fabric/src/supervisor.rs"]
+acceptance = "Launch admitted stdio children lazily with allowlisted environment, bounded initialization/requests/frames/retries/idle/shutdown and reaping. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. A wedged child cannot block another child or health. Post-write cancellation retires the child and leaves outcome unknown."
+remaining = "Current implementation manages direct children; process-tree termination, resource limits and filesystem isolation are unsupported."
+
+[capability.surface.condition.files]
+public_map = "surfaces"
+public_id = "surface.condition.files"
+requirement = "req.coverage.conditions"
+status = "pending"
+tasks = ["task.3.1", "task.4.2"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-cortex/src/repograph.rs"]
+acceptance = "Canonicalize and revalidate authorized file existence/content/mtime facts without following a replaced target outside allowed roots. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Fact transitions have stable occurrence identities and do not emit duplicates."
+remaining = "The fact predicate interpreter is implemented; file and Git condition producers are pending."
+
+[capability.surface.condition.git]
+public_map = "surfaces"
+public_id = "surface.condition.git"
+requirement = "req.coverage.conditions"
+status = "pending"
+tasks = ["task.3.1", "task.4.2"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-cortex/src/repograph.rs"]
+acceptance = "Bound ancestry/tag facts using argument-vector Git execution with verified repository identity and refs and no raw command output. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Conditions cannot invoke shell syntax, networking or excessive/deadline-unbounded command output."
+remaining = "The fact predicate interpreter is implemented; file and Git condition producers are pending."
+
+[capability.surface.remote.enrollment]
+public_map = "surfaces"
+public_id = "surface.remote.enrollment"
+requirement = "req.coverage.remote"
+status = "pending"
+tasks = ["task.3.2", "task.4.2", "task.4.3"]
+current_paths = ["crates/hm-serve/src/grpc/tls.rs"]
+acceptance = "Review named-device least privilege, TLS identity and expiry; revocation stops new remote sessions. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Existing TLS server is not federated routing, device enrollment or relay qualification."
+
+[capability.surface.remote.mobile]
+public_map = "surfaces"
+public_id = "surface.remote.mobile"
+requirement = "req.coverage.mobile"
+status = "pending"
+tasks = ["task.3.2", "task.4.2"]
+current_paths = ["sdk/swift/Sources/HyperMind/HyperMindEngine.swift"]
+acceptance = "Qualify one-column native inspection with filter sheets, persistent status and foreground/resume review workflows. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Real 320px and 390px paths avoid page overflow and recover authoritative receipts after background/resume."
+remaining = "Embedded Swift support is present; phone federation, mutation reconciliation and native mobile journeys are pending."
+
+[capability.surface.remote.accessibility]
+public_map = "surfaces"
+public_id = "surface.remote.accessibility"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Verify keyboard, assistive reading, touch and reduced-motion behavior across filters, dialogs, plans, progress and receipts. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Use at least 44px touch targets and linear alternatives; announce validation/gaps/outcomes once without losing visible focus."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.native.console]
+public_map = "surfaces"
+public_id = "surface.native.console"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Integrate within existing Gideon settings/diagnostics using shared page structure and components instead of a separate product shell. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Complete inspection, configuration, plan/application and receipt recovery without raw IDs or JSON or another standalone web app."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[capability.surface.native.cli]
+public_map = "surfaces"
+public_id = "surface.native.cli"
+requirement = "req.coverage.cli"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["crates/hm-cli/src/lib.rs"]
+acceptance = "Provide complete status/inspect/config/maintenance/lifecycle/condition/export families with stable exit behavior and noninteractive preconditions. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Full command family parity and actual lifecycle service consumers remain pending."
+
+[capability.surface.native.desktop]
+public_map = "surfaces"
+public_id = "surface.native.desktop"
+requirement = "req.coverage.host"
+status = "pending"
+tasks = ["task.2.2", "task.4.2", "task.4.3"]
+current_paths = ["sdk/python/hypermind/context.py"]
+acceptance = "Local desktop lifecycle alone owns daemon start/stop, drains cleanly and exposes native status and notifications. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance. Web-only mode never spawns a daemon; local shutdown leaves no daemon-owned stdio descendants."
+remaining = "A typed host interface is present; no complete installed OSS Gideon native lifecycle consumer is qualified."
+
+[capability.surface.native.truthful-state]
+public_map = "surfaces"
+public_id = "surface.native.truthful-state"
+requirement = "req.coverage.ui"
+status = "integration_pending"
+tasks = ["task.4.2"]
+current_paths = ["sdk/typescript/packages/console/src/context.ts", "sdk/typescript/packages/console/src/app.ts"]
+acceptance = "Distinguish planned/unavailable/connecting/ready/degraded/running and committed/failed/cancelled/unknown throughout all surfaces. Meet the referenced requirement with real consumer evidence; related source or a focused component gate alone does not close acceptance."
+remaining = "Focused console rendering does not prove complete native host, accessibility or mobile user paths."
+
+[req.deep.anchored_knowledge]
+status = "pending"
+tasks = ["task.2.1", "task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Record immutable chronological observations separately from mutable conclusions. Preserve occurrence time versus record time, exact source spans, authority, confidence and contradiction groups. Corrections append relationships and new revisions; summaries and decay never rewrite anchors. Concurrent expected-revision writes yield one accepted mutation and one conflict with no partial derivative state."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.source_mapping]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Map claims to concrete authorized file/repository/source evidence or an explicit source-independent classification. Store the evidence identity, revision and digest used for each mapping. New records enter a bounded mapping backlog; moved or deleted sources invalidate the mapping rather than broadening access."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.incremental_verification]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Recheck only records whose mapped evidence changed since that individual record was verified. Compare actual current source contents and preserve supported, contradicted and unresolved findings with cited spans. Corrections require optimistic publication fences; a classifier or prior summary cannot serve as fresh observation."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.complete_verification]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Persist a complete verification cycle over the authorized mapped pool, independent of incremental change detection. Bound each run and checkpoint unfinished records so timeout, cancellation and restart resume the same cycle. Preserve competing evidence and report incomplete coverage rather than claiming the highest completed cursor proves continuity."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.curation]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Propose evidence-grounded deduplication, concise revision, merge and archival over the active memory pool. A merge retains all source anchors, lineage and contradictory alternatives, respects owner authority and expected revisions, and cannot archive pinned content. Archived rows remain recoverable until their retention window allows purge."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.classification_and_sharing]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Classify importance, topical scope and shareability against authorized evidence without changing frozen prompt bytes mid-generation. Content changes revoke prior sharing eligibility and invalidate classification. Workspace pooling is read-only and explicitly category/resource granted; malformed sharing policy exposes nothing and never grants foreign writes."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.retrospective_lessons]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Examine new typed user corrections and repeated re-explanations since a persisted successful watermark. When no eligible signal exists, record a no-call outcome. Bounded evidence-only analysis produces source-linked lesson proposals with deduplication; changed input or cancelled analysis publishes nothing. Project lessons and behavioral user observations remain separate record families."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.profile_review]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Require explicit user enablement before gathering behavioral profile candidates. Require independently identified recurrence across sessions, retain source provenance and uncertainty, and submit protected attribute changes for owner review. Approval checks current revision; rejection or revocation prevents later automatic re-promotion. Provide inspection, withdrawal and scoped deletion of profile evidence."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.primer_development]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Detect repeated standing questions from verified source history and propose durable scoped primers with evidence, answer revision and review status. Deduplicate recurring questions without collapsing incompatible answers. Promotion cannot silently reinterpret a generated question as a user instruction."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.primer_refresh]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Reinvestigate stale primer answers against current authorized code and evidence under item/call/time/cost limits. Preserve earlier answers, contradictions and exact source anchors, publish revision-checked replacements and track freshness. A blocked source or budget exhaustion leaves an explicit unresolved backlog."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.deferred_notes]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Evaluate declarative note conditions against bounded authorized facts without executing arbitrary code. Record the source/condition revisions and evaluation outcome; false, unavailable and refused remain distinct. Surface newly ready notes idempotently and invalidate readiness on condition or source changes; user-content delivery remains attributed data."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.documentation_proposals]
+status = "pending"
+tasks = ["task.3.1", "task.4.2"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Derive architecture and structure change proposals from actual authorized repository deltas. Present target paths, cited evidence, before/after digest and patch for owner review; do not turn generated text into privileged instructions. Apply only approved current-revision plans and record a durable receipt; unrelated user edits survive refusal."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.knowledge_schedules]
+status = "pending"
+tasks = ["task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Configure each maintenance family independently with disabled schedules, manual dispatch, bounded timeout and optional provider policy. Serialize conflicting project mutations through leases, persist per-family watermarks and partial backlogs, bound repeated identical failures with visible circuit-breaker state, and account real/unknown usage without consuming foreground ownership."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.retention_and_purge]
+status = "pending"
+tasks = ["task.2.1", "task.3.1", "task.4.3"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Retain pinned observations, required lineage and competing evidence through explicit retention windows. Tombstones immediately exclude recall, injection and derived publication. After eligibility, an authorized purge removes raw and derived copies according to declared key/storage semantics with an inspectable plan and receipt. Backup/export retention policy states which copies remain and why."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.compact_memory_cues]
+status = "pending"
+tasks = ["task.3.1", "task.3.3"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Optional compact cues are content-revision cached derivatives with exact expansion back to original knowledge. If a vision-capable provider uses a visual representation of budget-trimmed memory, bind image/cue provenance and generation, account modality cost and preserve a textual fallback. Missing vision support or unreadable cues are visible limitations, never evidence of successful recall."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[req.deep.cross_session_memory]
+status = "pending"
+tasks = ["task.2.1", "task.3.1"]
+current_paths = ["crates/hm-context/src/notes.rs", "crates/hm-context/src/maintenance.rs", "crates/hm-context/src/historian.rs", "crates/hm-cortex/src"]
+acceptance = "Categorize durable project rules, architecture decisions, constraints, configuration and naming conventions with owner scope and source authority. Active, pinned and archived states have explicit injection/curation semantics. Track observed retrieval/use separately from importance, trim injection deterministically under budget and suppress already-visible evidence without hiding exact search recovery."
+remaining = "Foundational records and scheduler APIs do not implement the complete evidence-consuming worker and host review journey. Ledger publication, real bounded workers and visible consumer evidence are required."
+
+[design.coverage_closure]
+contract = "A capability closes only when its independent acceptance and all linked coverage/deep requirements pass through a declared executable consumer. Where related code implements only a subset, preserve the remaining gap rather than promoting the component status to full completion."
+wave2 = "task.2.1 closes authority, revision/lineage migration and derived invalidation; task.2.2 closes installed OSS Gideon and Rust/Python/TypeScript/Go/Swift consumers; task.2.3 closes real multi-source retrieval, embeddings and indexing. task.2.4 requires those consumers together."
+wave3 = "task.3.1 closes every deep knowledge requirement with real evidence workers and review surfaces; task.3.2 closes PostgreSQL/NATS backend parity, role conformance, strong process containment, catalog/usage/push/logging, signed registry lifecycle, service management and optional federated/mobile routing; task.3.3 closes long-session provider and modality continuity. task.3.4 joins these real executable paths."
+wave4 = "task.4.1 measures quality/cost/continuity on pinned workloads, task.4.2 closes native host, browser, desktop/mobile and accessibility journeys, and task.4.3 closes declared platform/SDK/backend/security matrices and reversible cutover. A platform or provider absence remains an explicit gap."
+unsupported_policy = "Current unsupported containment is an implementation obligation under task.3.2, not a completed compatibility decision. Runtime negotiation must advertise it as unavailable until implemented and qualified. Optional remote/backends remain unavailable until explicitly enabled and proven."

@@ -28,6 +28,7 @@ fn actor_config(path: &std::path::Path) -> ActorConfig {
 
 fn import() -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "ops".to_owned(),
         content: DOCUMENT.to_owned(),
         kind: RememberKind::Vocabulary,

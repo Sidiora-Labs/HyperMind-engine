@@ -26,3 +26,5 @@ pub(crate) mod sources;
 pub mod surfaces;
 pub mod websource;
 pub mod webtext;
+
+pub mod session_context;

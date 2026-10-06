@@ -36,6 +36,9 @@ hm-core = { path = "../hm-core" }
 hm-ledger = { path = "../hm-ledger" }
 
 [dev-dependencies]
+hm-context = { path = "../hm-context" }
+hm-fabric = { path = "../hm-fabric" }
+ed25519-dalek = "2.2.0"
 base64 = "0.22.1"
 blake3 = "1.8.2"
 hm-compose = { path = "../hm-compose" }

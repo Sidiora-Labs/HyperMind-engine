@@ -357,6 +357,11 @@ enum Command {
         Vec<IncomingEvent>,
         oneshot::Sender<Result<AppendOutcome, Error>>,
     ),
+    AppendIfTail(
+        LSN,
+        Vec<IncomingEvent>,
+        oneshot::Sender<Result<AppendOutcome, Error>>,
+    ),
     IdempotentAppend(
         ConnectionId,
         u64,
@@ -522,6 +527,20 @@ impl ActorEngine {
     pub async fn append(&self, events: Vec<IncomingEvent>) -> Result<AppendOutcome, Error> {
         let span = ingestion_span(self.actor, events.len());
         let outcome = request(&self.commands, |reply| Command::Append(events, reply)).await;
+        finish_ingestion(span, outcome.is_ok());
+        outcome
+    }
+
+    pub async fn append_if_tail(
+        &self,
+        expected_lsn: LSN,
+        events: Vec<IncomingEvent>,
+    ) -> Result<AppendOutcome, Error> {
+        let span = ingestion_span(self.actor, events.len());
+        let outcome = request(&self.commands, |reply| {
+            Command::AppendIfTail(expected_lsn, events, reply)
+        })
+        .await;
         finish_ingestion(span, outcome.is_ok());
         outcome
     }
@@ -1141,6 +1160,19 @@ async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Comman
             Command::Append(events, reply) => {
                 let before = state.plaintext_frames.len();
                 let result = state.append(events);
+                if result.as_ref().is_ok_and(|outcome| !outcome.duplicate) {
+                    state.publish_from(before);
+                }
+                let _ = reply.send(result);
+            }
+            Command::AppendIfTail(expected_lsn, events, reply) => {
+                let before = state.plaintext_frames.len();
+                let current_lsn = LSN::new(state.log.next_lsn().get() - 1);
+                let result = if expected_lsn != current_lsn {
+                    Err(Error::new(ErrorCode::SequenceViolation).at_lsn(current_lsn))
+                } else {
+                    state.append(events)
+                };
                 if result.as_ref().is_ok_and(|outcome| !outcome.duplicate) {
                     state.publish_from(before);
                 }

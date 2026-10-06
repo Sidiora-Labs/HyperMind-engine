@@ -26,6 +26,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
 
     let remembered = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "docs".to_owned(),
             content: "heliotrope alpha heliotrope beta".to_owned(),
             kind: RememberKind::Document,
@@ -74,6 +75,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
 
     let activated = server
         .activate_envelope(ActivateInput {
+                context: None,
             conversation: "new-turn".to_owned(),
             query: "heliotrope".to_owned(),
             turn_text: String::new(),
@@ -90,6 +92,7 @@ async fn four_tools_share_one_real_actor_and_one_envelope() {
 
     let rejected = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "docs".to_owned(),
             content: String::new(),
             kind: RememberKind::User,

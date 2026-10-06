@@ -40,6 +40,7 @@ async fn seeded_actor(path: &Path) -> ActorEngine {
     for index in 0..6_usize {
         let remembered = writer
             .remember_envelope(RememberInput {
+                context: None,
                 conversation: CONVERSATIONS[index % CONVERSATIONS.len()].to_owned(),
                 content: format!("turn {index:02}. {DEFINITION}"),
                 kind: RememberKind::User,

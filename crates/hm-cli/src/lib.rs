@@ -50,6 +50,8 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Command {
+    /// Run an authenticated local module worker.
+    FabricWorker,
     Init {
         #[arg(long)]
         path: PathBuf,
@@ -232,6 +234,10 @@ pub async fn run(arguments: impl IntoIterator<Item = impl Into<OsString> + Clone
 #[allow(clippy::too_many_lines)]
 async fn execute(command: Command) -> Result<Value> {
     match command {
+        Command::FabricWorker => {
+            hm_fabric::runtime::worker_from_env().await?;
+            Ok(json!({"ok":true,"stopped":true}))
+        }
         Command::Init {
             path,
             actor,

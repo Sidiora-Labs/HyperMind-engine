@@ -81,6 +81,7 @@ fn remember(
     source_settlement: Option<SourceSettlementInput>,
 ) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "ops".to_owned(),
         content: String::new(),
         kind: RememberKind::Document,

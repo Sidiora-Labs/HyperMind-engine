@@ -50,6 +50,7 @@ fn list_input() -> ConsolidateInput {
 async fn remember(server: &McpServer, content: &str) {
     let envelope = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "watermark-window".to_owned(),
             content: content.to_owned(),
             kind: RememberKind::User,

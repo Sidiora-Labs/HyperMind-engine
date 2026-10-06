@@ -13,6 +13,9 @@ use tokio::task::JoinSet;
 
 #[derive(Debug, Default, Args)]
 pub(crate) struct RemoteOptions {
+    /// Owner-only versioned actor and context scope binding files.
+    #[arg(long = "context-scope", value_name = "PATH")]
+    context_scopes: Vec<PathBuf>,
     #[arg(long, requires = "tls_source")]
     grpc_bind: Option<SocketAddr>,
     #[arg(long, requires = "tls_source")]
@@ -88,6 +91,13 @@ pub(crate) async fn run(
     options: RemoteOptions,
     tls: Option<TlsIdentity>,
 ) -> Result<Value> {
+    let mut context_scopes = Vec::new();
+    let mut bound_actors = std::collections::BTreeSet::new();
+    for path in &options.context_scopes {
+        let binding = hm_serve::context_config::load_for_server(path, &config)?;
+        anyhow::ensure!(bound_actors.insert(binding.actor), "duplicate actor context scope");
+        context_scopes.push(binding);
+    }
     let mut grpc = Vec::new();
     let mut rest = Vec::new();
     let config = Arc::new(config);
@@ -124,8 +134,11 @@ pub(crate) async fn run(
             }
         }
     }
-    let dispatcher =
+    let mut dispatcher =
         tokio::task::spawn_blocking(hm_mcp::dispatcher::McpToolDispatcher::from_env).await??;
+    for binding in context_scopes {
+        dispatcher = dispatcher.with_context_scope(binding);
+    }
     let uds = UdsServer::bind((*config).clone())
         .await?
         .with_tool_dispatcher(Arc::new(dispatcher));

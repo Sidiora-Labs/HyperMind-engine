@@ -137,6 +137,10 @@ class Client:
         from .session import Session
         return Session(self, conversation)
 
+    def context(self, scope, session_id: str, *, actor: int, context_owner, conversation=None):
+        from .context import ContextClient
+        return ContextClient(self, scope, session_id, actor=actor, context_owner=context_owner, conversation=conversation)
+
     def _request_bytes(self, payload):
         request = RequestT()
         request.requestId = self._next_id

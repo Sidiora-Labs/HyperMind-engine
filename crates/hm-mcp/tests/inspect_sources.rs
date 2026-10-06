@@ -33,6 +33,7 @@ async fn seeded(path: &std::path::Path) -> McpServer {
     ] {
         let stored = server
             .remember_envelope(RememberInput {
+                context: None,
                 conversation: conversation.to_owned(),
                 content: content.to_owned(),
                 kind: RememberKind::Document,

@@ -19,6 +19,7 @@ import {
   renderAnswerLookup,
   renderEvidencePath,
 } from "./evidence.js";
+import { buildContextSessions, inspectContext, renderContext, renderContextSessionOptions } from "./context.js";
 import { escapeText, section } from "./html.js";
 import { buildOverview, OverviewView, renderOverview } from "./overview.js";
 import { buildRemovalPreview, renderRemovalPreview } from "./removal.js";
@@ -45,6 +46,40 @@ let notice = "";
 
 function failure(error: unknown): string {
   return error instanceof Error ? error.message : "the console could not read the daemon";
+}
+
+async function showContext(mount: HTMLElement): Promise<void> {
+  if (session === undefined) return;
+  const panel = document.createElement("section");
+  panel.id = "console-context";
+  panel.innerHTML = '<h2>Scoped session inspection</h2><form id="context-session-form"><label for="context-session-id">Session id</label><select id="context-session-id" name="session-id" required disabled><option value="">Loading sessions…</option></select><button type="submit" disabled>Inspect session</button></form><div id="context-output" aria-live="polite"><p>Select a session to inspect its reported context and operations.</p></div>';
+  let request = 0;
+  panel.querySelector("form")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (session === undefined) return;
+    const id = String(new FormData(event.currentTarget as HTMLFormElement).get("session-id") ?? "");
+    const output = panel.querySelector<HTMLElement>("#context-output");
+    if (output === null) return;
+    if (id === "") return;
+    const current = ++request;
+    output.textContent = "Loading session context…";
+    void inspectContext(session.transport, session.actor, id).then((view) => { if (current === request) output.innerHTML = renderContext(view); }).catch((error) => { if (current === request) output.textContent = `Session unavailable: ${failure(error)}`; });
+  });
+  mount.append(panel);
+  const select = panel.querySelector<HTMLSelectElement>("#context-session-id");
+  const output = panel.querySelector<HTMLElement>("#context-output");
+  if (select === null || output === null) return;
+  try {
+    const sessions = buildContextSessions(await session.transport.callTool("inspect", { uri: `hm://${session.actor}/context` }));
+    select.innerHTML = sessions.length === 0 ? '<option value="">No scoped sessions</option>' : renderContextSessionOptions(sessions);
+    select.disabled = sessions.length === 0;
+    const button = panel.querySelector<HTMLButtonElement>("button");
+    if (button !== null) button.disabled = sessions.length === 0;
+    if (sessions.length === 0) output.textContent = "No scoped sessions have been created for this actor.";
+  } catch (error) {
+    select.innerHTML = '<option value="">Sessions unavailable</option>';
+    output.textContent = `Session list unavailable: ${failure(error)}`;
+  }
 }
 
 async function showSource(mount: HTMLElement, conversation: string): Promise<void> {
@@ -354,6 +389,7 @@ async function render(): Promise<void> {
   summary.innerHTML = renderOverview(overview);
   mount.append(summary);
   showActivity(mount);
+  await showContext(mount);
   await showSources(mount);
   await showEvidence(mount, values);
   await showAccess(mount);
@@ -380,5 +416,6 @@ document.addEventListener("submit", (event) => {
 });
 
 window.addEventListener("hashchange", () => {
+  if (window.location.hash.startsWith("#context-")) return;
   void render();
 });

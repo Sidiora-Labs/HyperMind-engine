@@ -23,6 +23,7 @@ getrandom = "0.3.4"
 hm-compose = { path = "../hm-compose" }
 hm-core = { path = "../hm-core" }
 hm-embed = { path = "../hm-embed" }
+hm-fabric = { path = "../hm-fabric" }
 hm-ledger = { path = "../hm-ledger" }
 hm-mcp = { path = "../hm-mcp" }
 hm-proj = { path = "../hm-proj" }

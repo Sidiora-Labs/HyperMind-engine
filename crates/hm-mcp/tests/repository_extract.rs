@@ -46,6 +46,7 @@ fn actor_config(path: &std::path::Path) -> ActorConfig {
 
 fn snapshot_input(content: &str) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "repository:atlas".to_owned(),
         content: content.to_owned(),
         kind: RememberKind::RepositorySnapshot,

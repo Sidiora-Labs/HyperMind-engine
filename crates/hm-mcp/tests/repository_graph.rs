@@ -28,6 +28,7 @@ fn actor_config(path: &std::path::Path) -> ActorConfig {
 
 fn snapshot_input() -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "repository:orbit".to_owned(),
         content: SNAPSHOT.to_owned(),
         kind: RememberKind::RepositorySnapshot,

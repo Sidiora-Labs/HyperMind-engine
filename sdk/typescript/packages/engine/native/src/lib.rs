@@ -26,6 +26,8 @@ struct OpenConfig {
     user_hex: String,
     kek_hex: String,
     projection_map_bytes: usize,
+    #[serde(default)]
+    context_scope: Option<serde_json::Value>,
 }
 
 #[derive(Deserialize)]
@@ -74,6 +76,7 @@ struct RememberOptionsJson {
 pub struct NativeEngine {
     actor: ActorEngine,
     mcp: McpServer,
+    dispatcher: hm_mcp::dispatcher::McpToolDispatcher,
 }
 
 #[napi]
@@ -95,11 +98,25 @@ impl NativeEngine {
         })
         .await
         .map_err(napi_error)?;
-        let mcp = McpServer::configured(actor.clone(), None)
-            .await
-            .map_err(napi_error)?;
-        Ok(Self { actor, mcp })
+        let mut dispatcher = hm_mcp::dispatcher::McpToolDispatcher::from_env().map_err(napi_error)?;
+        if let Some(scope) = config.context_scope {
+            let trusted: hm_serve::context_config::TrustedContextConfig = serde_json::from_value(serde_json::json!({"version":1,"actor":config.actor,"scope":scope})).map_err(napi_error)?;
+            hm_serve::embedded::validate_context_config(&trusted, ActorId::new(config.actor)).map_err(napi_error)?;
+            dispatcher = dispatcher.with_context_scope(trusted);
+        }
+        let mcp = dispatcher.server(actor.clone());
+        Ok(Self { actor, mcp, dispatcher })
     }
+
+    #[napi]
+    pub async fn call_tool(&self, verb: String, arguments_json: String) -> napi::Result<String> {
+        use hm_serve::uds::ToolDispatcher;
+        let bytes = self.dispatcher.dispatch(self.actor.clone(), verb, arguments_json.into_bytes()).await.map_err(napi_error)?;
+        String::from_utf8(bytes).map_err(napi_error)
+    }
+
+    #[napi]
+    pub async fn close(&self) -> napi::Result<()> { self.actor.shutdown().await.map_err(napi_error) }
 
     #[napi]
     pub fn session(&self, conversation: String) -> napi::Result<NativeSession> {
@@ -156,6 +173,8 @@ impl NativeSession {
                     sensitivity: options.sensitivity,
                     vocabulary: None,
                     source: None,
+                    context: None,
+                    document: None,
                 derive: None,
                     source_delivery: None,
                     source_settlement: None,

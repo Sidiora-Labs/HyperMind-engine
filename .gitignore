@@ -1,4 +1,6 @@
 /target/
+/GOTCHA.kvx
+/gotcha.kvx
 /.venv/
 /fuzz/target/
 /.cargo/
@@ -15,3 +17,4 @@
 /deploy/**/*.pem
 /deploy/**/*.csr
 /deploy/**/*.srl
+*.kvx.lock

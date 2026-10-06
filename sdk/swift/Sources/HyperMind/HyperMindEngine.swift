@@ -32,8 +32,13 @@ public final class HyperMindEngine: @unchecked Sendable {
     private let handle: OpaquePointer
 
     /// Opens the actor named by `credentials` under `stateDirectory`.
-    public init(credentials: HyperMindCredentials, stateDirectory: String) throws {
-        let configuration = credentials.configurationJSON(stateDirectory: stateDirectory)
+    public init(credentials: HyperMindCredentials, stateDirectory: String, contextScope: ContextScope? = nil) throws {
+        var configuration = credentials.configurationJSON(stateDirectory: stateDirectory)
+        if let contextScope {
+            let trusted = ContextJSON.object(["version": .integer(1), "actor": .integer(Int64(credentials.actor)), "scope": try encoded(contextScope)])
+            configuration.removeLast()
+            configuration += ",\"context_scope\":" + (try trusted.canonical()) + "}"
+        }
         var opened: OpaquePointer?
         let status = configuration.withCString { hm_engine_open($0, &opened) }
         guard status == HM_STATUS_OK, let opened else {

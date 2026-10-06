@@ -12,6 +12,7 @@ import {
   PredictInput,
   encodeToolArguments,
   parseBundle,
+  ContextClient, Scope, ContextOwner, ToolEnvelope, ToolTransportError,
 } from "@hypermind/client";
 
 export type { AsOfOptions, BeliefProvenance, BeliefRecord, BeliefType, BelieveInput };
@@ -22,6 +23,8 @@ export type {
 
 interface NativeEngineHandle {
   session(conversation: string): NativeSessionHandle;
+  callTool(verb:string,argumentsJson:string):Promise<string>;
+  close():Promise<void>;
 }
 
 interface NativeSessionHandle {
@@ -57,6 +60,7 @@ export interface EngineConfig {
   userHex: string;
   kekHex: string;
   projectionMapBytes?: number;
+  contextScope?: Scope;
 }
 
 export type HealthStatus = "semantic_ready" | "semantic_lagging" | "lexical_only" | "unavailable";
@@ -161,6 +165,17 @@ export class HyperMind {
     );
     return new HyperMind(handle);
   }
+
+  async callTool(verb:"activate"|"inspect"|"remember",input:unknown):Promise<ToolEnvelope> {
+    let encoded:string;try{encoded=encodeToolArguments(input);}catch(error){throw new ToolTransportError("not_dispatched",error);}
+    try{return JSON.parse(await this.native.callTool(verb,encoded)) as ToolEnvelope;}catch(error){throw new ToolTransportError("unknown",error);}
+  }
+
+  context(scope:Scope,sessionId:string,actor:number,contextOwner:ContextOwner,conversation=sessionId):ContextClient {
+    return new ContextClient(this,scope,sessionId,actor,contextOwner,conversation);
+  }
+
+  async close():Promise<void>{await this.native.close();}
 
   session(conversation: string): Session {
     return new Session(this.native.session(conversation), conversation);

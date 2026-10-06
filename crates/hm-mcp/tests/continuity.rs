@@ -50,6 +50,7 @@ async fn intend_and_bind_append_real_continuity_events() {
 
     let evidence = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "delivery".to_owned(),
             content: "the continuity fixture is observed".to_owned(),
             kind: RememberKind::User,

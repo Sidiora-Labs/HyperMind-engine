@@ -63,6 +63,7 @@ fn runtime(url: &str, response: FetchResponse) -> (WebSourceRuntime, Arc<Recorde
 
 fn source_input(conversation: &str, url: &str) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: conversation.to_owned(),
         content: String::new(),
         kind: RememberKind::Document,

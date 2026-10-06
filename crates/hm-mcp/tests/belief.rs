@@ -62,6 +62,7 @@ fn claim(
 async fn evidence(server: &McpServer, conversation: &str) -> u64 {
     let result = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: conversation.to_owned(),
             content: "observed deployment configuration".to_owned(),
             kind: RememberKind::User,
@@ -173,6 +174,7 @@ async fn believe_asof_retract_and_protected_proposal_use_real_ledger_projections
     assert_eq!(rejected.effect_state.as_deref(), Some("rejected"));
     let activated = server
         .activate_envelope(ActivateInput {
+                context: None,
             conversation: "belief-lifecycle".to_owned(),
             query: "identity".to_owned(),
             turn_text: String::new(),

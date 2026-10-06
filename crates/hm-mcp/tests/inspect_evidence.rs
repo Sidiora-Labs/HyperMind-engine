@@ -20,6 +20,7 @@ fn actor_config(path: &std::path::Path) -> ActorConfig {
 async fn remember(server: &McpServer, conversation: &str, content: &str) -> u64 {
     let stored = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: conversation.to_owned(),
             content: content.to_owned(),
             kind: RememberKind::Document,

@@ -24,6 +24,8 @@ struct OpenRequest {
     projection_map_bytes: usize,
     #[serde(default)]
     providers_from_environment: bool,
+    #[serde(default)]
+    context_scope: Option<hm_serve::context_config::TrustedContextConfig>,
 }
 
 fn hex<const N: usize>(value: &str) -> Result<[u8; N], HmStatus> {
@@ -78,7 +80,8 @@ pub struct HmEngine {
 /// fresh handle through `out_engine`.
 ///
 /// The configuration object carries `path`, `actor`, `user_hex`, `kek_hex` and
-/// the optional `projection_map_bytes` and `providers_from_environment` keys;
+/// the optional `projection_map_bytes`, `providers_from_environment` and
+/// `context_scope` keys;
 /// unknown keys are rejected. On any failure `out_engine` is left untouched and
 /// `hm_last_error_message` describes the fault on the calling thread.
 ///
@@ -110,6 +113,13 @@ pub unsafe extern "C" fn hm_engine_open(
         set_last_error("actor must be nonzero");
         return HmStatus::InvalidArgument;
     }
+    if let Some(context) = &request.context_scope {
+        if let Err(error) = hm_serve::embedded::validate_context_config(context, ActorId::new(request.actor)) {
+            let (kind, _, message) = status::kernel_status(error);
+            set_last_error(message);
+            return kind;
+        }
+    }
     let (Ok(user), Ok(kek)) = (hex::<16>(&request.user_hex), hex::<32>(&request.kek_hex)) else {
         set_last_error("user_hex and kek_hex must be 32 and 64 hexadecimal characters");
         return HmStatus::InvalidArgument;
@@ -136,6 +146,10 @@ pub unsafe extern "C" fn hm_engine_open(
         }
     } else {
         McpToolDispatcher::default()
+    };
+    let dispatcher = match request.context_scope {
+        Some(context) => dispatcher.with_context_scope(context),
+        None => dispatcher,
     };
     let config = ActorConfig {
         actor_directory: Path::new(&request.path).join(request.actor.to_string()),

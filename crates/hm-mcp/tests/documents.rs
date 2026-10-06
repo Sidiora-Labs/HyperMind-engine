@@ -34,6 +34,7 @@ fn document(
     plan_only: bool,
 ) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "library".to_owned(),
         content: String::new(),
         kind: RememberKind::Document,

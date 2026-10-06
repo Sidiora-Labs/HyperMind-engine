@@ -4,6 +4,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>HyperMind console</title>
+    <style>
+      :root { font-family: system-ui, sans-serif; color: #192c3b; background: #f5f7fa; }
+      body { max-width: 1120px; margin: auto; padding: 24px; }
+      section { margin: 20px 0; padding: 20px; background: white; border: 1px solid #dce3eb; border-radius: 12px; }
+      form, .context-navigation { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+      input, select, button { font: inherit; padding: 9px; max-width: 100%; box-sizing: border-box; }
+      button { cursor: pointer; } a { color: #1758aa; }
+      dl { display: grid; grid-template-columns: minmax(100px, 1fr) minmax(0, 3fr); gap: 8px 16px; }
+      dt { font-weight: 600; } dd { margin: 0; overflow-wrap: anywhere; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
+      .context-card { border-top: 1px solid #dce3eb; padding: 12px 0; }
+      .context-empty, .context-unavailable { color: #5c6675; }
+      table { display: block; max-width: 100%; overflow-x: auto; }
+      @media (max-width: 600px) { body { padding: 12px; } section { padding: 14px; } dl { grid-template-columns: 1fr; } dd { margin-bottom: 10px; } form input { width: 100%; } }
+    </style>
   </head>
   <body>
     <h1>HyperMind console</h1>

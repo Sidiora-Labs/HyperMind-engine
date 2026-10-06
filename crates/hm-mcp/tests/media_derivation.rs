@@ -150,6 +150,7 @@ fn subject(media_lsn: u64) -> MediaSubject {
 
 fn derive_input(media_lsn: u64) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: CONVERSATION.to_owned(),
         content: String::new(),
         kind: RememberKind::Document,
@@ -471,6 +472,7 @@ async fn recall_and_activate_never_reach_the_derivation_job() {
 
     let activated = server
         .activate_envelope(ActivateInput {
+                context: None,
             conversation: CONVERSATION.to_owned(),
             query: "freight manifest".to_owned(),
             turn_text: String::new(),

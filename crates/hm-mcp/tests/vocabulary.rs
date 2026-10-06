@@ -38,6 +38,7 @@ fn vocabulary() -> VocabularyInput {
 
 fn import(content: &str, vocabulary: Option<VocabularyInput>) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "ops".to_owned(),
         content: content.to_owned(),
         kind: RememberKind::Vocabulary,

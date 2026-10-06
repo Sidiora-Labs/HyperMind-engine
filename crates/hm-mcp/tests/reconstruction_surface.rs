@@ -189,6 +189,7 @@ async fn reconstruction_uses_verified_anchors_and_cannot_be_remembered() {
     ] {
         let remembered = server
             .remember_envelope(RememberInput {
+                context: None,
                 conversation: "reconstruction".to_owned(),
                 content: content.to_owned(),
                 kind,

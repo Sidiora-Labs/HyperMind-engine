@@ -14,6 +14,8 @@ path = "src/main.rs"
 hnsw = ["hm-serve/hnsw"]
 
 [dependencies]
+hm-fabric = { path = "../hm-fabric" }
+hm-context = { path = "../hm-context" }
 base64 = "0.22.1"
 blake3 = "1.8.2"
 hm-compose = { path = "../hm-compose" }

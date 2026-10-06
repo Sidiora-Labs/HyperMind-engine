@@ -38,6 +38,7 @@ fn runtime() -> EmbeddingRuntime {
 
 fn remember(content: &str) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "relations".to_owned(),
         content: content.to_owned(),
         kind: RememberKind::Document,

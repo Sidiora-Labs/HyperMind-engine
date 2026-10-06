@@ -21,6 +21,7 @@ fn actor_config(path: &std::path::Path) -> ActorConfig {
 
 fn evidence_document() -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "evidence".to_owned(),
         content: EVIDENCE.to_owned(),
         kind: RememberKind::Document,

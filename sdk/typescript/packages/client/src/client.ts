@@ -1,3 +1,4 @@
+import { ContextClient, Scope, ContextOwner } from "./context";
 import { createHash, randomBytes } from "node:crypto";
 import net from "node:net";
 import * as flatbuffers from "flatbuffers";
@@ -456,6 +457,10 @@ export class Client {
         (normalized.sinceLsn === undefined || lsn > normalized.sinceLsn)
         && (normalized.untilLsn === undefined || lsn <= normalized.untilLsn));
     });
+  }
+
+  context(scope:Scope,sessionId:string,actor:number,contextOwner:ContextOwner,conversation=sessionId):ContextClient {
+    return new ContextClient(this,scope,sessionId,actor,contextOwner,conversation);
   }
 
   async callTool(

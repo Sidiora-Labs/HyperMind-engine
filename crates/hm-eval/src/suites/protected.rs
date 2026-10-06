@@ -21,6 +21,7 @@ pub async fn run() -> Result<ProtectedResult, Error> {
     let server = McpServer::new(actor.clone());
     let evidence = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: "protected-suite".to_owned(),
             content: "run-derived candidate about the protected self".to_owned(),
             kind: RememberKind::User,
@@ -91,6 +92,7 @@ pub async fn run() -> Result<ProtectedResult, Error> {
     }
     let bundle = server
         .activate_envelope(ActivateInput {
+                context: None,
             conversation: "protected-suite".to_owned(),
             query: "protected proposals".to_owned(),
             turn_text: String::new(),

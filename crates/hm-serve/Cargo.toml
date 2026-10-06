@@ -10,6 +10,8 @@ repository.workspace = true
 hnsw = ["hm-proj/hnsw"]
 
 [dependencies]
+hm-fabric = { path = "../hm-fabric" }
+hm-context = { path = "../hm-context" }
 axum = { version = "0.8.9", features = ["json"] }
 base64 = "0.22.1"
 blake3 = "1.8.2"
@@ -18,12 +20,14 @@ hm-compose = { path = "../hm-compose" }
 hm-core = { path = "../hm-core" }
 hm-cortex = { path = "../hm-cortex" }
 hm-embed = { path = "../hm-embed" }
+hm-index = { path = "../hm-index" }
 hm-ledger = { path = "../hm-ledger" }
 hm-proj = { path = "../hm-proj" }
 hm-schema = { path = "../hm-schema" }
 hyper-util = { version = "0.1.20", features = ["server-auto", "service", "tokio"] }
 prost = "0.14.3"
 rustls-pemfile = "2.2.0"
+rustix = { version = "1.1.4", features = ["fs", "process"] }
 subtle = "2.6.1"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"

@@ -93,6 +93,7 @@ fn sync_input(connector_id: &str) -> SourceSyncInput {
 
 fn remember(source_sync: SourceSyncInput) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "ops".to_owned(),
         content: String::new(),
         kind: RememberKind::Document,

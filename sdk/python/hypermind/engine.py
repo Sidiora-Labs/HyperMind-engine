@@ -1,5 +1,6 @@
 import asyncio
 import json
+from dataclasses import asdict
 from .bundle import parse_bundle
 from .client import HyperMindError, conversation_id
 from .session import Session
@@ -11,12 +12,17 @@ class Engine:
         self._native = native
 
     @classmethod
-    async def open(cls, path, *, actor: int, user_hex: str, kek_hex: str, projection_map_bytes=268_435_456, enable_providers=False):
+    async def open(cls, path, *, actor: int, user_hex: str, kek_hex: str, projection_map_bytes=268_435_456, enable_providers=False, context_scope=None):
         from ._native import NativeEngine
-        native = await asyncio.to_thread(NativeEngine, str(path), actor, user_hex, kek_hex, projection_map_bytes, enable_providers)
+        native = await asyncio.to_thread(NativeEngine, str(path), actor, user_hex, kek_hex, projection_map_bytes, enable_providers, json.dumps({"version": 1, "actor": actor, "scope": asdict(context_scope)}) if context_scope is not None else None)
         return cls(native)
 
     def session(self, conversation: str): return Session(self, conversation)
+
+    def context(self, scope, session_id: str, *, actor: int, context_owner, conversation=None):
+        from .context import ContextClient
+        return ContextClient(self, scope, session_id, actor=actor, context_owner=context_owner, conversation=conversation)
+
 
     async def tool(self, verb: str, arguments: dict):
         try:

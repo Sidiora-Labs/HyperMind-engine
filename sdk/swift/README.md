@@ -51,30 +51,65 @@ error discriminant in `kernelCode` when that status is `HM_STATUS_KERNEL`, and
 the stable kernel error name in `message`. For synchronous refusals the message
 is the reason the boundary recorded on the calling thread.
 
-## Apple-platform gate
+## Typed context
 
-The Swift package is compiled and tested only on Apple platforms; no Swift
-toolchain exists in this repository's Linux CI, so the checked-in Linux gate
-proves only that the Swift sources bind symbols and status values that the C
-header actually declares. No Swift build or test run is claimed anywhere in
-this repository, and the XCTest suite under `Tests/HyperMindTests` is never
-executed here.
+`HyperMindContextClient` uses the existing engine handle and existing verbs.
+Supply `contextScope` when opening the engine; the C boundary validates that
+scope against the configured actor. A context client requires an explicit
+scope, session, actor and context owner. Host-owned activation defers engine
+reductions. Caller-provided required source IDs and UTC offsets remain explicit.
 
-The checked-in gate is `crates/hm-capi/tests/swift_binding.rs`. It reads the
-module map, the Swift sources and the header as text and fails if the Swift
-code names a symbol, a status enumerator or a verb that does not exist.
-
-To build and run the suite yourself on macOS, produce the static archive and
-then run the tests:
-
-```sh
-cargo rustc -p hm-capi --crate-type staticlib --release
-swift test
+```swift
+let scope = try ContextScope(ownerID: "owner", projectID: "project")
+let engine = try HyperMindEngine(
+    credentials: credentials, stateDirectory: path, contextScope: scope
+)
+let context = try HyperMindContextClient(
+    engine: engine, scope: scope, sessionID: "session", actorID: 7,
+    ownership: .hypermind
+)
+let source = try ContextSourceMessage(
+    id: "reading", ordinal: 0, role: .user,
+    parts: [.text("Temperature 20 C")], recordedAtNS: 1791288000123456789,
+    authority: .userAsserted
+)
+let receipt = try await context.ingest(source, originalBytes: originalBytes)
+let report = try await context.activate(
+    query: "temperature",
+    budget: ContextTokenBudget(contextTokens: 2048, reservedOutputTokens: 128)
+)
+let recovered = try await context.recover(sourceID: source.id)
 ```
 
-The archive lands under the workspace target directory; point the linker at it
-with `-L` when `swift test` cannot find `libhypermind.a` on its default search
-path.
+Nanosecond fields use canonical signed decimal JSON strings. Source digests
+bind the immutable typed source, while expansion returns the exact original
+host bytes. Relations, forks, import bundles and receipts, historian and
+maintenance jobs, notes and memory calls all reach the actual C ABI.
+`ContextClientError` describes client validation, response identity and cursor
+failures; `HyperMindError` retains boundary and kernel refusals. Cancellation
+retains the engine's cooperative call-boundary behavior.
+
+## Platform qualification
+
+The package requires Swift 5.9 or newer and a matching native HyperMind library.
+The source-contract gate `crates/hm-capi/tests/swift_binding.rs` checks C symbols
+and the fourteen-verb inventory. Actual compilation and runtime tests require
+a Swift toolchain and the native library; this textual gate does not establish
+runtime qualification. Linux compilation is available with Swift 6.2.4.
+Apple runtime and SDK qualification require separate runs on those platforms.
+
+Build the native library and run the focused context suite with its library
+directory on the linker and runtime search paths:
+
+```sh
+cargo build -p hm-capi
+LD_LIBRARY_PATH="$PWD/target/debug" swift test --package-path sdk/swift \
+  -Xlinker -L -Xlinker "$PWD/target/debug" --filter Context
+```
+
+On macOS use `DYLD_LIBRARY_PATH` for a dynamic library, or build a static
+archive and provide its directory to the linker. The target path must match
+`CARGO_TARGET_DIR` when that variable is configured.
 
 See the [SDK guide](../../docs/reference/sdks.md) for how this package sits
 beside the other language surfaces.

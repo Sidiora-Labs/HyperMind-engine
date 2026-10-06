@@ -38,7 +38,7 @@ struct NativeEngine {
 #[pymethods]
 impl NativeEngine {
     #[new]
-    #[pyo3(signature = (path, actor, user_hex, kek_hex, projection_map_bytes=268_435_456, enable_providers=false))]
+    #[pyo3(signature = (path, actor, user_hex, kek_hex, projection_map_bytes=268_435_456, enable_providers=false, context_scope_json=None))]
     fn new(
         py: Python<'_>,
         path: String,
@@ -47,6 +47,7 @@ impl NativeEngine {
         kek_hex: String,
         projection_map_bytes: usize,
         enable_providers: bool,
+        context_scope_json: Option<String>,
     ) -> PyResult<Self> {
         if actor == 0 {
             return Err(PyValueError::new_err("actor must be nonzero"));
@@ -60,11 +61,16 @@ impl NativeEngine {
         };
         py.allow_threads(move || {
             let runtime = Arc::new(Runtime::new().map_err(failure)?);
-            let dispatcher = if enable_providers {
+            let mut dispatcher = if enable_providers {
                 McpToolDispatcher::from_env().map_err(failure)?
             } else {
                 McpToolDispatcher::default()
             };
+            if let Some(json) = context_scope_json {
+                let trusted: hm_serve::context_config::TrustedContextConfig = serde_json::from_str(&json).map_err(failure)?;
+                hm_serve::embedded::validate_context_config(&trusted, ActorId::new(actor)).map_err(failure)?;
+                dispatcher = dispatcher.with_context_scope(trusted);
+            }
             let actor = runtime
                 .block_on(ActorEngine::open(config))
                 .map_err(failure)?;

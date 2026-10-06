@@ -12,12 +12,24 @@ use std::sync::Arc;
 #[derive(Clone)]
 pub struct EmbeddingRuntime {
     embedder: Arc<dyn Embedder>,
+    mode: hm_serve::context_retrieval::EmbeddingMode,
 }
 
 impl EmbeddingRuntime {
     #[must_use]
     pub fn new(embedder: Arc<dyn Embedder>) -> Self {
-        Self { embedder }
+        Self {
+            embedder,
+            mode: hm_serve::context_retrieval::EmbeddingMode::Managed,
+        }
+    }
+
+    pub fn context_mode(&self) -> hm_serve::context_retrieval::EmbeddingMode {
+        self.mode
+    }
+
+    pub fn embedder(&self) -> Arc<dyn Embedder> {
+        self.embedder.clone()
     }
 
     pub(crate) fn health(&self) -> &'static str {
@@ -55,7 +67,10 @@ impl EmbeddingRuntime {
         .map_err(|_| "embedding provider configuration is invalid")?;
         let cached = CachedEmbedder::new(embedder, 16)
             .map_err(|_| "embedding cache configuration is invalid")?;
-        Ok(Some(Self::new(Arc::new(cached))))
+        Ok(Some(Self {
+            embedder: Arc::new(cached),
+            mode: hm_serve::context_retrieval::EmbeddingMode::RemoteCompatible,
+        }))
     }
 
     pub(crate) fn document_space(&self) -> SpaceIdentity {
@@ -264,4 +279,6 @@ pub struct RememberInput {
     pub document: Option<RememberDocument>,
     #[serde(default)]
     pub source_sync: Option<SourceSyncInput>,
+    #[serde(default)]
+    pub context: Option<serde_json::Value>,
 }

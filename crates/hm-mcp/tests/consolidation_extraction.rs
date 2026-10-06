@@ -53,6 +53,7 @@ async fn seed(server: &McpServer, topics: &[&str]) {
         for note in 0..NOTES_PER_TOPIC {
             let envelope = server
                 .remember_envelope(RememberInput {
+                context: None,
                     conversation: CONVERSATIONS[index % CONVERSATIONS.len()].to_owned(),
                     content: format!("{topic} note {note:02}. {}", definition(topic)),
                     kind: RememberKind::User,

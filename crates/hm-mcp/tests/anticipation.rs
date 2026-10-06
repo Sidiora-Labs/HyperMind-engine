@@ -103,6 +103,7 @@ async fn every_wake_trigger_is_persisted_and_observed_change_is_batched_across_r
     assert_eq!(actor.stats().await.unwrap().log_events, count);
     let bundle = server
         .activate_envelope(ActivateInput {
+                context: None,
             conversation: "anticipation".to_owned(),
             query: String::new(),
             turn_text: "new turn".to_owned(),

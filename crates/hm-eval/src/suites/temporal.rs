@@ -143,6 +143,7 @@ async fn open_actor(path: &std::path::Path) -> Result<ActorEngine, Error> {
 async fn write_fixture(server: &McpServer, fixture: &Fixture) -> Result<(), Error> {
     let evidence = server
         .remember_envelope(RememberInput {
+                context: None,
             conversation: fixture.conversation.clone(),
             content: fixture.evidence.clone(),
             kind: RememberKind::User,

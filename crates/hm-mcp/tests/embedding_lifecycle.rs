@@ -19,6 +19,7 @@ fn actor_config(path: &std::path::Path) -> ActorConfig {
 
 fn remember(content: &str) -> RememberInput {
     RememberInput {
+                context: None,
         conversation: "embedding-lifecycle".to_owned(),
         content: content.to_owned(),
         kind: RememberKind::Document,

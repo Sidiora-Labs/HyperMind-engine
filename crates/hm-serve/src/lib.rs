@@ -16,3 +16,13 @@ pub mod telemetry;
 pub mod uds;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+pub mod hypermid_import;
+
+pub mod session_context;
+pub mod context_config;
+pub mod context_history;
+pub mod context_jobs;
+pub mod context_projection;
+pub mod context_memory;
+pub mod context_retrieval;

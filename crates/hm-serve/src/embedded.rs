@@ -30,6 +30,7 @@ pub struct HyperMind {
 #[derive(Clone)]
 pub struct Actor {
     engine: ActorEngine,
+    context_scope: Option<hm_context::Scope>,
 }
 
 #[derive(Clone)]
@@ -91,7 +92,7 @@ impl HyperMind {
         })
         .await?;
         Ok(Self {
-            actor: Actor { engine },
+            actor: Actor { engine, context_scope: None },
         })
     }
 
@@ -257,4 +258,79 @@ pub fn render(bundle: &ActivationBundle, model: RenderModel) -> Result<RenderedB
         sections,
         bundle_hash: bundle.bundle_hash,
     })
+}
+
+
+pub fn validate_context_config(config: &crate::context_config::TrustedContextConfig, actor: ActorId) -> Result<(), Error> {
+    if config.version != crate::context_config::CONTEXT_CONFIG_VERSION {
+        return Err(Error::new(ErrorCode::SchemaVersion));
+    }
+    if actor.get() == 0 || config.actor != actor.get() {
+        return Err(Error::new(ErrorCode::CapabilityDenied));
+    }
+    config.scope.validate().map_err(|_| Error::new(ErrorCode::InvalidArgument))
+}
+
+#[derive(Clone)]
+pub struct ContextSession {
+    actor: Actor,
+    session_id: String,
+    conversation: String,
+    scope: hm_context::Scope,
+}
+
+impl HyperMind {
+    pub async fn open_with_context(path: impl AsRef<Path>, config: EmbeddedConfig, context: crate::context_config::TrustedContextConfig) -> Result<Self, Error> {
+        validate_context_config(&context, config.actor)?;
+        let mut engine = Self::open(path, config).await?;
+        engine.actor.context_scope = Some(context.scope);
+        Ok(engine)
+    }
+}
+impl Actor {
+    pub fn context_session(&self, session_id: impl Into<String>, conversation: impl Into<String>) -> Result<ContextSession, Error> {
+        let scope = self.context_scope.clone().ok_or_else(|| Error::new(ErrorCode::CapabilityDenied))?;
+        let session_id = session_id.into();
+        let conversation = conversation.into();
+        hm_context::validate_id(&session_id).and_then(|()| hm_context::validate_id(&conversation)).map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+        Ok(ContextSession { actor: self.clone(), session_id, conversation, scope })
+    }
+}
+impl ContextSession {
+    pub fn scope(&self) -> &hm_context::Scope { &self.scope }
+    pub fn session_id(&self) -> &str { &self.session_id }
+    pub async fn source(&self, message: hm_context::SourceMessage, original_bytes: Vec<u8>) -> Result<crate::context_history::HistoryReceipt, crate::context_history::HistoryError> {
+        crate::context_history::ingest(&self.actor.engine, &self.scope, &crate::context_history::SourceIngestion { version: hm_context::CONTRACT_VERSION, scope: self.scope.clone(), session_id: self.session_id.clone(), conversation: self.conversation.clone(), message, original_bytes }).await
+    }
+    pub async fn relate(&self, relation: hm_context::history::SourceRelation) -> Result<crate::context_history::HistoryReceipt, crate::context_history::HistoryError> {
+        crate::context_history::relate(&self.actor.engine, &self.scope, &crate::context_history::RelationIngestion { version: hm_context::CONTRACT_VERSION, scope: self.scope.clone(), session_id: self.session_id.clone(), conversation: self.conversation.clone(), relation }).await
+    }
+    pub async fn fork(&self, child_session_id: impl Into<String>, child_conversation: impl Into<String>) -> Result<ContextSession, crate::context_history::HistoryError> {
+        let child_session_id = child_session_id.into();
+        let child_conversation = child_conversation.into();
+        crate::context_history::fork(&self.actor.engine, &self.scope, &crate::context_history::ForkRequest { version: hm_context::CONTRACT_VERSION, scope: self.scope.clone(), parent_session_id: self.session_id.clone(), parent_conversation: self.conversation.clone(), child_session_id: child_session_id.clone(), child_conversation: child_conversation.clone() }).await?;
+        Ok(ContextSession { actor: self.actor.clone(), session_id: child_session_id, conversation: child_conversation, scope: self.scope.clone() })
+    }
+    pub async fn activate(&self, request: crate::session_context::SessionContextRequest) -> Result<serde_json::Value, Error> {
+        if request.session_id != self.session_id { return Err(Error::new(ErrorCode::InvalidArgument)); }
+        crate::session_context::activate(&self.actor.engine, &self.conversation, &self.scope, request).await
+    }
+    pub async fn inspect(&self) -> Result<serde_json::Value, Error> {
+        crate::session_context::inspect(&self.actor.engine, &self.scope, Some(&self.session_id)).await
+    }
+    pub async fn history(&self) -> Result<crate::context_history::LedgerHistory, crate::context_history::HistoryError> {
+        crate::context_history::replay(&self.actor.engine, &self.scope, &self.session_id, &self.conversation).await
+    }
+    pub async fn recover(&self, span: &hm_context::SourceSpan) -> Result<Vec<u8>, crate::context_history::HistoryError> {
+        crate::context_history::recover(&self.actor.engine, &self.scope, &self.session_id, &self.conversation, span).await
+    }
+    pub async fn job(&self, request_id: impl Into<String>, action: crate::context_jobs::ContextJobAction) -> Result<serde_json::Value, Error> {
+        crate::context_jobs::execute(&self.actor.engine, &self.scope, &self.scope.owner_id, crate::context_jobs::ContextJobRequest { version: hm_context::CONTRACT_VERSION, scope: self.scope.clone(), request_id: request_id.into(), action }).await
+    }
+    pub async fn import(&self, bundle: &crate::hypermid_import::ImportBundle, max_entries: usize) -> Result<crate::hypermid_import::ImportReceipt, crate::hypermid_import::ImportError> {
+        if bundle.scope != self.scope || max_entries == 0 || max_entries > 256 { return Err(hm_context::ContextError::ScopeMismatch.into()); }
+        let mut registry = hm_context::temporal::IdentityRegistry::new();
+        registry.bind(self.scope.clone(), self.actor.id().get(), Vec::new())?;
+        crate::hypermid_import::import_batch(&self.actor.engine, &registry, bundle, max_entries).await
+    }
 }
