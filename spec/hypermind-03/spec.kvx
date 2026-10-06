@@ -983,7 +983,7 @@ owner_lane = "console"
 status = "in_progress"
 requires = ["task.3.25"]
 coverage = ["req.coverage.ui", "req.coverage.diagnostics"]
-touches = ["sdk/typescript/packages/console/src/development.ts", "sdk/typescript/packages/console/src/operations.ts", "sdk/typescript/packages/console/src/continuity.ts", "sdk/typescript/packages/console/src/development.test.ts", "sdk/typescript/packages/console/src/operations.test.ts", "sdk/typescript/packages/console/src/continuity.test.ts"]
+touches = ["sdk/typescript/packages/console/src/development.ts", "sdk/typescript/packages/console/src/operations.ts", "sdk/typescript/packages/console/src/continuity.ts", "sdk/typescript/packages/console/src/development.test.ts", "sdk/typescript/packages/console/src/operations.test.ts", "sdk/typescript/packages/console/src/continuity.test.ts", "sdk/typescript/packages/console/src/app.ts", "sdk/typescript/packages/console/src/index.ts"]
 verify_cmd = "node --test sdk/typescript/packages/console/dist/development.test.js"
 acceptance = "Existing native console navigation consumes real development and operational services with source detail, preserved rejected drafts, scoped review plans, progress and durable outcomes. Unavailable and unknown remain explicit; browser qualification stays separate."
 
@@ -1248,7 +1248,7 @@ owner_lane = "maintenance"
 status = "in_progress"
 requires = ["task.3.12", "task.3.34"]
 coverage = ["req.coverage.usage", "req.deep.knowledge_schedules"]
-touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_service.rs", "crates/hm-fabric/src/role_runner.rs", "crates/hm-fabric/tests/runner_usage.rs", "crates/hm-fabric/tests/role_runner_live.rs"]
+touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_service.rs", "crates/hm-fabric/src/role_runner.rs", "crates/hm-fabric/tests/runner_usage.rs", "crates/hm-fabric/tests/role_runner_live.rs", "crates/hm-serve/src/development_usage.rs", "crates/hm-serve/src/development_workers.rs", "crates/hm-serve/src/development_scheduler.rs", "crates/hm-serve/tests/generic_worker_usage.rs"]
 verify_cmd = "cargo test -p hm-serve --test usage_service"
 acceptance = "Native host cost and usage remain canonical. Background calls reserve cost and concurrency before dispatch, settle real observations once, retain unknown charges through restart and expose exact attributed rollups."
 
@@ -1261,11 +1261,11 @@ owner_lane = "surface"
 status = "in_progress"
 requires = ["task.3.25"]
 coverage = ["req.coverage.auth", "req.coverage.context_mode", "req.coverage.diagnostics"]
-touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs", "crates/hm-mcp/src/tools/session_context.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/tests/test_continuity_host.py", "crates/hm-serve/Cargo.toml", "crates/hm-serve/src/lib.rs", "crates/hm-mcp/src/dispatcher.rs", "crates/hm-mcp/src/fabric_runtime.rs", "crates/hm-mcp/src/lib.rs", "crates/hm-mcp/src/main.rs", "crates/hm-mcp/tests/fabric_runtime.rs", "crates/hm-cli/src/serve.rs"]
+touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs", "crates/hm-mcp/src/tools/session_context.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/tests/test_continuity_host.py", "crates/hm-serve/Cargo.toml", "crates/hm-serve/src/lib.rs", "crates/hm-mcp/src/dispatcher.rs", "crates/hm-mcp/src/fabric_runtime.rs", "crates/hm-mcp/src/lib.rs", "crates/hm-mcp/src/main.rs", "crates/hm-mcp/tests/fabric_runtime.rs", "crates/hm-cli/src/serve.rs", "crates/hm-cli/tests/fabric_service_journey.rs"]
 verify_cmd = "cargo test -p hm-serve --test fabric_service --test continuity_service"
 acceptance = "Native operational and continuation services expose real configured backends, routes, jobs, budgets, mode boundaries and effect receipts through existing surfaces without granting callers new authority."
 
-result = "Native continuity and operational service gates passed, including preserved host off/pass-through bytes, read-only shadow comparison, durable native hook receipts, real worker cancellation and retained uncertainty. Existing MCP dispatch now reuses one trusted operational owner; its actual actor and signed-worker journey passed scope/version and caller-configuration refusal, result replay, inspection and shutdown. Daemon and stdio startup compile with an owner-only loader. Actual startup-file, daemon/socket and SDK journeys, broader operational families and compatible primary host serving remain unqualified."
+result = "Native continuity and operational service components and retained MCP dispatch passed their scoped gates. The actual daemon and production worker now pass trusted startup, authenticated socket dispatch, durable replay and restart, and child cleanup. Wrong scope, actor, file mode, symlink and file owner refuse before backend creation. Stdio behavior, additional startup backends and operational families, and compatible primary host serving remain incomplete."
 
 [task.3.47]
 title = "Installed host development and operational consumers"
