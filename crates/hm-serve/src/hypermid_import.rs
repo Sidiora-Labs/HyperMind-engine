@@ -54,6 +54,8 @@ pub struct ImportBundle {
     pub scope: Scope,
     pub entries: Vec<ImportEntry>,
     pub digest: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub context_sources: Vec<crate::hypermid_context_import::ContextSourceMaterial>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -128,6 +130,56 @@ pub async fn import_batch(
         return Err(ContextError::ScopeMismatch.into());
     }
     let _guard = crate::context_jobs::CONTEXT_MUTATIONS.lock().await;
+    let shared_key = format!(
+        "hypermid-import-v2:{}:{}",
+        bundle.scope.digest()?,
+        bundle.import_id
+    );
+    if let Some(checkpoint) = engine
+        .latest_checkpoint(shared_key.as_bytes().to_vec())
+        .await?
+    {
+        let previous: ImportReceipt = serde_json::from_slice(&checkpoint.blob)?;
+        if previous.version != 2
+            || previous.scope != bundle.scope
+            || previous.import_id != bundle.import_id
+            || previous.bundle_digest != bundle.digest
+            || previous.total != bundle.entries.len()
+            || previous.accepted > previous.total
+            || previous.complete && previous.accepted != previous.total
+        {
+            return Err(ContextError::Conflict.into());
+        }
+    }
+    const CONTEXT_KINDS: &[&str] = &[
+        "source_reference",
+        "source_snapshot",
+        "summary",
+        "projection",
+        "policy_revision",
+        "cache_generation",
+        "reduction",
+    ];
+    let is_context = !bundle.context_sources.is_empty()
+        || bundle
+            .entries
+            .iter()
+            .any(|entry| CONTEXT_KINDS.contains(&entry.kind.as_str()));
+    if is_context {
+        if bundle
+            .entries
+            .iter()
+            .any(|entry| !CONTEXT_KINDS.contains(&entry.kind.as_str()))
+        {
+            return Err(ContextError::Invalid("mixed context and knowledge import".into()).into());
+        }
+        let prepared = crate::hypermid_context_import::prepare(bundle)?;
+        let receipt =
+            crate::hypermid_context_import::import_batch_locked(engine, &prepared, max_entries)
+                .await?;
+        persist_receipt(engine, &shared_key, &receipt).await?;
+        return Ok(receipt);
+    }
     let state = context_memory::rebuild(engine, &bundle.scope).await?;
     let accepted = state.import_progress(&bundle.import_id, &bundle.digest)?;
     if accepted != usize::MAX {
@@ -216,23 +268,28 @@ pub async fn import_batch(
         receipt.last_lsn = committed.last_lsn;
         receipt.complete = true;
     }
-    let previous = engine.latest_checkpoint(key.as_bytes().to_vec()).await?;
-    if previous
-        .as_ref()
-        .is_none_or(|p| p.blob != serde_json::to_vec(&receipt).unwrap_or_default())
+    persist_receipt(engine, &key, &receipt).await?;
+    Ok(receipt)
+}
+
+async fn persist_receipt(
+    engine: &ActorEngine,
+    key: &str,
+    receipt: &ImportReceipt,
+) -> Result<(), ImportError> {
+    let bytes = serde_json::to_vec(receipt)?;
+    if engine
+        .latest_checkpoint(key.as_bytes().to_vec())
+        .await?
+        .is_none_or(|previous| previous.blob != bytes)
     {
         let id = connection(&format!("{key}:checkpoint"));
         let sequence = engine.next_client_sequence(id).await?;
         engine
-            .write_checkpoint(
-                id,
-                sequence,
-                key.into_bytes(),
-                serde_json::to_vec(&receipt)?,
-            )
+            .write_checkpoint(id, sequence, key.as_bytes().to_vec(), bytes)
             .await?;
     }
-    Ok(receipt)
+    Ok(())
 }
 
 fn bad() -> ContextError {
@@ -247,6 +304,7 @@ fn finish(
     entries: Vec<ImportEntry>,
 ) -> Result<ImportBundle, ImportError> {
     let mut b = ImportBundle {
+        context_sources: vec![],
         version: 1,
         import_id: id,
         scope,
@@ -495,7 +553,7 @@ pub async fn import_receipt(
                 || &receipt.scope != scope
                 || receipt.import_id != import_id
                 || receipt.accepted > receipt.total
-                || receipt.complete != (receipt.accepted == receipt.total)
+                || receipt.complete && receipt.accepted != receipt.total
             {
                 return Err(ContextError::Conflict.into());
             }

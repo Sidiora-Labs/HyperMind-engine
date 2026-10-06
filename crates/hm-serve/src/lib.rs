@@ -18,6 +18,7 @@ pub mod uds;
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub mod hypermid_import;
+pub mod hypermid_context_import;
 
 pub mod session_context;
 pub mod context_config;

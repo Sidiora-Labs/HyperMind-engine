@@ -26,12 +26,18 @@ async fn durable_resume_preserves_sources_and_rejects_corruption_and_scope() {
     };
     let mut registry = IdentityRegistry::new();
     registry.bind(scope.clone(), 7, vec![]).unwrap();
-    let entries=(0..3).map(|i| {let payload=serde_json::json!({"revision":i,"source_digest":"original","provenance":["source-1"],"content":"retained evidence"}); ImportEntry{source_id:format!("revision:{i}"),kind:"revision".into(),digest:digest_bytes(&serde_json::to_vec(&payload).unwrap()),payload}}).collect();
+    let rows = [
+        ("record", "record", serde_json::json!({"record_id":"record","kind":"note","category":"general","status":"active","current_revision":2,"current_revision_digest":"revision-two","importance":0.8,"confidence":0.9,"created_at_ms":1,"observed_from_ms":1})),
+        ("revision:1", "revision", serde_json::json!({"record_id":"record","revision":1,"revision_digest":"revision-one","content":"retained evidence one","content_digest":digest_bytes(b"retained evidence one"),"authored_at_ms":1,"immutable_anchor":false})),
+        ("revision:2", "revision", serde_json::json!({"record_id":"record","revision":2,"revision_digest":"revision-two","parent_revision_digest":"revision-one","content":"retained evidence two","content_digest":digest_bytes(b"retained evidence two"),"authored_at_ms":2,"immutable_anchor":false})),
+    ];
+    let entries = rows.into_iter().map(|(source_id,kind,payload)| ImportEntry { source_id:source_id.into(),kind:kind.into(),digest:digest_bytes(&serde_json::to_vec(&payload).unwrap()),payload }).collect();
     let mut bundle = ImportBundle {
         version: 1,
         import_id: "export-1".into(),
         scope,
         entries,
+        context_sources: vec![],
         digest: String::new(),
     };
     bundle.digest = bundle.computed_digest().unwrap();
@@ -56,23 +62,13 @@ async fn durable_resume_preserves_sources_and_rejects_corruption_and_scope() {
         import_batch(&engine, &registry, &bundle, 10).await.unwrap()
     );
     assert_eq!(count, engine.stats().await.unwrap().log_events);
-    let event = engine
-        .verified_event(hm_core::LSN::new(done.last_lsn))
-        .await
-        .unwrap();
-    match event.envelope.payload {
-        hm_schema::events::EventPayload::UserMsg(m) => {
-            let v: serde_json::Value = serde_json::from_slice(&m.content).unwrap();
-            assert_eq!(v["entry"]["payload"]["revision"], 2);
-            assert_eq!(v["entry"]["source_id"], "revision:2");
-        }
-        _ => panic!("wrong ledger kind"),
-    }
+    let native = hm_serve::context_memory::rebuild(&engine,&bundle.scope).await.unwrap();
+    assert_eq!(native.read(&bundle.scope,"record",0).unwrap().unwrap().content,"retained evidence two");
     let mut corrupt = bundle.clone();
-    corrupt.entries[0].payload["content"] = serde_json::json!("changed");
+    corrupt.entries[1].payload["content"] = serde_json::json!("changed");
     assert!(import_batch(&engine, &registry, &corrupt, 1).await.is_err());
-    corrupt.entries[0].digest =
-        digest_bytes(&serde_json::to_vec(&corrupt.entries[0].payload).unwrap());
+    corrupt.entries[1].digest =
+        digest_bytes(&serde_json::to_vec(&corrupt.entries[1].payload).unwrap());
     corrupt.digest = corrupt.computed_digest().unwrap();
     assert!(import_batch(&engine, &registry, &corrupt, 1).await.is_err());
     assert!(

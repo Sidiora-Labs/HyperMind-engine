@@ -96,6 +96,18 @@ pub async fn replay(actor: &ActorEngine, scope: &Scope, session_id: &str, conver
             }
         }
         if let EventPayload::ProviderFrame(provider) = &verified.envelope.payload {
+            if provider.provider == crate::hypermid_context_import::PROVIDER {
+                if let Some(imported) = crate::hypermid_context_import::replay_committed(actor, &provider.api_content).await.map_err(|error| match error { crate::hypermid_import::ImportError::Context(e) => HistoryError::Context(e), crate::hypermid_import::ImportError::Ledger(e) => HistoryError::Ledger(e) })? {
+                    if imported.session_id == session_id || imported.conversation == conversation {
+                        trusted(scope,&imported.scope)?;
+                        if imported.session_id != session_id || imported.conversation != conversation || !output.history.messages().is_empty() { return Err(ContextError::Conflict.into()); }
+                        output.history = imported.history;
+                        output.source_uris = imported.source_uris;
+                        apply_ignored(&mut output,&ignored)?;
+                    }
+                }
+                continue;
+            }
             if provider.provider == HISTORY_PROVIDER {
                 let record: Record = serde_json::from_slice(&provider.api_content)?;
                 validate_binding(record.version, &record.scope, &record.session_id, &record.conversation)?;

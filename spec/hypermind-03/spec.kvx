@@ -671,11 +671,13 @@ acceptance = "Scoped inspection exports canonical authoritative memory JSON Line
 title = "Validated Hypermid source history migration"
 wave = 2
 owner_lane = "source_service"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["crates/hm-serve/src/hypermid_context_import.rs", "crates/hm-serve/src/hypermid_import.rs", "crates/hm-serve/tests/hypermid_context_import.rs", "crates/hm-serve/tests/hypermid_import.rs", "crates/hm-sim/tests/unified_context_journey.rs"]
 verify_cmd = "cargo test -p hm-serve --test hypermid_context_import --test hypermid_import --test unified_memory_migration"
 acceptance = "The declared public Hypermid context export format migrates original source identities, bytes, times and supported relations through preflight validation, bounded staging and atomic visibility. Replay is idempotent, malformed or unsupported authority commits nothing, and exact recovery survives restart."
+
+qualification = "Library compile and actual public-export producer journey passed. Resolver-bound source references stage invisibly and publish atomically, retain exact originals and recorded time, preserve unknown occurrence time, and survive restart, edits, frozen forks, fades and idempotent retry. Unsupported opaque derived records and unspecified cross-session snapshot restoration refuse before effects."
 
 [task.2.15]
 title = "Swift operation error fidelity"

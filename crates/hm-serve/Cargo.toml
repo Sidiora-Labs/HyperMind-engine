@@ -15,6 +15,7 @@ hm-context = { path = "../hm-context" }
 axum = { version = "0.8.9", features = ["json"] }
 base64 = "0.22.1"
 blake3 = "1.8.2"
+chrono = { version = "0.4.42", default-features = false, features = ["std"] }
 crc32c = "0.6.8"
 hm-compose = { path = "../hm-compose" }
 hm-core = { path = "../hm-core" }

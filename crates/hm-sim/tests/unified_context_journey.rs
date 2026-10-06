@@ -434,15 +434,18 @@ async fn unified_context_journey() -> Result<()> {
         ]
         .into()
     );
-    let entries = (1..=2).map(|revision| {
-        let payload=json!({"record_id":"pressure-record","revision":revision,"content":format!("Observed pressure revision {revision}"),"recorded_at_ns":"1791288000123456789","provenance":["pressure-sensor"]});
-        Ok(ImportEntry {source_id:format!("pressure-revision-{revision}"),kind:"revision".into(),digest:digest_bytes(&serde_json::to_vec(&payload)?),payload})
-    }).collect::<Result<Vec<_>>>()?;
+    let rows = [
+        ("pressure-record", "record", json!({"record_id":"pressure-record","kind":"note","category":"measurements","status":"active","current_revision":2,"current_revision_digest":"pressure-revision-2","importance":0.8,"confidence":0.9,"created_at_ms":1,"observed_from_ms":1})),
+        ("pressure-revision-1", "revision", json!({"record_id":"pressure-record","revision":1,"revision_digest":"pressure-revision-1","content":"Observed pressure revision 1","content_digest":digest_bytes(b"Observed pressure revision 1"),"authored_at_ms":1,"immutable_anchor":false})),
+        ("pressure-revision-2", "revision", json!({"record_id":"pressure-record","revision":2,"revision_digest":"pressure-revision-2","parent_revision_digest":"pressure-revision-1","content":"Observed pressure revision 2","content_digest":digest_bytes(b"Observed pressure revision 2"),"authored_at_ms":2,"immutable_anchor":false})),
+    ];
+    let entries = rows.into_iter().map(|(source_id,kind,payload)| Ok(ImportEntry {source_id:source_id.into(),kind:kind.into(),digest:digest_bytes(&serde_json::to_vec(&payload)?),payload})).collect::<Result<Vec<_>>>()?;
     let mut bundle = ImportBundle {
         version: 1,
         import_id: "pressure-knowledge-export".into(),
         scope: scope(),
         entries,
+        context_sources: vec![],
         digest: String::new(),
     };
     bundle.digest = bundle.computed_digest()?;
@@ -451,14 +454,14 @@ async fn unified_context_journey() -> Result<()> {
     assert_eq!(partial["items"][0]["accepted"], 1);
     assert_eq!(partial["items"][0]["complete"], false);
     let imported = client.call("remember", import_args(128)).await?;
-    assert_eq!(imported["items"][0]["accepted"], 2);
+    assert_eq!(imported["items"][0]["accepted"], 3);
     assert_eq!(imported["items"][0]["complete"], true);
     let imported_event=client.call("inspect",json!({"uri":format!("hm://{ACTOR}/lsn/{}",imported["items"][0]["last_lsn"].as_u64().unwrap())})).await?;
     assert!(imported_event["items"]
         .as_array()
         .unwrap()
         .iter()
-        .any(|item| item["authority"] == "external_observed"));
+        .any(|item| item["authority"] == "runtime_fact"));
     println!("daemon authenticated discovery and knowledge import passed");
     let original = [
         source("reading-20", 1, "Measured pressure is 20 kPa. ".repeat(90))?,

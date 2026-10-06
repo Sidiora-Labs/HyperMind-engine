@@ -210,7 +210,7 @@ async fn versioned_source_after_knowledge_import_reaches_real_remember_boundary(
         let payload = serde_json::json!({"record_id":"pressure-record","revision":revision,"content":format!("Observed pressure revision {revision}"),"recorded_at_ns":"1791288000123456789","provenance":["pressure-sensor"]});
         hm_serve::hypermid_import::ImportEntry { source_id:format!("pressure-revision-{revision}"),kind:"revision".into(),digest:hm_context::digest_bytes(&serde_json::to_vec(&payload).unwrap()),payload }
     }).collect();
-    let mut bundle = hm_serve::hypermid_import::ImportBundle {version:1,import_id:"pressure-knowledge-export".into(),scope:trusted.clone(),entries,digest:String::new()};
+    let mut bundle = hm_serve::hypermid_import::ImportBundle {version:1,import_id:"pressure-knowledge-export".into(),scope:trusted.clone(),entries,context_sources:vec![],digest:String::new()};
     bundle.digest = bundle.computed_digest().unwrap();
     for max_entries in [1,128] {
         let input: hm_mcp::RememberInput = serde_json::from_value(serde_json::json!({"conversation":"pressure-conversation","kind":"user","context":{"operation":"import","request":bundle,"max_entries":max_entries}})).unwrap();
