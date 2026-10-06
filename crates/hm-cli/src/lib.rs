@@ -52,6 +52,8 @@ struct Cli {
 enum Command {
     /// Run an authenticated local module worker.
     FabricWorker,
+    /// Run an authenticated worker for an approved native tool.
+    FabricToolWorker,
     Init {
         #[arg(long)]
         path: PathBuf,
@@ -236,6 +238,10 @@ async fn execute(command: Command) -> Result<Value> {
     match command {
         Command::FabricWorker => {
             hm_fabric::runtime::worker_from_env().await?;
+            Ok(json!({"ok":true,"stopped":true}))
+        }
+        Command::FabricToolWorker => {
+            hm_fabric::role_workers::tool_worker_from_env().await?;
             Ok(json!({"ok":true,"stopped":true}))
         }
         Command::Init {

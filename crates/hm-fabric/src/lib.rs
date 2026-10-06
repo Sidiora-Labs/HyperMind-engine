@@ -45,3 +45,5 @@ pub mod bus_nats;
 pub mod federation;
 
 pub mod egress;
+
+pub mod role_workers;

@@ -250,3 +250,12 @@ pub fn dispatch_transform(
         }
     }
 }
+
+pub async fn dispatch_declared_tool(
+    registry: &mut DurableRoleRegistry,
+    worker: &mut crate::role_workers::ToolWorkerSession,
+    id: &str,
+    source: &SourceFence,
+) -> Result<WorkRecord, crate::role_workers::ToolWorkerError> {
+    worker.execute(registry, id, source).await
+}
