@@ -13,6 +13,7 @@ CONTEXT_VERSION = 1
 MAX_SAFE_INTEGER = (1 << 53) - 1
 Authority = Literal['user_asserted', 'external_observed', 'tool_observed', 'runtime_fact', 'assistant_generated', 'derived_inference']
 EffectState = Literal['not_dispatched', 'unknown', 'rejected']
+ContextOwner = Literal['host', 'hypermind']
 
 
 def _identifier(value: str) -> None:
@@ -252,8 +253,9 @@ class ContextClient:
     async def configure_embedding(self, enabled: bool, expected_revision: int) -> dict[str, Any]:
         return await self.retrieval({'operation': 'embedding', 'enabled': enabled, 'expected_revision': expected_revision})
 
-    async def backfill(self, maximum_items: int, maximum_bytes: int) -> dict[str, Any]:
-        return await self.retrieval({'operation': 'backfill', 'maximum_items': maximum_items, 'maximum_bytes': maximum_bytes})
+    async def backfill(self, maximum_items: int, maximum_bytes: int) -> BackfillReport:
+        envelope = await self.retrieval({'operation': 'backfill', 'maximum_items': maximum_items, 'maximum_bytes': maximum_bytes})
+        return envelope['items'][0]
 
     async def inspect_retrieval(self) -> dict[str, Any]:
         return self._check_envelope(await self.client.tool('inspect', {'uri': f'hm://{self.actor}/context-retrieval'}))
@@ -857,3 +859,22 @@ class BackfillRetrieval(TypedDict):
     maximum_items: int
     maximum_bytes: int
 RetrievalOperation = RegisterRetrieval | TombstoneRetrieval | GrantRetrieval | RevokeRetrieval | ConfigureEmbedding | BackfillRetrieval
+
+
+class VectorFingerprint(TypedDict):
+    model: str
+    revision: str
+    dimensions: int
+class EmbeddingRegistration(TypedDict):
+    id: str
+    revision: int
+    mode: Literal['off', 'local', 'remote_compatible', 'managed']
+    fingerprint: VectorFingerprint | None
+class BackfillReport(TypedDict):
+    registration: EmbeddingRegistration | None
+    checkpoint: str | None
+    embedded: int
+    remaining: int
+    unavailable: str | None
+    ledger_tail: int
+    usage: str

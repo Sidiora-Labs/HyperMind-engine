@@ -46,17 +46,17 @@ fn python_typescript_real_embedded_and_remote_context() -> Result<()> {
     fs::write(dir.join("python_journey.py"), PYTHON)?; fs::write(dir.join("node_journey.js"), NODE)?;
     let python = std::env::var("HM_SDK_PYTHON").unwrap_or_else(|_|"python3".into());
     let node = std::env::var("HM_SDK_NODE").unwrap_or_else(|_|"node".into());
-    run(Command::new(python).arg(dir.join("python_journey.py")).arg(&repo).arg(&target).arg(dir).arg(grpc.to_string()).env("PYTHONPATH",std::env::var("HM_SDK_PYTHON_DEPS").unwrap_or_else(|_|"/tmp/hypermind-python-deps".into())))?;
+    run(Command::new(python).arg(dir.join("python_journey.py")).arg(&repo).arg(&target).arg(dir).arg(grpc.to_string()).env("PYTHONPATH",std::env::var("HM_SDK_PYTHON_DEPS").or_else(|_|std::env::var("PYTHONPATH")).unwrap_or_default()))?;
     run(Command::new(node).arg(dir.join("node_journey.js")).arg(&repo).arg(&target).arg(dir).arg(&socket))?;
     Ok(())
 }
 
 const PYTHON: &str = r#"
-import asyncio, importlib.util, json, pathlib, sys
+import asyncio, importlib.util, json, pathlib, sys, hashlib
 repo,target,directory,port=map(str,sys.argv[1:])
 sys.path.insert(0,str(pathlib.Path(repo)/'sdk/python'))
 from hypermind import Engine, Client
-from hypermind.context import Scope, SourceMessage, TokenBudget, make_import_bundle, make_memory_record, seal_memory_record
+from hypermind.context import Scope, SourceMessage, TokenBudget, make_import_bundle, make_memory_record, seal_memory_record, ContextClientError
 spec=importlib.util.spec_from_file_location('hypermind._native',str(pathlib.Path(target)/'lib_native.so'))
 module=importlib.util.module_from_spec(spec);sys.modules['hypermind._native']=module;spec.loader.exec_module(module)
 scope=Scope('sdk-owner','sdk-project')
@@ -71,7 +71,7 @@ async def exercise(engine,label):
     assembled=await context.activate('replacement',TokenBudget(8192,512,0));assert assembled['report']['scope']['owner_id']=='sdk-owner'
     inspected=await context.inspect();assert inspected['report']['digest']==assembled['report']['digest']
     forked=await context.fork(label+'-child',label+'-child');assert forked['session_id']==label+'-child'
-    bundle=make_import_bundle(scope,label+'-import',[('import-scope','scope',{'scope':{'owner_id':scope.owner_id,'project_id':scope.project_id,'workspace_id':scope.workspace_id}})])
+    bundle=make_import_bundle(scope,label+'-import',[(label+'-import-scope','scope',{'scope':{'owner_id':scope.owner_id,'project_id':scope.project_id,'workspace_id':scope.workspace_id}})])
     imported=await context.import_bundle(bundle,1);assert imported['complete'] and imported['accepted']==1
     note={'id':label+'-note','kind':'Note','revision':1,'text':'durable SDK note','parents':[],'contradictions':[],'expires_at_ns':None,'predicate':'True','tombstoned':False}
     created=await context.job(label+'-create',{'action':'notes','command':{'Create':note}});assert created['ok']
@@ -84,8 +84,21 @@ async def exercise(engine,label):
     memory=await context.inspect_memory(record['id']);assert memory['record']['content']=='revised native knowledge'
     await context.memory(label+'-memory-tombstone',{'kind':'tombstone','id':record['id'],'expected_revision':2})
     visible=await context.inspect_memory();assert not any(row['id']==record['id'] for row in visible['records'])
-    print(label+' source/replay/relation/activate/inspect/fork/import/job/memory passed')
-    return context.session_id,assembled['report']['digest']
+    text='registered lexical document '+label; content_digest=hashlib.sha256(text.encode()).hexdigest()
+    document={'scope':{'owner_id':scope.owner_id,'project_id':scope.project_id,'workspace_id':scope.workspace_id},'kind':'document','id':label+'-doc','revision':1,'text':text,'content_digest':content_digest,'authority':'external_observed','provenance':[{'source_id':label+'-doc-source','source_digest':content_digest,'byte_start':0,'byte_end':len(text.encode())}],'occurred_at_ns':None,'recorded_at_ns':'1791288000123456789','expires_at_ns':None,'tombstoned':False}
+    assert (await context.register_retrieval_source(document,0))['ok']
+    state=await context.inspect_retrieval();assert state['ok']
+    recipient=Scope('sdk-owner','sdk-recipient')
+    grant={'source_scope':document['scope'],'recipient_scope':{'owner_id':recipient.owner_id,'project_id':recipient.project_id,'workspace_id':recipient.workspace_id},'kind':'document','source_id':document['id'],'source_digest':content_digest,'source_revision':1,'expires_at_ns':'9223372036854775807'}
+    assert (await context.grant_evidence(grant))['ok']
+    assert (await context.revoke_evidence(recipient,'document',document['id']))['ok']
+    registration=state['items'][0].get('registration')
+    assert (await context.configure_embedding(False,registration['revision'] if registration else 0))['ok']
+    backfill=await context.backfill(16,65536);assert backfill['embedded']==0 and backfill['unavailable'] and backfill['usage'].startswith('unknown:')
+    assert (await context.tombstone_retrieval_source('document',document['id'],1))['ok']
+    final=await context.inspect()
+    print(label+' source/replay/relation/activate/inspect/fork/import/job/memory/retrieval passed')
+    return context.session_id,final['report']['digest']
 async def main():
     data=pathlib.Path(directory)/'python-native'
     engine=await Engine.open(data,actor=7,user_hex='11'*16,kek_hex='22'*32,projection_map_bytes=67108864,context_scope=scope)
@@ -100,10 +113,10 @@ asyncio.run(main())
 "#;
 
 const NODE: &str = r#"
-const assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs');
+const assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs'),crypto=require('node:crypto');
 const [repo,target,directory,socket]=process.argv.slice(2);
 const clientPath=path.join(repo,'sdk/typescript/packages/client/dist/index.js');
-const {Client,makeImportBundle,freezeSourceMessage,makeMemoryRecord,sealMemoryRecord}=require(clientPath);
+const {Client,makeImportBundle,freezeSourceMessage,makeMemoryRecord,sealMemoryRecord,ContextClientError}=require(clientPath);
 const enginePath=path.join(repo,'sdk/typescript/packages/engine');
 const nativePackage=path.join(directory,'node_modules/@hypermind/engine-linux-x64-gnu');fs.mkdirSync(nativePackage,{recursive:true});
 fs.copyFileSync(path.join(target,'libhypermind_engine_napi.so'),path.join(nativePackage,'engine.node'));
@@ -121,7 +134,7 @@ async function exercise(engine,label){
  const assembled=await context.activate('replacement',{context_tokens:8192,reserved_output_tokens:512,required_tokens:0});
  const inspected=await context.inspect();assert.equal(inspected.report.digest,assembled.report.digest);
  const forked=await context.fork(label+'-child');assert.equal(forked.session_id,label+'-child');
- const imported=await context.importBundle(makeImportBundle(scope,label+'-import',[{source_id:'import-scope',kind:'scope',payload:{scope}}]),1);assert.equal(imported.complete,true);
+ const imported=await context.importBundle(makeImportBundle(scope,label+'-import',[{source_id:label+'-import-scope',kind:'scope',payload:{scope}}]),1);assert.equal(imported.complete,true);
  const note={id:label+'-note',kind:'Note',revision:1,text:'durable SDK note',parents:[],contradictions:[],expires_at_ns:null,predicate:'True',tombstoned:false};
  assert.equal((await context.job(label+'-create',{action:'notes',command:{Create:note}})).ok,true);
  assert.equal((await context.job(label+'-read',{action:'read_note',id:note.id,now_ns:1791288000123456789n,facts:{}})).ok,true);
@@ -133,7 +146,18 @@ async function exercise(engine,label){
  assert.equal((await context.inspectMemory(record.id)).record.content,'revised native knowledge');
  await context.memory(label+'-memory-tombstone',{kind:'tombstone',id:record.id,expected_revision:2});
  assert.equal((await context.inspectMemory()).records.some(row=>row.id===record.id),false);
- console.log(label+' source/replay/relation/activate/inspect/fork/import/job/memory passed');return [context.sessionId,assembled.report.digest];
+ const text='registered lexical document '+label,contentDigest=crypto.createHash('sha256').update(text).digest('hex');
+ const document={scope,kind:'document',id:label+'-doc',revision:1,text,content_digest:contentDigest,authority:'external_observed',provenance:[{source_id:label+'-doc-source',source_digest:contentDigest,byte_start:0,byte_end:Buffer.byteLength(text)}],occurred_at_ns:null,recorded_at_ns:1791288000123456789n,expires_at_ns:null,tombstoned:false};
+ assert.equal((await context.registerRetrievalSource(document,0)).ok,true);
+ const state=await context.inspectRetrieval();assert.equal(state.ok,true);
+ const recipient={owner_id:'sdk-owner',project_id:'sdk-recipient',workspace_id:null};
+ assert.equal((await context.grantEvidence({source_scope:scope,recipient_scope:recipient,kind:'document',source_id:document.id,source_digest:contentDigest,source_revision:1,expires_at_ns:9223372036854775807n})).ok,true);
+ assert.equal((await context.revokeEvidence(recipient,'document',document.id)).ok,true);
+ assert.equal((await context.configureEmbedding(false,state.items[0].registration?.revision??0)).ok,true);
+ const backfill=await context.backfill(16,65536);assert.equal(backfill.embedded,0);assert.ok(backfill.unavailable);assert.match(backfill.usage,/^unknown:/);
+ assert.equal((await context.tombstoneRetrievalSource('document',document.id,1)).ok,true);
+ const final=await context.inspect();
+ console.log(label+' source/replay/relation/activate/inspect/fork/import/job/memory/retrieval passed');return [context.sessionId,final.report.digest];
 }
 (async()=>{
  const config={actor:7,userHex:'11'.repeat(16),kekHex:'22'.repeat(32),projectionMapBytes:67108864,contextScope:scope};
@@ -142,7 +166,7 @@ async function exercise(engine,label){
  engine=await HyperMind.open(path.join(directory,'node-native'),config);
  assert.equal((await engine.context(scope,session,7,'hypermind','node-native').inspect()).report.digest,digest);await engine.close();
  const client=await Client.connect({socketPath:socket,capabilityToken:Buffer.from('44'.repeat(32),'hex')});
- await exercise(client,'node-remote');await client.close();
+ try{await exercise(client,'node-remote');}finally{client.close();}
  console.log('typescript native reopen and UDS remote passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});
 "#;

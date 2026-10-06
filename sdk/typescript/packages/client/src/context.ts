@@ -83,7 +83,7 @@ export class ContextClient {
   async grantEvidence(grant:EvidenceGrant):Promise<ToolEnvelope>{return this.retrieval({operation:"retrieval_grant",grant});}
   async revokeEvidence(recipientScope:Scope,kind:EvidenceKind,id:string):Promise<ToolEnvelope>{return this.retrieval({operation:"retrieval_revoke",recipient_scope:recipientScope,kind,id});}
   async configureEmbedding(enabled:boolean,expectedRevision:number):Promise<ToolEnvelope>{return this.retrieval({operation:"embedding",enabled,expected_revision:expectedRevision});}
-  async backfill(maximumItems:number,maximumBytes:number):Promise<ToolEnvelope>{return this.retrieval({operation:"backfill",maximum_items:maximumItems,maximum_bytes:maximumBytes});}
+  async backfill(maximumItems:number,maximumBytes:number):Promise<BackfillReport>{const envelope=await this.retrieval({operation:"backfill",maximum_items:maximumItems,maximum_bytes:maximumBytes});return envelope.items[0] as BackfillReport;}
   async inspectRetrieval():Promise<ToolEnvelope>{return this.checkEnvelope(await this.client.callTool("inspect",{uri:`hm://${this.actor}/context-retrieval`}));}
   async inspectMemory(recordId?:string,ownerScope?:Scope,sourceId?:string):Promise<MemoryView>{
     let uri=`hm://${this.actor}/context-memory`;if(recordId!==undefined)uri+=`/${encodeContextIdentifier(recordId)}`;
@@ -245,3 +245,7 @@ export interface RetrievalSourceRecord {scope:Scope;kind:EvidenceKind;id:string;
 export interface EvidenceGrant {source_scope:Scope;recipient_scope:Scope;kind:EvidenceKind;source_id:string;source_digest:string;source_revision:number;expires_at_ns:Nanoseconds}
 export type RetrievalOperation={operation:"retrieval_source";expected_revision:number;source:RetrievalSourceRecord}|{operation:"retrieval_tombstone";kind:EvidenceKind;id:string;expected_revision:number}|{operation:"retrieval_grant";grant:EvidenceGrant}|{operation:"retrieval_revoke";recipient_scope:Scope;kind:EvidenceKind;id:string}|{operation:"embedding";expected_revision:number;enabled:boolean}|{operation:"backfill";maximum_items:number;maximum_bytes:number};
 export type RetrievalRememberInput=RememberContextInput<RetrievalOperation>;
+
+export interface VectorFingerprint {model:string;revision:string;dimensions:number}
+export interface EmbeddingRegistration {id:string;revision:number;mode:"off"|"local"|"remote_compatible"|"managed";fingerprint:VectorFingerprint|null}
+export interface BackfillReport {registration:EmbeddingRegistration|null;checkpoint:string|null;embedded:number;remaining:number;unavailable:string|null;ledger_tail:number;usage:string}

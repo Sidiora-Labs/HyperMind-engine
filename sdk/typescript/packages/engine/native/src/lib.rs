@@ -116,7 +116,7 @@ impl NativeEngine {
     }
 
     #[napi]
-    pub async fn close(&self) -> napi::Result<()> { self.actor.shutdown().await.map_err(napi_error) }
+    pub async fn close(&self) -> napi::Result<()> { self.actor.clone().shutdown().await.map_err(napi_error) }
 
     #[napi]
     pub fn session(&self, conversation: String) -> napi::Result<NativeSession> {

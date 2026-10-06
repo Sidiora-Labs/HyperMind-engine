@@ -563,11 +563,13 @@ qualification = "Actor-loop atomic admission and restart tests passed; stale bat
 title = "Python and TypeScript executable context consumers"
 wave = 2
 owner_lane = "clients"
-status = "in_progress"
+status = "done"
 requires = ["task.1.21"]
 touches = ["sdk/python", "sdk/typescript/packages/client", "sdk/typescript/packages/engine"]
 verify_cmd = "cargo test -p hm-sim --test context_client_journey"
 acceptance = "Native and remote clients consume typed source, relation, fork, import, knowledge, job and inspection operations against the actual engine; opaque identifiers, nanosecond timestamps, restart and effect uncertainty retain exact semantics."
+
+qualification = "Python embedded and mTLS plus TypeScript embedded and local socket journeys passed against the actual configured daemon and native libraries. Source replay, edits, exact timestamps, fork, import, jobs, native memory revisions, retrieval grants, explicit unavailable backfill and embedded reopen were exercised. Additional portability and aggregate SDK requirements remain separate tasks."
 
 [task.2.6]
 title = "Go typed context consumer"

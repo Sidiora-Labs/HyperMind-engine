@@ -10,6 +10,7 @@ import grpc
 from . import hypermind_pb2 as pb
 from .hypermind_pb2_grpc import HyperMindStub
 from ._errors import CODES
+from .context import ContextClient, Scope, ContextOwner
 from .bundle import parse_bundle
 from .protocol.WireEnvelope import WireEnvelope, WireEnvelopeT
 from .protocol.WirePayload import WirePayload
@@ -137,8 +138,7 @@ class Client:
         from .session import Session
         return Session(self, conversation)
 
-    def context(self, scope, session_id: str, *, actor: int, context_owner, conversation=None):
-        from .context import ContextClient
+    def context(self, scope: Scope, session_id: str, *, actor: int, context_owner: ContextOwner, conversation: str | None = None) -> ContextClient:
         return ContextClient(self, scope, session_id, actor=actor, context_owner=context_owner, conversation=conversation)
 
     def _request_bytes(self, payload):
