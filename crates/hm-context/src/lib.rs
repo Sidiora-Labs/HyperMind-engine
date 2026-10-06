@@ -29,3 +29,5 @@ pub mod development_schedule;
 pub mod source_continuity;
 
 pub mod continuity_pressure;
+
+pub mod knowledge_injection;

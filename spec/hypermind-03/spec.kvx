@@ -1041,12 +1041,14 @@ acceptance = "Actual repository deltas produce cited documentation patches with 
 title = "Categorized cross-session knowledge injection"
 wave = 3
 owner_lane = "historian"
-status = "in_progress"
+status = "done"
 requires = ["task.3.11"]
 coverage = ["req.deep.cross_session_memory"]
 touches = ["crates/hm-context/src/knowledge_injection.rs", "crates/hm-serve/src/knowledge_injection.rs", "crates/hm-serve/tests/knowledge_injection.rs"]
 verify_cmd = "cargo test -p hm-serve --test knowledge_injection"
 acceptance = "Native category, pin, archive and observed-use state controls deterministic budgeted cross-session injection. Importance remains distinct from use, visible evidence is suppressed precisely, and exact recall remains available."
+
+result = "Compile and two actual native ledger tests passed for exact token budgets, category and pin ordering, archive semantics, current revision grants, exact evidence suppression, independent observed-use attribution, revocation, deletion and restart. Native session consumer integration remains a separate acceptance gate."
 
 [task.3.30]
 title = "Revision-bound compact memory cues"
