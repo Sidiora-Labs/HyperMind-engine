@@ -298,7 +298,7 @@ pub async fn execute(
     let plan_hash = digest_array(&p.digest)?;
     if let Some(storage) = actor.retention_status().await? {
         if storage.plan == plan_hash {
-            return Ok(receipt(p, storage.redacted_frames, true));
+            return Ok(receipt(p, p.affected_lsns.len(), true));
         }
     }
     let runtime = now()?;

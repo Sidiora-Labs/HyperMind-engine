@@ -2533,7 +2533,7 @@ impl WriterState {
         Ok(ActorStats {
             actor: self.config.actor,
             log_events: self.applied.event_count,
-            log_bytes: directory_bytes(&self.config.actor_directory.join("log"))?,
+            log_bytes: directory_bytes(&hm_ledger::retention::active_directory(&self.config.actor_directory)?.join("log"))?,
             projections,
             applied: self.applied,
         })
