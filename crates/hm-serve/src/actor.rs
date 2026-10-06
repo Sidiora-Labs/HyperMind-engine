@@ -295,6 +295,8 @@ pub struct ActorEngine {
 }
 
 enum Command {
+    PurgeNative(crate::retention::ValidatedPurge, oneshot::Sender<Result<hm_ledger::retention::StorageReceipt, Error>>),
+    RetentionStatus(oneshot::Sender<Result<Option<hm_ledger::retention::StorageReceipt>, Error>>),
     VerifiedEvent(LSN, oneshot::Sender<Result<event::VerifiedEvent, Error>>),
     EvaluateWake(
         LSN,
@@ -650,6 +652,12 @@ impl ActorEngine {
         request(&self.commands, |reply| Command::Relations(limit, reply)).await
     }
 
+    pub(crate) async fn purge_native(&self, plan: crate::retention::ValidatedPurge) -> Result<hm_ledger::retention::StorageReceipt, Error> {
+        request(&self.commands, |reply| Command::PurgeNative(plan, reply)).await
+    }
+    pub(crate) async fn retention_status(&self) -> Result<Option<hm_ledger::retention::StorageReceipt>, Error> {
+        request(&self.commands, Command::RetentionStatus).await
+    }
     pub async fn stats(&self) -> Result<ActorStats, Error> {
         request(&self.commands, Command::Stats).await
     }
@@ -999,6 +1007,24 @@ fn neighbourhood(
 async fn writer_loop(mut state: WriterState, mut commands: mpsc::Receiver<Command>) {
     while let Some(command) = commands.recv().await {
         match command {
+            Command::RetentionStatus(reply) => {
+                let result = hm_ledger::retention::load(&state.config.actor_directory, &state.signing_keys.public_key).map(|c| c.map(|c| hm_ledger::retention::StorageReceipt {plan:c.plan,original_root:c.root,redacted_frames:c.entries.len(),removed_generations:0}));
+                let _ = reply.send(result);
+            }
+            Command::PurgeNative(plan, reply) => {
+                if state.applied.last_lsn.get() != plan.expected_tail || state.mmr.verification_status().root != plan.root {
+                    let _ = reply.send(Err(Error::new(ErrorCode::SequenceViolation)));
+                    continue;
+                }
+                let result = state.purge_native(&plan);
+                match result {
+                    Ok(next) => {
+                        state = next;
+                        let _ = reply.send(Ok(hm_ledger::retention::StorageReceipt {plan:plan.plan,original_root:plan.root,redacted_frames:plan.replacements.len(),removed_generations:0}));
+                    }
+                    Err(error) => { let _ = reply.send(Err(error)); return; }
+                }
+            }
             Command::VerifiedEvent(lsn, reply) => {
                 let result = state.verified_event(lsn);
                 let _ = reply.send(result);
@@ -1730,8 +1756,9 @@ impl WriterState {
             config.actor,
             signing_keys.public_key,
         )?;
+        let retention = hm_ledger::retention::load(&config.actor_directory, &signing_keys.public_key)?;
         loop {
-            let repaired = mmr.verify_and_repair_bounded(&sealed_frames)?;
+            let repaired = mmr.verify_and_repair_certified(&sealed_frames, retention.as_ref())?;
             if repaired.complete {
                 break;
             }
@@ -1742,8 +1769,8 @@ impl WriterState {
         {
             mmr.create_checkpoint(&signing_keys)?;
         }
-        let projections =
-            ProjectionStore::open(&config.actor_directory, config.projection_map_bytes)?;
+        let storage_directory = hm_ledger::retention::active_directory(&config.actor_directory)?;
+        let projections = ProjectionStore::open(&storage_directory, config.projection_map_bytes)?;
         let mut kinds = Vec::new();
         let mut authorities = Vec::new();
         let mut applied = AppliedState::default();
@@ -1772,7 +1799,7 @@ impl WriterState {
         }
         let dedup = DedupTable::rebuild(&plaintext_frames)?;
         let (vector_lanes, vector_digests) =
-            open_vector_lanes(&config.actor_directory, &plaintext_frames)?;
+            open_vector_lanes(&storage_directory, &plaintext_frames)?;
         let vector_checkpoint = projections
             .begin_snapshot()?
             .checkpoint(ProjectionId::VectorLane)?;
@@ -1782,6 +1809,7 @@ impl WriterState {
         {
             projections.apply(ProjectionId::VectorLane, frame.header.lsn, &[])?;
         }
+        if retention.is_some() { hm_ledger::retention::finish_cleanup(&config.actor_directory)?; }
         let mut state = Self {
             config,
             log,
@@ -2406,6 +2434,21 @@ impl WriterState {
                 .flat_map(|item| item.provenance.iter().copied()),
         )?;
         Ok(bundle)
+    }
+
+    fn purge_native(&mut self, plan: &crate::retention::ValidatedPurge) -> Result<Self, Error> {
+        self.tripwires.guard(plan.replacements.keys().map(|lsn| LSN::new(*lsn)))?;
+        if self.events.receiver_count() != 0 { return Err(Error::new(ErrorCode::OperationUnavailable)); }
+        let frames = self.log.read_all()?;
+        let mut replacements = BTreeMap::new();
+        let mut entropy = OsEntropy;
+        for frame in &frames {
+            if let Some(payload) = plan.replacements.get(&frame.header.lsn.get()) {
+                replacements.insert(frame.header.lsn.get(), self.keys.seal(&frame.header, payload, &mut entropy)?);
+            }
+        }
+        hm_ledger::retention::switch_generation(&self.config.actor_directory,self.config.actor,&frames,&replacements,plan.root,plan.plan,&self.signing_keys)?;
+        Self::open(self.config.clone(), self.events.clone(), self.tripwires.clone())
     }
 
     fn integrity_at(&self, lsn: LSN) -> Result<IntegrityReceipt, Error> {

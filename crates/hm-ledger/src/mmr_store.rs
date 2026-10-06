@@ -206,6 +206,15 @@ impl MmrStore {
     }
 
     pub fn verify_and_repair_bounded(&mut self, frames: &[Frame]) -> Result<RepairStatus, Error> {
+        self.verify_and_repair_certified(frames, None)
+    }
+
+    pub fn verify_and_repair_certified(&mut self, frames: &[Frame], certificate: Option<&crate::retention::Certificate>) -> Result<RepairStatus, Error> {
+        if let Some(c) = certificate {
+            if c.actor != self.actor.get() || c.leaf_count > self.mmr.leaf_count() || self.mmr.root_at(c.leaf_count)? != c.root {
+                return Err(Error::new(ErrorCode::CheckpointMismatch));
+            }
+        }
         let frame_count =
             u64::try_from(frames.len()).map_err(|_| Error::new(ErrorCode::CapacityExceeded))?;
         if self.mmr.leaf_count() > frame_count {
@@ -215,7 +224,9 @@ impl MmrStore {
             let frame = frames
                 .get(index)
                 .ok_or_else(|| Error::new(ErrorCode::CheckpointMismatch))?;
-            if *stored != hash_frame_sealed(&frame.header, &frame.sealed_payload) {
+            if let Some(c) = certificate {
+                crate::retention::verify_frame(c, frame, *stored)?;
+            } else if *stored != hash_frame_sealed(&frame.header, &frame.sealed_payload) {
                 return Err(Error::new(ErrorCode::CheckpointMismatch).at_lsn(frame.header.lsn));
             }
         }

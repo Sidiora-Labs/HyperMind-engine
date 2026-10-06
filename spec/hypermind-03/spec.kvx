@@ -837,12 +837,14 @@ result = "Two focused scheduler tests passed with real provider Extraction dispa
 title = "Retention plans and physical record purge"
 wave = 3
 owner_lane = "migration"
-status = "pending"
+status = "in_progress"
 requires = ["task.3.5"]
 coverage = ["req.deep.retention_and_purge"]
 touches = ["crates/hm-serve/src/retention.rs", "crates/hm-ledger/src/retention.rs", "crates/hm-serve/tests/retention.rs"]
 verify_cmd = "cargo test -p hm-serve --test retention"
 acceptance = "Reviewed retention plans protect pinned evidence and required lineage, exclude tombstones immediately and erase eligible record data according to actual ledger key and storage semantics. Actor-wide deletion cannot masquerade as record purge; retained backup copies remain explicit."
+
+result = "Compile and actual supported source-free native record purge passed: managed ciphertext removal, signed redaction certification, unchanged MMR roots, unrelated frame fidelity, restart cleanup and tamper refusal. Source, mixed, cache and external copies remain unsupported. Multi-plan receipt and active-generation storage metrics need repair; cryptographic or device erasure is not claimed."
 
 [task.3.14]
 title = "Authorized conditions and deferred-note delivery"

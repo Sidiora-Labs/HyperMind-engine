@@ -16,3 +16,5 @@ pub mod shred;
 pub mod tripwire;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+pub mod retention;

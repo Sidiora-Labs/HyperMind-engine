@@ -105,7 +105,7 @@ impl SegmentLog {
         if actor.get() == 0 || !valid_options(options) {
             return Err(Error::new(ErrorCode::InvalidArgument));
         }
-        let log_directory = actor_directory.as_ref().join("log");
+        let log_directory = crate::retention::active_directory(actor_directory.as_ref())?.join("log");
         fs::create_dir_all(&log_directory)
             .map_err(|error| io_error(ErrorCode::OpenFailed, &error))?;
         let mut paths = segment_paths(&log_directory)?;
