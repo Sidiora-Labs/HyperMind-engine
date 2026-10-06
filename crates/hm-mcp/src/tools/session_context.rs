@@ -29,6 +29,9 @@ pub enum RememberContext {
     Job {
         request: ContextJobRequest,
     },
+    Continuity {
+        request: hm_serve::continuity_service::ContinuityRequest,
+    },
     Development {
         request: hm_serve::development_service::DevelopmentRequest,
     },
@@ -93,6 +96,9 @@ pub async fn remember_with_development(
     }
     let operation: RememberContext = serde_json::from_value(input).map_err(|_| invalid())?;
     let reply = match operation {
+        RememberContext::Continuity { request } => {
+            hm_serve::continuity_service::execute(actor, scope, scope, request).await?
+        }
         RememberContext::Development { request } => {
             let service = development_service(actor, scope, development)?;
             service

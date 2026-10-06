@@ -1261,11 +1261,11 @@ owner_lane = "surface"
 status = "in_progress"
 requires = ["task.3.25"]
 coverage = ["req.coverage.auth", "req.coverage.context_mode", "req.coverage.diagnostics"]
-touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs"]
+touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continuity_service.rs", "crates/hm-serve/tests/fabric_service.rs", "crates/hm-serve/tests/continuity_service.rs", "crates/hm-mcp/src/tools/session_context.rs", "sdk/python/hypermind/continuity_host.py", "sdk/python/tests/test_continuity_host.py"]
 verify_cmd = "cargo test -p hm-serve --test fabric_service --test continuity_service"
 acceptance = "Native operational and continuation services expose real configured backends, routes, jobs, budgets, mode boundaries and effect receipts through existing surfaces without granting callers new authority."
 
-result = "Native continuity service compile and real ledger journey passed for read-only shadow pressure, primary hook receipts across restart, source edit invalidation, exact recovery and strict budgets. Fresh native required-block materialization preserves existing authorization. Public host hook integration and the separate operational service remain pending."
+result = "Native continuity service remains qualified for shadow pressure and primary hook receipts. The actual installed host consumer now passes byte-identical off and pass-through behavior, turn-boundary policy changes, shadow comparison without serving-state advance, and explicit primary refusal on a host without failure-refusing hooks. Primary host dispatch and operational public service integration remain incomplete."
 
 [task.3.47]
 title = "Installed host development and operational consumers"
