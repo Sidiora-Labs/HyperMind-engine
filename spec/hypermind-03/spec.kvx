@@ -1259,6 +1259,8 @@ touches = ["crates/hm-serve/src/fabric_service.rs", "crates/hm-serve/src/continu
 verify_cmd = "cargo test -p hm-serve --test fabric_service --test continuity_service"
 acceptance = "Native operational and continuation services expose real configured backends, routes, jobs, budgets, mode boundaries and effect receipts through existing surfaces without granting callers new authority."
 
+result = "Native continuity service compile and real ledger journey passed for read-only shadow pressure, primary hook receipts across restart, source edit invalidation, exact recovery and strict budgets. Fresh native required-block materialization preserves existing authorization. Public host hook integration and the separate operational service remain pending."
+
 [task.3.47]
 title = "Installed host development and operational consumers"
 wave = 3

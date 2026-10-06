@@ -121,6 +121,19 @@ async fn bindings(actor: &ActorEngine) -> Result<BTreeMap<String, Binding>, Erro
     }
     Ok(bindings)
 }
+pub async fn session_request(
+    actor: &ActorEngine,
+    scope: &Scope,
+    session: &str,
+) -> Result<(SessionContextRequest, String), Error> {
+    let all = bindings(actor).await?;
+    let binding = all.get(session).ok_or_else(invalid)?;
+    if &binding.request.scope != scope {
+        return Err(Error::new(ErrorCode::CapabilityDenied));
+    }
+    Ok((binding.request.clone(), binding.conversation.clone()))
+}
+
 pub async fn conversation_for_session(
     actor: &ActorEngine,
     scope: &Scope,
@@ -292,26 +305,28 @@ pub async fn inspect_history(
         json!({"version":1,"scope":scope,"session_id":session,"cursor":state.history.cursor(),"messages":state.history.messages(),"relations":state.history.relations(),"parent":state.history.parent(),"spans":spans,"unsupported_parts":state.unsupported_parts}),
     )
 }
-async fn assemble(
+#[derive(Clone, Debug)]
+pub struct RequiredMaterialization {
+    pub jobs: Value,
+    pub policy: u64,
+    pub now_ns: i64,
+    pub required_ids: Vec<String>,
+    pub blocks: Vec<ContextBlock>,
+    pub memory_views: Vec<Value>,
+    pub permission_revision: String,
+    pub memory_scopes: Vec<Scope>,
+    pub facts: BTreeMap<String, String>,
+    pub memory_fence: String,
+    pub projection_request: ProjectionRequest,
+}
+pub async fn required_materialization_locked(
     actor: &ActorEngine,
-    binding: &Binding,
-    provider: Option<&crate::context_retrieval::EmbeddingProvider>,
-) -> Result<Value, Error> {
-    let request = &binding.request;
-    let source_tail = actor.stats().await?.applied.last_lsn;
-    let ledger = crate::context_history::replay(
-        actor,
-        &request.scope,
-        &request.session_id,
-        &binding.conversation,
-    )
-    .await
-    .map_err(history_error)?;
-    if !ledger.unsupported_parts.is_empty() {
-        return Err(Error::new(ErrorCode::OperationUnavailable));
+    request: &SessionContextRequest,
+    history: &hm_context::history::SourceHistory,
+) -> Result<RequiredMaterialization, Error> {
+    if &request.scope != history.scope() || request.session_id != history.session_id() {
+        return Err(Error::new(ErrorCode::CapabilityDenied));
     }
-    let mut uris = ledger.visible_source_uris();
-    let history = ledger.history;
     let jobs =
         crate::context_jobs::inspect_state(actor, &request.scope, &request.scope.owner_id).await?;
     let policy = jobs["policies"][&request.session_id].as_u64().unwrap_or(1);
@@ -398,12 +413,60 @@ async fn assemble(
     let projection_request = ProjectionRequest {
         model_id: request.model_id.clone(),
         policy_revision: policy.to_string(),
-        permission_revision,
-        required_blocks,
+        permission_revision: permission_revision.clone(),
+        required_blocks: required_blocks.clone(),
         required_message_ids: required.clone(),
         tier: request.tier,
         defer_reductions: request.defer_reductions,
     };
+    Ok(RequiredMaterialization {
+        jobs,
+        policy,
+        now_ns,
+        required_ids: required,
+        blocks: required_blocks,
+        memory_views,
+        permission_revision,
+        memory_scopes,
+        facts,
+        memory_fence,
+        projection_request,
+    })
+}
+
+async fn assemble(
+    actor: &ActorEngine,
+    binding: &Binding,
+    provider: Option<&crate::context_retrieval::EmbeddingProvider>,
+) -> Result<Value, Error> {
+    let request = &binding.request;
+    let source_tail = actor.stats().await?.applied.last_lsn;
+    let ledger = crate::context_history::replay(
+        actor,
+        &request.scope,
+        &request.session_id,
+        &binding.conversation,
+    )
+    .await
+    .map_err(history_error)?;
+    if !ledger.unsupported_parts.is_empty() {
+        return Err(Error::new(ErrorCode::OperationUnavailable));
+    }
+    let mut uris = ledger.visible_source_uris();
+    let history = ledger.history;
+    let materialization = required_materialization_locked(actor, request, &history).await?;
+    let RequiredMaterialization {
+        jobs,
+        policy,
+        now_ns,
+        required_ids: required,
+        memory_views,
+        projection_request,
+        memory_scopes,
+        facts,
+        memory_fence,
+        ..
+    } = materialization;
     let initial = crate::context_projection::assemble(
         actor,
         &history,

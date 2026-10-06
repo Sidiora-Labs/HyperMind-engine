@@ -63,3 +63,5 @@ pub mod development_usage;
 pub mod development_workers;
 
 pub mod memory_cues;
+
+pub mod continuity_service;
