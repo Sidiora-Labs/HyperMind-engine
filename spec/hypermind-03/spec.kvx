@@ -970,7 +970,7 @@ touches = ["sdk/python/hypermind/continuity.py", "sdk/python/tests/test_continui
 verify_cmd = "cargo test -p hm-sim --test sdk_continuity"
 acceptance = "Actual language consumers preserve epochs, cursors, source identity, version refusal, cancellation and typed uncertain effects through reauthentication and restart. Potentially accepted writes are never automatically retried."
 
-result = "Python, TypeScript and Go continuity focused journeys passed. Go additionally exercised authenticated reconnect and actual stopped-daemon cancellation with blocked replay. Swift compiles but fork source recovery after reopen remains unqualified; aggregate continuity remains pending."
+result = "Focused Python, TypeScript, Go and Swift continuity journeys passed. Go exercised real authenticated reconnect and stopped-daemon cancellation; Swift restored activated child source bindings. Aggregate cross-SDK continuity qualification remains pending."
 
 [task.3.24]
 title = "Native knowledge review and operational views"
@@ -1324,8 +1324,10 @@ acceptance = "Existing context operations consume trusted configured development
 title = "Qualify restored child session bindings in Swift continuity"
 wave = 3
 owner_lane = "sdk"
-status = "in_progress"
+status = "done"
 requires = ["task.2.7"]
 touches = ["sdk/swift/Sources/HyperMind/ContextContinuity.swift", "sdk/swift/Tests/HyperMindTests/ContextContinuityTests.swift"]
 verify_cmd = "cd sdk/swift && swift test --filter ContextContinuityTests"
 acceptance = "The actual native Swift consumer restores checkpoints and binds forked child sessions before recovering exact original source bytes, timestamps and identity."
+
+result = "Actual Swift compile and C ABI continuity gate passed after binding the restored forked child by activation. Exact bytes, parent identity, source digest, nanoseconds, profile changes and uncertain outcome reconciliation were exercised. Apple and mobile platforms remain unqualified."

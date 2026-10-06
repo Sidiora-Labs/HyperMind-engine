@@ -1,0 +1,72 @@
+import Foundation
+import XCTest
+@testable import HyperMind
+
+final class ContextContinuityTests: XCTestCase {
+    func testRealCheckpointReopenForkAndUncertainIdentity() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("continuity-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let credentials = HyperMindCredentials(actor: 7, userHex: String(repeating: "11", count: 16), kekHex: String(repeating: "22", count: 32), projectionMapBytes: 16_777_216)
+        let scope = try ContextScope(ownerID: "continuity-owner", projectID: "continuity-project")
+        let engine = try HyperMindEngine(credentials: credentials, stateDirectory: root.path, contextScope: scope)
+        let context = try HyperMindContextClient(engine: engine, scope: scope, sessionID: "session", actorID: 7, ownership: .hypermind)
+        let continuation = try ContextContinuation(context: context)
+        let message = try ContextSourceMessage(id: "reading", ordinal: 0, role: .user, parts: [.text("Exact observation")], occurredAtNS: 1791287999123456789, recordedAtNS: 1791288000123456789, authority: .userAsserted)
+        let raw = Data([0xff, 0x00, 0x61])
+        print("continuity stage ingest")
+        _ = try await continuation.ingest(message, originalBytes: raw)
+        let budget = try ContextTokenBudget(contextTokens: 2048, reservedOutputTokens: 256)
+        print("continuity stage activate-parent")
+        let initial = try await continuation.activate(query: "observation", budget: budget)
+        print("continuity stage fork")
+        _ = try await continuation.fork(childSessionID: "child")
+        let checkpoint = await continuation.checkpoint()
+        XCTAssertEqual(checkpoint.accepted?.generation, initial.report.generation)
+        let persisted = try JSONDecoder().decode(ContextContinuationCheckpoint.self, from: JSONEncoder().encode(checkpoint))
+        try await continuation.close()
+        let reopened = try HyperMindEngine(credentials: credentials, stateDirectory: root.path, contextScope: scope)
+        defer { try? reopened.close() }
+        let fresh = try HyperMindContextClient(engine: reopened, scope: scope, sessionID: "session", actorID: 7, ownership: .hypermind)
+        let resumed = try ContextContinuation(context: fresh, checkpoint: persisted)
+        let compatible = await resumed.generationCompatible; XCTAssertFalse(compatible)
+        print("continuity stage activate-resumed-parent")
+        _ = try await resumed.activate(query: "observation", budget: budget)
+        print("continuity stage reconnect")
+        _ = try await resumed.reconnect(fresh)
+        print("continuity stage recover-parent")
+        let recovered = try await fresh.recover(sourceID: message.id); XCTAssertEqual(recovered, raw)
+        print("continuity stage history-parent")
+        let history = try await fresh.history(); XCTAssertEqual(history.messages.first?.recordedAtNS, message.recordedAtNS)
+        let child = try HyperMindContextClient(engine: reopened, scope: scope, sessionID: "child", actorID: 7, ownership: .hypermind)
+        print("continuity stage activate-and-recover-child")
+        let childDiagnostics = try await child.activate(query: "observation", budget: budget)
+        XCTAssertEqual(childDiagnostics.report.session_id, "child")
+        let childBytes = try await child.recover(sourceID: message.id); XCTAssertEqual(childBytes, raw)
+        let childHistory = try await child.history()
+        XCTAssertEqual(childHistory.parent["session_id"].string, "session")
+        XCTAssertEqual(childHistory.messages.first?.sourceDigest, message.sourceDigest)
+        XCTAssertEqual(childHistory.messages.first?.recordedAtNS, message.recordedAtNS)
+        print("continuity stage switch-model")
+        let changed = try await resumed.activate(query: "observation", budget: budget, modelID: "gpt-4o-mini")
+        XCTAssertGreaterThan(changed.report.generation, 0)
+        let profile = ["user": true, "assistant": true, "tool": true, "text": true, "tool_calls": false, "tool_results": false, "opaque": false]
+        print("continuity stage switch-profile")
+        _ = try await resumed.activate(query: "observation", budget: budget, modelID: "gpt-4o-mini", profile: profile)
+        let selected = await resumed.checkpoint(); XCTAssertEqual(selected.accepted?.profile, profile)
+        let unknown = ContextMutationOutcome(operation: "source", identity: message.id, detail: "caller_cancelled_after_dispatch")
+        let unknownCheckpoint = ContextContinuationCheckpoint(scope: scope, actorID: 7, sessionID: "session", conversation: "session", ownership: .hypermind, accepted: persisted.accepted, uncertain: unknown)
+        let uncertain = try ContextContinuation(context: fresh, checkpoint: unknownCheckpoint)
+        print("continuity stage block-uncertain-write")
+        do { _ = try await uncertain.ingest(message, originalBytes: raw); XCTFail("uncertain write dispatched") } catch let error as ContextContinuationError { XCTAssertEqual(error.effectState, "not_dispatched") }
+        print("continuity stage reconcile-source")
+        let reconciled = try await uncertain.reconcileSource(message); XCTAssertTrue(reconciled)
+        let abandoned = try ContextContinuation(context: fresh, checkpoint: unknownCheckpoint)
+        print("continuity stage abandon-uncertain")
+        _ = try await abandoned.abandonUncertain()
+        print("continuity stage block-abandoned-retry")
+        do { _ = try await abandoned.ingest(message, originalBytes: raw); XCTFail("abandoned identity retried") } catch let error as ContextContinuationError { XCTAssertEqual(error.code, "unresolved_mutation_identity") }
+        let wrong = try HyperMindContextClient(engine: reopened, scope: scope, sessionID: "other", actorID: 7, ownership: .hypermind)
+        XCTAssertThrowsError(try ContextContinuation(context: wrong, checkpoint: persisted))
+    }
+}
