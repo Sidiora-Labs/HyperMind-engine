@@ -783,12 +783,14 @@ result = "Compile and actual provider reword, classification, merge and restart 
 title = "Correction-driven retrospective lessons"
 wave = 3
 owner_lane = "temporal"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 coverage = ["req.deep.retrospective_lessons"]
 touches = ["crates/hm-cortex/src/development_retrospective.rs", "crates/hm-serve/src/development_retrospective.rs", "crates/hm-serve/tests/development_retrospective.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_retrospective"
 acceptance = "New typed user corrections produce deduplicated source-linked lesson proposals; no eligible signal makes no provider call, and cancelled or changed input publishes nothing."
+
+result = "Real provider correction journey passed: typed user edits generate deduplicated cited lessons and an archived checkpoint atomically. Restart produces a no-call outcome for unchanged corrections. Durable revocation and source tombstones prevent later publication without changing ledger state."
 
 [task.3.10]
 title = "Enabled profile collection and owner review"
@@ -1288,11 +1290,13 @@ result = "Scoped compile and real historian journey passed with exact source quo
 title = "Create archived generated records in one atomic native transition"
 wave = 3
 owner_lane = "memory"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 touches = ["crates/hm-serve/src/development_admission.rs", "crates/hm-serve/tests/development_admission.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_admission"
 acceptance = "Validated archived generation is created and archived inside one native batch without transient visibility, weakening public creation rules or bypassing protected evidence."
+
+result = "Compile and seven atomic admission tests passed. Archived generation finishes at revision two in one ledger append with no transient active state. The actual retrospective consumer also passed, preserving native public creation and evidence protections."
 
 [task.3.53]
 title = "Connect native development dispatch and validated historian context"

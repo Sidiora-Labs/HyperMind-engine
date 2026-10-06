@@ -859,3 +859,158 @@ async fn verification_metadata_preserves_pinned_original_and_rejects_changed_sou
     );
     actor.shutdown().await.unwrap();
 }
+
+#[tokio::test]
+async fn archived_initial_creation_is_one_atomic_publication_with_revision_two_and_native_refusals()
+{
+    let dir = tempfile::tempdir().unwrap();
+    let actor = ActorEngine::open(config(dir.path())).await.unwrap();
+    setup(&actor, DevelopmentKind::Retrospective).await;
+    let evidence = snapshot(&actor, "cap", false).await;
+    let mut archived = generated("new-one");
+    archived.status = DevelopmentRecordStatus::Archived;
+    let native: MemoryRecord =
+        serde_json::from_value(serde_json::to_value(&archived).unwrap()).unwrap();
+    archived.revision_digest = native.computed_revision_digest().unwrap();
+    let before = actor.stats().await.unwrap();
+    assert!(
+        context_memory::execute(
+            &actor,
+            &owner(),
+            &owner(),
+            MemoryRequest {
+                version: 1,
+                scope: owner(),
+                request_id: "direct-archived-create".into(),
+                command: MemoryCommand::Create { record: native }
+            }
+        )
+        .await
+        .is_err()
+    );
+    assert_eq!(actor.stats().await.unwrap(), before);
+    let mut pinned = archived.clone();
+    pinned.pinned = true;
+    pinned.revision_digest.clear();
+    let mut anchor = archived.clone();
+    anchor.kind = DevelopmentRecordKind::Anchor;
+    anchor.revision_digest.clear();
+    let mut ungrounded = archived.clone();
+    ungrounded.provenance.clear();
+    ungrounded.revision_digest.clear();
+    let mut wrong_revision = archived.clone();
+    wrong_revision.revision = 3;
+    wrong_revision.revision_digest.clear();
+    for (id, record) in [
+        ("pin-archive", pinned),
+        ("anchor-archive", anchor),
+        ("ungrounded-archive", ungrounded),
+        ("wrong-revision-archive", wrong_revision),
+    ] {
+        assert!(
+            development_admission::admit(
+                &actor,
+                &owner(),
+                &worker(),
+                "worker-runtime",
+                plan(
+                    id,
+                    DevelopmentKind::Retrospective,
+                    evidence.clone(),
+                    vec![PlannedKnowledgeMutation::Create { record }]
+                )
+            )
+            .await
+            .is_err()
+        );
+        assert_eq!(actor.stats().await.unwrap(), before);
+    }
+    let mut invalid = generated("new-two");
+    invalid.confidence = 1_000_001;
+    assert!(
+        development_admission::admit(
+            &actor,
+            &owner(),
+            &worker(),
+            "worker-runtime",
+            plan(
+                "archive-rollback",
+                DevelopmentKind::Retrospective,
+                evidence.clone(),
+                vec![
+                    PlannedKnowledgeMutation::Create {
+                        record: archived.clone()
+                    },
+                    PlannedKnowledgeMutation::Create { record: invalid }
+                ]
+            )
+        )
+        .await
+        .is_err()
+    );
+    assert_eq!(actor.stats().await.unwrap(), before);
+    assert!(
+        !context_memory::rebuild(&actor, &owner())
+            .await
+            .unwrap()
+            .records
+            .contains_key("new-one")
+    );
+    let mut subscription = actor.subscribe();
+    let receipt = development_admission::admit(
+        &actor,
+        &owner(),
+        &worker(),
+        "worker-runtime",
+        plan(
+            "archived-initial",
+            DevelopmentKind::Retrospective,
+            evidence,
+            vec![PlannedKnowledgeMutation::Create { record: archived }],
+        ),
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        actor.stats().await.unwrap().log_events,
+        before.log_events + 1
+    );
+    assert_eq!(
+        subscription.try_recv().unwrap().header.lsn.get(),
+        receipt.ledger_lsn
+    );
+    assert!(matches!(
+        subscription.try_recv(),
+        Err(tokio::sync::broadcast::error::TryRecvError::Empty)
+    ));
+    let state = context_memory::rebuild(&actor, &owner()).await.unwrap();
+    let record = state.records["new-one"].clone();
+    assert_eq!(record.status, context_memory::RecordStatus::Archived);
+    assert_eq!(record.revision, 2);
+    assert_eq!(
+        record.revision_digest,
+        record.computed_revision_digest().unwrap()
+    );
+    assert_eq!(record.authority, Authority::DerivedInference);
+    assert_eq!(
+        state.revisions[&("new-one".into(), 1)].last_lsn,
+        record.last_lsn
+    );
+    assert!(
+        state
+            .visible_records(&owner(), 100)
+            .unwrap()
+            .iter()
+            .all(|record| record.id != "new-one")
+    );
+    actor.shutdown().await.unwrap();
+    let actor = ActorEngine::open(config(dir.path())).await.unwrap();
+    assert_eq!(
+        context_memory::rebuild(&actor, &owner())
+            .await
+            .unwrap()
+            .records["new-one"],
+        record
+    );
+    actor.shutdown().await.unwrap();
+}

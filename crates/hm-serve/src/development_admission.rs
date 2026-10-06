@@ -378,10 +378,30 @@ fn translate(
                 if record.kind == RecordKind::Anchor || record.pinned {
                     return Err(invalid("workers cannot create protected records"));
                 }
-                if record.revision_digest.is_empty() {
+                if record.status == RecordStatus::Archived {
+                    if record.revision != 1 || !record.contradictions.is_empty() {
+                        return Err(invalid("invalid initial archived record"));
+                    }
+                    if !record.revision_digest.is_empty()
+                        && record.revision_digest != record.computed_revision_digest()?
+                    {
+                        return Err(ContextError::Conflict.into());
+                    }
+                    let id = record.id.clone();
+                    record.status = RecordStatus::Active;
                     record.revision_digest = record.computed_revision_digest()?;
+                    commands.push(MemoryCommand::Create { record });
+                    MemoryCommand::SetStatus {
+                        id,
+                        status: RecordStatus::Archived,
+                        expected_revision: 1,
+                    }
+                } else {
+                    if record.revision_digest.is_empty() {
+                        record.revision_digest = record.computed_revision_digest()?;
+                    }
+                    MemoryCommand::Create { record }
                 }
-                MemoryCommand::Create { record }
             }
             PlannedKnowledgeMutation::Revise {
                 record,
