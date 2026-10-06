@@ -31,3 +31,5 @@ pub mod context_retrieval;
 pub mod development_admission;
 
 pub mod model_inventory;
+
+pub mod development_profile;

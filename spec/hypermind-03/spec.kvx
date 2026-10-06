@@ -790,12 +790,14 @@ acceptance = "New typed user corrections produce deduplicated source-linked less
 title = "Enabled profile collection and owner review"
 wave = 3
 owner_lane = "notes"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 coverage = ["req.deep.profile_review"]
 touches = ["crates/hm-cortex/src/development_profile.rs", "crates/hm-serve/src/development_profile.rs", "crates/hm-serve/tests/development_profile.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_profile"
 acceptance = "Explicit enablement precedes behavioral collection. Independently recurring evidence produces uncertain owner-review proposals; current-revision approval, rejection, withdrawal and revocation remain authoritative."
+
+result = "Native profile compile and actual multi-session provider journey passed. Owner opt-in precedes collection; source-backed proposals require current owner review. Worker self-approval, stale digests and tombstoned evidence refuse; approval, rejection and disabled state survive restart. Scheduling, UI and physical evidence deletion remain separate."
 
 [task.3.11]
 title = "Actual historian and grounded knowledge extraction"
