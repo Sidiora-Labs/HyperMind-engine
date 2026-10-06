@@ -967,14 +967,14 @@ result = "Egress and opaque secret handle checks passed with actual local connec
 title = "SDK continuation and uncertain-effect recovery"
 wave = 3
 owner_lane = "clients"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 coverage = ["req.coverage.sdk"]
 touches = ["sdk/python/hypermind/continuity.py", "sdk/python/tests/test_continuity.py", "sdk/typescript/packages/client/src/continuity.ts", "sdk/go/continuity.go", "sdk/swift/Sources/HyperMind/ContextContinuity.swift", "crates/hm-sim/tests/sdk_continuity.rs"]
 verify_cmd = "cargo test -p hm-sim --test sdk_continuity"
 acceptance = "Actual language consumers preserve epochs, cursors, source identity, version refusal, cancellation and typed uncertain effects through reauthentication and restart. Potentially accepted writes are never automatically retried."
 
-result = "Focused Python, TypeScript, Go and Swift continuity journeys passed. Go exercised real authenticated reconnect and stopped-daemon cancellation; Swift restored activated child source bindings. Aggregate cross-SDK continuity qualification remains pending."
+result = "The aggregate passed across Python embedded and mTLS, TypeScript native and authenticated local transport, Go authenticated local transport and Swift Linux C ABI. Actual restart, reauthentication, source identity, version refusal and persisted uncertain-write blocking passed. Swift in-flight or stream cancellation, Apple platforms and unselected transport variants remain unqualified."
 
 [task.3.24]
 title = "Native knowledge review and operational views"
