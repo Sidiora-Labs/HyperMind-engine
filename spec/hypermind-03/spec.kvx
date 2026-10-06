@@ -1271,12 +1271,14 @@ result = "Native continuity and operational service components and retained MCP 
 title = "Installed host development and operational consumers"
 wave = 3
 owner_lane = "clients"
-status = "pending"
+status = "in_progress"
 requires = ["task.3.23", "task.3.25", "task.3.46"]
 coverage = ["req.coverage.host", "req.coverage.sdk"]
-touches = ["sdk/python/hypermind/development.py", "sdk/python/hypermind/fabric.py", "sdk/python/tests/test_development.py", "sdk/python/tests/test_fabric.py", "crates/hm-sim/tests/development_host.rs"]
+touches = ["sdk/python/hypermind/__init__.py", "sdk/python/hypermind/development.py", "sdk/python/hypermind/fabric.py", "sdk/python/tests/test_development.py", "sdk/python/tests/test_fabric.py", "crates/hm-sim/tests/development_host.rs"]
 verify_cmd = "cargo test -p hm-sim --test development_host"
 acceptance = "Installed host consumers preserve transcript, provider, tool approval, cancellation, usage and final-delivery ownership while using native development and operational services. Full-host readiness requires every declared supported family."
+
+result = "Typed Python development and operational clients now consume existing native tool transports. Real authenticated daemon journeys passed owner consent, original session collection, primer backlog, configured no-work completion, cancellation, capability revocation and restart. Operational digest dispatch, replay, conflict, stopped-worker uncertainty and receipt recovery also passed. Complete installed-host integration, broader runtime families and primary provider dispatch remain pending."
 
 [task.3.48]
 title = "Repair isolated device mounts and owned namespace teardown"

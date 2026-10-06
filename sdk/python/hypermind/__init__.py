@@ -9,3 +9,7 @@ __all__ += ["ContextContinuation", "ContinuationState", "ContinuationCheckpoint"
 
 from .context import ContextBlock, ContextClient, ContextClientError, ContextDiagnostics, ContextJobAction, ContextReport, Cursor, HistoryReceipt, HostAdapter, NotesCommand, Scope, SourceMessage, SourceRelation, SourceSpan, TokenBudget
 __all__ += ["ContextBlock", "ContextClient", "ContextClientError", "ContextDiagnostics", "ContextJobAction", "ContextReport", "Cursor", "HistoryReceipt", "HostAdapter", "NotesCommand", "Scope", "SourceMessage", "SourceRelation", "SourceSpan", "TokenBudget"]
+
+from .development import DevelopmentClient, DevelopmentBudget, SnapshotRequest, ScheduleMode, ServiceSchedule, ProposalDecision
+from .fabric import FabricClient
+__all__ += ["DevelopmentClient", "DevelopmentBudget", "SnapshotRequest", "ScheduleMode", "ServiceSchedule", "ProposalDecision", "FabricClient"]
