@@ -1338,7 +1338,7 @@ touches = ["crates/hm-mcp/src/lib.rs", "crates/hm-mcp/src/dispatcher.rs", "crate
 verify_cmd = "cargo test -p hm-mcp --test development_runtime"
 acceptance = "Existing context operations consume trusted configured development workers and current native historian publications. Source, permission and generation fences protect active cached bytes, restart and the next compatible reduction."
 
-result = "Compile and actual production dispatcher with real provider journey passed. Native summary publication preserves deferred provider bytes and generation until the next compatible fold; restart and stale-policy omission passed. Unsupported worker families remain absent. Socket framing and aggregate hosted journeys remain separate."
+result = "Native dispatcher compile and real provider journeys passed for historian publication and compatible context folding, classification, source-mapped verification, stale repository refusal and restart. Trusted runtime configuration constructs actual adapters. Profile, primer and retrospective adapters await live integration qualification; unsupported families remain absent."
 
 [task.3.54]
 title = "Qualify restored child session bindings in Swift continuity"

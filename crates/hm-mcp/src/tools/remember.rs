@@ -426,6 +426,7 @@ pub struct DevelopmentRuntime {
     endpoint: String,
     model: String,
     timeout: std::time::Duration,
+    workers: Vec<hm_serve::development_workers::WorkerConfiguration>,
 }
 impl DevelopmentRuntime {
     pub fn from_env() -> Result<Option<Self>, Error> {
@@ -441,7 +442,29 @@ impl DevelopmentRuntime {
                     .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
                 let model = std::env::var("HM_DEVELOPMENT_MODEL")
                     .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
-                Self::ollama(endpoint, model, std::time::Duration::from_secs(60)).map(Some)
+                let mut runtime =
+                    Self::ollama(endpoint, model, std::time::Duration::from_secs(60))?;
+                if let Some(config) = std::env::var_os("HM_DEVELOPMENT_WORKERS") {
+                    runtime.workers = serde_json::from_str(
+                        config
+                            .to_str()
+                            .ok_or_else(|| Error::new(ErrorCode::InvalidArgument))?,
+                    )
+                    .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+                    let mut ids = std::collections::BTreeSet::new();
+                    if runtime.workers.len() > 16 {
+                        return Err(Error::new(ErrorCode::CapacityExceeded));
+                    }
+                    for worker in &runtime.workers {
+                        worker
+                            .validate()
+                            .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+                        if !ids.insert(&worker.id) {
+                            return Err(Error::new(ErrorCode::InvalidArgument));
+                        }
+                    }
+                }
+                Ok(Some(runtime))
             }
             _ => Err(Error::new(ErrorCode::InvalidArgument)),
         }
@@ -467,7 +490,27 @@ impl DevelopmentRuntime {
             endpoint,
             model,
             timeout,
+            workers: Vec::new(),
         })
+    }
+    pub fn with_workers(
+        mut self,
+        workers: Vec<hm_serve::development_workers::WorkerConfiguration>,
+    ) -> Result<Self, Error> {
+        if workers.len() > 16 {
+            return Err(Error::new(ErrorCode::CapacityExceeded));
+        }
+        let mut ids = std::collections::BTreeSet::new();
+        for worker in &workers {
+            worker
+                .validate()
+                .map_err(|_| Error::new(ErrorCode::InvalidArgument))?;
+            if !ids.insert(&worker.id) {
+                return Err(Error::new(ErrorCode::InvalidArgument));
+            }
+        }
+        self.workers = workers;
+        Ok(self)
     }
     pub fn service(
         &self,
@@ -475,7 +518,7 @@ impl DevelopmentRuntime {
         scope: hm_context::Scope,
     ) -> Result<hm_serve::development_service::DevelopmentService, Error> {
         use hm_context::development::DevelopmentKind;
-        let workers: Vec<(
+        let mut workers: Vec<(
             String,
             Arc<dyn hm_serve::development_scheduler::DevelopmentWorker>,
         )> = [
@@ -494,6 +537,16 @@ impl DevelopmentRuntime {
             )
         })
         .collect();
+        workers.extend(
+            hm_serve::development_workers::configured_workers(
+                actor,
+                &self.workers,
+                &self.endpoint,
+                &self.model,
+                self.timeout,
+            )
+            .map_err(hm_serve::session_context::memory_error)?,
+        );
         hm_serve::development_service::DevelopmentService::new(scope, workers)
             .map_err(hm_serve::session_context::memory_error)
     }
@@ -503,7 +556,32 @@ impl DevelopmentRuntime {
                 serde_json::json!({"provider":"off","registered_families":[],"readiness":"disabled","unavailable_families":["historian","extraction","indexing","verification","curation","retrospective","primer","conditional_note","profile_proposal","documentation_proposal"]})
             }
             Some(runtime) => {
-                serde_json::json!({"provider":"ollama","model":runtime.model,"readiness":"configured","registered_families":["historian","extraction"],"unavailable_families":["indexing","verification","curation","retrospective","primer","conditional_note","profile_proposal","documentation_proposal"],"historian_summary_slot":"first authorized new record ID in lexical order"})
+                let mut registered = std::collections::BTreeSet::from([
+                    "historian".to_owned(),
+                    "extraction".to_owned(),
+                ]);
+                for worker in &runtime.workers {
+                    if let Some(kind) = serde_json::to_value(worker.operation.kind())
+                        .ok()
+                        .and_then(|v| v.as_str().map(str::to_owned))
+                    {
+                        registered.insert(kind);
+                    }
+                }
+                let unavailable: Vec<_> = [
+                    "indexing",
+                    "verification",
+                    "curation",
+                    "retrospective",
+                    "primer",
+                    "conditional_note",
+                    "profile_proposal",
+                    "documentation_proposal",
+                ]
+                .into_iter()
+                .filter(|kind| !registered.contains(*kind))
+                .collect();
+                serde_json::json!({"provider":"ollama","model":runtime.model,"readiness":"configured","registered_families":std::iter::once("historian".to_owned()).chain(std::iter::once("extraction".to_owned())).chain(registered.into_iter().filter(|kind|kind!="historian"&&kind!="extraction")).collect::<Vec<_>>(),"unavailable_families":unavailable,"historian_summary_slot":"first authorized new record ID in lexical order"})
             }
         }
     }
@@ -522,8 +600,31 @@ impl hm_serve::development_scheduler::DevelopmentWorker for RuntimeDevelopmentWo
     }
     fn run(
         &self,
+        _evidence: hm_context::development::EvidenceSnapshot,
+        _plan_id: String,
+    ) -> std::pin::Pin<
+        Box<
+            dyn std::future::Future<
+                    Output = Result<
+                        hm_context::development::DevelopmentPlan,
+                        hm_serve::development_scheduler::WorkerFailure,
+                    >,
+                > + Send
+                + '_,
+        >,
+    > {
+        Box::pin(async {
+            Err(hm_serve::development_scheduler::WorkerFailure {
+                error: "original scheduler dispatch binding required".into(),
+                usage: hm_context::maintenance::Usage::Known(0),
+            })
+        })
+    }
+    fn run_observed(
+        &self,
         evidence: hm_context::development::EvidenceSnapshot,
         plan_id: String,
+        context: hm_serve::development_scheduler::DispatchContext,
     ) -> std::pin::Pin<
         Box<
             dyn std::future::Future<
@@ -631,9 +732,10 @@ impl hm_serve::development_scheduler::DevelopmentWorker for RuntimeDevelopmentWo
                     slots,
                     chunk,
                 )?;
-                hm_serve::development_historian::HistorianWorker::new(
+                hm_serve::development_usage::ObservedHistorianWorker::new(
                     provider,
                     self.runtime.timeout,
+                    "ollama".into(),
                 )
                 .map_err(hm_serve::context_memory::MemoryError::Context)
             }
@@ -643,14 +745,10 @@ impl hm_serve::development_scheduler::DevelopmentWorker for RuntimeDevelopmentWo
                     error: error.to_string(),
                     usage: Usage::Known(0),
                 })?;
-            worker
-                .generate(evidence, plan_id)
-                .await
-                .map(|execution| execution.plan)
-                .map_err(|failure| hm_serve::development_scheduler::WorkerFailure {
-                    error: failure.error,
-                    usage: failure.usage,
-                })
+            hm_serve::development_scheduler::DevelopmentWorker::run_observed(
+                &worker, evidence, plan_id, context,
+            )
+            .await
         })
     }
 }
