@@ -915,12 +915,14 @@ acceptance = "Signed immutable metadata and artifact digests govern reviewed sta
 title = "Durable role state and process restart"
 wave = 3
 owner_lane = "roles"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 coverage = ["req.coverage.roles", "req.coverage.role_conformance"]
 touches = ["crates/hm-fabric/src/role_store.rs", "crates/hm-fabric/src/role_dispatch.rs", "crates/hm-fabric/tests/role_restart.rs"]
 verify_cmd = "cargo test -p hm-fabric --test role_restart"
 acceptance = "Real role processes persist negotiated capabilities, approvals, held work, source fences and terminal outcomes. Restart cannot dispatch unapproved work or replay uncertain effects; late results require acknowledgement."
+
+result = "Durable role compile and four actual restart behaviors passed: fresh source ledger, authenticated handoffs, process kill, uncertain work recovery, late acknowledgement, digest dispatch and local transform and compaction fences. Arbitrary tool and live provider conformance remain separate."
 
 [task.3.22]
 title = "Destination policy and dispatch secret boundaries"
