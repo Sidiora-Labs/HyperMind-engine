@@ -204,8 +204,8 @@ pub struct HttpTransport {
     client: reqwest::blocking::Client,
 }
 
-impl WireTransport for HttpTransport {
-    fn send(&self, request: &WireRequest) -> Result<WireResponse, LlmError> {
+impl HttpTransport {
+    pub fn send_observed(&self,request:&WireRequest)->Result<(WireResponse,Vec<u8>),LlmError>{
         let method = reqwest::Method::from_bytes(request.method.as_bytes())
             .map_err(|error| LlmError::Network(error.to_string()))?;
         let mut call = self
@@ -219,12 +219,14 @@ impl WireTransport for HttpTransport {
             .send()
             .map_err(|error| LlmError::Network(error.to_string()))?;
         let status = response.status().as_u16();
-        let body = response
-            .text()
-            .map_err(|error| LlmError::Network(error.to_string()))?;
-        let body = decode_wire_response(&body)?;
-        Ok(WireResponse { status, body })
+        let original_bytes = response.bytes().map_err(|error|LlmError::Network(error.to_string()))?.to_vec();
+        let text=std::str::from_utf8(&original_bytes).map_err(|error|LlmError::Wire(error.to_string()))?;
+        let body = decode_wire_response(text)?;
+        Ok((WireResponse{status,body},original_bytes))
     }
+}
+impl WireTransport for HttpTransport {
+    fn send(&self,request:&WireRequest)->Result<WireResponse,LlmError>{self.send_observed(request).map(|(response,_)|response)}
 }
 
 fn decode_wire_response(body: &str) -> Result<Value, LlmError> {
@@ -284,7 +286,5 @@ mod wire_tests {
         assert!(decode_wire_response("data: {\"ok\":true}\n\ndata: [DONE]").is_err());
     }
 }
-
 pub mod catalog;
-
 pub mod provider_usage;

@@ -622,6 +622,84 @@ pub async fn rollup(
         }
         rollup.attributions.push(reservation.attribution.clone());
     }
+    let scheduler = crate::development_scheduler::inspect(actor, scope).await?;
+    let original_attempts =
+        crate::development_usage::dispatched_attempts(actor, scope, owner).await?;
+    let original_observations = crate::development_usage::inspect(actor, scope, owner).await?;
+    let settlements =
+        crate::development_scheduler::observed_settlements(actor, scope, owner).await?;
+    for binding in original_attempts {
+        let Some(job) = scheduler.jobs.get(&binding.job_id) else {
+            continue;
+        };
+        let started_ms = binding
+            .maintenance_lease
+            .expires_ms
+            .saturating_sub(scheduler.schedules[&job.schedule_id].timeout_ms);
+        if query
+            .session_id
+            .as_ref()
+            .is_some_and(|v| v != &binding.session_id)
+            || query
+                .turn_id
+                .as_ref()
+                .is_some_and(|v| v != &binding.plan_id)
+            || query.job_id.as_ref().is_some_and(|v| v != &binding.job_id)
+            || query
+                .provider_id
+                .as_ref()
+                .is_some_and(|v| v != &binding.provider_id)
+            || query.start_ms.is_some_and(|v| started_ms < v)
+            || query.end_ms.is_some_and(|v| started_ms >= v)
+        {
+            continue;
+        }
+        let observation = original_observations
+            .iter()
+            .find(|observation| observation.binding == binding);
+        if let Some(settlement) = settlements.iter().find(|settlement| {
+            settlement.job_id == binding.job_id && settlement.attempt == binding.attempt
+        }) {
+            rollup.known_tokens = rollup
+                .known_tokens
+                .checked_add(settlement.actual_tokens)
+                .ok_or(ContextError::Capacity)?;
+        } else {
+            let key = format!("{}:{}", binding.maintenance_lease.job_id, binding.attempt);
+            if let Some(held) = scheduler.accounting.unknown_usage.get(&key) {
+                rollup.held_tokens = rollup
+                    .held_tokens
+                    .checked_add(*held)
+                    .ok_or(ContextError::Capacity)?;
+                rollup.unknown_reservations += 1;
+            } else if scheduler.accounting.jobs[&binding.maintenance_lease.job_id].status
+                == JobStatus::Running(binding.maintenance_lease.clone())
+            {
+                rollup.held_tokens = rollup
+                    .held_tokens
+                    .checked_add(
+                        scheduler.accounting.jobs[&binding.maintenance_lease.job_id]
+                            .request
+                            .reservation,
+                    )
+                    .ok_or(ContextError::Capacity)?;
+                rollup.active_reservations += 1;
+            }
+        }
+        if let Some(observation) = observation {
+            rollup.observed_calls += 1;
+            rollup.observations.push(observation.id.clone());
+        }
+        rollup.attributions.push(UsageAttribution {
+            job_id: binding.job_id,
+            worker_id: binding.worker_id,
+            session_id: binding.session_id,
+            turn_id: binding.plan_id,
+            provider_id: binding.provider_id,
+            model_id: binding.model_id,
+            source_ids: binding.source_digests.keys().cloned().collect(),
+        });
+    }
     Ok(rollup)
 }
 

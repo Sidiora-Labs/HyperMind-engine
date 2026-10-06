@@ -32,10 +32,33 @@ pub struct WorkerFailure {
     pub error: String,
     pub usage: Usage,
 }
+#[derive(Clone)]
+pub struct DispatchContext {
+    pub actor: ActorEngine,
+    pub scope: Scope,
+    pub lease: DispatchLease,
+    pub maintenance_lease: hm_context::maintenance::JobLease,
+    pub worker_id: String,
+}
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct ObservedSettlement {
+    pub observation_id: String,
+    pub job_id: String,
+    pub attempt: u64,
+    pub actual_tokens: u64,
+}
 pub trait DevelopmentWorker: Send + Sync {
     fn kind(&self) -> DevelopmentKind;
     fn provider_policy(&self) -> Option<&str> {
         None
+    }
+    fn run_observed(
+        &self,
+        evidence: EvidenceSnapshot,
+        plan_id: String,
+        _context: DispatchContext,
+    ) -> Pin<Box<dyn Future<Output = Result<DevelopmentPlan, WorkerFailure>> + Send + '_>> {
+        self.run(evidence, plan_id)
     }
     fn run(
         &self,
@@ -107,6 +130,8 @@ struct LedgerState {
     state: DevelopmentSchedules,
     pending: BTreeMap<String, PendingPublication>,
     receipts: BTreeMap<String, SavedReceipt>,
+    #[serde(default)]
+    observed_settlements: BTreeMap<String, ObservedSettlement>,
 }
 fn error(message: &str) -> MemoryError {
     ContextError::Invalid(message.into()).into()
@@ -134,6 +159,7 @@ async fn load(actor: &ActorEngine, scope: &Scope) -> Result<LedgerState, MemoryE
         state: DevelopmentSchedules::new(scope.clone(), 1_000_000, 2)?,
         pending: BTreeMap::new(),
         receipts: BTreeMap::new(),
+        observed_settlements: BTreeMap::new(),
     };
     for frame in actor.frames_since(LSN::new(0), None, usize::MAX).await? {
         if frame.header.kind != hm_ledger::frame::EventKind::ProviderFrame {
@@ -318,12 +344,41 @@ async fn terminal_locked(
     saved
         .pending
         .retain(|_, publication| publication.lease.job_id != lease.job_id);
+    let observation =
+        crate::development_usage::for_attempt(actor, scope, &lease.job_id, lease.attempt).await?;
+    let result = if let Some(observation) = &observation {
+        validate_binding_state(&saved, &observation.binding, false)?;
+        let usage = crate::development_usage::actual_tokens(observation)
+            .map_or(Usage::Unknown, Usage::Known);
+        match result {
+            Ok((_, receipt)) => Ok((usage, receipt)),
+            Err(mut failure) => {
+                failure.usage = usage;
+                Err(failure)
+            }
+        }
+    } else {
+        result
+    };
     match result {
         Ok((usage, receipt)) => saved.state.finish(lease, usage, receipt, time)?,
         Err(failure) => saved
             .state
             .fail(lease, failure.usage, failure.error, time)?,
     };
+    if let Some(observation) = observation {
+        if let Some(actual_tokens) = crate::development_usage::actual_tokens(&observation) {
+            saved.observed_settlements.insert(
+                DevelopmentSchedules::charge_key(lease),
+                ObservedSettlement {
+                    observation_id: observation.id,
+                    job_id: lease.job_id.clone(),
+                    attempt: lease.attempt,
+                    actual_tokens,
+                },
+            );
+        }
+    }
     append(actor, tail, &mut saved).await?;
     Ok(saved.state)
 }
@@ -413,7 +468,24 @@ pub async fn dispatch(
     let plan_id = format!("development-{}-{}", lease.job_id, lease.attempt);
     let result = tokio::time::timeout(
         std::time::Duration::from_millis(schedule.timeout_ms),
-        worker.run(evidence.clone(), plan_id.clone()),
+        worker.run_observed(
+            evidence.clone(),
+            plan_id.clone(),
+            DispatchContext {
+                actor: actor.clone(),
+                scope: scope.clone(),
+                lease: lease.clone(),
+                maintenance_lease: {
+                    let active = inspect(actor, scope).await?;
+                    let job = &active.jobs[&lease.job_id];
+                    match &active.accounting.jobs[&job.accounting_id].status {
+                        hm_context::maintenance::JobStatus::Running(lease) => lease.clone(),
+                        _ => return Err(ContextError::Stale.into()),
+                    }
+                },
+                worker_id: schedule.worker_id.clone(),
+            },
+        ),
     )
     .await;
     let plan = match result {
@@ -558,4 +630,104 @@ pub async fn tick(
         );
     }
     Ok(jobs)
+}
+
+fn validate_binding_state(
+    saved: &LedgerState,
+    binding: &crate::development_usage::OriginalCallBinding,
+    require_running: bool,
+) -> Result<(), MemoryError> {
+    if saved.state.scope != binding.scope {
+        return Err(ContextError::ScopeMismatch.into());
+    }
+    let job = saved
+        .state
+        .jobs
+        .get(&binding.job_id)
+        .ok_or(ContextError::Stale)?;
+    let schedule = &saved.state.schedules[&job.schedule_id];
+    let accounting = saved
+        .state
+        .accounting
+        .jobs
+        .get(&job.accounting_id)
+        .ok_or(ContextError::Stale)?;
+    if job.accounting_id != binding.maintenance_lease.job_id
+        || binding.attempt != binding.maintenance_lease.attempt
+        || job.attempt < binding.attempt
+        || accounting.fence != binding.maintenance_lease.fence
+        || schedule.worker_id != binding.worker_id
+        || binding.plan_id != format!("development-{}-{}", binding.job_id, binding.attempt)
+    {
+        return Err(ContextError::ScopeMismatch.into());
+    }
+    if require_running {
+        let hm_context::maintenance::JobStatus::Running(lease) = &accounting.status else {
+            return Err(ContextError::Stale.into());
+        };
+        if lease != &binding.maintenance_lease
+            || job.attempt != binding.attempt
+            || !matches!(job.status, DispatchStatus::Running { .. })
+            || lease.expires_ms <= now()?
+        {
+            return Err(ContextError::Stale.into());
+        }
+    }
+    Ok(())
+}
+pub(crate) async fn validate_original_binding(
+    actor: &ActorEngine,
+    binding: &crate::development_usage::OriginalCallBinding,
+    require_running: bool,
+) -> Result<(), MemoryError> {
+    let saved = load(actor, &binding.scope).await?;
+    validate_binding_state(&saved, binding, require_running)
+}
+pub(crate) async fn reconcile_original_observation(
+    actor: &ActorEngine,
+    scope: &Scope,
+    observation: &crate::development_usage::OriginalUsageObservation,
+) -> Result<(), MemoryError> {
+    let _scheduler_guard = SCHEDULER_MUTATIONS.lock().await;
+    let _guard = crate::context_jobs::CONTEXT_MUTATIONS.lock().await;
+    let tail = actor.stats().await?.applied.last_lsn;
+    let mut saved = load(actor, scope).await?;
+    validate_binding_state(&saved, &observation.binding, false)?;
+    let actual_tokens = crate::development_usage::actual_tokens(observation)
+        .ok_or_else(|| error("original counters remain unknown"))?;
+    let key = format!(
+        "{}:{}",
+        observation.binding.job_id, observation.binding.attempt
+    );
+    if let Some(receipt) = saved.observed_settlements.get(&key) {
+        if receipt.observation_id != observation.id || receipt.actual_tokens != actual_tokens {
+            return Err(ContextError::Conflict.into());
+        }
+        return Ok(());
+    }
+    saved.state.settle_unknown(&key, actual_tokens)?;
+    saved.observed_settlements.insert(
+        key,
+        ObservedSettlement {
+            observation_id: observation.id.clone(),
+            job_id: observation.binding.job_id.clone(),
+            attempt: observation.binding.attempt,
+            actual_tokens,
+        },
+    );
+    append(actor, tail, &mut saved).await
+}
+pub async fn observed_settlements(
+    actor: &ActorEngine,
+    scope: &Scope,
+    owner: &Scope,
+) -> Result<Vec<ObservedSettlement>, MemoryError> {
+    if scope != owner {
+        return Err(ContextError::ScopeMismatch.into());
+    }
+    Ok(load(actor, scope)
+        .await?
+        .observed_settlements
+        .into_values()
+        .collect())
 }

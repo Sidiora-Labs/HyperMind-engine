@@ -1244,7 +1244,7 @@ touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_
 verify_cmd = "cargo test -p hm-serve --test usage_service"
 acceptance = "Native host cost and usage remain canonical. Background calls reserve cost and concurrency before dispatch, settle real observations once, retain unknown charges through restart and expose exact attributed rollups."
 
-result = "Native usage service compile and two focused tests passed, including real provider response bytes, exact observed counters, durable unknown reservations and idempotent reconciliation. The original development worker response must still settle its existing scheduler reservation without a second call or duplicate charge."
+result = "The original historian or extraction response now binds to its existing scheduler job and attempt. The real provider cancellation and restart test passed: unknown hold survived, the original persisted observation settled once, and no second request or parallel charge occurred. Generic worker proof capture, publication-crash rollup diagnostics and SDK precision remain incomplete."
 
 [task.3.46]
 title = "Native operational and continuity services"
