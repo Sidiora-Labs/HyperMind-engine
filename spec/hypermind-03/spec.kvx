@@ -770,12 +770,14 @@ acceptance = "A durable complete verification cycle enumerates authorized record
 title = "Grounded curation and sharing classification"
 wave = 3
 owner_lane = "retrieval"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 coverage = ["req.deep.curation", "req.deep.classification_and_sharing"]
 touches = ["crates/hm-cortex/src/development_curation.rs", "crates/hm-serve/src/development_curation.rs", "crates/hm-serve/tests/development_curation.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_curation"
 acceptance = "Grounded curation and classification produce revision-checked native plans; merges preserve all original anchors and contradictions, pinned records cannot be archived, and content changes revoke prior sharing eligibility."
+
+result = "Compile and actual provider reword, classification, merge and restart journey passed after canonical lineage repair. Atomic publication preserves protected parents and original provenance, invalidates stale sharing and refuses stale plans. Frozen projection identity is diagnostic; active-turn boundary integration remains separate."
 
 [task.3.9]
 title = "Correction-driven retrospective lessons"
@@ -1258,11 +1260,13 @@ result = "Registered library compile, six actual native admission tests and the 
 title = "Preserve canonical lineage in atomic memory curation"
 wave = 3
 owner_lane = "memory"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5"]
 touches = ["crates/hm-cortex/src/development_curation.rs", "crates/hm-serve/tests/development_curation.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_curation actual_curation_classification_conflict_and_restart -- --ignored"
 acceptance = "Real provider merges use the native lineage relation and preserve exact parent provenance, protected records and restart recovery."
+
+result = "Canonical merged_from lineage and both exact parent provenance assertions passed the actual provider curation and restart gate without admission weakening."
 
 [task.3.51]
 title = "Constrain historian quotations to observed original source bytes"
