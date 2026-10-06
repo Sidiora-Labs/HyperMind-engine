@@ -910,12 +910,14 @@ result = "Authenticated native adapter compile and real two-process peer gate pa
 title = "Signed artifact installation and ownership receipts"
 wave = 3
 owner_lane = "routing"
-status = "in_progress"
+status = "done"
 requires = ["task.2.4"]
 coverage = ["req.coverage.registry"]
 touches = ["crates/hm-fabric/src/artifacts.rs", "crates/hm-fabric/src/registry_install.rs", "crates/hm-fabric/tests/registry_install.rs"]
 verify_cmd = "cargo test -p hm-fabric --test registry_install"
 acceptance = "Signed immutable metadata and artifact digests govern reviewed staged installation, replacement and removal. Interrupted activation preserves a healthy incumbent; rollback and deletion use exact ownership receipts."
+
+result = "Signed artifact compile and three focused lifecycle tests passed: real contained install and update, failed warmup incumbent preservation, rollback, exact ownership drift refusal and retain, export and all-owned-release purge. Platform service and runtime integration remain separate."
 
 [task.3.21]
 title = "Durable role state and process restart"

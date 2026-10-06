@@ -29,3 +29,7 @@ pub mod bus_contract;
 pub mod bus_memory;
 
 pub mod containment;
+
+pub mod artifacts;
+
+pub mod registry_install;
