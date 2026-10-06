@@ -681,11 +681,13 @@ qualification = "Verified pinned BGE-small with real ONNX inference passed the n
 title = "Scoped native memory portability consumers"
 wave = 2
 owner_lane = "surface"
-status = "in_progress"
+status = "done"
 requires = ["task.2.11"]
 touches = ["crates/hm-mcp/src/tools/session_context.rs", "crates/hm-serve/src/session_context.rs", "crates/hm-mcp/tests/session_context.rs", "sdk"]
 verify_cmd = "cargo test -p hm-mcp --test session_context"
 acceptance = "Scoped inspection exports canonical authoritative memory JSON Lines with verified manifest digest and byte count; the same native mutation path restores valid exports, rejects foreign or forged authority, and preserves revisions across reopen. Client consumers expose the actual transport contract."
+
+qualification = "Native admission and scoped tool gates passed exact-byte JSON Lines export and restore, including arbitrary numeric metadata, revisions, source provenance, restart and no-effects refusal. Python, TypeScript, Go and Swift real consumer journeys passed. Exports may exceed the advertised 512 KiB raw restore limit; larger streaming restore remains outstanding."
 
 [task.2.14]
 title = "Validated Hypermid source history migration"

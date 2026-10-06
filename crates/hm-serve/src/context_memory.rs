@@ -252,6 +252,10 @@ pub enum MemoryCommand {
     RestoreExport {
         export: MemoryExport,
     },
+    RestoreJsonl {
+        jsonl: Vec<u8>,
+        artifact_digest: String,
+    },
     CommitImport {
         import_id: String,
         bundle_digest: String,
@@ -545,6 +549,13 @@ impl MemoryProjection {
     }
     fn apply(&mut self, c: &MemoryCommand, lsn: u64) -> Result<(), MemoryError> {
         match c {
+            MemoryCommand::RestoreJsonl {
+                jsonl,
+                artifact_digest,
+            } => {
+                let export = verified_jsonl(jsonl, artifact_digest)?;
+                self.apply(&MemoryCommand::RestoreExport { export }, lsn)?;
+            }
             MemoryCommand::RestoreExport { export } => {
                 let mut check = export.clone();
                 let digest = check.digest.clone();
@@ -1270,6 +1281,13 @@ fn validate_external_authority(command: &MemoryCommand, depth: usize) -> Result<
             )
             .into())
         }
+        MemoryCommand::RestoreJsonl {
+            jsonl,
+            artifact_digest,
+        } => {
+            let export = verified_jsonl(jsonl, artifact_digest)?;
+            validate_external_authority(&MemoryCommand::RestoreExport { export }, depth + 1)
+        }
         MemoryCommand::RestoreExport { export } => {
             for value in &export.events {
                 let event: MemoryEvent = serde_json::from_value(value.clone())?;
@@ -1279,4 +1297,14 @@ fn validate_external_authority(command: &MemoryCommand, depth: usize) -> Result<
         }
         _ => Ok(()),
     }
+}
+
+fn verified_jsonl(bytes: &[u8], artifact_digest: &str) -> Result<MemoryExport, MemoryError> {
+    if bytes.is_empty() || bytes.len() > 512 * 1024 {
+        return Err(ContextError::Capacity.into());
+    }
+    if artifact_digest != digest_bytes(bytes) {
+        return Err(ContextError::Invalid("memory artifact digest mismatch".into()).into());
+    }
+    MemoryExport::from_jsonl(bytes)
 }

@@ -86,8 +86,15 @@ bind the immutable typed source, while expansion returns the exact original
 host bytes. Relations, forks, import bundles and receipts, historian and
 maintenance jobs, notes and memory calls all reach the actual C ABI.
 `ContextClientError` describes client validation, response identity and cursor
-failures; `HyperMindError` retains boundary and kernel refusals. Cancellation
+failures; `ContextOperationError` retains producer codes, operation and effect
+state, while `HyperMindError` retains boundary and kernel refusals. Cancellation
 retains the engine's cooperative call-boundary behavior.
+
+`exportNativeMemory()` returns a digest-verified native JSONL artifact as raw
+bytes. `restoreNativeMemory(_:requestID:)` sends those bytes unchanged, preserving
+numeric metadata. Restoration checks the artifact scope and the engine's
+`restore_max_bytes` limit before dispatch. Read-only exports may exceed that
+limit; streaming restoration is unavailable.
 
 ## Platform qualification
 
@@ -95,8 +102,11 @@ The package requires Swift 5.9 or newer and a matching native HyperMind library.
 The source-contract gate `crates/hm-capi/tests/swift_binding.rs` checks C symbols
 and the fourteen-verb inventory. Actual compilation and runtime tests require
 a Swift toolchain and the native library; this textual gate does not establish
-runtime qualification. Linux compilation is available with Swift 6.2.4.
-Apple runtime and SDK qualification require separate runs on those platforms.
+runtime qualification. The focused context tests have compiled and run against
+the actual C ABI on Linux with Swift 6.2.4, including source recovery after
+restart. The runtime must provide a glibc version compatible with the native
+library; a library built against glibc 2.43 requires matching runtime support.
+Apple runtime and SDK qualification remain unqualified.
 
 Build the native library and run the focused context suite with its library
 directory on the linker and runtime search paths:

@@ -746,6 +746,30 @@ async fn memory_materialization(
     );
     Ok((blocks, views, fence))
 }
+pub async fn export_memory(actor: &ActorEngine, scope: &Scope) -> Result<Value, Error> {
+    let _guard = crate::context_jobs::CONTEXT_MUTATIONS.lock().await;
+    let tail = actor.stats().await?.applied.last_lsn;
+    let export = crate::context_memory::export(actor, scope, scope)
+        .await
+        .map_err(memory_error)?;
+    let bytes = export.to_jsonl().map_err(memory_error)?;
+    if bytes.len() > 64 * 1024 * 1024 {
+        return Err(Error::new(ErrorCode::CapacityExceeded));
+    }
+    crate::context_projection::validate_tail(actor, tail).await?;
+    Ok(json!({
+        "version": 1,
+        "scope": export.scope,
+        "cursor": export.cursor,
+        "media_type": "application/x-ndjson",
+        "restore_max_bytes": 512 * 1024,
+        "byte_count": bytes.len(),
+        "artifact_digest": hm_context::digest_bytes(&bytes),
+        "export_digest": export.digest,
+        "bytes": bytes,
+    }))
+}
+
 pub async fn inspect_memory(
     actor: &ActorEngine,
     principal: &Scope,

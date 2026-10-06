@@ -12,7 +12,7 @@ public struct ContextOperationError: Error, Equatable, Sendable, CustomStringCon
     public var description: String {
         "ContextOperationError(verb: \(verb), operation: \(operation ?? "none"), code: \(code ?? "unknown"), message: \(message ?? "unavailable"), effectState: \(effectState))"
     }
-    fileprivate init(verb: String, arguments: ContextJSON, envelope: ContextJSON) {
+    init(verb: String, arguments: ContextJSON, envelope: ContextJSON) {
         func symbol(_ value: String?) -> String? {
             guard let value, !value.isEmpty, value.utf8.count <= 128,
                   value.utf8.allSatisfy({ (65...90).contains($0) || (97...122).contains($0) || (48...57).contains($0) || $0 == 95 }) else { return nil }

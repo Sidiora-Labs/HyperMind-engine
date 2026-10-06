@@ -475,3 +475,137 @@ async fn migration_stages_all_rows_then_publishes_native_revisions_idempotently(
     );
     actor.shutdown().await.unwrap();
 }
+
+#[tokio::test]
+async fn raw_jsonl_restore_preserves_exact_numeric_metadata_and_refuses_privileged_artifacts() {
+    let dir = tempfile::tempdir().unwrap();
+    let actor = ActorEngine::open(config(&dir.path().join("original"), 7))
+        .await
+        .unwrap();
+    let mut record = MemoryRecord::new("numeric-record", RecordKind::Note, "numeric metadata", 100);
+    record.metadata=serde_json::from_str(r#"{"one":1.0,"large":18446744073709551615,"fraction":0.12345678901234568,"nested":{"scientific":1.2345678901234567e-20}}"#).unwrap();
+    command(&actor, "numeric-create", MemoryCommand::Create { record })
+        .await
+        .unwrap();
+    let expected = context_memory::rebuild(&actor, &scope())
+        .await
+        .unwrap()
+        .records["numeric-record"]
+        .clone();
+    let export = context_memory::export(&actor, &scope(), &scope())
+        .await
+        .unwrap();
+    let jsonl = export.to_jsonl().unwrap();
+    let artifact_digest = digest_bytes(&jsonl);
+    let restored = ActorEngine::open(config(&dir.path().join("restored"), 8))
+        .await
+        .unwrap();
+    let restore = MemoryCommand::RestoreJsonl {
+        jsonl: jsonl.clone(),
+        artifact_digest: artifact_digest.clone(),
+    };
+    command(&restored, "restore-raw", restore.clone())
+        .await
+        .unwrap();
+    let actual = context_memory::rebuild(&restored, &scope())
+        .await
+        .unwrap()
+        .records["numeric-record"]
+        .clone();
+    assert_eq!(
+        serde_json::to_vec(&actual.metadata).unwrap(),
+        serde_json::to_vec(&expected.metadata).unwrap()
+    );
+    assert_eq!(actual.metadata["large"].as_u64(), Some(u64::MAX));
+    assert!(
+        serde_json::to_string(&actual.metadata)
+            .unwrap()
+            .contains("\"one\":1.0")
+    );
+    assert_eq!(actual.revision_digest, expected.revision_digest);
+    assert!(
+        command(&restored, "restore-raw", restore)
+            .await
+            .unwrap()
+            .replayed
+    );
+    let count = restored.stats().await.unwrap().log_events;
+    let mut corrupt = jsonl.clone();
+    corrupt[0] = b'x';
+    assert!(
+        command(
+            &restored,
+            "bad-sha",
+            MemoryCommand::RestoreJsonl {
+                jsonl: corrupt,
+                artifact_digest
+            }
+        )
+        .await
+        .is_err()
+    );
+    let mut foreign = export.clone();
+    foreign.scope.owner_id = "foreign".into();
+    foreign.digest.clear();
+    foreign.digest = digest_bytes(&serde_json::to_vec(&foreign).unwrap());
+    let bytes = foreign.to_jsonl().unwrap();
+    assert!(
+        command(
+            &restored,
+            "foreign",
+            MemoryCommand::RestoreJsonl {
+                artifact_digest: digest_bytes(&bytes),
+                jsonl: bytes
+            }
+        )
+        .await
+        .is_err()
+    );
+    let mut privileged = export;
+    for event in &mut privileged.events {
+        if event["command"]["kind"] == "create" {
+            let mut r: MemoryRecord =
+                serde_json::from_value(event["command"]["record"].clone()).unwrap();
+            r.authority = Authority::RuntimeFact;
+            r.revision_digest = r.computed_revision_digest().unwrap();
+            event["command"]["record"] = serde_json::to_value(r).unwrap();
+            let request = MemoryRequest {
+                version: 1,
+                scope: scope(),
+                request_id: event["request_id"].as_str().unwrap().into(),
+                command: serde_json::from_value(event["command"].clone()).unwrap(),
+            };
+            event["digest"] = json!(digest_bytes(&serde_json::to_vec(&request).unwrap()));
+        }
+    }
+    privileged.digest.clear();
+    privileged.digest = digest_bytes(&serde_json::to_vec(&privileged).unwrap());
+    let bytes = privileged.to_jsonl().unwrap();
+    assert!(
+        command(
+            &restored,
+            "privileged",
+            MemoryCommand::RestoreJsonl {
+                artifact_digest: digest_bytes(&bytes),
+                jsonl: bytes
+            }
+        )
+        .await
+        .is_err()
+    );
+    assert_eq!(count, restored.stats().await.unwrap().log_events);
+    restored.shutdown().await.unwrap();
+    let restored = ActorEngine::open(config(&dir.path().join("restored"), 8))
+        .await
+        .unwrap();
+    assert_eq!(
+        context_memory::rebuild(&restored, &scope())
+            .await
+            .unwrap()
+            .records["numeric-record"]
+            .metadata,
+        expected.metadata
+    );
+    actor.shutdown().await.unwrap();
+    restored.shutdown().await.unwrap();
+}

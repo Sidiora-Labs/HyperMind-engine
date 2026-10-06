@@ -473,3 +473,157 @@ async fn native_memory_and_registered_retrieval_affect_context_and_recovery() {
     assert!(state.ok, "{state:?}");
     assert!(state.items[0]["records"].as_array().unwrap().is_empty());
 }
+
+#[tokio::test]
+async fn native_memory_jsonl_export_reopens_restores_and_refuses_invalid_artifacts() {
+    use hm_serve::context_memory::{
+        MemoryExport, MemoryRecord, MemorySource, Provenance, RecordKind,
+    };
+    let directory = tempfile::tempdir().unwrap();
+    let actor = ActorEngine::open(config(directory.path())).await.unwrap();
+    let server = McpServer::new(actor.clone()).with_context_scope(scope());
+    let original = b"Portable original evidence\nwith exact bytes".to_vec();
+    let digest = hm_context::digest_bytes(&original);
+    let source = MemorySource {
+        id: "portable-source".into(),
+        digest: digest.clone(),
+        content: original.clone(),
+        locator: "local:portable-source".into(),
+        occurred_at_ns: None,
+        recorded_at_ns: 200,
+        tombstoned: false,
+    };
+    let admitted = context_operation(&server, "portable", json!({"operation":"memory","request":{"version":1,"scope":scope(),"request_id":"source","command":{"kind":"source","source":source}}})).await;
+    assert!(admitted.ok, "{admitted:?}");
+    let mut record = MemoryRecord::new(
+        "portable-note",
+        RecordKind::Note,
+        "Portable native note",
+        200,
+    );
+    record.metadata = serde_json::from_str(
+        r#"{"large_integer":18446744073709551615,"decimal":1.25,"nullable":null}"#,
+    )
+    .unwrap();
+    record.provenance.push(Provenance {
+        source_id: "portable-source".into(),
+        source_digest: digest.clone(),
+        span_start: 0,
+        span_end: original.len() as u64,
+        quoted_digest: digest,
+    });
+    let created = context_operation(&server, "portable", json!({"operation":"memory","request":{"version":1,"scope":scope(),"request_id":"create","command":{"kind":"create","record":record}}})).await;
+    assert!(created.ok, "{created:?}");
+    let context = activate_context(&server, "portable", "portable").await;
+    assert!(context.ok, "{context:?}");
+    let tail = actor.stats().await.unwrap().applied.last_lsn;
+    let exported = server
+        .inspect_envelope(InspectInput {
+            uri: Some("hm://1/context-memory-export".into()),
+            ..Default::default()
+        })
+        .await;
+    assert!(exported.ok, "{exported:?}");
+    assert_eq!(actor.stats().await.unwrap().applied.last_lsn, tail);
+    let metadata = &exported.items[0];
+    let bytes: Vec<u8> = serde_json::from_value(metadata["bytes"].clone()).unwrap();
+    let export = MemoryExport::from_jsonl(&bytes).unwrap();
+    assert_eq!(metadata["scope"], json!(scope()));
+    assert_eq!(metadata["media_type"], "application/x-ndjson");
+    assert_eq!(metadata["restore_max_bytes"], 512 * 1024);
+    assert_eq!(metadata["byte_count"], bytes.len());
+    assert_eq!(
+        metadata["artifact_digest"],
+        hm_context::digest_bytes(&bytes)
+    );
+    assert_eq!(metadata["export_digest"], export.digest);
+    assert_eq!(metadata["cursor"], export.cursor);
+    assert_eq!(export.events.len(), 2);
+    assert_eq!(export.events[0]["command"]["kind"], "source");
+    assert_eq!(export.events[1]["command"]["kind"], "create");
+    drop(server);
+    actor.shutdown().await.unwrap();
+    let actor = ActorEngine::open(config(directory.path())).await.unwrap();
+    let server = McpServer::new(actor.clone()).with_context_scope(scope());
+    let reopened = server
+        .inspect_envelope(InspectInput {
+            uri: Some("hm://1/context-memory-export".into()),
+            ..Default::default()
+        })
+        .await;
+    assert!(reopened.ok, "{reopened:?}");
+    assert_eq!(reopened.items[0], *metadata);
+    drop(server);
+    actor.shutdown().await.unwrap();
+
+    let target_directory = tempfile::tempdir().unwrap();
+    let target = ActorEngine::open(config(target_directory.path()))
+        .await
+        .unwrap();
+    let server = McpServer::new(target.clone()).with_context_scope(scope());
+    let restored = context_operation(&server, "portable", json!({"operation":"memory","request":{"version":1,"scope":scope(),"request_id":"restore","command":{"kind":"restore_jsonl","jsonl":bytes,"artifact_digest":hm_context::digest_bytes(&bytes)}}})).await;
+    assert!(restored.ok, "{restored:?}");
+    let recovered = server
+        .inspect_envelope(InspectInput {
+            uri: Some("hm://1/context-memory/portable-note/source/portable-source".into()),
+            ..Default::default()
+        })
+        .await;
+    assert!(recovered.ok, "{recovered:?}");
+    assert_eq!(recovered.items[0]["source"]["content"], json!(original));
+    let read = server
+        .inspect_envelope(InspectInput {
+            uri: Some("hm://1/context-memory/portable-note".into()),
+            ..Default::default()
+        })
+        .await;
+    assert!(read.ok, "{read:?}");
+    assert_eq!(read.items[0]["record"]["content"], record.content);
+    assert_eq!(
+        read.items[0]["record"]["authority"],
+        json!(record.authority)
+    );
+    assert_eq!(
+        read.items[0]["record"]["provenance"],
+        json!(record.provenance)
+    );
+    let tail = target.stats().await.unwrap().applied.last_lsn;
+    let mut corrupt = bytes.clone();
+    corrupt[0] ^= 1;
+    let refused = context_operation(&server, "portable", json!({"operation":"memory","request":{"version":1,"scope":scope(),"request_id":"corrupt","command":{"kind":"restore_jsonl","jsonl":corrupt,"artifact_digest":hm_context::digest_bytes(&bytes)}}})).await;
+    assert!(!refused.ok);
+    let mut foreign = export.clone();
+    foreign.scope.project_id = "foreign".into();
+    foreign.digest.clear();
+    foreign.digest = hm_context::digest_bytes(&serde_json::to_vec(&foreign).unwrap());
+    foreign.validate().unwrap();
+    let foreign_bytes = foreign.to_jsonl().unwrap();
+    let refused = context_operation(&server, "portable", json!({"operation":"memory","request":{"version":1,"scope":scope(),"request_id":"foreign","command":{"kind":"restore_jsonl","jsonl":foreign_bytes,"artifact_digest":hm_context::digest_bytes(&foreign_bytes)}}})).await;
+    assert!(!refused.ok);
+    assert_eq!(target.stats().await.unwrap().applied.last_lsn, tail);
+    let disabled = McpServer::new(target.clone());
+    let refused = disabled
+        .inspect_envelope(InspectInput {
+            uri: Some("hm://1/context-memory-export".into()),
+            ..Default::default()
+        })
+        .await;
+    assert!(!refused.ok);
+    drop(disabled);
+    drop(server);
+    target.shutdown().await.unwrap();
+    let target = ActorEngine::open(config(target_directory.path()))
+        .await
+        .unwrap();
+    let server = McpServer::new(target.clone()).with_context_scope(scope());
+    let recovered = server
+        .inspect_envelope(InspectInput {
+            uri: Some("hm://1/context-memory/portable-note/source/portable-source".into()),
+            ..Default::default()
+        })
+        .await;
+    assert!(recovered.ok, "{recovered:?}");
+    assert_eq!(recovered.items[0]["source"]["content"], json!(original));
+    drop(server);
+    target.shutdown().await.unwrap();
+}

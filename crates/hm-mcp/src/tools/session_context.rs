@@ -306,6 +306,11 @@ pub async fn inspect(
     runtime: Option<&super::remember::EmbeddingRuntime>,
 ) -> Result<Envelope, Error> {
     let scope = scope.ok_or_else(invalid)?;
+    if uri == format!("hm://{}/context-memory-export", actor.actor()) {
+        return Ok(envelope(
+            hm_serve::session_context::export_memory(actor, scope).await?,
+        ));
+    }
     if uri.starts_with(&format!("hm://{}/context-memory", actor.actor())) {
         return memory_inspect(actor, scope, uri).await;
     }

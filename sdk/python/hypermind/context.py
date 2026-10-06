@@ -260,6 +260,15 @@ class ContextClient:
     async def inspect_retrieval(self) -> dict[str, Any]:
         return self._check_envelope(await self.client.tool('inspect', {'uri': f'hm://{self.actor}/context-retrieval'}))
 
+    async def export_memory(self) -> MemoryExportArtifact:
+        envelope = self._check_envelope(await self.client.tool('inspect', {'uri': f'hm://{self.actor}/context-memory-export'}))
+        return decode_memory_export(envelope['items'][0], self.scope)
+
+    async def restore_memory(self, request_id: str, artifact: MemoryExportArtifact) -> MemoryReceipt:
+        verified = decode_memory_export({'version': 1, 'scope': asdict(artifact.scope), 'cursor': artifact.cursor, 'media_type': 'application/x-ndjson', 'bytes': list(artifact.data), 'byte_count': len(artifact.data), 'artifact_digest': artifact.artifact_digest, 'export_digest': artifact.export_digest, 'restore_max_bytes': artifact.restore_max_bytes}, self.scope)
+        if len(verified.data) > verified.restore_max_bytes: raise ValueError('streaming restore is unsupported; artifact exceeds restore_max_bytes')
+        return await self.memory(request_id, {'kind': 'restore_jsonl', 'jsonl': list(verified.data), 'artifact_digest': verified.artifact_digest})
+
     async def inspect_memory(self, record_id: str | None = None, *, owner_scope: Scope | None = None, source_id: str | None = None) -> MemoryView:
         uri = f'hm://{self.actor}/context-memory'
         if record_id is not None: uri += '/' + encode_context_identifier(record_id)
@@ -878,3 +887,95 @@ class BackfillReport(TypedDict):
     unavailable: str | None
     ledger_tail: int
     usage: str
+
+class RestoreMemoryJsonl(TypedDict):
+    kind: Literal['restore_jsonl']
+    jsonl: list[int]
+    artifact_digest: str
+
+class ImportMemoryRows(TypedDict):
+    kind: Literal['import_rows']
+    import_id: str
+    bundle_digest: str
+    start: int
+    total: int
+    entries: list[ImportEntry]
+class CommitMemoryImport(TypedDict):
+    kind: Literal['commit_import']
+    import_id: str
+    bundle_digest: str
+class MemoryExport(TypedDict):
+    version: int
+    scope: dict[str, str | None]
+    cursor: int
+    events: list[MemoryExportEvent]
+    digest: str
+class RestoreMemoryExport(TypedDict):
+    kind: Literal['restore_export']
+    export: MemoryExport
+MemoryCommand = MemoryCommand | RestoreMemoryJsonl | ImportMemoryRows | CommitMemoryImport | RestoreMemoryExport
+
+class MemoryExportEvent(TypedDict):
+    version: int
+    scope: dict[str, str | None]
+    principal: dict[str, str | None]
+    request_id: str
+    digest: str
+    cursor: int
+    command: MemoryCommand
+
+@dataclass(frozen=True)
+class MemoryExportArtifact:
+    scope: Scope
+    cursor: int
+    data: bytes
+    artifact_digest: str
+    export_digest: str
+    restore_max_bytes: int
+    events: tuple[MemoryExportEvent, ...]
+
+
+def decode_memory_export(metadata: dict[str, Any], expected_scope: Scope) -> MemoryExportArtifact:
+    def invalid(): raise ValueError('invalid memory export artifact')
+    if metadata.get('version') != 1 or metadata.get('scope') != asdict(expected_scope) or metadata.get('media_type') != 'application/x-ndjson': invalid()
+    encoded = metadata.get('bytes')
+    if not isinstance(encoded, list) or len(encoded) > 64 * 1024 * 1024 or any(type(byte) is not int or not 0 <= byte <= 255 for byte in encoded): invalid()
+    data = bytes(encoded)
+    if type(metadata.get('byte_count')) is not int or metadata['byte_count'] != len(data) or metadata.get('artifact_digest') != sha256(data).hexdigest(): invalid()
+    if not data or not data.endswith(b'\n'): invalid()
+    try:
+        lines = data.decode('utf-8').split('\n')[:-1]
+        header = json.loads(lines[0])
+    except (UnicodeDecodeError, json.JSONDecodeError, IndexError) as error:
+        raise ValueError('invalid memory export encoding') from error
+    if not isinstance(header, dict) or set(header) != {'kind', 'version', 'scope', 'cursor', 'event_count', 'digest'} or header['kind'] != 'manifest' or header['version'] != 1 or header['scope'] != asdict(expected_scope): invalid()
+    if json.dumps(header, sort_keys=True, ensure_ascii=False, separators=(',', ':'), allow_nan=False) != lines[0]: invalid()
+    if type(header['cursor']) is not int or header['cursor'] != len(lines) - 1 or type(header['event_count']) is not int or header['event_count'] != header['cursor'] or metadata.get('cursor') != header['cursor']: invalid()
+    events, originals = [], []
+    for ordinal, line in enumerate(lines[1:], 1):
+        if not line.startswith('{"event":') or not line.endswith(',"kind":"event"}'): invalid()
+        raw = line[len('{"event":'):-len(',"kind":"event"}')]
+        try: event = json.loads(raw)
+        except json.JSONDecodeError as error: raise ValueError('invalid memory export event') from error
+        if not isinstance(event, dict) or set(event) != {'version', 'scope', 'principal', 'request_id', 'digest', 'cursor', 'command'} or event['version'] != 1 or event['scope'] != asdict(expected_scope) or event['principal'] != asdict(expected_scope) or type(event['cursor']) is not int or event['cursor'] != ordinal: invalid()
+        _identifier(event['request_id'])
+        _validate_export_nanoseconds(event['command'])
+        events.append(event); originals.append(raw)
+    blank = '{"version":1,"scope":' + json.dumps(asdict(expected_scope), separators=(',', ':'), ensure_ascii=False) + ',"cursor":' + str(header['cursor']) + ',"events":[' + ','.join(originals) + '],"digest":""}'
+    digest = sha256(blank.encode()).hexdigest()
+    if header['digest'] != digest or metadata.get('export_digest') != digest: invalid()
+    limit = metadata.get('restore_max_bytes')
+    if type(limit) is not int or limit != 524288: invalid()
+    return MemoryExportArtifact(expected_scope, header['cursor'], data, metadata['artifact_digest'], digest, limit, tuple(events))
+
+
+def _validate_export_nanoseconds(value, depth=0):
+    if depth > 32: raise ValueError('memory export nesting exceeds capacity')
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if key in ('metadata', 'payload', 'value'): continue
+            if key.endswith('_ns'):
+                if item is not None and (not isinstance(item, str) or _timestamp_decimal(item) != item): raise ValueError('noncanonical memory export timestamp')
+            else: _validate_export_nanoseconds(item, depth + 1)
+    elif isinstance(value, list):
+        for item in value: _validate_export_nanoseconds(item, depth + 1)
