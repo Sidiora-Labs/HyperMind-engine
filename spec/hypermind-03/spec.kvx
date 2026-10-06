@@ -759,12 +759,14 @@ result = "Actual repository, ledger and provider mapping journey passed. Exact s
 title = "Resumable complete verification cycles"
 wave = 3
 owner_lane = "cache"
-status = "in_progress"
+status = "done"
 requires = ["task.3.5", "task.3.6"]
 coverage = ["req.deep.complete_verification"]
 touches = ["crates/hm-cortex/src/development_verification.rs", "crates/hm-serve/src/development_verification.rs", "crates/hm-serve/tests/development_verification.rs"]
 verify_cmd = "cargo test -p hm-serve --test development_verification"
 acceptance = "A durable complete verification cycle enumerates authorized records independently of change detection, resumes a bounded backlog after cancellation and restart, and reports actual contiguous coverage."
+
+result = "Compile and actual broad verification journey passed. Timeout, cancellation and restart retain work; complete cycles force rechecks, source revisions schedule new findings, competing evidence remains, and contiguous coverage survives restart. Each invocation requires an owner-renewed capability; host registration remains separate."
 
 [task.3.8]
 title = "Grounded curation and sharing classification"
