@@ -957,11 +957,11 @@ owner_lane = "effects"
 status = "in_progress"
 requires = ["task.3.5"]
 coverage = ["req.coverage.egress", "req.coverage.credentials"]
-touches = ["crates/hm-fabric/src/egress.rs", "crates/hm-fabric/src/secret_handles.rs", "crates/hm-fabric/tests/egress.rs", "crates/hm-fabric/tests/secret_handles.rs"]
+touches = ["crates/hm-fabric/src/egress.rs", "crates/hm-fabric/src/secret_handles.rs", "crates/hm-fabric/tests/egress.rs", "crates/hm-fabric/tests/secret_handles.rs", "crates/hm-fabric/src/provider_egress.rs", "crates/hm-fabric/src/role_runner.rs", "crates/hm-fabric/tests/provider_egress_live.rs"]
 verify_cmd = "cargo test -p hm-fabric --test egress --test secret_handles"
 acceptance = "Actual destination resolution, redirects and proxies enforce egress policy before unauthorized connections. Dispatch resolves scoped secret handles without exposing values in arguments, logs, evidence or export, while uncertain writes retain uncertainty."
 
-result = "Egress and opaque secret handle checks passed with actual local connections. Scope, current principal, operation and request-bound credentials are injected only at dispatch; response echoes and exported diagnostics exclude values. Redirected secret dispatch refuses, and uncertain writes never replay. Handles are volatile. Provider, Git and general tool consumer integration remains pending."
+result = "Actual egress and scoped secret-handle components passed their focused connection gates. Native runner catalog and inference now dispatch through the authenticated host broker with request-bound secret grants; actual guarded and default model paths preserve original response bytes and existing reservation ownership. The v2 protocol pin rejects a real legacy worker during registration before work or network dispatch; prior catalogs require explicit review and registration. Returned evidence excludes the test credential. Other provider, Git and general tool consumers, and new live credential-echo or cancellation qualification remain pending."
 
 [task.3.23]
 title = "SDK continuation and uncertain-effect recovery"

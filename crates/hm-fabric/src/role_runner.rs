@@ -1,8 +1,10 @@
 use crate::{
+    provider_egress::{RunnerProviderGuard, RunnerProviderSession},
     role_dispatch::{RoleWireRequest, handoff},
     role_store::*,
     roles::{RoleVersion, RunTerminal},
     routing::{Binding, ModuleManifest, RouteCall, Router},
+    secret_handles::SecretProviderResponse,
     supervisor::{ProcessSpec, Supervisor},
     transport::{Credentials, Frame, FrameKind, Limits, ReplayGuard, UnixTransport},
 };
@@ -12,8 +14,8 @@ use hm_context::{
     types::{Authority, Scope, TokenBudget, digest_bytes},
 };
 use hm_llm::{
-    HttpTransport, LlmError, LlmProvider, ModelTier, Pricing, ProviderConfig, StructuredRequest,
-    WireRequest, WireResponse, WireTransport,
+    LlmError, LlmProvider, ModelTier, Pricing, ProviderConfig, StructuredRequest, WireRequest,
+    WireResponse, WireTransport,
     ollama::Ollama,
     provider_usage::{ObservationFormat, ObservationMetadata, ProviderUsageSnapshot},
 };
@@ -108,7 +110,7 @@ impl RunnerDeclaration {
     }
     pub fn descriptor(&self) -> Result<RoleDescriptor> {
         self.validate()?;
-        Ok(RoleDescriptor{id:self.id.clone(),kind:RoleKind::Runner,pin:RoleVersion::new(b"HyperMind local structured Ollama runner v1: owner-approved canonical reservation; original provider evidence; no settlement",&serde_json::to_vec(self).map_err(err)?),semantic_version:self.semantic_version.clone(),capabilities:BTreeMap::from([("run".into(),1)]),grants:RoleGrants{operations:BTreeSet::from(["run".into()]),authorities:vec![Authority::AssistantGenerated],hooks:BTreeSet::from(["runner_dispatch".into()]),max_input_tokens:self.budget.context_tokens,max_output_tokens:self.budget.reserved_output_tokens,may_reorder:false},transform:None})
+        Ok(RoleDescriptor{id:self.id.clone(),kind:RoleKind::Runner,pin:RoleVersion::new(b"HyperMind structured Ollama runner v2: mandatory authenticated host egress broker; scoped secret dispatch; owner-approved canonical reservation; original provider evidence; no settlement",&serde_json::to_vec(self).map_err(err)?),semantic_version:self.semantic_version.clone(),capabilities:BTreeMap::from([("run".into(),1)]),grants:RoleGrants{operations:BTreeSet::from(["run".into()]),authorities:vec![Authority::AssistantGenerated],hooks:BTreeSet::from(["runner_dispatch".into()]),max_input_tokens:self.budget.context_tokens,max_output_tokens:self.budget.reserved_output_tokens,may_reorder:false},transform:None})
     }
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -194,14 +196,30 @@ pub struct RunnerWorkerSession {
     scope: Scope,
     declaration: RunnerDeclaration,
     in_flight: Option<DispatchTicket>,
+    provider_guard: RunnerProviderGuard,
+    provider_session: Arc<RunnerProviderSession>,
+    provider_task: Option<tokio::task::JoinHandle<Result<SecretProviderResponse>>>,
 }
 impl RunnerWorkerSession {
     pub async fn launch(
-        mut spec: ProcessSpec,
+        spec: ProcessSpec,
         config: RunnerWorkerConfig,
         registry: &DurableRoleRegistry,
         limits: Limits,
     ) -> Result<Self> {
+        let guard = RunnerProviderGuard::local(&config.scope, &config.declaration).map_err(err)?;
+        Self::launch_guarded(spec, config, registry, limits, guard).await
+    }
+    pub async fn launch_guarded(
+        mut spec: ProcessSpec,
+        config: RunnerWorkerConfig,
+        registry: &DurableRoleRegistry,
+        limits: Limits,
+        provider_guard: RunnerProviderGuard,
+    ) -> Result<Self> {
+        if provider_guard.policy().scope != config.scope {
+            return Err(err("provider scope mismatch"));
+        }
         if registry.scope() != &config.scope {
             return Err(err("scope mismatch"));
         }
@@ -296,16 +314,32 @@ impl RunnerWorkerSession {
         }
         .await;
         match accepted {
-            Ok((transport, router, binding)) => Ok(Self {
-                supervisor,
-                transport,
-                router,
-                binding,
-                socket,
-                scope: config.scope,
-                declaration: config.declaration,
-                in_flight: None,
-            }),
+            Ok((transport, router, binding)) => {
+                let provider_session = match provider_guard
+                    .session(transport.identity(), &launch.module_id, launch.generation)
+                    .await
+                {
+                    Ok(session) => Arc::new(session),
+                    Err(error) => {
+                        let _ = supervisor.shutdown();
+                        let _ = std::fs::remove_file(&socket);
+                        return Err(err(error));
+                    }
+                };
+                Ok(Self {
+                    supervisor,
+                    transport,
+                    router,
+                    binding,
+                    socket,
+                    scope: config.scope,
+                    declaration: config.declaration,
+                    in_flight: None,
+                    provider_guard,
+                    provider_session,
+                    provider_task: None,
+                })
+            }
             Err(e) => {
                 let _ = supervisor.shutdown();
                 let _ = std::fs::remove_file(socket);
@@ -332,6 +366,33 @@ impl RunnerWorkerSession {
             return Err(err("unapproved runner work"));
         }
         validate_input(&self.declaration, &record.work)?;
+        let catalog = registry
+            .catalog(&record.work.role_id)
+            .map_err(err)?
+            .ok_or_else(|| err("runner catalog missing"))?;
+        if record.work.source != *source
+            || record.work.deadline_ns <= now()
+            || catalog.withdrawal.is_some()
+            || catalog.descriptor != record.descriptor
+            || record.approval_revision != Some(catalog.revision)
+        {
+            return Err(err("current runner approval refused"));
+        }
+        self.provider_guard
+            .check_public(&record.work.payload)
+            .await
+            .map_err(err)?;
+        verify_model(
+            &self.declaration,
+            &self.provider_guard,
+            &self.provider_session,
+            &format!(
+                "catalog-{}-{}",
+                id,
+                SEQUENCE.fetch_add(1, Ordering::Relaxed)
+            ),
+        )
+        .await?;
         self.router
             .enqueue(
                 self.transport.identity(),
@@ -370,6 +431,53 @@ impl RunnerWorkerSession {
             let _ = registry.mark_uncertain(&ticket);
             return Err(err("provider start acknowledgement missing"));
         }
+        let requested = self.transport.receive().await.map_err(err)?;
+        let broker_request: WireRequest = serde_json::from_slice(&requested.payload)
+            .map_err(|_| err("invalid provider broker request"))?;
+        let input = validate_input(&self.declaration, &record.work)?;
+        if requested.kind != FrameKind::Request
+            || requested.correlation_id != id
+            || broker_request.method != "POST"
+            || broker_request.url != self.declaration.endpoint
+            || broker_request.headers
+                != BTreeMap::from([("content-type".into(), "application/json".into())])
+            || digest_bytes(&serde_json::to_vec(&broker_request.body).map_err(err)?)
+                != provider_request_digest(&self.declaration, &input)?
+        {
+            let _ = registry.mark_uncertain(&ticket);
+            return Err(err("provider broker request fence mismatch"));
+        }
+        let current = registry
+            .get(id)
+            .map_err(err)?
+            .ok_or_else(|| err("missing dispatched work"))?;
+        let catalog = registry
+            .catalog(&record.work.role_id)
+            .map_err(err)?
+            .ok_or_else(|| err("missing runner catalog"))?;
+        if current.state != WorkState::Dispatched
+            || current.work != record.work
+            || current.ticket.as_ref() != Some(&ticket)
+            || catalog.withdrawal.is_some()
+            || catalog.descriptor != record.descriptor
+            || current.approval_revision != Some(catalog.revision)
+            || current.work.deadline_ns <= now()
+        {
+            let _ = registry.mark_uncertain(&ticket);
+            return Err(err("current provider dispatch approval refused"));
+        }
+        let guard = self.provider_guard.clone();
+        let session = self.provider_session.clone();
+        let operation = format!(
+            "provider-{}",
+            digest_bytes(&serde_json::to_vec(&ticket).map_err(err)?)
+        );
+        self.provider_task = Some(tokio::spawn(async move {
+            guard
+                .dispatch(&session, &operation, &broker_request)
+                .await
+                .map_err(err)
+        }));
         Ok(ticket)
     }
     pub async fn receive(
@@ -381,6 +489,28 @@ impl RunnerWorkerSession {
             .in_flight
             .clone()
             .ok_or_else(|| err("no in-flight run"))?;
+        if let Some(task) = self.provider_task.take() {
+            let dispatched = task.await;
+            let mut response = Frame::request(&ticket.id, Vec::new());
+            match dispatched {
+                Ok(Ok(provider)) => {
+                    response.kind = FrameKind::Response;
+                    response.payload = serde_json::to_vec(&BrokerResponse {
+                        status: provider.receipt.status,
+                        original_bytes: provider.original_bytes,
+                    })
+                    .map_err(err)?;
+                }
+                _ => {
+                    registry.mark_uncertain(&ticket).map_err(err)?;
+                    response.kind = FrameKind::Cancel;
+                }
+            }
+            if self.transport.send(response).await.is_err() {
+                let _ = registry.mark_uncertain(&ticket);
+                return Err(err("provider broker delivery uncertain"));
+            }
+        }
         let received = self.transport.receive().await;
         let result = (|| {
             let frame = received.map_err(err)?;
@@ -455,6 +585,9 @@ impl RunnerWorkerSession {
     pub async fn cancel(&mut self, registry: &mut DurableRoleRegistry) -> Result<()> {
         let t = self.in_flight.as_ref().ok_or_else(|| err("no run"))?;
         registry.mark_uncertain(t).map_err(err)?;
+        if let Some(task) = self.provider_task.take() {
+            task.abort();
+        }
         let mut f = Frame::request(&t.id, vec![]);
         f.kind = FrameKind::Cancel;
         self.transport.send(f).await.map_err(err)
@@ -463,14 +596,23 @@ impl RunnerWorkerSession {
         if let Some(t) = &self.in_flight {
             registry.mark_uncertain(t).map_err(err)?;
         }
+        if let Some(task) = self.provider_task.take() {
+            task.abort();
+        }
         self.supervisor.shutdown().map_err(err)
     }
     pub fn shutdown(&mut self) -> Result<()> {
+        if let Some(task) = self.provider_task.take() {
+            task.abort();
+        }
         self.supervisor.shutdown().map_err(err)
     }
 }
 impl Drop for RunnerWorkerSession {
     fn drop(&mut self) {
+        if let Some(task) = self.provider_task.take() {
+            task.abort();
+        }
         let _ = self.supervisor.shutdown();
         let _ = std::fs::remove_file(&self.socket);
     }
@@ -582,8 +724,14 @@ fn approved(c: &Configuration, r: &RoleWireRequest) -> Result<()> {
     validate_input(&c.declaration, &r.work)?;
     Ok(())
 }
+#[derive(Serialize, Deserialize)]
+struct BrokerResponse {
+    status: u16,
+    original_bytes: Vec<u8>,
+}
 struct Observed {
-    inner: HttpTransport,
+    request: tokio::sync::mpsc::UnboundedSender<WireRequest>,
+    response: Mutex<std::sync::mpsc::Receiver<BrokerResponse>>,
     bytes: Arc<Mutex<Option<Vec<u8>>>>,
     request_digest: Arc<Mutex<Option<String>>>,
 }
@@ -592,38 +740,54 @@ impl WireTransport for Observed {
         *self.request_digest.lock().map_err(|_| LlmError::Capacity)? = Some(digest_bytes(
             &serde_json::to_vec(&r.body).map_err(|_| LlmError::Capacity)?,
         ));
-        let (response, bytes) = self.inner.send_observed(r)?;
-        *self.bytes.lock().map_err(|_| LlmError::Capacity)? = Some(bytes);
-        Ok(response)
+        self.request
+            .send(r.clone())
+            .map_err(|_| LlmError::Network("provider broker unavailable".into()))?;
+        let observed = self
+            .response
+            .lock()
+            .map_err(|_| LlmError::Capacity)?
+            .recv()
+            .map_err(|_| LlmError::Network("provider outcome unknown".into()))?;
+        let body = serde_json::from_slice(&observed.original_bytes)
+            .map_err(|_| LlmError::Wire("provider JSON rejected".into()))?;
+        *self.bytes.lock().map_err(|_| LlmError::Capacity)? = Some(observed.original_bytes);
+        Ok(WireResponse {
+            status: observed.status,
+            body,
+        })
     }
 }
-async fn verify_model(d: &RunnerDeclaration) -> Result<()> {
-    let client = reqwest::Client::builder()
-        .redirect(reqwest::redirect::Policy::none())
-        .timeout(Duration::from_secs(5))
-        .build()
-        .map_err(err)?;
-    let raw = client
-        .get(format!(
-            "{}/api/tags",
-            d.endpoint
-                .strip_suffix("/api/chat")
-                .ok_or_else(|| err("invalid configured endpoint"))?
-        ))
-        .send()
+async fn verify_model(
+    d: &RunnerDeclaration,
+    guard: &RunnerProviderGuard,
+    session: &RunnerProviderSession,
+    operation: &str,
+) -> Result<()> {
+    let request = WireRequest {
+        method: "GET".into(),
+        url: d
+            .endpoint
+            .strip_suffix("/api/chat")
+            .map(|base| format!("{base}/api/tags"))
+            .ok_or_else(|| err("invalid configured endpoint"))?,
+        headers: BTreeMap::new(),
+        body: serde_json::Value::Null,
+    };
+    let result = guard
+        .dispatch(session, operation, &request)
         .await
-        .map_err(err)?
-        .error_for_status()
-        .map_err(err)?
-        .bytes()
-        .await
         .map_err(err)?;
-    let v: serde_json::Value = serde_json::from_slice(&raw).map_err(err)?;
-    if !v["models"]
+    if !(200..300).contains(&result.receipt.status) {
+        return Err(err("model catalog unavailable"));
+    }
+    let value: serde_json::Value = serde_json::from_slice(&result.original_bytes)
+        .map_err(|_| err("model catalog JSON rejected"))?;
+    if !value["models"]
         .as_array()
         .ok_or_else(|| err("model catalog missing"))?
         .iter()
-        .any(|m| m["name"] == d.profile.model_id && m["digest"] == d.model_digest)
+        .any(|model| model["name"] == d.profile.model_id && model["digest"] == d.model_digest)
     {
         return Err(err("configured model digest changed"));
     }
@@ -695,13 +859,13 @@ pub async fn runner_worker_from_env() -> Result<()> {
             return Err(err("correlation mismatch"));
         }
         approved(&c, &r)?;
-        verify_model(&c.declaration).await?;
-        approved(&c, &r)?;
         let input = validate_input(&c.declaration, &r.work)?;
         let d = c.declaration.clone();
         let prompt = input.prompt.clone();
         let id = r.work.id.clone();
-        let task = tokio::task::spawn_blocking(move || {
+        let (request_sender, mut request_receiver) = tokio::sync::mpsc::unbounded_channel();
+        let (response_sender, response_receiver) = std::sync::mpsc::channel();
+        let mut task = tokio::task::spawn_blocking(move || {
             let bytes = Arc::new(Mutex::new(None));
             let request_digest = Arc::new(Mutex::new(None));
             let provider = Ollama::new(
@@ -713,7 +877,8 @@ pub async fn runner_worker_from_env() -> Result<()> {
                     pricing: Pricing::default(),
                 },
                 Observed {
-                    inner: HttpTransport::default(),
+                    request: request_sender,
+                    response: Mutex::new(response_receiver),
                     bytes: bytes.clone(),
                     request_digest: request_digest.clone(),
                 },
@@ -736,13 +901,49 @@ pub async fn runner_worker_from_env() -> Result<()> {
                 .take();
             Ok::<_, RunnerError>((result, raw, request_digest))
         });
+        let wire = request_receiver
+            .recv()
+            .await
+            .ok_or_else(|| err("provider request unavailable"))?;
         let mut started = Frame::request(&r.work.id, b"provider_dispatch_started".to_vec());
         started.kind = FrameKind::Response;
         transport.send(started).await.map_err(err)?;
+        transport
+            .send(Frame::request(
+                &r.work.id,
+                serde_json::to_vec(&wire).map_err(err)?,
+            ))
+            .await
+            .map_err(err)?;
         let timeout = Duration::from_millis(c.declaration.timeout_ms).min(Duration::from_nanos(
             r.work.deadline_ns.saturating_sub(now()).max(0) as u64,
         ));
-        let finished = tokio::select! {result=task=>Some(result.map_err(err)??),incoming=transport.receive()=>{let cancel=incoming.map_err(err)?;if cancel.kind!=FrameKind::Cancel || cancel.correlation_id!=r.work.id{return Err(err("unexpected in-flight frame"));}None},_=tokio::time::sleep(timeout)=>None};
+        let provider_reply = tokio::select! { incoming=transport.receive()=>Some(incoming.map_err(err)?),_=tokio::time::sleep(timeout)=>None };
+        let finished = if let Some(reply) = provider_reply {
+            if reply.correlation_id != r.work.id {
+                return Err(err("provider response correlation mismatch"));
+            }
+            match reply.kind {
+                FrameKind::Response => {
+                    let response: BrokerResponse = serde_json::from_slice(&reply.payload)
+                        .map_err(|_| err("provider broker response rejected"))?;
+                    response_sender
+                        .send(response)
+                        .map_err(|_| err("provider broker unavailable"))?;
+                    Some((&mut task).await.map_err(err)??)
+                }
+                FrameKind::Cancel => {
+                    drop(response_sender);
+                    let _ = (&mut task).await;
+                    None
+                }
+                _ => return Err(err("unexpected provider response frame")),
+            }
+        } else {
+            drop(response_sender);
+            let _ = (&mut task).await;
+            None
+        };
         let output = if let Some((response, raw, request_digest)) = finished {
             match response {
                 Ok(response) => {

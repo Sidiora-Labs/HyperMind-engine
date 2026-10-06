@@ -42,6 +42,10 @@ pub struct SecretDispatchReceipt {
     pub status: u16,
     pub egress: EgressReceipt,
 }
+pub struct SecretProviderResponse {
+    pub receipt: SecretDispatchReceipt,
+    pub original_bytes: Vec<u8>,
+}
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum SecretError {
     #[error("secret operation denied")]
@@ -305,7 +309,62 @@ impl SecretHandleService {
                 .collect(),
         })
     }
+    pub async fn validate_public_bytes(&self, bytes: &[u8]) -> Result<(), SecretError> {
+        let state = self.state.lock().await;
+        metadata_check(&state, bytes)?;
+        if let Ok(value) = serde_json::from_slice::<serde_json::Value>(bytes) {
+            if !json_secret_free(&state, &value) {
+                return Err(SecretError::Denied);
+            }
+        }
+        Ok(())
+    }
     pub async fn dispatch(
+        &self,
+        client: &EgressHttpClient,
+        scope: &Scope,
+        principal: &str,
+        principal_revision: u64,
+        operation_id: &str,
+        request: EgressRequest,
+        grant_ids: &[String],
+    ) -> Result<SecretDispatchReceipt, SecretError> {
+        self.dispatch_inner(
+            client,
+            scope,
+            principal,
+            principal_revision,
+            operation_id,
+            request,
+            grant_ids,
+            false,
+        )
+        .await
+        .map(|response| response.receipt)
+    }
+    pub async fn dispatch_provider_response(
+        &self,
+        client: &EgressHttpClient,
+        scope: &Scope,
+        principal: &str,
+        principal_revision: u64,
+        operation_id: &str,
+        request: EgressRequest,
+        grant_ids: &[String],
+    ) -> Result<SecretProviderResponse, SecretError> {
+        self.dispatch_inner(
+            client,
+            scope,
+            principal,
+            principal_revision,
+            operation_id,
+            request,
+            grant_ids,
+            true,
+        )
+        .await
+    }
+    async fn dispatch_inner(
         &self,
         client: &EgressHttpClient,
         scope: &Scope,
@@ -314,11 +373,15 @@ impl SecretHandleService {
         operation_id: &str,
         mut request: EgressRequest,
         grant_ids: &[String],
-    ) -> Result<SecretDispatchReceipt, SecretError> {
+        provider_response: bool,
+    ) -> Result<SecretProviderResponse, SecretError> {
         scope.validate().map_err(|_| SecretError::Invalid)?;
         identifier(principal)?;
         identifier(operation_id)?;
-        if client.policy().scope != *scope || grant_ids.is_empty() || grant_ids.len() > 8 {
+        if client.policy().scope != *scope
+            || (!provider_response && grant_ids.is_empty())
+            || grant_ids.len() > 8
+        {
             return Err(SecretError::Denied);
         }
         let mut state = self.state.lock().await;
@@ -396,13 +459,28 @@ impl SecretHandleService {
             .execute(request)
             .await
             .map_err(SecretError::Egress)?;
-        // Credential-bearing endpoints may echo credentials; only transport evidence leaves this service.
-        Ok(SecretDispatchReceipt {
-            version: 1,
-            operation_id: operation_id.into(),
-            grant_ids: grant_ids.to_vec(),
-            status: response.status,
-            egress: response.receipt,
+        let original_bytes = if provider_response {
+            if metadata_check(&state, &response.body).is_err() {
+                return Err(SecretError::Egress(EgressError::OutcomeUncertain));
+            }
+            if let Ok(json) = serde_json::from_slice::<serde_json::Value>(&response.body) {
+                if !json_secret_free(&state, &json) {
+                    return Err(SecretError::Egress(EgressError::OutcomeUncertain));
+                }
+            }
+            response.body
+        } else {
+            Vec::new()
+        };
+        Ok(SecretProviderResponse {
+            original_bytes,
+            receipt: SecretDispatchReceipt {
+                version: 1,
+                operation_id: operation_id.into(),
+                grant_ids: grant_ids.to_vec(),
+                status: response.status,
+                egress: response.receipt,
+            },
         })
     }
 }
@@ -444,6 +522,11 @@ fn metadata_check(state: &State, bytes: &[u8]) -> Result<(), SecretError> {
 fn request_check(state: &State, request: &EgressRequest) -> Result<(), SecretError> {
     metadata_check(state, request.url.as_bytes())?;
     metadata_check(state, &request.body)?;
+    if let Ok(json) = serde_json::from_slice::<serde_json::Value>(&request.body) {
+        if !json_secret_free(state, &json) {
+            return Err(SecretError::Denied);
+        }
+    }
     for (name, value) in &request.headers {
         metadata_check(state, name.as_bytes())?;
         metadata_check(state, value)?;
@@ -474,4 +557,17 @@ fn policy_digest(client: &EgressHttpClient) -> Result<String, SecretError> {
         "{:x}",
         Sha256::digest(serde_json::to_vec(client.policy()).map_err(|_| SecretError::Invalid)?)
     ))
+}
+
+fn json_secret_free(state: &State, value: &serde_json::Value) -> bool {
+    match value {
+        serde_json::Value::String(text) => metadata_check(state, text.as_bytes()).is_ok(),
+        serde_json::Value::Array(values) => {
+            values.iter().all(|value| json_secret_free(state, value))
+        }
+        serde_json::Value::Object(values) => values.iter().all(|(key, value)| {
+            metadata_check(state, key.as_bytes()).is_ok() && json_secret_free(state, value)
+        }),
+        _ => true,
+    }
 }
