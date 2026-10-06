@@ -1248,11 +1248,11 @@ owner_lane = "maintenance"
 status = "in_progress"
 requires = ["task.3.12", "task.3.34"]
 coverage = ["req.coverage.usage", "req.deep.knowledge_schedules"]
-touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_service.rs", "crates/hm-fabric/src/role_runner.rs", "crates/hm-fabric/tests/runner_usage.rs", "crates/hm-fabric/tests/role_runner_live.rs", "crates/hm-serve/src/development_usage.rs", "crates/hm-serve/src/development_workers.rs", "crates/hm-serve/src/development_scheduler.rs", "crates/hm-serve/tests/generic_worker_usage.rs"]
+touches = ["crates/hm-serve/src/usage_service.rs", "crates/hm-serve/tests/usage_service.rs", "crates/hm-fabric/src/role_runner.rs", "crates/hm-fabric/tests/runner_usage.rs", "crates/hm-fabric/tests/role_runner_live.rs", "crates/hm-serve/src/development_usage.rs", "crates/hm-serve/src/development_workers.rs", "crates/hm-serve/src/development_scheduler.rs", "crates/hm-serve/tests/generic_worker_usage.rs", "crates/hm-serve/tests/generic_worker_usage_recovery.rs"]
 verify_cmd = "cargo test -p hm-serve --test usage_service"
 acceptance = "Native host cost and usage remain canonical. Background calls reserve cost and concurrency before dispatch, settle real observations once, retain unknown charges through restart and expose exact attributed rollups."
 
-result = "Original historian, extraction and authenticated runner observations settle existing reservations once. Configured generic workers now persist each original call and trusted attempt completion; the real two-call classification journey passed checked aggregate settlement, exact per-call rollup, actor responsiveness, publication and restart with one reservation. Incomplete proof stays unknown. Dedicated generic cancellation/loss, all-family qualification, public precision and publication-crash diagnostics remain incomplete."
+result = "Original historian, extraction, authenticated runner and generic multi-call observations settle their existing reservations once. Real classification, checked aggregate settlement, attribution and restart passed. A new actual cancellation and lost-completion journey preserved unknown usage through restart, refused redispatch and reconciled late original evidence once without publication or another charge. Provider termination, hard process loss, all-family qualification, public precision and publication-crash diagnostics remain incomplete."
 
 [task.3.46]
 title = "Native operational and continuity services"
