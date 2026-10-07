@@ -1,4 +1,4 @@
-![HyperMind](spec/readme_img.png)
+![HyperMind](https://supabase.paxeer.app/storage/v1/object/public/json/readme_hp.png)
 
 # HyperMind
 
