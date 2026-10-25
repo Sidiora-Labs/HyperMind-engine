@@ -13,7 +13,7 @@
     "@hypermind/render": "0.1.0"
   },
   "devDependencies": {
-    "@napi-rs/cli": "3.4.1"
+    "@napi-rs/cli": "3.9.1"
   },
   "napi": {
     "binaryName": "hypermind_engine",
